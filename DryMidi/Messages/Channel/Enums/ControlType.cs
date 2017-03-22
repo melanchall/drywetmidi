@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryMidi
 {
-    public enum ControlType : byte
+    public enum ControlType : byte 
     {
         BankSelect                      = 0x00,
         Modulation                      = 0x01,
