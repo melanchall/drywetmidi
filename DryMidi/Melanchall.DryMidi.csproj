@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{499FDD77-17E3-4249-AAE5-50941A47D35E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Melanchall.DryMidi</RootNamespace>
+    <AssemblyName>Melanchall.DryMidi</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChunksConverters\ChunksConverterFactory.cs" />
+    <Compile Include="ChunksConverters\IChunksConverter.cs" />
+    <Compile Include="ChunksConverters\MultiSequenceChunksConverter.cs" />
+    <Compile Include="ChunksConverters\MultiTrackChunksConverter.cs" />
+    <Compile Include="ChunksConverters\SingleTrackChunksConverter.cs" />
+    <Compile Include="Chunks\Chunk.cs" />
+    <Compile Include="Chunks\HeaderChunk.cs" />
+    <Compile Include="Chunks\TrackChunk.cs" />
+    <Compile Include="Chunks\UnknownChunk.cs" />
+    <Compile Include="Collections\ChunksCollection.cs" />
+    <Compile Include="Collections\MessagesCollection.cs" />
+    <Compile Include="DataTypes\DataTypesUtilities.cs" />
+    <Compile Include="DataTypes\FourBitNumber.cs" />
+    <Compile Include="DataTypes\SevenBitNumber.cs" />
+    <Compile Include="Exceptions\NoHeaderChunkException.cs" />
+    <Compile Include="Exceptions\TooManyTrackChunksException.cs" />
+    <Compile Include="Exceptions\UnexpectedTrackChunksCountException.cs" />
+    <Compile Include="Exceptions\UnknownChunkIdException.cs" />
+    <Compile Include="Exceptions\InvalidChunkSizeException.cs" />
+    <Compile Include="Exceptions\MidiException.cs" />
+    <Compile Include="Exceptions\MissedEndOfTrackMessageException.cs" />
+    <Compile Include="Exceptions\UnknownChannelMessageException.cs" />
+    <Compile Include="Exceptions\UnknownFileFormatException.cs" />
+    <Compile Include="Messages\Base\ChannelMessage.cs" />
+    <Compile Include="Messages\Base\SysExMessage.cs" />
+    <Compile Include="Messages\Channel\ChannelAftertouchMessage.cs" />
+    <Compile Include="Messages\Channel\ControlChangeMessage.cs" />
+    <Compile Include="Messages\Channel\Enums\ControlType.cs" />
+    <Compile Include="Messages\Channel\Enums\NoteType.cs" />
+    <Compile Include="Messages\Channel\NoteAftertouchMessage.cs" />
+    <Compile Include="Messages\Channel\NoteOffMessage.cs" />
+    <Compile Include="Messages\Channel\NoteOnMessage.cs" />
+    <Compile Include="Messages\Channel\PitchBendMessage.cs" />
+    <Compile Include="Messages\Channel\ProgramChangeMessage.cs" />
+    <Compile Include="Messages\Readers\ChannelMessageReader.cs" />
+    <Compile Include="Messages\Readers\IMessageReader.cs" />
+    <Compile Include="Messages\Base\Message.cs" />
+    <Compile Include="Messages\MessagesStatusBytes.cs" />
+    <Compile Include="Messages\Base\MetaMessage.cs" />
+    <Compile Include="Messages\Readers\MessageReaderFactory.cs" />
+    <Compile Include="Messages\Readers\MetaMessageReader.cs" />
+    <Compile Include="Messages\Meta\ChannelPrefixMessage.cs" />
+    <Compile Include="Messages\Meta\CopyrightNoticeMessage.cs" />
+    <Compile Include="Messages\Meta\CuePointMessage.cs" />
+    <Compile Include="Messages\Meta\DeviceNameMessage.cs" />
+    <Compile Include="Messages\Meta\EndOfTrackMessage.cs" />
+    <Compile Include="Messages\Meta\InstrumentNameMessage.cs" />
+    <Compile Include="Messages\Meta\KeySignatureMessage.cs" />
+    <Compile Include="Messages\Meta\LyricMessage.cs" />
+    <Compile Include="Messages\Meta\MarkerMessage.cs" />
+    <Compile Include="Messages\Meta\PortPrefixMessage.cs" />
+    <Compile Include="Messages\Meta\ProgramNameMessage.cs" />
+    <Compile Include="Messages\Meta\SequenceNumberMessage.cs" />
+    <Compile Include="Messages\Meta\SequencerSpecificMessage.cs" />
+    <Compile Include="Messages\Meta\SequenceTrackNameMessage.cs" />
+    <Compile Include="Messages\Meta\SetTempoMessage.cs" />
+    <Compile Include="Messages\Meta\SmpteOffsetMessage.cs" />
+    <Compile Include="Messages\Meta\TextMessage.cs" />
+    <Compile Include="Messages\Meta\TimeSignatureMessage.cs" />
+    <Compile Include="Messages\Meta\UnknownMetaMessage.cs" />
+    <Compile Include="Messages\Readers\SysExMessageReader.cs" />
+    <Compile Include="Messages\SysEx\EscapeSysExMessage.cs" />
+    <Compile Include="Messages\SysEx\NormalSysExMessage.cs" />
+    <Compile Include="Messages\Writers\ChannelMessageWriter.cs" />
+    <Compile Include="Messages\Writers\IMessageWriter.cs" />
+    <Compile Include="Messages\Writers\MessageWriterFactory.cs" />
+    <Compile Include="Messages\Writers\MetaMessageWriter.cs" />
+    <Compile Include="Messages\Writers\SysExMessageWriter.cs" />
+    <Compile Include="MidiFile.cs" />
+    <Compile Include="MidiFileFormat.cs" />
+    <Compile Include="MidiReader.cs" />
+    <Compile Include="MidiWriter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadingSettings\ExtraTrackChunkPolicy.cs" />
+    <Compile Include="ReadingSettings\InvalidMessageSizePolicy.cs" />
+    <Compile Include="ReadingSettings\UnexpectedTrackChunksCountPolicy.cs" />
+    <Compile Include="ReadingSettings\UnknownChunkIdPolicy.cs" />
+    <Compile Include="ReadingSettings\MissedEndOfTrackPolicy.cs" />
+    <Compile Include="ReadingSettings\ReadingSettings.cs" />
+    <Compile Include="ReadingSettings\SilentNoteOnPolicy.cs" />
+    <Compile Include="ReadingSettings\InvalidChunkSizePolicy.cs" />
+    <Compile Include="ReadingSettings\UnknownFileFormatPolicy.cs" />
+    <Compile Include="WritingSettings\CompressionPolicy.cs" />
+    <Compile Include="WritingSettings\WritingSettings.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
