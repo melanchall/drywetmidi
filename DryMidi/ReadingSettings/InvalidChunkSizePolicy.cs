@@ -12,7 +12,7 @@
         Abort = 0,
 
         /// <summary>
-        /// Ignore difference between actual chunk's size and the declared one;
+        /// Ignore difference between actual chunk's size and the declared one.
         /// </summary>
         Ignore
     }

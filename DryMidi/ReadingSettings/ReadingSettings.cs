@@ -81,6 +81,7 @@ namespace Melanchall.DryMidi
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on unknown file format stored in a header chunk.
+        /// The default is <see cref="UnknownFileFormatPolicy.Ignore"/>.
         /// </summary>
         /// <remarks>
         /// If <see cref="UnknownFileFormatPolicy.Abort"/> is used an instance of the
