@@ -134,6 +134,21 @@ namespace Melanchall.DryMidi
             _messages.RemoveAt(index);
         }
 
+        /// <summary>
+        /// Removes all the messages that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="match">The <see cref="Predicate{T}"/> delegate that defines the conditions
+        /// of the messages to remove.</param>
+        /// <returns>The number of messages removed from the <see cref="MessagesCollection"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
+        public int RemoveAll(Predicate<Message> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            return _messages.RemoveAll(match);
+        }
+
         #endregion
 
         #region IEnumerable<Message>

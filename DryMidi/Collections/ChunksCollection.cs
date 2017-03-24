@@ -137,6 +137,21 @@ namespace Melanchall.DryMidi
             _chunks.RemoveAt(index);
         }
 
+        /// <summary>
+        /// Removes all the chunks that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="match">The <see cref="Predicate{T}"/> delegate that defines the conditions
+        /// of the chunks to remove.</param>
+        /// <returns>The number of chunks removed from the <see cref="ChunksCollection"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
+        public int RemoveAll(Predicate<Chunk> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            return _chunks.RemoveAll(match);
+        }
+
         #endregion
 
         #region IEnumerable<Message>
