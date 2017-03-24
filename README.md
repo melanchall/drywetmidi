@@ -22,10 +22,10 @@ You can define your own chunks and meta messages which can be written to a file 
 // Read the file ...
 var midiFile = MidiFile.Load("My Great Song.mid");
 
-// ... and get all track chunks in it ...
+// and get all track chunks in it ...
 var trackChunks = midiFile.Chunks.OfType<TrackChunk>();
 
-// ... and know their names
+// and know their names
 var trackNames = trackChunks.Select(track => track.Messages.OfType<SequenceTrackNameMessage>()
                                                            .FirstOrDefault()
                                                            ?.Text);
