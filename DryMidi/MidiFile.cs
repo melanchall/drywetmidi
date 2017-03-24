@@ -9,7 +9,7 @@ namespace Melanchall.DryMidi
     {
         #region Properties
 
-        public short TimeDivision { get; set; }
+        public TimeDivision TimeDivision { get; set; }
 
         public ChunksCollection Chunks { get; } = new ChunksCollection();
 

@@ -15,24 +15,35 @@
         /// <returns>Single byte made of four-bit halfs.</returns>
         internal static byte Combine(FourBitNumber head, FourBitNumber tail)
         {
-            return (byte)((head << 4) + tail);
+            return (byte)((head << 4) | tail);
         }
 
         /// <summary>
-        /// Merges two seven-bit numbers into one unsigned 16-bit integer number.
+        /// Merges two seven-bit numbers into one unsigned 16-bit unsigned integer number.
         /// </summary>
         /// <param name="head"><see cref="SevenBitNumber"/> representing left part of resulting number.</param>
         /// <param name="tail"><see cref="SevenBitNumber"/> representing right part of resulting number.</param>
         /// <returns>Single unsigned 16-bit integer number made of seven-bit halfs.</returns>
         internal static ushort Combine(SevenBitNumber head, SevenBitNumber tail)
         {
-            return (byte)((head << 7) + tail);
+            return (byte)((head << 7) | tail);
+        }
+
+        /// <summary>
+        /// Merges two signed bytes into one 16-bit signed integer number.
+        /// </summary>
+        /// <param name="head">Byte representing left part of resulting number.</param>
+        /// <param name="tail">Byte representing right part of resulting number.</param>
+        /// <returns>Single signed 16-bit integer number made of byte halfs.</returns>
+        internal static short Combine(byte head, byte tail)
+        {
+            return (short)((head << 8) | tail);
         }
 
         /// <summary>
         /// Extracts right four-bit part of a byte.
         /// </summary>
-        /// <param name="number">Byte to extract right part.</param>
+        /// <param name="number">Byte to extract right part of.</param>
         /// <returns><see cref="FourBitNumber"/> representing the right part of the byte.</returns>
         internal static FourBitNumber GetTail(this byte number)
         {
@@ -42,7 +53,7 @@
         /// <summary>
         /// Extracts right seven-bit part of an unsigned 16-bit integer number.
         /// </summary>
-        /// <param name="number">Number to extract right part.</param>
+        /// <param name="number">Number to extract right part of.</param>
         /// <returns><see cref="SevenBitNumber"/> representing the right part of the unsigned 16-bit integer number.</returns>
         internal static SevenBitNumber GetTail(this ushort number)
         {
@@ -50,9 +61,19 @@
         }
 
         /// <summary>
+        /// Extracts right eight-bit part of an nsigned 16-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract right part of.</param>
+        /// <returns>Byte representing the right part of the signed 16-bit integer number.</returns>
+        internal static byte GetTail(this short number)
+        {
+            return (byte)(number & byte.MaxValue);
+        }
+
+        /// <summary>
         /// Extracts left four-bit part of a byte.
         /// </summary>
-        /// <param name="number">Byte to extract left part.</param>
+        /// <param name="number">Byte to extract left part of.</param>
         /// <returns><see cref="FourBitNumber"/> representing the left part of the byte.</returns>
         internal static FourBitNumber GetHead(this byte number)
         {
@@ -62,11 +83,21 @@
         /// <summary>
         /// Extracts left seven-bit part of an unsigned 16-bit integer number.
         /// </summary>
-        /// <param name="number">Number to extract left part.</param>
+        /// <param name="number">Number to extract left part of.</param>
         /// <returns><see cref="SevenBitNumber"/> representing the left part of the unsigned 16-bit integer number.</returns>
         internal static SevenBitNumber GetHead(this ushort number)
         {
             return (SevenBitNumber)(number >> 7);
+        }
+
+        /// <summary>
+        /// Extracts left eight-bit part of an signed 16-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract left part of.</param>
+        /// <returns>Byte representing the left part of the signed 16-bit integer number.</returns>
+        internal static byte GetHead(this short number)
+        {
+            return (byte)(number >> 8);
         }
 
         /// <summary>

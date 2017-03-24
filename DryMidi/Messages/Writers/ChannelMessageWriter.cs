@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Melanchall.DryMidi
 {
-    public sealed class ChannelMessageWriter : IMessageWriter
+    internal sealed class ChannelMessageWriter : IMessageWriter
     {
         #region Constants
 

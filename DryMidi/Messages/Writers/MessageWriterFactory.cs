@@ -25,7 +25,7 @@ namespace Melanchall.DryMidi
         /// <exception cref="ArgumentNullException">
         /// <paramref name="message"/> is null.
         /// </exception>
-        public static IMessageWriter GetWriter(Message message)
+        internal static IMessageWriter GetWriter(Message message)
         {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));

@@ -118,6 +118,11 @@
     <Compile Include="ReadingSettings\SilentNoteOnPolicy.cs" />
     <Compile Include="ReadingSettings\InvalidChunkSizePolicy.cs" />
     <Compile Include="ReadingSettings\UnknownFileFormatPolicy.cs" />
+    <Compile Include="TimeDivision\SmpteFormat.cs" />
+    <Compile Include="TimeDivision\TimeDivision.cs" />
+    <Compile Include="TimeDivision\SmpteTimeDivision.cs" />
+    <Compile Include="TimeDivision\TicksPerQuarterNoteTimeDivision.cs" />
+    <Compile Include="TimeDivision\TimeDivisionFactory.cs" />
     <Compile Include="WritingSettings\CompressionPolicy.cs" />
     <Compile Include="WritingSettings\WritingSettings.cs" />
   </ItemGroup>

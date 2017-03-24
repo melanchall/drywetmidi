@@ -63,7 +63,7 @@ namespace Melanchall.DryMidi
         /// (which represent a byte stored positive) is the resolution within a frame: typical values may be 4
         /// (MIDI Time Code resolution), 8, 10, 80 (bit resolution), or 100.
         /// </remarks>
-        public short TimeDivision { get; set; }
+        public TimeDivision TimeDivision { get; set; }
 
         /// <summary>
         /// Gets or sets the number of track chunks that are stored or will be stored in a file
@@ -100,7 +100,7 @@ namespace Melanchall.DryMidi
 
             FileFormat = fileFormat;
             TracksNumber = reader.ReadWord();
-            TimeDivision = reader.ReadInt16();
+            TimeDivision = TimeDivisionFactory.GetTimeDivision(reader.ReadInt16());
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Melanchall.DryMidi
         {
             writer.WriteWord(FileFormat);
             writer.WriteWord(TracksNumber);
-            writer.WriteInt16(TimeDivision);
+            writer.WriteInt16(TimeDivision.ToInt16());
         }
 
         /// <summary>

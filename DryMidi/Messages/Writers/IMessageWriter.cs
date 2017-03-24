@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides methods to write messages of specific types.
     /// </summary>
-    public interface IMessageWriter
+    internal interface IMessageWriter
     {
         /// <summary>
         /// Writes a message to the <see cref="MidiWriter"/>'s underlying stream according to specified

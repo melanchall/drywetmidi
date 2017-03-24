@@ -12,7 +12,7 @@
 
         #region Methods
 
-        public static IMessageReader GetReader(byte statusByte)
+        internal static IMessageReader GetReader(byte statusByte)
         {
             if (statusByte == MessagesStatusBytes.Global.Meta)
                 return _metaMessageReader;

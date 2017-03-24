@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Melanchall.DryMidi
 {
-    public sealed class MetaMessageReader : IMessageReader
+    internal sealed class MetaMessageReader : IMessageReader
     {
         #region Constants
 
