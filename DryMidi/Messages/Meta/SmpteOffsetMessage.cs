@@ -38,7 +38,7 @@ namespace Melanchall.DryMidi
 
         #region Overrides
 
-        public override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
+        internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
         {
             Hours = reader.ReadByte();
             Minutes = reader.ReadByte();
@@ -47,7 +47,7 @@ namespace Melanchall.DryMidi
             SubFrames = reader.ReadByte();
         }
 
-        public override void WriteContent(MidiWriter writer, WritingSettings settings)
+        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Hours);
             writer.WriteByte(Minutes);
@@ -56,7 +56,7 @@ namespace Melanchall.DryMidi
             writer.WriteByte(SubFrames);
         }
 
-        public override int GetContentSize()
+        internal override int GetContentSize()
         {
             return 5;
         }

@@ -27,19 +27,19 @@
 
         #region Overrides
 
-        public override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
+        internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
         {
             Key = reader.ReadSByte();
             Scale = reader.ReadByte();
         }
 
-        public override void WriteContent(MidiWriter writer, WritingSettings settings)
+        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteSByte(Key);
             writer.WriteByte(Scale);
         }
 
-        public override int GetContentSize()
+        internal override int GetContentSize()
         {
             return 2;
         }

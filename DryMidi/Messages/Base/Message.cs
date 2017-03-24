@@ -28,11 +28,11 @@ namespace Melanchall.DryMidi
 
         #region Methods
 
-        public abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1);
+        internal abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1);
 
-        public abstract void WriteContent(MidiWriter writer, WritingSettings settings);
+        internal abstract void WriteContent(MidiWriter writer, WritingSettings settings);
 
-        public abstract int GetContentSize();
+        internal abstract int GetContentSize();
 
         protected abstract Message CloneMessage();
 
