@@ -1,6 +1,6 @@
 # DryMIDI
 
-DryMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like message and track chunk. You will not find here any high-level entities like note or chord.
+DryMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like *message* and *track chunk*.
 
 The library is under MIT license so you can do whatever you want with it.
 
@@ -39,4 +39,4 @@ midiFile.Save("My Great Song.mid",
               });
 ```
 
-Using `CompressionPolicy.Default` option doesn't lead to losing of any data, so any unknown chunks and meta messages will be presented in the file.
+Using of the `CompressionPolicy.Default` option doesn't lead to losing of any data, so any unknown chunks and meta messages will be presented in the file.
