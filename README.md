@@ -4,21 +4,11 @@ DryMIDI is the .NET library to work with MIDI files. You need to understand MIDI
 
 The library is under MIT license so you can do whatever you want with it.
 
-## Main Features
-
-#### Flexible reading and writing MIDI files
-
-DryMIDI has a lot of options in order to give you full control under reading and writing MIDI files. For example, you can choose format of the file being saved or reaction on some unexpected situations like missing End of Track message at the end of track chunk. This also gives you ability to read corrupted files.
-
-#### Files customization
-
-You can define your own chunks and meta messages which can be written to a file and read from it. So you have the ability to easily create new MIDI-based file format for your purposes.
-
 ## Getting Started
 
-`Load` static method of the `MidiFile` class is all you need to read an existing MIDI file. After that you can work with the content of the file through chunks and messages.
+Let's see some examples of what you can do with DryMIDI.
 
-For example, if you want to speed up a MIDI file by two times you can do it with this code:
+If you want to speed up playing back a MIDI file by two times you can do it with this code:
 
 ```csharp
 var midiFile = MidiFile.Load("My Great Song.mid");
@@ -30,4 +20,23 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
         setTempoMessage.MicrosecondsPerBeat /= 2;
     }
 }
+
+midiFile.Save("My Great Song Speeded.mid");
 ```
+
+Of course this code is simplified. In practice a MIDI file may not contain SetTempo message which means it has the default one (500000 microseconds per beat).
+
+You can try to minimize size of a MIDI file with this code:
+
+```csharp
+var midiFile = MidiFile.Load("My Great Song.mid");
+midiFile.Save("My Great Song.mid",
+              true,
+              MidiFileFormat.SingleTrack,
+              new WritingSettings
+              {
+                  CompressionPolicy = CompressionPolicy.Default
+              });
+```
+
+Using `CompressionPolicy.Default` option doesn't lead to losing of any data, so any unknown chunks and meta messages will be presented in the file.
