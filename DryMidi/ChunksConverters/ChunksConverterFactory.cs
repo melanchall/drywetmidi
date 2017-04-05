@@ -1,8 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Melanchall.DryMidi
 {
-    public static class ChunksConverterFactory
+    /// <summary>
+    /// Provider of an implementation of the <see cref="IChunksConverter"/> interface which
+    /// is appropriate for a specified MIDI file format.
+    /// </summary>
+    internal static class ChunksConverterFactory
     {
         #region Fields
 
@@ -17,12 +23,24 @@ namespace Melanchall.DryMidi
 
         #region Methods
 
+        /// <summary>
+        /// Gets chunks converter which is appropriate for a passed MIDI file format.
+        /// </summary>
+        /// <param name="format">MIDI file format to get <see cref="IChunksConverter"/> for.</param>
+        /// <returns>An instance of the <see cref="IChunksConverter"/> appropriate for
+        /// <paramref name="format"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
+        /// <exception cref="NotSupportedException"><paramref name="format"/> is not supported yet.</exception>
         public static IChunksConverter GetConverter(MidiFileFormat format)
         {
+            if (!Enum.IsDefined(typeof(MidiFileFormat), format))
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
+
             IChunksConverter converter;
-            return _converters.TryGetValue(format, out converter)
-                ? converter
-                : null;
+            if (_converters.TryGetValue(format, out converter))
+                return converter;
+
+            throw new NotImplementedException($"Converter for the {format} format is not implemented.");
         }
 
         #endregion

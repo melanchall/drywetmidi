@@ -10,7 +10,7 @@ namespace Melanchall.DryMidi
     /// data in the file: format of the file, number of track chunks and time division which specifies
     /// the meaning of the delta-times of messages.
     /// </remarks>
-    public sealed class HeaderChunk : Chunk
+    internal sealed class HeaderChunk : Chunk
     {
         #region Constants
 

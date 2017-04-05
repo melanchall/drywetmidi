@@ -32,7 +32,7 @@ namespace Melanchall.DryMidi
         UseRunningStatus = 1,
 
         /// <summary>
-        /// Turn Note Off messages into the Note On ones with zero velocity. It helps to
+        /// Turn Note Off messages into the Note On ones with zero velocity. Note that it helps to
         /// compress MIDI data in the case of <see cref="UseRunningStatus"/> is used only.
         /// </summary>
         NoteOffAsSilentNoteOn = 2,
@@ -53,12 +53,12 @@ namespace Melanchall.DryMidi
         DeleteDefaultSetTempo = 16,
 
         /// <summary>
-        /// Don't write unknown meta messages presented in the file to save.
+        /// Don't write unknown meta messages presented in an instance of the <see cref="MidiFile"/>.
         /// </summary>
         DeleteUnknownMetaMessages = 32,
 
         /// <summary>
-        /// Don't write unknown chunks presented in the file to save.
+        /// Don't write unknown chunks presented in an instance of the <see cref="MidiFile"/>.
         /// </summary>
         DeleteUnknownChunks = 64,
 

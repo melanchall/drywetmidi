@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Melanchall.DryMidi
 {
-    public sealed class SingleTrackChunksConverter : IChunksConverter
+    internal sealed class SingleTrackChunksConverter : IChunksConverter
     {
         #region Nested types
 

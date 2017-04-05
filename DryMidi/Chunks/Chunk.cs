@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Melanchall.DryMidi
 {
@@ -55,7 +56,7 @@ namespace Melanchall.DryMidi
         #region Properties
 
         /// <summary>
-        /// 4-character ID of the chunk which specifies its type.
+        /// Gets 4-character ID of the chunk which specifies its type.
         /// </summary>
         public string ChunkId { get; }
 
@@ -72,7 +73,7 @@ namespace Melanchall.DryMidi
         /// <exception cref="ObjectDisposedException">
         /// Method was called after <paramref name="reader"/> was disposed.
         /// </exception>
-        /// <exception cref="System.IO.IOException">
+        /// <exception cref="IOException">
         /// An I/O error occurs on the <paramref name="reader"/>'s underlying stream.
         /// </exception>
         /// <exception cref="InvalidChunkSizeException">
@@ -103,7 +104,7 @@ namespace Melanchall.DryMidi
         /// <exception cref="ObjectDisposedException">
         /// Method was called after <paramref name="writer"/> was disposed.
         /// </exception>
-        /// <exception cref="System.IO.IOException">
+        /// <exception cref="IOException">
         /// An I/O error occurs on the <paramref name="writer"/>'s underlying stream.
         /// </exception>
         public void Write(MidiWriter writer, WritingSettings settings)

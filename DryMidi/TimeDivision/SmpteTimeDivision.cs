@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryMidi
 {
@@ -16,10 +17,11 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="format">SMPTE format representing the number of frames per second.</param>
         /// <param name="resolution">Resoltuion within a frame.</param>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         public SmpteTimeDivision(SmpteFormat format, byte resolution)
         {
             if (!Enum.IsDefined(typeof(SmpteFormat), format))
-                throw new ArgumentException("Format is invalid.", nameof(format));
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(SmpteFormat));
 
             Format = format;
             Resolution = resolution;

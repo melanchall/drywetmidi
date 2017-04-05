@@ -1,16 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
 namespace Melanchall.DryMidi
 {
+    /// <summary>
+    /// Class that represents a MIDI file.
+    /// </summary>
     public sealed class MidiFile
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a time division of a MIDI file.
+        /// </summary>
+        /// <remarks>
+        /// Time division specifies the meaning of the delta-times of messages. There are two types of
+        /// the time division: ticks per quarter note and SMPTE. The first type represented by
+        /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
+        /// <see cref="SmpteTimeDivision"/> class.
+        /// </remarks>
         public TimeDivision TimeDivision { get; set; }
 
+        /// <summary>
+        /// Gets collection of chunks of a MIDI file.
+        /// </summary>
+        /// <remarks>
+        /// MIDI Files are made up of chunks. Сollection returned by this property may contain chunks
+        /// of the following types: <see cref="TrackChunk"/>, <see cref="UnknownChunk"/>, and any custom
+        /// chunk types you've defined.
+        /// </remarks>
         public ChunksCollection Chunks { get; } = new ChunksCollection();
 
         #endregion
@@ -70,7 +91,7 @@ namespace Melanchall.DryMidi
                     file.Chunks.Add(chunk);
                 }
 
-                ProcessUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
+                ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
             }
 
             //
@@ -78,10 +99,25 @@ namespace Melanchall.DryMidi
             return file;
         }
 
+        /// <summary>
+        /// Writes current <see cref="MidiFile"/> to the stream.
+        /// </summary>
+        /// <param name="stream">Stream to write file's data to.</param>
+        /// <param name="format">Format of the file to be written.</param>
+        /// <param name="settings">Settings according to which the file must be written.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> does not support writing,
+        /// or is already closed.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
+        /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
+        /// exceeds maximum value allowed for MIDI file.</exception>
         public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
+
+            if (!Enum.IsDefined(typeof(MidiFileFormat), format))
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
 
             //
 
@@ -117,6 +153,18 @@ namespace Melanchall.DryMidi
             }
         }
 
+        /// <summary>
+        /// Reads a header chunk from a MIDI-file.
+        /// </summary>
+        /// <param name="reader">Reader to read a chunk with.</param>
+        /// <param name="settings">Settings according to which a chunk must be read.</param>
+        /// <returns>A MIDI-file header chunk.</returns>
+        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
+        /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
+        /// in its header and that should be treated as error according to the specified
+        /// <see cref="ReadingSettings"/>.</exception>
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
@@ -128,6 +176,24 @@ namespace Melanchall.DryMidi
             return headerChunk;
         }
 
+        /// <summary>
+        /// Reads a chunk from a MIDI-file.
+        /// </summary>
+        /// <param name="reader">Reader to read a chunk with.</param>
+        /// <param name="settings">Settings according to which a chunk must be read.</param>
+        /// <param name="actualTrackChunksCount">Actual count of track chunks at the moment.</param>
+        /// <param name="expectedTrackChunksCount">Expected count of track chunks.</param>
+        /// <returns>A MIDI-file chunk.</returns>
+        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
+        /// should be treated as error accordng to the specified <see cref="ReadingSettings"/>.</exception>
+        /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
+        /// count is greater than expected one and that should be treated as error according to
+        /// the specified <see cref="ReadingSettings"/>.</exception>
+        /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
+        /// in its header and that should be treated as error according to the specified
+        /// <see cref="ReadingSettings"/>.</exception>
         private static Chunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
@@ -155,7 +221,7 @@ namespace Melanchall.DryMidi
 
             if (chunk is TrackChunk && actualTrackChunksCount >= expectedTrackChunksCount)
             {
-                ProcessUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
+                ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
 
                 switch (settings.ExtraTrackChunkPolicy)
                 {
@@ -173,7 +239,17 @@ namespace Melanchall.DryMidi
             return chunk;
         }
 
-        private static void ProcessUnexpectedTrackChunksCount(UnexpectedTrackChunksCountPolicy policy, int actualTrackChunksCount, int expectedTrackChunksCount)
+        /// <summary>
+        /// Does nothing if difference between expected track chunks count and the actual one should not
+        /// be treated as error; or throws the <see cref="UnexpectedTrackChunksCountException"/> if this
+        /// difference is unallowable.
+        /// </summary>
+        /// <param name="policy">The policy according to which the method should operate.</param>
+        /// <param name="actualTrackChunksCount">Actual count of track chunks.</param>
+        /// <param name="expectedTrackChunksCount">Expected count of track chunks.</param>
+        /// <exception cref="UnexpectedTrackChunksCountException">Difference between expected track chunks
+        /// count and the actual one is unallowable by used <see cref="ReadingSettings"/>.</exception>
+        private static void ReactOnUnexpectedTrackChunksCount(UnexpectedTrackChunksCountPolicy policy, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             switch (policy)
             {
@@ -188,21 +264,39 @@ namespace Melanchall.DryMidi
             }
         }
 
+        /// <summary>
+        /// Tries to create an instance of a chunk type that has specified ID.
+        /// </summary>
+        /// <param name="chunkId">ID of the chunk that need to be created.</param>
+        /// <param name="chunksTypes">Collection of the <see cref="Type"/> objects to search for
+        /// the chunk type with <paramref name="chunkId"/> ID.</param>
+        /// <returns>An instance of the chunk type with the specified ID.</returns>
         private static Chunk TryCreateChunk(string chunkId, IEnumerable<Type> chunksTypes)
         {
             if (chunksTypes == null || !chunksTypes.Any())
                 return null;
 
-            return chunksTypes.Where(IsTypeRepresentCustomChunk)
+            return chunksTypes.Where(IsChunkType)
                               .Select(Activator.CreateInstance)
                               .OfType<Chunk>()
                               .Where(c => c.ChunkId == chunkId)
                               .FirstOrDefault();
         }
 
-        private static bool IsTypeRepresentCustomChunk(Type type)
+        /// <summary>
+        /// Checks if a type represents a MIDI-file chunk.
+        /// </summary>
+        /// <param name="type">Type to check whether it represents a chunk or not.</param>
+        /// <returns>True if passed type represents a MIDI-file chunk; false - otherwise.</returns>
+        /// <remarks>
+        /// Type represents a chunk if it is derived from the <see cref="Chunk"/> class and has
+        /// parameterless constructor.
+        /// </remarks>
+        private static bool IsChunkType(Type type)
         {
-            return type != null && type.IsSubclassOf(typeof(Chunk)) && type.GetConstructor(Type.EmptyTypes) != null;
+            return type != null &&
+                   type.IsSubclassOf(typeof(Chunk)) &&
+                   type.GetConstructor(Type.EmptyTypes) != null;
         }
 
         #endregion

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Melanchall.DryMidi
 {
-    public sealed class MultiSequenceChunksConverter : IChunksConverter
+    internal sealed class MultiSequenceChunksConverter : IChunksConverter
     {
         #region IChunksConverter
 
