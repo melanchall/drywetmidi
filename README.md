@@ -21,7 +21,7 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
     }
 }
 
-midiFile.Save("My Great Song Speeded.mid");
+midiFile.Save("My Great Song speeded.mid");
 ```
 
 Of course this code is simplified. In practice a MIDI file may not contain SetTempo message which means it has the default one (500000 microseconds per beat).
@@ -30,6 +30,7 @@ You can try to minimize size of a MIDI file with this code:
 
 ```csharp
 var midiFile = MidiFile.Load("My Great Song.mid");
+
 midiFile.Save("My Great Song.mid",
               true,
               MidiFileFormat.SingleTrack,
@@ -40,3 +41,17 @@ midiFile.Save("My Great Song.mid",
 ```
 
 Using of the `CompressionPolicy.Default` option doesn't lead to losing of any data, so any unknown chunks and meta messages will be presented in the file.
+
+And another one example. Suppose you want to remove all C sharp notes from a MIDI file. It can be done with this code:
+
+```csharp
+var midiFile = MidiFile.Load("My Great Song.mid");
+
+foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
+{
+    trackChunk.Messages.RemoveAll(m => (m as NoteOnMessage)?.GetNoteLetter() == NoteLetter.CSharp ||
+                                       (m as NoteOffMessage)?.GetNoteLetter() == NoteLetter.CSharp);
+}
+            
+midiFile.Save("My Great Song without C Sharp notes.mid");
+```
