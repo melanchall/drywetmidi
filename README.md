@@ -1,8 +1,15 @@
 # DryMIDI
 
-DryMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like *message* and *track chunk*.
+DryMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like *message* and *track chunk*. Visit [The MIDI Association site](https://www.midi.org) to get more information about MIDI.
 
 The library is under MIT license so you can do whatever you want with it.
+
+## Features
+
+* DryMIDI provides core functionality to read and write [standard MIDI files](https://www.midi.org/specifications/category/smf-specifications) giving you set of basic MIDI objects: ```MidiFile```, ```Message```, ```TrackChunk``` (see examples below of how you can use these objects).
+* The library gives you ability to implement custom meta messages (by deriving from the ```MetaMessage```) and custom chunks (by deriving from the ```Chunk```).
+* Process of reading or writing can be finely adjusted with help of ```ReadingSettings``` and ```WritingSettings```. It allows, for example, to read files with some corruptions like mismatch of actual track chunk's length and expected one written in the chunk's header.
+* All possible errors in a MIDI file are presented in the DryMIDI as separate exception classes so you can easily catch specific error. Some of these exceptions are thrown only if specific option is set in an instance of the ```ReadingSettings``` used to read the file.
 
 ## Getting Started
 
@@ -42,7 +49,7 @@ midiFile.Save("My Great Song.mid",
 
 Using of the `CompressionPolicy.Default` option doesn't lead to losing of any data, so any unknown chunks and meta messages will be presented in the file.
 
-And another one example. Suppose you want to remove all C sharp notes from a MIDI file. It can be done with this code:
+And another one example. Suppose you want to remove all *C#* notes from a MIDI file. It can be done with this code:
 
 ```csharp
 var midiFile = MidiFile.Load("My Great Song.mid");
