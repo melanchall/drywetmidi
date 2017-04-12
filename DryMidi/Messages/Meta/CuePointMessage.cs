@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(CuePointMessage cuePointMessage)
+        {
+            if (ReferenceEquals(null, cuePointMessage))
+                return false;
+
+            if (ReferenceEquals(this, cuePointMessage))
+                return true;
+
+            return base.Equals(cuePointMessage) && Text == cuePointMessage.Text;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Cue Point (text = {Text})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as CuePointMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
         }
 
         #endregion

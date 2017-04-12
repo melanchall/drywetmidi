@@ -21,6 +21,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(UnknownMetaMessage unknownMetaMessage)
+        {
+            if (ReferenceEquals(null, unknownMetaMessage))
+                return false;
+
+            if (ReferenceEquals(this, unknownMetaMessage))
+                return true;
+
+            return base.Equals(unknownMetaMessage) && ArrayUtilities.Equals(Data, unknownMetaMessage.Data);
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -54,6 +69,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Unknown meta (status-byte = {StatusByte})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as UnknownMetaMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Data?.GetHashCode() ?? 0);
         }
 
         #endregion

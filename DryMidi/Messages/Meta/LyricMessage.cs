@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(LyricMessage lyricMessage)
+        {
+            if (ReferenceEquals(null, lyricMessage))
+                return false;
+
+            if (ReferenceEquals(this, lyricMessage))
+                return true;
+
+            return base.Equals(lyricMessage) && Text == lyricMessage.Text;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Lyric (text = {Text})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as LyricMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
         }
 
         #endregion

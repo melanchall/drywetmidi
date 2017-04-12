@@ -25,6 +25,23 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(KeySignatureMessage keySignatureMessage)
+        {
+            if (ReferenceEquals(null, keySignatureMessage))
+                return false;
+
+            if (ReferenceEquals(this, keySignatureMessage))
+                return true;
+
+            return base.Equals(keySignatureMessage) &&
+                   Key == keySignatureMessage.Key &&
+                   Scale == keySignatureMessage.Scale;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -52,6 +69,16 @@
         public override string ToString()
         {
             return $"Key Signature (key = {Key}, scale = {Scale})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as KeySignatureMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ Key.GetHashCode() ^ Scale.GetHashCode();
         }
 
         #endregion

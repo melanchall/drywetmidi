@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(SequenceTrackNameMessage sequenceTrackNameMessage)
+        {
+            if (ReferenceEquals(null, sequenceTrackNameMessage))
+                return false;
+
+            if (ReferenceEquals(this, sequenceTrackNameMessage))
+                return true;
+
+            return base.Equals(sequenceTrackNameMessage) && Text == sequenceTrackNameMessage.Text;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Sequence/Track Name (text = {Text})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SequenceTrackNameMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
         }
 
         #endregion

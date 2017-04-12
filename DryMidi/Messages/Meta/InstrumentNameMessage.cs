@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(InstrumentNameMessage instrumentNameMessage)
+        {
+            if (ReferenceEquals(null, instrumentNameMessage))
+                return false;
+
+            if (ReferenceEquals(this, instrumentNameMessage))
+                return true;
+
+            return base.Equals(instrumentNameMessage) && InstrumentName == instrumentNameMessage.InstrumentName;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Instrument Name (instrument name = {InstrumentName})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as InstrumentNameMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (InstrumentName?.GetHashCode() ?? 0);
         }
 
         #endregion

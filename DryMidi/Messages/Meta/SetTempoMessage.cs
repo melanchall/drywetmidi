@@ -6,7 +6,7 @@ namespace Melanchall.DryMidi
     {
         #region Constants
 
-        private const long DefaultTempo = 500000;
+        public const long DefaultTempo = 500000;
 
         #endregion
 
@@ -46,6 +46,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(SetTempoMessage setTempoMessage)
+        {
+            if (ReferenceEquals(null, setTempoMessage))
+                return false;
+
+            if (ReferenceEquals(this, setTempoMessage))
+                return true;
+
+            return base.Equals(setTempoMessage) && MicrosecondsPerBeat == setTempoMessage.MicrosecondsPerBeat;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -71,6 +86,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Set Tempo (tempo = {MicrosecondsPerBeat})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SetTempoMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ MicrosecondsPerBeat.GetHashCode();
         }
 
         #endregion

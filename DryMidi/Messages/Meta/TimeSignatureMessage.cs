@@ -40,6 +40,24 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(TimeSignatureMessage timeSignatureMessage)
+        {
+            if (ReferenceEquals(null, timeSignatureMessage))
+                return false;
+
+            if (ReferenceEquals(this, timeSignatureMessage))
+                return true;
+
+            return base.Equals(timeSignatureMessage) && Numerator == timeSignatureMessage.Numerator &&
+                                                        Denominator == timeSignatureMessage.Denominator &&
+                                                        Clocks == timeSignatureMessage.Clocks &&
+                                                        NumberOf32ndNotesPerBeat == timeSignatureMessage.NumberOf32ndNotesPerBeat;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -71,6 +89,19 @@
         public override string ToString()
         {
             return $"Time Signature (numerator = {Numerator}, denominator = {Denominator}, clocks = {Clocks}, 32nd notes per beat = {NumberOf32ndNotesPerBeat})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as TimeSignatureMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ Numerator.GetHashCode() ^
+                                        Denominator.GetHashCode() ^
+                                        Clocks.GetHashCode() ^
+                                        NumberOf32ndNotesPerBeat.GetHashCode();
         }
 
         #endregion

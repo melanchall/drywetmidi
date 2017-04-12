@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(DeviceNameMessage deviceNameMessage)
+        {
+            if (ReferenceEquals(null, deviceNameMessage))
+                return false;
+
+            if (ReferenceEquals(this, deviceNameMessage))
+                return true;
+
+            return base.Equals(deviceNameMessage) && DeviceName == deviceNameMessage.DeviceName;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Device Name message (device name = {DeviceName})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as DeviceNameMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (DeviceName?.GetHashCode() ?? 0);
         }
 
         #endregion

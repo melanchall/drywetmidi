@@ -148,6 +148,7 @@ namespace Melanchall.DryMidi
         {
             byte? runningStatus = null;
             var writeStatusByte = true;
+            var deleteDefaultSetTempo = true;
 
             foreach (var message in Messages.Concat(new[] { new EndOfTrackMessage() }))
             {
@@ -165,6 +166,18 @@ namespace Melanchall.DryMidi
                             Channel = noteOffMessage.Channel,
                             NoteNumber = noteOffMessage.NoteNumber
                         };
+                }
+
+                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultSetTempo) && deleteDefaultSetTempo)
+                {
+                    var setTempoMessage = messageToWrite as SetTempoMessage;
+                    if (setTempoMessage != null)
+                    {
+                        if (setTempoMessage.MicrosecondsPerBeat == SetTempoMessage.DefaultTempo)
+                            continue;
+
+                        deleteDefaultSetTempo = false;
+                    }
                 }
 
                 IMessageWriter messageWriter = MessageWriterFactory.GetWriter(messageToWrite);

@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(ProgramNameMessage programNameMessage)
+        {
+            if (ReferenceEquals(null, programNameMessage))
+                return false;
+
+            if (ReferenceEquals(this, programNameMessage))
+                return true;
+
+            return base.Equals(programNameMessage) && Text == programNameMessage.Text;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Program Name (text = {Text})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ProgramNameMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
         }
 
         #endregion

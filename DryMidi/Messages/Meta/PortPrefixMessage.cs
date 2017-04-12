@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(PortPrefixMessage portPrefixMessage)
+        {
+            if (ReferenceEquals(null, portPrefixMessage))
+                return false;
+
+            if (ReferenceEquals(this, portPrefixMessage))
+                return true;
+
+            return base.Equals(portPrefixMessage) && Port == portPrefixMessage.Port;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -49,6 +64,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Port Prefix (port = {Port})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as PortPrefixMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ Port.GetHashCode();
         }
 
         #endregion

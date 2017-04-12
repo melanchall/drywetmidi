@@ -22,6 +22,21 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(SequenceNumberMessage sequenceNumberMessage)
+        {
+            if (ReferenceEquals(null, sequenceNumberMessage))
+                return false;
+
+            if (ReferenceEquals(this, sequenceNumberMessage))
+                return true;
+
+            return base.Equals(sequenceNumberMessage) && Number == sequenceNumberMessage.Number;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -47,6 +62,16 @@
         public override string ToString()
         {
             return $"Sequence Number (number = {Number})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SequenceNumberMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ Number.GetHashCode();
         }
 
         #endregion

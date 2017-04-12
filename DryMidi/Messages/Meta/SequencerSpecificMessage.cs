@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(SequencerSpecificMessage sequencerSpecificMessage)
+        {
+            if (ReferenceEquals(null, sequencerSpecificMessage))
+                return false;
+
+            if (ReferenceEquals(this, sequencerSpecificMessage))
+                return true;
+
+            return base.Equals(sequencerSpecificMessage) && ArrayUtilities.Equals(Data, sequencerSpecificMessage.Data);
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -57,6 +72,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return "Sequencer Specific";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SequencerSpecificMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Data?.GetHashCode() ?? 0);
         }
 
         #endregion

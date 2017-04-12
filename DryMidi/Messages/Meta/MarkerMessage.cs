@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(MarkerMessage markerMessage)
+        {
+            if (ReferenceEquals(null, markerMessage))
+                return false;
+
+            if (ReferenceEquals(this, markerMessage))
+                return true;
+
+            return base.Equals(markerMessage) && Text == markerMessage.Text;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Marker (text = {Text})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as MarkerMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
         }
 
         #endregion

@@ -18,7 +18,9 @@ namespace Melanchall.DryMidi
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Delta-time have to be non-negative number.");
+                    throw new ArgumentOutOfRangeException(nameof(value),
+                                                          value,
+                                                          "Delta-time have to be non-negative number.");
 
                 _deltaTime = value;
             }
@@ -36,6 +38,17 @@ namespace Melanchall.DryMidi
 
         protected abstract Message CloneMessage();
 
+        public bool Equals(Message message)
+        {
+            if (ReferenceEquals(null, message))
+                return false;
+
+            if (ReferenceEquals(this, message))
+                return true;
+
+            return DeltaTime == message.DeltaTime;
+        }
+
         #endregion
 
         #region ICloneable
@@ -45,6 +58,20 @@ namespace Melanchall.DryMidi
             var message = CloneMessage();
             message.DeltaTime = DeltaTime;
             return message;
+        }
+
+        #endregion
+
+        #region Overrides
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Message);
+        }
+
+        public override int GetHashCode()
+        {
+            return DeltaTime.GetHashCode();
         }
 
         #endregion

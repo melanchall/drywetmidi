@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Melanchall.DryMidi
 {
@@ -28,6 +29,21 @@ namespace Melanchall.DryMidi
         #region Properties
 
         public FourBitNumber Channel { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        public bool Equals(ChannelMessage channelMessage)
+        {
+            if (ReferenceEquals(null, channelMessage))
+                return false;
+
+            if (ReferenceEquals(this, channelMessage))
+                return true;
+
+            return base.Equals(channelMessage) && _parameters.SequenceEqual(channelMessage._parameters);
+        }
 
         #endregion
 
@@ -63,6 +79,16 @@ namespace Melanchall.DryMidi
             Array.Copy(_parameters, message._parameters, _parameters.Length);
 
             return message;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ChannelMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ _parameters.GetHashCode();
         }
 
         #endregion

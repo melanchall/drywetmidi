@@ -270,7 +270,8 @@ namespace Melanchall.DryMidi
         /// <param name="chunkId">ID of the chunk that need to be created.</param>
         /// <param name="chunksTypes">Collection of the <see cref="Type"/> objects to search for
         /// the chunk type with <paramref name="chunkId"/> ID.</param>
-        /// <returns>An instance of the chunk type with the specified ID.</returns>
+        /// <returns>An instance of the chunk type with the specified ID or null if <paramref name="chunksTypes"/>
+        /// doesn;t contain chunk type with it.</returns>
         private static Chunk TryCreateChunk(string chunkId, IEnumerable<Type> chunksTypes)
         {
             if (chunksTypes == null || !chunksTypes.Any())

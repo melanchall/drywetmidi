@@ -24,6 +24,21 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(CopyrightNoticeMessage copyrightNoticeMessage)
+        {
+            if (ReferenceEquals(null, copyrightNoticeMessage))
+                return false;
+
+            if (ReferenceEquals(this, copyrightNoticeMessage))
+                return true;
+
+            return base.Equals(copyrightNoticeMessage) && Text == copyrightNoticeMessage.Text;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -55,6 +70,16 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"Copyright Notice (text = {Text})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as CopyrightNoticeMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
         }
 
         #endregion

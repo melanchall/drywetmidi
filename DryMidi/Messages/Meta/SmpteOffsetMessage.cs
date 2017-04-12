@@ -36,6 +36,25 @@ namespace Melanchall.DryMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(SmpteOffsetMessage smpteOffsetMessage)
+        {
+            if (ReferenceEquals(null, smpteOffsetMessage))
+                return false;
+
+            if (ReferenceEquals(this, smpteOffsetMessage))
+                return true;
+
+            return base.Equals(smpteOffsetMessage) && Hours == smpteOffsetMessage.Hours &&
+                                                      Minutes == smpteOffsetMessage.Minutes &&
+                                                      Seconds == smpteOffsetMessage.Seconds &&
+                                                      Frames == smpteOffsetMessage.Frames &&
+                                                      SubFrames == smpteOffsetMessage.SubFrames;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
@@ -69,6 +88,20 @@ namespace Melanchall.DryMidi
         public override string ToString()
         {
             return $"SMPTE Offset (hours = {Hours}, minutes = {Minutes}, seconds = {Seconds}, frames = {Frames}, subframes = {SubFrames})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SmpteOffsetMessage);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ Hours.GetHashCode() ^
+                                        Minutes.GetHashCode() ^
+                                        Seconds.GetHashCode() ^
+                                        Frames.GetHashCode() ^
+                                        SubFrames.GetHashCode();
         }
 
         #endregion
