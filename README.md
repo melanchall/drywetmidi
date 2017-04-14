@@ -62,3 +62,5 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
             
 midiFile.Save("My Great Song without C Sharp notes.mid");
 ```
+------------------
+Visit [Wiki](https://github.com/melanchall/drymidi/wiki) to learn more.
