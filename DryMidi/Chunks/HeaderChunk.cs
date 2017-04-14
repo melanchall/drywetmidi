@@ -88,7 +88,7 @@ namespace Melanchall.DryMidi
         /// <param name="settings">Settings according to which the chunk's content must be read.</param>
         /// <param name="size">Expected size of the content taken from the chunk's header.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the reader's underlying stream was disposed.</exception>
-        /// <exception cref="System.IO.IOException">An I/O error occurs on the reader's underlying stream.</exception>
+        /// <exception cref="System.IO.IOException">An I/O error occurred on the reader's underlying stream.</exception>
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
@@ -113,7 +113,7 @@ namespace Melanchall.DryMidi
         /// <param name="writer">Writer to write the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be written.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream was disposed.</exception>
-        /// <exception cref="System.IO.IOException">An I/O error occurs on the writer's underlying stream.</exception>
+        /// <exception cref="System.IO.IOException">An I/O error occurred on the writer's underlying stream.</exception>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteWord(FileFormat);

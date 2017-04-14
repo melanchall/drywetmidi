@@ -49,7 +49,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="value">The unsigned byte to write.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteByte(byte value)
         {
             _binaryWriter.Write(value);
@@ -61,7 +61,7 @@ namespace Melanchall.DryMidi
         /// <param name="bytes">A byte array containing the data to write.</param>
         /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is null.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteBytes(byte[] bytes)
         {
             if (bytes == null)
@@ -75,7 +75,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="value">The signed byte to write.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteSByte(sbyte value)
         {
             _binaryWriter.Write(value);
@@ -87,7 +87,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="value">WORD value to write.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteWord(ushort value)
         {
             var bytes = BitConverter.GetBytes(value);
@@ -103,7 +103,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="value">DWORD value to write.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteDword(uint value)
         {
             var bytes = BitConverter.GetBytes(value);
@@ -119,7 +119,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="value">INT16 value to write.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteInt16(short value)
         {
             var bytes = BitConverter.GetBytes(value);
@@ -134,7 +134,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="value">The string to write.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteString(string value)
         {
             var chars = value?.ToCharArray() ?? new char[0];
@@ -154,7 +154,7 @@ namespace Melanchall.DryMidi
         /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteVlqNumber(int value)
         {
             var bytes = value.GetVlqBytes();
@@ -167,7 +167,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <param name="value">DWORD value to write.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void Write3ByteDword(uint value)
         {
             const int mask = 255;

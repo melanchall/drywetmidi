@@ -74,7 +74,7 @@ namespace Melanchall.DryMidi
         /// Method was called after <paramref name="reader"/> was disposed.
         /// </exception>
         /// <exception cref="IOException">
-        /// An I/O error occurs on the <paramref name="reader"/>'s underlying stream.
+        /// An I/O error occurred on the <paramref name="reader"/>'s underlying stream.
         /// </exception>
         /// <exception cref="InvalidChunkSizeException">
         /// Actual chunk's size differs from the one declared in its header.
@@ -105,7 +105,7 @@ namespace Melanchall.DryMidi
         /// Method was called after <paramref name="writer"/> was disposed.
         /// </exception>
         /// <exception cref="IOException">
-        /// An I/O error occurs on the <paramref name="writer"/>'s underlying stream.
+        /// An I/O error occurred on the <paramref name="writer"/>'s underlying stream.
         /// </exception>
         public void Write(MidiWriter writer, WritingSettings settings)
         {

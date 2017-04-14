@@ -40,7 +40,7 @@ namespace Melanchall.DryMidi
         /// <summary>
         /// Gets or sets the position within the underlying stream.
         /// </summary>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
         public long Position
         {
@@ -51,7 +51,7 @@ namespace Melanchall.DryMidi
         /// <summary>
         /// Gets a value indicating whether end of the underlying stream is reached.
         /// </summary>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
         public bool EndReached => _binaryReader.BaseStream.Position >= _binaryReader.BaseStream.Length;
 
@@ -65,7 +65,7 @@ namespace Melanchall.DryMidi
         /// <returns>The next byte read from the underlying stream.</returns>
         /// <exception cref="EndOfStreamException">The end of the underlying stream is reached.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte ReadByte()
         {
             return _binaryReader.ReadByte();
@@ -77,7 +77,7 @@ namespace Melanchall.DryMidi
         /// <returns>A signed byte read from the underlying stream.</returns>
         /// <exception cref="EndOfStreamException">The end of the underlying stream is reached.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public sbyte ReadSByte()
         {
             return _binaryReader.ReadSByte();
@@ -93,7 +93,7 @@ namespace Melanchall.DryMidi
         /// than the number of bytes requested if the end of the stream is reached.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is negative.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte[] ReadBytes(int count)
         {
             return _binaryReader.ReadBytes(count);
@@ -105,7 +105,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <returns>A 16-bit unsigned integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public ushort ReadWord()
         {
             var bytes = ReadBytes(sizeof(ushort));
@@ -121,7 +121,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <returns>A 32-bit unsigned integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public uint ReadDword()
         {
             var bytes = ReadBytes(sizeof(uint));
@@ -137,7 +137,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <returns>A 16-bit signed integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public short ReadInt16()
         {
             var bytes = ReadBytes(sizeof(short));
@@ -155,7 +155,7 @@ namespace Melanchall.DryMidi
         /// <returns>The string being read.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is negative.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public string ReadString(int count)
         {
             var chars = _binaryReader.ReadChars(count);
@@ -176,7 +176,7 @@ namespace Melanchall.DryMidi
         /// <returns>A 32-bit signed integer read from the underlying stream.</returns>
         /// <exception cref="EndOfStreamException">The end of the underlying stream is reached.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public int ReadVlqNumber()
         {
             int result = 0;
@@ -198,7 +198,7 @@ namespace Melanchall.DryMidi
         /// </summary>
         /// <returns>A 32-bit unsigned integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public uint Read3ByteDword()
         {
             var bytes = ReadBytes(3);

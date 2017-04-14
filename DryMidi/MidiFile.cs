@@ -38,6 +38,33 @@ namespace Melanchall.DryMidi
 
         #region Methods
 
+        /// <summary>
+        /// Loads a MIDI file specified by its full path.
+        /// </summary>
+        /// <param name="filePath">Path to the file to load.</param>
+        /// <param name="settings">Settings according to which the file must be loaded.</param>
+        /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file.</returns>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
+        /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
+        /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
+        /// and file names must be less than 260 characters.</exception>
+        /// <exception cref="DirectoryNotFoundException">The specified path is invalid, (for example,
+        /// it is on an unmapped drive).</exception>
+        /// <exception cref="IOException">An I/O error occurred while saving the file.</exception>
+        /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
+        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
+        /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
+        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
+        /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
+        /// in its header and that should be treated as error according to the <paramref name="settings"/>.
+        /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
+        /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
+        /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
+        /// count differs from the expected one and that should be treated as error according to
+        /// the specified <paramref name="settings"/>.</exception>
         public static MidiFile Load(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))
@@ -46,14 +73,60 @@ namespace Melanchall.DryMidi
             }
         }
 
+        /// <summary>
+        /// Saves the MIDI file to location specified by full path.
+        /// </summary>
+        /// <param name="filePath">Full path of the file to save to.</param>
+        /// <param name="overwriteFile">If true and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if false and the file exists exception will be thrown.</param>
+        /// <param name="format">MIDI file format to save in.</param>
+        /// <param name="settings">Settings according to which the file must be saved.</param>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
+        /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
+        /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
+        /// and file names must be less than 260 characters.</exception>
+        /// <exception cref="DirectoryNotFoundException">The specified path is invalid, (for example,
+        /// it is on an unmapped drive).</exception>
+        /// <exception cref="IOException">An I/O error occurred while saving the file.</exception>
+        /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
+        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
+        /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
+        /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
+        /// exceeds maximum value allowed for MIDI file.</exception>
         public void Save(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
+            if (!Enum.IsDefined(typeof(MidiFileFormat), format))
+                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
+
             using (var fileStream = File.Open(filePath, overwriteFile ? FileMode.Create : FileMode.CreateNew))
             {
                 Write(fileStream, format, settings);
             }
         }
 
+        /// <summary>
+        /// Reads a MIDI file from the stream.
+        /// </summary>
+        /// <param name="stream">Stream to read file from.</param>
+        /// <param name="settings">Settings according to which the file must be read.</param>
+        /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file was read from the stream.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">Position of the stream is placed at its end.</exception>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
+        /// or is already closed.</exception>
+        /// <exception cref="IOException">An I/O error occurred while reading from the stream.</exception>
+        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
+        /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
+        /// in its header and that should be treated as error according to the <paramref name="settings"/>.
+        /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
+        /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
+        /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
+        /// count differs from the expected one and that should be treated as error according to
+        /// the specified <paramref name="settings"/>.</exception>
         public static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             if (stream == null)
@@ -159,12 +232,11 @@ namespace Melanchall.DryMidi
         /// <param name="reader">Reader to read a chunk with.</param>
         /// <param name="settings">Settings according to which a chunk must be read.</param>
         /// <returns>A MIDI-file header chunk.</returns>
-        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the specified
-        /// <see cref="ReadingSettings"/>.</exception>
+        /// <paramref name="settings"/>.</exception>
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
@@ -185,15 +257,15 @@ namespace Melanchall.DryMidi
         /// <param name="expectedTrackChunksCount">Expected count of track chunks.</param>
         /// <returns>A MIDI-file chunk.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurs on the underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the specified <see cref="ReadingSettings"/>.</exception>
+        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count is greater than expected one and that should be treated as error according to
-        /// the specified <see cref="ReadingSettings"/>.</exception>
+        /// the specified <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the specified
-        /// <see cref="ReadingSettings"/>.</exception>
+        /// <paramref name="settings"/>.</exception>
         private static Chunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
@@ -248,7 +320,7 @@ namespace Melanchall.DryMidi
         /// <param name="actualTrackChunksCount">Actual count of track chunks.</param>
         /// <param name="expectedTrackChunksCount">Expected count of track chunks.</param>
         /// <exception cref="UnexpectedTrackChunksCountException">Difference between expected track chunks
-        /// count and the actual one is unallowable by used <see cref="ReadingSettings"/>.</exception>
+        /// count and the actual one is unallowable due to <paramref name="policy"/>.</exception>
         private static void ReactOnUnexpectedTrackChunksCount(UnexpectedTrackChunksCountPolicy policy, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             switch (policy)
