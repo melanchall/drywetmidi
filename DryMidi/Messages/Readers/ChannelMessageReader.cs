@@ -32,7 +32,7 @@ namespace Melanchall.DryMidi
                 throw new UnknownChannelMessageException(statusByte, channel);
 
             var message = (ChannelMessage)Activator.CreateInstance(messageType);
-            message.ReadContent(reader, settings);
+            message.ReadContent(reader, settings, Message.UnknownContentSize);
             message.Channel = channel;
             return message;
         }

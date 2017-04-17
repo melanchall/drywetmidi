@@ -49,7 +49,7 @@ namespace Melanchall.DryMidi
 
         #region Overrides
 
-        internal override sealed void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
+        internal override sealed void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             for (int i = 0; i < _parameters.Length; i++)
             {

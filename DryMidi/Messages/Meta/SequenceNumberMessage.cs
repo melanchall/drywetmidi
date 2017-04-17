@@ -39,17 +39,17 @@
 
         #region Overrides
 
-        internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
+        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
         {
             Number = reader.ReadInt16();
         }
 
-        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteInt16(Number);
         }
 
-        internal override int GetContentSize()
+        protected override int GetContentDataSize()
         {
             return 2;
         }

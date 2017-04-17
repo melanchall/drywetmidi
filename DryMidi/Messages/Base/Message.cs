@@ -4,6 +4,12 @@ namespace Melanchall.DryMidi
 {
     public abstract class Message : ICloneable
     {
+        #region Constants
+
+        public const int UnknownContentSize = -1;
+
+        #endregion
+
         #region Fields
 
         private int _deltaTime;
@@ -30,7 +36,7 @@ namespace Melanchall.DryMidi
 
         #region Methods
 
-        internal abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1);
+        internal abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size);
 
         internal abstract void WriteContent(MidiWriter writer, WritingSettings settings);
 

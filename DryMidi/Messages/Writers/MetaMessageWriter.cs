@@ -54,7 +54,7 @@ namespace Melanchall.DryMidi
             if (unknownMetaMessage != null)
                 statusByte = unknownMetaMessage.StatusByte;
             else if (!_messageStatusBytes.TryGetValue(message.GetType(), out statusByte))
-                throw new Exception("AAAA");
+                throw new NotImplementedException($"Writing of the {message.GetType()} is not implemented.");
 
             writer.WriteByte(statusByte);
 

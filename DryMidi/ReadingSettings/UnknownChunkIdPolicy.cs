@@ -17,7 +17,7 @@
         Skip,
 
         /// <summary>
-        /// Abort reading and throw an exception.
+        /// Abort reading and throw an <see cref="UnknownChunkIdException"/>.
         /// </summary>
         Abort
     }

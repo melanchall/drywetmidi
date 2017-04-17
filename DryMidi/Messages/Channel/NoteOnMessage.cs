@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryMidi
+﻿using System.Diagnostics;
+
+namespace Melanchall.DryMidi
 {
     public sealed class NoteOnMessage : ChannelMessage
     {

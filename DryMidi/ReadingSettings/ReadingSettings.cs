@@ -6,15 +6,15 @@ namespace Melanchall.DryMidi
     /// <summary>
     /// Settings of the reading engine.
     /// </summary>
-    public sealed class ReadingSettings
+    public class ReadingSettings
     {
         /// <summary>
-        /// Gets or sets reaction of the reading engine on unexpected track chunks count. The defailt is
+        /// Gets or sets reaction of the reading engine on unexpected track chunks count. The default is
         /// <see cref="UnexpectedTrackChunksCountPolicy.Ignore"/>.
         /// </summary>
         /// <remarks>
         /// This policy will be taken into account if actual track chunks count is less or greater than
-        /// tracks number specified in the file's header chunk. If <see cref="UnknownChunkIdPolicy.Abort"/>
+        /// tracks number specified in the file's header chunk. If <see cref="UnexpectedTrackChunksCountPolicy.Abort"/>
         /// is used an instance of the <see cref="UnexpectedTrackChunksCountException"/> will be thrown if
         /// track chunks count is unexpected.
         /// </remarks>
@@ -52,7 +52,8 @@ namespace Melanchall.DryMidi
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on Note On messages with velocity 0.
-        /// The default is <see cref="SilentNoteOnPolicy.NoteOff"/>.
+        /// The default is <see cref="SilentNoteOnPolicy.NoteOff"/>. Although it is recommended to treat silent
+        /// Note On message as Note Off you can turn this behavior off to get original message stored in the file.
         /// </summary>
         public SilentNoteOnPolicy SilentNoteOnPolicy { get; set; }
 
@@ -66,18 +67,6 @@ namespace Melanchall.DryMidi
         /// the one declared in chunk's header.
         /// </remarks>
         public InvalidChunkSizePolicy InvalidChunkSizePolicy { get; set; }
-
-        /// <summary>
-        /// Gets or sets reaction of the reading engine on invalid expected size of a message.
-        /// The default is <see cref="InvalidMessageSizePolicy.Ignore"/>.
-        /// </summary>
-        /// <remarks>
-        /// Some messages (at now, meta messages only) are written along with the size of their content.
-        /// For example, for the Set Tempo message 0 should be written as a size since this message has
-        /// no parameters. If read size is not 0 and <see cref="InvalidMessageSizePolicy.Abort"/> option
-        /// is used, an exception will be thrown.
-        /// </remarks>
-        public InvalidMessageSizePolicy InvalidMessageSizePolicy { get; set; }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on unknown file format stored in a header chunk.
@@ -96,5 +85,12 @@ namespace Melanchall.DryMidi
         /// these requirements.
         /// </summary>
         public IEnumerable<Type> CustomChunksTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets collection of custom meta messages types. These types must be derived from the
+        /// <see cref="MetaMessage"/> class and have parameterless constructor. No exception will be thrown
+        /// if some types don't meet these requirements.
+        /// </summary>
+        public IEnumerable<Type> CustomMetaMessagesTypes { get; set; }
     }
 }

@@ -41,17 +41,17 @@ namespace Melanchall.DryMidi
 
         #region Overrides
 
-        internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
+        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
         {
             Port = reader.ReadByte();
         }
 
-        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Port);
         }
 
-        internal override int GetContentSize()
+        protected override int GetContentDataSize()
         {
             return 1;
         }

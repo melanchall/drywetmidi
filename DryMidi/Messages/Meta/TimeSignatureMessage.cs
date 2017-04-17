@@ -60,7 +60,7 @@
 
         #region Overrides
 
-        internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size = -1)
+        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
         {
             Numerator = reader.ReadByte();
             Denominator = reader.ReadByte();
@@ -68,7 +68,7 @@
             NumberOf32ndNotesPerBeat = reader.ReadByte();
         }
 
-        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Numerator);
             writer.WriteByte(Denominator);
@@ -76,7 +76,7 @@
             writer.WriteByte(NumberOf32ndNotesPerBeat);
         }
 
-        internal override int GetContentSize()
+        protected override int GetContentDataSize()
         {
             return 4;
         }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Settings of the writing engine.
     /// </summary>
-    public sealed class WritingSettings
+    public class WritingSettings
     {
         /// <summary>
         /// Gets or sets compression rules for the writing engine. The default is

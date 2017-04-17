@@ -53,7 +53,7 @@ namespace Melanchall.DryMidi
         /// and file names must be less than 260 characters.</exception>
         /// <exception cref="DirectoryNotFoundException">The specified path is invalid, (for example,
         /// it is on an unmapped drive).</exception>
-        /// <exception cref="IOException">An I/O error occurred while saving the file.</exception>
+        /// <exception cref="IOException">An I/O error occurred while loading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
         /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
@@ -65,6 +65,9 @@ namespace Melanchall.DryMidi
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one and that should be treated as error according to
         /// the specified <paramref name="settings"/>.</exception>
+        /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
+        /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
+        /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         public static MidiFile Load(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))
@@ -127,7 +130,10 @@ namespace Melanchall.DryMidi
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one and that should be treated as error according to
         /// the specified <paramref name="settings"/>.</exception>
-        public static MidiFile Read(Stream stream, ReadingSettings settings = null)
+        /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
+        /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
+        /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
+        private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
@@ -184,7 +190,7 @@ namespace Melanchall.DryMidi
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
-        public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
+        private void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
@@ -237,6 +243,9 @@ namespace Melanchall.DryMidi
         /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the specified
         /// <paramref name="settings"/>.</exception>
+        /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
+        /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
+        /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);

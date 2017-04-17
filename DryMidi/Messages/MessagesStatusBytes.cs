@@ -1,15 +1,15 @@
 ﻿namespace Melanchall.DryMidi
 {
-    public static class MessagesStatusBytes
+    internal static class MessagesStatusBytes
     {
-        public static class Global
+        internal static class Global
         {
             public const byte Meta        = 0xFF;
             public const byte NormalSysEx = 0xF0;
             public const byte EscapeSysEx = 0xF7;
         }
 
-        public static class Meta
+        internal static class Meta
         {
             public const byte SequenceNumber    = 0x00;
             public const byte Text              = 0x01;
@@ -31,7 +31,7 @@
             public const byte SequencerSpecific = 0x7F;
         }
 
-        public static class Channel
+        internal static class Channel
         {
             public const byte NoteOff           = 0x8;
             public const byte NoteOn            = 0x9;
