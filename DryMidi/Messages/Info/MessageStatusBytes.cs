@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryMidi
 {
-    internal static class MessagesStatusBytes
+    internal static class MessageStatusBytes
     {
         internal static class Global
         {

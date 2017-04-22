@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryMidi
 {
     internal sealed class SysExMessageReader : IMessageReader
     {
-        #region Constants
-
-        private static readonly Dictionary<byte, Type> _messageTypes = new Dictionary<byte, Type>
-        {
-            [MessagesStatusBytes.Global.EscapeSysEx] = typeof(EscapeSysExMessage),
-            [MessagesStatusBytes.Global.NormalSysEx] = typeof(NormalSysExMessage)
-        };
-
-        #endregion
-
         #region IMessageReader
 
         public Message Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
@@ -24,7 +13,7 @@ namespace Melanchall.DryMidi
             //
 
             Type messageType;
-            var message = _messageTypes.TryGetValue(currentStatusByte, out messageType)
+            var message = StandardMessageTypes.SysEx.TryGetType(currentStatusByte, out messageType)
                 ? (SysExMessage)Activator.CreateInstance(messageType)
                 : null;
 

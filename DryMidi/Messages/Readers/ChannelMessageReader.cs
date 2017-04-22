@@ -1,25 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryMidi
 {
     internal sealed class ChannelMessageReader : IMessageReader
     {
-        #region Constants
-
-        private static readonly Dictionary<byte, Type> _messageTypes = new Dictionary<byte, Type>
-        {
-            [MessagesStatusBytes.Channel.ChannelAftertouch] = typeof(ChannelAftertouchMessage),
-            [MessagesStatusBytes.Channel.ControlChange] = typeof(ControlChangeMessage),
-            [MessagesStatusBytes.Channel.NoteAftertouch] = typeof(NoteAftertouchMessage),
-            [MessagesStatusBytes.Channel.NoteOff] = typeof(NoteOffMessage),
-            [MessagesStatusBytes.Channel.NoteOn] = typeof(NoteOnMessage),
-            [MessagesStatusBytes.Channel.PitchBend] = typeof(PitchBendMessage),
-            [MessagesStatusBytes.Channel.ProgramChange] = typeof(ProgramChangeMessage)
-        };
-
-        #endregion
-
         #region IMessageReader
 
         public Message Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
@@ -28,7 +12,7 @@ namespace Melanchall.DryMidi
             var channel = currentStatusByte.GetTail();
 
             Type messageType;
-            if (!_messageTypes.TryGetValue(statusByte, out messageType))
+            if (!StandardMessageTypes.Channel.TryGetType(statusByte, out messageType))
                 throw new UnknownChannelMessageException(statusByte, channel);
 
             var message = (ChannelMessage)Activator.CreateInstance(messageType);

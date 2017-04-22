@@ -1,36 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryMidi
 {
     internal sealed class MetaMessageWriter : IMessageWriter
     {
-        #region Constants
-
-        private static readonly Dictionary<Type, byte> _messageStatusBytes = new Dictionary<Type, byte>
-        {
-            [typeof(SequenceNumberMessage)]    = MessagesStatusBytes.Meta.SequenceNumber,
-            [typeof(TextMessage)]              = MessagesStatusBytes.Meta.Text,
-            [typeof(CopyrightNoticeMessage)]   = MessagesStatusBytes.Meta.CopyrightNotice,
-            [typeof(SequenceTrackNameMessage)] = MessagesStatusBytes.Meta.SequenceTrackName,
-            [typeof(InstrumentNameMessage)]    = MessagesStatusBytes.Meta.InstrumentName,
-            [typeof(LyricMessage)]             = MessagesStatusBytes.Meta.Lyric,
-            [typeof(MarkerMessage)]            = MessagesStatusBytes.Meta.Marker,
-            [typeof(CuePointMessage)]          = MessagesStatusBytes.Meta.CuePoint,
-            [typeof(ProgramNameMessage)]       = MessagesStatusBytes.Meta.ProgramName,
-            [typeof(DeviceNameMessage)]        = MessagesStatusBytes.Meta.DeviceName,
-            [typeof(ChannelPrefixMessage)]     = MessagesStatusBytes.Meta.ChannelPrefix,
-            [typeof(PortPrefixMessage)]        = MessagesStatusBytes.Meta.PortPrefix,
-            [typeof(EndOfTrackMessage)]        = MessagesStatusBytes.Meta.EndOfTrack,
-            [typeof(SetTempoMessage)]          = MessagesStatusBytes.Meta.SetTempo,
-            [typeof(SmpteOffsetMessage)]       = MessagesStatusBytes.Meta.SmpteOffset,
-            [typeof(TimeSignatureMessage)]     = MessagesStatusBytes.Meta.TimeSignature,
-            [typeof(KeySignatureMessage)]      = MessagesStatusBytes.Meta.KeySignature,
-            [typeof(SequencerSpecificMessage)] = MessagesStatusBytes.Meta.SequencerSpecific
-        };
-
-        #endregion
-
         #region IMessageWriter
 
         public void Write(Message message, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
@@ -44,7 +17,7 @@ namespace Melanchall.DryMidi
             //
 
             if (writeStatusByte)
-                writer.WriteByte(MessagesStatusBytes.Global.Meta);
+                writer.WriteByte(MessageStatusBytes.Global.Meta);
 
             //
 
@@ -53,8 +26,12 @@ namespace Melanchall.DryMidi
             var unknownMetaMessage = message as UnknownMetaMessage;
             if (unknownMetaMessage != null)
                 statusByte = unknownMetaMessage.StatusByte;
-            else if (!_messageStatusBytes.TryGetValue(message.GetType(), out statusByte))
-                throw new NotImplementedException($"Writing of the {message.GetType()} is not implemented.");
+            else
+            {
+                var messageType = message.GetType();
+                if (!StandardMessageTypes.Meta.TryGetStatusByte(messageType, out statusByte) && settings.CustomMetaMessagesTypes?.TryGetStatusByte(messageType, out statusByte) != true)
+                    throw new NotImplementedException($"Writing of the {message.GetType()} is not implemented.");
+            }
 
             writer.WriteByte(statusByte);
 
@@ -81,7 +58,7 @@ namespace Melanchall.DryMidi
 
         public byte GetStatusByte(Message message)
         {
-            return MessagesStatusBytes.Global.Meta;
+            return MessageStatusBytes.Global.Meta;
         }
 
         #endregion

@@ -70,10 +70,12 @@
     <Compile Include="Messages\Channel\NoteOnMessage.cs" />
     <Compile Include="Messages\Channel\PitchBendMessage.cs" />
     <Compile Include="Messages\Channel\ProgramChangeMessage.cs" />
+    <Compile Include="Messages\Info\MessageType.cs" />
+    <Compile Include="Messages\Info\MessageTypesCollection.cs" />
     <Compile Include="Messages\Readers\ChannelMessageReader.cs" />
     <Compile Include="Messages\Readers\IMessageReader.cs" />
     <Compile Include="Messages\Base\Message.cs" />
-    <Compile Include="Messages\MessagesStatusBytes.cs" />
+    <Compile Include="Messages\Info\MessageStatusBytes.cs" />
     <Compile Include="Messages\Base\MetaMessage.cs" />
     <Compile Include="Messages\Readers\MessageReaderFactory.cs" />
     <Compile Include="Messages\Readers\MetaMessageReader.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Messages\Meta\TimeSignatureMessage.cs" />
     <Compile Include="Messages\Meta\UnknownMetaMessage.cs" />
     <Compile Include="Messages\Readers\SysExMessageReader.cs" />
+    <Compile Include="Messages\Info\StandardMessageTypes.cs" />
     <Compile Include="Messages\SysEx\EscapeSysExMessage.cs" />
     <Compile Include="Messages\SysEx\NormalSysExMessage.cs" />
     <Compile Include="Messages\Writers\ChannelMessageWriter.cs" />

@@ -1,36 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryMidi
 {
     internal sealed class MetaMessageReader : IMessageReader
     {
-        #region Constants
-
-        private static readonly Dictionary<byte, Type> _messageTypes = new Dictionary<byte, Type>
-        {
-            [MessagesStatusBytes.Meta.SequenceNumber]    = typeof(SequenceNumberMessage),
-            [MessagesStatusBytes.Meta.Text]              = typeof(TextMessage),
-            [MessagesStatusBytes.Meta.CopyrightNotice]   = typeof(CopyrightNoticeMessage),
-            [MessagesStatusBytes.Meta.SequenceTrackName] = typeof(SequenceTrackNameMessage),
-            [MessagesStatusBytes.Meta.InstrumentName]    = typeof(InstrumentNameMessage),
-            [MessagesStatusBytes.Meta.Lyric]             = typeof(LyricMessage),
-            [MessagesStatusBytes.Meta.Marker]            = typeof(MarkerMessage),
-            [MessagesStatusBytes.Meta.CuePoint]          = typeof(CuePointMessage),
-            [MessagesStatusBytes.Meta.ProgramName]       = typeof(ProgramNameMessage),
-            [MessagesStatusBytes.Meta.DeviceName]        = typeof(DeviceNameMessage),
-            [MessagesStatusBytes.Meta.ChannelPrefix]     = typeof(ChannelPrefixMessage),
-            [MessagesStatusBytes.Meta.PortPrefix]        = typeof(PortPrefixMessage),
-            [MessagesStatusBytes.Meta.EndOfTrack]        = typeof(EndOfTrackMessage),
-            [MessagesStatusBytes.Meta.SetTempo]          = typeof(SetTempoMessage),
-            [MessagesStatusBytes.Meta.SmpteOffset]       = typeof(SmpteOffsetMessage),
-            [MessagesStatusBytes.Meta.TimeSignature]     = typeof(TimeSignatureMessage),
-            [MessagesStatusBytes.Meta.KeySignature]      = typeof(KeySignatureMessage),
-            [MessagesStatusBytes.Meta.SequencerSpecific] = typeof(SequencerSpecificMessage)
-        };
-
-        #endregion
-
         #region IMessageReader
 
         public Message Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
@@ -41,7 +14,7 @@ namespace Melanchall.DryMidi
             //
 
             Type messageType;
-            var message = _messageTypes.TryGetValue(statusByte, out messageType)
+            var message = TryGetMessageType(settings.CustomMetaMessagesTypes, statusByte, out messageType)
                 ? (MetaMessage)Activator.CreateInstance(messageType)
                 : new UnknownMetaMessage(statusByte);
 
@@ -56,6 +29,23 @@ namespace Melanchall.DryMidi
                 reader.ReadBytes((int)bytesUnread);
 
             return message;
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static bool TryGetMessageType(MessageTypesCollection customMetaMessageTypes, byte statusByte, out Type messageType)
+        {
+            return StandardMessageTypes.Meta.TryGetType(statusByte, out messageType) ||
+                   (customMetaMessageTypes?.TryGetType(statusByte, out messageType) == true && IsMetaMessageType(messageType));
+        }
+
+        private static bool IsMetaMessageType(Type type)
+        {
+            return type != null &&
+                   type.IsSubclassOf(typeof(MetaMessage)) &&
+                   type.GetConstructor(Type.EmptyTypes) != null;
         }
 
         #endregion

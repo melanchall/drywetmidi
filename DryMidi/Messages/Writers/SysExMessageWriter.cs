@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryMidi
 {
     internal sealed class SysExMessageWriter : IMessageWriter
     {
-        #region Constants
-
-        private static readonly Dictionary<Type, byte> _messageStatusBytes = new Dictionary<Type, byte>
-        {
-            [typeof(EscapeSysExMessage)] = MessagesStatusBytes.Global.EscapeSysEx,
-            [typeof(NormalSysExMessage)] = MessagesStatusBytes.Global.NormalSysEx
-        };
-
-        #endregion
-
         #region IMessageWriter
 
         public void Write(Message message, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
@@ -31,7 +20,7 @@ namespace Melanchall.DryMidi
             if (writeStatusByte)
             {
                 byte statusByte;
-                if (!_messageStatusBytes.TryGetValue(message.GetType(), out statusByte))
+                if (!StandardMessageTypes.SysEx.TryGetStatusByte(message.GetType(), out statusByte))
                     throw new Exception();
 
                 writer.WriteByte(statusByte);
@@ -69,7 +58,7 @@ namespace Melanchall.DryMidi
             //
 
             byte statusByte;
-            if (!_messageStatusBytes.TryGetValue(message.GetType(), out statusByte))
+            if (!StandardMessageTypes.SysEx.TryGetStatusByte(message.GetType(), out statusByte))
                 throw new Exception();
 
             return statusByte;

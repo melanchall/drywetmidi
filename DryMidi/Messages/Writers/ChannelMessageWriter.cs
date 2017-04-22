@@ -1,26 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Melanchall.DryMidi
 {
     internal sealed class ChannelMessageWriter : IMessageWriter
     {
-        #region Constants
-
-        private static readonly Dictionary<Type, byte> _messageStatusBytes = new Dictionary<Type, byte>
-        {
-            [typeof(ChannelAftertouchMessage)] = MessagesStatusBytes.Channel.ChannelAftertouch,
-            [typeof(ControlChangeMessage)]     = MessagesStatusBytes.Channel.ControlChange,
-            [typeof(NoteAftertouchMessage)]    = MessagesStatusBytes.Channel.NoteAftertouch,
-            [typeof(NoteOffMessage)]           = MessagesStatusBytes.Channel.NoteOff,
-            [typeof(NoteOnMessage)]            = MessagesStatusBytes.Channel.NoteOn,
-            [typeof(PitchBendMessage)]         = MessagesStatusBytes.Channel.PitchBend,
-            [typeof(ProgramChangeMessage)]     = MessagesStatusBytes.Channel.ProgramChange
-        };
-
-        #endregion
-
         #region IMessageWriter
 
         public void Write(Message message, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
@@ -37,7 +21,7 @@ namespace Melanchall.DryMidi
             if (writeStatusByte)
             {
                 byte statusByte;
-                if (!_messageStatusBytes.TryGetValue(message.GetType(), out statusByte))
+                if (!StandardMessageTypes.Channel.TryGetStatusByte(message.GetType(), out statusByte))
                     Debug.Fail($"No status byte defined for {message.GetType()}.");
 
                 var channel = channelMessage.Channel;
@@ -76,7 +60,7 @@ namespace Melanchall.DryMidi
             //
 
             byte statusByte;
-            if (!_messageStatusBytes.TryGetValue(message.GetType(), out statusByte))
+            if (!StandardMessageTypes.Channel.TryGetStatusByte(message.GetType(), out statusByte))
                 Debug.Fail($"No status byte defined for {message.GetType()}.");
 
             var channel = channelMessage.Channel;

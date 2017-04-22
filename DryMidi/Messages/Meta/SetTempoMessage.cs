@@ -63,17 +63,17 @@ namespace Melanchall.DryMidi
 
         #region Overrides
 
-        internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
         {
             MicrosecondsPerBeat = reader.Read3ByteDword();
         }
 
-        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
         {
             writer.Write3ByteDword((uint)MicrosecondsPerBeat);
         }
 
-        internal override int GetContentSize()
+        protected override int GetContentDataSize()
         {
             return 3;
         }

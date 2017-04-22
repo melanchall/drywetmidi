@@ -91,6 +91,6 @@ namespace Melanchall.DryMidi
         /// <see cref="MetaMessage"/> class and have parameterless constructor. No exception will be thrown
         /// if some types don't meet these requirements.
         /// </summary>
-        public IEnumerable<Type> CustomMetaMessagesTypes { get; set; }
+        public MessageTypesCollection CustomMetaMessagesTypes { get; set; }
     }
 }

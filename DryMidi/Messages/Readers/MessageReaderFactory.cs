@@ -14,10 +14,10 @@
 
         internal static IMessageReader GetReader(byte statusByte)
         {
-            if (statusByte == MessagesStatusBytes.Global.Meta)
+            if (statusByte == MessageStatusBytes.Global.Meta)
                 return _metaMessageReader;
 
-            if (statusByte == MessagesStatusBytes.Global.EscapeSysEx || statusByte == MessagesStatusBytes.Global.NormalSysEx)
+            if (statusByte == MessageStatusBytes.Global.EscapeSysEx || statusByte == MessageStatusBytes.Global.NormalSysEx)
                 return _sysExMessageReader;
 
             return _channelMessageReader;
