@@ -15,11 +15,46 @@ The library is under MIT license so you can do whatever you want with it.
 
 Let's see some examples of what you can do with DryMIDI.
 
-If you want to speed up playing back a MIDI file by two times you can do it with this code:
+To reading a MIDI file you have to use ```Read``` static method of the ```MidiFile```:
 
 ```csharp
-var midiFile = MidiFile.Load("My Great Song.mid");
-                             
+var midiFile = MidiFile.Read("My Great Song.mid");
+```
+
+or
+
+```csharp
+var midiFile = MidiFile.Read("My Great Song.mid",
+                             new ReadingSettings
+                             {
+                                 CustomChunkTypes = new ChunkTypesCollection
+                                 {
+                                     { typeof(MyCustomChunk), "Cstm" }
+                                 }
+                             });
+```
+
+To write MIDI data to a file you have to use ```Write``` method of the ```MidiFile```:
+
+```csharp
+midiFile.Write("My Great Song speeded.mid");
+```
+
+or
+
+```csharp
+midiFile.Write("My Great Song.mid",
+               true,
+               MidiFileFormat.SingleTrack,
+               new WritingSettings
+               {
+                   CompressionPolicy = CompressionPolicy.Default
+               });
+```
+
+If you want to speed up playing back a MIDI file by two times you can do it with this code:
+
+```csharp                   
 foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 {
     foreach (var setTempoMessage in trackChunk.Messages.OfType<SetTempoMessage>())
@@ -27,40 +62,18 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
         setTempoMessage.MicrosecondsPerBeat /= 2;
     }
 }
-
-midiFile.Save("My Great Song speeded.mid");
 ```
 
 Of course this code is simplified. In practice a MIDI file may not contain SetTempo message which means it has the default one (500000 microseconds per beat).
 
-You can try to minimize size of a MIDI file with this code:
+Suppose you want to remove all *C#* notes from a MIDI file. It can be done with this code:
 
 ```csharp
-var midiFile = MidiFile.Load("My Great Song.mid");
-
-midiFile.Save("My Great Song.mid",
-              true,
-              MidiFileFormat.SingleTrack,
-              new WritingSettings
-              {
-                  CompressionPolicy = CompressionPolicy.Default
-              });
-```
-
-Using of the `CompressionPolicy.Default` option doesn't lead to losing of any data, so any unknown chunks and meta messages will be presented in the file.
-
-And another one example. Suppose you want to remove all *C#* notes from a MIDI file. It can be done with this code:
-
-```csharp
-var midiFile = MidiFile.Load("My Great Song.mid");
-
 foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 {
     trackChunk.Messages.RemoveAll(m => (m as NoteOnMessage)?.GetNoteLetter() == NoteLetter.CSharp ||
                                        (m as NoteOffMessage)?.GetNoteLetter() == NoteLetter.CSharp);
 }
-            
-midiFile.Save("My Great Song without C Sharp notes.mid");
 ```
 ------------------
 Visit [Wiki](https://github.com/melanchall/drymidi/wiki) to learn more.
