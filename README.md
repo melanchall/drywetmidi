@@ -15,7 +15,7 @@ The library is under MIT license so you can do whatever you want with it.
 
 Let's see some examples of what you can do with DryMIDI.
 
-To reading a MIDI file you have to use ```Read``` static method of the ```MidiFile```:
+To [read a MIDI file](https://github.com/melanchall/drymidi/wiki/Reading-a-MIDI-file) you have to use ```Read``` static method of the ```MidiFile```:
 
 ```csharp
 var midiFile = MidiFile.Read("My Great Song.mid");
@@ -34,7 +34,7 @@ var midiFile = MidiFile.Read("My Great Song.mid",
                              });
 ```
 
-To write MIDI data to a file you have to use ```Write``` method of the ```MidiFile```:
+To [write MIDI data to a file](https://github.com/melanchall/drymidi/wiki/Writing-a-MIDI-file) you have to use ```Write``` method of the ```MidiFile```:
 
 ```csharp
 midiFile.Write("My Great Song speeded.mid");
