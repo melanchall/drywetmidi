@@ -22,7 +22,7 @@ namespace Melanchall.DryMidi
         /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
         /// <see cref="SmpteTimeDivision"/> class.
         /// </remarks>
-        public TimeDivision TimeDivision { get; set; }
+        public TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote);
 
         /// <summary>
         /// Gets collection of chunks of a MIDI file.
@@ -53,7 +53,7 @@ namespace Melanchall.DryMidi
         /// and file names must be less than 260 characters.</exception>
         /// <exception cref="DirectoryNotFoundException">The specified path is invalid, (for example,
         /// it is on an unmapped drive).</exception>
-        /// <exception cref="IOException">An I/O error occurred while loading the file.</exception>
+        /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
         /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
@@ -94,7 +94,7 @@ namespace Melanchall.DryMidi
         /// and file names must be less than 260 characters.</exception>
         /// <exception cref="DirectoryNotFoundException">The specified path is invalid, (for example,
         /// it is on an unmapped drive).</exception>
-        /// <exception cref="IOException">An I/O error occurred while saving the file.</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
         /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
@@ -249,7 +249,7 @@ namespace Melanchall.DryMidi
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
-            if (chunkId != ChunkIds.Header)
+            if (chunkId != HeaderChunk.Id)
                 throw new NoHeaderChunkException($"'{chunkId}' is invalid header chunk's ID. It must be '{HeaderChunk.Id}'.");
 
             var headerChunk = new HeaderChunk();
@@ -278,7 +278,7 @@ namespace Melanchall.DryMidi
         private static Chunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
-            var chunk = chunkId == ChunkIds.Track
+            var chunk = chunkId == TrackChunk.Id
                 ? new TrackChunk()
                 : TryCreateChunk(chunkId, settings.CustomChunkTypes);
 
@@ -355,11 +355,8 @@ namespace Melanchall.DryMidi
         /// doesn't contain chunk type with it.</returns>
         private static Chunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
         {
-            if (chunksTypes == null || !chunksTypes.Any())
-                return null;
-
-            Type type;
-            return chunksTypes.TryGetType(chunkId, out type) && IsChunkType(type)
+            Type type = null;
+            return chunksTypes?.TryGetType(chunkId, out type) == true && IsChunkType(type)
                 ? (Chunk)Activator.CreateInstance(type)
                 : null;
         }

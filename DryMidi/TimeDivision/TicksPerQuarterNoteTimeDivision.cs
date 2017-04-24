@@ -7,6 +7,15 @@ namespace Melanchall.DryMidi
     /// </summary>
     public sealed class TicksPerQuarterNoteTimeDivision : TimeDivision
     {
+        #region Constants
+
+        /// <summary>
+        /// Default number of ticks which make up a quarter-note.
+        /// </summary>
+        public const short DefaultTicksPerQuarterNote = 96;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
