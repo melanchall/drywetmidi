@@ -13,7 +13,7 @@
 
         #region Properties
 
-        public byte[] Data { get; private set; }
+        public byte[] Data { get; set; }
 
         #endregion
 

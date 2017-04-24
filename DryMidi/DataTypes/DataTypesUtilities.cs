@@ -3,7 +3,7 @@
     /// <summary>
     /// Internal utilities to manipulate MIDI data types.
     /// </summary>
-    internal static class DataTypesUtilities
+    public static class DataTypesUtilities
     {
         #region Methods
 
@@ -13,7 +13,7 @@
         /// <param name="head"><see cref="FourBitNumber"/> representing left part of resulting number.</param>
         /// <param name="tail"><see cref="FourBitNumber"/> representing right part of resulting number.</param>
         /// <returns>Single byte made of four-bit halfs.</returns>
-        internal static byte Combine(FourBitNumber head, FourBitNumber tail)
+        public static byte Combine(FourBitNumber head, FourBitNumber tail)
         {
             return (byte)((head << 4) | tail);
         }
@@ -24,7 +24,7 @@
         /// <param name="head"><see cref="SevenBitNumber"/> representing left part of resulting number.</param>
         /// <param name="tail"><see cref="SevenBitNumber"/> representing right part of resulting number.</param>
         /// <returns>Single unsigned 16-bit integer number made of seven-bit halfs.</returns>
-        internal static ushort Combine(SevenBitNumber head, SevenBitNumber tail)
+        public static ushort Combine(SevenBitNumber head, SevenBitNumber tail)
         {
             return (byte)((head << 7) | tail);
         }
@@ -35,7 +35,7 @@
         /// <param name="head">Byte representing left part of resulting number.</param>
         /// <param name="tail">Byte representing right part of resulting number.</param>
         /// <returns>Single signed 16-bit integer number made of byte halfs.</returns>
-        internal static short Combine(byte head, byte tail)
+        public static short Combine(byte head, byte tail)
         {
             return (short)((head << 8) | tail);
         }
@@ -45,7 +45,7 @@
         /// </summary>
         /// <param name="number">Byte to extract right part of.</param>
         /// <returns><see cref="FourBitNumber"/> representing the right part of the byte.</returns>
-        internal static FourBitNumber GetTail(this byte number)
+        public static FourBitNumber GetTail(this byte number)
         {
             return (FourBitNumber)(number & FourBitNumber.MaxValue);
         }
@@ -55,7 +55,7 @@
         /// </summary>
         /// <param name="number">Number to extract right part of.</param>
         /// <returns><see cref="SevenBitNumber"/> representing the right part of the unsigned 16-bit integer number.</returns>
-        internal static SevenBitNumber GetTail(this ushort number)
+        public static SevenBitNumber GetTail(this ushort number)
         {
             return (SevenBitNumber)(number & SevenBitNumber.MaxValue);
         }
@@ -65,7 +65,7 @@
         /// </summary>
         /// <param name="number">Number to extract right part of.</param>
         /// <returns>Byte representing the right part of the signed 16-bit integer number.</returns>
-        internal static byte GetTail(this short number)
+        public static byte GetTail(this short number)
         {
             return (byte)(number & byte.MaxValue);
         }
@@ -75,7 +75,7 @@
         /// </summary>
         /// <param name="number">Byte to extract left part of.</param>
         /// <returns><see cref="FourBitNumber"/> representing the left part of the byte.</returns>
-        internal static FourBitNumber GetHead(this byte number)
+        public static FourBitNumber GetHead(this byte number)
         {
             return (FourBitNumber)(number >> 4);
         }
@@ -85,7 +85,7 @@
         /// </summary>
         /// <param name="number">Number to extract left part of.</param>
         /// <returns><see cref="SevenBitNumber"/> representing the left part of the unsigned 16-bit integer number.</returns>
-        internal static SevenBitNumber GetHead(this ushort number)
+        public static SevenBitNumber GetHead(this ushort number)
         {
             return (SevenBitNumber)(number >> 7);
         }
@@ -95,7 +95,7 @@
         /// </summary>
         /// <param name="number">Number to extract left part of.</param>
         /// <returns>Byte representing the left part of the signed 16-bit integer number.</returns>
-        internal static byte GetHead(this short number)
+        public static byte GetHead(this short number)
         {
             return (byte)(number >> 8);
         }
@@ -112,7 +112,7 @@
         /// The largest number which is allowed is 0FFFFFFF so that the VLQ representations
         /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
-        internal static int GetVlqLength(this int number)
+        public static int GetVlqLength(this int number)
         {
             byte result = 1;
             int mask = 127 << 7;
@@ -138,7 +138,7 @@
         /// The largest number which is allowed is 0FFFFFFF so that the VLQ representations
         /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
-        internal static byte[] GetVlqBytes(this int number)
+        public static byte[] GetVlqBytes(this int number)
         {
             var result = new byte[number.GetVlqLength()];
             var i = result.Length - 1;

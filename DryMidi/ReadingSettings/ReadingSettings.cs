@@ -84,13 +84,13 @@ namespace Melanchall.DryMidi
         /// class and have parameterless constructor. No exception will be thrown if some types don't meet
         /// these requirements.
         /// </summary>
-        public IEnumerable<Type> CustomChunksTypes { get; set; }
+        public ChunkTypesCollection CustomChunkTypes { get; set; }
 
         /// <summary>
         /// Gets or sets collection of custom meta messages types. These types must be derived from the
         /// <see cref="MetaMessage"/> class and have parameterless constructor. No exception will be thrown
         /// if some types don't meet these requirements.
         /// </summary>
-        public MessageTypesCollection CustomMetaMessagesTypes { get; set; }
+        public MessageTypesCollection CustomMetaMessageTypes { get; set; }
     }
 }

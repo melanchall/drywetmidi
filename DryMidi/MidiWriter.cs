@@ -137,8 +137,9 @@ namespace Melanchall.DryMidi
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteString(string value)
         {
-            var chars = value?.ToCharArray() ?? new char[0];
-            _binaryWriter.Write(chars);
+            var chars = value?.ToCharArray();
+            if (chars != null && chars.Length > 0)
+                _binaryWriter.Write(chars);
         }
 
         /// <summary>

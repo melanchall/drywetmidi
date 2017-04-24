@@ -39,10 +39,10 @@ namespace Melanchall.DryMidi
         #region Methods
 
         /// <summary>
-        /// Loads a MIDI file specified by its full path.
+        /// Reads a MIDI file specified by its full path.
         /// </summary>
-        /// <param name="filePath">Path to the file to load.</param>
-        /// <param name="settings">Settings according to which the file must be loaded.</param>
+        /// <param name="filePath">Path to the file to read.</param>
+        /// <param name="settings">Settings according to which the file must be read.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
@@ -68,7 +68,7 @@ namespace Melanchall.DryMidi
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
-        public static MidiFile Load(string filePath, ReadingSettings settings = null)
+        public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))
             {
@@ -77,13 +77,13 @@ namespace Melanchall.DryMidi
         }
 
         /// <summary>
-        /// Saves the MIDI file to location specified by full path.
+        /// Writes the MIDI file to location specified by full path.
         /// </summary>
-        /// <param name="filePath">Full path of the file to save to.</param>
+        /// <param name="filePath">Full path of the file to write to.</param>
         /// <param name="overwriteFile">If true and file specified by <paramref name="filePath"/> already
         /// exists it will be overwritten; if false and the file exists exception will be thrown.</param>
-        /// <param name="format">MIDI file format to save in.</param>
-        /// <param name="settings">Settings according to which the file must be saved.</param>
+        /// <param name="format">MIDI file format to write in.</param>
+        /// <param name="settings">Settings according to which the file must be written.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
@@ -100,7 +100,7 @@ namespace Melanchall.DryMidi
         /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
-        public void Save(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
+        public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
             if (!Enum.IsDefined(typeof(MidiFileFormat), format))
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
@@ -249,7 +249,7 @@ namespace Melanchall.DryMidi
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
-            if (chunkId != HeaderChunk.Id)
+            if (chunkId != ChunkIds.Header)
                 throw new NoHeaderChunkException($"'{chunkId}' is invalid header chunk's ID. It must be '{HeaderChunk.Id}'.");
 
             var headerChunk = new HeaderChunk();
@@ -278,9 +278,9 @@ namespace Melanchall.DryMidi
         private static Chunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(Chunk.IdLength);
-            var chunk = chunkId == TrackChunk.Id
+            var chunk = chunkId == ChunkIds.Track
                 ? new TrackChunk()
-                : TryCreateChunk(chunkId, settings.CustomChunksTypes);
+                : TryCreateChunk(chunkId, settings.CustomChunkTypes);
 
             if (chunk == null)
             {
@@ -349,20 +349,19 @@ namespace Melanchall.DryMidi
         /// Tries to create an instance of a chunk type that has specified ID.
         /// </summary>
         /// <param name="chunkId">ID of the chunk that need to be created.</param>
-        /// <param name="chunksTypes">Collection of the <see cref="Type"/> objects to search for
-        /// the chunk type with <paramref name="chunkId"/> ID.</param>
+        /// <param name="chunksTypes">Collection of the chunks types to search for the one with
+        /// <paramref name="chunkId"/> ID.</param>
         /// <returns>An instance of the chunk type with the specified ID or null if <paramref name="chunksTypes"/>
-        /// doesn;t contain chunk type with it.</returns>
-        private static Chunk TryCreateChunk(string chunkId, IEnumerable<Type> chunksTypes)
+        /// doesn't contain chunk type with it.</returns>
+        private static Chunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
         {
             if (chunksTypes == null || !chunksTypes.Any())
                 return null;
 
-            return chunksTypes.Where(IsChunkType)
-                              .Select(Activator.CreateInstance)
-                              .OfType<Chunk>()
-                              .Where(c => c.ChunkId == chunkId)
-                              .FirstOrDefault();
+            Type type;
+            return chunksTypes.TryGetType(chunkId, out type) && IsChunkType(type)
+                ? (Chunk)Activator.CreateInstance(type)
+                : null;
         }
 
         /// <summary>

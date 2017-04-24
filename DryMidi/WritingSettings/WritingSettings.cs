@@ -16,6 +16,6 @@
         /// <see cref="MetaMessage"/> class and have parameterless constructor. No exception will be thrown
         /// if some types don't meet these requirements.
         /// </summary>
-        public MessageTypesCollection CustomMetaMessagesTypes { get; set; }
+        public MessageTypesCollection CustomMetaMessageTypes { get; set; }
     }
 }

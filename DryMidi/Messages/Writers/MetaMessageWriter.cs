@@ -29,8 +29,8 @@ namespace Melanchall.DryMidi
             else
             {
                 var messageType = message.GetType();
-                if (!StandardMessageTypes.Meta.TryGetStatusByte(messageType, out statusByte) && settings.CustomMetaMessagesTypes?.TryGetStatusByte(messageType, out statusByte) != true)
-                    throw new NotImplementedException($"Writing of the {message.GetType()} is not implemented.");
+                if (!StandardMessageTypes.Meta.TryGetStatusByte(messageType, out statusByte) && settings.CustomMetaMessageTypes?.TryGetStatusByte(messageType, out statusByte) != true)
+                    throw new InvalidOperationException($"Unable to write the {messageType} message.");
             }
 
             writer.WriteByte(statusByte);

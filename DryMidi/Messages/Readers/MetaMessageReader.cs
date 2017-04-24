@@ -14,7 +14,7 @@ namespace Melanchall.DryMidi
             //
 
             Type messageType;
-            var message = TryGetMessageType(settings.CustomMetaMessagesTypes, statusByte, out messageType)
+            var message = TryGetMessageType(settings.CustomMetaMessageTypes, statusByte, out messageType)
                 ? (MetaMessage)Activator.CreateInstance(messageType)
                 : new UnknownMetaMessage(statusByte);
 

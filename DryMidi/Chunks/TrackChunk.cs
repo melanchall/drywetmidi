@@ -148,13 +148,18 @@ namespace Melanchall.DryMidi
         {
             byte? runningStatus = null;
             var writeStatusByte = true;
-            var deleteDefaultSetTempo = true;
+
+            var skipSetTempo = true;
+            var skipKeySignature = true;
+            var skipTimeSignature = true;
 
             foreach (var message in Messages.Concat(new[] { new EndOfTrackMessage() }))
             {
                 var messageToWrite = message;
                 if (messageToWrite is UnknownMetaMessage && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaMessages))
                     continue;
+
+                //
 
                 if (settings.CompressionPolicy.HasFlag(CompressionPolicy.NoteOffAsSilentNoteOn))
                 {
@@ -168,17 +173,21 @@ namespace Melanchall.DryMidi
                         };
                 }
 
-                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultSetTempo) && deleteDefaultSetTempo)
-                {
-                    var setTempoMessage = messageToWrite as SetTempoMessage;
-                    if (setTempoMessage != null)
-                    {
-                        if (setTempoMessage.MicrosecondsPerBeat == SetTempoMessage.DefaultTempo)
-                            continue;
+                //
 
-                        deleteDefaultSetTempo = false;
-                    }
-                }
+                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultSetTempo) &&
+                    TrySkipDefaultSetTempo(messageToWrite, ref skipSetTempo))
+                    continue;
+
+                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultKeySignature) &&
+                    TrySkipDefaultKeySignature(messageToWrite, ref skipKeySignature))
+                    continue;
+
+                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultTimeSignature) &&
+                    TrySkipDefaultTimeSignature(messageToWrite, ref skipTimeSignature))
+                    continue;
+
+                //
 
                 IMessageWriter messageWriter = MessageWriterFactory.GetWriter(messageToWrite);
 
@@ -194,8 +203,64 @@ namespace Melanchall.DryMidi
                     writeStatusByte = true;
                 }
 
+                //
+
                 messageHandler(messageWriter, messageToWrite, writeStatusByte);
             }
+        }
+
+        private static bool TrySkipDefaultSetTempo(Message message, ref bool skip)
+        {
+            if (skip)
+            {
+                var setTempoMessage = message as SetTempoMessage;
+                if (setTempoMessage != null)
+                {
+                    if (setTempoMessage.MicrosecondsPerBeat == SetTempoMessage.DefaultTempo)
+                        return true;
+
+                    skip = false;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TrySkipDefaultKeySignature(Message message, ref bool skip)
+        {
+            if (skip)
+            {
+                var keySignatureMessage = message as KeySignatureMessage;
+                if (keySignatureMessage != null)
+                {
+                    if (keySignatureMessage.Key == KeySignatureMessage.DefaultKey && keySignatureMessage.Scale == KeySignatureMessage.DefaultScale)
+                        return true;
+
+                    skip = false;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TrySkipDefaultTimeSignature(Message message, ref bool skip)
+        {
+            if (skip)
+            {
+                var timeSignatureMessage = message as TimeSignatureMessage;
+                if (timeSignatureMessage != null)
+                {
+                    if (timeSignatureMessage.Numerator == TimeSignatureMessage.DefaultNumerator &&
+                        timeSignatureMessage.Denominator == TimeSignatureMessage.DefaultDenominator &&
+                        timeSignatureMessage.Clocks == TimeSignatureMessage.DefaultClocks &&
+                        timeSignatureMessage.NumberOf32ndNotesPerBeat == TimeSignatureMessage.Default32ndNotesPerBeat)
+                        return true;
+
+                    skip = false;
+                }
+            }
+
+            return false;
         }
 
         #endregion

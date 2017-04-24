@@ -1,10 +1,10 @@
 ﻿namespace Melanchall.DryMidi
 {
-    public static class StandardMessageTypes
+    internal static class StandardMessageTypes
     {
         #region Constants
 
-        public static readonly MessageTypesCollection Channel = new MessageTypesCollection
+        internal static readonly MessageTypesCollection Channel = new MessageTypesCollection
         {
             { typeof(ChannelAftertouchMessage), MessageStatusBytes.Channel.ChannelAftertouch },
             { typeof(ControlChangeMessage), MessageStatusBytes.Channel.ControlChange },
@@ -15,7 +15,7 @@
             { typeof(ProgramChangeMessage), MessageStatusBytes.Channel.ProgramChange }
         };
 
-        public static readonly MessageTypesCollection Meta = new MessageTypesCollection
+        internal static readonly MessageTypesCollection Meta = new MessageTypesCollection
         {
             { typeof(SequenceNumberMessage), MessageStatusBytes.Meta.SequenceNumber },
             { typeof(TextMessage), MessageStatusBytes.Meta.Text },
@@ -37,7 +37,7 @@
             { typeof(SequencerSpecificMessage), MessageStatusBytes.Meta.SequencerSpecific }
         };
 
-        public static readonly MessageTypesCollection SysEx = new MessageTypesCollection
+        internal static readonly MessageTypesCollection SysEx = new MessageTypesCollection
         {
             { typeof(EscapeSysExMessage), MessageStatusBytes.Global.EscapeSysEx },
             { typeof(NormalSysExMessage), MessageStatusBytes.Global.NormalSysEx }

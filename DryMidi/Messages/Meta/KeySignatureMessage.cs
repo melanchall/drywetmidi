@@ -2,6 +2,13 @@
 {
     public sealed class KeySignatureMessage : MetaMessage
     {
+        #region Constants
+
+        public const sbyte DefaultKey = 0;
+        public const byte DefaultScale = 0;
+
+        #endregion
+
         #region Constructor
 
         public KeySignatureMessage()

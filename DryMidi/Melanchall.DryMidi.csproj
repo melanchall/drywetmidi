@@ -43,6 +43,10 @@
     <Compile Include="ChunksConverters\SingleTrackChunksConverter.cs" />
     <Compile Include="Chunks\Chunk.cs" />
     <Compile Include="Chunks\HeaderChunk.cs" />
+    <Compile Include="Chunks\Info\ChunkType.cs" />
+    <Compile Include="Chunks\Info\ChunkIds.cs" />
+    <Compile Include="Chunks\Info\ChunkTypesCollection.cs" />
+    <Compile Include="Chunks\Info\StandardChunkTypes.cs" />
     <Compile Include="Chunks\TrackChunk.cs" />
     <Compile Include="Chunks\UnknownChunk.cs" />
     <Compile Include="Collections\ChunksCollection.cs" />
