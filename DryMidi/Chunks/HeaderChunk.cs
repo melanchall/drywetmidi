@@ -8,7 +8,7 @@ namespace Melanchall.DryMidi
     /// <remarks>
     /// The header chunk at the beginning of the file specifies some basic information about the
     /// data in the file: format of the file, number of track chunks and time division which specifies
-    /// the meaning of the delta-times of messages.
+    /// the meaning of the delta-times of events.
     /// </remarks>
     internal sealed class HeaderChunk : Chunk
     {
@@ -54,7 +54,7 @@ namespace Melanchall.DryMidi
         /// is written or will be written.
         /// </summary>
         /// <remarks>
-        /// Time division specifies the meaning of the delta-times of messages. There are two types of
+        /// Time division specifies the meaning of the delta-times of events. There are two types of
         /// the time division: ticks per quarter note and SMPTE. Time division of the first type has bit 15 set
         /// to 0. In this case bits 14 thru 0 represent the number of ticks which make up a quarter-note.
         /// Division of the second type has bit 15 set to 1. In this case bits 14 thru 8 contain one of the four

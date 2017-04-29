@@ -35,9 +35,9 @@ namespace Melanchall.DryMidi
         #region Properties
 
         /// <summary>
-        /// Gets the collection of messages contained in the track chunk.
+        /// Gets the collection of events contained in the track chunk.
         /// </summary>
-        public MessagesCollection Messages { get; } = new MessagesCollection();
+        public EventsCollection Events { get; } = new EventsCollection();
 
         #endregion
 
@@ -47,7 +47,7 @@ namespace Melanchall.DryMidi
         /// Reads content of a <see cref="TrackChunk"/>.
         /// </summary>
         /// <remarks>
-        /// Content of a track chunk is collection of MIDI messages.
+        /// Content of a track chunk is collection of MIDI events.
         /// </remarks>
         /// <param name="reader">Reader to read the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be read.</param>
@@ -61,14 +61,14 @@ namespace Melanchall.DryMidi
 
             while (reader.Position < endReaderPosition)
             {
-                var message = ReadMessage(reader, settings);
-                if (message is EndOfTrackMessage)
+                var midiEvent = ReadEvent(reader, settings);
+                if (midiEvent is EndOfTrackEvent)
                 {
                     endOfTrackPresented = true;
                     break;
                 }
 
-                Messages.Add(message);
+                Events.Add(midiEvent);
             }
 
             _currentStatusByte = null;
@@ -76,15 +76,15 @@ namespace Melanchall.DryMidi
             //
 
             if (settings.MissedEndOfTrackPolicy == MissedEndOfTrackPolicy.Abort && !endOfTrackPresented)
-                throw new MissedEndOfTrackMessageException();
+                throw new MissedEndOfTrackEventException();
         }
 
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
-            ProcessMessages(settings, (messageWriter, message, writeStatusByte) =>
+            ProcessEvents(settings, (eventWriter, midiEvent, writeStatusByte) =>
             {
-                writer.WriteVlqNumber(message.DeltaTime);
-                messageWriter.Write(message, writer, settings, writeStatusByte);
+                writer.WriteVlqNumber(midiEvent.DeltaTime);
+                eventWriter.Write(midiEvent, writer, settings, writeStatusByte);
             });
         }
 
@@ -92,10 +92,10 @@ namespace Melanchall.DryMidi
         {
             uint result = 0;
 
-            ProcessMessages(settings, (messageWriter, message, writeStatusByte) =>
+            ProcessEvents(settings, (eventWriter, midiEvent, writeStatusByte) =>
             {
-                result += (uint)message.DeltaTime.GetVlqLength();
-                result += (uint)messageWriter.CalculateSize(message, settings, writeStatusByte);
+                result += (uint)midiEvent.DeltaTime.GetVlqLength();
+                result += (uint)eventWriter.CalculateSize(midiEvent, settings, writeStatusByte);
             });
 
             return result;
@@ -105,7 +105,7 @@ namespace Melanchall.DryMidi
 
         #region Methods
 
-        private Message ReadMessage(MidiReader reader, ReadingSettings settings)
+        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings)
         {
             var deltaTime = reader.ReadVlqNumber();
 
@@ -119,32 +119,32 @@ namespace Melanchall.DryMidi
 
             //
 
-            var messageReader = MessageReaderFactory.GetReader(_currentStatusByte.Value);
-            var message = messageReader.Read(reader, settings, _currentStatusByte.Value);
+            var eventReader = EventReaderFactory.GetReader(_currentStatusByte.Value);
+            var midiEvent = eventReader.Read(reader, settings, _currentStatusByte.Value);
 
             //
 
             if (settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff)
             {
-                var noteOnMessage = message as NoteOnMessage;
-                if (noteOnMessage != null && noteOnMessage.Velocity == 0)
+                var noteOnEvent = midiEvent as NoteOnEvent;
+                if (noteOnEvent != null && noteOnEvent.Velocity == 0)
                 {
-                    message = new NoteOffMessage
+                    midiEvent = new NoteOffEvent
                     {
-                        DeltaTime = noteOnMessage.DeltaTime,
-                        Channel = noteOnMessage.Channel,
-                        NoteNumber = noteOnMessage.NoteNumber
+                        DeltaTime = noteOnEvent.DeltaTime,
+                        Channel = noteOnEvent.Channel,
+                        NoteNumber = noteOnEvent.NoteNumber
                     };
                 }
             }
 
             //
 
-            message.DeltaTime = deltaTime;
-            return message;
+            midiEvent.DeltaTime = deltaTime;
+            return midiEvent;
         }
 
-        private void ProcessMessages(WritingSettings settings, Action<IMessageWriter, Message, bool> messageHandler)
+        private void ProcessEvents(WritingSettings settings, Action<IEventWriter, MidiEvent, bool> eventHandler)
         {
             byte? runningStatus = null;
             var writeStatusByte = true;
@@ -153,47 +153,47 @@ namespace Melanchall.DryMidi
             var skipKeySignature = true;
             var skipTimeSignature = true;
 
-            foreach (var message in Messages.Concat(new[] { new EndOfTrackMessage() }))
+            foreach (var midiEvent in Events.Concat(new[] { new EndOfTrackEvent() }))
             {
-                var messageToWrite = message;
-                if (messageToWrite is UnknownMetaMessage && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaMessages))
+                var eventToWrite = midiEvent;
+                if (eventToWrite is UnknownMetaEvent && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaEvents))
                     continue;
 
                 //
 
                 if (settings.CompressionPolicy.HasFlag(CompressionPolicy.NoteOffAsSilentNoteOn))
                 {
-                    var noteOffMessage = messageToWrite as NoteOffMessage;
-                    if (noteOffMessage != null)
-                        messageToWrite = new NoteOnMessage
+                    var noteOffEvent = eventToWrite as NoteOffEvent;
+                    if (noteOffEvent != null)
+                        eventToWrite = new NoteOnEvent
                         {
-                            DeltaTime = noteOffMessage.DeltaTime,
-                            Channel = noteOffMessage.Channel,
-                            NoteNumber = noteOffMessage.NoteNumber
+                            DeltaTime = noteOffEvent.DeltaTime,
+                            Channel = noteOffEvent.Channel,
+                            NoteNumber = noteOffEvent.NoteNumber
                         };
                 }
 
                 //
 
                 if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultSetTempo) &&
-                    TrySkipDefaultSetTempo(messageToWrite, ref skipSetTempo))
+                    TrySkipDefaultSetTempo(eventToWrite, ref skipSetTempo))
                     continue;
 
                 if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultKeySignature) &&
-                    TrySkipDefaultKeySignature(messageToWrite, ref skipKeySignature))
+                    TrySkipDefaultKeySignature(eventToWrite, ref skipKeySignature))
                     continue;
 
                 if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultTimeSignature) &&
-                    TrySkipDefaultTimeSignature(messageToWrite, ref skipTimeSignature))
+                    TrySkipDefaultTimeSignature(eventToWrite, ref skipTimeSignature))
                     continue;
 
                 //
 
-                IMessageWriter messageWriter = MessageWriterFactory.GetWriter(messageToWrite);
+                IEventWriter eventWriter = EventWriterFactory.GetWriter(eventToWrite);
 
-                if (messageToWrite is ChannelMessage)
+                if (eventToWrite is ChannelEvent)
                 {
-                    var statusByte = messageWriter.GetStatusByte(messageToWrite);
+                    var statusByte = eventWriter.GetStatusByte(eventToWrite);
                     writeStatusByte = runningStatus != statusByte || !settings.CompressionPolicy.HasFlag(CompressionPolicy.UseRunningStatus);
                     runningStatus = statusByte;
                 }
@@ -205,18 +205,18 @@ namespace Melanchall.DryMidi
 
                 //
 
-                messageHandler(messageWriter, messageToWrite, writeStatusByte);
+                eventHandler(eventWriter, eventToWrite, writeStatusByte);
             }
         }
 
-        private static bool TrySkipDefaultSetTempo(Message message, ref bool skip)
+        private static bool TrySkipDefaultSetTempo(MidiEvent midiEvent, ref bool skip)
         {
             if (skip)
             {
-                var setTempoMessage = message as SetTempoMessage;
-                if (setTempoMessage != null)
+                var setTempoEvent = midiEvent as SetTempoEvent;
+                if (setTempoEvent != null)
                 {
-                    if (setTempoMessage.MicrosecondsPerBeat == SetTempoMessage.DefaultTempo)
+                    if (setTempoEvent.MicrosecondsPerBeat == SetTempoEvent.DefaultTempo)
                         return true;
 
                     skip = false;
@@ -226,14 +226,14 @@ namespace Melanchall.DryMidi
             return false;
         }
 
-        private static bool TrySkipDefaultKeySignature(Message message, ref bool skip)
+        private static bool TrySkipDefaultKeySignature(MidiEvent midiEvent, ref bool skip)
         {
             if (skip)
             {
-                var keySignatureMessage = message as KeySignatureMessage;
-                if (keySignatureMessage != null)
+                var keySignatureEvent = midiEvent as KeySignatureEvent;
+                if (keySignatureEvent != null)
                 {
-                    if (keySignatureMessage.Key == KeySignatureMessage.DefaultKey && keySignatureMessage.Scale == KeySignatureMessage.DefaultScale)
+                    if (keySignatureEvent.Key == KeySignatureEvent.DefaultKey && keySignatureEvent.Scale == KeySignatureEvent.DefaultScale)
                         return true;
 
                     skip = false;
@@ -243,17 +243,17 @@ namespace Melanchall.DryMidi
             return false;
         }
 
-        private static bool TrySkipDefaultTimeSignature(Message message, ref bool skip)
+        private static bool TrySkipDefaultTimeSignature(MidiEvent midiEvent, ref bool skip)
         {
             if (skip)
             {
-                var timeSignatureMessage = message as TimeSignatureMessage;
-                if (timeSignatureMessage != null)
+                var timeSignatureEvent = midiEvent as TimeSignatureEvent;
+                if (timeSignatureEvent != null)
                 {
-                    if (timeSignatureMessage.Numerator == TimeSignatureMessage.DefaultNumerator &&
-                        timeSignatureMessage.Denominator == TimeSignatureMessage.DefaultDenominator &&
-                        timeSignatureMessage.Clocks == TimeSignatureMessage.DefaultClocks &&
-                        timeSignatureMessage.NumberOf32ndNotesPerBeat == TimeSignatureMessage.Default32ndNotesPerBeat)
+                    if (timeSignatureEvent.Numerator == TimeSignatureEvent.DefaultNumerator &&
+                        timeSignatureEvent.Denominator == TimeSignatureEvent.DefaultDenominator &&
+                        timeSignatureEvent.Clocks == TimeSignatureEvent.DefaultClocks &&
+                        timeSignatureEvent.NumberOf32ndNotesPerBeat == TimeSignatureEvent.Default32ndNotesPerBeat)
                         return true;
 
                     skip = false;

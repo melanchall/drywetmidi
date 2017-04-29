@@ -8,13 +8,13 @@ namespace Melanchall.DryMidi
     {
         #region Nested types
 
-        private sealed class MessageDescriptor
+        private sealed class EventDescriptor
         {
             #region Constructor
 
-            public MessageDescriptor(Message message, int absoluteTime, int channel)
+            public EventDescriptor(MidiEvent midiEvent, int absoluteTime, int channel)
             {
-                Message = message;
+                Event = midiEvent;
                 AbsoluteTime = absoluteTime;
                 Channel = channel;
             }
@@ -23,7 +23,7 @@ namespace Melanchall.DryMidi
 
             #region Properties
 
-            public Message Message { get; }
+            public MidiEvent Event { get; }
 
             public int AbsoluteTime { get; }
 
@@ -32,11 +32,11 @@ namespace Melanchall.DryMidi
             #endregion
         }
 
-        private sealed class MessageDescriptorComparer : IComparer<MessageDescriptor>
+        private sealed class EventDescriptorComparer : IComparer<EventDescriptor>
         {
-            #region IComparer<MessageDescriptor
+            #region IComparer<EventDescriptor>
 
-            public int Compare(MessageDescriptor x, MessageDescriptor y)
+            public int Compare(EventDescriptor x, EventDescriptor y)
             {
                 var absoluteTimeDifference = x.AbsoluteTime - y.AbsoluteTime;
                 if (absoluteTimeDifference != 0)
@@ -44,13 +44,13 @@ namespace Melanchall.DryMidi
 
                 //
 
-                var xMetaMessage = x.Message as MetaMessage;
-                var yMetaMessage = y.Message as MetaMessage;
-                if (xMetaMessage != null && yMetaMessage == null)
+                var xMetaEvent = x.Event as MetaEvent;
+                var yMetaEvent = y.Event as MetaEvent;
+                if (xMetaEvent != null && yMetaEvent == null)
                     return -1;
-                else if (xMetaMessage == null && yMetaMessage != null)
+                else if (xMetaEvent == null && yMetaEvent != null)
                     return 1;
-                else if (xMetaMessage == null && yMetaMessage == null)
+                else if (xMetaEvent == null && yMetaEvent == null)
                     return 0;
 
                 //
@@ -61,11 +61,11 @@ namespace Melanchall.DryMidi
 
                 //
 
-                var xChannelPrefixMessage = x.Message as ChannelPrefixMessage;
-                var yChannelPrefixMessage = y.Message as ChannelPrefixMessage;
-                if (xChannelPrefixMessage != null && yChannelPrefixMessage == null)
+                var xChannelPrefixEvent = x.Event as ChannelPrefixEvent;
+                var yChannelPrefixEvent = y.Event as ChannelPrefixEvent;
+                if (xChannelPrefixEvent != null && yChannelPrefixEvent == null)
                     return -1;
-                else if (xChannelPrefixMessage == null && yChannelPrefixMessage != null)
+                else if (xChannelPrefixEvent == null && yChannelPrefixEvent != null)
                     return 1;
 
                 //
@@ -93,38 +93,38 @@ namespace Melanchall.DryMidi
 
             //
 
-            var messagesDescriptors = trackChunks
+            var eventsDescriptors = trackChunks
                 .SelectMany(trackChunk =>
                 {
                     var absoluteTime = 0;
                     var channel = -1;
-                    return trackChunk.Messages
-                                     .Select(message =>
+                    return trackChunk.Events
+                                     .Select(midiEvent =>
                                      {
-                                         var channelPrefixMessage = message as ChannelPrefixMessage;
-                                         if (channelPrefixMessage != null)
-                                             channel = channelPrefixMessage.Channel;
+                                         var channelPrefixEvent = midiEvent as ChannelPrefixEvent;
+                                         if (channelPrefixEvent != null)
+                                             channel = channelPrefixEvent.Channel;
 
-                                         if (!(message is MetaMessage))
+                                         if (!(midiEvent is MetaEvent))
                                              channel = -1;
 
-                                         return new MessageDescriptor(message, (absoluteTime += message.DeltaTime), channel);
+                                         return new EventDescriptor(midiEvent, (absoluteTime += midiEvent.DeltaTime), channel);
                                      });
                 })
-                .OrderBy(d => d, new MessageDescriptorComparer());
+                .OrderBy(d => d, new EventDescriptorComparer());
 
             //
 
             var resultTrackChunk = new TrackChunk();
             var time = 0;
 
-            foreach (var messageDescriptor in messagesDescriptors)
+            foreach (var eventDescriptor in eventsDescriptors)
             {
-                var message = (Message)messageDescriptor.Message.Clone();
-                message.DeltaTime = messageDescriptor.AbsoluteTime - time;
-                resultTrackChunk.Messages.Add(message);
+                var midiEvent = (MidiEvent)eventDescriptor.Event.Clone();
+                midiEvent.DeltaTime = eventDescriptor.AbsoluteTime - time;
+                resultTrackChunk.Events.Add(midiEvent);
 
-                time = messageDescriptor.AbsoluteTime;
+                time = eventDescriptor.AbsoluteTime;
             }
 
             //

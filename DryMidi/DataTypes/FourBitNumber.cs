@@ -5,7 +5,7 @@ namespace Melanchall.DryMidi
     /// <summary>
     /// Type that is used to represent a four-bit number.
     /// </summary>
-    /// <remarks>Four-bit numbers widely used by MIDI protocol as parameters of MIDI-messages.
+    /// <remarks>Four-bit numbers widely used by MIDI protocol as parameters of MIDI events.
     /// So instead of manipulating built-in C# numeric types (like byte or int) and checking for
     /// out-of-range errors all validation of numbers in the [0; 15] range happens on data type
     /// level via casting C# integer values to <see cref="FourBitNumber"/> type.</remarks>

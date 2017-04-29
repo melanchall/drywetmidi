@@ -17,7 +17,7 @@ namespace Melanchall.DryMidi
         /// Gets or sets a time division of a MIDI file.
         /// </summary>
         /// <remarks>
-        /// Time division specifies the meaning of the delta-times of messages. There are two types of
+        /// Time division specifies the meaning of the delta-times of events. There are two types of
         /// the time division: ticks per quarter note and SMPTE. The first type represented by
         /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
         /// <see cref="SmpteTimeDivision"/> class.

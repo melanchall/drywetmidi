@@ -26,10 +26,10 @@ namespace Melanchall.DryMidi
 
             #region Methods
 
-            public void AddMessage(Message message)
+            public void AddEvent(MidiEvent midiEvent)
             {
-                message.DeltaTime = DeltaTime;
-                Chunk.Messages.Add(message);
+                midiEvent.DeltaTime = DeltaTime;
+                Chunk.Events.Add(midiEvent);
 
                 DeltaTime = 0;
             }
@@ -55,38 +55,37 @@ namespace Melanchall.DryMidi
                                                    .ToArray();
             FourBitNumber? channel = null;
 
-            foreach (var message in trackChunks.First().Messages.Select(m => (Message)m.Clone()))
+            foreach (var midiEvent in trackChunks.First().Events.Select(m => (MidiEvent)m.Clone()))
             {
-                Array.ForEach(
-                    trackChunksDescriptors,
-                    d => d.DeltaTime += message.DeltaTime);
+                Array.ForEach(trackChunksDescriptors,
+                              d => d.DeltaTime += midiEvent.DeltaTime);
 
-                var channelMessage = message as ChannelMessage;
-                if (channelMessage != null)
+                var channelEvent = midiEvent as ChannelEvent;
+                if (channelEvent != null)
                 {
-                    trackChunksDescriptors[channelMessage.Channel + 1].AddMessage(message);
+                    trackChunksDescriptors[channelEvent.Channel + 1].AddEvent(midiEvent);
                     channel = null;
                     continue;
                 }
 
-                if (!(message is MetaMessage))
+                if (!(midiEvent is MetaEvent))
                     channel = null;
 
-                var channelPrefixMessage = message as ChannelPrefixMessage;
-                if (channelPrefixMessage != null)
-                    channel = (FourBitNumber)channelPrefixMessage.Channel;
+                var channelPrefixEvent = midiEvent as ChannelPrefixEvent;
+                if (channelPrefixEvent != null)
+                    channel = (FourBitNumber)channelPrefixEvent.Channel;
 
                 if (channel != null)
                 {
-                    trackChunksDescriptors[channel.Value + 1].AddMessage(message);
+                    trackChunksDescriptors[channel.Value + 1].AddEvent(midiEvent);
                     continue;
                 }
 
-                trackChunksDescriptors[0].AddMessage(message);
+                trackChunksDescriptors[0].AddEvent(midiEvent);
             }
 
             return trackChunksDescriptors.Select(d => d.Chunk)
-                                         .Where(c => c.Messages.Any())
+                                         .Where(c => c.Events.Any())
                                          .Concat(chunks.Where(c => !(c is TrackChunk)));
         }
 

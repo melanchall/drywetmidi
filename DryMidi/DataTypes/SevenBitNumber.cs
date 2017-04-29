@@ -5,7 +5,7 @@ namespace Melanchall.DryMidi
     /// <summary>
     /// Type that is used to represent a seven-bit number.
     /// </summary>
-    /// <remarks>Seven-bit numbers widely used by MIDI protocol as parameters of MIDI-messages.
+    /// <remarks>Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events.
     /// So instead of manipulating built-in C# numeric types (like byte or int) and checking for
     /// out-of-range errors all validation of numbers in the [0; 127] range happens on data type
     /// level via casting C# integer values to <see cref="SevenBitNumber"/> type.</remarks>

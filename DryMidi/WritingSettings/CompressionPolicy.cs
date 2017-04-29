@@ -15,7 +15,7 @@ namespace Melanchall.DryMidi
 
         /// <summary>
         /// Use default compression on the MIDI data to write. This option turns on all options
-        /// that don't lead to data losing (for example, unknown meta messages).
+        /// that don't lead to data losing (for example, unknown meta events).
         /// </summary>
         Default =
             UseRunningStatus |
@@ -23,48 +23,48 @@ namespace Melanchall.DryMidi
             DeleteDefaultTimeSignature |
             DeleteDefaultKeySignature |
             DeleteDefaultSetTempo |
-            DeleteRedundantMessages,
+            DeleteRedundantEvents,
 
         /// <summary>
-        /// Use 'running status' to turn off writing of the status bytes of consecutive messages
+        /// Use 'running status' to turn off writing of the status bytes of consecutive events
         /// of the same type.
         /// </summary>
         UseRunningStatus = 1,
 
         /// <summary>
-        /// Turn Note Off messages into the Note On ones with zero velocity. Note that it helps to
+        /// Turn Note Off events into the Note On ones with zero velocity. Note that it helps to
         /// compress MIDI data in the case of <see cref="UseRunningStatus"/> is used only.
         /// </summary>
         NoteOffAsSilentNoteOn = 2,
 
         /// <summary>
-        /// Don't write default Time Signature message.
+        /// Don't write default Time Signature event.
         /// </summary>
         DeleteDefaultTimeSignature = 4,
 
         /// <summary>
-        /// Don't write default key signature message.
+        /// Don't write default Key Signature event.
         /// </summary>
         DeleteDefaultKeySignature = 8,
 
         /// <summary>
-        /// Don't write default Set Tempo message.
+        /// Don't write default Set Tempo event.
         /// </summary>
         DeleteDefaultSetTempo = 16,
 
         /// <summary>
-        /// Don't write unknown meta messages presented in an instance of the <see cref="MidiFile"/>.
+        /// Don't write instances of the <see cref="UnknownMetaEvent"/>.
         /// </summary>
-        DeleteUnknownMetaMessages = 32,
+        DeleteUnknownMetaEvents = 32,
 
         /// <summary>
-        /// Don't write unknown chunks presented in an instance of the <see cref="MidiFile"/>.
+        /// Don't write instances of the <see cref="UnknownChunk"/>.
         /// </summary>
         DeleteUnknownChunks = 64,
 
         /// <summary>
-        /// Don't write redundant messages.
+        /// Don't write redundant events.
         /// </summary>
-        DeleteRedundantMessages = 128
+        DeleteRedundantEvents = 128
     }
 }

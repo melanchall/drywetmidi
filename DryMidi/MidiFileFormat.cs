@@ -19,8 +19,8 @@
         /// </summary>
         /// <remarks>
         /// File of this format has a header chunk followed by one or more track chunks. First track
-        /// chunk is usually reserved for tempo information (it can contain messages like
-        /// <see cref="SetTempoMessage"/>, <see cref="TimeSignatureMessage"/>, <see cref="KeySignatureMessage"/>).
+        /// chunk is usually reserved for tempo information (it can contain events like
+        /// <see cref="SetTempoEvent"/>, <see cref="TimeSignatureEvent"/>, <see cref="KeySignatureEvent"/>).
         /// </remarks>
         MultiTrack = 1,
 

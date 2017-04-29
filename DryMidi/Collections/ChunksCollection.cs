@@ -154,7 +154,7 @@ namespace Melanchall.DryMidi
 
         #endregion
 
-        #region IEnumerable<Message>
+        #region IEnumerable<Chunk>
 
         /// <summary>
         /// Returns an enumerator that iterates through the <see cref="ChunksCollection"/>.

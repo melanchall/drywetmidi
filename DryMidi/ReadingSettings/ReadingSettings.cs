@@ -38,22 +38,22 @@ namespace Melanchall.DryMidi
         public UnknownChunkIdPolicy UnknownChunkIdPolicy { get; set; }
 
         /// <summary>
-        /// Gets or sets reaction of the reading engine on missed End Of Track message.
+        /// Gets or sets reaction of the reading engine on missed End Of Track event.
         /// The default is <see cref="MissedEndOfTrackPolicy.Ignore"/>.
         /// </summary>
         /// <remarks>
         /// If <see cref="MissedEndOfTrackPolicy.Abort"/> is used an instance of the
-        /// <see cref="MissedEndOfTrackMessageException"/> will be thrown if track chunk
-        /// doesn't end with End Of Track message. Although this message is not optional and
+        /// <see cref="MissedEndOfTrackEventException"/> will be thrown if track chunk
+        /// doesn't end with End Of Track event. Although this event is not optional and
         /// therefore missing of it must be treated as error, you can try to read a track chunk
         /// relying on the chunk's size only.
         /// </remarks>
         public MissedEndOfTrackPolicy MissedEndOfTrackPolicy { get; set; }
 
         /// <summary>
-        /// Gets or sets reaction of the reading engine on Note On messages with velocity 0.
+        /// Gets or sets reaction of the reading engine on Note On events with velocity 0.
         /// The default is <see cref="SilentNoteOnPolicy.NoteOff"/>. Although it is recommended to treat silent
-        /// Note On message as Note Off you can turn this behavior off to get original message stored in the file.
+        /// Note On event as Note Off you can turn this behavior off to get original event stored in the file.
         /// </summary>
         public SilentNoteOnPolicy SilentNoteOnPolicy { get; set; }
 
@@ -87,10 +87,10 @@ namespace Melanchall.DryMidi
         public ChunkTypesCollection CustomChunkTypes { get; set; }
 
         /// <summary>
-        /// Gets or sets collection of custom meta messages types. These types must be derived from the
-        /// <see cref="MetaMessage"/> class and have parameterless constructor. No exception will be thrown
+        /// Gets or sets collection of custom meta events types. These types must be derived from the
+        /// <see cref="MetaEvent"/> class and have parameterless constructor. No exception will be thrown
         /// if some types don't meet these requirements.
         /// </summary>
-        public MessageTypesCollection CustomMetaMessageTypes { get; set; }
+        public EventTypesCollection CustomMetaEventTypes { get; set; }
     }
 }

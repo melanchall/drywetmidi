@@ -39,9 +39,9 @@ namespace Melanchall.DryMidi
             if (trackChunk == null)
                 throw new ArgumentNullException(nameof(trackChunk));
 
-            return trackChunk.Messages
+            return trackChunk.Events
                              .TakeWhile(m => m.DeltaTime == 0)
-                             .OfType<SequenceNumberMessage>()
+                             .OfType<SequenceNumberEvent>()
                              .FirstOrDefault()
                              ?.Number;
         }
