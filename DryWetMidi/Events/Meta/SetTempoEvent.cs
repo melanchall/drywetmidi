@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi
 {
-    public sealed class SetTempoEvent : MetaEvent
+    internal sealed class SetTempoEvent : MetaEvent
     {
         #region Constants
 
