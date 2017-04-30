@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi
 {
@@ -58,12 +59,12 @@ namespace Melanchall.DryWetMidi
         /// <summary>
         /// Adds an event to the end of collection.
         /// </summary>
+        /// <param name="midiEvent">The event to be added to the end of the collection.</param>
         /// <remarks>
         /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
-        /// a MIDI file writing.
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <param name="midiEvent">The event to be added to the end of the collection.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is an instance of <see cref="EndOfTrackEvent"/>.
         /// </exception>
@@ -76,6 +77,33 @@ namespace Melanchall.DryWetMidi
                 throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(midiEvent));
 
             _events.Add(midiEvent);
+        }
+
+        /// <summary>
+        /// Adds events to the end of collection.
+        /// </summary>
+        /// <param name="events">Events to be added to the end of the collection.</param>
+        /// <remarks>
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// track chunk structure. End Of Track event will be written to the track chunk automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
+        /// <paramref name="events"/> contain null.
+        /// </exception>
+        public void AddRange(IEnumerable<MidiEvent> events)
+        {
+            if (events == null)
+                throw new ArgumentNullException(nameof(events));
+
+            if (events.Any(e => e is EndOfTrackEvent))
+                throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(events));
+
+            if (events.Any(e => e == null))
+                throw new ArgumentException("Null cannot be added to events collection.", nameof(events));
+
+            _events.AddRange(events);
         }
 
         /// <summary>

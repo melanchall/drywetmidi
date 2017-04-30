@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi
 {
@@ -58,14 +59,14 @@ namespace Melanchall.DryWetMidi
         #region Methods
 
         /// <summary>
-        /// Adds a chunk to the end of collection.
+        /// Adds a chunk to the end of the collection.
         /// </summary>
+        /// <param name="chunk">The chunk to be added to the end of the collection.</param>
         /// <remarks>
         /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
-        /// Header chunk with appropriate information will be written to a file automatically on <see cref="MidiFile.Save(string, bool, WritingSettings)"/>
-        /// or <see cref="MidiFile.Write(System.IO.Stream, WritingSettings)"/>.
+        /// Header chunk with appropriate information will be written to a file automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <param name="chunk">The chunk to be added to the end of the collection.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="chunk"/> is an instance of <see cref="HeaderChunk"/>.</exception>
         public void Add(MidiChunk chunk)
@@ -77,6 +78,32 @@ namespace Melanchall.DryWetMidi
                 throw new ArgumentException("Header chunk cannot be added to chunks collection.", nameof(chunk));
 
             _chunks.Add(chunk);
+        }
+
+        /// <summary>
+        /// Adds chunks the end of the collection.
+        /// </summary>
+        /// <param name="chunks">Chunks to add to the collection.</param>
+        /// <remarks>
+        /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+        /// Header chunk with appropriate information will be written to a file automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="chunks"/> contain an instance of <see cref="HeaderChunk"/>; or
+        /// <paramref name="chunks"/> contain null.</exception>
+        public void AddRange(IEnumerable<MidiChunk> chunks)
+        {
+            if (chunks == null)
+                throw new ArgumentNullException(nameof(chunks));
+
+            if (chunks.Any(c => c is HeaderChunk))
+                throw new ArgumentException("Header chunk cannot be added to chunks collection.", nameof(chunks));
+
+            if (chunks.Any(c => c == null))
+                throw new ArgumentException("Null cannot be added to chunks collection.", nameof(chunks));
+
+            _chunks.AddRange(chunks);
         }
 
         /// <summary>

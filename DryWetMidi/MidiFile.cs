@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,51 @@ namespace Melanchall.DryWetMidi
     /// </summary>
     public sealed class MidiFile
     {
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiFile"/>.
+        /// </summary>
+        public MidiFile()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiFile"/> with the specified chunks.
+        /// </summary>
+        /// <param name="chunks">Chunks to add to the file.</param>
+        /// <remarks>
+        /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+        /// Header chunk with appropriate information will be written to a file automatically on
+        /// <see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="chunks"/> contain instances of <see cref="HeaderChunk"/>; or
+        /// <paramref name="chunks"/> contain null.</exception>
+        public MidiFile(IEnumerable<MidiChunk> chunks)
+        {
+            Chunks.AddRange(chunks);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiFile"/> with the specified chunks.
+        /// </summary>
+        /// <param name="chunks">Chunks to add to the file.</param>
+        /// <remarks>
+        /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+        /// Header chunk with appropriate information will be written to a file automatically on
+        /// <see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="chunks"/> contain instances of <see cref="HeaderChunk"/>; or
+        /// <paramref name="chunks"/> contain null.</exception>
+        public MidiFile(params MidiChunk[] chunks)
+        {
+            Chunks.AddRange(chunks);
+        }
+
+        #endregion
+
         #region Properties
 
         /// <summary>

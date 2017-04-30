@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi
@@ -28,6 +29,44 @@ namespace Melanchall.DryWetMidi
         public TrackChunk()
             : base(Id)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TrackChunk"/> with the specified events.
+        /// </summary>
+        /// <param name="events">Events to add to the track chunk.</param>
+        /// <remarks>
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// track chunk structure. End Of Track event will be written to the track chunk automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
+        /// <paramref name="events"/> contain null.
+        /// </exception>
+        public TrackChunk(IEnumerable<MidiEvent> events)
+            : this()
+        {
+            Events.AddRange(events);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TrackChunk"/> with the specified events.
+        /// </summary>
+        /// <param name="events">Events to add to the track chunk.</param>
+        /// <remarks>
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// track chunk structure. End Of Track event will be written to the track chunk automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
+        /// <paramref name="events"/> contain null.
+        /// </exception>
+        public TrackChunk(params MidiEvent[] events)
+            : this()
+        {
+            Events.AddRange(events);
         }
 
         #endregion
