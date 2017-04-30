@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryMidi
+﻿namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Format of a Standard MIDI file which specifies overall structure of the file.

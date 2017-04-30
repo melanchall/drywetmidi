@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Class that represents a MIDI file.

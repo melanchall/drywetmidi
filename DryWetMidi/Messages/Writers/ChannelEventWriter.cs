@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     internal sealed class ChannelEventWriter : IEventWriter
     {

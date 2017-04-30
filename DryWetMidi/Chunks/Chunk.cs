@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Represents a chunk of Standard MIDI file.

@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryMidi
+﻿namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Specifies how reading engine should react on invalid expected size of an event.

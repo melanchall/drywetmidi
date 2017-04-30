@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Settings of the reading engine.

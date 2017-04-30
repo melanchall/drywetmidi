@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     internal sealed class MetaEventReader : IEventReader
     {

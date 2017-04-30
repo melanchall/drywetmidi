@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryMidi
+﻿namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Letter of a note of the 12-tone chromatic scale.

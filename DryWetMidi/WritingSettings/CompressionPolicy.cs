@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Specifies how writing engine should compress MIDI data. The default is <see cref="NoCompression"/>.

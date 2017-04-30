@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     public sealed class EventTypesCollection : IEnumerable<EventType>
     {

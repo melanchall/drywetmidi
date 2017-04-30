@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     internal sealed class MultiTrackChunksConverter : IChunksConverter
     {

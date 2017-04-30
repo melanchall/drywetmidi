@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Provides a way to convert a collection of <see cref="Chunk"/> objects to

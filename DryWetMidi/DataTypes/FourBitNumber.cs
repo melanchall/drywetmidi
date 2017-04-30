@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Type that is used to represent a four-bit number.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     [Serializable]
     public sealed class TooManyTrackChunksException : MidiException

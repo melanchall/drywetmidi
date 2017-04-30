@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Writer of the MIDI data types.

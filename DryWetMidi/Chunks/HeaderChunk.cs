@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Represents a header chunk of a Standard MIDI file.

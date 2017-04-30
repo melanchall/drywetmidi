@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     internal static class ArrayUtilities
     {

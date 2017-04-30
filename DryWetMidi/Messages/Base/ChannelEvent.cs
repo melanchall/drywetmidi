@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Melanchall.DryMidi
+namespace Melanchall.DryWetMidi
 {
     public abstract class ChannelEvent : MidiEvent
     {
