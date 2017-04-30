@@ -55,12 +55,16 @@ midiFile.Write("My Great Song.mid",
 Of course you can create a MIDI file from scratch by creating an instance of the ```MidiFile``` and writing it:
 
 ```csharp
-var midiFile = new MidiFile();
-
-var trackChunk = new TrackChunk();
-trackChunk.Events.Add(new TextEvent("It's just empty track..."));
-
-midiFile.Chunks.Add(trackChunk);
+var midiFile = new MidiFile(
+                   new TrackChunk(
+                       new SetTempoEvent(500000)),
+                   new TrackChunk(
+                       new TextEvent("It's just single note track..."),
+                       new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)45),
+                       new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)0)
+                       {
+                           DeltaTime = 400
+                       }));
 midiFile.Write("My Future Great Song.mid");
 ```
 
