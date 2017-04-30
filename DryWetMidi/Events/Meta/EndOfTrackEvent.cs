@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi
 {
-    public sealed class EndOfTrackEvent : MetaEvent
+    internal sealed class EndOfTrackEvent : MetaEvent
     {
         #region Methods
 
