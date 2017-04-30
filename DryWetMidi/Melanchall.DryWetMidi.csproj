@@ -41,7 +41,7 @@
     <Compile Include="ChunksConverters\MultiSequenceChunksConverter.cs" />
     <Compile Include="ChunksConverters\MultiTrackChunksConverter.cs" />
     <Compile Include="ChunksConverters\SingleTrackChunksConverter.cs" />
-    <Compile Include="Chunks\Chunk.cs" />
+    <Compile Include="Chunks\MidiChunk.cs" />
     <Compile Include="Chunks\HeaderChunk.cs" />
     <Compile Include="Chunks\Info\ChunkType.cs" />
     <Compile Include="Chunks\Info\ChunkTypesCollection.cs" />

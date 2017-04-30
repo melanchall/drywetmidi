@@ -247,7 +247,7 @@ namespace Melanchall.DryWetMidi
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
-            var chunkId = reader.ReadString(Chunk.IdLength);
+            var chunkId = reader.ReadString(MidiChunk.IdLength);
             if (chunkId != HeaderChunk.Id)
                 throw new NoHeaderChunkException($"'{chunkId}' is invalid header chunk's ID. It must be '{HeaderChunk.Id}'.");
 
@@ -274,9 +274,9 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the specified
         /// <paramref name="settings"/>.</exception>
-        private static Chunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
+        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
-            var chunkId = reader.ReadString(Chunk.IdLength);
+            var chunkId = reader.ReadString(MidiChunk.IdLength);
             var chunk = chunkId == TrackChunk.Id
                 ? new TrackChunk()
                 : TryCreateChunk(chunkId, settings.CustomChunkTypes);
@@ -352,11 +352,11 @@ namespace Melanchall.DryWetMidi
         /// <paramref name="chunkId"/> ID.</param>
         /// <returns>An instance of the chunk type with the specified ID or null if <paramref name="chunksTypes"/>
         /// doesn't contain chunk type with it.</returns>
-        private static Chunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
+        private static MidiChunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
         {
             Type type = null;
             return chunksTypes?.TryGetType(chunkId, out type) == true && IsChunkType(type)
-                ? (Chunk)Activator.CreateInstance(type)
+                ? (MidiChunk)Activator.CreateInstance(type)
                 : null;
         }
 
@@ -366,13 +366,13 @@ namespace Melanchall.DryWetMidi
         /// <param name="type">Type to check whether it represents a chunk or not.</param>
         /// <returns>True if passed type represents a MIDI-file chunk; false - otherwise.</returns>
         /// <remarks>
-        /// Type represents a chunk if it is derived from the <see cref="Chunk"/> class and has
+        /// Type represents a chunk if it is derived from the <see cref="MidiChunk"/> class and has
         /// parameterless constructor.
         /// </remarks>
         private static bool IsChunkType(Type type)
         {
             return type != null &&
-                   type.IsSubclassOf(typeof(Chunk)) &&
+                   type.IsSubclassOf(typeof(MidiChunk)) &&
                    type.GetConstructor(Type.EmptyTypes) != null;
         }
 

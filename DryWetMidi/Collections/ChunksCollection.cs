@@ -5,13 +5,13 @@ using System.Collections.Generic;
 namespace Melanchall.DryWetMidi
 {
     /// <summary>
-    /// Collection of <see cref="Chunk"/> objects.
+    /// Collection of <see cref="MidiChunk"/> objects.
     /// </summary>
-    public sealed class ChunksCollection : IEnumerable<Chunk>
+    public sealed class ChunksCollection : IEnumerable<MidiChunk>
     {
         #region Fields
 
-        private readonly List<Chunk> _chunks = new List<Chunk>();
+        private readonly List<MidiChunk> _chunks = new List<MidiChunk>();
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi
         /// <see cref="Count"/>.
         /// </exception>
         /// <exception cref="ArgumentNullException">value is null</exception>
-        public Chunk this[int index]
+        public MidiChunk this[int index]
         {
             get
             {
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi
         /// <param name="chunk">The chunk to be added to the end of the collection.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="chunk"/> is an instance of <see cref="HeaderChunk"/>.</exception>
-        public void Add(Chunk chunk)
+        public void Add(MidiChunk chunk)
         {
             if (chunk == null)
                 throw new ArgumentNullException(nameof(chunk));
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="ArgumentException"><paramref name="chunk"/> is an instance of <see cref="HeaderChunk"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0; or
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
-        public void Insert(int index, Chunk chunk)
+        public void Insert(int index, MidiChunk chunk)
         {
             if (chunk == null)
                 throw new ArgumentNullException(nameof(chunk));
@@ -115,7 +115,7 @@ namespace Melanchall.DryWetMidi
         /// <returns>true if chunk is successfully removed; otherwise, false. This method also returns
         /// false if chunk was not found in the collection.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
-        public bool Remove(Chunk chunk)
+        public bool Remove(MidiChunk chunk)
         {
             if (chunk == null)
                 throw new ArgumentNullException(nameof(chunk));
@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi
         /// of the chunks to remove.</param>
         /// <returns>The number of chunks removed from the <see cref="ChunksCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
-        public int RemoveAll(Predicate<Chunk> match)
+        public int RemoveAll(Predicate<MidiChunk> match)
         {
             if (match == null)
                 throw new ArgumentNullException(nameof(match));
@@ -160,7 +160,7 @@ namespace Melanchall.DryWetMidi
         /// Returns an enumerator that iterates through the <see cref="ChunksCollection"/>.
         /// </summary>
         /// <returns>An enumerator for the <see cref="ChunksCollection"/>.</returns>
-        public IEnumerator<Chunk> GetEnumerator()
+        public IEnumerator<MidiChunk> GetEnumerator()
         {
             return _chunks.GetEnumerator();
         }

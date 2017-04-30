@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi
 
         #region IChunksConverter
 
-        public IEnumerable<Chunk> Convert(IEnumerable<Chunk> chunks)
+        public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
         {
             if (chunks == null)
                 throw new ArgumentNullException(nameof(chunks));

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi
 {
-    public sealed class TrackChunk : Chunk
+    public sealed class TrackChunk : MidiChunk
     {
         #region Constants
 

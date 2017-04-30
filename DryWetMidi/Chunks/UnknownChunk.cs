@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi
 {
-    public sealed class UnknownChunk : Chunk
+    public sealed class UnknownChunk : MidiChunk
     {
         #region Constructor
 

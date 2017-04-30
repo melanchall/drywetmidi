@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi
     /// The length of the chunk refers to the number of bytes of data which follow (the eight bytes of ID and length
     /// are not included).Therefore, a chunk with a length of 6 would actually occupy 14 bytes in the file.
     /// </remarks>
-    public abstract class Chunk
+    public abstract class MidiChunk
     {
         #region Constants
 
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Chunk"/> with the specified ID.
+        /// Initializes a new instance of the <see cref="MidiChunk"/> with the specified ID.
         /// </summary>
         /// <param name="id">The type of the chunk.</param>
         /// <exception cref="ArgumentNullException">
@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi
         /// <paramref name="id"/> is empty, or consists only of white-space characters; or
         /// length of <paramref name="id"/> doesn't equal 4.
         /// </exception>
-        public Chunk(string id)
+        public MidiChunk(string id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));

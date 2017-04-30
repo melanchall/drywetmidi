@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi
         public UnknownFileFormatPolicy UnknownFileFormatPolicy { get; set; }
 
         /// <summary>
-        /// Gets or sets collection of custom chunks types. These types must be derived from the <see cref="Chunk"/>
+        /// Gets or sets collection of custom chunks types. These types must be derived from the <see cref="MidiChunk"/>
         /// class and have parameterless constructor. No exception will be thrown if some types don't meet
         /// these requirements.
         /// </summary>
