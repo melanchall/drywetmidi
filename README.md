@@ -1,19 +1,19 @@
-# DryMIDI
+# DryWetMIDI
 
-DryMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like *event* and *track chunk*. Visit [The MIDI Association site](https://www.midi.org) to get more information about MIDI.
+DryWetMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like *event* and *track chunk*. Visit [The MIDI Association site](https://www.midi.org) to get more information about MIDI.
 
 The library is under MIT license so you can do whatever you want with it.
 
 ## Features
 
-* DryMIDI provides core functionality to read and write [standard MIDI files](https://www.midi.org/specifications/category/smf-specifications) giving you set of basic MIDI objects: ```MidiFile```, ```MidiEvent```, ```Chunk``` (see examples below of how you can use these objects).
+* DryWetMIDI provides core functionality to read and write [standard MIDI files](https://www.midi.org/specifications/category/smf-specifications) giving you set of basic MIDI objects: ```MidiFile```, ```MidiEvent```, ```Chunk``` (see examples below of how you can use these objects).
 * The library gives you ability to implement custom meta events (by deriving from the ```MetaEvent```) and custom chunks (by deriving from the ```Chunk```).
 * Process of reading or writing can be finely adjusted with help of ```ReadingSettings``` and ```WritingSettings```. It allows, for example, to read files with some corruptions like mismatch of actual track chunk's length and expected one written in the chunk's header.
-* All possible errors in a MIDI file are presented in the DryMIDI as separate exception classes so you can easily catch specific error. Some of these exceptions are thrown only if specific option is set in an instance of the ```ReadingSettings``` used to read the file.
+* All possible errors in a MIDI file are presented in the DryWetMIDI as separate exception classes so you can easily catch specific error. Some of these exceptions are thrown only if specific option is set in an instance of the ```ReadingSettings``` used to read the file.
 
 ## Getting Started
 
-Let's see some examples of what you can do with DryMIDI.
+Let's see some examples of what you can do with DryWetMIDI.
 
 To [read a MIDI file](https://github.com/melanchall/drymidi/wiki/Reading-a-MIDI-file) you have to use ```Read``` static method of the ```MidiFile```:
 
@@ -21,7 +21,7 @@ To [read a MIDI file](https://github.com/melanchall/drymidi/wiki/Reading-a-MIDI-
 var midiFile = MidiFile.Read("My Great Song.mid");
 ```
 
-or
+or, in more advanced form (visit [Reading settings](https://github.com/melanchall/drywetmidi/wiki/Reading-settings) page on Wiki to learn more about how to adjust process of reading)
 
 ```csharp
 var midiFile = MidiFile.Read("My Great Song.mid",
@@ -40,7 +40,7 @@ To [write MIDI data to a file](https://github.com/melanchall/drymidi/wiki/Writin
 midiFile.Write("My Great Song speeded.mid");
 ```
 
-or
+or, in more advanced form (visit [Writing settings](https://github.com/melanchall/drywetmidi/wiki/Writing-settings) page on Wiki to learn more about how to adjust process of writing)
 
 ```csharp
 midiFile.Write("My Great Song.mid",
