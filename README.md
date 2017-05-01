@@ -87,8 +87,8 @@ Suppose you want to remove all *C#* notes from a MIDI file. It can be done with 
 ```csharp
 foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 {
-    trackChunk.Events.RemoveAll(e => (e as NoteOnEvent)?.GetNoteLetter() == NoteLetter.CSharp ||
-                                     (e as NoteOffEvent)?.GetNoteLetter() == NoteLetter.CSharp);
+    trackChunk.Events.RemoveAll(e => (e as NoteOnEvent)?.GetNoteName() == NoteName.CSharp ||
+                                     (e as NoteOffEvent)?.GetNoteName() == NoteName.CSharp);
 }
 ```
 ------------------
