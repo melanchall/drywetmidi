@@ -128,7 +128,7 @@
     <Compile Include="TimeDivision\TicksPerQuarterNoteTimeDivision.cs" />
     <Compile Include="TimeDivision\TimeDivisionFactory.cs" />
     <Compile Include="Utilities\ArrayUtilities.cs" />
-    <Compile Include="Utilities\NoteLetter.cs" />
+    <Compile Include="Utilities\NoteName.cs" />
     <Compile Include="Utilities\NoteUtilities.cs" />
     <Compile Include="WritingSettings\CompressionPolicy.cs" />
     <Compile Include="WritingSettings\WritingSettings.cs" />

@@ -10,17 +10,17 @@ namespace Melanchall.DryWetMidi
         private const int OctaveSize = 12;
 
         /// <summary>
-        /// Gets letter of the note presented by an instance of <see cref="NoteOnEvent"/>.
+        /// Gets name of the note presented by an instance of <see cref="NoteOnEvent"/>.
         /// </summary>
-        /// <param name="noteOnEvent">Note On event to get note letter of.</param>
-        /// <returns>Note letter of the <paramref name="noteOnEvent"/> event.</returns>
+        /// <param name="noteOnEvent">Note On event to get note name of.</param>
+        /// <returns>Note name of the <paramref name="noteOnEvent"/> event.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteOnEvent"/> is null.</exception>
-        public static NoteLetter GetNoteLetter(this NoteOnEvent noteOnEvent)
+        public static NoteName GetNoteName(this NoteOnEvent noteOnEvent)
         {
             if (noteOnEvent == null)
                 throw new ArgumentNullException(nameof(noteOnEvent));
 
-            return GetNoteLetter(noteOnEvent.NoteNumber);
+            return GetNoteName(noteOnEvent.NoteNumber);
         }
 
         /// <summary>
@@ -38,17 +38,17 @@ namespace Melanchall.DryWetMidi
         }
 
         /// <summary>
-        /// Gets letter of the note presented by an instance of <see cref="NoteOffEvent"/>.
+        /// Gets name of the note presented by an instance of <see cref="NoteOffEvent"/>.
         /// </summary>
-        /// <param name="noteOffEvent">Note Off event to get note letter of.</param>
-        /// <returns>Note letter of the <paramref name="noteOffEvent"/> event.</returns>
+        /// <param name="noteOffEvent">Note Off event to get note name of.</param>
+        /// <returns>Note name of the <paramref name="noteOffEvent"/> event.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteOffEvent"/> is null.</exception>
-        public static NoteLetter GetNoteLetter(this NoteOffEvent noteOffEvent)
+        public static NoteName GetNoteName(this NoteOffEvent noteOffEvent)
         {
             if (noteOffEvent == null)
                 throw new ArgumentNullException(nameof(noteOffEvent));
 
-            return GetNoteLetter(noteOffEvent.NoteNumber);
+            return GetNoteName(noteOffEvent.NoteNumber);
         }
 
         /// <summary>
@@ -66,13 +66,13 @@ namespace Melanchall.DryWetMidi
         }
 
         /// <summary>
-        /// Gets letter of the note presented by note number.
+        /// Gets name of the note presented by note number.
         /// </summary>
-        /// <param name="noteNumber">Note number to get note letter of.</param>
-        /// <returns>Letter of the note presented by <paramref name="noteNumber"/>.</returns>
-        private static NoteLetter GetNoteLetter(SevenBitNumber noteNumber)
+        /// <param name="noteNumber">Note number to get note name of.</param>
+        /// <returns>Name of the note presented by <paramref name="noteNumber"/>.</returns>
+        private static NoteName GetNoteName(SevenBitNumber noteNumber)
         {
-            return (NoteLetter)(noteNumber % OctaveSize);
+            return (NoteName)(noteNumber % OctaveSize);
         }
 
         /// <summary>

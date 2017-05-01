@@ -1,9 +1,9 @@
 ﻿namespace Melanchall.DryWetMidi
 {
     /// <summary>
-    /// Letter of a note of the 12-tone chromatic scale.
+    /// Name of a note of the 12-tone chromatic scale.
     /// </summary>
-    public enum  NoteLetter
+    public enum  NoteName
     {
         /// <summary>
         /// C (Do) note.
