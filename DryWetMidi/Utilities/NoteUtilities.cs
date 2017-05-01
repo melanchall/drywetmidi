@@ -7,7 +7,13 @@ namespace Melanchall.DryWetMidi
     /// </summary>
     public static class NoteUtilities
     {
+        #region Constants
+
         private const int OctaveSize = 12;
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Gets name of the note presented by an instance of <see cref="NoteOnEvent"/>.
@@ -84,5 +90,7 @@ namespace Melanchall.DryWetMidi
         {
             return noteNumber / OctaveSize;
         }
+
+        #endregion
     }
 }

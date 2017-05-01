@@ -65,7 +65,6 @@
     <Compile Include="Events\Base\SysExEvent.cs" />
     <Compile Include="Events\Channel\ChannelAftertouchEvent.cs" />
     <Compile Include="Events\Channel\ControlChangeEvent.cs" />
-    <Compile Include="Events\Channel\Enums\ControlType.cs" />
     <Compile Include="Events\Channel\NoteAftertouchEvent.cs" />
     <Compile Include="Events\Channel\NoteOffEvent.cs" />
     <Compile Include="Events\Channel\NoteOnEvent.cs" />
@@ -128,6 +127,8 @@
     <Compile Include="TimeDivision\TicksPerQuarterNoteTimeDivision.cs" />
     <Compile Include="TimeDivision\TimeDivisionFactory.cs" />
     <Compile Include="Utilities\ArrayUtilities.cs" />
+    <Compile Include="Utilities\ControlName.cs" />
+    <Compile Include="Utilities\ControlUtilities.cs" />
     <Compile Include="Utilities\NoteName.cs" />
     <Compile Include="Utilities\NoteUtilities.cs" />
     <Compile Include="WritingSettings\CompressionPolicy.cs" />

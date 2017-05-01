@@ -16,13 +16,6 @@
             ControlValue = controlValue;
         }
 
-        public ControlChangeEvent(ControlType control, SevenBitNumber controlValue)
-            : this()
-        {
-            Control = control;
-            ControlValue = controlValue;
-        }
-
         #endregion
 
         #region Properties
@@ -37,12 +30,6 @@
         {
             get { return _parameters[1]; }
             set { _parameters[1] = value; }
-        }
-
-        public ControlType Control
-        {
-            get { return (ControlType)(byte)ControlNumber; }
-            set { ControlNumber = (SevenBitNumber)(byte)value; }
         }
 
         #endregion
