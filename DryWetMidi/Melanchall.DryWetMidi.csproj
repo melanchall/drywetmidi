@@ -52,6 +52,7 @@
     <Compile Include="DataTypes\DataTypesUtilities.cs" />
     <Compile Include="DataTypes\FourBitNumber.cs" />
     <Compile Include="DataTypes\SevenBitNumber.cs" />
+    <Compile Include="Events\Meta\BaseTextEvent.cs" />
     <Compile Include="Exceptions\NoHeaderChunkException.cs" />
     <Compile Include="Exceptions\TooManyTrackChunksException.cs" />
     <Compile Include="Exceptions\UnexpectedTrackChunksCountException.cs" />

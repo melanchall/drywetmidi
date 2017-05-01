@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi
 {
-    public sealed class SequenceTrackNameEvent : MetaEvent
+    public sealed class SequenceTrackNameEvent : BaseTextEvent
     {
         #region Constructor
 
@@ -11,56 +9,13 @@ namespace Melanchall.DryWetMidi
         }
 
         public SequenceTrackNameEvent(string text)
-            : this()
+            : base(text)
         {
-            Text = text;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string Text { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public bool Equals(SequenceTrackNameEvent sequenceTrackNameEvent)
-        {
-            if (ReferenceEquals(null, sequenceTrackNameEvent))
-                return false;
-
-            if (ReferenceEquals(this, sequenceTrackNameEvent))
-                return true;
-
-            return base.Equals(sequenceTrackNameEvent) && Text == sequenceTrackNameEvent.Text;
         }
 
         #endregion
 
         #region Overrides
-
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
-        {
-            if (size < 0)
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    size,
-                    "Non-negative size have to be specified in order to read Sequence/Track Name event.");
-
-            Text = reader.ReadString(size);
-        }
-
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
-        {
-            writer.WriteString(Text);
-        }
-
-        protected override int GetContentDataSize()
-        {
-            return Text?.Length ?? 0;
-        }
 
         protected override MidiEvent CloneEvent()
         {
@@ -79,7 +34,7 @@ namespace Melanchall.DryWetMidi
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
+            return base.GetHashCode();
         }
 
         #endregion

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi
 {
-    public sealed class CopyrightNoticeEvent : MetaEvent
+    public sealed class CopyrightNoticeEvent : BaseTextEvent
     {
         #region Constructor
 
@@ -11,56 +9,13 @@ namespace Melanchall.DryWetMidi
         }
 
         public CopyrightNoticeEvent(string text)
-            : this()
+            : base(text)
         {
-            Text = text;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string Text { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public bool Equals(CopyrightNoticeEvent copyrightNoticeEvent)
-        {
-            if (ReferenceEquals(null, copyrightNoticeEvent))
-                return false;
-
-            if (ReferenceEquals(this, copyrightNoticeEvent))
-                return true;
-
-            return base.Equals(copyrightNoticeEvent) && Text == copyrightNoticeEvent.Text;
         }
 
         #endregion
 
         #region Overrides
-
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
-        {
-            if (size < 0)
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    size,
-                    "Non-negative size have to be specified in order to read Copyright Notice event.");
-
-            Text = reader.ReadString(size);
-        }
-
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
-        {
-            writer.WriteString(Text);
-        }
-
-        protected override int GetContentDataSize()
-        {
-            return Text?.Length ?? 0;
-        }
 
         protected override MidiEvent CloneEvent()
         {
@@ -79,7 +34,7 @@ namespace Melanchall.DryWetMidi
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
+            return base.GetHashCode();
         }
 
         #endregion

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi
 {
-    public sealed class DeviceNameEvent : MetaEvent
+    public sealed class DeviceNameEvent : BaseTextEvent
     {
         #region Constructor
 
@@ -11,65 +9,22 @@ namespace Melanchall.DryWetMidi
         }
 
         public DeviceNameEvent(string deviceName)
-            : this()
+            : base(deviceName)
         {
-            DeviceName = deviceName;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string DeviceName { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public bool Equals(DeviceNameEvent deviceNameEvent)
-        {
-            if (ReferenceEquals(null, deviceNameEvent))
-                return false;
-
-            if (ReferenceEquals(this, deviceNameEvent))
-                return true;
-
-            return base.Equals(deviceNameEvent) && DeviceName == deviceNameEvent.DeviceName;
         }
 
         #endregion
 
         #region Overrides
 
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
-        {
-            if (size < 0)
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    size,
-                    "Non-negative size have to be specified in order to read Device Name event.");
-
-            DeviceName = reader.ReadString(size);
-        }
-
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
-        {
-            writer.WriteString(DeviceName);
-        }
-
-        protected override int GetContentDataSize()
-        {
-            return DeviceName?.Length ?? 0;
-        }
-
         protected override MidiEvent CloneEvent()
         {
-            return new DeviceNameEvent(DeviceName);
+            return new DeviceNameEvent(Text);
         }
 
         public override string ToString()
         {
-            return $"Device Name (device name = {DeviceName})";
+            return $"Device Name (device name = {Text})";
         }
 
         public override bool Equals(object obj)
@@ -79,7 +34,7 @@ namespace Melanchall.DryWetMidi
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ (DeviceName?.GetHashCode() ?? 0);
+            return base.GetHashCode();
         }
 
         #endregion

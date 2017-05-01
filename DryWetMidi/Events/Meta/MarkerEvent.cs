@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi
 {
-    public sealed class MarkerEvent : MetaEvent
+    public sealed class MarkerEvent : BaseTextEvent
     {
         #region Constructor
 
@@ -11,56 +9,13 @@ namespace Melanchall.DryWetMidi
         }
 
         public MarkerEvent(string text)
-            : this()
+            : base(text)
         {
-            Text = text;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string Text { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public bool Equals(MarkerEvent markerEvent)
-        {
-            if (ReferenceEquals(null, markerEvent))
-                return false;
-
-            if (ReferenceEquals(this, markerEvent))
-                return true;
-
-            return base.Equals(markerEvent) && Text == markerEvent.Text;
         }
 
         #endregion
 
         #region Overrides
-
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
-        {
-            if (size < 0)
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    size,
-                    "Non-negative size have to be specified in order to read Marker event.");
-
-            Text = reader.ReadString(size);
-        }
-
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
-        {
-            writer.WriteString(Text);
-        }
-
-        protected override int GetContentDataSize()
-        {
-            return Text?.Length ?? 0;
-        }
 
         protected override MidiEvent CloneEvent()
         {
@@ -79,7 +34,7 @@ namespace Melanchall.DryWetMidi
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
+            return base.GetHashCode();
         }
 
         #endregion
