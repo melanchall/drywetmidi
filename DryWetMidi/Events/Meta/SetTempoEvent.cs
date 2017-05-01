@@ -22,10 +22,10 @@ namespace Melanchall.DryWetMidi
         {
         }
 
-        public SetTempoEvent(long tempo)
+        public SetTempoEvent(long microsecondsPerBeat)
             : this()
         {
-            MicrosecondsPerBeat = tempo;
+            MicrosecondsPerBeat = microsecondsPerBeat;
         }
 
         #endregion
