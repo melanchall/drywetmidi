@@ -5,14 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Melanchall.DryWetMidi")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyTitle("DryWetMIDI")]
+[assembly: AssemblyDescription(".NET library to read/write MIDI files")]
 [assembly: AssemblyCompany("Melanchall")]
-[assembly: AssemblyProduct("Melanchall.DryWetMidi")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyProduct("DryWetMIDI")]
+[assembly: AssemblyCopyright("Copyright © Melanchall 2017")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
