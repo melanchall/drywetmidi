@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi
+﻿using System;
+
+namespace Melanchall.DryWetMidi
 {
     /// <summary>
     /// Internal utilities to manipulate MIDI data types.
@@ -114,16 +116,16 @@
         /// </remarks>
         public static int GetVlqLength(this int number)
         {
-            byte result = 1;
-            int mask = 127 << 7;
+            var mask = 1 << 30;
+            var bitsCount = 31;
 
-            while ((number & mask) != 0)
+            while ((number & mask) == 0 && mask > 0)
             {
-                result++;
-                mask <<= 7;
+                mask >>= 1;
+                bitsCount--;
             }
 
-            return result;
+            return Math.Max(bitsCount / 7 + (bitsCount % 7 > 0 ? 1 : 0), 1);
         }
 
         /// <summary>
