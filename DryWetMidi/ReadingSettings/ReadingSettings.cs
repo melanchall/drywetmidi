@@ -80,6 +80,19 @@ namespace Melanchall.DryWetMidi
         public UnknownFileFormatPolicy UnknownFileFormatPolicy { get; set; }
 
         /// <summary>
+        /// Gets or sets reaction of the reading engine on invalid value of a channel event's
+        /// parameter value. Valid values are 0-127 so, for example, 128 is the invalid one
+        /// and will be processed according with this policy. The default is
+        /// <see cref="InvalidChannelEventParameterValuePolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="InvalidChannelEventParameterValuePolicy.Abort"/> is used an instance of the
+        /// <see cref="InvalidChannelEventParameterValueException"/> will be thrown if event's parameter value
+        /// just read is invalid.
+        /// </remarks>
+        public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy { get; set; }
+
+        /// <summary>
         /// Gets or sets collection of custom chunks types. These types must be derived from the <see cref="MidiChunk"/>
         /// class and have parameterless constructor. No exception will be thrown if some types don't meet
         /// these requirements.

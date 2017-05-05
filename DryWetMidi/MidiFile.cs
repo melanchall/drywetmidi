@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi
         /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the <paramref name="settings"/>.
+        /// in its header and that should be treated as error according to the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
         /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
@@ -113,6 +113,9 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
+        /// just read is invalid.</exception>
+        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))

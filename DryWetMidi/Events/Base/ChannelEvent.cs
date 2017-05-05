@@ -53,7 +53,20 @@ namespace Melanchall.DryWetMidi
         {
             for (int i = 0; i < _parameters.Length; i++)
             {
-                _parameters[i] = (SevenBitNumber)reader.ReadByte();
+                var parameter = reader.ReadByte();
+                if (parameter > SevenBitNumber.MaxValue)
+                {
+                    switch (settings.InvalidChannelEventParameterValuePolicy)
+                    {
+                        case InvalidChannelEventParameterValuePolicy.Abort:
+                            throw new InvalidChannelEventParameterValueException($"{parameter} is invalid value for channel event's parameter.", parameter);
+                        case InvalidChannelEventParameterValuePolicy.ReadValid:
+                            parameter &= 127;
+                            break;
+                    }
+                }
+
+                _parameters[i] = (SevenBitNumber)parameter;
             }
         }
 
