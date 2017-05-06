@@ -93,6 +93,18 @@ namespace Melanchall.DryWetMidi
         public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy { get; set; }
 
         /// <summary>
+        /// Gets or sets reaction of the reading engine on lack of bytes in the underlying stream
+        /// that are needed to read some value (for example, DWORD requires 4 bytes available).
+        /// The default is <see cref="NotEnoughBytesPolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="NotEnoughBytesPolicy.Abort"/> is used an instance of the
+        /// <see cref="NotEnoughBytesException"/> will be thrown if the reader's underlying stream doesn't
+        /// have enough bytes to read a value.
+        /// </remarks>
+        public NotEnoughBytesPolicy NotEnoughBytesPolicy { get; set; }
+
+        /// <summary>
         /// Gets or sets collection of custom chunks types. These types must be derived from the <see cref="MidiChunk"/>
         /// class and have parameterless constructor. No exception will be thrown if some types don't meet
         /// these requirements.

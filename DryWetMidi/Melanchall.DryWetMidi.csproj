@@ -55,6 +55,7 @@
     <Compile Include="Events\Meta\BaseTextEvent.cs" />
     <Compile Include="Exceptions\InvalidChannelEventParameterValueException.cs" />
     <Compile Include="Exceptions\NoHeaderChunkException.cs" />
+    <Compile Include="Exceptions\NotEnoughBytesException.cs" />
     <Compile Include="Exceptions\TooManyTrackChunksException.cs" />
     <Compile Include="Exceptions\UnexpectedTrackChunksCountException.cs" />
     <Compile Include="Exceptions\UnknownChunkIdException.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="ReadingSettings\ExtraTrackChunkPolicy.cs" />
     <Compile Include="ReadingSettings\InvalidChannelEventParameterValuePolicy.cs" />
     <Compile Include="ReadingSettings\InvalidEventSizePolicy.cs" />
+    <Compile Include="ReadingSettings\NotEnoughBytesPolicy.cs" />
     <Compile Include="ReadingSettings\UnexpectedTrackChunksCountPolicy.cs" />
     <Compile Include="ReadingSettings\UnknownChunkIdPolicy.cs" />
     <Compile Include="ReadingSettings\MissedEndOfTrackPolicy.cs" />

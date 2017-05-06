@@ -21,7 +21,14 @@
 
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
-            Data = reader.ReadBytes((int)size);
+            var availableSize = reader.Length - reader.Position;
+            var bytes = reader.ReadBytes((int)(availableSize < size ? availableSize : size));
+            if (bytes.Length < size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("Chunk's data cannot be read since the reader's underlying stream doesn't have enough bytes.",
+                                                  size,
+                                                  bytes.Length);
+
+            Data = bytes;
         }
 
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)

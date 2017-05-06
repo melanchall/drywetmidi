@@ -49,11 +49,18 @@ namespace Melanchall.DryWetMidi
         }
 
         /// <summary>
+        /// Gets length of the underlying stream.
+        /// </summary>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
+        public long Length => _binaryReader.BaseStream.Length;
+
+        /// <summary>
         /// Gets a value indicating whether end of the underlying stream is reached.
         /// </summary>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
-        public bool EndReached => _binaryReader.BaseStream.Position >= _binaryReader.BaseStream.Length;
+        public bool EndReached => Position >= Length;
 
         #endregion
 
@@ -106,9 +113,15 @@ namespace Melanchall.DryWetMidi
         /// <returns>A 16-bit unsigned integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a WORD.</exception>
         public ushort ReadWord()
         {
-            var bytes = ReadBytes(sizeof(ushort));
+            const int wordSize = sizeof(ushort);
+
+            var bytes = ReadBytes(wordSize);
+            if (bytes.Length < wordSize)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a WORD.", wordSize, bytes.Length);
+
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
 
@@ -122,9 +135,15 @@ namespace Melanchall.DryWetMidi
         /// <returns>A 32-bit unsigned integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a DWORD.</exception>
         public uint ReadDword()
         {
-            var bytes = ReadBytes(sizeof(uint));
+            const int dwordSize = sizeof(uint);
+
+            var bytes = ReadBytes(dwordSize);
+            if (bytes.Length < dwordSize)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a DWORD.", dwordSize, bytes.Length);
+
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
 
@@ -138,9 +157,15 @@ namespace Melanchall.DryWetMidi
         /// <returns>A 16-bit signed integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a INT16.</exception>
         public short ReadInt16()
         {
-            var bytes = ReadBytes(sizeof(short));
+            const int int16Size = sizeof(short);
+
+            var bytes = ReadBytes(int16Size);
+            if (bytes.Length < int16Size)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a INT16.", int16Size, bytes.Length);
+
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
 
@@ -199,9 +224,14 @@ namespace Melanchall.DryWetMidi
         /// <returns>A 32-bit unsigned integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a 3-byte DWORD.</exception>
         public uint Read3ByteDword()
         {
-            var bytes = ReadBytes(3);
+            const int dwordSize = 3;
+
+            var bytes = ReadBytes(dwordSize);
+            if (bytes.Length < dwordSize)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a 3-byte DWORD.", dwordSize, bytes.Length);
 
             var bytesForInt = new byte[sizeof(uint)];
             Array.Copy(bytes, 0, bytesForInt, bytesForInt.Length - bytes.Length, bytes.Length);

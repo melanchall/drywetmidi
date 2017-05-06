@@ -23,11 +23,11 @@ namespace Melanchall.DryWetMidi
         private InvalidChunkSizeException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            ExpectedSize = info.GetUInt32(ExpectedSizeSerializationPropertyName);
-            ActualSize = info.GetUInt32(ActualSizeSerializationPropertyName);
+            ExpectedSize = info.GetInt64(ExpectedSizeSerializationPropertyName);
+            ActualSize = info.GetInt64(ActualSizeSerializationPropertyName);
         }
 
-        public InvalidChunkSizeException(uint expectedSize, uint actualSize)
+        public InvalidChunkSizeException(long expectedSize, long actualSize)
             : this()
         {
             ExpectedSize = expectedSize;
@@ -38,9 +38,9 @@ namespace Melanchall.DryWetMidi
 
         #region Properties
 
-        public uint ExpectedSize { get; }
+        public long ExpectedSize { get; }
 
-        public uint ActualSize { get; }
+        public long ActualSize { get; }
 
         #endregion
 

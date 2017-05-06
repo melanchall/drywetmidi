@@ -81,18 +81,28 @@ namespace Melanchall.DryWetMidi
         /// </exception>
         public void Read(MidiReader reader, ReadingSettings settings)
         {
-            var size = reader.ReadDword();
+            uint size = 0;
+
+            try
+            {
+                size = reader.ReadDword();
+            }
+            catch (NotEnoughBytesException ex)
+            {
+                if (settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                    throw new NotEnoughBytesException("Size of the chunk cannot be read since the reader's underlying stream doesn't have enough bytes.", ex);
+            }
 
             var readerPosition = reader.Position;
             ReadContent(reader, settings, size);
 
-            var bytesRead = (uint)(reader.Position - readerPosition);
+            var bytesRead = reader.Position - readerPosition;
             if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && bytesRead != size)
                 throw new InvalidChunkSizeException(size, bytesRead);
 
             var bytesUnread = size - bytesRead;
             if (bytesUnread > 0)
-                reader.ReadBytes((int)bytesUnread);
+                reader.Position += bytesUnread;
         }
 
         /// <summary>

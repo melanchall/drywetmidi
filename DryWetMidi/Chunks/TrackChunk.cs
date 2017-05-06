@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi
 
         #region Fields
 
-        private byte? _currentStatusByte = null;
+        private byte? _channelEventStatusByte = null;
 
         #endregion
 
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi
                 Events.Add(midiEvent);
             }
 
-            _currentStatusByte = null;
+            _channelEventStatusByte = null;
 
             //
 
@@ -152,14 +152,15 @@ namespace Melanchall.DryWetMidi
 
             var statusByte = reader.ReadByte();
             if (statusByte <= SevenBitNumber.MaxValue)
+            {
                 reader.Position--;
-            else
-                _currentStatusByte = statusByte;
+                statusByte = _channelEventStatusByte.Value;
+            }
 
             //
 
-            var eventReader = EventReaderFactory.GetReader(_currentStatusByte.Value);
-            var midiEvent = eventReader.Read(reader, settings, _currentStatusByte.Value);
+            var eventReader = EventReaderFactory.GetReader(statusByte);
+            var midiEvent = eventReader.Read(reader, settings, statusByte);
 
             //
 
@@ -176,6 +177,11 @@ namespace Melanchall.DryWetMidi
                     };
                 }
             }
+
+            //
+
+            if (midiEvent is ChannelEvent)
+                _channelEventStatusByte = statusByte;
 
             //
 
