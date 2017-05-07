@@ -11,6 +11,12 @@ namespace Melanchall.DryWetMidi
     /// </summary>
     public sealed class MidiFile
     {
+        #region Fields
+
+        private ushort? _originalFormat;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -78,6 +84,26 @@ namespace Melanchall.DryWetMidi
         /// chunk types you've defined.
         /// </remarks>
         public ChunksCollection Chunks { get; } = new ChunksCollection();
+
+        /// <summary>
+        /// Gets original format of the file was read. This property returns null for the <see cref="MidiFile"/>
+        /// created by constructor.
+        /// </summary>
+        /// <exception cref="UnknownFileFormatException">File format is unknown.</exception>
+        public MidiFileFormat? OriginalFormat
+        {
+            get
+            {
+                if (_originalFormat == null)
+                    return null;
+
+                var formatValue = _originalFormat.Value;
+                if (!Enum.IsDefined(typeof(MidiFileFormat), formatValue))
+                    throw new UnknownFileFormatException($"File format {formatValue} is unknown.", formatValue);
+
+                return (MidiFileFormat)formatValue;
+            }
+        }
 
         #endregion
 
@@ -202,6 +228,7 @@ namespace Melanchall.DryWetMidi
             {
                 var headerChunk = ReadHeaderChunk(reader, settings);
                 file.TimeDivision = headerChunk.TimeDivision;
+                file._originalFormat = headerChunk.FileFormat;
 
                 var expectedTrackChunksCount = headerChunk.TracksNumber;
                 var actualTrackChunksCount = 0;
