@@ -151,8 +151,8 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
         /// just read is invalid.</exception>
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
-        /// <exception cref="NotEnoughBytesException">Size of a chunk cannot be read since the reader's
-        /// underlying stream doesn't have enough bytes.</exception>
+        /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
+        /// have enough bytes.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))
@@ -218,8 +218,8 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
-        /// <exception cref="NotEnoughBytesException">Size of a chunk cannot be read since the reader's
-        /// underlying stream doesn't have enough bytes.</exception>
+        /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
+        /// have enough bytes.</exception>
         private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             if (stream == null)
@@ -237,28 +237,41 @@ namespace Melanchall.DryWetMidi
 
             //
 
-            using (var reader = new MidiReader(stream))
+            try
             {
-                var headerChunk = ReadHeaderChunk(reader, settings);
-                file.TimeDivision = headerChunk.TimeDivision;
-                file._originalFormat = headerChunk.FileFormat;
-
-                var expectedTrackChunksCount = headerChunk.TracksNumber;
-                var actualTrackChunksCount = 0;
-
-                while (!reader.EndReached)
+                using (var reader = new MidiReader(stream))
                 {
-                    var chunk = ReadChunk(reader, settings, actualTrackChunksCount, expectedTrackChunksCount);
-                    if (chunk == null)
-                        continue;
+                    var headerChunk = ReadHeaderChunk(reader, settings);
+                    file.TimeDivision = headerChunk.TimeDivision;
+                    file._originalFormat = headerChunk.FileFormat;
 
-                    if (chunk is TrackChunk)
-                        actualTrackChunksCount++;
+                    var expectedTrackChunksCount = headerChunk.TracksNumber;
+                    var actualTrackChunksCount = 0;
 
-                    file.Chunks.Add(chunk);
+                    while (!reader.EndReached)
+                    {
+                        var chunk = ReadChunk(reader, settings, actualTrackChunksCount, expectedTrackChunksCount);
+                        if (chunk == null)
+                            continue;
+
+                        if (chunk is TrackChunk)
+                            actualTrackChunksCount++;
+
+                        file.Chunks.Add(chunk);
+                    }
+
+                    ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
                 }
-
-                ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
+            }
+            catch (NotEnoughBytesException ex)
+            {
+                if (settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                    throw new NotEnoughBytesException("MIDI file cannot be read since the reader's underlying stream doesn't have enough bytes.", ex);
+            }
+            catch (EndOfStreamException ex)
+            {
+                if (settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                    throw new NotEnoughBytesException("MIDI file cannot be read since the reader's underlying stream doesn't have enough bytes.", ex);
             }
 
             //
@@ -334,8 +347,8 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
-        /// <exception cref="NotEnoughBytesException">Size of the chunk cannot be read since the reader's
-        /// underlying stream doesn't have enough bytes.</exception>
+        /// <exception cref="NotEnoughBytesException">Value cannot be read since the reader's underlying stream
+        /// doesn't have enough bytes.</exception>
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);
@@ -366,8 +379,8 @@ namespace Melanchall.DryWetMidi
         /// in its header and that should be treated as error according to the specified
         /// <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
-        /// <exception cref="NotEnoughBytesException">Size of a chunk cannot be read since the reader's
-        /// underlying stream doesn't have enough bytes.</exception>
+        /// <exception cref="NotEnoughBytesException">Value cannot be read since the reader's underlying stream
+        /// doesn't have enough bytes.</exception>
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);

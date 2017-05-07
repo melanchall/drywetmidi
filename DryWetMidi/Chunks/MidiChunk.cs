@@ -80,17 +80,7 @@ namespace Melanchall.DryWetMidi
         /// underlying stream doesn't have enough bytes.</exception>
         public void Read(MidiReader reader, ReadingSettings settings)
         {
-            uint size = 0;
-
-            try
-            {
-                size = reader.ReadDword();
-            }
-            catch (NotEnoughBytesException ex)
-            {
-                if (settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
-                    throw new NotEnoughBytesException("Size of the chunk cannot be read since the reader's underlying stream doesn't have enough bytes.", ex);
-            }
+            var size = reader.ReadDword();
 
             var readerPosition = reader.Position;
             ReadContent(reader, settings, size);

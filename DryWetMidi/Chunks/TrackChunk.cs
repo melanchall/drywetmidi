@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi
 
             //
 
-            while (reader.Position < endReaderPosition)
+            while (reader.Position < endReaderPosition && !reader.EndReached)
             {
                 var midiEvent = ReadEvent(reader, settings);
                 if (midiEvent is EndOfTrackEvent)
@@ -153,6 +153,12 @@ namespace Melanchall.DryWetMidi
 
         #region Methods
 
+        /// <summary>
+        /// Reads an event from the reader's underlying stream.
+        /// </summary>
+        /// <param name="reader">Reader to read an event.</param>
+        /// <param name="settings">Settings according to which an event must be read.</param>
+        /// <returns>Instance of the <see cref="MidiEvent"/> representing a MIDI event.</returns>
         private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings)
         {
             var deltaTime = reader.ReadVlqNumber();

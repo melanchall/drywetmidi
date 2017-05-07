@@ -199,7 +199,8 @@ namespace Melanchall.DryWetMidi
         /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
         /// <returns>A 32-bit signed integer read from the underlying stream.</returns>
-        /// <exception cref="EndOfStreamException">The end of the underlying stream is reached.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a variable-length quantity
+        /// number.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public int ReadVlqNumber()
@@ -207,12 +208,19 @@ namespace Melanchall.DryWetMidi
             int result = 0;
             byte b;
 
-            do
+            try
             {
-                b = ReadByte();
-                result = (result << 7) + (b & 127);
+                do
+                {
+                    b = ReadByte();
+                    result = (result << 7) + (b & 127);
+                }
+                while (b >> 7 != 0);
             }
-            while (b >> 7 != 0);
+            catch (EndOfStreamException ex)
+            {
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a variable-length quantity number.", ex);
+            }
 
             return result;
         }
