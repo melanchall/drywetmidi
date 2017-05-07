@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi
     /// <summary>
     /// Provides a way to get <see cref="IEventWriter"/> for an event.
     /// </summary>
-    public static class EventWriterFactory
+    internal static class EventWriterFactory
     {
         #region Fields
 

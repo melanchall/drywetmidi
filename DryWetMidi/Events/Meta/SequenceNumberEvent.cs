@@ -46,6 +46,9 @@
 
         protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
         {
+            if (size < 2)
+                return;
+
             Number = reader.ReadInt16();
         }
 

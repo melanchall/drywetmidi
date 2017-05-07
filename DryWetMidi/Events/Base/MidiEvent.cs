@@ -2,10 +2,16 @@
 
 namespace Melanchall.DryWetMidi
 {
+    /// <summary>
+    /// Represents a MIDI file event stored in a track chunk.
+    /// </summary>
     public abstract class MidiEvent : ICloneable
     {
         #region Constants
 
+        /// <summary>
+        /// Constant for content's size of events that don't have size information stored.
+        /// </summary>
         public const int UnknownContentSize = -1;
 
         #endregion
@@ -18,6 +24,15 @@ namespace Melanchall.DryWetMidi
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets delta-time of the event.
+        /// </summary>
+        /// <remarks>
+        /// Delta-time represents the amount of time before the following event. If the first event in a track
+        /// occurs at the very beginning of a track, or if two events occur simultaneously, a delta-time of zero is used.
+        /// Delta-time is in some fraction of a beat (or a second, for recording a track with SMPTE times), as specified
+        /// in the header chunk of the MIDI file.
+        /// </remarks>
         public long DeltaTime
         {
             get { return _deltaTime; }

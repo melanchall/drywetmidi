@@ -1,6 +1,9 @@
 ﻿namespace Melanchall.DryWetMidi
 {
-    public static class EventReaderFactory
+    /// <summary>
+    /// Provides a way to get <see cref="IEventReader"/> for an event.
+    /// </summary>
+    internal static class EventReaderFactory
     {
         #region Fields
 
@@ -12,6 +15,11 @@
 
         #region Methods
 
+        /// <summary>
+        /// Gets <see cref="IEventReader"/> for an event with the specified status byte.
+        /// </summary>
+        /// <param name="statusByte">Status byte to get reader for.</param>
+        /// <returns>Reader for an event with the specified status byte.</returns>
         internal static IEventReader GetReader(byte statusByte)
         {
             if (statusByte == EventStatusBytes.Global.Meta)
