@@ -162,6 +162,8 @@ namespace Melanchall.DryWetMidi
         private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings)
         {
             var deltaTime = reader.ReadVlqLongNumber();
+            if (deltaTime < 0)
+                deltaTime = 0;
 
             //
 
