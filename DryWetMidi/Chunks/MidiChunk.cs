@@ -42,8 +42,8 @@ namespace Melanchall.DryWetMidi
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            if (string.IsNullOrWhiteSpace(id))
-                throw new ArgumentException("ID is empty or consists only of white-space characters.", nameof(id));
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException("ID is empty string.", nameof(id));
 
             if (id.Length != IdLength)
                 throw new ArgumentException($"ID length doesn't equal {IdLength}.", nameof(id));
