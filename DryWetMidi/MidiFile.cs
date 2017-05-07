@@ -40,6 +40,15 @@ namespace Melanchall.DryWetMidi
         /// <paramref name="chunks"/> contain null.</exception>
         public MidiFile(IEnumerable<MidiChunk> chunks)
         {
+            if (chunks == null)
+                throw new ArgumentNullException(nameof(chunks));
+
+            if (chunks.Any(c => c is HeaderChunk))
+                throw new ArgumentException("Header chunk cannot be added to chunks collection.", nameof(chunks));
+
+            if (chunks.Any(c => c == null))
+                throw new ArgumentException("Null cannot be added to chunks collection.", nameof(chunks));
+
             Chunks.AddRange(chunks);
         }
 

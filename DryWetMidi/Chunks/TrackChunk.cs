@@ -47,6 +47,15 @@ namespace Melanchall.DryWetMidi
         public TrackChunk(IEnumerable<MidiEvent> events)
             : this()
         {
+            if (events == null)
+                throw new ArgumentNullException(nameof(events));
+
+            if (events.Any(e => e is EndOfTrackEvent))
+                throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(events));
+
+            if (events.Any(e => e == null))
+                throw new ArgumentException("Null cannot be added to events collection.", nameof(events));
+
             Events.AddRange(events);
         }
 
