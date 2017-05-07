@@ -70,15 +70,14 @@ namespace Melanchall.DryWetMidi
         /// </summary>
         /// <param name="reader">Reader to read the chunk's data with.</param>
         /// <param name="settings">Settings according to which the chunk's data must be read.</param>
-        /// <exception cref="ObjectDisposedException">
-        /// Method was called after <paramref name="reader"/> was disposed.
-        /// </exception>
-        /// <exception cref="IOException">
-        /// An I/O error occurred on the <paramref name="reader"/>'s underlying stream.
-        /// </exception>
-        /// <exception cref="InvalidChunkSizeException">
-        /// Actual chunk's size differs from the one declared in its header.
-        /// </exception>
+        /// <exception cref="ObjectDisposedException">Method was called after <paramref name="reader"/>
+        /// was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the <paramref name="reader"/>'s
+        /// underlying stream.</exception>
+        /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
+        /// in its header.</exception>
+        /// <exception cref="NotEnoughBytesException">Size of the chunk cannot be read since the reader's
+        /// underlying stream doesn't have enough bytes.</exception>
         public void Read(MidiReader reader, ReadingSettings settings)
         {
             uint size = 0;
@@ -99,6 +98,8 @@ namespace Melanchall.DryWetMidi
             var bytesRead = reader.Position - readerPosition;
             if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && bytesRead != size)
                 throw new InvalidChunkSizeException(size, bytesRead);
+
+            // Skip unread bytes
 
             var bytesUnread = size - bytesRead;
             if (bytesUnread > 0)

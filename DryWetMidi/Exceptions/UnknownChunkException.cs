@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Melanchall.DryWetMidi
 {
     [Serializable]
-    public sealed class UnknownChunkIdException : MidiException
+    public sealed class UnknownChunkException : MidiException
     {
         #region Constants
 
@@ -14,28 +14,28 @@ namespace Melanchall.DryWetMidi
 
         #region Constructors
 
-        public UnknownChunkIdException()
+        public UnknownChunkException()
             : base()
         {
         }
 
-        public UnknownChunkIdException(string message)
+        public UnknownChunkException(string message)
             : base(message)
         {
         }
 
-        public UnknownChunkIdException(string message, Exception innerException)
+        public UnknownChunkException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
-        private UnknownChunkIdException(SerializationInfo info, StreamingContext context)
+        private UnknownChunkException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             ChunkId = info.GetString(ChunkIdSerializationPropertyName);
         }
 
-        public UnknownChunkIdException(string message, string chunkId)
+        public UnknownChunkException(string message, string chunkId)
             : this(message)
         {
             ChunkId = chunkId;

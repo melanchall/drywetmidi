@@ -58,7 +58,7 @@
     <Compile Include="Exceptions\NotEnoughBytesException.cs" />
     <Compile Include="Exceptions\TooManyTrackChunksException.cs" />
     <Compile Include="Exceptions\UnexpectedTrackChunksCountException.cs" />
-    <Compile Include="Exceptions\UnknownChunkIdException.cs" />
+    <Compile Include="Exceptions\UnknownChunkException.cs" />
     <Compile Include="Exceptions\InvalidChunkSizeException.cs" />
     <Compile Include="Exceptions\MidiException.cs" />
     <Compile Include="Exceptions\MissedEndOfTrackEventException.cs" />

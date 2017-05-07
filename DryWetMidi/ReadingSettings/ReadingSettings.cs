@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi
         /// </summary>
         /// <remarks>
         /// If <see cref="UnknownChunkIdPolicy.Abort"/> is used an instance of the
-        /// <see cref="UnknownChunkIdException"/> will be thrown if a chunk to be read has unknown ID.
+        /// <see cref="UnknownChunkException"/> will be thrown if a chunk to be read has unknown ID.
         /// </remarks>
         public UnknownChunkIdPolicy UnknownChunkIdPolicy { get; set; }
 

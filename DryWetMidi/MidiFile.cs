@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the <paramref name="settings"/>.</exception>
-        /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
+        /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
         /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one and that should be treated as error according to
@@ -151,6 +151,8 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
         /// just read is invalid.</exception>
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
+        /// <exception cref="NotEnoughBytesException">Size of a chunk cannot be read since the reader's
+        /// underlying stream doesn't have enough bytes.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))
@@ -208,7 +210,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the <paramref name="settings"/>.
-        /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
+        /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
         /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one and that should be treated as error according to
@@ -216,6 +218,8 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
+        /// <exception cref="NotEnoughBytesException">Size of a chunk cannot be read since the reader's
+        /// underlying stream doesn't have enough bytes.</exception>
         private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             if (stream == null)
@@ -330,6 +334,8 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
+        /// <exception cref="NotEnoughBytesException">Size of the chunk cannot be read since the reader's
+        /// underlying stream doesn't have enough bytes.</exception>
         private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);
@@ -351,7 +357,7 @@ namespace Melanchall.DryWetMidi
         /// <returns>A MIDI-file chunk.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        /// <exception cref="UnknownChunkIdException">Chunk to be read has unknown ID and that
+        /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
         /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count is greater than expected one and that should be treated as error according to
@@ -359,6 +365,9 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the specified
         /// <paramref name="settings"/>.</exception>
+        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
+        /// <exception cref="NotEnoughBytesException">Size of a chunk cannot be read since the reader's
+        /// underlying stream doesn't have enough bytes.</exception>
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);
@@ -380,7 +389,7 @@ namespace Melanchall.DryWetMidi
                         return null;
 
                     case UnknownChunkIdPolicy.Abort:
-                        throw new UnknownChunkIdException($"'{chunkId}' chunk ID is unknown.", chunkId);
+                        throw new UnknownChunkException($"'{chunkId}' chunk ID is unknown.", chunkId);
                 }
             }
 
