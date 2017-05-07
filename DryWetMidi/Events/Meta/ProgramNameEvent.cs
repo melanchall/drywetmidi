@@ -16,6 +16,26 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(ProgramNameEvent programNameEvent)
+        {
+            return Equals(programNameEvent, true);
+        }
+
+        public bool Equals(ProgramNameEvent programNameEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, programNameEvent))
+                return false;
+
+            if (ReferenceEquals(this, programNameEvent))
+                return true;
+
+            return base.Equals(programNameEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         protected override MidiEvent CloneEvent()

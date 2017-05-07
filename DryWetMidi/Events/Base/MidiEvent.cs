@@ -46,13 +46,18 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(MidiEvent midiEvent)
         {
+            return Equals(midiEvent, true);
+        }
+
+        public bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, midiEvent))
                 return false;
 
             if (ReferenceEquals(this, midiEvent))
                 return true;
 
-            return DeltaTime == midiEvent.DeltaTime;
+            return !respectDeltaTime || DeltaTime == midiEvent.DeltaTime;
         }
 
         #endregion

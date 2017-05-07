@@ -26,13 +26,18 @@
 
         public bool Equals(SequenceNumberEvent sequenceNumberEvent)
         {
+            return Equals(sequenceNumberEvent, true);
+        }
+
+        public bool Equals(SequenceNumberEvent sequenceNumberEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, sequenceNumberEvent))
                 return false;
 
             if (ReferenceEquals(this, sequenceNumberEvent))
                 return true;
 
-            return base.Equals(sequenceNumberEvent) && Number == sequenceNumberEvent.Number;
+            return base.Equals(sequenceNumberEvent, respectDeltaTime) && Number == sequenceNumberEvent.Number;
         }
 
         #endregion

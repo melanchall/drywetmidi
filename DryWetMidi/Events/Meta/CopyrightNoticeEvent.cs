@@ -15,6 +15,26 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(CopyrightNoticeEvent copyrightNoticeEvent)
+        {
+            return Equals(copyrightNoticeEvent, true);
+        }
+
+        public bool Equals(CopyrightNoticeEvent copyrightNoticeEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, copyrightNoticeEvent))
+                return false;
+
+            if (ReferenceEquals(this, copyrightNoticeEvent))
+                return true;
+
+            return base.Equals(copyrightNoticeEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         protected override MidiEvent CloneEvent()

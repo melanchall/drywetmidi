@@ -17,6 +17,26 @@ namespace Melanchall.DryWetMidi
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(CuePointEvent cuePointEvent)
+        {
+            return Equals(cuePointEvent, true);
+        }
+
+        public bool Equals(CuePointEvent cuePointEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, cuePointEvent))
+                return false;
+
+            if (ReferenceEquals(this, cuePointEvent))
+                return true;
+
+            return base.Equals(cuePointEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         protected override MidiEvent CloneEvent()

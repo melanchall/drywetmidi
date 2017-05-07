@@ -44,16 +44,22 @@
 
         public bool Equals(TimeSignatureEvent timeSignatureEvent)
         {
+            return Equals(timeSignatureEvent, true);
+        }
+
+        public bool Equals(TimeSignatureEvent timeSignatureEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, timeSignatureEvent))
                 return false;
 
             if (ReferenceEquals(this, timeSignatureEvent))
                 return true;
 
-            return base.Equals(timeSignatureEvent) && Numerator == timeSignatureEvent.Numerator &&
-                                                      Denominator == timeSignatureEvent.Denominator &&
-                                                      Clocks == timeSignatureEvent.Clocks &&
-                                                      NumberOf32ndNotesPerBeat == timeSignatureEvent.NumberOf32ndNotesPerBeat;
+            return base.Equals(timeSignatureEvent, respectDeltaTime) &&
+                   Numerator == timeSignatureEvent.Numerator &&
+                   Denominator == timeSignatureEvent.Denominator &&
+                   Clocks == timeSignatureEvent.Clocks &&
+                   NumberOf32ndNotesPerBeat == timeSignatureEvent.NumberOf32ndNotesPerBeat;
         }
 
         #endregion

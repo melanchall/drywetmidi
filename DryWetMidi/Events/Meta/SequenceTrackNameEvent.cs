@@ -15,6 +15,26 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(SequenceTrackNameEvent sequenceTrackNameEvent)
+        {
+            return Equals(sequenceTrackNameEvent, true);
+        }
+
+        public bool Equals(SequenceTrackNameEvent sequenceTrackNameEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, sequenceTrackNameEvent))
+                return false;
+
+            if (ReferenceEquals(this, sequenceTrackNameEvent))
+                return true;
+
+            return base.Equals(sequenceTrackNameEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         protected override MidiEvent CloneEvent()

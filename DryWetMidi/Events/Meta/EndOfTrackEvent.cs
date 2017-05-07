@@ -6,13 +6,18 @@
 
         public bool Equals(EndOfTrackEvent endOfTrackEvent)
         {
+            return Equals(endOfTrackEvent, true);
+        }
+
+        public bool Equals(EndOfTrackEvent endOfTrackEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, endOfTrackEvent))
                 return false;
 
             if (ReferenceEquals(this, endOfTrackEvent))
                 return true;
 
-            return base.Equals(endOfTrackEvent);
+            return base.Equals(endOfTrackEvent, respectDeltaTime);
         }
 
         #endregion

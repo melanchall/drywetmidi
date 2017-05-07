@@ -25,13 +25,19 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(UnknownMetaEvent unknownMetaEvent)
         {
+            return Equals(unknownMetaEvent, true);
+        }
+
+        public bool Equals(UnknownMetaEvent unknownMetaEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, unknownMetaEvent))
                 return false;
 
             if (ReferenceEquals(this, unknownMetaEvent))
                 return true;
 
-            return base.Equals(unknownMetaEvent) && ArrayUtilities.Equals(Data, unknownMetaEvent.Data);
+            return base.Equals(unknownMetaEvent, respectDeltaTime) &&
+                   ArrayUtilities.Equals(Data, unknownMetaEvent.Data);
         }
 
         #endregion

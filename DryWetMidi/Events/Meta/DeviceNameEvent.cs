@@ -15,6 +15,26 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(DeviceNameEvent deviceNameEvent)
+        {
+            return Equals(deviceNameEvent, true);
+        }
+
+        public bool Equals(DeviceNameEvent deviceNameEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, deviceNameEvent))
+                return false;
+
+            if (ReferenceEquals(this, deviceNameEvent))
+                return true;
+
+            return base.Equals(deviceNameEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         protected override MidiEvent CloneEvent()

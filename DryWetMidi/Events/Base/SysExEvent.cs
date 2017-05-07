@@ -16,14 +16,20 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(SysExEvent sysExEvent)
         {
+            return Equals(sysExEvent, true);
+        }
+
+        public bool Equals(SysExEvent sysExEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, sysExEvent))
                 return false;
 
             if (ReferenceEquals(this, sysExEvent))
                 return true;
 
-            return base.Equals(sysExEvent) && Completed == sysExEvent.Completed &&
-                                              ArrayUtilities.Equals(Data, sysExEvent.Data);
+            return base.Equals(sysExEvent, respectDeltaTime) &&
+                   Completed == sysExEvent.Completed &&
+                   ArrayUtilities.Equals(Data, sysExEvent.Data);
         }
 
         #endregion

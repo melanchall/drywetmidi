@@ -28,13 +28,18 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(PortPrefixEvent portPrefixEvent)
         {
+            return Equals(portPrefixEvent, true);
+        }
+
+        public bool Equals(PortPrefixEvent portPrefixEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, portPrefixEvent))
                 return false;
 
             if (ReferenceEquals(this, portPrefixEvent))
                 return true;
 
-            return base.Equals(portPrefixEvent) && Port == portPrefixEvent.Port;
+            return base.Equals(portPrefixEvent, respectDeltaTime) && Port == portPrefixEvent.Port;
         }
 
         #endregion

@@ -50,13 +50,19 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(SetTempoEvent setTempoEvent)
         {
+            return Equals(setTempoEvent, true);
+        }
+
+        public bool Equals(SetTempoEvent setTempoEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, setTempoEvent))
                 return false;
 
             if (ReferenceEquals(this, setTempoEvent))
                 return true;
 
-            return base.Equals(setTempoEvent) && MicrosecondsPerBeat == setTempoEvent.MicrosecondsPerBeat;
+            return base.Equals(setTempoEvent, respectDeltaTime) &&
+                   MicrosecondsPerBeat == setTempoEvent.MicrosecondsPerBeat;
         }
 
         #endregion

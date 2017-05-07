@@ -28,13 +28,19 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(SequencerSpecificEvent sequencerSpecificEvent)
         {
+            return Equals(sequencerSpecificEvent, true);
+        }
+
+        public bool Equals(SequencerSpecificEvent sequencerSpecificEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, sequencerSpecificEvent))
                 return false;
 
             if (ReferenceEquals(this, sequencerSpecificEvent))
                 return true;
 
-            return base.Equals(sequencerSpecificEvent) && ArrayUtilities.Equals(Data, sequencerSpecificEvent.Data);
+            return base.Equals(sequencerSpecificEvent, respectDeltaTime) &&
+                   ArrayUtilities.Equals(Data, sequencerSpecificEvent.Data);
         }
 
         #endregion

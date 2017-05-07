@@ -15,6 +15,26 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(TextEvent textEvent)
+        {
+            return Equals(textEvent, true);
+        }
+
+        public bool Equals(TextEvent textEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, textEvent))
+                return false;
+
+            if (ReferenceEquals(this, textEvent))
+                return true;
+
+            return base.Equals(textEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         protected override MidiEvent CloneEvent()

@@ -40,17 +40,23 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(SmpteOffsetEvent smpteOffsetEvent)
         {
+            return Equals(smpteOffsetEvent, true);
+        }
+
+        public bool Equals(SmpteOffsetEvent smpteOffsetEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, smpteOffsetEvent))
                 return false;
 
             if (ReferenceEquals(this, smpteOffsetEvent))
                 return true;
 
-            return base.Equals(smpteOffsetEvent) && Hours == smpteOffsetEvent.Hours &&
-                                                    Minutes == smpteOffsetEvent.Minutes &&
-                                                    Seconds == smpteOffsetEvent.Seconds &&
-                                                    Frames == smpteOffsetEvent.Frames &&
-                                                    SubFrames == smpteOffsetEvent.SubFrames;
+            return base.Equals(smpteOffsetEvent, respectDeltaTime) &&
+                   Hours == smpteOffsetEvent.Hours &&
+                   Minutes == smpteOffsetEvent.Minutes &&
+                   Seconds == smpteOffsetEvent.Seconds &&
+                   Frames == smpteOffsetEvent.Frames &&
+                   SubFrames == smpteOffsetEvent.SubFrames;
         }
 
         #endregion

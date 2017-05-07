@@ -28,13 +28,18 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(BaseTextEvent baseTextEvent)
         {
+            return Equals(baseTextEvent, true);
+        }
+
+        public bool Equals(BaseTextEvent baseTextEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, baseTextEvent))
                 return false;
 
             if (ReferenceEquals(this, baseTextEvent))
                 return true;
 
-            return base.Equals(baseTextEvent) && Text == baseTextEvent.Text;
+            return base.Equals(baseTextEvent, respectDeltaTime) && Text == baseTextEvent.Text;
         }
 
         #endregion

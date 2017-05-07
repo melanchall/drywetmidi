@@ -11,6 +11,39 @@ namespace Melanchall.DryWetMidi
 
         #endregion
 
+        #region Constructor
+
+        public NormalSysExEvent()
+        {
+        }
+
+        public NormalSysExEvent(byte[] data)
+        {
+            Data = data;
+        }
+
+        #endregion
+
+        #region Methods
+
+        public bool Equals(NormalSysExEvent normalSysExEvent)
+        {
+            return Equals(normalSysExEvent, true);
+        }
+
+        public bool Equals(NormalSysExEvent normalSysExEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, normalSysExEvent))
+                return false;
+
+            if (ReferenceEquals(this, normalSysExEvent))
+                return true;
+
+            return base.Equals(normalSysExEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
@@ -43,6 +76,16 @@ namespace Melanchall.DryWetMidi
         public override string ToString()
         {
             return "Normal SysEx";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as NormalSysExEvent);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         #endregion

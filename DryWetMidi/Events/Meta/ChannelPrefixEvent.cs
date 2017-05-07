@@ -26,13 +26,18 @@
 
         public bool Equals(ChannelPrefixEvent channelPrefixEvent)
         {
+            return Equals(channelPrefixEvent, true);
+        }
+
+        public bool Equals(ChannelPrefixEvent channelPrefixEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, channelPrefixEvent))
                 return false;
 
             if (ReferenceEquals(this, channelPrefixEvent))
                 return true;
 
-            return base.Equals(channelPrefixEvent) && Channel == channelPrefixEvent.Channel;
+            return base.Equals(channelPrefixEvent, respectDeltaTime) && Channel == channelPrefixEvent.Channel;
         }
 
         #endregion

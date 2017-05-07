@@ -15,6 +15,26 @@
 
         #endregion
 
+        #region Methods
+
+        public bool Equals(InstrumentNameEvent instrumentNameEvent)
+        {
+            return Equals(instrumentNameEvent, true);
+        }
+
+        public bool Equals(InstrumentNameEvent instrumentNameEvent, bool respectDeltaTime)
+        {
+            if (ReferenceEquals(null, instrumentNameEvent))
+                return false;
+
+            if (ReferenceEquals(this, instrumentNameEvent))
+                return true;
+
+            return base.Equals(instrumentNameEvent, respectDeltaTime);
+        }
+
+        #endregion
+
         #region Overrides
 
         protected override MidiEvent CloneEvent()

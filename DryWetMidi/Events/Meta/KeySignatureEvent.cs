@@ -36,13 +36,18 @@
 
         public bool Equals(KeySignatureEvent keySignatureEvent)
         {
+            return Equals(keySignatureEvent, true);
+        }
+
+        public bool Equals(KeySignatureEvent keySignatureEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, keySignatureEvent))
                 return false;
 
             if (ReferenceEquals(this, keySignatureEvent))
                 return true;
 
-            return base.Equals(keySignatureEvent) &&
+            return base.Equals(keySignatureEvent, respectDeltaTime) &&
                    Key == keySignatureEvent.Key &&
                    Scale == keySignatureEvent.Scale;
         }

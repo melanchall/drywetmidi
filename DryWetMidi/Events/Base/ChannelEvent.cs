@@ -36,13 +36,18 @@ namespace Melanchall.DryWetMidi
 
         public bool Equals(ChannelEvent channelEvent)
         {
+            return Equals(channelEvent, true);
+        }
+
+        public bool Equals(ChannelEvent channelEvent, bool respectDeltaTime)
+        {
             if (ReferenceEquals(null, channelEvent))
                 return false;
 
             if (ReferenceEquals(this, channelEvent))
                 return true;
 
-            return base.Equals(channelEvent) && _parameters.SequenceEqual(channelEvent._parameters);
+            return base.Equals(channelEvent, respectDeltaTime) && _parameters.SequenceEqual(channelEvent._parameters);
         }
 
         #endregion
