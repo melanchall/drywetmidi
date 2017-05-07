@@ -384,6 +384,19 @@ namespace Melanchall.DryWetMidi
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);
+            if (chunkId.Length < MidiChunk.IdLength)
+            {
+                switch (settings.NotEnoughBytesPolicy)
+                {
+                    case NotEnoughBytesPolicy.Abort:
+                        throw new NotEnoughBytesException("Chunk ID cannot be read since the reader's underlying stream doesn't have enough bytes.",
+                                                          MidiChunk.IdLength,
+                                                          chunkId.Length);
+                    case NotEnoughBytesPolicy.Ignore:
+                        return null;
+                }
+            }
+
             var chunk = chunkId == TrackChunk.Id
                 ? new TrackChunk()
                 : TryCreateChunk(chunkId, settings.CustomChunkTypes);
