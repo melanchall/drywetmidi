@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi
         }
 
         /// <summary>
-        /// Merges two seven-bit numbers into one unsigned 16-bit unsigned integer number.
+        /// Merges two seven-bit numbers into one 16-bit unsigned integer number.
         /// </summary>
         /// <param name="head"><see cref="SevenBitNumber"/> representing left part of resulting number.</param>
         /// <param name="tail"><see cref="SevenBitNumber"/> representing right part of resulting number.</param>

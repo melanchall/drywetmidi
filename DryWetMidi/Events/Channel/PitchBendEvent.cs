@@ -2,10 +2,18 @@
 {
     public sealed class PitchBendEvent : ChannelEvent
     {
+        #region Constants
+
+        private const int ParametersCount = 2;
+        private const int PitchValueLsbParameterIndex = 0;
+        private const int PitchValueMsbParameterIndex = 1;
+
+        #endregion
+
         #region Constructor
 
         public PitchBendEvent()
-            : base(2)
+            : base(ParametersCount)
         {
         }
 
@@ -28,14 +36,14 @@
 
         public SevenBitNumber PitchValueLsb
         {
-            get { return _parameters[0]; }
-            set { _parameters[0] = value; }
+            get { return _parameters[PitchValueLsbParameterIndex]; }
+            set { _parameters[PitchValueLsbParameterIndex] = value; }
         }
 
         public SevenBitNumber PitchValueMsb
         {
-            get { return _parameters[1]; }
-            set { _parameters[1] = value; }
+            get { return _parameters[PitchValueMsbParameterIndex]; }
+            set { _parameters[PitchValueMsbParameterIndex] = value; }
         }
 
         public ushort PitchValue

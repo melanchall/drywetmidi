@@ -2,10 +2,18 @@
 {
     public sealed class ControlChangeEvent : ChannelEvent
     {
+        #region Constants
+
+        private const int ParametersCount = 2;
+        private const int ControlNumberParameterIndex = 0;
+        private const int ControlValueParameterIndex = 1;
+
+        #endregion
+
         #region Constructor
 
         public ControlChangeEvent()
-            : base(2)
+            : base(ParametersCount)
         {
         }
 
@@ -22,14 +30,14 @@
 
         public SevenBitNumber ControlNumber
         {
-            get { return _parameters[0]; }
-            set { _parameters[0] = value; }
+            get { return _parameters[ControlNumberParameterIndex]; }
+            set { _parameters[ControlNumberParameterIndex] = value; }
         }
 
         public SevenBitNumber ControlValue
         {
-            get { return _parameters[1]; }
-            set { _parameters[1] = value; }
+            get { return _parameters[ControlValueParameterIndex]; }
+            set { _parameters[ControlValueParameterIndex] = value; }
         }
 
         #endregion

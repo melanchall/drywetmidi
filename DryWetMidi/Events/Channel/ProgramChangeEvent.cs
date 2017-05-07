@@ -2,10 +2,17 @@
 {
     public sealed class ProgramChangeEvent : ChannelEvent
     {
+        #region Constants
+
+        private const int ParametersCount = 1;
+        private const int ProgramNumberParameterIndex = 0;
+
+        #endregion
+
         #region Constructor
 
         public ProgramChangeEvent()
-            : base(1)
+            : base(ParametersCount)
         {
         }
 
@@ -21,8 +28,8 @@
 
         public SevenBitNumber ProgramNumber
         {
-            get { return _parameters[0]; }
-            set { _parameters[0] = value; }
+            get { return _parameters[ProgramNumberParameterIndex]; }
+            set { _parameters[ProgramNumberParameterIndex] = value; }
         }
 
         #endregion

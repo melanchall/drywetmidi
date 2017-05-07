@@ -2,10 +2,17 @@
 {
     public sealed class ChannelAftertouchEvent : ChannelEvent
     {
+        #region Constants
+
+        private const int ParametersCount = 1;
+        private const int AftertouchValueParameterIndex = 0;
+
+        #endregion
+
         #region Constructor
 
         public ChannelAftertouchEvent()
-            : base(1)
+            : base(ParametersCount)
         {
         }
 
@@ -21,8 +28,8 @@
 
         public SevenBitNumber AftertouchValue
         {
-            get { return _parameters[0]; }
-            set { _parameters[0] = value; }
+            get { return _parameters[AftertouchValueParameterIndex]; }
+            set { _parameters[AftertouchValueParameterIndex] = value; }
         }
 
         #endregion
