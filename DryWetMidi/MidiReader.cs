@@ -195,8 +195,6 @@ namespace Melanchall.DryWetMidi
         /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
         /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
         /// number is between 0 and 127, it is thus represented exactly as one byte.
-        /// The largest number which is allowed is 0FFFFFFF so that the VLQ representations
-        /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
         /// <returns>A 32-bit signed integer read from the underlying stream.</returns>
         /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a variable-length quantity
@@ -205,7 +203,26 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public int ReadVlqNumber()
         {
-            int result = 0;
+            return (int)ReadVlqLongNumber();
+        }
+
+        /// <summary>
+        /// Reads a 64-bit signed integer presented in compressed format called variable-length quantity (VLQ)
+        /// to the underlying stream.
+        /// </summary>
+        /// <remarks>
+        /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
+        /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
+        /// number is between 0 and 127, it is thus represented exactly as one byte.
+        /// </remarks>
+        /// <returns>A 64-bit signed integer read from the underlying stream.</returns>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a variable-length quantity
+        /// number.</exception>
+        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        public long ReadVlqLongNumber()
+        {
+            long result = 0;
             byte b;
 
             try

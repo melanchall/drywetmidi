@@ -12,13 +12,13 @@ namespace Melanchall.DryWetMidi
 
         #region Fields
 
-        private int _deltaTime;
+        private long _deltaTime;
 
         #endregion
 
         #region Properties
 
-        public int DeltaTime
+        public long DeltaTime
         {
             get { return _deltaTime; }
             set

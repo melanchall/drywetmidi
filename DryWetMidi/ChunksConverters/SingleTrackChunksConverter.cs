@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi
         {
             #region Constructor
 
-            public EventDescriptor(MidiEvent midiEvent, int absoluteTime, int channel)
+            public EventDescriptor(MidiEvent midiEvent, long absoluteTime, int channel)
             {
                 Event = midiEvent;
                 AbsoluteTime = absoluteTime;
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi
 
             public MidiEvent Event { get; }
 
-            public int AbsoluteTime { get; }
+            public long AbsoluteTime { get; }
 
             public int Channel { get; }
 
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi
             {
                 var absoluteTimeDifference = x.AbsoluteTime - y.AbsoluteTime;
                 if (absoluteTimeDifference != 0)
-                    return absoluteTimeDifference;
+                    return (int)(absoluteTimeDifference / Math.Abs(absoluteTimeDifference));
 
                 //
 
@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi
             var eventsDescriptors = trackChunks
                 .SelectMany(trackChunk =>
                 {
-                    var absoluteTime = 0;
+                    var absoluteTime = 0L;
                     var channel = -1;
                     return trackChunk.Events
                                      .Select(midiEvent =>
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi
             //
 
             var resultTrackChunk = new TrackChunk();
-            var time = 0;
+            var time = 0L;
 
             foreach (var eventDescriptor in eventsDescriptors)
             {

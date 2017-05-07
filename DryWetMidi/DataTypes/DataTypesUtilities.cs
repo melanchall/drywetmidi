@@ -111,13 +111,35 @@ namespace Melanchall.DryWetMidi
         /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
         /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
         /// number is between 0 and 127, it is thus represented exactly as one byte.
-        /// The largest number which is allowed is 0FFFFFFF so that the VLQ representations
-        /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
         public static int GetVlqLength(this int number)
         {
             var mask = 1 << 30;
             var bitsCount = 31;
+
+            while ((number & mask) == 0 && mask > 0)
+            {
+                mask >>= 1;
+                bitsCount--;
+            }
+
+            return Math.Max(bitsCount / 7 + (bitsCount % 7 > 0 ? 1 : 0), 1);
+        }
+
+        /// <summary>
+        /// Gets length of variable-length quantity (VLQ) representation of an integer number.
+        /// </summary>
+        /// <param name="number">Number to calculate VLQ length for.</param>
+        /// <returns>Bytes count required to represent the number in VLQ.</returns>
+        /// <remarks>
+        /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
+        /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
+        /// number is between 0 and 127, it is thus represented exactly as one byte.
+        /// </remarks>
+        public static int GetVlqLength(this long number)
+        {
+            var mask = 1L << 62;
+            var bitsCount = 63;
 
             while ((number & mask) == 0 && mask > 0)
             {
@@ -137,10 +159,23 @@ namespace Melanchall.DryWetMidi
         /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
         /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
         /// number is between 0 and 127, it is thus represented exactly as one byte.
-        /// The largest number which is allowed is 0FFFFFFF so that the VLQ representations
-        /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
         public static byte[] GetVlqBytes(this int number)
+        {
+            return GetVlqBytes((long)number);
+        }
+
+        /// <summary>
+        /// Gets bytes of a number in variable-length quantity (VLQ) format.
+        /// </summary>
+        /// <param name="number">Number to get VLQ bytes for.</param>
+        /// <returns>Bytes representing the number coded in VLQ.</returns>
+        /// <remarks>
+        /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
+        /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
+        /// number is between 0 and 127, it is thus represented exactly as one byte.
+        /// </remarks>
+        public static byte[] GetVlqBytes(this long number)
         {
             var result = new byte[number.GetVlqLength()];
             var i = result.Length - 1;

@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi
         /// <returns>Instance of the <see cref="MidiEvent"/> representing a MIDI event.</returns>
         private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings)
         {
-            var deltaTime = reader.ReadVlqNumber();
+            var deltaTime = reader.ReadVlqLongNumber();
 
             //
 

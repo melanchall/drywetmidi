@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi
 
             public TrackChunk Chunk { get; } = new TrackChunk();
 
-            public int DeltaTime { get; set; }
+            public long DeltaTime { get; set; }
 
             #endregion
 

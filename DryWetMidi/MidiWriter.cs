@@ -151,12 +151,27 @@ namespace Melanchall.DryWetMidi
         /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
         /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
         /// number is between 0 and 127, it is thus represented exactly as one byte.
-        /// The largest number which is allowed is 0FFFFFFF so that the VLQ representations
-        /// must fit in 32 bits in a routine to write variable-length numbers.
         /// </remarks>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteVlqNumber(int value)
+        {
+            WriteVlqNumber((long)value);
+        }
+
+        /// <summary>
+        /// Writes a 64-bit signed integer to the underlying stream in compressed format called
+        /// variable-length quantity (VLQ).
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        /// <remarks>
+        /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
+        /// All bytes except the last have bit 7 set, and the last byte has bit 7 clear. If the
+        /// number is between 0 and 127, it is thus represented exactly as one byte.
+        /// </remarks>
+        /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        public void WriteVlqNumber(long value)
         {
             var bytes = value.GetVlqBytes();
             WriteBytes(bytes);
