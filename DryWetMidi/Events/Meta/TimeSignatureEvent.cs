@@ -70,8 +70,12 @@
         {
             Numerator = reader.ReadByte();
             Denominator = reader.ReadByte();
-            Clocks = reader.ReadByte();
-            NumberOf32ndNotesPerBeat = reader.ReadByte();
+
+            if (size >= 4)
+            {
+                Clocks = reader.ReadByte();
+                NumberOf32ndNotesPerBeat = reader.ReadByte();
+            }
         }
 
         protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
