@@ -8,11 +8,49 @@ namespace Melanchall.DryWetMidi
     /// <summary>
     /// Collection of <see cref="MidiEvent"/> objects.
     /// </summary>
-    public sealed class EventsCollection : IEnumerable<MidiEvent>
+    public sealed class EventsCollection : IEnumerable<MidiEvent>, ICloneable
     {
         #region Fields
 
         private readonly List<MidiEvent> _events = new List<MidiEvent>();
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventsCollection"/>.
+        /// </summary>
+        internal EventsCollection()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventsCollection"/> with the specified events.
+        /// </summary>
+        /// <param name="events">Events to add to the events collection.</param>
+        /// <remarks>
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// track chunk structure. End Of Track event will be written to the track chunk automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
+        /// <paramref name="events"/> contain null.
+        /// </exception>
+        private EventsCollection(IEnumerable<MidiEvent> events)
+        {
+            if (events == null)
+                throw new ArgumentNullException(nameof(events));
+
+            if (events.Any(e => e is EndOfTrackEvent))
+                throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(events));
+
+            if (events.Any(e => e == null))
+                throw new ArgumentException("Null cannot be added to events collection.", nameof(events));
+
+            AddRange(events);
+        }
 
         #endregion
 
@@ -199,6 +237,19 @@ namespace Melanchall.DryWetMidi
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _events.GetEnumerator();
+        }
+
+        #endregion
+
+        #region ICloneable
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="EventsCollection"/> that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new instance of the <see cref="EventsCollection"/> that is a copy of this instance.</returns>
+        public object Clone()
+        {
+            return new EventsCollection(this.Select(e => e.Clone() as MidiEvent));
         }
 
         #endregion
