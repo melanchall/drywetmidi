@@ -99,12 +99,13 @@ namespace Melanchall.DryWetMidi
         /// created by constructor.
         /// </summary>
         /// <exception cref="UnknownFileFormatException">File format is unknown.</exception>
+        /// <exception cref="InvalidOperationException">Unable to get original format of the file.</exception>
         public MidiFileFormat? OriginalFormat
         {
             get
             {
                 if (_originalFormat == null)
-                    return null;
+                    throw new InvalidOperationException("Unable to get original format of the file.");
 
                 var formatValue = _originalFormat.Value;
                 if (!Enum.IsDefined(typeof(MidiFileFormat), formatValue))
