@@ -24,6 +24,9 @@ namespace Melanchall.DryWetMidi
         /// </summary>
         /// <param name="type">Type of event.</param>
         /// <param name="statusByte">Status byte of event.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
+        /// <exception cref="ArgumentException">Event type specified by <paramref name="type"/> and
+        /// <paramref name="statusByte"/> already exists in the <see cref="EventsCollection"/>.</exception>
         public void Add(Type type, byte statusByte)
         {
             _statusBytes.Add(type, statusByte);
@@ -44,6 +47,15 @@ namespace Melanchall.DryWetMidi
             return _types.TryGetValue(statusByte, out type);
         }
 
+        /// <summary>
+        /// Gets the status byte associated with the specified event type.
+        /// </summary>
+        /// <param name="type">Event type to get status byte for.</param>
+        /// <param name="statusByte">When this method returns, contains the status byte associated with
+        /// the specified event type, if the key is found; otherwise, 0. This parameter is passed
+        /// uninitialized.</param>
+        /// <returns>true if the <see cref="EventTypesCollection"/> contains a status byte for the
+        /// specified event type; otherwise, false.</returns>
         public bool TryGetStatusByte(Type type, out byte statusByte)
         {
             return _statusBytes.TryGetValue(type, out statusByte);
@@ -53,12 +65,20 @@ namespace Melanchall.DryWetMidi
 
         #region IEnumerable<EventType>
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<EventType> GetEnumerator()
         {
             return _statusBytes.Select(kv => new EventType(kv.Key, kv.Value))
                                .GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

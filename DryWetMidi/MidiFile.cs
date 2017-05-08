@@ -236,6 +236,7 @@ namespace Melanchall.DryWetMidi
                 settings = new ReadingSettings();
 
             var file = new MidiFile();
+            var headerChunks = new List<HeaderChunk>();
 
             //
 
@@ -243,26 +244,56 @@ namespace Melanchall.DryWetMidi
             {
                 using (var reader = new MidiReader(stream))
                 {
-                    var headerChunk = ReadHeaderChunk(reader, settings);
-                    file.TimeDivision = headerChunk.TimeDivision;
-                    file._originalFormat = headerChunk.FileFormat;
-
-                    var expectedTrackChunksCount = headerChunk.TracksNumber;
+                    int? expectedTrackChunksCount = null;
                     var actualTrackChunksCount = 0;
 
                     while (!reader.EndReached)
                     {
+                        // Read chunk
+
                         var chunk = ReadChunk(reader, settings, actualTrackChunksCount, expectedTrackChunksCount);
                         if (chunk == null)
                             continue;
 
+                        // Process header chunk
+
+                        var headerChunk = chunk as HeaderChunk;
+                        if (headerChunk != null)
+                        {
+                            if (!headerChunks.Any())
+                            {
+                                expectedTrackChunksCount = headerChunk.TracksNumber;
+                                file.TimeDivision = headerChunk.TimeDivision;
+                                file._originalFormat = headerChunk.FileFormat;
+                            }
+
+                            headerChunks.Add(headerChunk);
+
+                            continue;
+                        }
+
+                        // Process track chunk
+
                         if (chunk is TrackChunk)
                             actualTrackChunksCount++;
+
+                        // Add chunk to chunks collection of the file
 
                         file.Chunks.Add(chunk);
                     }
 
-                    ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
+                    if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)
+                        ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount.Value);
+                }
+
+                // Process header chunks count
+
+                if (!headerChunks.Any())
+                {
+                    file.TimeDivision = null;
+
+                    if (settings.NoHeaderChunkPolicy == NoHeaderChunkPolicy.Abort)
+                        throw new NoHeaderChunkException();
                 }
             }
             catch (NotEnoughBytesException ex)
@@ -336,33 +367,6 @@ namespace Melanchall.DryWetMidi
         }
 
         /// <summary>
-        /// Reads a header chunk from a MIDI-file.
-        /// </summary>
-        /// <param name="reader">Reader to read a chunk with.</param>
-        /// <param name="settings">Settings according to which a chunk must be read.</param>
-        /// <returns>A MIDI-file header chunk.</returns>
-        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
-        /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the specified
-        /// <paramref name="settings"/>.</exception>
-        /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
-        /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
-        /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
-        /// <exception cref="NotEnoughBytesException">Value cannot be read since the reader's underlying stream
-        /// doesn't have enough bytes.</exception>
-        private static HeaderChunk ReadHeaderChunk(MidiReader reader, ReadingSettings settings)
-        {
-            var chunkId = reader.ReadString(MidiChunk.IdLength);
-            if (chunkId != HeaderChunk.Id)
-                throw new NoHeaderChunkException($"'{chunkId}' is invalid header chunk's ID. It must be '{HeaderChunk.Id}'.");
-
-            var headerChunk = new HeaderChunk();
-            headerChunk.Read(reader, settings);
-            return headerChunk;
-        }
-
-        /// <summary>
         /// Reads a chunk from a MIDI-file.
         /// </summary>
         /// <param name="reader">Reader to read a chunk with.</param>
@@ -384,7 +388,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="NotEnoughBytesException">Value cannot be read since the reader's underlying stream
         /// doesn't have enough bytes.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
+        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);
             if (chunkId.Length < MidiChunk.IdLength)
@@ -400,9 +404,23 @@ namespace Melanchall.DryWetMidi
                 }
             }
 
-            var chunk = chunkId == TrackChunk.Id
-                ? new TrackChunk()
-                : TryCreateChunk(chunkId, settings.CustomChunkTypes);
+            //
+
+            MidiChunk chunk = null;
+            switch (chunkId)
+            {
+                case HeaderChunk.Id:
+                    chunk = new HeaderChunk();
+                    break;
+                case TrackChunk.Id:
+                    chunk = new TrackChunk();
+                    break;
+                default:
+                    chunk = TryCreateChunk(chunkId, settings.CustomChunkTypes);
+                    break;
+            }
+
+            //
 
             if (chunk == null)
             {
@@ -422,9 +440,11 @@ namespace Melanchall.DryWetMidi
                 }
             }
 
-            if (chunk is TrackChunk && actualTrackChunksCount >= expectedTrackChunksCount)
+            //
+
+            if (chunk is TrackChunk && expectedTrackChunksCount != null && actualTrackChunksCount >= expectedTrackChunksCount)
             {
-                ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount);
+                ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount.Value);
 
                 switch (settings.ExtraTrackChunkPolicy)
                 {
@@ -437,6 +457,8 @@ namespace Melanchall.DryWetMidi
                         return null;
                 }
             }
+
+            //
 
             chunk.Read(reader, settings);
             return chunk;

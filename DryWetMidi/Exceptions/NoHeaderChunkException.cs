@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi
         #region Constructors
 
         public NoHeaderChunkException()
-            : base()
+            : base("MIDI file doesn't contain the header chunk.")
         {
         }
 

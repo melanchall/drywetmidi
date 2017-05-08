@@ -119,6 +119,7 @@
     <Compile Include="ReadingSettings\ExtraTrackChunkPolicy.cs" />
     <Compile Include="ReadingSettings\InvalidChannelEventParameterValuePolicy.cs" />
     <Compile Include="ReadingSettings\InvalidEventSizePolicy.cs" />
+    <Compile Include="ReadingSettings\NoHeaderChunkPolicy.cs" />
     <Compile Include="ReadingSettings\NotEnoughBytesPolicy.cs" />
     <Compile Include="ReadingSettings\UnexpectedTrackChunksCountPolicy.cs" />
     <Compile Include="ReadingSettings\UnknownChunkIdPolicy.cs" />

@@ -105,6 +105,16 @@ namespace Melanchall.DryWetMidi
         public NotEnoughBytesPolicy NotEnoughBytesPolicy { get; set; }
 
         /// <summary>
+        /// Gets or sets reaction of the reading engine on missing of the header chunk in the MIDI file.
+        /// The default is <see cref="NoHeaderChunkPolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="NoHeaderChunkPolicy.Abort"/> is used an instance of the
+        /// <see cref="NoHeaderChunkException"/> will be thrown if the MIDI file doesn't contain the header chunk.
+        /// </remarks>
+        public NoHeaderChunkPolicy NoHeaderChunkPolicy { get; set; }
+
+        /// <summary>
         /// Gets or sets collection of custom chunks types. These types must be derived from the <see cref="MidiChunk"/>
         /// class and have parameterless constructor. No exception will be thrown if some types don't meet
         /// these requirements.
