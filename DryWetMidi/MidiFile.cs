@@ -185,6 +185,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
         /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
+        /// <exception cref="InvalidOperationException">Time division is null.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
         public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
@@ -323,6 +324,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support writing,
         /// or is already closed.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
+        /// <exception cref="InvalidOperationException">Time division is null.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
         private void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
@@ -332,6 +334,9 @@ namespace Melanchall.DryWetMidi
 
             if (!Enum.IsDefined(typeof(MidiFileFormat), format))
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
+
+            if (TimeDivision == null)
+                throw new InvalidOperationException("Time division is null.");
 
             //
 
