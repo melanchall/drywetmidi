@@ -6,10 +6,10 @@ The library is under MIT license so you can do whatever you want with it.
 
 ## Features
 
-* DryWetMIDI provides core functionality to read and write [standard MIDI files](https://www.midi.org/specifications/category/smf-specifications) giving you set of basic MIDI objects: ```MidiFile```, ```MidiEvent```, ```MidiChunk``` (see examples below of how you can use these objects).
-* The library gives you ability to implement custom meta events (by deriving from the ```MetaEvent```) and custom chunks (by deriving from the ```MidiChunk```).
-* Process of reading or writing can be finely adjusted with help of ```ReadingSettings``` and ```WritingSettings```. It allows, for example, to read files with some corruptions like mismatch of actual track chunk's length and expected one written in the chunk's header.
-* All possible errors in a MIDI file are presented in the DryWetMIDI as separate exception classes so you can easily catch specific error. Some of these exceptions are thrown only if specific option is set in an instance of the ```ReadingSettings``` used to read the file.
+* DryWetMIDI provides the way to read and write [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications) giving you set of basic MIDI objects: ```MidiFile```, ```MidiEvent```, ```MidiChunk``` (see examples below of how you can use these objects). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
+* Process of reading and writing can be finely adjusted with help of ```ReadingSettings``` and ```WritingSettings```. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
+* The library gives you ability to implement custom [meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks).
+* All possible errors in a MIDI file are presented in the DryWetMIDI as separate exception classes so you can easily catch specific error.
 
 ## Getting Started
 
