@@ -153,6 +153,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
         /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
         /// have enough bytes.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))
@@ -220,6 +221,7 @@ namespace Melanchall.DryWetMidi
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
         /// have enough bytes.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             if (stream == null)
@@ -381,6 +383,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
         /// <exception cref="NotEnoughBytesException">Value cannot be read since the reader's underlying stream
         /// doesn't have enough bytes.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);

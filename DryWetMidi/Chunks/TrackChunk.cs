@@ -170,8 +170,11 @@ namespace Melanchall.DryWetMidi
             var statusByte = reader.ReadByte();
             if (statusByte <= SevenBitNumber.MaxValue)
             {
-                reader.Position--;
+                if (_channelEventStatusByte == null)
+                    throw new UnexpectedRunningStatusException();
+
                 statusByte = _channelEventStatusByte.Value;
+                reader.Position--;
             }
 
             //
