@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi
         /// </summary>
         /// <exception cref="UnknownFileFormatException">File format is unknown.</exception>
         /// <exception cref="InvalidOperationException">Unable to get original format of the file.</exception>
-        public MidiFileFormat? OriginalFormat
+        public MidiFileFormat OriginalFormat
         {
             get
             {
