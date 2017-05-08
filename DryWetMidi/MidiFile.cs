@@ -11,6 +11,13 @@ namespace Melanchall.DryWetMidi
     /// </summary>
     public sealed class MidiFile
     {
+        #region Constants
+
+        private const string RiffChunkId = "RIFF";
+        private const int RmidPreambleSize = 12; // RMID_size (4) + 'RMID' (4) + 'data' (4)
+
+        #endregion
+
         #region Fields
 
         private ushort? _originalFormat;
@@ -246,10 +253,26 @@ namespace Melanchall.DryWetMidi
             {
                 using (var reader = new MidiReader(stream))
                 {
+                    // Read RIFF header
+
+                    long? smfEndPosition = null;
+
+                    var chunkId = reader.ReadString(RiffChunkId.Length);
+                    if (chunkId == RiffChunkId)
+                    {
+                        reader.Position += RmidPreambleSize;
+                        var smfSize = reader.ReadDword();
+                        smfEndPosition = reader.Position + smfSize;
+                    }
+                    else
+                        reader.Position -= chunkId.Length;
+
+                    // Read SMF
+
                     int? expectedTrackChunksCount = null;
                     var actualTrackChunksCount = 0;
 
-                    while (!reader.EndReached)
+                    while (!reader.EndReached && (smfEndPosition == null || reader.Position < smfEndPosition))
                     {
                         // Read chunk
 
