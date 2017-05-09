@@ -17,17 +17,13 @@ namespace Melanchall.DryWetMidi
             if (trackChunks.Length == 0)
                 return chunks;
 
-            var sequenceNumbers = trackChunks.Select(GetSequenceNumber).ToArray();
-            if (!sequenceNumbers.Any() || sequenceNumbers.Any(n => n == null))
-                throw new InvalidOperationException("Chunks cannot be converted to multi-sequence since some of chunks have no sequence number.");
-
-            if (sequenceNumbers.Length == trackChunks.Length)
-                return chunks;
+            var sequenceNumbers = trackChunks.Select((c, i) => new { Chunk = c, Number = GetSequenceNumber(c) ?? i })
+                                             .ToArray();
 
             var singleTrackChunksConverter = ChunksConverterFactory.GetConverter(MidiFileFormat.SingleTrack);
-            return trackChunks.GroupBy(GetSequenceNumber)
-                              .SelectMany(g => singleTrackChunksConverter.Convert(g))
-                              .Concat(chunks.Where(c => !(c is TrackChunk)));
+            return sequenceNumbers.GroupBy(n => n.Number)
+                                  .SelectMany(g => singleTrackChunksConverter.Convert(g.Select(n => n.Chunk)))
+                                  .Concat(chunks.Where(c => !(c is TrackChunk)));
         }
 
         #endregion
