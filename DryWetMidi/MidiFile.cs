@@ -245,7 +245,10 @@ namespace Melanchall.DryWetMidi
                 settings = new ReadingSettings();
 
             var file = new MidiFile();
-            var headerChunks = new List<HeaderChunk>();
+
+            int? expectedTrackChunksCount = null;
+            int actualTrackChunksCount = 0;
+            bool headerChunkIsRead = false;
 
             //
 
@@ -269,9 +272,6 @@ namespace Melanchall.DryWetMidi
 
                     // Read SMF
 
-                    int? expectedTrackChunksCount = null;
-                    var actualTrackChunksCount = 0;
-
                     while (!reader.EndReached && (smfEndPosition == null || reader.Position < smfEndPosition))
                     {
                         // Read chunk
@@ -285,14 +285,14 @@ namespace Melanchall.DryWetMidi
                         var headerChunk = chunk as HeaderChunk;
                         if (headerChunk != null)
                         {
-                            if (!headerChunks.Any())
+                            if (!headerChunkIsRead)
                             {
                                 expectedTrackChunksCount = headerChunk.TracksNumber;
                                 file.TimeDivision = headerChunk.TimeDivision;
                                 file._originalFormat = headerChunk.FileFormat;
                             }
 
-                            headerChunks.Add(headerChunk);
+                            headerChunkIsRead = true;
 
                             continue;
                         }
@@ -313,7 +313,7 @@ namespace Melanchall.DryWetMidi
 
                 // Process header chunks count
 
-                if (!headerChunks.Any())
+                if (!headerChunkIsRead)
                 {
                     file.TimeDivision = null;
 
@@ -323,13 +323,11 @@ namespace Melanchall.DryWetMidi
             }
             catch (NotEnoughBytesException ex)
             {
-                if (settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
-                    throw new NotEnoughBytesException("MIDI file cannot be read since the reader's underlying stream doesn't have enough bytes.", ex);
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, ex);
             }
             catch (EndOfStreamException ex)
             {
-                if (settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
-                    throw new NotEnoughBytesException("MIDI file cannot be read since the reader's underlying stream doesn't have enough bytes.", ex);
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, ex);
             }
 
             //
@@ -502,7 +500,7 @@ namespace Melanchall.DryWetMidi
         /// <param name="actualTrackChunksCount">Actual count of track chunks.</param>
         /// <param name="expectedTrackChunksCount">Expected count of track chunks.</param>
         /// <exception cref="UnexpectedTrackChunksCountException">Difference between expected track chunks
-        /// count and the actual one is unallowable due to <paramref name="policy"/>.</exception>
+        /// count and the actual one is unallowable due to the <paramref name="policy"/>.</exception>
         private static void ReactOnUnexpectedTrackChunksCount(UnexpectedTrackChunksCountPolicy policy, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             switch (policy)
@@ -516,6 +514,21 @@ namespace Melanchall.DryWetMidi
                         actualTrackChunksCount,
                         expectedTrackChunksCount);
             }
+        }
+
+        /// <summary>
+        /// Does nothing if lack of bytes in the reader's underlying stream needed to read a value should
+        /// not be treated as error; or throws the <see cref="NotEnoughBytesException"/> if this is
+        /// unallowable.
+        /// </summary>
+        /// <param name="policy">The policy according to which the method should operate.</param>
+        /// <param name="exception">Initial exception.</param>
+        /// <exception cref="NotEnoughBytesException">Lack of bytes in the reader's underlying stream needed to
+        /// read a value is unallowable due to the <paramref name="policy"/>.</exception>
+        private static void ReactOnNotEnoughBytes(NotEnoughBytesPolicy policy, Exception exception)
+        {
+            if (policy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("MIDI file cannot be read since the reader's underlying stream doesn't have enough bytes.", exception);
         }
 
         /// <summary>
