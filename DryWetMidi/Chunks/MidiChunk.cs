@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi
         /// in its header.</exception>
         /// <exception cref="NotEnoughBytesException">Size of the chunk cannot be read since the reader's
         /// underlying stream doesn't have enough bytes.</exception>
-        public void Read(MidiReader reader, ReadingSettings settings)
+        internal void Read(MidiReader reader, ReadingSettings settings)
         {
             var size = reader.ReadDword();
 
@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="IOException">
         /// An I/O error occurred on the <paramref name="writer"/>'s underlying stream.
         /// </exception>
-        public void Write(MidiWriter writer, WritingSettings settings)
+        internal void Write(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteString(ChunkId);
 
