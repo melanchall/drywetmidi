@@ -5,10 +5,12 @@ namespace Melanchall.DryWetMidi
     /// <summary>
     /// Type that is used to represent a four-bit number.
     /// </summary>
-    /// <remarks>Four-bit numbers widely used by MIDI protocol as parameters of MIDI events.
+    /// <remarks>
+    /// Four-bit numbers widely used by MIDI protocol as parameters of MIDI events.
     /// So instead of manipulating built-in C# numeric types (like byte or int) and checking for
     /// out-of-range errors all validation of numbers in the [0; 15] range happens on data type
-    /// level via casting C# integer values to <see cref="FourBitNumber"/> type.</remarks>
+    /// level via casting C# integer values to the <see cref="FourBitNumber"/>.
+    /// </remarks>
     public struct FourBitNumber
     {
         #region Constants
@@ -83,6 +85,29 @@ namespace Melanchall.DryWetMidi
         public override string ToString()
         {
             return _value.ToString();
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            if (!(obj is FourBitNumber))
+                return false;
+
+            var fourBitNumber = (FourBitNumber)obj;
+            return fourBitNumber._value == _value;
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return _value.GetHashCode();
         }
 
         #endregion

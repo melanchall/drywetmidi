@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi
 
         #region Overrides
 
-        protected override sealed void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
+        protected override sealed void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             if (size < 0)
                 throw new ArgumentOutOfRangeException(
@@ -57,12 +57,12 @@ namespace Melanchall.DryWetMidi
             Text = reader.ReadString(size);
         }
 
-        protected override sealed void WriteContentData(MidiWriter writer, WritingSettings settings)
+        protected override sealed void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteString(Text);
         }
 
-        protected override sealed int GetContentDataSize()
+        protected override sealed int GetContentSize()
         {
             return Text?.Length ?? 0;
         }

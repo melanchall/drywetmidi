@@ -36,14 +36,14 @@ namespace Melanchall.DryWetMidi
 
         #region Overrides
 
-        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
+        internal override void Write(MidiWriter writer, WritingSettings settings)
         {
             var data = Data;
             if (data != null)
                 writer.WriteBytes(data);
         }
 
-        internal override int GetContentSize()
+        internal override int GetSize()
         {
             return Data?.Length ?? 0;
         }

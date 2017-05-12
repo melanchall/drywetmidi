@@ -24,15 +24,15 @@
 
         #region Overrides
 
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
         }
 
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
         }
 
-        protected override int GetContentDataSize()
+        protected override int GetContentSize()
         {
             return 0;
         }

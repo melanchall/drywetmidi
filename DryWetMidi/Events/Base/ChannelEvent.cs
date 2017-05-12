@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi
 
         #region Overrides
 
-        internal override sealed void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+        internal override sealed void Read(MidiReader reader, ReadingSettings settings, int size)
         {
             for (int i = 0; i < _parameters.Length; i++)
             {
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi
             }
         }
 
-        internal override void WriteContent(MidiWriter writer, WritingSettings settings)
+        internal override void Write(MidiWriter writer, WritingSettings settings)
         {
             foreach (var parameter in _parameters)
             {
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi
             }
         }
 
-        internal override int GetContentSize()
+        internal override int GetSize()
         {
             return _parameters.Length;
         }

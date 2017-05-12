@@ -44,7 +44,7 @@
 
         #region Overrides
 
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             if (size < 2)
                 return;
@@ -52,12 +52,12 @@
             Number = reader.ReadInt16();
         }
 
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteInt16(Number);
         }
 
-        protected override int GetContentDataSize()
+        protected override int GetContentSize()
         {
             return 2;
         }

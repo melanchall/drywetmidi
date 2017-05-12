@@ -44,17 +44,17 @@
 
         #region Overrides
 
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             Channel = reader.ReadByte();
         }
 
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Channel);
         }
 
-        protected override int GetContentDataSize()
+        protected override int GetContentSize()
         {
             return 1;
         }

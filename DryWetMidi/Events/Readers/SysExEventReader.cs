@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi
             //
 
             midiEvent.Completed = false;
-            midiEvent.ReadContent(reader, settings, size);
+            midiEvent.Read(reader, settings, size);
             return midiEvent;
         }
 

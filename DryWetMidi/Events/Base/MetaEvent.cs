@@ -1,35 +1,69 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi
 {
+    /// <summary>
+    /// Represents a MIDI file meta event.
+    /// </summary>
+    /// <remarks>
+    /// Meta event specifies non-MIDI information useful to this format or to sequencers.
+    /// </remarks>
     public abstract class MetaEvent : MidiEvent
     {
         #region Overrides
 
-        internal sealed override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+        /// <summary>
+        /// Reads content of a MIDI event.
+        /// </summary>
+        /// <param name="reader">Reader to read the content with.</param>
+        /// <param name="settings">Settings according to which the event's content must be read.</param>
+        /// <param name="size">Size of the event's content.</param>
+        internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
         {
-            ReadContentData(reader, settings, size);
+            ReadContent(reader, settings, size);
         }
 
-        internal sealed override void WriteContent(MidiWriter writer, WritingSettings settings)
+        /// <summary>
+        /// Writes content of a MIDI event.
+        /// </summary>
+        /// <param name="writer">Writer to write the content with.</param>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
+        internal sealed override void Write(MidiWriter writer, WritingSettings settings)
         {
-            WriteContentData(writer, settings);
+            WriteContent(writer, settings);
         }
 
-        internal sealed override int GetContentSize()
+        /// <summary>
+        /// Gets the size of the content of a MIDI event.
+        /// </summary>
+        /// <returns>Size of the event's content.</returns>
+        internal sealed override int GetSize()
         {
-            return GetContentDataSize();
+            return GetContentSize();
         }
 
         #endregion
 
         #region Methods
 
-        protected abstract void ReadContentData(MidiReader reader, ReadingSettings settings, int size);
+        /// <summary>
+        /// Reads content of a MIDI meta event.
+        /// </summary>
+        /// <param name="reader">Reader to read the content with.</param>
+        /// <param name="settings">Settings according to which the event's content must be read.</param>
+        /// <param name="size">Size of the event's content.</param>
+        protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size);
 
-        protected abstract void WriteContentData(MidiWriter writer, WritingSettings settings);
+        /// <summary>
+        /// Writes content of a MIDI meta event.
+        /// </summary>
+        /// <param name="writer">Writer to write the content with.</param>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
+        protected abstract void WriteContent(MidiWriter writer, WritingSettings settings);
 
-        protected abstract int GetContentDataSize();
+        /// <summary>
+        /// Gets the size of the content of a MIDI meta event.
+        /// </summary>
+        /// <returns>Size of the event's content.</returns>
+        protected abstract int GetContentSize();
 
         #endregion
     }

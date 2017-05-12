@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi
 
         #region Overrides
 
-        internal override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
         {
             if (size < 0)
                 throw new ArgumentOutOfRangeException(

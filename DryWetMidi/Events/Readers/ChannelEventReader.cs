@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi
                 throw new UnknownChannelEventException(statusByte, channel);
 
             var channelEvent = (ChannelEvent)Activator.CreateInstance(eventType);
-            channelEvent.ReadContent(reader, settings, MidiEvent.UnknownContentSize);
+            channelEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
             channelEvent.Channel = channel;
             return channelEvent;
         }

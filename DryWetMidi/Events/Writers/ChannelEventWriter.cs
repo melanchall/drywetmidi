@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi
 
             //
 
-            midiEvent.WriteContent(writer, settings);
+            midiEvent.Write(writer, settings);
         }
 
         public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi
 
             //
 
-            return (writeStatusByte ? 1 : 0) + midiEvent.GetContentSize();
+            return (writeStatusByte ? 1 : 0) + midiEvent.GetSize();
         }
 
         public byte GetStatusByte(MidiEvent midiEvent)

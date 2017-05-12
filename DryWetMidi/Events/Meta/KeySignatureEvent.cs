@@ -56,19 +56,19 @@
 
         #region Overrides
 
-        protected override void ReadContentData(MidiReader reader, ReadingSettings settings, int size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             Key = reader.ReadSByte();
             Scale = reader.ReadByte();
         }
 
-        protected override void WriteContentData(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteSByte(Key);
             writer.WriteByte(Scale);
         }
 
-        protected override int GetContentDataSize()
+        protected override int GetContentSize()
         {
             return 2;
         }

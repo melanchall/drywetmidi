@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi
         /// Delta-time represents the amount of time before the following event. If the first event in a track
         /// occurs at the very beginning of a track, or if two events occur simultaneously, a delta-time of zero is used.
         /// Delta-time is in some fraction of a beat (or a second, for recording a track with SMPTE times), as specified
-        /// in the header chunk of the MIDI file.
+        /// by the file's time division.
         /// </remarks>
         public long DeltaTime
         {
@@ -51,19 +51,50 @@ namespace Melanchall.DryWetMidi
 
         #region Methods
 
-        internal abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size);
+        /// <summary>
+        /// Reads content of a MIDI event.
+        /// </summary>
+        /// <param name="reader">Reader to read the content with.</param>
+        /// <param name="settings">Settings according to which the event's content must be read.</param>
+        /// <param name="size">Size of the event's content.</param>
+        internal abstract void Read(MidiReader reader, ReadingSettings settings, int size);
 
-        internal abstract void WriteContent(MidiWriter writer, WritingSettings settings);
+        /// <summary>
+        /// Writes content of a MIDI event.
+        /// </summary>
+        /// <param name="writer">Writer to write the content with.</param>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
+        internal abstract void Write(MidiWriter writer, WritingSettings settings);
 
-        internal abstract int GetContentSize();
+        /// <summary>
+        /// Gets the size of the content of a MIDI event.
+        /// </summary>
+        /// <returns>Size of the event's content.</returns>
+        internal abstract int GetSize();
 
+        /// <summary>
+        /// Clones event by creating a new instance of the specific event.
+        /// </summary>
+        /// <returns>Copy of the event.</returns>
         protected abstract MidiEvent CloneEvent();
 
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
         public bool Equals(MidiEvent midiEvent)
         {
             return Equals(midiEvent, true);
         }
 
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the <see cref="DeltaTime"/> will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
         public bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
         {
             if (ReferenceEquals(null, midiEvent))
@@ -79,6 +110,10 @@ namespace Melanchall.DryWetMidi
 
         #region ICloneable
 
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new object that is a copy of this instance.</returns>
         public object Clone()
         {
             var midiEvent = CloneEvent();
@@ -90,11 +125,20 @@ namespace Melanchall.DryWetMidi
 
         #region Overrides
 
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             return Equals(obj as MidiEvent);
         }
 
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
             return DeltaTime.GetHashCode();

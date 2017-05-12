@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi
             //
 
             var readerPosition = reader.Position;
-            midiEvent.ReadContent(reader, settings, size);
+            midiEvent.Read(reader, settings, size);
 
             var bytesRead = reader.Position - readerPosition;
             var bytesUnread = size - bytesRead;
