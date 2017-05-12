@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi
         internal abstract int GetSize();
 
         /// <summary>
-        /// Clones event by creating a new instance of the specific event.
+        /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
         protected abstract MidiEvent CloneEvent();

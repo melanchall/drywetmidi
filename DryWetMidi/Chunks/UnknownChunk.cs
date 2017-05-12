@@ -4,7 +4,7 @@
     {
         #region Constructor
 
-        public UnknownChunk(string id)
+        internal UnknownChunk(string id)
             : base(id)
         {
         }
@@ -13,7 +13,7 @@
 
         #region Properties
 
-        public byte[] Data { get; set; }
+        public byte[] Data { get; private set; }
 
         #endregion
 

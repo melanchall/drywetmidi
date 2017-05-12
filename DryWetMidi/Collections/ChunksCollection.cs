@@ -111,8 +111,8 @@ namespace Melanchall.DryWetMidi
         /// </summary>
         /// <remarks>
         /// Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
-        /// Header chunk with appropriate information will be written to a file automatically on <see cref="MidiFile.Save(string, bool, WritingSettings)"/>
-        /// or <see cref="MidiFile.Write(System.IO.Stream, WritingSettings)"/>.
+        /// Header chunk with appropriate information will be written to a file automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
         /// <param name="chunk">The chunk to be added to the end of the collection.</param>

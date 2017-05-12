@@ -219,7 +219,7 @@ namespace Melanchall.DryWetMidi
         /// <exception cref="IOException">An I/O error occurred while reading from the stream.</exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the <paramref name="settings"/>.
+        /// in its header and that should be treated as error according to the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
         /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
