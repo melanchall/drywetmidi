@@ -17,13 +17,6 @@
         {
         }
 
-        public PitchBendEvent(SevenBitNumber pitchValueLsb, SevenBitNumber pitchValueMsb)
-            : this()
-        {
-            PitchValueLsb = pitchValueLsb;
-            PitchValueMsb = pitchValueMsb;
-        }
-
         public PitchBendEvent(ushort pitchValue)
             : this()
         {
@@ -34,18 +27,6 @@
 
         #region Properties
 
-        public SevenBitNumber PitchValueLsb
-        {
-            get { return _parameters[PitchValueLsbParameterIndex]; }
-            set { _parameters[PitchValueLsbParameterIndex] = value; }
-        }
-
-        public SevenBitNumber PitchValueMsb
-        {
-            get { return _parameters[PitchValueMsbParameterIndex]; }
-            set { _parameters[PitchValueMsbParameterIndex] = value; }
-        }
-
         public ushort PitchValue
         {
             get { return DataTypesUtilities.Combine(PitchValueLsb, PitchValueMsb); }
@@ -54,6 +35,18 @@
                 PitchValueLsb = value.GetHead();
                 PitchValueMsb = value.GetTail();
             }
+        }
+
+        private SevenBitNumber PitchValueLsb
+        {
+            get { return _parameters[PitchValueLsbParameterIndex]; }
+            set { _parameters[PitchValueLsbParameterIndex] = value; }
+        }
+
+        private SevenBitNumber PitchValueMsb
+        {
+            get { return _parameters[PitchValueMsbParameterIndex]; }
+            set { _parameters[PitchValueMsbParameterIndex] = value; }
         }
 
         #endregion
