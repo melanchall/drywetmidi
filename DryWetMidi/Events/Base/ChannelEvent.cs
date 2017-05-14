@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Melanchall.DryWetMidi
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a MIDI file channel event.

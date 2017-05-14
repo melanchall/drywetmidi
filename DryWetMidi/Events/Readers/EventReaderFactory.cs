@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Provides a way to get <see cref="IEventReader"/> for an event.

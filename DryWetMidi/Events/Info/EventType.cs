@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryWetMidi
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents an event's identity described by its type and corresponding status byte.

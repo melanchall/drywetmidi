@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Provides methods to write events of specific types.

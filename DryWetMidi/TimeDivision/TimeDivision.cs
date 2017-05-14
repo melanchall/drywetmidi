@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// MIDI file time division.

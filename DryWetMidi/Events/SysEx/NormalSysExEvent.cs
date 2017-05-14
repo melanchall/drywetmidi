@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Melanchall.DryWetMidi
+namespace Melanchall.DryWetMidi.Smf
 {
     public sealed class NormalSysExEvent : SysExEvent
     {

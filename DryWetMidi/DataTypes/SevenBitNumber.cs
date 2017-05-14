@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryWetMidi
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Type that is used to represent a seven-bit number.

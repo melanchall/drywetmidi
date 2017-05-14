@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi
+﻿namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// SMPTE format which represents the frame rate.

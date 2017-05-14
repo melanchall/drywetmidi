@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryWetMidi
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Provides a way to get <see cref="IEventWriter"/> for an event.

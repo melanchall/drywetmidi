@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Melanchall.DryWetMidi
+namespace Melanchall.DryWetMidi.Smf
 {
     public sealed class UnexpectedRunningStatusException : MidiException
     {

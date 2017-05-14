@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Melanchall.DryWetMidi
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Provides a way to convert a collection of <see cref="MidiChunk"/> objects to
