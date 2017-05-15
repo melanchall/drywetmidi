@@ -142,7 +142,7 @@
     <Compile Include="Smf\WritingSettings\WritingSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Smf\ClassDiagrams\EventsClassDiagram.cd" />
+    <None Include="ClassDiagrams\EventsClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
