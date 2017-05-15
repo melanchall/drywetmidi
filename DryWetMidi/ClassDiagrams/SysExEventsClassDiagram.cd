@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Melanchall.DryWetMidi.Smf.SysExEvent" Collapsed="true">
+    <Position X="5.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAKAgAAAAAACAAAAAJAAAAAAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\Base\SysExEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.EscapeSysExEvent" Collapsed="true">
+    <Position X="4" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAgAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SysEx\EscapeSysExEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.NormalSysExEvent" Collapsed="true">
+    <Position X="6.75" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAgAAAAAIAQAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SysEx\NormalSysExEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

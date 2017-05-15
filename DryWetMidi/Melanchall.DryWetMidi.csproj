@@ -144,6 +144,8 @@
   <ItemGroup>
     <None Include="ClassDiagrams\ChannelEventsClassDiagram.cd" />
     <None Include="ClassDiagrams\EventsClassDiagram.cd" />
+    <None Include="ClassDiagrams\MetaEventsClassDiagram.cd" />
+    <None Include="ClassDiagrams\SysExEventsClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
