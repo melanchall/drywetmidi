@@ -1,4 +1,4 @@
-# DryWetMIDI
+<img src="https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png" height="80">
 
 DryWetMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like *event* and *track chunk*. Visit [The MIDI Association site](https://www.midi.org) to get more information about MIDI.
 
