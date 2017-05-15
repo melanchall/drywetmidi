@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Smf
+﻿namespace Melanchall.DryWetMidi.Smf
 {
     public sealed class CuePointEvent : BaseTextEvent
     {
