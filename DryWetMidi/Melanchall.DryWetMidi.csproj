@@ -142,6 +142,7 @@
     <Compile Include="Smf\WritingSettings\WritingSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagrams\ChannelEventsClassDiagram.cd" />
     <None Include="ClassDiagrams\EventsClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
