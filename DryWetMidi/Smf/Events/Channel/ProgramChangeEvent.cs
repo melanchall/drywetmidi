@@ -1,5 +1,11 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Program Change message.
+    /// </summary>
+    /// <remarks>
+    /// This message sent when the patch number changes.
+    /// </remarks>
     public sealed class ProgramChangeEvent : ChannelEvent
     {
         #region Constants
@@ -11,11 +17,19 @@
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgramChangeEvent"/>.
+        /// </summary>
         public ProgramChangeEvent()
             : base(ParametersCount)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgramChangeEvent"/> with the specified
+        /// program number.
+        /// </summary>
+        /// <param name="programNumber">Program number.</param>
         public ProgramChangeEvent(SevenBitNumber programNumber)
             : this()
         {

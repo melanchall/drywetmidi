@@ -1,5 +1,11 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Polyphonic Key Pressure (Aftertouch) message.
+    /// </summary>
+    /// <remarks>
+    /// This message is most often sent by pressing down on the key after it "bottoms out".
+    /// </remarks>
     public sealed class NoteAftertouchEvent : ChannelEvent
     {
         #region Constants
@@ -12,11 +18,20 @@
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoteAftertouchEvent"/>.
+        /// </summary>
         public NoteAftertouchEvent()
             : base(ParametersCount)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoteAftertouchEvent"/> with the specified
+        /// note number and aftertouch (pressure) value.
+        /// </summary>
+        /// <param name="noteNumber">Note number.</param>
+        /// <param name="aftertouchValue">Aftertouch (pressure) value.</param>
         public NoteAftertouchEvent(SevenBitNumber noteNumber, SevenBitNumber aftertouchValue)
             : this()
         {

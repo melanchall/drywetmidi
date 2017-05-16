@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Collection of <see cref="ChunkType"/> objects which provide identity information of a chunk.
+    /// </summary>
     public sealed class ChunkTypesCollection : IEnumerable<ChunkType>
     {
         #region Fields
@@ -16,6 +19,15 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Methods
 
+        /// <summary>
+        /// Adds chunk type along with the corresponding ID.
+        /// </summary>
+        /// <param name="type">Type of chunk.</param>
+        /// <param name="id">ID of chunk.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null. -or- <paramref name="id"/>
+        /// is null.</exception>
+        /// <exception cref="ArgumentException">Chunk type specified by <paramref name="type"/> and
+        /// <paramref name="id"/> already exists in the <see cref="ChunksCollection"/>.</exception>
         public void Add(Type type, string id)
         {
             _ids.Add(type, id);
