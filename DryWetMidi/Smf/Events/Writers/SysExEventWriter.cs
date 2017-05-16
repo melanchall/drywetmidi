@@ -19,9 +19,11 @@ namespace Melanchall.DryWetMidi.Smf
 
             if (writeStatusByte)
             {
+                var eventType = midiEvent.GetType();
+
                 byte statusByte;
-                if (!StandardEventTypes.SysEx.TryGetStatusByte(midiEvent.GetType(), out statusByte))
-                    throw new Exception();
+                if (!StandardEventTypes.SysEx.TryGetStatusByte(eventType, out statusByte))
+                    throw new InvalidOperationException($"Unable to write the {eventType} event.");
 
                 writer.WriteByte(statusByte);
             }

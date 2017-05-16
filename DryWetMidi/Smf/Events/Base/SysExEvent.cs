@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -11,12 +12,18 @@ namespace Melanchall.DryWetMidi.Smf
     /// </remarks>
     public abstract class SysExEvent : MidiEvent
     {
+        #region Constants
+
+        private const byte EndOfEventByte = 0xF7;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Gets a value indicating whether this sytem exclusive event is completed or not.
         /// </summary>
-        public bool Completed { get; internal set; } = true;
+        public bool Completed => Data?.LastOrDefault() == EndOfEventByte;
 
         /// <summary>
         /// Gets or sets the event's data.
@@ -62,6 +69,23 @@ namespace Melanchall.DryWetMidi.Smf
         #region Overrides
 
         /// <summary>
+        /// Reads content of a MIDI event.
+        /// </summary>
+        /// <param name="reader">Reader to read the content with.</param>
+        /// <param name="settings">Settings according to which the event's content must be read.</param>
+        /// <param name="size">Size of the event's content.</param>
+        internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
+        {
+            if (size < 0)
+                throw new ArgumentOutOfRangeException(
+                    nameof(size),
+                    size,
+                    "Non-negative size have to be specified in order to read SysEx event.");
+
+            Data = reader.ReadBytes(size);
+        }
+
+        /// <summary>
         /// Writes content of a MIDI event.
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
@@ -91,7 +115,6 @@ namespace Melanchall.DryWetMidi.Smf
             var eventType = GetType();
             var sysExEvent = (SysExEvent)Activator.CreateInstance(eventType);
 
-            sysExEvent.Completed = Completed;
             sysExEvent.Data = Data?.Clone() as byte[];
 
             return sysExEvent;

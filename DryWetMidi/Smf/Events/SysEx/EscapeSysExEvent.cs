@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Smf
+﻿namespace Melanchall.DryWetMidi.Smf
 {
     public sealed class EscapeSysExEvent : SysExEvent
     {
@@ -50,18 +48,6 @@ namespace Melanchall.DryWetMidi.Smf
         #endregion
 
         #region Overrides
-
-        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
-        {
-            if (size < 0)
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    size,
-                    "Non-negative size have to be specified in order to read Escape SysEx event.");
-
-            Data = reader.ReadBytes(size);
-            Completed = true;
-        }
 
         public override string ToString()
         {

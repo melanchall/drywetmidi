@@ -22,7 +22,6 @@ namespace Melanchall.DryWetMidi.Smf
 
             //
 
-            midiEvent.Completed = false;
             midiEvent.Read(reader, settings, size);
             return midiEvent;
         }
