@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 
 namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
-    /// Represents a header chunk of a Standard MIDI file.
+    /// Represents a header chunk of a standard MIDI file.
     /// </summary>
     /// <remarks>
     /// The header chunk at the beginning of the file specifies some basic information about the
@@ -88,7 +89,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="settings">Settings according to which the chunk's content must be read.</param>
         /// <param name="size">Expected size of the content taken from the chunk's header.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the reader's underlying stream was disposed.</exception>
-        /// <exception cref="System.IO.IOException">An I/O error occurred on the reader's underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the reader's underlying stream.</exception>
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
@@ -113,7 +114,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="writer">Writer to write the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be written.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream was disposed.</exception>
-        /// <exception cref="System.IO.IOException">An I/O error occurred on the writer's underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteWord(FileFormat);
@@ -123,10 +124,13 @@ namespace Melanchall.DryWetMidi.Smf
 
         /// <summary>
         /// Gets size of <see cref="HeaderChunk"/>'s content as number of bytes required to write it according
-        /// to specified <see cref="WritingSettings"/> which is always 6.
+        /// to specified <see cref="WritingSettings"/>.
         /// </summary>
         /// <param name="settings">Settings according to which the chunk's content will be written.</param>
-        /// <returns>Number of bytes required to write <see cref="HeaderChunk"/>'s content which is always 6.</returns>
+        /// <returns>Number of bytes required to write <see cref="HeaderChunk"/>'s content.</returns>
+        /// <remarks>
+        /// This method must always return 6.
+        /// </remarks>
         protected override uint GetContentSize(WritingSettings settings)
         {
             return 6;

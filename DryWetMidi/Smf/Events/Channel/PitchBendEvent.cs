@@ -42,35 +42,34 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets pitch value.
+        /// </summary>
         public ushort PitchValue
         {
-            get { return DataTypesUtilities.Combine(PitchValueLsb, PitchValueMsb); }
+            get
+            {
+                return DataTypesUtilities.Combine(this[PitchValueLsbParameterIndex],
+                                                  this[PitchValueMsbParameterIndex]);
+            }
             set
             {
-                PitchValueLsb = value.GetHead();
-                PitchValueMsb = value.GetTail();
+                this[PitchValueLsbParameterIndex] = value.GetHead();
+                this[PitchValueMsbParameterIndex] = value.GetTail();
             }
-        }
-
-        private SevenBitNumber PitchValueLsb
-        {
-            get { return _parameters[PitchValueLsbParameterIndex]; }
-            set { _parameters[PitchValueLsbParameterIndex] = value; }
-        }
-
-        private SevenBitNumber PitchValueMsb
-        {
-            get { return _parameters[PitchValueMsbParameterIndex]; }
-            set { _parameters[PitchValueMsbParameterIndex] = value; }
         }
 
         #endregion
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Pitch Bend (channel = {Channel}, pitch value LSB = {PitchValueLsb}, pitch value MSB = {PitchValueMsb})";
+            return $"Pitch Bend (channel = {Channel}, pitch value = {PitchValue})";
         }
 
         #endregion

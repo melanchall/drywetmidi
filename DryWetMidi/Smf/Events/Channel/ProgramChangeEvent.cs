@@ -40,16 +40,23 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets program (patch) number.
+        /// </summary>
         public SevenBitNumber ProgramNumber
         {
-            get { return _parameters[ProgramNumberParameterIndex]; }
-            set { _parameters[ProgramNumberParameterIndex] = value; }
+            get { return this[ProgramNumberParameterIndex]; }
+            set { this[ProgramNumberParameterIndex] = value; }
         }
 
         #endregion
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Program Change (channel = {Channel}, program number = {ProgramNumber})";

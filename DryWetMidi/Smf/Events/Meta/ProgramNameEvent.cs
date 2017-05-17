@@ -1,17 +1,32 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Program Name meta event.
+    /// </summary>
+    /// <remarks>
+    /// This optional event is used to embed the patch/program name that is called up by the
+    /// immediately subsequent Bank Select and Program Change messages. It serves to aid the
+    /// end user in making an intelligent program choice when using different hardware.
+    /// </remarks>
     public sealed class ProgramNameEvent : BaseTextEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgramNameEvent"/>.
+        /// </summary>
         public ProgramNameEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgramNameEvent"/> with the
+        /// specified program name.
+        /// </summary>
+        /// <param name="programName">Name of the program.</param>
         public ProgramNameEvent(string programName)
             : base(programName)
         {
-            Text = programName;
         }
 
         #endregion
@@ -59,6 +74,10 @@
             return new ProgramNameEvent(Text);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Program Name (text = {Text})";

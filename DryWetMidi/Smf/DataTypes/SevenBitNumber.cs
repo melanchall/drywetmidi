@@ -79,9 +79,9 @@ namespace Melanchall.DryWetMidi.Smf
         #region Overrides
 
         /// <summary>
-        /// Converts the current <see cref="SevenBitNumber"/> object to its equivalent string representation.
+        /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns>The string representation of the value of this instance.</returns>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return _value.ToString();

@@ -1,14 +1,29 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Sequence Number meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI sequence number meta message defines the number of a sequence in type 0 and 1 MIDI files,
+    /// or the pattern number in type 2 MIDI files.
+    /// </remarks>
     public sealed class SequenceNumberEvent : MetaEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequenceNumberEvent"/>.
+        /// </summary>
         public SequenceNumberEvent()
         {
         }
 
-        public SequenceNumberEvent(short number)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequenceNumberEvent"/> with the
+        /// specified number of a sequence.
+        /// </summary>
+        /// <param name="number">The number of a sequence.</param>
+        public SequenceNumberEvent(ushort number)
             : this()
         {
             Number = number;
@@ -18,7 +33,10 @@
 
         #region Properties
 
-        public short Number { get; set; }
+        /// <summary>
+        /// Gets or sets the number of a sequence.
+        /// </summary>
+        public ushort Number { get; set; }
 
         #endregion
 
@@ -64,10 +82,13 @@
         /// <param name="size">Size of the event's content.</param>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
+            // A shortened version can be used in format 2 MIDI files : the 2 data bytes can be omitted
+            // (thus length must be 0), whereupon the sequence number is derived from the track chunk's
+            // position within the file.
             if (size < 2)
                 return;
 
-            Number = reader.ReadInt16();
+            Number = reader.ReadWord();
         }
 
         /// <summary>
@@ -77,7 +98,7 @@
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
-            writer.WriteInt16(Number);
+            writer.WriteWord(Number);
         }
 
         /// <summary>
@@ -98,6 +119,10 @@
             return new SequenceNumberEvent(Number);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Sequence Number (number = {Number})";

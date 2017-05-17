@@ -43,22 +43,32 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets note number.
+        /// </summary>
         public SevenBitNumber NoteNumber
         {
-            get { return _parameters[NoteNumberParameterIndex]; }
-            set { _parameters[NoteNumberParameterIndex] = value; }
+            get { return this[NoteNumberParameterIndex]; }
+            set { this[NoteNumberParameterIndex] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets velocity.
+        /// </summary>
         public SevenBitNumber Velocity
         {
-            get { return _parameters[VelocityParameterIndex]; }
-            set { _parameters[VelocityParameterIndex] = value; }
+            get { return this[VelocityParameterIndex]; }
+            set { this[VelocityParameterIndex] = value; }
         }
 
         #endregion
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Note Off (channel = {Channel}, note number = {NoteNumber}, velocity = {Velocity})";

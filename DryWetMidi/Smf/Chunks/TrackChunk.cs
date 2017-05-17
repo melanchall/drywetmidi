@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a track chunk of a standard MIDI file.
+    /// </summary>
+    /// <remarks>
+    /// Track chunk contains actual MIDI data as set of events.
+    /// </remarks>
     public sealed class TrackChunk : MidiChunk
     {
         #region Constants
@@ -95,11 +102,20 @@ namespace Melanchall.DryWetMidi.Smf
         /// Reads content of a <see cref="TrackChunk"/>.
         /// </summary>
         /// <remarks>
-        /// Content of a track chunk is collection of MIDI events.
+        /// Content of a <see cref="TrackChunk"/> is collection of MIDI events.
         /// </remarks>
         /// <param name="reader">Reader to read the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be read.</param>
         /// <param name="size">Expected size of the content taken from the chunk's header.</param>
+        /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream
+        /// was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
+        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes to read an event.</exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter just
+        /// read is invalid.</exception>
+        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
             var endReaderPosition = reader.Position + size;
@@ -127,6 +143,16 @@ namespace Melanchall.DryWetMidi.Smf
                 throw new MissedEndOfTrackEventException();
         }
 
+        /// <summary>
+        /// Writes content of a <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <remarks>
+        /// Content of a <see cref="TrackChunk"/> is collection of MIDI events.
+        /// </remarks>
+        /// <param name="writer">Writer to write the chunk's content with.</param>
+        /// <param name="settings">Settings according to which the chunk's content must be written.</param>
+        /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             ProcessEvents(settings, (eventWriter, midiEvent, writeStatusByte) =>
@@ -136,14 +162,20 @@ namespace Melanchall.DryWetMidi.Smf
             });
         }
 
+        /// <summary>
+        /// Gets size of <see cref="TrackChunk"/>'s content as number of bytes required to write it according
+        /// to specified <see cref="WritingSettings"/>.
+        /// </summary>
+        /// <param name="settings">Settings according to which the chunk's content will be written.</param>
+        /// <returns>Number of bytes required to write <see cref="TrackChunk"/>'s content.</returns>
         protected override uint GetContentSize(WritingSettings settings)
         {
             uint result = 0;
 
             ProcessEvents(settings, (eventWriter, midiEvent, writeStatusByte) =>
             {
-                result += (uint)midiEvent.DeltaTime.GetVlqLength();
-                result += (uint)eventWriter.CalculateSize(midiEvent, settings, writeStatusByte);
+                result += (uint)(midiEvent.DeltaTime.GetVlqLength() +
+                                eventWriter.CalculateSize(midiEvent, settings, writeStatusByte));
             });
 
             return result;
@@ -159,6 +191,14 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="reader">Reader to read an event.</param>
         /// <param name="settings">Settings according to which an event must be read.</param>
         /// <returns>Instance of the <see cref="MidiEvent"/> representing a MIDI event.</returns>
+        /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream
+        /// was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
+        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes to read an event.</exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter just
+        /// read is invalid.</exception>
         private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings)
         {
             var deltaTime = reader.ReadVlqLongNumber();
@@ -187,7 +227,7 @@ namespace Melanchall.DryWetMidi.Smf
             if (settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff)
             {
                 var noteOnEvent = midiEvent as NoteOnEvent;
-                if (noteOnEvent != null && noteOnEvent.Velocity == 0)
+                if (noteOnEvent?.Velocity == 0)
                 {
                     midiEvent = new NoteOffEvent
                     {

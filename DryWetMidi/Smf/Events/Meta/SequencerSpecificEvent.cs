@@ -2,14 +2,29 @@
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Sequencer Specific meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI sequencer specific meta message carries information that is specific to a
+    /// MIDI sequencer produced by a certain MIDI manufacturer.
+    /// </remarks>
     public sealed class SequencerSpecificEvent : MetaEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequencerSpecificEvent"/>.
+        /// </summary>
         public SequencerSpecificEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequencerSpecificEvent"/> with the
+        /// specified data.
+        /// </summary>
+        /// <param name="data">Sequencer specific data.</param>
         public SequencerSpecificEvent(byte[] data)
             : this()
         {
@@ -20,6 +35,9 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets sequencer specific data.
+        /// </summary>
         public byte[] Data { get; set; }
 
         #endregion
@@ -108,6 +126,10 @@ namespace Melanchall.DryWetMidi.Smf
             return new SequencerSpecificEvent(Data?.Clone() as byte[]);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return "Sequencer Specific";

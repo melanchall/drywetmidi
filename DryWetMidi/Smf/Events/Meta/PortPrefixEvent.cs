@@ -1,14 +1,29 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a MIDI Port meta event.
+    /// </summary>
+    /// <remarks>
+    /// This optional event specifies the MIDI output port on which data within a track chunk
+    /// will be transmitted.
+    /// </remarks>
     public sealed class PortPrefixEvent : MetaEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PortPrefixEvent"/>.
+        /// </summary>
         public PortPrefixEvent()
         {
         }
 
-        public PortPrefixEvent(byte port)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PortPrefixEvent"/> with the
+        /// specified port.
+        /// </summary>
+        /// <param name="port">MIDI port.</param>
+        public PortPrefixEvent(SevenBitNumber port)
             : this()
         {
             Port = port;
@@ -18,7 +33,10 @@
 
         #region Properties
 
-        public byte Port { get; set; }
+        /// <summary>
+        /// Gets or sets MIDI port.
+        /// </summary>
+        public SevenBitNumber Port { get; set; }
 
         #endregion
 
@@ -64,7 +82,7 @@
         /// <param name="size">Size of the event's content.</param>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            Port = reader.ReadByte();
+            Port = (SevenBitNumber)reader.ReadByte();
         }
 
         /// <summary>
@@ -95,6 +113,10 @@
             return new PortPrefixEvent(Port);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Port Prefix (port = {Port})";

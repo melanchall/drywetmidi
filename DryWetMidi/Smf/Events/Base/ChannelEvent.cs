@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Parameters of the MIDI channel event.
         /// </summary>
-        protected internal readonly SevenBitNumber[] _parameters;
+        private readonly SevenBitNumber[] _parameters;
 
         #endregion
 
@@ -42,6 +42,17 @@ namespace Melanchall.DryWetMidi.Smf
         /// Gets or sets channel for this event.
         /// </summary>
         public FourBitNumber Channel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parameter's value at the specified index.
+        /// </summary>
+        /// <param name="index">Index of the parameter.</param>
+        /// <returns>Value of parameter at the specified index.</returns>
+        protected SevenBitNumber this[int index]
+        {
+            get { return _parameters[index]; }
+            set { _parameters[index] = value; }
+        }
 
         #endregion
 

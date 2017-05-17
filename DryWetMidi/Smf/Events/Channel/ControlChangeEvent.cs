@@ -44,22 +44,32 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets controller number.
+        /// </summary>
         public SevenBitNumber ControlNumber
         {
-            get { return _parameters[ControlNumberParameterIndex]; }
-            set { _parameters[ControlNumberParameterIndex] = value; }
+            get { return this[ControlNumberParameterIndex]; }
+            set { this[ControlNumberParameterIndex] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets controller value.
+        /// </summary>
         public SevenBitNumber ControlValue
         {
-            get { return _parameters[ControlValueParameterIndex]; }
-            set { _parameters[ControlValueParameterIndex] = value; }
+            get { return this[ControlValueParameterIndex]; }
+            set { this[ControlValueParameterIndex] = value; }
         }
 
         #endregion
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Control Change (channel = {Channel}, control number = {ControlNumber}, control value = {ControlValue})";

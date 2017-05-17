@@ -2,14 +2,28 @@
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a text meta event.
+    /// </summary>
+    /// <remarks>
+    /// There are several meta events that have text content and the same structure. All these
+    /// events are derivde from <see cref="BaseTextEvent"/>.
+    /// </remarks>
     public abstract class BaseTextEvent : MetaEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseTextEvent"/>.
+        /// </summary>
         public BaseTextEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseTextEvent"/> with the specified text.
+        /// </summary>
+        /// <param name="text">Text contained in the event.</param>
         public BaseTextEvent(string text)
             : this()
         {
@@ -20,6 +34,9 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets text contained in the event.
+        /// </summary>
         public string Text { get; set; }
 
         #endregion

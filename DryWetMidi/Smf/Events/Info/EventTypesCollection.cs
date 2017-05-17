@@ -38,8 +38,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="statusByte">The status byte of the event type to get.</param>
         /// <param name="type">When this method returns, contains the event type associated with
-        /// the specified status byte, if the key is found; otherwise, null. This parameter is passed
-        /// uninitialized.</param>
+        /// the specified status byte, if the status byte is found; otherwise, null. This parameter
+        /// is passed uninitialized.</param>
         /// <returns>true if the <see cref="EventTypesCollection"/> contains an event type with the
         /// specified status byte; otherwise, false.</returns>
         public bool TryGetType(byte statusByte, out Type type)
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="type">Event type to get status byte for.</param>
         /// <param name="statusByte">When this method returns, contains the status byte associated with
-        /// the specified event type, if the key is found; otherwise, 0. This parameter is passed
+        /// the specified event type, if the type is found; otherwise, 0. This parameter is passed
         /// uninitialized.</param>
         /// <returns>true if the <see cref="EventTypesCollection"/> contains a status byte for the
         /// specified event type; otherwise, false.</returns>

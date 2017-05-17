@@ -1,20 +1,42 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Key Signature meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI key signature meta message specifies the key signature and scale of a MIDI file.
+    /// </remarks>
     public sealed class KeySignatureEvent : MetaEvent
     {
         #region Constants
 
+        /// <summary>
+        /// Default key (C).
+        /// </summary>
         public const sbyte DefaultKey = 0;
+
+        /// <summary>
+        /// Default scale (major).
+        /// </summary>
         public const byte DefaultScale = 0;
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeySignatureEvent"/>.
+        /// </summary>
         public KeySignatureEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeySignatureEvent"/> with the
+        /// specified key and scale.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="scale"></param>
         public KeySignatureEvent(sbyte key, byte scale)
             : this()
         {
@@ -26,8 +48,15 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets key signature in terms of number of flats (if negative) or
+        /// sharps (if positive).
+        /// </summary>
         public sbyte Key { get; set; }
 
+        /// <summary>
+        /// Gets or sets scale (0 for major or 1 for minor).
+        /// </summary>
         public byte Scale { get; set; }
 
         #endregion
@@ -109,6 +138,10 @@
             return new KeySignatureEvent(Key, Scale);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Key Signature (key = {Key}, scale = {Scale})";

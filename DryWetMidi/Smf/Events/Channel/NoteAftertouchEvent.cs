@@ -43,22 +43,32 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets note number.
+        /// </summary>
         public SevenBitNumber NoteNumber
         {
-            get { return _parameters[NoteNumberParameterIndex]; }
-            set { _parameters[NoteNumberParameterIndex] = value; }
+            get { return this[NoteNumberParameterIndex]; }
+            set { this[NoteNumberParameterIndex] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets aftertouch (pressure) value.
+        /// </summary>
         public SevenBitNumber AftertouchValue
         {
-            get { return _parameters[AftertouchValueParameterIndex]; }
-            set { _parameters[AftertouchValueParameterIndex] = value; }
+            get { return this[AftertouchValueParameterIndex]; }
+            set { this[AftertouchValueParameterIndex] = value; }
         }
 
         #endregion
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Note Aftertouch (channel = {Channel}, note number = {NoteNumber}, aftertouch value = {AftertouchValue})";

@@ -1,13 +1,28 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a MIDI Channel Prefix meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI channel prefix meta message specifies a MIDI channel so that meta messages that
+    /// follow are specific to a channel.
+    /// </remarks>
     public sealed class ChannelPrefixEvent : MetaEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelPrefixEvent"/>.
+        /// </summary>
         public ChannelPrefixEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelPrefixEvent"/> with the
+        /// specified MIDI channel.
+        /// </summary>
+        /// <param name="channel">MIDI channel.</param>
         public ChannelPrefixEvent(byte channel)
             : this()
         {
@@ -18,6 +33,9 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets MIDI channel.
+        /// </summary>
         public byte Channel { get; set; }
 
         #endregion
@@ -95,6 +113,10 @@
             return new ChannelPrefixEvent(Channel);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Channel Prefix (channel = {Channel})";
