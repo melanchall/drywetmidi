@@ -1,9 +1,20 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a SMPTE Offset meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI SMPTE offset meta message specifies an offset for the starting point
+    /// of a MIDI track from the start of a sequence in terms of SMPTE time
+    /// (hours:minutes:seconds:frames:subframes).
+    /// </remarks>
     public sealed class SmpteOffsetEvent : MetaEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmpteOffsetEvent"/>.
+        /// </summary>
         public SmpteOffsetEvent()
         {
         }

@@ -2,10 +2,20 @@
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Set Tempo meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI set tempo meta message sets the tempo of a MIDI sequence in terms
+    /// of microseconds per quarter note.
+    /// </remarks>
     public sealed class SetTempoEvent : MetaEvent
     {
         #region Constants
 
+        /// <summary>
+        /// Default tempo.
+        /// </summary>
         public const long DefaultTempo = 500000;
 
         #endregion
@@ -18,10 +28,18 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SetTempoEvent"/>.
+        /// </summary>
         public SetTempoEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SetTempoEvent"/> with the
+        /// specified number of microseconds per beat.
+        /// </summary>
+        /// <param name="microsecondsPerBeat">Number of microseconds per quarter note.</param>
         public SetTempoEvent(long microsecondsPerBeat)
             : this()
         {
@@ -32,6 +50,9 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets number of microseconds per quarter note.
+        /// </summary>
         public long MicrosecondsPerBeat
         {
             get { return _microsecondsPerBeat; }
