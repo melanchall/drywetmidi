@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Methods
 
-        private static short? GetSequenceNumber(TrackChunk trackChunk)
+        private static ushort? GetSequenceNumber(TrackChunk trackChunk)
         {
             if (trackChunk == null)
                 throw new ArgumentNullException(nameof(trackChunk));
