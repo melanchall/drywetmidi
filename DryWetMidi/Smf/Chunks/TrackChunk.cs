@@ -357,7 +357,7 @@ namespace Melanchall.DryWetMidi.Smf
                 {
                     if (timeSignatureEvent.Numerator == TimeSignatureEvent.DefaultNumerator &&
                         timeSignatureEvent.Denominator == TimeSignatureEvent.DefaultDenominator &&
-                        timeSignatureEvent.Clocks == TimeSignatureEvent.DefaultClocks &&
+                        timeSignatureEvent.ClocksPerClick == TimeSignatureEvent.DefaultClocksPerClick &&
                         timeSignatureEvent.NumberOf32ndNotesPerBeat == TimeSignatureEvent.Default32ndNotesPerBeat)
                         return true;
 

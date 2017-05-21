@@ -162,7 +162,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
         /// have enough bytes.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
+        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
+        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = File.OpenRead(filePath))
@@ -232,7 +233,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
         /// have enough bytes.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
+        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
+        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
         private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             if (stream == null)
@@ -417,7 +419,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="NotEnoughBytesException">Value cannot be read since the reader's underlying stream
         /// doesn't have enough bytes.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
+        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
+        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);

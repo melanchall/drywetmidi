@@ -1,13 +1,27 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Text meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI text meta message defines some text to be carried within a MIDI file.
+    /// </remarks>
     public sealed class TextEvent : BaseTextEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextEvent"/>.
+        /// </summary>
         public TextEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextEvent"/> with the
+        /// specified text.
+        /// </summary>
+        /// <param name="text">Text of the message.</param>
         public TextEvent(string text)
             : base(text)
         {

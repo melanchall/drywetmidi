@@ -1,28 +1,69 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents a Time Signature meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI time signature meta message defines the musical time signature of a MIDI sequence.
+    /// </remarks>
     public sealed class TimeSignatureEvent : MetaEvent
     {
         #region Constants
 
+        /// <summary>
+        /// Numerator of the default time signature.
+        /// </summary>
         public const byte DefaultNumerator = 4;
-        public const byte DefaultDenominator = 2;
-        public const byte DefaultClocks = 24;
+
+        /// <summary>
+        /// Denominator of the default time signature.
+        /// </summary>
+        public const byte DefaultDenominator = 4;
+
+        /// <summary>
+        /// Default number of MIDI clock ticks per metronome click.
+        /// </summary>
+        public const byte DefaultClocksPerClick = 24;
+
+        /// <summary>
+        /// Default number of 32nd notes per beat.
+        /// </summary>
         public const byte Default32ndNotesPerBeat = 8;
+
+        #endregion
+
+        #region Fields
+
+        private byte _denominator = DefaultDenominator;
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSignatureEvent"/>.
+        /// </summary>
         public TimeSignatureEvent()
         {
         }
 
-        public TimeSignatureEvent(byte numerator, byte denominator, byte clocks, byte numberOf32ndNotesPerBeat)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSignatureEvent"/> with the
+        /// specified numerator, denominator, number of MIDI clocks per metronome click
+        /// and number of 32nd notes per beat.
+        /// </summary>
+        /// <param name="numerator">Numerator of the time signature.</param>
+        /// <param name="denominator">Denominator of the time signature.</param>
+        /// <param name="clocksPerClick">Number of MIDI clocks per metronome click.</param>
+        /// <param name="numberOf32ndNotesPerBeat">Number of 32nd notes per beat.</param>
+        public TimeSignatureEvent(byte numerator, byte denominator, byte clocksPerClick, byte numberOf32ndNotesPerBeat)
             : this()
         {
             Numerator = numerator;
             Denominator = denominator;
-            Clocks = clocks;
+            ClocksPerClick = clocksPerClick;
             NumberOf32ndNotesPerBeat = numberOf32ndNotesPerBeat;
         }
 
@@ -30,12 +71,38 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets numerator of the time signature.
+        /// </summary>
         public byte Numerator { get; set; } = DefaultNumerator;
 
-        public byte Denominator { get; set; } = DefaultDenominator;
+        /// <summary>
+        /// Gets or sets denominator of the time signature.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Denominator is zero or is not a
+        /// power of two.</exception>
+        public byte Denominator
+        {
+            get { return _denominator; }
+            set
+            {
+                if (!IsPowerOfTwo(value))
+                    throw new ArgumentOutOfRangeException(nameof(value),
+                                                          value,
+                                                          "Denominator is zero or is not a power of two.");
 
-        public byte Clocks { get; set; } = DefaultClocks;
+                _denominator = value;
+            }
+        }
 
+        /// <summary>
+        /// Gets or sets number of MIDI clock ticks per metronome click.
+        /// </summary>
+        public byte ClocksPerClick { get; set; } = DefaultClocksPerClick;
+
+        /// <summary>
+        /// Gets or sets number of 32nd notes per beat.
+        /// </summary>
         public byte NumberOf32ndNotesPerBeat { get; set; } = Default32ndNotesPerBeat;
 
         #endregion
@@ -70,8 +137,18 @@
             return base.Equals(timeSignatureEvent, respectDeltaTime) &&
                    Numerator == timeSignatureEvent.Numerator &&
                    Denominator == timeSignatureEvent.Denominator &&
-                   Clocks == timeSignatureEvent.Clocks &&
+                   ClocksPerClick == timeSignatureEvent.ClocksPerClick &&
                    NumberOf32ndNotesPerBeat == timeSignatureEvent.NumberOf32ndNotesPerBeat;
+        }
+
+        /// <summary>
+        /// Ckecks if a number is a power of 2.
+        /// </summary>
+        /// <param name="value">Value to check.</param>
+        /// <returns>true if the number is a power of 2, false - otherwise.</returns>
+        private static bool IsPowerOfTwo(byte value)
+        {
+            return value != 0 && (value & (value - 1)) == 0;
         }
 
         #endregion
@@ -87,11 +164,11 @@
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             Numerator = reader.ReadByte();
-            Denominator = reader.ReadByte();
+            Denominator = (byte)Math.Pow(2, reader.ReadByte());
 
             if (size >= 4)
             {
-                Clocks = reader.ReadByte();
+                ClocksPerClick = reader.ReadByte();
                 NumberOf32ndNotesPerBeat = reader.ReadByte();
             }
         }
@@ -104,8 +181,8 @@
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Numerator);
-            writer.WriteByte(Denominator);
-            writer.WriteByte(Clocks);
+            writer.WriteByte((byte)Math.Log(Denominator, 2));
+            writer.WriteByte(ClocksPerClick);
             writer.WriteByte(NumberOf32ndNotesPerBeat);
         }
 
@@ -124,7 +201,7 @@
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new TimeSignatureEvent(Numerator, Denominator, Clocks, NumberOf32ndNotesPerBeat);
+            return new TimeSignatureEvent(Numerator, Denominator, ClocksPerClick, NumberOf32ndNotesPerBeat);
         }
 
         /// <summary>
@@ -133,7 +210,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Time Signature (numerator = {Numerator}, denominator = {Denominator}, clocks = {Clocks}, 32nd notes per beat = {NumberOf32ndNotesPerBeat})";
+            return $"Time Signature ({Numerator}/{Denominator}, {ClocksPerClick} clock/click, {NumberOf32ndNotesPerBeat} 32nd/beat)";
         }
 
         /// <summary>
@@ -154,7 +231,7 @@
         {
             return base.GetHashCode() ^ Numerator.GetHashCode() ^
                                         Denominator.GetHashCode() ^
-                                        Clocks.GetHashCode() ^
+                                        ClocksPerClick.GetHashCode() ^
                                         NumberOf32ndNotesPerBeat.GetHashCode();
         }
 

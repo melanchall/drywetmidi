@@ -2,10 +2,23 @@
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents an unknown meta event.
+    /// </summary>
+    /// <remarks>
+    /// Structure of meta eventa allows custom ones be implemented and stored within a MIDI file.
+    /// Any meta event DryWetMIDI doesn't know about will be read as an instance of the
+    /// <see cref="UnknownMetaEvent"/>.
+    /// </remarks>
     public sealed class UnknownMetaEvent : MetaEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnknownMetaEvent"/> with the
+        /// specified status byte.
+        /// </summary>
+        /// <param name="statusByte">Status byte of the meta event.</param>
         internal UnknownMetaEvent(byte statusByte)
         {
             StatusByte = statusByte;
@@ -15,8 +28,14 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
+        /// <summary>
+        /// Gets the status byte of the meta event.
+        /// </summary>
         public byte StatusByte { get; }
 
+        /// <summary>
+        /// Gets the content of the meta event as array of bytes.
+        /// </summary>
         public byte[] Data { get; private set; }
 
         #endregion
