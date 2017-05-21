@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Smf
             if (events == null)
                 throw new ArgumentNullException(nameof(events));
 
-            if (events.Any(e => e is EndOfTrackEvent))
+            if (events.OfType<EndOfTrackEvent>().Any())
                 throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(events));
 
             if (events.Any(e => e == null))
@@ -153,11 +153,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// a MIDI file writing.
         /// </remarks>
         /// <param name="index">The zero-based index at which the event should be inserted.</param>
-        /// <param name="midiEvent">The event to be added to the end of the collection.</param>
+        /// <param name="midiEvent">The event to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is an instance of <see cref="EndOfTrackEvent"/>.
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0; or
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void Insert(int index, MidiEvent midiEvent)
         {
@@ -171,6 +171,35 @@ namespace Melanchall.DryWetMidi.Smf
                 throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
 
             _events.Insert(index, midiEvent);
+        }
+
+        /// <summary>
+        /// Inserts a set of events into the collection at the specified index.
+        /// </summary>
+        /// <remarks>
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// track chunk structure. End Of Track event will be written to the track chunk automatically on
+        /// a MIDI file writing.
+        /// </remarks>
+        /// <param name="index">The zero-based index at which the events should be inserted.</param>
+        /// <param name="midiEvents">The events to insert.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="midiEvents"/> contains an instance of
+        /// <see cref="EndOfTrackEvent"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
+        /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
+        public void InsertRange(int index, IEnumerable<MidiEvent> midiEvents)
+        {
+            if (midiEvents == null)
+                throw new ArgumentNullException(nameof(midiEvents));
+
+            if (midiEvents.OfType<EndOfTrackEvent>().Any())
+                throw new ArgumentException("End Of Track cannot be inserted to events collection.", nameof(midiEvents));
+
+            if (index < 0 || index >= _events.Count)
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+
+            _events.InsertRange(index, midiEvents);
         }
 
         /// <summary>

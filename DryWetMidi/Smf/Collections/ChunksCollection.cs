@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Smf
             if (chunks == null)
                 throw new ArgumentNullException(nameof(chunks));
 
-            if (chunks.Any(c => c is HeaderChunk))
+            if (chunks.OfType<HeaderChunk>().Any())
                 throw new ArgumentException("Header chunk cannot be added to chunks collection.", nameof(chunks));
 
             if (chunks.Any(c => c == null))
@@ -115,10 +115,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
-        /// <param name="chunk">The chunk to be added to the end of the collection.</param>
+        /// <param name="chunk">The chunk to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="chunk"/> is an instance of <see cref="HeaderChunk"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0; or
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void Insert(int index, MidiChunk chunk)
         {
@@ -134,6 +134,34 @@ namespace Melanchall.DryWetMidi.Smf
             _chunks.Insert(index, chunk);
         }
 
+        /// <summary>
+        /// Inserts a set of chunks into the collection at the specified index.
+        /// </summary>
+        /// <remarks>
+        /// Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
+        /// Header chunk with appropriate information will be written to a file automatically on
+        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// </remarks>
+        /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
+        /// <param name="chunks">The chunk to insert.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="chunks"/> contains an instance of
+        /// <see cref="HeaderChunk"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
+        /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
+        public void InsertRange(int index, IEnumerable<MidiChunk> chunks)
+        {
+            if (chunks == null)
+                throw new ArgumentNullException(nameof(chunks));
+
+            if (chunks.OfType<HeaderChunk>().Any())
+                throw new ArgumentException("Header chunk cannot be inserted to chunks collection.", nameof(chunks));
+
+            if (index < 0 || index >= _chunks.Count)
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+
+            _chunks.InsertRange(index, chunks);
+        }
 
         /// <summary>
         /// Removes the first occurrence of a specific chunk from the collection.
