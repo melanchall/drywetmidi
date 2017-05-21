@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Key Signature meta event.
@@ -19,6 +21,19 @@
         /// Default scale (major).
         /// </summary>
         public const byte DefaultScale = 0;
+
+        private const int MinKey = -7;
+        private const int MaxKey = 7;
+
+        private const int MinScale = 0;
+        private const int MaxScale = 1;
+
+        #endregion
+
+        #region Fields
+
+        private sbyte _key = DefaultKey;
+        private byte _scale = DefaultScale;
 
         #endregion
 
@@ -52,12 +67,34 @@
         /// Gets or sets key signature in terms of number of flats (if negative) or
         /// sharps (if positive).
         /// </summary>
-        public sbyte Key { get; set; }
+        /// <exception cref="ArgumentOutOfRangeException">Key is out of range.</exception>
+        public sbyte Key
+        {
+            get { return _key; }
+            set
+            {
+                if (value < MinKey || value > MaxKey)
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "Key is out of range.");
+
+                _key = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets scale (0 for major or 1 for minor).
         /// </summary>
-        public byte Scale { get; set; }
+        /// <exception cref="ArgumentOutOfRangeException">Scale is out of range.</exception>
+        public byte Scale
+        {
+            get { return _scale; }
+            set
+            {
+                if (value < MinScale || value > MaxScale)
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "Scale is out of range.");
+
+                _scale = value;
+            }
+        }
 
         #endregion
 
