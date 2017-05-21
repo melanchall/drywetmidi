@@ -22,8 +22,7 @@ namespace Melanchall.DryWetMidi.Smf
             NoteOffAsSilentNoteOn |
             DeleteDefaultTimeSignature |
             DeleteDefaultKeySignature |
-            DeleteDefaultSetTempo |
-            DeleteRedundantEvents,
+            DeleteDefaultSetTempo,
 
         /// <summary>
         /// Use 'running status' to turn off writing of the status bytes of consecutive events
@@ -61,10 +60,5 @@ namespace Melanchall.DryWetMidi.Smf
         /// Don't write instances of the <see cref="UnknownChunk"/>.
         /// </summary>
         DeleteUnknownChunks = 64,
-
-        /// <summary>
-        /// Don't write redundant events.
-        /// </summary>
-        DeleteRedundantEvents = 128
     }
 }
