@@ -134,9 +134,9 @@
     <Compile Include="Smf\TimeDivision\TicksPerQuarterNoteTimeDivision.cs" />
     <Compile Include="Smf\TimeDivision\TimeDivisionFactory.cs" />
     <Compile Include="Smf\Utilities\ArrayUtilities.cs" />
-    <Compile Include="Smf\Utilities\ControlName.cs" />
+    <Compile Include="Common\ControlName.cs" />
     <Compile Include="Smf\Utilities\ControlUtilities.cs" />
-    <Compile Include="Smf\Utilities\NoteName.cs" />
+    <Compile Include="Common\NoteName.cs" />
     <Compile Include="Smf\Utilities\NoteUtilities.cs" />
     <Compile Include="Smf\WritingSettings\CompressionPolicy.cs" />
     <Compile Include="Smf\WritingSettings\WritingSettings.cs" />

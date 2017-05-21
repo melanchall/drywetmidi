@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
     /// Name and function of a MIDI controller.

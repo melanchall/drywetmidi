@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -10,6 +12,7 @@ namespace Melanchall.DryWetMidi.Smf
         #region Constants
 
         private const int OctaveSize = 12;
+        private const int OctaveOffset = 1;
 
         #endregion
 
@@ -34,6 +37,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="noteOnEvent">Note On event to get note octave of.</param>
         /// <returns>Note octave of the <paramref name="noteOnEvent"/> event.</returns>
+        /// <remarks>
+        /// Octave number will be returned in scientific pitch notation which means
+        /// that 4 will be returned for 60 note number.
+        /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteOnEvent"/> is null.</exception>
         public static int GetNoteOctave(this NoteOnEvent noteOnEvent)
         {
@@ -62,6 +69,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="noteOffEvent">Note Off event to get note octave of.</param>
         /// <returns>Note octave of the <paramref name="noteOffEvent"/> event.</returns>
+        /// <remarks>
+        /// Octave number will be returned in scientific pitch notation which means
+        /// that 4 will be returned for 60 note number.
+        /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteOffEvent"/> is null.</exception>
         public static int GetNoteOctave(this NoteOffEvent noteOffEvent)
         {
@@ -69,6 +80,52 @@ namespace Melanchall.DryWetMidi.Smf
                 throw new ArgumentNullException(nameof(noteOffEvent));
 
             return GetNoteOctave(noteOffEvent.NoteNumber);
+        }
+
+        /// <summary>
+        /// Sets the note number of the <see cref="NoteOnEvent"/> with the specified note name and octave.
+        /// </summary>
+        /// <param name="noteOnEvent">Note On event to set the note number of.</param>
+        /// <param name="noteName">Name of the note.</param>
+        /// <param name="octave">Number of the octave.</param>
+        /// <remarks>
+        /// Octave number is specified in scientific pitch notation which means that 4 must be
+        /// passed to get the number of the middle C.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="noteOnEvent"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentException">Note number is out of range for the specified note
+        /// name and octave.</exception>
+        public static void SetNoteNumber(this NoteOnEvent noteOnEvent, NoteName noteName, int octave)
+        {
+            if (noteOnEvent == null)
+                throw new ArgumentNullException(nameof(noteOnEvent));
+
+            noteOnEvent.NoteNumber = GetNoteNumber(noteName, octave);
+        }
+
+        /// <summary>
+        /// Sets the note number of the <see cref="NoteOffEvent"/> with the specified note name and octave.
+        /// </summary>
+        /// <param name="noteOffEvent">Note Off event to set the note number of.</param>
+        /// <param name="noteName">Name of the note.</param>
+        /// <param name="octave">Number of the octave.</param>
+        /// <remarks>
+        /// Octave number is specified in scientific pitch notation which means that 4 must be
+        /// passed to get the number of the middle C.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="noteOffEvent"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentException">Note number is out of range for the specified note
+        /// name and octave.</exception>
+        public static void SetNoteNumber(this NoteOffEvent noteOffEvent, NoteName noteName, int octave)
+        {
+            if (noteOffEvent == null)
+                throw new ArgumentNullException(nameof(noteOffEvent));
+
+            noteOffEvent.NoteNumber = GetNoteNumber(noteName, octave);
         }
 
         /// <summary>
@@ -82,13 +139,43 @@ namespace Melanchall.DryWetMidi.Smf
         }
 
         /// <summary>
-        /// Gets octave number of the note presented by note number.
+        /// Gets octave number of the note presented by note number in scientific pitch notation.
         /// </summary>
         /// <param name="noteNumber">Note number to get octave of.</param>
         /// <returns>Octave of the note presented by <paramref name="noteNumber"/>.</returns>
+        /// <remarks>
+        /// Octave number will be returned in scientific pitch notation which means
+        /// that 4 will be returned for 60 note number.
+        /// </remarks>
         private static int GetNoteOctave(SevenBitNumber noteNumber)
         {
-            return noteNumber / OctaveSize;
+            return noteNumber / OctaveSize - OctaveOffset;
+        }
+
+        /// <summary>
+        /// Gets the note number for the specified note name and octave.
+        /// </summary>
+        /// <param name="noteName">Name of the note.</param>
+        /// <param name="octave">Number of the octave in scientific pitch notation.</param>
+        /// <returns>Number of the note represented by specified name and octave.</returns>
+        /// <remarks>
+        /// Octave number is specified in scientific pitch notation which means that 4 must be
+        /// passed to get the number of the middle C.
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentException">Note number is out of range for the specified note
+        /// name and octave.</exception>
+        private static SevenBitNumber GetNoteNumber(NoteName noteName, int octave)
+        {
+            if (!Enum.IsDefined(typeof(NoteName), noteName))
+                throw new InvalidEnumArgumentException(nameof(noteName), (int)noteName, typeof(NoteName));
+
+            var noteNumber = (octave + OctaveOffset) * OctaveSize + (int)noteName;
+            if (noteNumber < SevenBitNumber.MinValue || noteNumber > SevenBitNumber.MaxValue)
+                throw new ArgumentException("Note number is out of range for the specified note name and octave.", nameof(octave));
+
+            return (SevenBitNumber)noteNumber;
         }
 
         #endregion
