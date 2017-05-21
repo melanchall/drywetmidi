@@ -79,7 +79,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Device Name (device name = {Text})";
+            return $"Device Name ({Text})";
         }
 
         /// <summary>

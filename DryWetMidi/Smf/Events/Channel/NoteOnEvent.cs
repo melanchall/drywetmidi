@@ -71,7 +71,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Note On (channel = {Channel}, note number = {NoteNumber}, velocity = {Velocity})";
+            return $"Note On [{Channel}] ({NoteNumber}, {Velocity})";
         }
 
         #endregion

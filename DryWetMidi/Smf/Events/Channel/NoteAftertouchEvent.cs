@@ -71,7 +71,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Note Aftertouch (channel = {Channel}, note number = {NoteNumber}, aftertouch value = {AftertouchValue})";
+            return $"Note Aftertouch [{Channel}] ({NoteNumber}, {AftertouchValue})";
         }
 
         #endregion

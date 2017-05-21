@@ -119,7 +119,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Channel Prefix (channel = {Channel})";
+            return $"Channel Prefix ({Channel})";
         }
 
         /// <summary>

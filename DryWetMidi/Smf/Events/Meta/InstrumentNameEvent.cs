@@ -81,7 +81,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Instrument Name (instrument name = {Text})";
+            return $"Instrument Name ({Text})";
         }
 
         /// <summary>

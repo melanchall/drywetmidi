@@ -78,7 +78,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Marker (text = {Text})";
+            return $"Marker ({Text})";
         }
 
         /// <summary>

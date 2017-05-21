@@ -125,7 +125,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Sequence Number (number = {Number})";
+            return $"Sequence Number ({Number})";
         }
 
         /// <summary>

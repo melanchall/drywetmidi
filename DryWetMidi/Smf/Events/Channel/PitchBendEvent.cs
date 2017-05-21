@@ -69,7 +69,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Pitch Bend (channel = {Channel}, pitch value = {PitchValue})";
+            return $"Pitch Bend [{Channel}] ({PitchValue})";
         }
 
         #endregion

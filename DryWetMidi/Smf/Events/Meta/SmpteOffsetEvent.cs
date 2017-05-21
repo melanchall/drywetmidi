@@ -337,7 +337,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"SMPTE Offset ({Format} {Hours}:{Minutes}:{Seconds}:{Frames}:{SubFrames})";
+            return $"SMPTE Offset ({Format}, {Hours}:{Minutes}:{Seconds}:{Frames}:{SubFrames})";
         }
 
         /// <summary>

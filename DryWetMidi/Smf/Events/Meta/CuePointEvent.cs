@@ -81,7 +81,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Cue Point (text = {Text})";
+            return $"Cue Point ({Text})";
         }
 
         /// <summary>

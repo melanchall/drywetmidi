@@ -80,7 +80,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Program Name (text = {Text})";
+            return $"Program Name ({Text})";
         }
 
         /// <summary>

@@ -59,7 +59,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Program Change (channel = {Channel}, program number = {ProgramNumber})";
+            return $"Program Change [{Channel}] ({ProgramNumber})";
         }
 
         #endregion

@@ -119,7 +119,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Port Prefix (port = {Port})";
+            return $"Port Prefix ({Port})";
         }
 
         /// <summary>

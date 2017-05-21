@@ -61,7 +61,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Channel Aftertouch (channel = {Channel}, aftertouch value = {AftertouchValue})";
+            return $"Channel Aftertouch [{Channel}] ({AftertouchValue})";
         }
 
         #endregion

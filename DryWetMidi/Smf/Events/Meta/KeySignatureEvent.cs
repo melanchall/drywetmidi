@@ -181,7 +181,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Key Signature (key = {Key}, scale = {Scale})";
+            return $"Key Signature ({Key}, {Scale})";
         }
 
         /// <summary>

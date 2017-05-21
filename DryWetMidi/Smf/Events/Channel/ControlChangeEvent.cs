@@ -72,7 +72,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Control Change (channel = {Channel}, control number = {ControlNumber}, control value = {ControlValue})";
+            return $"Control Change [{Channel}] ({ControlNumber}, {ControlValue})";
         }
 
         #endregion
