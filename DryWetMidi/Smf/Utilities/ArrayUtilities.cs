@@ -4,6 +4,8 @@ namespace Melanchall.DryWetMidi.Smf
 {
     internal static class ArrayUtilities
     {
+        #region Methods
+
         internal static bool Equals<T>(T[] array1, T[] array2)
         {
             if (ReferenceEquals(array1, array2))
@@ -17,5 +19,7 @@ namespace Melanchall.DryWetMidi.Smf
 
             return array1.SequenceEqual(array2);
         }
+
+        #endregion
     }
 }

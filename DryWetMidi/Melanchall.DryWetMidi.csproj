@@ -36,6 +36,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Smf\ChunksConverters\ChunksConverterFactory.cs" />
     <Compile Include="Smf\ChunksConverters\IChunksConverter.cs" />
     <Compile Include="Smf\ChunksConverters\MultiSequenceChunksConverter.cs" />

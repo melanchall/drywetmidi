@@ -32,8 +32,6 @@ namespace Melanchall.DryWetMidi.Smf
 
         private const uint FILE_SHARE_NONE = 0;
 
-        private const int MaxPathLength = 260;
-
         #endregion
 
         #region Methods
@@ -43,12 +41,18 @@ namespace Melanchall.DryWetMidi.Smf
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentException("File path is null or contains white-spaces only.", nameof(filePath));
 
-            if (filePath.Length <= MaxPathLength)
+            try
+            {
                 return File.OpenRead(filePath);
+            }
+            catch (PathTooLongException)
+            {
+                SafeFileHandle fileHandle = GetFileHandle(filePath,
+                                                          GENERIC_READ,
+                                                          OPEN_EXISTING);
 
-            SafeFileHandle fileHandle = GetFileHandle(filePath, GENERIC_READ, OPEN_EXISTING);
-
-            return new FileStream(fileHandle, FileAccess.Read);
+                return new FileStream(fileHandle, FileAccess.Read);
+            }
         }
 
         internal static FileStream OpenFileForWrite(string filePath, bool overwriteFile)
@@ -56,14 +60,19 @@ namespace Melanchall.DryWetMidi.Smf
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentException("File path is null or contains white-spaces only.", nameof(filePath));
 
-            if (filePath.Length <= MaxPathLength)
+            try
+            {
                 return File.Open(filePath, overwriteFile ? FileMode.Create : FileMode.CreateNew);
+            }
+            catch (PathTooLongException)
+            {
+                SafeFileHandle fileHandle = GetFileHandle(filePath,
+                                                          GENERIC_WRITE,
+                                                          overwriteFile ? CREATE_ALWAYS
+                                                                        : CREATE_NEW);
 
-            SafeFileHandle fileHandle = GetFileHandle(filePath,
-                                                      GENERIC_WRITE,
-                                                      overwriteFile ? CREATE_ALWAYS : CREATE_NEW);
-
-            return new FileStream(fileHandle, FileAccess.Write);
+                return new FileStream(fileHandle, FileAccess.Write);
+            }
         }
 
         private static SafeFileHandle GetFileHandle(string filePath, uint fileAccess, uint creationDisposition)
