@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
-            using (var fileStream = File.OpenRead(filePath))
+            using (var fileStream = FileUtilities.OpenFileForRead(filePath))
             {
                 return Read(fileStream, settings);
             }
@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.Smf
             if (!Enum.IsDefined(typeof(MidiFileFormat), format))
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
 
-            using (var fileStream = File.Open(filePath, overwriteFile ? FileMode.Create : FileMode.CreateNew))
+            using (var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile))
             {
                 Write(fileStream, format, settings);
             }
