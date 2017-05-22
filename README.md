@@ -1,4 +1,4 @@
-<img src="https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png" height="80">
+![Channel events class diagram](https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png)
 
 ----------------
 
