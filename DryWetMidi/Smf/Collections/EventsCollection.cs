@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// <summary>
     /// Collection of <see cref="MidiEvent"/> objects.
     /// </summary>
-    public sealed class EventsCollection : IEnumerable<MidiEvent>, ICloneable
+    public sealed class EventsCollection : IEnumerable<MidiEvent>
     {
         #region Fields
 
@@ -266,19 +266,6 @@ namespace Melanchall.DryWetMidi.Smf
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _events.GetEnumerator();
-        }
-
-        #endregion
-
-        #region ICloneable
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="EventsCollection"/> that is a copy of the current instance.
-        /// </summary>
-        /// <returns>A new instance of the <see cref="EventsCollection"/> that is a copy of this instance.</returns>
-        public object Clone()
-        {
-            return new EventsCollection(this.Select(e => e.Clone() as MidiEvent));
         }
 
         #endregion

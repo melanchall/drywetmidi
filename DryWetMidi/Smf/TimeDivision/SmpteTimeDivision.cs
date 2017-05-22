@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -48,6 +49,15 @@ namespace Melanchall.DryWetMidi.Smf
         internal override short ToInt16()
         {
             return (short)-DataTypesUtilities.Combine((byte)Format, Resolution);
+        }
+
+        /// <summary>
+        /// Clones time division by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the time division.</returns>
+        protected override TimeDivision CloneTimeDivision()
+        {
+            return new SmpteTimeDivision(Format, Resolution);
         }
 
         #endregion

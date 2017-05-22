@@ -128,7 +128,7 @@
     <Compile Include="Smf\ReadingSettings\SilentNoteOnPolicy.cs" />
     <Compile Include="Smf\ReadingSettings\InvalidChunkSizePolicy.cs" />
     <Compile Include="Smf\ReadingSettings\UnknownFileFormatPolicy.cs" />
-    <Compile Include="Smf\TimeDivision\SmpteFormat.cs" />
+    <Compile Include="Common\SmpteFormat.cs" />
     <Compile Include="Smf\TimeDivision\TimeDivision.cs" />
     <Compile Include="Smf\TimeDivision\SmpteTimeDivision.cs" />
     <Compile Include="Smf\TimeDivision\TicksPerQuarterNoteTimeDivision.cs" />

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// MIDI file time division.
@@ -13,12 +15,35 @@
     /// (which represent a byte stored positive) is the resolution within a frame: typical values may be 4
     /// (MIDI Time Code resolution), 8, 10, 80 (bit resolution), or 100.
     /// </remarks>
-    public abstract class TimeDivision
+    public abstract class TimeDivision : ICloneable
     {
+        #region Methods
+
         /// <summary>
         /// Converts this time division into 16-bit signed integer number that will be written to a file.
         /// </summary>
         /// <returns>16-bit signed integer number representing this time division.</returns>
         internal abstract short ToInt16();
+
+        /// <summary>
+        /// Clones time division by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the time division.</returns>
+        protected abstract TimeDivision CloneTimeDivision();
+
+        #endregion
+
+        #region ICloneable
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new object that is a copy of this instance.</returns>
+        public object Clone()
+        {
+            return CloneTimeDivision();
+        }
+
+        #endregion
     }
 }
