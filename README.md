@@ -1,15 +1,17 @@
-![Channel events class diagram](https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png)
+![DryWetMIDI Logo](https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png)
 
-DryWetMIDI is the .NET library to work with MIDI files. You need to understand MIDI file structure to effectively work with the library since it operates by low-level MIDI objects like *event* and *track chunk*. Visit [The MIDI Association site](https://www.midi.org) to get more information about MIDI.
+DryWetMIDI is the .NET library to work with MIDI files.
 
 The library is under MIT license so you can do whatever you want with it.
 
 ## Features
 
-* DryWetMIDI provides the way to read and write [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
-* Process of reading and writing can be finely adjusted with help of ```ReadingSettings``` and ```WritingSettings```. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
-* The library gives you ability to implement custom [meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks).
-* All possible errors in a MIDI file are presented in the DryWetMIDI as separate exception classes so you can easily catch specific error.
+With the DryWetMIDI you can:
+
+* Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
+* Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
+* Implement custom [meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks) that can be write to and read from MIDI files.
+* Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
 
 ## Getting Started
 
