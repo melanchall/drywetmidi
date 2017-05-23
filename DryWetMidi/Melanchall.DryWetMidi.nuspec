@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Melanchall.DryWetMidi</id>
+    <version>1.0.0</version>
+    <title>DryWetMIDI</title>
+    <authors>melanchall</authors>
+    <owners>melanchall</owners>
+    <licenseUrl>https://github.com/melanchall/drywetmidi/blob/develop/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/melanchall/drywetmidi</projectUrl>
+    <iconUrl>https://github.com/melanchall/drywetmidi/blob/develop/Resources/NuGet/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.NET library to work with MIDI files</description>
+    <copyright>Copyright © Melanchall 2017</copyright>
+    <tags>midi smf</tags>
+  </metadata>
+  <files>
+    <file src="..\Resources\NuGet\readme.txt" target=""/>
+  </files>
+</package>

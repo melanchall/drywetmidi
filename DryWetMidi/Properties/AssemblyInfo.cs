@@ -5,8 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DryWetMIDI")]
-[assembly: AssemblyDescription(".NET library to read/write MIDI files")]
-[assembly: AssemblyCompany("Melanchall")]
+[assembly: AssemblyDescription(".NET library to work with MIDI files")]
 [assembly: AssemblyProduct("DryWetMIDI")]
 [assembly: AssemblyCopyright("Copyright © Melanchall 2017")]
 
