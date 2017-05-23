@@ -20,15 +20,16 @@ Let's see some examples of what you can do with DryWetMIDI.
 To [read a MIDI file](https://github.com/melanchall/drymidi/wiki/Reading-a-MIDI-file) you have to use ```Read``` static method of the ```MidiFile```:
 
 ```csharp
-var midiFile = MidiFile.Read("My Great Song.mid");
+var midiFile = MidiFile.Read("Some Great Song.mid");
 ```
 
 or, in more advanced form (visit [Reading settings](https://github.com/melanchall/drywetmidi/wiki/Reading-settings) page on Wiki to learn more about how to adjust process of reading)
 
 ```csharp
-var midiFile = MidiFile.Read("My Great Song.mid",
+var midiFile = MidiFile.Read("Some Great Song.mid",
                              new ReadingSettings
                              {
+                                 NoHeaderChunkPolicy = NoHeaderChunkPolicy.Abort,
                                  CustomChunkTypes = new ChunkTypesCollection
                                  {
                                      { typeof(MyCustomChunk), "Cstm" }
@@ -39,7 +40,7 @@ var midiFile = MidiFile.Read("My Great Song.mid",
 To [write MIDI data to a file](https://github.com/melanchall/drymidi/wiki/Writing-a-MIDI-file) you have to use ```Write``` method of the ```MidiFile```:
 
 ```csharp
-midiFile.Write("My Great Song speeded.mid");
+midiFile.Write("My Great Song.mid");
 ```
 
 or, in more advanced form (visit [Writing settings](https://github.com/melanchall/drywetmidi/wiki/Writing-settings) page on Wiki to learn more about how to adjust process of writing)
@@ -84,7 +85,7 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 
 Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (500,000 microseconds per beat).
 
-Suppose you want to remove all *C#* notes from a MIDI file. It can be done with this code:
+Suppose you want to remove all C# notes from a MIDI file. It can be done with this code:
 
 ```csharp
 foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
