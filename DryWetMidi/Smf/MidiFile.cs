@@ -433,77 +433,90 @@ namespace Melanchall.DryWetMidi.Smf
         /// just read is invalid.</exception>
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
-            var chunkId = reader.ReadString(MidiChunk.IdLength);
-            if (chunkId.Length < MidiChunk.IdLength)
-            {
-                switch (settings.NotEnoughBytesPolicy)
-                {
-                    case NotEnoughBytesPolicy.Abort:
-                        throw new NotEnoughBytesException("Chunk ID cannot be read since the reader's underlying stream doesn't have enough bytes.",
-                                                          MidiChunk.IdLength,
-                                                          chunkId.Length);
-                    case NotEnoughBytesPolicy.Ignore:
-                        return null;
-                }
-            }
-
-            //
-
             MidiChunk chunk = null;
-            switch (chunkId)
-            {
-                case HeaderChunk.Id:
-                    chunk = new HeaderChunk();
-                    break;
-                case TrackChunk.Id:
-                    chunk = new TrackChunk();
-                    break;
-                default:
-                    chunk = TryCreateChunk(chunkId, settings.CustomChunkTypes);
-                    break;
-            }
 
-            //
-
-            if (chunk == null)
+            try
             {
-                switch (settings.UnknownChunkIdPolicy)
+                var chunkId = reader.ReadString(MidiChunk.IdLength);
+                if (chunkId.Length < MidiChunk.IdLength)
                 {
-                    case UnknownChunkIdPolicy.ReadAsUnknownChunk:
-                        chunk = new UnknownChunk(chunkId);
-                        break;
-
-                    case UnknownChunkIdPolicy.Skip:
-                        var size = reader.ReadDword();
-                        reader.Position += size;
-                        return null;
-
-                    case UnknownChunkIdPolicy.Abort:
-                        throw new UnknownChunkException($"'{chunkId}' chunk ID is unknown.", chunkId);
+                    switch (settings.NotEnoughBytesPolicy)
+                    {
+                        case NotEnoughBytesPolicy.Abort:
+                            throw new NotEnoughBytesException("Chunk ID cannot be read since the reader's underlying stream doesn't have enough bytes.",
+                                                              MidiChunk.IdLength,
+                                                              chunkId.Length);
+                        case NotEnoughBytesPolicy.Ignore:
+                            return null;
+                    }
                 }
-            }
 
-            //
+                //
 
-            if (chunk is TrackChunk && expectedTrackChunksCount != null && actualTrackChunksCount >= expectedTrackChunksCount)
-            {
-                ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount.Value);
-
-                switch (settings.ExtraTrackChunkPolicy)
+                switch (chunkId)
                 {
-                    case ExtraTrackChunkPolicy.Read:
+                    case HeaderChunk.Id:
+                        chunk = new HeaderChunk();
                         break;
-
-                    case ExtraTrackChunkPolicy.Skip:
-                        var size = reader.ReadDword();
-                        reader.Position += size;
-                        return null;
+                    case TrackChunk.Id:
+                        chunk = new TrackChunk();
+                        break;
+                    default:
+                        chunk = TryCreateChunk(chunkId, settings.CustomChunkTypes);
+                        break;
                 }
+
+                //
+
+                if (chunk == null)
+                {
+                    switch (settings.UnknownChunkIdPolicy)
+                    {
+                        case UnknownChunkIdPolicy.ReadAsUnknownChunk:
+                            chunk = new UnknownChunk(chunkId);
+                            break;
+
+                        case UnknownChunkIdPolicy.Skip:
+                            var size = reader.ReadDword();
+                            reader.Position += size;
+                            return null;
+
+                        case UnknownChunkIdPolicy.Abort:
+                            throw new UnknownChunkException($"'{chunkId}' chunk ID is unknown.", chunkId);
+                    }
+                }
+
+                //
+
+                if (chunk is TrackChunk && expectedTrackChunksCount != null && actualTrackChunksCount >= expectedTrackChunksCount)
+                {
+                    ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount.Value);
+
+                    switch (settings.ExtraTrackChunkPolicy)
+                    {
+                        case ExtraTrackChunkPolicy.Read:
+                            break;
+
+                        case ExtraTrackChunkPolicy.Skip:
+                            var size = reader.ReadDword();
+                            reader.Position += size;
+                            return null;
+                    }
+                }
+
+                //
+
+                chunk.Read(reader, settings);
+            }
+            catch (NotEnoughBytesException ex)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, ex);
+            }
+            catch (EndOfStreamException ex)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, ex);
             }
 
-            //
-
-            chunk.Read(reader, settings);
             return chunk;
         }
 
