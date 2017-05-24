@@ -23,7 +23,7 @@
         /// specified port.
         /// </summary>
         /// <param name="port">MIDI port.</param>
-        public PortPrefixEvent(SevenBitNumber port)
+        public PortPrefixEvent(byte port)
             : this()
         {
             Port = port;
@@ -36,7 +36,7 @@
         /// <summary>
         /// Gets or sets MIDI port.
         /// </summary>
-        public SevenBitNumber Port { get; set; }
+        public byte Port { get; set; }
 
         #endregion
 
@@ -82,7 +82,8 @@
         /// <param name="size">Size of the event's content.</param>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            Port = (SevenBitNumber)reader.ReadByte();
+            if (size >= 1)
+                Port = reader.ReadByte();
         }
 
         /// <summary>

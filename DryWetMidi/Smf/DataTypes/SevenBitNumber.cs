@@ -16,12 +16,12 @@ namespace Melanchall.DryWetMidi.Smf
         #region Constants
 
         /// <summary>
-        /// The smallest possible value of <see cref="SevenBitNumber"/>.
+        /// The smallest possible value of a <see cref="SevenBitNumber"/>.
         /// </summary>
         public static readonly SevenBitNumber MinValue = new SevenBitNumber(Min);
 
         /// <summary>
-        /// The largest possible value of an <see cref="SevenBitNumber"/>.
+        /// The largest possible value of a <see cref="SevenBitNumber"/>.
         /// </summary>
         public static readonly SevenBitNumber MaxValue = new SevenBitNumber(Max);
 

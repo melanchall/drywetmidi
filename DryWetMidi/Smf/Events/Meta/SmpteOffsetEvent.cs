@@ -279,6 +279,22 @@ namespace Melanchall.DryWetMidi.Smf
             return (byte)(format & Hours);
         }
 
+        private static byte ProcessValue(byte value, string property, byte max, InvalidMetaEventParameterValuePolicy policy)
+        {
+            if (value <= max)
+                return value;
+
+            switch (policy)
+            {
+                case InvalidMetaEventParameterValuePolicy.Abort:
+                    throw new InvalidMetaEventParameterValueException($"{value} is invalid value for the {property} of a SMPTE Offset event.", value);
+                case InvalidMetaEventParameterValuePolicy.SnapToLimits:
+                    return Math.Min(value, max);
+            }
+
+            return value;
+        }
+
         #endregion
 
         #region Overrides
@@ -291,13 +307,30 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="size">Size of the event's content.</param>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
+            var invalidMetaEventParameterValuePolicy = settings.InvalidMetaEventParameterValuePolicy;
+
             var formatAndHours = reader.ReadByte();
             Format = GetFormat(formatAndHours);
-            Hours = GetHours(formatAndHours);
-            Minutes = reader.ReadByte();
-            Seconds = reader.ReadByte();
-            Frames = reader.ReadByte();
-            SubFrames = reader.ReadByte();
+            Hours = ProcessValue(GetHours(formatAndHours),
+                                 nameof(Hours),
+                                 MaxHours,
+                                 invalidMetaEventParameterValuePolicy);
+            Minutes = ProcessValue(reader.ReadByte(),
+                                   nameof(Minutes),
+                                   MaxMinutes,
+                                   invalidMetaEventParameterValuePolicy);
+            Seconds = ProcessValue(reader.ReadByte(),
+                                   nameof(Seconds),
+                                   MaxSeconds,
+                                   invalidMetaEventParameterValuePolicy);
+            Frames = ProcessValue(reader.ReadByte(),
+                                  nameof(Frames),
+                                  MaxFrames[Format],
+                                  invalidMetaEventParameterValuePolicy);
+            SubFrames = ProcessValue(reader.ReadByte(),
+                                     nameof(SubFrames),
+                                     MaxSubFrames,
+                                     invalidMetaEventParameterValuePolicy);
         }
 
         /// <summary>

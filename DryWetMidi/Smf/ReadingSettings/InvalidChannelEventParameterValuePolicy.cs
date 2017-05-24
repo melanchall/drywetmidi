@@ -15,6 +15,11 @@
         /// <summary>
         /// Read byte and take its lower seven bits as the final value.
         /// </summary>
-        ReadValid
+        ReadValid,
+
+        /// <summary>
+        /// Read value and snap it to limits of the allowable range if it is out of them.
+        /// </summary>
+        SnapToLimits
     }
 }

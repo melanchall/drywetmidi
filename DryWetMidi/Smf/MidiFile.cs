@@ -158,6 +158,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
         /// just read is invalid.</exception>
+        /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
+        /// just read is invalid.</exception>
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
         /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
         /// have enough bytes.</exception>
@@ -235,6 +237,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
         /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
+        /// just read is invalid.</exception>
+        /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
+        /// just read is invalid.</exception>
         private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             if (stream == null)
@@ -421,6 +427,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
         /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
+        /// just read is invalid.</exception>
+        /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
+        /// just read is invalid.</exception>
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
             var chunkId = reader.ReadString(MidiChunk.IdLength);

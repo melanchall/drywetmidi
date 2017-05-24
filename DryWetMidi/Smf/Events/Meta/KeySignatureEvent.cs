@@ -22,11 +22,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         public const byte DefaultScale = 0;
 
-        private const int MinKey = -7;
-        private const int MaxKey = 7;
+        private const sbyte MinKey = -7;
+        private const sbyte MaxKey = 7;
 
-        private const int MinScale = 0;
-        private const int MaxScale = 1;
+        private const byte MinScale = 0;
+        private const byte MaxScale = 1;
 
         #endregion
 
@@ -130,6 +130,22 @@ namespace Melanchall.DryWetMidi.Smf
                    Scale == keySignatureEvent.Scale;
         }
 
+        private static int ProcessValue(int value, string property, int min, int max, InvalidMetaEventParameterValuePolicy policy)
+        {
+            if (value >= min && value <= max)
+                return value;
+
+            switch (policy)
+            {
+                case InvalidMetaEventParameterValuePolicy.Abort:
+                    throw new InvalidMetaEventParameterValueException($"{value} is invalid value for the {property} of a Key Signature event.", value);
+                case InvalidMetaEventParameterValuePolicy.SnapToLimits:
+                    return Math.Min(Math.Max(value, min), max);
+            }
+
+            return value;
+        }
+
         #endregion
 
         #region Overrides
@@ -142,8 +158,19 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="size">Size of the event's content.</param>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            Key = reader.ReadSByte();
-            Scale = (byte)(reader.ReadByte() == 0 ? 0 : 1);
+            var invalidMetaEventParameterValuePolicy = settings.InvalidMetaEventParameterValuePolicy;
+
+            Key = (sbyte)ProcessValue(reader.ReadSByte(),
+                                       nameof(Key),
+                                       MinKey,
+                                       MaxKey,
+                                       invalidMetaEventParameterValuePolicy);
+
+            Scale = (byte)ProcessValue(reader.ReadByte(),
+                                        nameof(Scale),
+                                        MinScale,
+                                        MaxScale,
+                                        invalidMetaEventParameterValuePolicy);
         }
 
         /// <summary>

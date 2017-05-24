@@ -112,6 +112,9 @@ namespace Melanchall.DryWetMidi.Smf
                         case InvalidChannelEventParameterValuePolicy.ReadValid:
                             parameter &= SevenBitNumber.MaxValue;
                             break;
+                        case InvalidChannelEventParameterValuePolicy.SnapToLimits:
+                            parameter = SevenBitNumber.MaxValue;
+                            break;
                     }
                 }
 

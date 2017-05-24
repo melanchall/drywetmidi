@@ -93,6 +93,19 @@ namespace Melanchall.DryWetMidi.Smf
         public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy { get; set; }
 
         /// <summary>
+        /// Gets or sets reaction of the reading engine on invalid value of a meta event's
+        /// parameter value. For example, 255 is the invalid value for the <see cref="KeySignatureEvent.Scale"/>
+        /// and will be processed according with this policy. The default is
+        /// <see cref="InvalidMetaEventParameterValuePolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="InvalidMetaEventParameterValuePolicy.Abort"/> is used an instance of the
+        /// <see cref="InvalidMetaEventParameterValueException"/> will be thrown if event's parameter value
+        /// just read is invalid.
+        /// </remarks>
+        public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy { get; set; }
+
+        /// <summary>
         /// Gets or sets reaction of the reading engine on lack of bytes in the underlying stream
         /// that are needed to read some value (for example, DWORD requires 4 bytes available).
         /// The default is <see cref="NotEnoughBytesPolicy.Abort"/>.

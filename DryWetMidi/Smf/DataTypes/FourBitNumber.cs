@@ -16,12 +16,12 @@ namespace Melanchall.DryWetMidi.Smf
         #region Constants
 
         /// <summary>
-        /// The smallest possible value of <see cref="FourBitNumber"/>.
+        /// The smallest possible value of a <see cref="FourBitNumber"/>.
         /// </summary>
         public static readonly FourBitNumber MinValue = new FourBitNumber(Min);
 
         /// <summary>
-        /// The largest possible value of an <see cref="FourBitNumber"/>.
+        /// The largest possible value of a <see cref="FourBitNumber"/>.
         /// </summary>
         public static readonly FourBitNumber MaxValue = new FourBitNumber(Max);
 

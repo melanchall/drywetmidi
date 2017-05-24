@@ -55,6 +55,7 @@
     <Compile Include="Smf\DataTypes\SevenBitNumber.cs" />
     <Compile Include="Smf\Events\Meta\BaseTextEvent.cs" />
     <Compile Include="Smf\Exceptions\InvalidChannelEventParameterValueException.cs" />
+    <Compile Include="Smf\Exceptions\InvalidMetaEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\NoHeaderChunkException.cs" />
     <Compile Include="Smf\Exceptions\NotEnoughBytesException.cs" />
     <Compile Include="Smf\Exceptions\TooManyTrackChunksException.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Smf\ReadingSettings\ExtraTrackChunkPolicy.cs" />
     <Compile Include="Smf\ReadingSettings\InvalidChannelEventParameterValuePolicy.cs" />
     <Compile Include="Smf\ReadingSettings\InvalidEventSizePolicy.cs" />
+    <Compile Include="Smf\ReadingSettings\InvalidMetaEventParameterValuePolicy.cs" />
     <Compile Include="Smf\ReadingSettings\NoHeaderChunkPolicy.cs" />
     <Compile Include="Smf\ReadingSettings\NotEnoughBytesPolicy.cs" />
     <Compile Include="Smf\ReadingSettings\UnexpectedTrackChunksCountPolicy.cs" />
