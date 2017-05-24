@@ -143,7 +143,7 @@ namespace Melanchall.DryWetMidi.Smf
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             Key = reader.ReadSByte();
-            Scale = reader.ReadByte();
+            Scale = (byte)(reader.ReadByte() == 0 ? 0 : 1);
         }
 
         /// <summary>
