@@ -1,6 +1,6 @@
 ![DryWetMIDI Logo](https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png)
 
-DryWetMIDI is the .NET library to work with MIDI files.
+DryWetMIDI is the .NET library to work with MIDI files. It was tested on 130,000 files taken from [here](https://www.reddit.com/r/WeAreTheMusicMakers/comments/3ajwe4/the_largest_midi_collection_on_the_internet/).
 
 The library is under MIT license so you can do whatever you want with it.
 
