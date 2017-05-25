@@ -1,8 +1,10 @@
 ![DryWetMIDI Logo](https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png)
 
-DryWetMIDI is the .NET library to work with MIDI files. It was tested on 130,000 files taken from [here](https://www.reddit.com/r/WeAreTheMusicMakers/comments/3ajwe4/the_largest_midi_collection_on_the_internet/).
+DryWetMIDI is the .NET library to work with MIDI files. Visit [Wiki](https://github.com/melanchall/drymidi/wiki) to learn how to use the DryWetMIDI.
 
 The library is under MIT license so you can do whatever you want with it.
+
+DryWetMIDI was tested on 130,000 files taken from [here](https://www.reddit.com/r/WeAreTheMusicMakers/comments/3ajwe4/the_largest_midi_collection_on_the_internet/). Thanks *midi-man* for this great collection.
 
 ## Features
 
@@ -94,5 +96,3 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
                                      (e as NoteOffEvent)?.GetNoteName() == NoteName.CSharp);
 }
 ```
-------------------
-Visit [Wiki](https://github.com/melanchall/drymidi/wiki) to learn more.
