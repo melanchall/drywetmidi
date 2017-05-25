@@ -8,7 +8,7 @@
     <owners>melanchall</owners>
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://github.com/melanchall/drywetmidi</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/NuGet/icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/NuGet/1.0.0/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
 DryWetMIDI is the .NET library to work with MIDI files. It allows:
@@ -22,7 +22,4 @@ DryWetMIDI is the .NET library to work with MIDI files. It allows:
     <copyright>Copyright © Melanchall 2017</copyright>
     <tags>midi smf</tags>
   </metadata>
-  <files>
-    <file src="..\Resources\NuGet\readme.txt" target=""/>
-  </files>
 </package>
