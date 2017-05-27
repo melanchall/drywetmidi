@@ -207,6 +207,22 @@ namespace Melanchall.DryWetMidi.Smf
             return _chunks.RemoveAll(match);
         }
 
+        /// <summary>
+        /// Searches for the specified chunk and returns the zero-based index of the first
+        /// occurrence within the entire <see cref="ChunksCollection"/>.
+        /// </summary>
+        /// <param name="chunk">The chunk to locate in the <see cref="ChunksCollection"/>.</param>
+        /// <returns>The zero-based index of the first occurrence of chunk within the entire
+        /// <see cref="ChunksCollection"/>, if found; otherwise, –1.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
+        public int IndexOf(MidiChunk chunk)
+        {
+            if (chunk == null)
+                throw new ArgumentNullException(nameof(chunk));
+
+            return _chunks.IndexOf(chunk);
+        }
+
         #endregion
 
         #region IEnumerable<Chunk>

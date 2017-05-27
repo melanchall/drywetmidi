@@ -246,6 +246,22 @@ namespace Melanchall.DryWetMidi.Smf
             return _events.RemoveAll(match);
         }
 
+        /// <summary>
+        /// Searches for the specified event and returns the zero-based index of the first
+        /// occurrence within the entire <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="midiEvent">The event to locate in the <see cref="EventsCollection"/>.</param>
+        /// <returns>The zero-based index of the first occurrence of event within the entire
+        /// <see cref="EventsCollection"/>, if found; otherwise, –1.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        public int IndexOf(MidiEvent midiEvent)
+        {
+            if (midiEvent == null)
+                throw new ArgumentNullException(nameof(midiEvent));
+
+            return _events.IndexOf(midiEvent);
+        }
+
         #endregion
 
         #region IEnumerable<MidiEvent>
