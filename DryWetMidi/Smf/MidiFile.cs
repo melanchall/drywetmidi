@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
         /// <see cref="SmpteTimeDivision"/> class.
         /// </remarks>
-        public TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote);
+        public TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
 
         /// <summary>
         /// Gets collection of chunks of a MIDI file.

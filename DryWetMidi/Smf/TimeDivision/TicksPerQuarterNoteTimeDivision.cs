@@ -19,6 +19,13 @@ namespace Melanchall.DryWetMidi.Smf
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="TicksPerQuarterNoteTimeDivision"/>.
+        /// </summary>
+        public TicksPerQuarterNoteTimeDivision()
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TicksPerQuarterNoteTimeDivision"/> with
         /// the specified ticks number per a quarter-note.
         /// </summary>
@@ -36,9 +43,9 @@ namespace Melanchall.DryWetMidi.Smf
         #region Properties
 
         /// <summary>
-        /// Gets number of ticks which make up a quarter-note.
+        /// Gets or sets number of ticks which make up a quarter-note.
         /// </summary>
-        public short TicksPerQuarterNote { get; }
+        public short TicksPerQuarterNote { get; set; } = DefaultTicksPerQuarterNote;
 
         #endregion
 
