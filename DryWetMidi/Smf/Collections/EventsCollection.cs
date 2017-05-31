@@ -95,6 +95,14 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
+        /// Removes all events from the <see cref="EventsCollection"/>.
+        /// </summary>
+        public void Clear()
+        {
+            _events.Clear();
+        }
+
+        /// <summary>
         /// Adds an event to the end of collection.
         /// </summary>
         /// <param name="midiEvent">The event to be added to the end of the collection.</param>

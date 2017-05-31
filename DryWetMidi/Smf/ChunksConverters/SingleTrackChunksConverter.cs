@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region IChunksConverter
 
-        public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
+        public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks, bool cloneEvents = true)
         {
             if (chunks == null)
                 throw new ArgumentNullException(nameof(chunks));
@@ -120,7 +120,10 @@ namespace Melanchall.DryWetMidi.Smf
 
             foreach (var eventDescriptor in eventsDescriptors)
             {
-                var midiEvent = (MidiEvent)eventDescriptor.Event.Clone();
+                var midiEvent = eventDescriptor.Event;
+                if (cloneEvents)
+                    midiEvent = (MidiEvent)midiEvent.Clone();
+
                 midiEvent.DeltaTime = eventDescriptor.AbsoluteTime - time;
                 resultTrackChunk.Events.Add(midiEvent);
 

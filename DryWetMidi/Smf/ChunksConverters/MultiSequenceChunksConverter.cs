@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Smf
     {
         #region IChunksConverter
 
-        public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
+        public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks, bool cloneEvents = true)
         {
             if (chunks == null)
                 throw new ArgumentNullException(nameof(chunks));
@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf
 
             var singleTrackChunksConverter = ChunksConverterFactory.GetConverter(MidiFileFormat.SingleTrack);
             return sequenceNumbers.GroupBy(n => n.Number)
-                                  .SelectMany(g => singleTrackChunksConverter.Convert(g.Select(n => n.Chunk)))
+                                  .SelectMany(g => singleTrackChunksConverter.Convert(g.Select(n => n.Chunk), cloneEvents))
                                   .Concat(chunks.Where(c => !(c is TrackChunk)));
         }
 
