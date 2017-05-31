@@ -114,6 +114,8 @@
     <Compile Include="Smf\Events\Writers\EventWriterFactory.cs" />
     <Compile Include="Smf\Events\Writers\MetaEventWriter.cs" />
     <Compile Include="Smf\Events\Writers\SysExEventWriter.cs" />
+    <Compile Include="Smf\Interaction\NotesManager\Note.cs" />
+    <Compile Include="Smf\Interaction\NotesManager\NotesManager.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEvent.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManager.cs" />
     <Compile Include="Smf\MidiFile.cs" />
