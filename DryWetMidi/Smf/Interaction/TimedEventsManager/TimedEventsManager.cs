@@ -8,29 +8,32 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Fields
 
-        private bool _disposed;
-
         private readonly EventsCollection _eventsCollection;
-        private readonly List<TimedEvent> _timedEvents;
+        private readonly List<TimedEvent> _timedEvents = new List<TimedEvent>();
+        private readonly TimedEventsComparer _eventsComparer;
+
+        private bool _disposed;
 
         #endregion
 
         #region Constructor
 
-        public TimedEventsManager(EventsCollection eventsCollection)
+        public TimedEventsManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             if (eventsCollection == null)
                 throw new ArgumentNullException(nameof(eventsCollection));
 
             _eventsCollection = eventsCollection;
-            _timedEvents = CreateTimedEvents(eventsCollection).ToList();
+            _eventsComparer = new TimedEventsComparer(sameTimeEventsComparison);
+
+            _timedEvents.AddRange(CreateTimedEvents(eventsCollection));
         }
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<TimedEvent> Events => _timedEvents.OrderBy(e => e.Time);
+        public IEnumerable<TimedEvent> Events => _timedEvents.OrderBy(e => e, _eventsComparer);
 
         #endregion
 

@@ -4,32 +4,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class Note
     {
-        #region Fields
-
-        private SevenBitNumber _noteNumber;
-        private SevenBitNumber _velocity;
-        private FourBitNumber _channel;
-
-        #endregion
-
         #region Constructor
 
         public Note(SevenBitNumber noteNumber)
-            : this(new TimedEvent(new NoteOnEvent()),
-                   new TimedEvent(new NoteOffEvent()))
+            : this(noteNumber, 0)
         {
-            NoteNumber = noteNumber;
         }
 
         public Note(SevenBitNumber noteNumber, long length)
-            : this(noteNumber)
+            : this(noteNumber, length, 0)
         {
-            Length = length;
         }
 
         public Note(SevenBitNumber noteNumber, long length, long time)
-            : this(noteNumber, length)
         {
+            NoteNumber = noteNumber;
+            Length = length;
             Time = time;
         }
 
@@ -48,8 +38,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (!(timedNoteOffEvent.Event is NoteOffEvent))
                 throw new ArgumentException("Timed event doesn't wrap Note Off event.", nameof(timedNoteOffEvent));
 
+            //
+
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
+
+            //
 
             NoteNumber = noteOnEvent.NoteNumber;
             Velocity = noteOnEvent.Velocity;
@@ -91,9 +85,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public FourBitNumber Channel { get; set; }
 
-        internal TimedEvent TimedNoteOnEvent { get; }
+        internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent());
 
-        internal TimedEvent TimedNoteOffEvent { get; }
+        internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
 
         #endregion
     }

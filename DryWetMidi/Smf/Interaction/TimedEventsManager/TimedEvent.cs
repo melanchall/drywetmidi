@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public MidiEvent Event { get; set; }
+        public MidiEvent Event { get; }
 
         public long Time
         {

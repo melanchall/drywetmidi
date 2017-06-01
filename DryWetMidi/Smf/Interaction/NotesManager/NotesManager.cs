@@ -8,29 +8,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Fields
 
-        private bool _disposed;
-
         private readonly TimedEventsManager _timedEventsManager;
-        private readonly List<Note> _notes;
+        private readonly List<Note> _notes = new List<Note>();
+
+        private bool _disposed;
 
         #endregion
 
         #region Constructor
 
-        public NotesManager(EventsCollection eventsCollection)
+        public NotesManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             if (eventsCollection == null)
                 throw new ArgumentNullException(nameof(eventsCollection));
 
-            _timedEventsManager = new TimedEventsManager(eventsCollection);
-            _notes = CreateNotes(_timedEventsManager.Events).ToList();
+            _timedEventsManager = eventsCollection.ManageTimedEvents(sameTimeEventsComparison);
+            _notes.AddRange(CreateNotes(_timedEventsManager.Events));
         }
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<Note> Notes => _notes.OrderBy(e => e.Time);
+        public IEnumerable<Note> Notes => _notes.OrderBy(n => n.Time);
 
         #endregion
 
@@ -54,6 +54,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _timedEventsManager.RemoveEvent(note.TimedNoteOnEvent);
             _timedEventsManager.RemoveEvent(note.TimedNoteOffEvent);
             _notes.Remove(note);
+        }
+
+        public IEnumerable<Note> GetNotesAtTime(long time, bool exactMatch = true)
+        {
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+
+            return _notes.Where(n => IsNoteAtTime(n, time, exactMatch));
         }
 
         public void SaveChanges()
@@ -110,6 +118,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return noteOnEvent != null &&
                    noteOnEvent.Channel == channel &&
                    noteOnEvent.NoteNumber == noteNumber;
+        }
+
+        private static bool IsNoteAtTime(Note note, long time, bool exactMatch)
+        {
+            var noteTime = note.Time;
+            if (noteTime == time)
+                return true;
+
+            if (!exactMatch)
+                return false;
+
+            return time > noteTime && time < noteTime + note.Length;
         }
 
         #endregion

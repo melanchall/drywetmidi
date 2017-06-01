@@ -186,49 +186,6 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
-        /// Merges multiple track chunks into one that corresponds to <see cref="MidiFileFormat.SingleTrack"/>.
-        /// </summary>
-        /// <param name="trackChunks">Track chunks to merge into one.</param>
-        /// <returns>Track chunk that containes all events from the <paramref name="trackChunks"/>.</returns>
-        /// <remarks>
-        /// Note that events will be cloned so events in the result track chunk will not be equal
-        /// by reference to events in the <paramref name="trackChunks"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
-        public static TrackChunk Merge(IEnumerable<TrackChunk> trackChunks)
-        {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
-
-            var chunksConverter = ChunksConverterFactory.GetConverter(MidiFileFormat.SingleTrack);
-            return chunksConverter.Convert(trackChunks)
-                                  .OfType<TrackChunk>()
-                                  .First();
-
-        }
-
-        /// <summary>
-        /// Splits a track chunk into multiple ones that correspond to <see cref="MidiFileFormat.MultiTrack"/>.
-        /// </summary>
-        /// <param name="trackChunk">Track chunk to split into multiple ones.</param>
-        /// <returns>Multiple track chunks that represent <paramref name="trackChunk"/>.</returns>
-        /// <remarks>
-        /// Note that events will be cloned so events in the result track chunks will not be equal
-        /// by reference to events in the <paramref name="trackChunk"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
-        public static IEnumerable<TrackChunk> Explode(TrackChunk trackChunk)
-        {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
-
-            var chunksConverter = ChunksConverterFactory.GetConverter(MidiFileFormat.MultiTrack);
-            return chunksConverter.Convert(new[] { trackChunk })
-                                  .OfType<TrackChunk>();
-
-        }
-
-        /// <summary>
         /// Reads an event from the reader's underlying stream.
         /// </summary>
         /// <param name="reader">Reader to read an event.</param>
