@@ -36,24 +36,48 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        public void AddNote(Note note)
+        public void AddNotes(IEnumerable<Note> notes)
         {
-            if (note == null)
-                throw new ArgumentNullException(nameof(note));
+            if (notes == null)
+                throw new ArgumentNullException(nameof(notes));
 
-            _timedEventsManager.AddEvent(note.TimedNoteOnEvent);
-            _timedEventsManager.AddEvent(note.TimedNoteOffEvent);
-            _notes.Add(note);
+            _timedEventsManager.AddEvents(GetNotesTimedEvents(notes));
+            _notes.AddRange(notes);
         }
 
-        public void RemoveNote(Note note)
+        public void AddNotes(params Note[] notes)
         {
-            if (note == null)
-                throw new ArgumentNullException(nameof(note));
+            AddNotes((IEnumerable<Note>)notes);
+        }
 
-            _timedEventsManager.RemoveEvent(note.TimedNoteOnEvent);
-            _timedEventsManager.RemoveEvent(note.TimedNoteOffEvent);
-            _notes.Remove(note);
+        public void RemoveNotes(IEnumerable<Note> notes)
+        {
+            if (notes == null)
+                throw new ArgumentNullException(nameof(notes));
+
+            _timedEventsManager.RemoveEvents(GetNotesTimedEvents(notes));
+
+            foreach (var n in notes.ToList())
+            {
+                _notes.Remove(n);
+            }
+        }
+
+        public void RemoveNotes(params Note[] notes)
+        {
+            RemoveNotes((IEnumerable<Note>)notes);
+        }
+
+        public void RemoveAllNotes()
+        {
+            _timedEventsManager.RemoveEvents(GetNotesTimedEvents(_notes));
+            _notes.Clear();
+        }
+
+        public void RemoveAllNotes(Predicate<Note> predicate)
+        {
+            _timedEventsManager.RemoveEvents(GetNotesTimedEvents(_notes.Where(n => predicate(n))));
+            _notes.RemoveAll(predicate);
         }
 
         public IEnumerable<Note> GetNotesAtTime(long time, bool exactMatch = true)
@@ -130,6 +154,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return false;
 
             return time > noteTime && time < noteTime + note.Length;
+        }
+
+        private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)
+        {
+            if (notes == null)
+                throw new ArgumentNullException(nameof(notes));
+
+            return notes.SelectMany(n => new[] { n.TimedNoteOnEvent, n.TimedNoteOffEvent });
         }
 
         #endregion

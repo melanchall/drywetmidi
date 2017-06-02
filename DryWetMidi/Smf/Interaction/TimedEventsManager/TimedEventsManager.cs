@@ -39,40 +39,54 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        public void AddEvent(TimedEvent timedEvent)
+        public void AddEvents(params TimedEvent[] events)
         {
-            if (timedEvent == null)
-                throw new ArgumentNullException(nameof(timedEvent));
-
-            _timedEvents.Add(timedEvent);
+            AddEvents((IEnumerable<TimedEvent>)events);
         }
 
-        public void RemoveEvent(TimedEvent timedEvent)
+        public void AddEvents(IEnumerable<TimedEvent> events)
         {
-            if (timedEvent == null)
-                throw new ArgumentNullException(nameof(timedEvent));
+            if (events == null)
+                throw new ArgumentNullException(nameof(events));
 
-            _timedEvents.Remove(timedEvent);
+            _timedEvents.AddRange(events);
         }
 
-        public IEnumerable<TimedEvent> GetEventsAtTime(long time, bool exactMatch = true)
+        public void RemoveEvents(params TimedEvent[] events)
+        {
+            RemoveEvents((IEnumerable<TimedEvent>)events);
+        }
+
+        public void RemoveEvents(IEnumerable<TimedEvent> events)
+        {
+            if (events == null)
+                throw new ArgumentNullException(nameof(events));
+
+            foreach (var e in events.ToList())
+            {
+                _timedEvents.Remove(e);
+            }
+        }
+
+        public void RemoveAllEvents()
+        {
+            _timedEvents.Clear();
+        }
+
+        public void RemoveAllEvents(Predicate<TimedEvent> match)
+        {
+            if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            _timedEvents.RemoveAll(match);
+        }
+
+        public IEnumerable<TimedEvent> GetEventsAtTime(long time)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
 
-            var exactMatchedEvents = _timedEvents.Where(e => e.Time == time);
-            if (exactMatchedEvents.Any())
-                return exactMatchedEvents;
-
-            if (exactMatch)
-                return Enumerable.Empty<TimedEvent>();
-
-            var earlyTimes = _timedEvents.Select(e => e.Time).Where(t => t < time);
-            if (!earlyTimes.Any())
-                return Enumerable.Empty<TimedEvent>();
-
-            var closestTime = earlyTimes.Max();
-            return _timedEvents.Where(e => e.Time == closestTime);
+            return _timedEvents.Where(e => e.Time == time);
         }
 
         public void SaveChanges()
