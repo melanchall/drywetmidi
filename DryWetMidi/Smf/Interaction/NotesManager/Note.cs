@@ -1,10 +1,26 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class Note
     {
         #region Constructor
+
+        public Note(NoteName noteName, int octave)
+            : this(noteName, octave, 0)
+        {
+        }
+
+        public Note(NoteName noteName, int octave, long length)
+            : this(noteName, octave, 0, length)
+        {
+        }
+
+        public Note(NoteName noteName, int octave, long length, long time)
+            : this(NoteUtilities.GetNoteNumber(noteName, octave))
+        {
+        }
 
         public Note(SevenBitNumber noteNumber)
             : this(noteNumber, 0)
@@ -84,6 +100,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public SevenBitNumber Velocity { get; set; }
 
         public FourBitNumber Channel { get; set; }
+
+        public NoteName NoteName => NoteUtilities.GetNoteName(NoteNumber);
+
+        public int Octave => NoteUtilities.GetNoteOctave(NoteNumber);
 
         internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent());
 

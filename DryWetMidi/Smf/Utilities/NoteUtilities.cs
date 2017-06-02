@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="noteNumber">Note number to get note name of.</param>
         /// <returns>Name of the note presented by <paramref name="noteNumber"/>.</returns>
-        private static NoteName GetNoteName(SevenBitNumber noteNumber)
+        public static NoteName GetNoteName(SevenBitNumber noteNumber)
         {
             return (NoteName)(noteNumber % OctaveSize);
         }
@@ -147,7 +147,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Octave number will be returned in scientific pitch notation which means
         /// that 4 will be returned for 60 note number.
         /// </remarks>
-        private static int GetNoteOctave(SevenBitNumber noteNumber)
+        public static int GetNoteOctave(SevenBitNumber noteNumber)
         {
             return noteNumber / OctaveSize - OctaveOffset;
         }
@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// invalid value.</exception>
         /// <exception cref="ArgumentException">Note number is out of range for the specified note
         /// name and octave.</exception>
-        private static SevenBitNumber GetNoteNumber(NoteName noteName, int octave)
+        public static SevenBitNumber GetNoteNumber(NoteName noteName, int octave)
         {
             if (!Enum.IsDefined(typeof(NoteName), noteName))
                 throw new InvalidEnumArgumentException(nameof(noteName), (int)noteName, typeof(NoteName));
