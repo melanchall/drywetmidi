@@ -41,6 +41,39 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return file.Chunks.OfType<TrackChunk>().GetNotes();
         }
 
+        public static IEnumerable<Note> GetNotesAtTime(this TrackChunk trackChunk, long time, bool exactMatch = true)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+
+            return trackChunk.ManageNotes().GetNotesAtTime(time, exactMatch);
+        }
+
+        public static IEnumerable<Note> GetNotesAtTime(this IEnumerable<TrackChunk> trackChunks, long time, bool exactMatch = true)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+
+            return trackChunks.SelectMany(c => c.GetNotesAtTime(time, exactMatch));
+        }
+
+        public static IEnumerable<Note> GetNotesAtTime(this MidiFile file, long time, bool exactMatch = true)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+
+            return file.Chunks.OfType<TrackChunk>().GetNotesAtTime(time, exactMatch);
+        }
+
         #endregion
     }
 }
