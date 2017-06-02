@@ -160,7 +160,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>Number of the note represented by specified name and octave.</returns>
         /// <remarks>
         /// Octave number is specified in scientific pitch notation which means that 4 must be
-        /// passed to get the number of the middle C.
+        /// passed to <paramref name="octave"/> to get the number of the middle C.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
         /// invalid value.</exception>

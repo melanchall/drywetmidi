@@ -2,6 +2,9 @@
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Represents wrapper for <see cref="MidiEvent"/> that provides absolute time of an event.
+    /// </summary>
     public sealed class TimedEvent
     {
         #region Fields
@@ -12,11 +15,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimedEvent"/> with the
+        /// specified MIDI event.
+        /// </summary>
+        /// <param name="midiEvent">An event to wrap into <see cref="TimedEvent"/>.</param>
         public TimedEvent(MidiEvent midiEvent)
         {
             Event = midiEvent;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimedEvent"/> with the
+        /// specified MIDI event and absolute time.
+        /// </summary>
+        /// <param name="midiEvent">An event to wrap into <see cref="TimedEvent"/>.</param>
+        /// <param name="time">Absolute time of an event in units defined by the time division of a MIDI file.</param>
         public TimedEvent(MidiEvent midiEvent, long time)
             : this(midiEvent)
         {
@@ -27,8 +41,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets wrapped MIDI event.
+        /// </summary>
         public MidiEvent Event { get; }
 
+        /// <summary>
+        /// Gets or sets absolute time of the event in units defined by the time division of a MIDI file.
+        /// </summary>
         public long Time
         {
             get { return _time; }
@@ -45,6 +65,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Event at {Time}: {Event}";
