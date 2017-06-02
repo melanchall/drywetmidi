@@ -110,5 +110,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
 
         #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            return $"{NoteName.ToString().Replace("Sharp", "#")}{Octave} at {Time}";
+        }
+
+        #endregion
     }
 }

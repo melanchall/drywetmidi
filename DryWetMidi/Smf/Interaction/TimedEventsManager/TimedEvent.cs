@@ -42,5 +42,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            return $"Event at {Time}: {Event}";
+        }
+
+        #endregion
     }
 }
