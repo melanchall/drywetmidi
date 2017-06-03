@@ -20,12 +20,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         #region Constructor
-
-        public ChordsCollection()
-        {
-        }
-
-        public ChordsCollection(IEnumerable<Chord> chords)
+        
+        internal ChordsCollection(IEnumerable<Chord> chords)
         {
             if (chords == null)
                 throw new ArgumentNullException(nameof(chords));
@@ -77,10 +73,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             Remove((IEnumerable<Chord>)chords);
         }
 
-        public void RemoveAll(Predicate<Chord> predicate)
+        public void RemoveAll(Predicate<Chord> match)
         {
-            var removedChords = _chords.Where(c => predicate(c)).ToList();
-            _chords.RemoveAll(predicate);
+            if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            var removedChords = _chords.Where(c => match(c)).ToList();
+            _chords.RemoveAll(match);
             OnChordsRemoved(removedChords);
         }
 

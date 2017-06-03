@@ -121,6 +121,7 @@
     <Compile Include="Smf\Interaction\NotesManager\NotesCollection.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesCollectionChangedEventArgs.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesManagingUtilities.cs" />
+    <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsCollection.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\NotesManager\Note.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesManager.cs" />

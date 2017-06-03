@@ -57,11 +57,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             var addedNotes = args.AddedNotes;
             if (addedNotes != null)
-                _timedEventsManager.AddEvents(GetNotesTimedEvents(addedNotes));
+                _timedEventsManager.Events.Add(GetNotesTimedEvents(addedNotes));
 
             var removedNotes = args.RemovedNotes;
             if (removedNotes != null)
-                _timedEventsManager.RemoveEvents(GetNotesTimedEvents(removedNotes));
+                _timedEventsManager.Events.Remove(GetNotesTimedEvents(removedNotes));
         }
 
         private static IEnumerable<Note> CreateNotes(IEnumerable<TimedEvent> events)

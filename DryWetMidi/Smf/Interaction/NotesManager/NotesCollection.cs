@@ -21,11 +21,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
-        public NotesCollection()
-        {
-        }
-
-        public NotesCollection(IEnumerable<Note> notes)
+        internal NotesCollection(IEnumerable<Note> notes)
         {
             if (notes == null)
                 throw new ArgumentNullException(nameof(notes));
@@ -75,10 +71,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             Remove((IEnumerable<Note>)notes);
         }
 
-        public void RemoveAll(Predicate<Note> predicate)
+        public void RemoveAll(Predicate<Note> match)
         {
-            var removedNotes = _notes.Where(n => predicate(n)).ToList();
-            _notes.RemoveAll(predicate);
+            if (match == null)
+                throw new ArgumentNullException(nameof(match));
+
+            var removedNotes = _notes.Where(n => match(n)).ToList();
+            _notes.RemoveAll(match);
             OnNotesRemoved(removedNotes);
         }
 

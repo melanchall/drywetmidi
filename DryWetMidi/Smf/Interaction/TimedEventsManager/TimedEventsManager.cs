@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -9,8 +8,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Fields
 
         private readonly EventsCollection _eventsCollection;
-        private readonly List<TimedEvent> _timedEvents = new List<TimedEvent>();
-        private readonly TimedEventsComparer _eventsComparer;
 
         private bool _disposed;
 
@@ -24,70 +21,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentNullException(nameof(eventsCollection));
 
             _eventsCollection = eventsCollection;
-            _eventsComparer = new TimedEventsComparer(sameTimeEventsComparison);
-
-            _timedEvents.AddRange(CreateTimedEvents(eventsCollection));
+            Events = new TimedEventsCollection(CreateTimedEvents(eventsCollection));
         }
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<TimedEvent> Events => _timedEvents.OrderBy(e => e, _eventsComparer);
+        public TimedEventsCollection Events { get; }
 
         #endregion
 
         #region Methods
-
-        public void AddEvents(params TimedEvent[] events)
-        {
-            AddEvents((IEnumerable<TimedEvent>)events);
-        }
-
-        public void AddEvents(IEnumerable<TimedEvent> events)
-        {
-            if (events == null)
-                throw new ArgumentNullException(nameof(events));
-
-            _timedEvents.AddRange(events);
-        }
-
-        public void RemoveEvents(params TimedEvent[] events)
-        {
-            RemoveEvents((IEnumerable<TimedEvent>)events);
-        }
-
-        public void RemoveEvents(IEnumerable<TimedEvent> events)
-        {
-            if (events == null)
-                throw new ArgumentNullException(nameof(events));
-
-            foreach (var e in events.ToList())
-            {
-                _timedEvents.Remove(e);
-            }
-        }
-
-        public void RemoveAllEvents()
-        {
-            _timedEvents.Clear();
-        }
-
-        public void RemoveAllEvents(Predicate<TimedEvent> match)
-        {
-            if (match == null)
-                throw new ArgumentNullException(nameof(match));
-
-            _timedEvents.RemoveAll(match);
-        }
-
-        public IEnumerable<TimedEvent> GetEventsAtTime(long time)
-        {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            return _timedEvents.Where(e => e.Time == time);
-        }
 
         public void SaveChanges()
         {
