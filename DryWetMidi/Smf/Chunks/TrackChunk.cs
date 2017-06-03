@@ -22,12 +22,6 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
-        #region Fields
-
-        private byte? _channelEventStatusByte = null;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -121,11 +115,13 @@ namespace Melanchall.DryWetMidi.Smf
             var endReaderPosition = reader.Position + size;
             var endOfTrackPresented = false;
 
+            byte? currentChannelEventStatusByte = null;
+
             //
 
             while (reader.Position < endReaderPosition && !reader.EndReached)
             {
-                var midiEvent = ReadEvent(reader, settings);
+                var midiEvent = ReadEvent(reader, settings, ref currentChannelEventStatusByte);
                 if (midiEvent is EndOfTrackEvent)
                 {
                     endOfTrackPresented = true;
@@ -134,8 +130,6 @@ namespace Melanchall.DryWetMidi.Smf
 
                 Events.Add(midiEvent);
             }
-
-            _channelEventStatusByte = null;
 
             //
 
@@ -199,7 +193,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="NotEnoughBytesException">Not enough bytes to read an event.</exception>
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter just
         /// read is invalid.</exception>
-        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings)
+        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
         {
             var deltaTime = reader.ReadVlqLongNumber();
             if (deltaTime < 0)
@@ -210,10 +204,10 @@ namespace Melanchall.DryWetMidi.Smf
             var statusByte = reader.ReadByte();
             if (statusByte <= SevenBitNumber.MaxValue)
             {
-                if (_channelEventStatusByte == null)
+                if (channelEventStatusByte == null)
                     throw new UnexpectedRunningStatusException();
 
-                statusByte = _channelEventStatusByte.Value;
+                statusByte = channelEventStatusByte.Value;
                 reader.Position--;
             }
 
@@ -241,7 +235,7 @@ namespace Melanchall.DryWetMidi.Smf
             //
 
             if (midiEvent is ChannelEvent)
-                _channelEventStatusByte = statusByte;
+                channelEventStatusByte = statusByte;
 
             //
 

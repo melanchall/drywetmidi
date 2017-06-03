@@ -9,7 +9,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Fields
 
         private readonly TimedEventsManager _timedEventsManager;
-        private readonly List<Note> _notes = new List<Note>();
 
         private bool _disposed;
 
@@ -23,74 +22,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentNullException(nameof(eventsCollection));
 
             _timedEventsManager = eventsCollection.ManageTimedEvents(sameTimeEventsComparison);
-            _notes.AddRange(CreateNotes(_timedEventsManager.Events));
+
+            Notes = new NotesCollection(CreateNotes(_timedEventsManager.Events));
+            Notes.CollectionChanged += OnNotesCollectionChanged;
         }
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<Note> Notes => _notes.OrderBy(n => n.Time);
+        public NotesCollection Notes { get; }
 
         #endregion
 
         #region Methods
 
-        public void AddNotes(IEnumerable<Note> notes)
-        {
-            if (notes == null)
-                throw new ArgumentNullException(nameof(notes));
-
-            _timedEventsManager.AddEvents(GetNotesTimedEvents(notes));
-            _notes.AddRange(notes);
-        }
-
-        public void AddNotes(params Note[] notes)
-        {
-            AddNotes((IEnumerable<Note>)notes);
-        }
-
-        public void RemoveNotes(IEnumerable<Note> notes)
-        {
-            if (notes == null)
-                throw new ArgumentNullException(nameof(notes));
-
-            _timedEventsManager.RemoveEvents(GetNotesTimedEvents(notes));
-
-            foreach (var n in notes.ToList())
-            {
-                _notes.Remove(n);
-            }
-        }
-
-        public void RemoveNotes(params Note[] notes)
-        {
-            RemoveNotes((IEnumerable<Note>)notes);
-        }
-
-        public void RemoveAllNotes()
-        {
-            _timedEventsManager.RemoveEvents(GetNotesTimedEvents(_notes));
-            _notes.Clear();
-        }
-
-        public void RemoveAllNotes(Predicate<Note> predicate)
-        {
-            _timedEventsManager.RemoveEvents(GetNotesTimedEvents(_notes.Where(n => predicate(n))));
-            _notes.RemoveAll(predicate);
-        }
-
-        public IEnumerable<Note> GetNotesAtTime(long time, bool exactMatch = true)
-        {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            return _notes.Where(n => IsNoteAtTime(n, time, exactMatch));
-        }
-
         public void SaveChanges()
         {
-            foreach (var note in _notes)
+            foreach (var note in Notes)
             {
                 var noteOnEvent = (NoteOnEvent)note.TimedNoteOnEvent.Event;
                 var noteOffEvent = (NoteOffEvent)note.TimedNoteOffEvent.Event;
@@ -102,6 +51,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             _timedEventsManager.SaveChanges();
+        }
+
+        private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)
+        {
+            var addedNotes = args.AddedNotes;
+            if (addedNotes != null)
+                _timedEventsManager.AddEvents(GetNotesTimedEvents(addedNotes));
+
+            var removedNotes = args.RemovedNotes;
+            if (removedNotes != null)
+                _timedEventsManager.RemoveEvents(GetNotesTimedEvents(removedNotes));
         }
 
         private static IEnumerable<Note> CreateNotes(IEnumerable<TimedEvent> events)
@@ -144,18 +104,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                    noteOnEvent.NoteNumber == noteNumber;
         }
 
-        private static bool IsNoteAtTime(Note note, long time, bool exactMatch)
-        {
-            var noteTime = note.Time;
-            if (noteTime == time)
-                return true;
-
-            if (!exactMatch)
-                return false;
-
-            return time > noteTime && time < noteTime + note.Length;
-        }
-
         private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)
         {
             if (notes == null)
@@ -179,7 +127,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return;
 
             if (disposing)
+            {
+                Notes.CollectionChanged -= OnNotesCollectionChanged;
                 SaveChanges();
+            }
 
             _disposed = true;
         }

@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                     chord = new Chord();
                 }
 
-                chord.AddNote(note);
+                chord.Notes.Add(note);
 
                 lastNoteEndTime = noteTime + note.Length;
             }

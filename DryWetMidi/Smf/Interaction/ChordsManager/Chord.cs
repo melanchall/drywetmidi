@@ -6,15 +6,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class Chord
     {
-        #region Fields
+        #region Events
 
-        private readonly List<Note> _notes = new List<Note>();
+        public event NotesCollectionChangedEventHandler NotesCollectionChanged;
 
         #endregion
 
         #region Constructor
 
         public Chord()
+            : this(Enumerable.Empty<Note>())
         {
         }
 
@@ -25,7 +26,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public Chord(IEnumerable<Note> notes, long time)
         {
-            _notes.AddRange(notes);
+            Notes = new NotesCollection(notes);
+            Notes.CollectionChanged += OnNotesCollectionChanged;
+
             Time = time;
         }
 
@@ -33,7 +36,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public IEnumerable<Note> Notes => _notes.OrderBy(n => n.Time);
+        public NotesCollection Notes { get; }
 
         public long Time
         {
@@ -43,7 +46,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), value, "Time is negative.");
 
-                // TODO
+                var currentTime = Time;
+
+                foreach (var note in Notes)
+                {
+                    var offset = note.Time - currentTime;
+                    note.Time = value + offset;
+                }
             }
         }
 
@@ -51,12 +60,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        public void AddNote(Note note)
+        private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)
         {
-            if (note == null)
-                throw new ArgumentNullException(nameof(note));
-
-            _notes.Add(note);
+            NotesCollectionChanged?.Invoke(collection, args);
         }
 
         #endregion

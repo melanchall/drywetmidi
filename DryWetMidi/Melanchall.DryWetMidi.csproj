@@ -116,6 +116,8 @@
     <Compile Include="Smf\Events\Writers\SysExEventWriter.cs" />
     <Compile Include="Smf\Interaction\ChordsManager\Chord.cs" />
     <Compile Include="Smf\Interaction\ChordsManager\ChordsManager.cs" />
+    <Compile Include="Smf\Interaction\NotesManager\NotesCollection.cs" />
+    <Compile Include="Smf\Interaction\NotesManager\NotesCollectionChangedEventArgs.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\NotesManager\Note.cs" />
