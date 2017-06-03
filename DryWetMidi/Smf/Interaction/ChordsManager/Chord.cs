@@ -56,6 +56,31 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        public long Length
+        {
+            get
+            {
+                if (!Notes.Any())
+                    return 0;
+
+                var startTime = long.MaxValue;
+                var endTime = long.MinValue;
+
+                foreach (var note in Notes)
+                {
+                    var noteStartTime = note.Time;
+                    if (noteStartTime < startTime)
+                        startTime = noteStartTime;
+
+                    var noteEndTime = noteStartTime + note.Length;
+                    if (noteEndTime > endTime)
+                        endTime = noteEndTime;
+                }
+
+                return endTime - startTime;
+            }
+        }
+
         #endregion
 
         #region Methods

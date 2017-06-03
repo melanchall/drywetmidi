@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                     if (noteOnTimedEvent == null)
                         continue;
 
-                    noteOnTimedEvents.RemoveAll(e => IsAppropriateNoteOnTimedEvent(e, channel, noteNumber));
+                    noteOnTimedEvents.Remove(noteOnTimedEvent);
                     yield return new Note(noteOnTimedEvent, timedEvent);
                 }
             }
