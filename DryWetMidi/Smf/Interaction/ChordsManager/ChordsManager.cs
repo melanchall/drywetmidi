@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -9,7 +8,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Fields
 
         private readonly NotesManager _notesManager;
-        private readonly List<Chord> _chords = new List<Chord>();
         private readonly long _chordNotesTolerance;
 
         private bool _disposed;
@@ -25,14 +23,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             _chordNotesTolerance = chordNotesTolerance;
             _notesManager = eventsCollection.ManageNotes(sameTimeEventsComparison);
-            _chords.AddRange(CreateChords(_notesManager.Notes, _chordNotesTolerance));
+
+            Chords = new ChordsCollection(CreateChords(_notesManager.Notes, _chordNotesTolerance));
+            Chords.CollectionChanged += OnChordsCollectionChanged;
         }
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<Chord> Chords => _chords.OrderBy(c => c.Time);
+        public ChordsCollection Chords { get; }
 
         #endregion
 
@@ -41,6 +41,72 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public void SaveChanges()
         {
             _notesManager.SaveChanges();
+        }
+
+        private void OnChordsCollectionChanged(ChordsCollection collection, ChordsCollectionChangedEventArgs args)
+        {
+            var addedChords = args.AddedChords;
+            if (addedChords != null)
+            {
+                foreach (var chord in addedChords)
+                {
+                    AddNotes(chord.Notes);
+                    SubscribeToChordEvents(chord);
+                }
+            }
+
+            var removedChords = args.RemovedChords;
+            if (removedChords != null)
+            {
+                foreach (var chord in removedChords)
+                {
+                    RemoveNotes(chord.Notes);
+                    UnsubscribeFromChordEvents(chord);
+                }
+            }
+        }
+
+        private void OnChordNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)
+        {
+            var addedNotes = args.AddedNotes;
+            if (addedNotes != null)
+                AddNotes(addedNotes);
+
+            var removedNotes = args.RemovedNotes;
+            if (removedNotes != null)
+                RemoveNotes(removedNotes);
+        }
+
+        private void SubscribeToChordEvents(Chord chord)
+        {
+            if (chord == null)
+                throw new ArgumentNullException(nameof(chord));
+
+            chord.NotesCollectionChanged += OnChordNotesCollectionChanged;
+        }
+
+        private void UnsubscribeFromChordEvents(Chord chord)
+        {
+            if (chord == null)
+                throw new ArgumentNullException(nameof(chord));
+
+            chord.NotesCollectionChanged -= OnChordNotesCollectionChanged;
+        }
+
+        private void AddNotes(IEnumerable<Note> notes)
+        {
+            if (notes == null)
+                throw new ArgumentNullException(nameof(notes));
+
+            _notesManager.Notes.Add(notes);
+        }
+
+        private void RemoveNotes(IEnumerable<Note> notes)
+        {
+            if (notes == null)
+                throw new ArgumentNullException(nameof(notes));
+
+            _notesManager.Notes.Remove(notes);
         }
 
         private static IEnumerable<Chord> CreateChords(IEnumerable<Note> notes, long chordNotesTolerance)
@@ -83,7 +149,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return;
 
             if (disposing)
+            {
+                foreach (var chord in Chords)
+                {
+                    UnsubscribeFromChordEvents(chord);
+                }
+
+                Chords.CollectionChanged -= OnChordsCollectionChanged;
+
                 SaveChanges();
+            }
 
             _disposed = true;
         }
