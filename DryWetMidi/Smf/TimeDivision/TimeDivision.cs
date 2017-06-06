@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// (which represent a byte stored positive) is the resolution within a frame: typical values may be 4
     /// (MIDI Time Code resolution), 8, 10, 80 (bit resolution), or 100.
     /// </remarks>
-    public abstract class TimeDivision : ICloneable
+    public abstract class TimeDivision
     {
         #region Methods
 
@@ -29,20 +29,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Clones time division by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the time division.</returns>
-        protected abstract TimeDivision CloneTimeDivision();
-
-        #endregion
-
-        #region ICloneable
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>A new object that is a copy of this instance.</returns>
-        public object Clone()
-        {
-            return CloneTimeDivision();
-        }
+        public abstract TimeDivision Clone();
 
         #endregion
     }

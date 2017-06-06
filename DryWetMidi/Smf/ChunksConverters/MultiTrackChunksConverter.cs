@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region IChunksConverter
 
-        public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks, bool cloneEvents = true)
+        public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
         {
             if (chunks == null)
                 throw new ArgumentNullException(nameof(chunks));
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Smf
                                                    .ToArray();
             FourBitNumber? channel = null;
 
-            foreach (var midiEvent in trackChunks.First().Events.Select(m => (MidiEvent)m.Clone()))
+            foreach (var midiEvent in trackChunks.First().Events.Select(m => m.Clone()))
             {
                 Array.ForEach(trackChunksDescriptors,
                               d => d.DeltaTime += midiEvent.DeltaTime);
@@ -63,8 +63,7 @@ namespace Melanchall.DryWetMidi.Smf
                 var channelEvent = midiEvent as ChannelEvent;
                 if (channelEvent != null)
                 {
-                    trackChunksDescriptors[channelEvent.Channel + 1].AddEvent(cloneEvents ? (MidiEvent)midiEvent.Clone()
-                                                                                          : midiEvent);
+                    trackChunksDescriptors[channelEvent.Channel + 1].AddEvent(midiEvent.Clone());
                     channel = null;
                     continue;
                 }

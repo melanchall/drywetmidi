@@ -184,6 +184,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="reader">Reader to read an event.</param>
         /// <param name="settings">Settings according to which an event must be read.</param>
+        /// <param name="channelEventStatusByte">Current channel event status byte used as running status.</param>
         /// <returns>Instance of the <see cref="MidiEvent"/> representing a MIDI event.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream
         /// was disposed.</exception>

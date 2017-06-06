@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Smf
         private static IEnumerable<TrackChunk> ConvertTrackChunks(IEnumerable<TrackChunk> trackChunks, MidiFileFormat format)
         {
             var chunksConverter = ChunksConverterFactory.GetConverter(format);
-            return chunksConverter.Convert(trackChunks, false)
+            return chunksConverter.Convert(trackChunks)
                                   .OfType<TrackChunk>();
         } 
     

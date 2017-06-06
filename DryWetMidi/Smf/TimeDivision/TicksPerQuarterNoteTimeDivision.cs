@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Clones time division by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the time division.</returns>
-        protected override TimeDivision CloneTimeDivision()
+        public override TimeDivision Clone()
         {
             return new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote);
         }

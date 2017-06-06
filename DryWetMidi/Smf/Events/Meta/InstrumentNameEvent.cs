@@ -70,7 +70,7 @@
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        protected override MidiEvent CloneEvent()
+        public override MidiEvent Clone()
         {
             return new InstrumentNameEvent(Text);
         }

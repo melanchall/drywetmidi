@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// <summary>
     /// Represents a MIDI file event stored in a track chunk.
     /// </summary>
-    public abstract class MidiEvent : ICloneable
+    public abstract class MidiEvent
     {
         #region Constants
 
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        protected abstract MidiEvent CloneEvent();
+        public abstract MidiEvent Clone();
 
         /// <summary>
         /// Determines whether the specified event is equal to the current one.
@@ -104,21 +104,6 @@ namespace Melanchall.DryWetMidi.Smf
                 return true;
 
             return !respectDeltaTime || DeltaTime == midiEvent.DeltaTime;
-        }
-
-        #endregion
-
-        #region ICloneable
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>A new object that is a copy of this instance.</returns>
-        public object Clone()
-        {
-            var midiEvent = CloneEvent();
-            midiEvent.DeltaTime = DeltaTime;
-            return midiEvent;
         }
 
         #endregion
