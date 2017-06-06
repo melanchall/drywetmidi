@@ -76,7 +76,18 @@ namespace Melanchall.DryWetMidi.Smf
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        public abstract MidiEvent Clone();
+        protected abstract MidiEvent CloneEvent();
+
+        /// <summary>
+        /// Clones event by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the event.</returns>
+        public MidiEvent Clone()
+        {
+            var midiEvent = CloneEvent();
+            midiEvent.DeltaTime = DeltaTime;
+            return midiEvent;
+        }
 
         /// <summary>
         /// Determines whether the specified event is equal to the current one.

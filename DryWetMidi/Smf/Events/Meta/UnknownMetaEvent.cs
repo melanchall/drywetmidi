@@ -20,8 +20,20 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="statusByte">Status byte of the meta event.</param>
         internal UnknownMetaEvent(byte statusByte)
+            : this(statusByte, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnknownMetaEvent"/> with the
+        /// specified status byte and data.
+        /// </summary>
+        /// <param name="statusByte">Status byte of the meta event.</param>
+        /// <param name="data">Data of an unknown meta event.</param>
+        private UnknownMetaEvent(byte statusByte, byte[] data)
         {
             StatusByte = statusByte;
+            Data = data;
         }
 
         #endregion
@@ -119,9 +131,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        public override MidiEvent Clone()
+        protected override MidiEvent CloneEvent()
         {
-            return new UnknownMetaEvent(StatusByte);
+            return new UnknownMetaEvent(StatusByte, Data?.Clone() as byte[]);
         }
 
         /// <summary>

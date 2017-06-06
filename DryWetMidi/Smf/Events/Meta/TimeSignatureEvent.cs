@@ -199,7 +199,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        public override MidiEvent Clone()
+        protected override MidiEvent CloneEvent()
         {
             return new TimeSignatureEvent(Numerator, Denominator, ClocksPerClick, NumberOf32ndNotesPerBeat);
         }

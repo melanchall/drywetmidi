@@ -114,7 +114,7 @@
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        public override MidiEvent Clone()
+        protected override MidiEvent CloneEvent()
         {
             return new SequenceNumberEvent(Number);
         }

@@ -148,7 +148,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        public sealed override MidiEvent Clone()
+        protected sealed override MidiEvent CloneEvent()
         {
             var eventType = GetType();
             var channelEvent = (ChannelEvent)Activator.CreateInstance(eventType);
