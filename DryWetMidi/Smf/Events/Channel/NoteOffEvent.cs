@@ -6,23 +6,15 @@
     /// <remarks>
     /// This message is sent when a note is released (ended).
     /// </remarks>
-    public sealed class NoteOffEvent : ChannelEvent
+    public sealed class NoteOffEvent : NoteEvent
     {
-        #region Constants
-
-        private const int ParametersCount = 2;
-        private const int NoteNumberParameterIndex = 0;
-        private const int VelocityParameterIndex = 1;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoteOffEvent"/>.
         /// </summary>
         public NoteOffEvent()
-            : base(ParametersCount)
+            : base()
         {
         }
 
@@ -33,32 +25,8 @@
         /// <param name="noteNumber">Note number.</param>
         /// <param name="velocity">Velocity.</param>
         public NoteOffEvent(SevenBitNumber noteNumber, SevenBitNumber velocity)
-            : this()
+            : base(noteNumber, velocity)
         {
-            NoteNumber = noteNumber;
-            Velocity = velocity;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets note number.
-        /// </summary>
-        public SevenBitNumber NoteNumber
-        {
-            get { return this[NoteNumberParameterIndex]; }
-            set { this[NoteNumberParameterIndex] = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets velocity.
-        /// </summary>
-        public SevenBitNumber Velocity
-        {
-            get { return this[VelocityParameterIndex]; }
-            set { this[VelocityParameterIndex] = value; }
         }
 
         #endregion

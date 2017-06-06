@@ -54,6 +54,7 @@
     <Compile Include="Smf\DataTypes\DataTypesUtilities.cs" />
     <Compile Include="Smf\DataTypes\FourBitNumber.cs" />
     <Compile Include="Smf\DataTypes\SevenBitNumber.cs" />
+    <Compile Include="Smf\Events\Channel\NoteEvent.cs" />
     <Compile Include="Smf\Events\Meta\BaseTextEvent.cs" />
     <Compile Include="Smf\Exceptions\InvalidChannelEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\InvalidMetaEventParameterValueException.cs" />

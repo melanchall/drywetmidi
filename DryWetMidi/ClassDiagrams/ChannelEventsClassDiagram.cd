@@ -13,7 +13,7 @@
       <Method Name="Write" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAgAAAEAACAgAAAAAAiAAAAAIAAAAAAAAEAAAA=</HashCode>
+      <HashCode>AAAAAAAgAAAEAACAiAAAAAAiAAAAAIAAAAAAAAEAAAA=</HashCode>
       <FileName>Smf\Events\Base\ChannelEvent.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -21,18 +21,13 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.ChannelAftertouchEvent" Collapsed="true">
-    <Position X="5" Y="2" Width="2" />
-    <Members>
-      <Field Name="AftertouchValueParameterIndex" Hidden="true" />
-      <Field Name="ParametersCount" Hidden="true" />
-      <Method Name="ToString" Hidden="true" />
-    </Members>
+    <Position X="4.75" Y="4.25" Width="2" />
     <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true">
       <Path>
         <Point X="3.75" Y="2.312" />
         <Point X="4.125" Y="2.312" />
-        <Point X="4.125" Y="2.502" />
-        <Point X="5" Y="2.502" />
+        <Point X="4.125" Y="4.596" />
+        <Point X="4.75" Y="4.596" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -41,13 +36,13 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.NoteAftertouchEvent" Collapsed="true">
-    <Position X="5" Y="4" Width="2" />
+    <Position X="4.75" Y="6.25" Width="2" />
     <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="3.75" Y="2.312" />
         <Point X="4.125" Y="2.312" />
-        <Point X="4.125" Y="4.375" />
-        <Point X="5" Y="4.375" />
+        <Point X="4.125" Y="6.625" />
+        <Point X="4.75" Y="6.625" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -56,58 +51,56 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.NoteOnEvent" Collapsed="true">
-    <Position X="5" Y="5" Width="2" />
-    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
+    <Position X="7.25" Y="2" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.NoteEvent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="3.75" Y="2.312" />
-        <Point X="4.125" Y="2.312" />
-        <Point X="4.125" Y="5.375" />
-        <Point X="5" Y="5.375" />
+        <Point X="6.25" Y="2.312" />
+        <Point X="7.25" Y="2.312" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAQAAIAAAAAAAEAAAAACAAAAAAAAAAAAAAAAAEAgA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Smf\Events\Channel\NoteOnEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.NoteOffEvent" Collapsed="true">
-    <Position X="5" Y="6" Width="2" />
-    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
+    <Position X="7.25" Y="3" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.NoteEvent" FixedFromPoint="true">
       <Path>
-        <Point X="3.75" Y="2.312" />
-        <Point X="4.125" Y="2.312" />
-        <Point X="4.125" Y="6.312" />
-        <Point X="5" Y="6.312" />
+        <Point X="6.25" Y="2.312" />
+        <Point X="6.625" Y="2.312" />
+        <Point X="6.625" Y="3.346" />
+        <Point X="7.25" Y="3.346" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAQAAIAAAAAAAEAAAAACAAAAAAAAAAAAAAAAAEAgA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Smf\Events\Channel\NoteOffEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.PitchBendEvent" Collapsed="true">
-    <Position X="5" Y="7" Width="2" />
+    <Position X="4.75" Y="7.25" Width="2" />
     <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="3.75" Y="2.312" />
         <Point X="4.125" Y="2.312" />
-        <Point X="4.125" Y="7.312" />
-        <Point X="5" Y="7.312" />
+        <Point X="4.125" Y="7.562" />
+        <Point X="4.75" Y="7.562" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AACAAAAIAABAAAAEAAAAABBAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAIAABAAAAEAAAAAABAAAAAIAAAAAAAAAAAAAA=</HashCode>
       <FileName>Smf\Events\Channel\PitchBendEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.ProgramChangeEvent" Collapsed="true">
-    <Position X="5" Y="8" Width="2" />
+    <Position X="4.75" Y="8.25" Width="2" />
     <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="3.75" Y="2.312" />
         <Point X="4.125" Y="2.312" />
-        <Point X="4.125" Y="8.312" />
-        <Point X="5" Y="8.312" />
+        <Point X="4.125" Y="8.562" />
+        <Point X="4.75" Y="8.562" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -116,18 +109,31 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.ControlChangeEvent" Collapsed="true">
-    <Position X="5" Y="3" Width="2" />
+    <Position X="4.75" Y="5.25" Width="2" />
     <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="3.75" Y="2.312" />
         <Point X="4.125" Y="2.312" />
-        <Point X="4.125" Y="3.312" />
-        <Point X="5" Y="3.312" />
+        <Point X="4.125" Y="5.562" />
+        <Point X="4.75" Y="5.562" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAAACAIAAAAAAAEAAAAAIAAAAAAgAAAAAAAAACAAAA=</HashCode>
       <FileName>Smf\Events\Channel\ControlChangeEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.NoteEvent" Collapsed="true">
+    <Position X="4.75" Y="2" Width="1.5" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.75" Y="2.312" />
+        <Point X="4.75" Y="2.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAIAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAEAgA=</HashCode>
+      <FileName>Smf\Events\Channel\NoteEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="Melanchall.DryWetMidi.Smf.FourBitNumber" Collapsed="true">
