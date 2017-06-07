@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents wrapper for <see cref="MidiEvent"/> that provides absolute time of an event.
     /// </summary>
-    public sealed class TimedEvent
+    public sealed class TimedEvent : ITimedObject
     {
         #region Fields
 

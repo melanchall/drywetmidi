@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class Chord
+    public sealed class Chord : ITimedObject, ILengthedObject
     {
         #region Events
 
@@ -78,6 +78,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 }
 
                 return endTime - startTime;
+            }
+            set
+            {
+
             }
         }
 

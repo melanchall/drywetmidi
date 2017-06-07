@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents a musical note.
     /// </summary>
-    public sealed class Note
+    public sealed class Note : ITimedObject, ILengthedObject
     {
         #region Constructor
 
