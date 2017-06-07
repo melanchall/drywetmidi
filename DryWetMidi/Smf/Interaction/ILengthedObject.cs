@@ -2,6 +2,6 @@
 {
     public interface ILengthedObject
     {
-        long Length { get; set; }
+        long Length { get; }
     }
 }

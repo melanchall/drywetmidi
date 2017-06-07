@@ -2,6 +2,6 @@
 {
     public interface ITimedObject
     {
-        long Time { get; set; }
+        long Time { get; }
     }
 }

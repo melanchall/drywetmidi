@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public static class LengthedObjectUtilities
     {
-        public static IEnumerable<T> GetAtTime<T>(this IEnumerable<T> objects, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
+        public static IEnumerable<T> AtTime<T>(this IEnumerable<T> objects, long time, LengthedObjectPart matchBy)
             where T : ILengthedObject, ITimedObject
         {
             if (time < 0)

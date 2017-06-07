@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
 
-            return trackChunk.ManageNotes().Notes.GetAtTime(time, matchBy);
+            return trackChunk.ManageNotes().Notes.AtTime(time, matchBy);
         }
 
         public static IEnumerable<Note> GetNotesAtTime(this IEnumerable<TrackChunk> trackChunks, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
