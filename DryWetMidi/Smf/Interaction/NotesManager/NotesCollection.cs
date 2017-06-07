@@ -88,26 +88,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             OnNotesRemoved(removedNotes);
         }
 
-        public IEnumerable<Note> GetAtTime(long time, bool exactMatch = true)
-        {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            return _notes.Where(n => IsNoteAtTime(n, time, exactMatch));
-        }
-
-        private static bool IsNoteAtTime(Note note, long time, bool exactMatch)
-        {
-            var noteTime = note.Time;
-            if (noteTime == time)
-                return true;
-
-            if (!exactMatch)
-                return false;
-
-            return time > noteTime && time < noteTime + note.Length;
-        }
-
         private void OnNotesAdded(IEnumerable<Note> addedNotes)
         {
             OnCollectionChanged(addedNotes, null);

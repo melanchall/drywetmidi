@@ -121,6 +121,8 @@
     <Compile Include="Smf\Interaction\ChordsManager\ChordsManager.cs" />
     <Compile Include="Smf\Interaction\ILengthedObject.cs" />
     <Compile Include="Smf\Interaction\ITimedObject.cs" />
+    <Compile Include="Smf\Interaction\LengthedObjectPart.cs" />
+    <Compile Include="Smf\Interaction\LengthedObjectUtilities.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesCollection.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesCollectionChangedEventArgs.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesManagingUtilities.cs" />
