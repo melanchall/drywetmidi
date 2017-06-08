@@ -37,6 +37,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\NumberUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Smf\ChunksConverters\ChunksConverterFactory.cs" />
     <Compile Include="Smf\ChunksConverters\IChunksConverter.cs" />
@@ -126,6 +127,12 @@
     <Compile Include="Smf\Interaction\NotesManager\NotesCollection.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesCollectionChangedEventArgs.cs" />
     <Compile Include="Smf\Interaction\NotesManager\NotesManagingUtilities.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\Tempo.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\TempoMap.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\TempoMapManager.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\TimeSignature.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\ValueChange.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\ValuesLine.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsCollection.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\NotesManager\Note.cs" />

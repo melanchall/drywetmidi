@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -51,6 +52,17 @@ namespace Melanchall.DryWetMidi.Smf
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSignatureEvent"/> with the
+        /// specified numerator and denominator.
+        /// </summary>
+        /// <param name="numerator">Numerator of the time signature.</param>
+        /// <param name="denominator">Denominator of the time signature.</param>
+        public TimeSignatureEvent(byte numerator, byte denominator)
+            : this(numerator, denominator, DefaultClocksPerClick, Default32ndNotesPerBeat)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSignatureEvent"/> with the
         /// specified numerator, denominator, number of MIDI clocks per metronome click
         /// and number of 32nd notes per beat.
         /// </summary>
@@ -86,7 +98,7 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _denominator; }
             set
             {
-                if (!IsPowerOfTwo(value))
+                if (!NumberUtilities.IsPowerOfTwo(value))
                     throw new ArgumentOutOfRangeException(nameof(value),
                                                           value,
                                                           "Denominator is zero or is not a power of two.");
@@ -139,16 +151,6 @@ namespace Melanchall.DryWetMidi.Smf
                    Denominator == timeSignatureEvent.Denominator &&
                    ClocksPerClick == timeSignatureEvent.ClocksPerClick &&
                    NumberOf32ndNotesPerBeat == timeSignatureEvent.NumberOf32ndNotesPerBeat;
-        }
-
-        /// <summary>
-        /// Ckecks if a number is a power of 2.
-        /// </summary>
-        /// <param name="value">Value to check.</param>
-        /// <returns>true if the number is a power of 2, false - otherwise.</returns>
-        private static bool IsPowerOfTwo(byte value)
-        {
-            return value != 0 && (value & (value - 1)) == 0;
         }
 
         #endregion
