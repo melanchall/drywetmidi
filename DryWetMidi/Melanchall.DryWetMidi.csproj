@@ -140,6 +140,8 @@
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEvent.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsComparer.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManager.cs" />
+    <Compile Include="Smf\Interaction\Time\MetricTime.cs" />
+    <Compile Include="Smf\Interaction\Time\MetricTimeConverter.cs" />
     <Compile Include="Smf\MidiFile.cs" />
     <Compile Include="Smf\MidiFileFormat.cs" />
     <Compile Include="Smf\MidiReader.cs" />
@@ -179,6 +181,7 @@
     <None Include="ClassDiagrams\MetaEventsClassDiagram.cd" />
     <None Include="ClassDiagrams\SysExEventsClassDiagram.cd" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
