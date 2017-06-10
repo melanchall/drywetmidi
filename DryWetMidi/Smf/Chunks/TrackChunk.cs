@@ -316,7 +316,7 @@ namespace Melanchall.DryWetMidi.Smf
                 var setTempoEvent = midiEvent as SetTempoEvent;
                 if (setTempoEvent != null)
                 {
-                    if (setTempoEvent.MicrosecondsPerBeat == SetTempoEvent.DefaultTempo)
+                    if (setTempoEvent.MicrosecondsPerQuarterNote == SetTempoEvent.DefaultTempo)
                         return true;
 
                     skip = false;

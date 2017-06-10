@@ -7,6 +7,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Fields
 
         private static readonly ITimeConverter _metricTimeConverter = new MetricTimeConverter();
+        private static readonly ITimeConverter _musicalTimeConverter = new MusicalTimeConverter();
 
         #endregion
 
@@ -15,10 +16,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         internal static ITimeConverter GetConverter<TTime>()
             where TTime : ITime
         {
-            if (typeof(TTime) == typeof(MetricTime))
-                return _metricTimeConverter;
-
-            throw new NotImplementedException($"Converter for {typeof(TTime)} is not implemented.");
+            return GetConverter(typeof(TTime));
         }
 
         internal static ITimeConverter GetConverter(Type timeType)
@@ -31,6 +29,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             if (timeType == typeof(MetricTime))
                 return _metricTimeConverter;
+            else if (timeType == typeof(MusicalTime))
+                return _musicalTimeConverter;
 
             throw new NotImplementedException($"Converter for {timeType} is not implemented.");
         }

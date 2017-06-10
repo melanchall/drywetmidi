@@ -37,13 +37,13 @@ namespace Melanchall.DryWetMidi.Smf
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SetTempoEvent"/> with the
-        /// specified number of microseconds per beat.
+        /// specified number of microseconds per quarter note.
         /// </summary>
-        /// <param name="microsecondsPerBeat">Number of microseconds per quarter note.</param>
-        public SetTempoEvent(long microsecondsPerBeat)
+        /// <param name="microsecondsPerQuarterNote">Number of microseconds per quarter note.</param>
+        public SetTempoEvent(long microsecondsPerQuarterNote)
             : this()
         {
-            MicrosecondsPerBeat = microsecondsPerBeat;
+            MicrosecondsPerQuarterNote = microsecondsPerQuarterNote;
         }
 
         #endregion
@@ -53,13 +53,15 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Gets or sets number of microseconds per quarter note.
         /// </summary>
-        public long MicrosecondsPerBeat
+        public long MicrosecondsPerQuarterNote
         {
             get { return _microsecondsPerBeat; }
             set
             {
                 if (value < 0)
-                    throw new ArgumentException("Value of microseconds per beat is negative.", nameof(value));
+                    throw new ArgumentOutOfRangeException("Value of microseconds per quarter note is negative.",
+                                                          value,
+                                                          nameof(value));
 
                 _microsecondsPerBeat = value;
             }
@@ -95,7 +97,7 @@ namespace Melanchall.DryWetMidi.Smf
                 return true;
 
             return base.Equals(setTempoEvent, respectDeltaTime) &&
-                   MicrosecondsPerBeat == setTempoEvent.MicrosecondsPerBeat;
+                   MicrosecondsPerQuarterNote == setTempoEvent.MicrosecondsPerQuarterNote;
         }
 
         #endregion
@@ -110,7 +112,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="size">Size of the event's content.</param>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            MicrosecondsPerBeat = reader.Read3ByteDword();
+            MicrosecondsPerQuarterNote = reader.Read3ByteDword();
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
-            writer.Write3ByteDword((uint)MicrosecondsPerBeat);
+            writer.Write3ByteDword((uint)MicrosecondsPerQuarterNote);
         }
 
         /// <summary>
@@ -138,7 +140,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new SetTempoEvent(MicrosecondsPerBeat);
+            return new SetTempoEvent(MicrosecondsPerQuarterNote);
         }
 
         /// <summary>
@@ -147,7 +149,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Set Tempo ({MicrosecondsPerBeat})";
+            return $"Set Tempo ({MicrosecondsPerQuarterNote})";
         }
 
         /// <summary>
@@ -166,7 +168,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ MicrosecondsPerBeat.GetHashCode();
+            return base.GetHashCode() ^ MicrosecondsPerQuarterNote.GetHashCode();
         }
 
         #endregion

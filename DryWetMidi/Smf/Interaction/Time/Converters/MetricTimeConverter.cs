@@ -117,12 +117,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long GetMicroseconds(long time, Tempo tempo, short ticksPerQuarterNote)
         {
+            if (time == 0)
+                return 0;
+
             return time * GetMicrosecondsInTick(tempo, ticksPerQuarterNote);
         }
 
         private static long GetMicrosecondsInTick(Tempo tempo, short ticksPerQuarterNote)
         {
-            return tempo.MicrosecondsPerBeat / ticksPerQuarterNote;
+            return tempo.MicrosecondsPerQuarterNote / ticksPerQuarterNote;
         }
 
         #endregion

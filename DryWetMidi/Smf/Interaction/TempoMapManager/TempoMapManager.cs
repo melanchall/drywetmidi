@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             {
                 var setTempoEvent = timedEvent.Event as SetTempoEvent;
                 TempoMap.TempoLine.SetValue(timedEvent.Time,
-                                        new Tempo(setTempoEvent.MicrosecondsPerBeat));
+                                        new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
             }
         }
 
@@ -126,7 +126,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (tempo == null)
                 throw new ArgumentNullException(nameof(tempo));
 
-            return new TimedEvent(new SetTempoEvent(tempo.Value.MicrosecondsPerBeat),
+            return new TimedEvent(new SetTempoEvent(tempo.Value.MicrosecondsPerQuarterNote),
                                   tempo.Time);
         }
 

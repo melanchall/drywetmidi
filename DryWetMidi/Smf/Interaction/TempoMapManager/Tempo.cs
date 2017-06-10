@@ -19,36 +19,36 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
-        public Tempo(long microsecondsPerBeat)
+        public Tempo(long microsecondsPerQuarterNote)
         {
-            if (microsecondsPerBeat <= 0)
-                throw new ArgumentOutOfRangeException("Number of microseconds per beat is zero or negative.",
-                                                      microsecondsPerBeat,
-                                                      nameof(microsecondsPerBeat));
+            if (microsecondsPerQuarterNote <= 0)
+                throw new ArgumentOutOfRangeException("Number of microseconds per quarter note is zero or negative.",
+                                                      microsecondsPerQuarterNote,
+                                                      nameof(microsecondsPerQuarterNote));
 
-            MicrosecondsPerBeat = microsecondsPerBeat;
+            MicrosecondsPerQuarterNote = microsecondsPerQuarterNote;
         }
 
         #endregion
 
         #region Properties
 
-        public long MicrosecondsPerBeat { get; }
+        public long MicrosecondsPerQuarterNote { get; }
 
-        public long BeatsPerMinute => MicrosecondsInMinute / MicrosecondsPerBeat;
+        public long BeatsPerMinute => MicrosecondsInMinute / MicrosecondsPerQuarterNote;
 
         #endregion
 
         #region Methods
 
-        public static Tempo FromMillisecondsPerBeat(long millisecondsPerBeat)
+        public static Tempo FromMillisecondsPerQuarterNote(long millisecondsPerQuarterNote)
         {
-            if (millisecondsPerBeat <= 0)
-                throw new ArgumentOutOfRangeException("Number of milliseconds per beat is zero or negative.",
-                                                      millisecondsPerBeat,
-                                                      nameof(millisecondsPerBeat));
+            if (millisecondsPerQuarterNote <= 0)
+                throw new ArgumentOutOfRangeException("Number of milliseconds per quarter note is zero or negative.",
+                                                      millisecondsPerQuarterNote,
+                                                      nameof(millisecondsPerQuarterNote));
 
-            return new Tempo(millisecondsPerBeat * MicrosecondsInMillisecond);
+            return new Tempo(millisecondsPerQuarterNote * MicrosecondsInMillisecond);
         }
 
         public static Tempo FromBeatsPerMinute(long beatsPerMinute)
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public override string ToString()
         {
-            return $"{MicrosecondsPerBeat} μs/beat";
+            return $"{MicrosecondsPerQuarterNote} μs/qnote";
         }
 
         public override bool Equals(object obj)
@@ -79,12 +79,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(null, tempo))
                 return false;
 
-            return MicrosecondsPerBeat == tempo.MicrosecondsPerBeat;
+            return MicrosecondsPerQuarterNote == tempo.MicrosecondsPerQuarterNote;
         }
 
         public override int GetHashCode()
         {
-            return MicrosecondsPerBeat.GetHashCode();
+            return MicrosecondsPerQuarterNote.GetHashCode();
         }
 
         #endregion
