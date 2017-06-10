@@ -130,9 +130,10 @@
     <Compile Include="Smf\Interaction\TempoMapManager\Tempo.cs" />
     <Compile Include="Smf\Interaction\TempoMapManager\TempoMap.cs" />
     <Compile Include="Smf\Interaction\TempoMapManager\TempoMapManager.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\TempoMapManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\TempoMapManager\TimeSignature.cs" />
     <Compile Include="Smf\Interaction\TempoMapManager\ValueChange.cs" />
-    <Compile Include="Smf\Interaction\TempoMapManager\ValuesLine.cs" />
+    <Compile Include="Smf\Interaction\TempoMapManager\ValueLine.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsCollection.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\NotesManager\Note.cs" />
@@ -140,8 +141,12 @@
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEvent.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsComparer.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManager.cs" />
+    <Compile Include="Smf\Interaction\Time\Converters\ITimeConverter.cs" />
+    <Compile Include="Smf\Interaction\Time\Converters\TimeConverter.cs" />
+    <Compile Include="Smf\Interaction\Time\Converters\TimeConverterFactory.cs" />
+    <Compile Include="Smf\Interaction\Time\ITime.cs" />
     <Compile Include="Smf\Interaction\Time\MetricTime.cs" />
-    <Compile Include="Smf\Interaction\Time\MetricTimeConverter.cs" />
+    <Compile Include="Smf\Interaction\Time\Converters\MetricTimeConverter.cs" />
     <Compile Include="Smf\MidiFile.cs" />
     <Compile Include="Smf\MidiFileFormat.cs" />
     <Compile Include="Smf\MidiReader.cs" />

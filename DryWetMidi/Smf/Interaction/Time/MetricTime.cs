@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class MetricTime
+    public sealed class MetricTime : ITime
     {
         #region Constants
 

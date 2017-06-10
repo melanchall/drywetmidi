@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class MetricTimeConverter
+    internal sealed class MetricTimeConverter : ITimeConverter
     {
-        #region Methods
+        #region ITimeConverter
 
-        public MetricTime ConvertTo(long time, TempoMap tempoMap)
+        public ITime ConvertTo(long time, TempoMap tempoMap)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
         }
 
-        public long ConvertFrom(MetricTime time, TempoMap tempoMap)
+        public long ConvertFrom(ITime time, TempoMap tempoMap)
         {
             if (time == null)
                 throw new ArgumentNullException(nameof(time));
@@ -30,12 +30,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (tempoMap == null)
                 throw new ArgumentNullException(nameof(tempoMap));
 
+            var metricTime = time as MetricTime;
+            if (metricTime == null)
+                throw new ArgumentException("Time is not a metric time.", nameof(time));
+
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
-                return ConvertFromByTicksPerQuarterNote(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
+                return ConvertFromByTicksPerQuarterNote(metricTime, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
             throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
         }
+
+        #endregion
+
+        #region Methods
 
         private static MetricTime ConvertToByTicksPerQuarterNote(long time, short ticksPerQuarterNote, TempoMap tempoMap)
         {
@@ -102,7 +110,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return lastTime + (timeMicroseconds - accumulatedMicroseconds) / GetMicrosecondsInTick(lastTempo, ticksPerQuarterNote);
         }
 
-        private static ValueChange<Tempo> CreateTempoChange(long time, ValuesLine<Tempo> tempoLine)
+        private static ValueChange<Tempo> CreateTempoChange(long time, ValueLine<Tempo> tempoLine)
         {
             return new ValueChange<Tempo>(time, tempoLine.AtTime(time));
         }

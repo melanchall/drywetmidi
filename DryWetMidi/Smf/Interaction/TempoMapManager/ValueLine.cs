@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class ValuesLine<T> where T : class
+    public sealed class ValueLine<TValue> where TValue : class
     {
         #region Fields
 
-        private readonly List<ValueChange<T>> _values = new List<ValueChange<T>>();
-        private readonly T _defaultValue;
+        private readonly List<ValueChange<TValue>> _values = new List<ValueChange<TValue>>();
+        private readonly TValue _defaultValue;
 
         #endregion
 
         #region Constructor
 
-        public ValuesLine(T defaultValue)
+        public ValueLine(TValue defaultValue)
         {
             _defaultValue = defaultValue;
         }
@@ -24,13 +24,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public IEnumerable<ValueChange<T>> Values => _values.OrderBy(v => v.Time);
+        public IEnumerable<ValueChange<TValue>> Values => _values.OrderBy(v => v.Time);
 
         #endregion
 
         #region Methods
 
-        public T AtTime(long time)
+        public TValue AtTime(long time)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                    ?? _defaultValue;
         }
 
-        internal void SetValue(long time, T value)
+        internal void SetValue(long time, TValue value)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return;
 
             _values.RemoveAll(v => v.Time == time);
-            _values.Add(new ValueChange<T>(time, value));
+            _values.Add(new ValueChange<TValue>(time, value));
         }
 
         internal void DeleteValues(long startTime)

@@ -12,8 +12,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentNullException(nameof(timeDivision));
 
             TimeDivision = timeDivision;
-            TimeSignatureLine = new ValuesLine<TimeSignature>(TimeSignature.Default);
-            TempoLine = new ValuesLine<Tempo>(Tempo.Default);
+            TimeSignatureLine = new ValueLine<TimeSignature>(TimeSignature.Default);
+            TempoLine = new ValueLine<Tempo>(Tempo.Default);
         }
 
         #endregion
@@ -22,9 +22,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public TimeDivision TimeDivision { get; }
 
-        public ValuesLine<TimeSignature> TimeSignatureLine { get; }
+        public ValueLine<TimeSignature> TimeSignatureLine { get; }
 
-        public ValuesLine<Tempo> TempoLine { get; }
+        public ValueLine<Tempo> TempoLine { get; }
 
         #endregion
     }
