@@ -8,32 +8,32 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Methods
 
-        public static IEnumerable<T> StartAtTime<T>(this IEnumerable<T> objects, long time)
-            where T : ILengthedObject, ITimedObject
+        public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, long time)
+            where TObject : ILengthedObject, ITimedObject
         {
             return AtTime(objects, time, LengthedObjectPart.Start);
         }
 
-        public static IEnumerable<T> EndAtTime<T>(this IEnumerable<T> objects, long time)
-            where T : ILengthedObject, ITimedObject
+        public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, long time)
+            where TObject : ILengthedObject, ITimedObject
         {
             return AtTime(objects, time, LengthedObjectPart.End);
         }
 
-        public static IEnumerable<T> StartAtTime<T>(this IEnumerable<T> objects, ITime time, TempoMap tempoMap)
-            where T : ILengthedObject, ITimedObject
+        public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
+            where TObject : ILengthedObject, ITimedObject
         {
             return AtTime(objects, time, tempoMap, LengthedObjectPart.Start);
         }
 
-        public static IEnumerable<T> EndAtTime<T>(this IEnumerable<T> objects, ITime time, TempoMap tempoMap)
-            where T : ILengthedObject, ITimedObject
+        public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
+            where TObject : ILengthedObject, ITimedObject
         {
             return AtTime(objects, time, tempoMap, LengthedObjectPart.End);
         }
 
-        public static IEnumerable<T> AtTime<T>(this IEnumerable<T> objects, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-            where T : ILengthedObject, ITimedObject
+        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time, LengthedObjectPart matchBy)
+            where TObject : ILengthedObject, ITimedObject
         {
             if (objects == null)
                 throw new ArgumentNullException(nameof(objects));
@@ -44,8 +44,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return objects.Where(o => IsObjectAtTime(o, time, matchBy));
         }
 
-        public static IEnumerable<T> AtTime<T>(this IEnumerable<T> objects, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-            where T : ILengthedObject, ITimedObject
+        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy)
+            where TObject : ILengthedObject, ITimedObject
         {
             if (objects == null)
                 throw new ArgumentNullException(nameof(objects));
@@ -60,8 +60,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return AtTime(objects, convertedTime, matchBy);
         }
 
-        private static bool IsObjectAtTime<T>(T obj, long time, LengthedObjectPart matchBy)
-            where T : ILengthedObject, ITimedObject
+        private static bool IsObjectAtTime<TObject>(TObject obj, long time, LengthedObjectPart matchBy)
+            where TObject : ILengthedObject, ITimedObject
         {
             if (obj == null)
                 throw new ArgumentNullException(nameof(obj));

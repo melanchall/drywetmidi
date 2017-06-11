@@ -141,6 +141,7 @@
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEvent.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsComparer.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManager.cs" />
+    <Compile Include="Smf\Interaction\TimedObjectUtilities.cs" />
     <Compile Include="Smf\Interaction\Time\Converters\ITimeConverter.cs" />
     <Compile Include="Smf\Interaction\Time\Converters\MusicalTimeConverter.cs" />
     <Compile Include="Smf\Interaction\Time\Converters\TimeConverter.cs" />

@@ -30,6 +30,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         public MetricTime(int hours, int minutes, int seconds)
+            : this(hours, minutes, seconds, 0)
+        {
+        }
+
+        public MetricTime(int hours, int minutes, int seconds, int milliseconds)
         {
             if (hours < 0)
                 throw new ArgumentOutOfRangeException(nameof(hours), hours, "Number of hours is negative.");
@@ -40,7 +45,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException(nameof(seconds), seconds, "Number of seconds is negative.");
 
-            _timeSpan = new TimeSpan(hours, minutes, seconds);
+            if (milliseconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(milliseconds), milliseconds, "Number of milliseconds is negative.");
+
+            _timeSpan = new TimeSpan(0, hours, minutes, seconds, milliseconds);
         }
 
         #endregion
