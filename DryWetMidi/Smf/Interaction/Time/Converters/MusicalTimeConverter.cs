@@ -99,12 +99,28 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            return 0;
-        }
+            var timeBars = time.Bars;
+            var accumulatedBars = 0;
+            var lastTime = 0L;
+            var lastTimeSignature = TimeSignature.Default;
 
-        private static ValueChange<TimeSignature> CreateTimeSignatureChange(long time, ValueLine<TimeSignature> timeSignatureLine)
-        {
-            return new ValueChange<TimeSignature>(time, timeSignatureLine.AtTime(time));
+            foreach (var timeSignatureChange in tempoMap.TimeSignatureLine.Values)
+            {
+                var timeSignatureChangeTime = timeSignatureChange.Time;
+
+                var bars = GetBarsCount(timeSignatureChangeTime - lastTime, lastTimeSignature, ticksPerQuarterNote);
+                if (accumulatedBars + bars >= timeBars)
+                    break;
+
+                accumulatedBars += bars;
+                lastTimeSignature = timeSignatureChange.Value;
+                lastTime = timeSignatureChangeTime;
+            }
+
+            var beatLength = GetBeatLength(lastTimeSignature, ticksPerQuarterNote);
+            return lastTime + (timeBars - accumulatedBars) * GetBarLength(lastTimeSignature, ticksPerQuarterNote) +
+                   time.Beats * beatLength +
+                   beatLength * time.Ticks / time.BeatLength;
         }
 
         private static int GetBarsCount(long time, TimeSignature timeSignature, short ticksPerQuarterNote)
