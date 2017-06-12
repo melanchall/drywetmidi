@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class Chord : ITimedObject, ILengthedObject
+    public sealed class Chord : ILengthedObject
     {
         #region Events
 

@@ -11,6 +11,12 @@
             return (TTime)converter.ConvertTo(time, tempoMap);
         }
 
+        public static TTime ConvertTo<TTime>(ITime time, TempoMap tempoMap)
+            where TTime : ITime
+        {
+            return ConvertTo<TTime>(ConvertFrom(time, tempoMap), tempoMap);
+        }
+
         public static long ConvertFrom<TTime>(TTime time, TempoMap tempoMap)
             where TTime : ITime
         {

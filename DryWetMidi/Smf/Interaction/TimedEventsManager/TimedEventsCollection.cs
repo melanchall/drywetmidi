@@ -74,25 +74,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _timedEvents.Clear();
         }
 
-        public IEnumerable<TimedEvent> GetAtTime(long time)
-        {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            return _timedEvents.Where(e => e.Time == time);
-        }
-
-        public IEnumerable<TimedEvent> GetAtTimeRange(long startTime, long endTime)
-        {
-            if (startTime < 0)
-                throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start time is negative.");
-
-            if (endTime < 0)
-                throw new ArgumentOutOfRangeException(nameof(endTime), endTime, "End time is negative.");
-
-            return _timedEvents.Where(e => e.Time >= startTime && e.Time <= endTime);
-        }
-
         #endregion
 
         #region IEnumerable<TimedEvent>
