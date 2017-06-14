@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             foreach (var midiEvent in events)
             {
                 time += midiEvent.DeltaTime;
-                yield return new TimedEvent(midiEvent, time);
+                yield return new TimedEvent(midiEvent.Clone(), time);
             }
         }
 
