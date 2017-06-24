@@ -22,6 +22,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="midiEvent">An event to wrap into <see cref="TimedEvent"/>.</param>
         public TimedEvent(MidiEvent midiEvent)
         {
+            if (midiEvent == null)
+                throw new ArgumentNullException(nameof(midiEvent));
+
             Event = midiEvent;
         }
 

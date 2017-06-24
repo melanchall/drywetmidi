@@ -138,8 +138,8 @@
     <Compile Include="Smf\Interaction\TempoMapManager\TempoMapManager.cs" />
     <Compile Include="Smf\Interaction\TempoMapManager\TempoMapManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\TempoMapManager\TimeSignature.cs" />
-    <Compile Include="Smf\Interaction\TempoMapManager\ValueChange.cs" />
-    <Compile Include="Smf\Interaction\TempoMapManager\ValueLine.cs" />
+    <Compile Include="Smf\Interaction\ValueLine\ValueChange.cs" />
+    <Compile Include="Smf\Interaction\ValueLine\ValueLine.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsCollection.cs" />
     <Compile Include="Smf\Interaction\TimedEventsManager\TimedEventsManagingUtilities.cs" />
     <Compile Include="Smf\Interaction\NotesManager\Note.cs" />
