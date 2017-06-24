@@ -29,6 +29,28 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        public void Add(MidiEvent midiEvent, long time)
+        {
+            if (midiEvent == null)
+                throw new ArgumentNullException(nameof(midiEvent));
+
+            _timedEvents.Add(new TimedEvent(midiEvent, time));
+        }
+
+        public void Add(MidiEvent midiEvent, ITime time, TempoMap tempoMap)
+        {
+            if (midiEvent == null)
+                throw new ArgumentNullException(nameof(midiEvent));
+
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (tempoMap == null)
+                throw new ArgumentNullException(nameof(tempoMap));
+
+            Add(midiEvent, TimeConverter.ConvertFrom(time, tempoMap));
+        }
+
         public void Add(IEnumerable<TimedEvent> events)
         {
             if (events == null)

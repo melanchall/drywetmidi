@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (file == null)
                 throw new ArgumentNullException(nameof(file));
 
-            return file.Chunks.OfType<TrackChunk>().ManageTempoMap(file.TimeDivision);
+            return file.GetTrackChunks().ManageTempoMap(file.TimeDivision);
         }
 
         public static TempoMap GetTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)

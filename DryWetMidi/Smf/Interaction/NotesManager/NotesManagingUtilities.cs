@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (file == null)
                 throw new ArgumentNullException(nameof(file));
 
-            return file.Chunks.OfType<TrackChunk>().GetNotes();
+            return file.GetTrackChunks().GetNotes();
         }
 
         public static IEnumerable<Note> GetNotesAtTime(this TrackChunk trackChunk, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
 
-            return file.Chunks.OfType<TrackChunk>().GetNotesAtTime(time, matchBy);
+            return file.GetTrackChunks().GetNotesAtTime(time, matchBy);
         }
 
         #endregion

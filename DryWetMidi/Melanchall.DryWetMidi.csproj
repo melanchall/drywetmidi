@@ -183,7 +183,7 @@
     <Compile Include="Common\ControlName.cs" />
     <Compile Include="Smf\Utilities\ControlUtilities.cs" />
     <Compile Include="Common\NoteName.cs" />
-    <Compile Include="Smf\Utilities\FileUtilities.cs" />
+    <Compile Include="Smf\Utilities\IOUtilities.cs" />
     <Compile Include="Smf\Utilities\NoteUtilities.cs" />
     <Compile Include="Smf\Utilities\TrackChunkUtilities.cs" />
     <Compile Include="Smf\WritingSettings\CompressionPolicy.cs" />

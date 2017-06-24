@@ -9,6 +9,20 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
+        /// Gets all track chunks of a MIDI file.
+        /// </summary>
+        /// <param name="midiFile">MIDI file to get track chunks of.</param>
+        /// <returns>Collection of track chunks contained in the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        public static IEnumerable<TrackChunk> GetTrackChunks(this MidiFile midiFile)
+        {
+            if (midiFile == null)
+                throw new ArgumentNullException(nameof(midiFile));
+
+            return midiFile.Chunks.OfType<TrackChunk>();
+        }
+
+        /// <summary>
         /// Merges multiple track chunks into one that corresponds to <see cref="MidiFileFormat.SingleTrack"/>.
         /// </summary>
         /// <param name="trackChunks">Track chunks to merge into one.</param>
