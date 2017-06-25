@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Provides extension methods for <see cref="TrackChunk"/>.
+    /// </summary>
     public static class TrackChunkUtilities
     {
         #region Methods

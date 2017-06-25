@@ -8,7 +8,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Fields
 
         private readonly NotesManager _notesManager;
-        private readonly long _chordNotesTolerance;
 
         private bool _disposed;
 
@@ -21,10 +20,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (eventsCollection == null)
                 throw new ArgumentNullException(nameof(eventsCollection));
 
-            _chordNotesTolerance = chordNotesTolerance;
             _notesManager = eventsCollection.ManageNotes(sameTimeEventsComparison);
 
-            Chords = new ChordsCollection(CreateChords(_notesManager.Notes, _chordNotesTolerance));
+            Chords = new ChordsCollection(CreateChords(_notesManager.Notes, chordNotesTolerance));
             Chords.CollectionChanged += OnChordsCollectionChanged;
         }
 
