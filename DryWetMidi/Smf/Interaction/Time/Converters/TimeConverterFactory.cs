@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             else if (timeType == typeof(MusicalTime))
                 return _musicalTimeConverter;
 
-            throw new NotImplementedException($"Converter for {timeType} is not implemented.");
+            throw new NotSupportedException($"Converter for {timeType} is not supported.");
         }
 
         #endregion
