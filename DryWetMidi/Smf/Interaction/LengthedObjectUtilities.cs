@@ -36,37 +36,78 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Filters collection of <see cref="ILengthedObject"/> to return those objects that start at the specified time.
+        /// Filters collection of <see cref="ILengthedObject"/> to return objects that start at the specified time.
         /// </summary>
         /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
-        /// <param name="objects">An <see cref="IEnumerable{TObject}"/> to filter.</param>
-        /// <param name="time">Start time of objects.</param>
-        /// <returns>An <see cref="IEnumerable{TObject}"/> that contains objects from the input sequence that
-        /// start at the specified time.</returns>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">Start time to filter objects by.</param>
+        /// <returns>A collection that contains objects from the input sequence that start at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ILengthedObject
         {
             return AtTime(objects, time, LengthedObjectPart.Start);
         }
 
+        /// <summary>
+        /// Filters collection of <see cref="ILengthedObject"/> to return objects that end at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">End time to filter objects by.</param>
+        /// <returns>A collection that contains objects from the input sequence that end at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ILengthedObject
         {
             return AtTime(objects, time, LengthedObjectPart.End);
         }
 
+        /// <summary>
+        /// Filters collection of <see cref="ILengthedObject"/> to return objects that start at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">Start time to filter objects by.</param>
+        /// <param name="tempoMap">Tempo map to filter <paramref name="objects"/> by <paramref name="time"/>.</param>
+        /// <returns>A collection that contains objects from the input sequence that start at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
         public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
             where TObject : ILengthedObject
         {
             return AtTime(objects, time, tempoMap, LengthedObjectPart.Start);
         }
 
+        /// <summary>
+        /// Filters collection of <see cref="ILengthedObject"/> to return objects that end at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">End time to filter objects by.</param>
+        /// <param name="tempoMap">Tempo map to filter <paramref name="objects"/> by <paramref name="time"/>.</param>
+        /// <returns>A collection that contains objects from the input sequence that end at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
         public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
             where TObject : ILengthedObject
         {
             return AtTime(objects, time, tempoMap, LengthedObjectPart.End);
         }
 
+        /// <summary>
+        /// Filters collection of <see cref="ILengthedObject"/> to return objects at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">Time to filter objects by.</param>
+        /// <param name="matchBy">Part of an object which have to be at <paramref name="time"/>.</param>
+        /// <returns>A collection that contains objects from the input sequence that at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="matchBy"/> specified an invalid value.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time, LengthedObjectPart matchBy)
             where TObject : ILengthedObject
         {
@@ -82,6 +123,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return objects.Where(o => IsObjectAtTime(o, time, matchBy));
         }
 
+        /// <summary>
+        /// Filters collection of <see cref="ILengthedObject"/> to return objects at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">Time to filter objects by.</param>
+        /// <param name="tempoMap">Tempo map to filter <paramref name="objects"/> by <paramref name="time"/>.</param>
+        /// <param name="matchBy">Part of an object which have to be at <paramref name="time"/>.</param>
+        /// <returns>A collection that contains objects from the input sequence that at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="matchBy"/> specified an invalid value.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy)
             where TObject : ILengthedObject
         {
@@ -101,6 +154,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return AtTime(objects, convertedTime, matchBy);
         }
 
+        /// <summary>
+        /// Checks if an <see cref="ILengthedObject"/> is at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">Type of an object.</typeparam>
+        /// <param name="obj"><see cref="ILengthedObject"/> to check.</param>
+        /// <param name="time">Time to check the <paramref name="obj"/>.</param>
+        /// <param name="matchBy">Part of the <paramref name="obj"/> which have to be at <paramref name="time"/>.</param>
+        /// <returns>true if <paramref name="obj"/> is at <paramref name="time"/>; false - otherwise.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null.</exception>
         private static bool IsObjectAtTime<TObject>(TObject obj, long time, LengthedObjectPart matchBy)
             where TObject : ILengthedObject
         {
