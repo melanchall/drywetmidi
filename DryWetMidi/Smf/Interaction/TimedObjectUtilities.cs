@@ -19,6 +19,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="obj">Object to get time of.</param>
         /// <param name="tempoMap">Tempo map to calculate time of the <paramref name="obj"/>.</param>
         /// <returns>Time of the specified object as an instance of <typeparamref name="TTime"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
         public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap tempoMap)
             where TTime : ITime
         {
@@ -31,6 +34,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeConverter.ConvertTo<TTime>(obj.Time, tempoMap);
         }
 
+        /// <summary>
+        /// Filters collection of <see cref="ITimedObject"/> to return objects at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">Time to filter objects by.</param>
+        /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ITimedObject
         {
@@ -43,6 +55,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return objects.Where(o => o.Time == time);
         }
 
+        /// <summary>
+        /// Filters collection of <see cref="ITimedObject"/> to return objects at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
+        /// <param name="objects">A collection to filter.</param>
+        /// <param name="time">Time to filter objects by.</param>
+        /// <param name="tempoMap">Tempo map to filter <paramref name="objects"/> by <paramref name="time"/>.</param>
+        /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
             where TObject : ITimedObject
         {

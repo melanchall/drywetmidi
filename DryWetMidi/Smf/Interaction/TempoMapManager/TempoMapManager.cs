@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Provides a way to manage tempo map of a MIDI file.
+    /// </summary>
     public sealed class TempoMapManager : IDisposable
     {
         #region Fields
@@ -16,6 +19,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TempoMapManager"/> with the specified time division
+        /// and events collections.
+        /// </summary>
+        /// <param name="timeDivision">MIDI file time division which specifies the meaning of the time
+        /// used by events of the file.</param>
+        /// <param name="eventsCollections">Collection of <see cref="EventsCollection"/> which hold events that
+        /// represent tempo map of a MIDI file.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
+        /// <paramref name="eventsCollections"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="eventsCollections"/> is empty.</exception>
         public TempoMapManager(TimeDivision timeDivision, IEnumerable<EventsCollection> eventsCollections)
         {
             if (timeDivision == null)
@@ -27,68 +41,239 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (!eventsCollections.Any())
                 throw new ArgumentException("Collection of EventsCollection is empty.", nameof(eventsCollections));
 
-            _timedEventsManagers = eventsCollections.Select(events => events.ManageTimedEvents()).ToList();
+            _timedEventsManagers = eventsCollections.Where(events => events != null)
+                                                    .Select(events => events.ManageTimedEvents())
+                                                    .ToList();
 
             //
 
             TempoMap = new TempoMap(timeDivision);
 
-            foreach (var timedEvent in _timedEventsManagers.SelectMany(m => m.Events.Where(IsTimeSignatureEvent)))
-            {
-                var timeSignatureEvent = timedEvent.Event as TimeSignatureEvent;
-                TempoMap.TimeSignatureLine.SetValue(timedEvent.Time,
-                                                new TimeSignature(timeSignatureEvent.Numerator,
-                                                                  timeSignatureEvent.Denominator));
-            }
-
-            foreach (var timedEvent in _timedEventsManagers.SelectMany(m => m.Events.Where(IsTempoEvent)))
-            {
-                var setTempoEvent = timedEvent.Event as SetTempoEvent;
-                TempoMap.TempoLine.SetValue(timedEvent.Time,
-                                        new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
-            }
+            CollectTimeSignatureChanges();
+            CollectTempoChanges();
         }
 
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// Gets current tempo map built by the <see cref="TempoMapManager"/>.
+        /// </summary>
         public TempoMap TempoMap { get; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Sets new time signature that will last from the specified time until next change of
+        /// time signature.
+        /// </summary>
+        /// <param name="time">Time to set the new time signature at.</param>
+        /// <param name="timeSignature">New time signature that will last from the specified
+        /// time until next change of time signature.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSignature"/> is null.</exception>
         public void SetTimeSignature(long time, TimeSignature timeSignature)
         {
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+
+            if (timeSignature == null)
+                throw new ArgumentNullException(nameof(timeSignature));
+
             TempoMap.TimeSignatureLine.SetValue(time, timeSignature);
         }
 
-        public void DeleteTimeSignature(long startTime)
+        /// <summary>
+        /// Sets new time signature that will last from the specified time until next change of
+        /// time signature.
+        /// </summary>
+        /// <param name="time">Time to set the new time signature at.</param>
+        /// <param name="timeSignature">New time signature that will last from the specified
+        /// time until next change of time signature.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="timeSignature"/> is null.</exception>
+        public void SetTimeSignature(ITime time, TimeSignature timeSignature)
         {
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (timeSignature == null)
+                throw new ArgumentNullException(nameof(timeSignature));
+
+            SetTimeSignature(TimeConverter.ConvertFrom(time, TempoMap), timeSignature);
+        }
+
+        /// <summary>
+        /// Removes all changes of time signature that occured since the specified time.
+        /// </summary>
+        /// <param name="startTime">Time to remove changes of time signature since.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative.</exception>
+        public void ClearTimeSignature(long startTime)
+        {
+            if (startTime < 0)
+                throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start time is negative.");
+
             TempoMap.TimeSignatureLine.DeleteValues(startTime);
         }
 
-        public void DeleteTimeSignature(long startTime, long endTime)
+        /// <summary>
+        /// Removes all changes of time signature that occured since the specified time.
+        /// </summary>
+        /// <param name="startTime">Time to remove changes of time signature since.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
+        public void ClearTimeSignature(ITime startTime)
         {
+            if (startTime == null)
+                throw new ArgumentNullException(nameof(startTime));
+
+            ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap));
+        }
+
+        /// <summary>
+        /// Removes all changes of time signature that occured between the specified times.
+        /// </summary>
+        /// <param name="startTime">Start of time range to remove changes of time signature in.</param>
+        /// <param name="endTime">End of time range to remove changes of time signature in.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative. -or-
+        /// <paramref name="endTime"/> is negative.</exception>
+        public void ClearTimeSignature(long startTime, long endTime)
+        {
+            if (startTime < 0)
+                throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start time is negative.");
+
+            if (endTime < 0)
+                throw new ArgumentOutOfRangeException(nameof(endTime), endTime, "End time is negative.");
+
             TempoMap.TimeSignatureLine.DeleteValues(startTime, endTime);
         }
 
+        /// <summary>
+        /// Removes all changes of time signature that occured between the specified times.
+        /// </summary>
+        /// <param name="startTime">Start of time range to remove changes of time signature in.</param>
+        /// <param name="endTime">End of time range to remove changes of time signature in.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
+        /// <paramref name="endTime"/> is null.</exception>
+        public void ClearTimeSignature(ITime startTime, ITime endTime)
+        {
+            if (startTime == null)
+                throw new ArgumentNullException(nameof(startTime));
+
+            if (endTime == null)
+                throw new ArgumentNullException(nameof(endTime));
+
+            ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap),
+                               TimeConverter.ConvertFrom(endTime, TempoMap));
+        }
+
+        /// <summary>
+        /// Sets new tempo that will last from the specified time until next change of tempo.
+        /// </summary>
+        /// <param name="time">Time to set the new tempo at.</param>
+        /// <param name="tempo">New tempo that will last from the specified time until next change
+        /// of tempo.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempo"/> is null.</exception>
         public void SetTempo(long time, Tempo tempo)
         {
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+
+            if (tempo == null)
+                throw new ArgumentNullException(nameof(tempo));
+
             TempoMap.TempoLine.SetValue(time, tempo);
         }
 
-        public void DeleteTempo(long startTime)
+        /// <summary>
+        /// Sets new tempo that will last from the specified time until next change of tempo.
+        /// </summary>
+        /// <param name="time">Time to set the new tempo at.</param>
+        /// <param name="tempo">New tempo that will last from the specified time until next change
+        /// of tempo.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="tempo"/> is null.</exception>
+        public void SetTempo(ITime time, Tempo tempo)
         {
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (tempo == null)
+                throw new ArgumentNullException(nameof(tempo));
+
+            SetTempo(TimeConverter.ConvertFrom(time, TempoMap), tempo);
+        }
+
+        /// <summary>
+        /// Removes all changes of tempo that occured since the specified time.
+        /// </summary>
+        /// <param name="startTime">Time to remove changes of tempo since.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative.</exception>
+        public void ClearTempo(long startTime)
+        {
+            if (startTime < 0)
+                throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start time is negative.");
+
             TempoMap.TempoLine.DeleteValues(startTime);
         }
 
-        public void DeleteTempo(long startTime, long endTime)
+        /// <summary>
+        /// Removes all changes of tempo that occured since the specified time.
+        /// </summary>
+        /// <param name="startTime">Time to remove changes of tempo since.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
+        public void ClearTempo(ITime startTime)
         {
+            if (startTime == null)
+                throw new ArgumentNullException(nameof(startTime));
+
+            ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap));
+        }
+
+        /// <summary>
+        /// Removes all changes of tempo that occured between the specified times.
+        /// </summary>
+        /// <param name="startTime">Start of time range to remove changes of tempo in.</param>
+        /// <param name="endTime">End of time range to remove changes of tempo in.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative. -or-
+        /// <paramref name="endTime"/> is negative.</exception>
+        public void ClearTempo(long startTime, long endTime)
+        {
+            if (startTime < 0)
+                throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start time is negative.");
+
+            if (endTime < 0)
+                throw new ArgumentOutOfRangeException(nameof(endTime), endTime, "End time is negative.");
+
             TempoMap.TempoLine.DeleteValues(startTime, endTime);
         }
 
+        /// <summary>
+        /// Removes all changes of tempo that occured between the specified times.
+        /// </summary>
+        /// <param name="startTime">Start of time range to remove changes of tempo in.</param>
+        /// <param name="endTime">End of time range to remove changes of tempo in.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
+        /// <paramref name="endTime"/> is null.</exception>
+        public void ClearTempo(ITime startTime, ITime endTime)
+        {
+            if (startTime == null)
+                throw new ArgumentNullException(nameof(startTime));
+
+            if (endTime == null)
+                throw new ArgumentNullException(nameof(endTime));
+
+            ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap),
+                       TimeConverter.ConvertFrom(endTime, TempoMap));
+        }
+
+        /// <summary>
+        /// Saves tempo map changes that were made with the <see cref="TempoMapManager"/> updating
+        /// underlined events collections.
+        /// </summary>
         public void SaveChanges()
         {
             foreach (var events in _timedEventsManagers.Select(m => m.Events))
@@ -103,6 +288,38 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             foreach (var timedEventsManager in _timedEventsManagers)
             {
                 timedEventsManager.SaveChanges();
+            }
+        }
+
+        private IEnumerable<TimedEvent> GetTimedEvents(Func<TimedEvent, bool> predicate)
+        {
+            return _timedEventsManagers.SelectMany(m => m.Events).Where(predicate);
+        }
+
+        private void CollectTimeSignatureChanges()
+        {
+            foreach (var timedEvent in GetTimedEvents(IsTimeSignatureEvent))
+            {
+                var timeSignatureEvent = timedEvent.Event as TimeSignatureEvent;
+                if (timeSignatureEvent == null)
+                    continue;
+
+                TempoMap.TimeSignatureLine.SetValue(timedEvent.Time,
+                                                    new TimeSignature(timeSignatureEvent.Numerator,
+                                                                      timeSignatureEvent.Denominator));
+            }
+        }
+
+        private void CollectTempoChanges()
+        {
+            foreach (var timedEvent in GetTimedEvents(IsTempoEvent))
+            {
+                var setTempoEvent = timedEvent.Event as SetTempoEvent;
+                if (setTempoEvent == null)
+                    continue;
+
+                TempoMap.TempoLine.SetValue(timedEvent.Time,
+                                            new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
             }
         }
 

@@ -66,7 +66,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Converts length from the specified length type to <see cref="long"/>.
         /// </summary>
-        /// <typeparam name="TLength">Type that represents the length of an object.</typeparam>
         /// <param name="length">Length to convert.</param>
         /// <param name="time">Start time of an object to convert length of.</param>
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
@@ -74,9 +73,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
-        /// <exception cref="NotSupportedException"><typeparamref name="TLength"/> is not supported.</exception>
-        public static long ConvertFrom<TLength>(TLength length, long time, TempoMap tempoMap)
-            where TLength : ILength
+        public static long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
             if (length == null)
                 throw new ArgumentNullException(nameof(length));

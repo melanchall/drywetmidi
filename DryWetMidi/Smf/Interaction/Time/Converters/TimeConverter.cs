@@ -56,15 +56,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Converts time from the specified time type to <see cref="long"/>.
         /// </summary>
-        /// <typeparam name="TTime">Type that represents the time of an object.</typeparam>
         /// <param name="time">Time to convert.</param>
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as <see cref="long"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
-        /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
-        public static long ConvertFrom<TTime>(TTime time, TempoMap tempoMap)
-            where TTime : ITime
+        public static long ConvertFrom(ITime time, TempoMap tempoMap)
         {
             if (time == null)
                 throw new ArgumentNullException(nameof(time));

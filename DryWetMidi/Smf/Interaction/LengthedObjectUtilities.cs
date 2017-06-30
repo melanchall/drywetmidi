@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="objects">A collection to filter.</param>
         /// <param name="time">Time to filter objects by.</param>
         /// <param name="matchBy">Part of an object which have to be at <paramref name="time"/>.</param>
-        /// <returns>A collection that contains objects from the input sequence that at the specified time.</returns>
+        /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- One of the objects is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="matchBy"/> specified an invalid value.</exception>
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="time">Time to filter objects by.</param>
         /// <param name="tempoMap">Tempo map to filter <paramref name="objects"/> by <paramref name="time"/>.</param>
         /// <param name="matchBy">Part of an object which have to be at <paramref name="time"/>.</param>
-        /// <returns>A collection that contains objects from the input sequence that at the specified time.</returns>
+        /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="matchBy"/> specified an invalid value.</exception>
