@@ -4,10 +4,21 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Extension methods for objects that implement the <see cref="ITimedObject"/> interface.
+    /// </summary>
     public static class TimedObjectUtilities
     {
         #region Methods
 
+        /// <summary>
+        /// Gets time of an <see cref="ITimedObject"/> as an instance of type that implements the
+        /// <see cref="ITime"/> interface.
+        /// </summary>
+        /// <typeparam name="TTime">Type that will represent the time of the <paramref name="obj"/>.</typeparam>
+        /// <param name="obj">Object to get time of.</param>
+        /// <param name="tempoMap">Tempo map to calculate time of the <paramref name="obj"/>.</param>
+        /// <returns>Time of the specified object as an instance of <typeparamref name="TTime"/>.</returns>
         public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap tempoMap)
             where TTime : ITime
         {
