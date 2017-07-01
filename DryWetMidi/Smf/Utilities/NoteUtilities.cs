@@ -19,113 +19,58 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
-        /// Gets name of the note presented by an instance of <see cref="NoteOnEvent"/>.
+        /// Gets name of the note presented by the specified <see cref="NoteEvent"/>.
         /// </summary>
-        /// <param name="noteOnEvent">Note On event to get note name of.</param>
-        /// <returns>Note name of the <paramref name="noteOnEvent"/> event.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteOnEvent"/> is null.</exception>
-        public static NoteName GetNoteName(this NoteOnEvent noteOnEvent)
+        /// <param name="noteEvent">Note event to get note name of.</param>
+        /// <returns>Note name of the <paramref name="noteEvent"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
+        public static NoteName GetNoteName(this NoteEvent noteEvent)
         {
-            if (noteOnEvent == null)
-                throw new ArgumentNullException(nameof(noteOnEvent));
+            if (noteEvent == null)
+                throw new ArgumentNullException(nameof(noteEvent));
 
-            return GetNoteName(noteOnEvent.NoteNumber);
+            return GetNoteName(noteEvent.NoteNumber);
         }
 
         /// <summary>
-        /// Gets octave of the note presented by an instance of <see cref="NoteOnEvent"/>.
+        /// Gets octave of the note presented by the specified <see cref="NoteOnEvent"/>.
         /// </summary>
-        /// <param name="noteOnEvent">Note On event to get note octave of.</param>
-        /// <returns>Note octave of the <paramref name="noteOnEvent"/> event.</returns>
+        /// <param name="noteEvent">Note event to get note octave of.</param>
+        /// <returns>Note octave of the <paramref name="noteEvent"/>.</returns>
         /// <remarks>
         /// Octave number will be returned in scientific pitch notation which means
         /// that 4 will be returned for 60 note number.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteOnEvent"/> is null.</exception>
-        public static int GetNoteOctave(this NoteOnEvent noteOnEvent)
+        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
+        public static int GetNoteOctave(this NoteEvent noteEvent)
         {
-            if (noteOnEvent == null)
-                throw new ArgumentNullException(nameof(noteOnEvent));
+            if (noteEvent == null)
+                throw new ArgumentNullException(nameof(noteEvent));
 
-            return GetNoteOctave(noteOnEvent.NoteNumber);
+            return GetNoteOctave(noteEvent.NoteNumber);
         }
 
         /// <summary>
-        /// Gets name of the note presented by an instance of <see cref="NoteOffEvent"/>.
+        /// Sets the note number of the <see cref="NoteEvent"/> with the specified note name and octave.
         /// </summary>
-        /// <param name="noteOffEvent">Note Off event to get note name of.</param>
-        /// <returns>Note name of the <paramref name="noteOffEvent"/> event.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteOffEvent"/> is null.</exception>
-        public static NoteName GetNoteName(this NoteOffEvent noteOffEvent)
-        {
-            if (noteOffEvent == null)
-                throw new ArgumentNullException(nameof(noteOffEvent));
-
-            return GetNoteName(noteOffEvent.NoteNumber);
-        }
-
-        /// <summary>
-        /// Gets octave of the note presented by an instance of <see cref="NoteOffEvent"/>.
-        /// </summary>
-        /// <param name="noteOffEvent">Note Off event to get note octave of.</param>
-        /// <returns>Note octave of the <paramref name="noteOffEvent"/> event.</returns>
-        /// <remarks>
-        /// Octave number will be returned in scientific pitch notation which means
-        /// that 4 will be returned for 60 note number.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteOffEvent"/> is null.</exception>
-        public static int GetNoteOctave(this NoteOffEvent noteOffEvent)
-        {
-            if (noteOffEvent == null)
-                throw new ArgumentNullException(nameof(noteOffEvent));
-
-            return GetNoteOctave(noteOffEvent.NoteNumber);
-        }
-
-        /// <summary>
-        /// Sets the note number of the <see cref="NoteOnEvent"/> with the specified note name and octave.
-        /// </summary>
-        /// <param name="noteOnEvent">Note On event to set the note number of.</param>
+        /// <param name="noteEvent">Note event to set the note number of.</param>
         /// <param name="noteName">Name of the note.</param>
         /// <param name="octave">Number of the octave.</param>
         /// <remarks>
         /// Octave number is specified in scientific pitch notation which means that 4 must be
         /// passed to get the number of the middle C.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteOnEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
         /// invalid value.</exception>
         /// <exception cref="ArgumentException">Note number is out of range for the specified note
         /// name and octave.</exception>
-        public static void SetNoteNumber(this NoteOnEvent noteOnEvent, NoteName noteName, int octave)
+        public static void SetNoteNumber(this NoteEvent noteEvent, NoteName noteName, int octave)
         {
-            if (noteOnEvent == null)
-                throw new ArgumentNullException(nameof(noteOnEvent));
+            if (noteEvent == null)
+                throw new ArgumentNullException(nameof(noteEvent));
 
-            noteOnEvent.NoteNumber = GetNoteNumber(noteName, octave);
-        }
-
-        /// <summary>
-        /// Sets the note number of the <see cref="NoteOffEvent"/> with the specified note name and octave.
-        /// </summary>
-        /// <param name="noteOffEvent">Note Off event to set the note number of.</param>
-        /// <param name="noteName">Name of the note.</param>
-        /// <param name="octave">Number of the octave.</param>
-        /// <remarks>
-        /// Octave number is specified in scientific pitch notation which means that 4 must be
-        /// passed to get the number of the middle C.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteOffEvent"/> is null.</exception>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
-        /// invalid value.</exception>
-        /// <exception cref="ArgumentException">Note number is out of range for the specified note
-        /// name and octave.</exception>
-        public static void SetNoteNumber(this NoteOffEvent noteOffEvent, NoteName noteName, int octave)
-        {
-            if (noteOffEvent == null)
-                throw new ArgumentNullException(nameof(noteOffEvent));
-
-            noteOffEvent.NoteNumber = GetNoteNumber(noteName, octave);
+            noteEvent.NoteNumber = GetNoteNumber(noteName, octave);
         }
 
         /// <summary>

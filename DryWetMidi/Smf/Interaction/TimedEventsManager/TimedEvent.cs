@@ -3,7 +3,7 @@
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
-    /// Represents wrapper for <see cref="MidiEvent"/> that provides absolute time of an event.
+    /// Represents wrapper for the <see cref="MidiEvent"/> that provides absolute time of an event.
     /// </summary>
     public sealed class TimedEvent : ITimedObject
     {
@@ -52,6 +52,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets or sets absolute time of the event in units defined by the time division of a MIDI file.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Value is negative.</exception>
         public long Time
         {
             get { return _time; }

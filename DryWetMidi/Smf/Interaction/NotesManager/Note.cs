@@ -127,7 +127,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (timedNoteOffEvent == null)
                 throw new ArgumentNullException(nameof(timedNoteOffEvent));
 
-            if (!(timedNoteOffEvent.Event is NoteOffEvent))
+            var noteOffEvent = timedNoteOffEvent.Event as NoteOffEvent;
+            if (noteOffEvent == null)
                 throw new ArgumentException("Timed event doesn't wrap a Note Off event.", nameof(timedNoteOffEvent));
 
             //
@@ -139,6 +140,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             NoteNumber = noteOnEvent.NoteNumber;
             Velocity = noteOnEvent.Velocity;
+            OffVelocity = noteOffEvent.Velocity;
             Channel = noteOnEvent.Channel;
         }
 
@@ -183,9 +185,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public SevenBitNumber NoteNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets velocity of the note.
+        /// Gets or sets velocity of the underlying <see cref="NoteOnEvent"/>.
         /// </summary>
         public SevenBitNumber Velocity { get; set; }
+
+        /// <summary>
+        /// Gets or sets velocity of the underlying <see cref="NoteOffEvent"/>.
+        /// </summary>
+        public SevenBitNumber OffVelocity { get; set; }
 
         /// <summary>
         /// Gets or sets channel to play the note on.

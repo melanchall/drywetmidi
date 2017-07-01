@@ -7,6 +7,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Provides a way to manage tempo map of a MIDI file.
     /// </summary>
+    /// <remarks>
+    /// This manager is wrapper for the <see cref="TimedEventsManager"/> that provides easy manipulation
+    /// of specific MIDI events: <see cref="SetTempoEvent"/> and <see cref="TimeSignature"/>. Also it
+    /// provides <see cref="TempoMap"/> that can be used to calculate custom representations of time
+    /// and length of an object.
+    /// </remarks>
     public sealed class TempoMapManager : IDisposable
     {
         #region Fields
@@ -272,8 +278,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         /// <summary>
         /// Saves tempo map changes that were made with the <see cref="TempoMapManager"/> updating
-        /// underlined events collections.
+        /// underlying events collections.
         /// </summary>
+        /// <remarks>
+        /// This method will rewrite content of all events collections were used to construct the current
+        /// <see cref="TempoMapManager"/> with events were managed by underlying <see cref="TimedEventsManager"/>
+        /// objects of this manager. Also all delta-times of wrapped events will be recalculated according to
+        /// the <see cref="TimedEvent.Time"/> of event wrappers.
+        /// </remarks>
         public void SaveChanges()
         {
             foreach (var events in _timedEventsManagers.Select(m => m.Events))

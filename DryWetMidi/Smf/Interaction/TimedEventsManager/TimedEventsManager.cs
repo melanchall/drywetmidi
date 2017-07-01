@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Provides a way to manage events of a MIDI file by their absolute time.
+    /// </summary>
     public sealed class TimedEventsManager : IDisposable
     {
         #region Fields
@@ -15,6 +18,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimedEventsManager"/> with the specified events
+        /// collection and comparison delegate for events that have same time.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds events to manage.</param>
+        /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
+        /// <remarks>
+        /// If the <paramref name="sameTimeEventsComparison"/> is not specified events with the same time
+        /// will be placed into the underlying events collection in order of adding them through the manager.
+        /// If you want to specify custom order of such events you need to specify appropriate comparison delegate.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public TimedEventsManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             if (eventsCollection == null)
@@ -28,12 +43,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets current collection of timed events reflecting all changes made by the current
+        /// <see cref="TimedEventsManager"/>.
+        /// </summary>
         public TimedEventsCollection Events { get; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Saves all events that were managed with the current <see cref="TempoMapManager"/> updating
+        /// underlying events collection.
+        /// </summary>
+        /// <remarks>
+        /// This method will rewrite content of the events collection was used to construct the current
+        /// <see cref="TimedEventsManager"/> with events were managed by this manager. Also all delta-times
+        /// of wrapped events will be recalculated according to the <see cref="TimedEvent.Time"/> of
+        /// event wrappers.
+        /// </remarks>
         public void SaveChanges()
         {
             _eventsCollection.Clear();
@@ -68,6 +97,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region IDisposable
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting
+        /// unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

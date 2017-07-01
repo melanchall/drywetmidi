@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class MetricLengthConverter : ILengthConverter
+    internal sealed class MetricLengthConverter : ILengthConverter
     {
         #region ILengthConverter
 

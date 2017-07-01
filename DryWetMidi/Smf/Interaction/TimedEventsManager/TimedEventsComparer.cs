@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class TimedEventsComparer : IComparer<TimedEvent>
+    internal sealed class TimedEventsComparer : IComparer<TimedEvent>
     {
         #region Fields
 
@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
-        public TimedEventsComparer(Comparison<MidiEvent> sameTimeEventsComparison)
+        internal TimedEventsComparer(Comparison<MidiEvent> sameTimeEventsComparison)
         {
             _sameTimeEventsComparison = sameTimeEventsComparison;
         }

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class MusicalTimeConverter : ITimeConverter
+    internal sealed class MusicalTimeConverter : ITimeConverter
     {
         #region ITimeConverter
 

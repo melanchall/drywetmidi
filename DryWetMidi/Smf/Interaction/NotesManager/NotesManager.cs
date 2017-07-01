@@ -4,6 +4,14 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Provides a way to manage notes of a MIDI file.
+    /// </summary>
+    /// <remarks>
+    /// This manager is wrapper for the <see cref="TimedEventsManager"/> that provides easy manipulation
+    /// of <see cref="NoteOnEvent"/> and <see cref="NoteOffEvent"/> events through the <see cref="Note"/>
+    /// objects.
+    /// </remarks>
     public sealed class NotesManager : IDisposable
     {
         #region Fields
@@ -16,6 +24,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotesManager"/> with the specified events
+        /// collection and comparison delegate for events that have same time.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds note events to manage.</param>
+        /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
+        /// <remarks>
+        /// If the <paramref name="sameTimeEventsComparison"/> is not specified events with the same time
+        /// will be placed into the underlying events collection in order of adding them through the manager.
+        /// If you want to specify custom order of such events you need to specify appropriate comparison delegate.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public NotesManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             if (eventsCollection == null)
@@ -47,7 +67,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 noteOnEvent.Channel = noteOffEvent.Channel = note.Channel;
                 noteOnEvent.NoteNumber = noteOffEvent.NoteNumber = note.NoteNumber;
                 noteOnEvent.Velocity = note.Velocity;
-                noteOffEvent.Velocity = (SevenBitNumber)0;
+                noteOffEvent.Velocity = note.OffVelocity;
             }
 
             _timedEventsManager.SaveChanges();
@@ -85,8 +105,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 {
                     var channel = noteOffEvent.Channel;
                     var noteNumber = noteOffEvent.NoteNumber;
-                    var noteOnTimedEvent = noteOnTimedEvents.FirstOrDefault(e => IsAppropriateNoteOnTimedEvent(e, channel, noteNumber));
 
+                    var noteOnTimedEvent = noteOnTimedEvents.FirstOrDefault(e => IsAppropriateNoteOnTimedEvent(e, channel, noteNumber));
                     if (noteOnTimedEvent == null)
                         continue;
 
