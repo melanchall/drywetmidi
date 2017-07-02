@@ -6,6 +6,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Provides a way to manage events of a MIDI file by their absolute time.
     /// </summary>
+    /// <remarks>
+    /// To start manage events you need to get an instance of the <see cref="TimedEventsManager"/>. To
+    /// finish managing you need to call the <see cref="SaveChanges"/> or <see cref="Dispose()"/> method.
+    /// Since the manager implements <see cref="IDisposable"/> it is recommnded to manage events within
+    /// using block.
+    /// </remarks>
     public sealed class TimedEventsManager : IDisposable
     {
         #region Fields
@@ -54,7 +60,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
-        /// Saves all events that were managed with the current <see cref="TempoMapManager"/> updating
+        /// Saves all events that were managed with the current <see cref="TimedEventsManager"/> updating
         /// underlying events collection.
         /// </summary>
         /// <remarks>

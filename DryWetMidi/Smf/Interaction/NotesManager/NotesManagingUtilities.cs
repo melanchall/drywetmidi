@@ -52,6 +52,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.ManageNotes().Notes.AtTime(time, matchBy);
         }
 
+        public static IEnumerable<Note> GetNotesAtTime(this TrackChunk trackChunk, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (tempoMap == null)
+                throw new ArgumentNullException(nameof(tempoMap));
+
+            return trackChunk.ManageNotes().Notes.AtTime(time, tempoMap, matchBy);
+        }
+
         public static IEnumerable<Note> GetNotesAtTime(this IEnumerable<TrackChunk> trackChunks, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
         {
             if (trackChunks == null)
@@ -63,6 +77,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunks.SelectMany(c => c.GetNotesAtTime(time, matchBy));
         }
 
+        public static IEnumerable<Note> GetNotesAtTime(this IEnumerable<TrackChunk> trackChunks, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (tempoMap == null)
+                throw new ArgumentNullException(nameof(tempoMap));
+
+            return trackChunks.SelectMany(c => c.GetNotesAtTime(time, tempoMap, matchBy));
+        }
+
         public static IEnumerable<Note> GetNotesAtTime(this MidiFile file, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
         {
             if (file == null)
@@ -72,6 +100,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
 
             return file.GetTrackChunks().GetNotesAtTime(time, matchBy);
+        }
+
+        public static IEnumerable<Note> GetNotesAtTime(this MidiFile file, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (tempoMap == null)
+                throw new ArgumentNullException(nameof(tempoMap));
+
+            return file.GetTrackChunks().GetNotesAtTime(time, tempoMap, matchBy);
         }
 
         #endregion

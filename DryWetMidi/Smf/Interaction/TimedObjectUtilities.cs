@@ -41,6 +41,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="objects">A collection to filter.</param>
         /// <param name="time">Time to filter objects by.</param>
         /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
+        /// <remarks>
+        /// Note that changes made on the objects returned by this method will not be saved to an underlying
+        /// data source (events collection, track chunk, file). To change properties of timed objects and
+        /// save them you need to use a manager appropriate for an object's type.
+        /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time)
@@ -63,6 +68,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="time">Time to filter objects by.</param>
         /// <param name="tempoMap">Tempo map to filter <paramref name="objects"/> by <paramref name="time"/>.</param>
         /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
+        /// <remarks>
+        /// Note that changes made on the objects returned by this method will not be saved to an underlying
+        /// data source (events collection, track chunk, file). To change properties of timed objects and
+        /// save them you need to use a manager appropriate for an object's type.
+        /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)

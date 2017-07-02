@@ -5,7 +5,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
-    /// Extension methods for MIDI objects to work with tempo map.
+    /// Extension methods for managing tempo map.
     /// </summary>
     public static class TempoMapManagingUtilities
     {
