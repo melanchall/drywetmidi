@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// and length of an object. To start manage tempo map you need to get an instance of the
     /// <see cref="TempoMapManager"/>. To finish managing you need to call the <see cref="SaveChanges"/>
     /// or <see cref="Dispose()"/> method. Since the manager implements <see cref="IDisposable"/> it is
-    /// recommnded to manage tempo map within using block.
+    /// recommended to manage tempo map within using block.
     /// </remarks>
     public sealed class TempoMapManager : IDisposable
     {

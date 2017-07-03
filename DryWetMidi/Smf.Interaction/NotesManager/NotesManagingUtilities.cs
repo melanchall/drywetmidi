@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Gets notes contained in the specified track chunk.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes.</param>
-        /// <returns>Collection of notes contained in <paramref name="trackChunk"/>.</returns>
+        /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this TrackChunk trackChunk)
         {
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Gets notes contained in the specified track chunks.
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for notes.</param>
-        /// <returns>Collection of notes contained in <paramref name="trackChunks"/>.</returns>
+        /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks)
         {
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Gets notes contained in the specified MIDI file.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes.</param>
-        /// <returns>Collection of notes contained in <paramref name="file"/>.</returns>
+        /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this MidiFile file)
         {

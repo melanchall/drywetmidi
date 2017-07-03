@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// of <see cref="NoteOnEvent"/> and <see cref="NoteOffEvent"/> events through the <see cref="Note"/>
     /// objects. To start manage notes you need to get an instance of the <see cref="NotesManager"/>. To
     /// finish managing you need to call the <see cref="SaveChanges"/> or <see cref="Dispose()"/> method.
-    /// Since the manager implements <see cref="IDisposable"/> it is recommnded to manage notes within
+    /// Since the manager implements <see cref="IDisposable"/> it is recommended to manage notes within
     /// using block.
     /// </remarks>
     public sealed class NotesManager : IDisposable
@@ -55,8 +55,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Properties
 
         /// <summary>
-        /// Gets the <see cref="NotesCollection"/> with all notes managed by the current
-        /// <see cref="NotesManager"/>.
+        /// Gets the <see cref="NotesCollection"/> with all notes managed by the current <see cref="NotesManager"/>.
         /// </summary>
         public NotesCollection Notes { get; }
 
