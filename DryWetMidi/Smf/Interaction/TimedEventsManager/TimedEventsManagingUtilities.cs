@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -12,7 +10,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
-        /// Creates an instance of the <see cref="TempoMapManager"/> initializing it with the
+        /// Creates an instance of the <see cref="TimedEventsManager"/> initializing it with the
         /// specified events collection and comparison delegate for events that have same time.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds events to manage.</param>
@@ -29,7 +27,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Creates an instance of the <see cref="TempoMapManager"/> initializing it with the
+        /// Creates an instance of the <see cref="TimedEventsManager"/> initializing it with the
         /// events collection of the specified track chunk and comparison delegate for events
         /// that have same time.
         /// </summary>

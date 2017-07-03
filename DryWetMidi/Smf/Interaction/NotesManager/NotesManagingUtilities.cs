@@ -4,10 +4,22 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Extension methods for notes managing.
+    /// </summary>
     public static class NotesManagingUtilities
     {
         #region Methods
 
+        /// <summary>
+        /// Creates an instance of the <see cref="NotesManager"/> initializing it with the
+        /// specified events collection and comparison delegate for events that have same time.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds notes to manage.</param>
+        /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
+        /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
+        /// notes represented by the <paramref name="eventsCollection"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public static NotesManager ManageNotes(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             if (eventsCollection == null)
@@ -16,6 +28,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new NotesManager(eventsCollection, sameTimeEventsComparison);
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="NotesManager"/> initializing it with the
+        /// events collection of the specified track chunk and comparison delegate for events
+        /// that have same time.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> that holds notes to manage.</param>
+        /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
+        /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
+        /// notes represented by the <paramref name="trackChunk"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static NotesManager ManageNotes(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             if (trackChunk == null)
@@ -24,96 +46,48 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
         }
 
+        /// <summary>
+        /// Gets notes contained in the specified track chunk.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes.</param>
+        /// <returns>Collection of notes contained in <paramref name="trackChunk"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        public static IEnumerable<Note> GetNotes(this TrackChunk trackChunk)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            return trackChunk.ManageNotes().Notes;
+        }
+
+        /// <summary>
+        /// Gets notes contained in the specified track chunks.
+        /// </summary>
+        /// <param name="trackChunks">Track chunks to search for notes.</param>
+        /// <returns>Collection of notes contained in <paramref name="trackChunks"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks)
         {
             if (trackChunks == null)
                 throw new ArgumentNullException(nameof(trackChunks));
 
-            return trackChunks.SelectMany(c => c.ManageNotes().Notes)
+            return trackChunks.Where(c => c != null)
+                              .SelectMany(GetNotes)
                               .OrderBy(n => n.Time);
         }
 
+        /// <summary>
+        /// Gets notes contained in the specified MIDI file.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for notes.</param>
+        /// <returns>Collection of notes contained in <paramref name="file"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this MidiFile file)
         {
             if (file == null)
                 throw new ArgumentNullException(nameof(file));
 
             return file.GetTrackChunks().GetNotes();
-        }
-
-        public static IEnumerable<Note> GetNotesAtTime(this TrackChunk trackChunk, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-        {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            return trackChunk.ManageNotes().Notes.AtTime(time, matchBy);
-        }
-
-        public static IEnumerable<Note> GetNotesAtTime(this TrackChunk trackChunk, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-        {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
-
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
-
-            return trackChunk.ManageNotes().Notes.AtTime(time, tempoMap, matchBy);
-        }
-
-        public static IEnumerable<Note> GetNotesAtTime(this IEnumerable<TrackChunk> trackChunks, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-        {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            return trackChunks.SelectMany(c => c.GetNotesAtTime(time, matchBy));
-        }
-
-        public static IEnumerable<Note> GetNotesAtTime(this IEnumerable<TrackChunk> trackChunks, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-        {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
-
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
-
-            return trackChunks.SelectMany(c => c.GetNotesAtTime(time, tempoMap, matchBy));
-        }
-
-        public static IEnumerable<Note> GetNotesAtTime(this MidiFile file, long time, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-        {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            return file.GetTrackChunks().GetNotesAtTime(time, matchBy);
-        }
-
-        public static IEnumerable<Note> GetNotesAtTime(this MidiFile file, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy = LengthedObjectPart.Entire)
-        {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
-
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
-
-            return file.GetTrackChunks().GetNotesAtTime(time, tempoMap, matchBy);
         }
 
         #endregion
