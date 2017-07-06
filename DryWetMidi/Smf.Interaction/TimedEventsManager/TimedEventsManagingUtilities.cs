@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -42,6 +44,50 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentNullException(nameof(trackChunk));
 
             return trackChunk.Events.ManageTimedEvents(sameTimeEventsComparison);
+        }
+
+        /// <summary>
+        /// Gets timed events contained in the specified track chunk.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events.</param>
+        /// <returns>Collection of timed events contained in <paramref name="trackChunk"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        public static IEnumerable<TimedEvent> GetTimedEvents(this TrackChunk trackChunk)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            return trackChunk.ManageTimedEvents().Events;
+        }
+
+        /// <summary>
+        /// Gets timed events contained in the specified track chunks.
+        /// </summary>
+        /// <param name="trackChunks">Track chunks to search for events.</param>
+        /// <returns>Collection of timed events contained in <paramref name="trackChunks"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        public static IEnumerable<TimedEvent> GetTimedEvents(this IEnumerable<TrackChunk> trackChunks)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            return trackChunks.Where(c => c != null)
+                              .SelectMany(GetTimedEvents)
+                              .OrderBy(n => n.Time);
+        }
+
+        /// <summary>
+        /// Gets timed events contained in the specified MIDI file.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for events.</param>
+        /// <returns>Collection of timed events contained in <paramref name="file"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
+        public static IEnumerable<TimedEvent> GetTimedEvents(this MidiFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            return file.GetTrackChunks().GetTimedEvents();
         }
 
         /// <summary>
