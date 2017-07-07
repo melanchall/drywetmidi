@@ -124,9 +124,12 @@ var midiFileDuration = midiFile.GetTimedEvents()
 Suppose you want to remove all C# notes from a MIDI file. It can be done with this code:
 
 ```csharp
-foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
+foreach (var trackChunk in midiFile.GetTrackChunks())
 {
-    trackChunk.Events.RemoveAll(e => (e as NoteEvent)?.GetNoteName() == NoteName.CSharp);
+    using (var notesManager = trackChunk.ManageNotes())
+    {
+        notesManager.Notes.RemoveAll(n => n.NoteName == NoteName.CSharp);
+    }
 }
 ```
 
