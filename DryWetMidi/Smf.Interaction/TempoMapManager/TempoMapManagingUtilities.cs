@@ -92,7 +92,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (timeDivision == null)
                 throw new ArgumentNullException(nameof(timeDivision));
 
-            return eventsCollections.ManageTempoMap(timeDivision).TempoMap;
+            return eventsCollections.Any()
+                ? eventsCollections.ManageTempoMap(timeDivision).TempoMap
+                : new TempoMap(timeDivision);
         }
 
         /// <summary>
@@ -114,7 +116,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (timeDivision == null)
                 throw new ArgumentNullException(nameof(timeDivision));
 
-            return trackChunks.ManageTempoMap(timeDivision).TempoMap;
+            return trackChunks.Any()
+                ? trackChunks.ManageTempoMap(timeDivision).TempoMap
+                : new TempoMap(timeDivision);
         }
 
         /// <summary>
@@ -128,7 +132,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (file == null)
                 throw new ArgumentNullException(nameof(file));
 
-            return file.ManageTempoMap().TempoMap;
+            return file.GetTrackChunks().Any()
+                ? file.ManageTempoMap().TempoMap
+                : new TempoMap(file.TimeDivision);
         }
 
         #endregion

@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentException">Note number is out of range for the specified note
         /// name and octave.</exception>
         public Note(NoteName noteName, int octave, long length)
-            : this(noteName, octave, 0, length)
+            : this(noteName, octave, length, 0)
         {
         }
 
@@ -69,6 +69,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public Note(NoteName noteName, int octave, long length, long time)
             : this(NoteUtilities.GetNoteNumber(noteName, octave))
         {
+            Length = length;
+            Time = time;
         }
 
         /// <summary>

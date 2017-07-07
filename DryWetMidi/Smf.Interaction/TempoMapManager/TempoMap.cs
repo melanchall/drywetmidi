@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="timeDivision">MIDI file time division which specifies the meaning of the time
         /// used by events of the file.</param>
         /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null.</exception>
-        public TempoMap(TimeDivision timeDivision)
+        internal TempoMap(TimeDivision timeDivision)
         {
             if (timeDivision == null)
                 throw new ArgumentNullException(nameof(timeDivision));
