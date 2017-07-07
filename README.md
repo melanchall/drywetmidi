@@ -114,9 +114,10 @@ Of course this code is simplified. In practice a MIDI file may not contain SetTe
 To get duration of a MIDI file as `TimeSpan` use this code:
 
 ```csharp
+TempoMap tempoMap = midiFile.GetTempoMap();
 var midiFileDuration = midiFile.GetTimedEvents()
                                .LastOrDefault(e => e.Event is NoteOffEvent)
-                               ?.TimeAs<MetricTime>()
+                               ?.TimeAs<MetricTime>(tempoMap)
                                ?.ToTimeSpan() ?? new TimeSpan();
 ```
 
