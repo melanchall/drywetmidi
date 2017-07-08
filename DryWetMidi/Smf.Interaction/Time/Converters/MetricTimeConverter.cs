@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 lastTime = tempoChangeTime;
             }
 
-            return lastTime + (timeMicroseconds - accumulatedMicroseconds) / GetMicrosecondsInTick(lastTempo, ticksPerQuarterNote);
+            return lastTime + (timeMicroseconds - accumulatedMicroseconds) * ticksPerQuarterNote / lastTempo.MicrosecondsPerQuarterNote;
         }
 
         private static ValueChange<Tempo> CreateTempoChange(long time, ValueLine<Tempo> tempoLine)
@@ -117,15 +117,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long GetMicroseconds(long time, Tempo tempo, short ticksPerQuarterNote)
         {
-            if (time == 0)
-                return 0;
-
-            return time * GetMicrosecondsInTick(tempo, ticksPerQuarterNote);
-        }
-
-        private static long GetMicrosecondsInTick(Tempo tempo, short ticksPerQuarterNote)
-        {
-            return tempo.MicrosecondsPerQuarterNote / ticksPerQuarterNote;
+            return time == 0
+                ? 0
+                : time * tempo.MicrosecondsPerQuarterNote / ticksPerQuarterNote;
         }
 
         #endregion
