@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents metric time on an object expressed in hours, minutes and seconds.
     /// </summary>
-    public sealed class MetricTime : ITime
+    public sealed class MetricTime : ITime, IFormattable
     {
         #region Constants
 
@@ -130,21 +130,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public TimeSpan ToTimeSpan()
         {
             return new TimeSpan(_timeSpan.Ticks);
-        }
-
-        /// <summary>
-        /// Converts the value of the current <see cref="MetricTime"/> object to its equivalent string
-        /// representation by using the specified format and culture-specific formatting
-        /// information.
-        /// </summary>
-        /// <param name="format">A standard or custom <see cref="TimeSpan"/> format string.</param>
-        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
-        /// <returns>The string representation of the current <see cref="MetricTime"/> value, as specified
-        /// by <paramref name="format"/> and <paramref name="formatProvider"/>.</returns>
-        /// <exception cref="FormatException"><paramref name="format"/> is not recognized or is not supported.</exception>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return _timeSpan.ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -338,6 +323,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public override string ToString()
         {
             return _timeSpan.ToString();
+        }
+
+        #endregion
+
+        #region IFormattable
+
+        /// <summary>
+        /// Converts the value of the current <see cref="MetricTime"/> object to its equivalent string
+        /// representation by using the specified format and culture-specific formatting
+        /// information.
+        /// </summary>
+        /// <param name="format">A standard or custom <see cref="TimeSpan"/> format string.</param>
+        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
+        /// <returns>The string representation of the current <see cref="MetricTime"/> value, as specified
+        /// by <paramref name="format"/> and <paramref name="formatProvider"/>.</returns>
+        /// <exception cref="FormatException"><paramref name="format"/> is not recognized or is not supported.</exception>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return _timeSpan.ToString(format, formatProvider);
         }
 
         #endregion
