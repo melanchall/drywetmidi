@@ -11,6 +11,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MusicalTime"/>.
+        /// </summary>
+        public MusicalTime()
+            : this(0, 0, 0, TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MusicalTime"/> with the specified
         /// numbers of bars, beats and ticks and the specified beat length.
         /// </summary>

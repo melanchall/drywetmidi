@@ -23,6 +23,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MetricTime"/>.
+        /// </summary>
+        public MetricTime()
+            : this(0)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MetricTime"/> with the specified
         /// number of microseconds.
         /// </summary>

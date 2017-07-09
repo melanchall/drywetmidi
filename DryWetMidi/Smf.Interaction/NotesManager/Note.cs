@@ -9,6 +9,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public sealed class Note : ILengthedObject
     {
+        #region Constants
+
+        private static readonly SevenBitNumber DefaultVelocity = (SevenBitNumber)100;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -189,7 +195,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets or sets velocity of the underlying <see cref="NoteOnEvent"/>.
         /// </summary>
-        public SevenBitNumber Velocity { get; set; }
+        public SevenBitNumber Velocity { get; set; } = DefaultVelocity;
 
         /// <summary>
         /// Gets or sets velocity of the underlying <see cref="NoteOffEvent"/>.

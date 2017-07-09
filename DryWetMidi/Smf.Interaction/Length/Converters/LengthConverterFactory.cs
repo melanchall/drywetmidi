@@ -10,6 +10,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Fields
 
         private static readonly ILengthConverter _metricLengthConverter = new MetricLengthConverter();
+        private static readonly ILengthConverter _musicalLengthConverter = new MusicalLengthConverter();
 
         #endregion
 
@@ -47,6 +48,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             if (lengthType == typeof(MetricLength))
                 return _metricLengthConverter;
+            else if (lengthType == typeof(MusicalLength))
+                return _musicalLengthConverter;
 
             throw new NotSupportedException($"Converter for {lengthType} is not supported.");
         }
