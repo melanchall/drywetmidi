@@ -58,6 +58,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageChords(notesTolerance, sameTimeEventsComparison);
         }
 
+        public static IEnumerable<Chord> GetChords(this EventsCollection eventsCollection, long notesTolerance = 0)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            if (notesTolerance < 0)
+                throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
+
+            return eventsCollection.ManageChords(notesTolerance).Chords;
+        }
+
         /// <summary>
         /// Gets chords contained in the specified track chunk.
         /// </summary>
@@ -75,7 +86,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
 
-            return trackChunk.ManageChords(notesTolerance).Chords;
+            return trackChunk.Events.GetChords(notesTolerance);
         }
 
         /// <summary>
@@ -118,6 +129,94 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
 
             return file.GetTrackChunks().GetChords(notesTolerance);
+        }
+
+        public static void ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            if (notesTolerance < 0)
+                throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
+
+            using (var chordsManager = eventsCollection.ManageChords(notesTolerance))
+            {
+                foreach (var chord in chordsManager.Chords.Where(c => match?.Invoke(c) != false))
+                {
+                    action(chord);
+                }
+            }
+        }
+
+        public static void ProcessChords(this TrackChunk trackChunk, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            trackChunk.Events.ProcessChords(action, match, notesTolerance);
+        }
+
+        public static void ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk?.ProcessChords(action, match, notesTolerance);
+            }
+        }
+
+        public static void ProcessChords(this MidiFile file, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            file.GetTrackChunks().ProcessChords(action, match, notesTolerance);
+        }
+
+        public static void RemoveChords(this EventsCollection eventsCollection, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            if (notesTolerance < 0)
+                throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
+
+            using (var chordsManager = eventsCollection.ManageChords(notesTolerance))
+            {
+                chordsManager.Chords.RemoveAll(match ?? (c => true));
+            }
+        }
+
+        public static void RemoveChords(this TrackChunk trackChunk, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            trackChunk.Events.RemoveChords(match, notesTolerance);
+        }
+
+        public static void RemoveChords(this IEnumerable<TrackChunk> trackChunks, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk?.RemoveChords(match, notesTolerance);
+            }
+        }
+
+        public static void RemoveChords(this MidiFile file, Predicate<Chord> match = null, long notesTolerance = 0)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            file.GetTrackChunks().RemoveChords(match, notesTolerance);
         }
 
         #endregion
