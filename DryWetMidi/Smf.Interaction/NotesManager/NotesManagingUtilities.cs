@@ -46,6 +46,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
         }
 
+        public static IEnumerable<Note> GetNotes(this EventsCollection eventsCollection)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            return eventsCollection.ManageNotes().Notes;
+        }
+
         /// <summary>
         /// Gets notes contained in the specified track chunk.
         /// </summary>
@@ -57,7 +65,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (trackChunk == null)
                 throw new ArgumentNullException(nameof(trackChunk));
 
-            return trackChunk.ManageNotes().Notes;
+            return trackChunk.Events.GetNotes();
         }
 
         /// <summary>
@@ -88,6 +96,97 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentNullException(nameof(file));
 
             return file.GetTrackChunks().GetNotes();
+        }
+
+        public static void ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, Predicate<Note> match = null)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            using (var notesManager = eventsCollection.ManageNotes())
+            {
+                foreach (var note in notesManager.Notes.Where(n => match?.Invoke(n) != false))
+                {
+                    action(note);
+                }
+            }
+        }
+
+        public static void ProcessNotes(this TrackChunk trackChunk, Action<Note> action, Predicate<Note> match = null)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            trackChunk.Events.ProcessNotes(action, match);
+        }
+
+        public static void ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, Predicate<Note> match = null)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk?.ProcessNotes(action, match);
+            }
+        }
+
+        public static void ProcessNotes(this MidiFile file, Action<Note> action, Predicate<Note> match = null)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            file.GetTrackChunks().ProcessNotes(action, match);
+        }
+
+        public static void RemoveNotes(this EventsCollection eventsCollection, Predicate<Note> match = null)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            using (var notesManager = eventsCollection.ManageNotes())
+            {
+                notesManager.Notes.RemoveAll(match ?? (n => true));
+            }
+        }
+
+        public static void RemoveNotes(this TrackChunk trackChunk, Predicate<Note> match = null)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            trackChunk.Events.RemoveNotes(match);
+        }
+
+        public static void RemoveNotes(this IEnumerable<TrackChunk> trackChunks, Predicate<Note> match = null)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk?.RemoveNotes(match);
+            }
+        }
+
+        public static void RemoveNotes(this MidiFile file, Predicate<Note> match = null)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            file.GetTrackChunks().RemoveNotes(match);
         }
 
         #endregion
