@@ -46,6 +46,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageTimedEvents(sameTimeEventsComparison);
         }
 
+        public static IEnumerable<TimedEvent> GetTimedEvents(this EventsCollection eventsCollection)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            return eventsCollection.ManageTimedEvents().Events;
+        }
+
         /// <summary>
         /// Gets timed events contained in the specified track chunk.
         /// </summary>
@@ -57,7 +65,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (trackChunk == null)
                 throw new ArgumentNullException(nameof(trackChunk));
 
-            return trackChunk.ManageTimedEvents().Events;
+            return trackChunk.Events.GetTimedEvents();
         }
 
         /// <summary>
@@ -143,6 +151,97 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentNullException(nameof(tempoMap));
 
             eventsCollection.AddEvent(midiEvent, TimeConverter.ConvertFrom(time, tempoMap));
+        }
+
+        public static void ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            using (var timedEventsManager = eventsCollection.ManageTimedEvents())
+            {
+                foreach (var timedEvent in timedEventsManager.Events.Where(e => match?.Invoke(e) != false))
+                {
+                    action(timedEvent);
+                }
+            }
+        }
+
+        public static void ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            trackChunk.Events.ProcessTimedEvents(action, match);
+        }
+
+        public static void ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk?.ProcessTimedEvents(action, match);
+            }
+        }
+
+        public static void ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            file.GetTrackChunks().ProcessTimedEvents(action, match);
+        }
+
+        public static void RemoveTimedEvents(this EventsCollection eventsCollection, Predicate<TimedEvent> match = null)
+        {
+            if (eventsCollection == null)
+                throw new ArgumentNullException(nameof(eventsCollection));
+
+            using (var timedEventsManager = eventsCollection.ManageTimedEvents())
+            {
+                timedEventsManager.Events.RemoveAll(match ?? (e => true));
+            }
+        }
+
+        public static void RemoveTimedEvents(this TrackChunk trackChunk, Predicate<TimedEvent> match = null)
+        {
+            if (trackChunk == null)
+                throw new ArgumentNullException(nameof(trackChunk));
+
+            trackChunk.Events.RemoveTimedEvents(match);
+        }
+
+        public static void RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match = null)
+        {
+            if (trackChunks == null)
+                throw new ArgumentNullException(nameof(trackChunks));
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk?.RemoveTimedEvents(match);
+            }
+        }
+
+        public static void RemoveTimedEvents(this MidiFile file, Predicate<TimedEvent> match = null)
+        {
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            file.GetTrackChunks().RemoveTimedEvents(match);
         }
 
         #endregion
