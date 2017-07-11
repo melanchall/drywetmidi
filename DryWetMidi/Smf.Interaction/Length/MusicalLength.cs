@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (fractionCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(fractionCount), fractionCount, "Fraction count is negative.");
 
-            FractionsCounts = new[] { new MusicalLengthFractionCount(fraction, fractionCount) };
+            Fractions = new[] { new MusicalLengthFractionCount(fraction, fractionCount) };
         }
 
         public MusicalLength(params MusicalLengthFractionCount[] fractionsCounts)
@@ -34,16 +34,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (fractionsCounts == null)
                 throw new ArgumentNullException(nameof(fractionsCounts));
 
-            FractionsCounts = fractionsCounts.GroupBy(c => c.Fraction)
-                                             .Select(g => new MusicalLengthFractionCount(g.Key, g.Sum(c => c.Count)))
-                                             .ToList();
+            Fractions = fractionsCounts.Simplify();
         }
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<MusicalLengthFractionCount> FractionsCounts { get; }
+        public IEnumerable<MusicalLengthFractionCount> Fractions { get; } = Enumerable.Empty<MusicalLengthFractionCount>();
 
         #endregion
 
@@ -65,7 +63,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public override string ToString()
         {
-            return string.Join(" + ", FractionsCounts);
+            return string.Join(" + ", Fractions);
         }
 
         #endregion

@@ -53,20 +53,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time == null)
                 throw new ArgumentNullException(nameof(time));
 
-            return time.FractionsCounts
-                       .Sum(c => GetFractionLength(c.Fraction, ticksPerQuarterNote, c.Count));
-        }
-
-        private static long GetFractionLength(MusicalLengthFraction fraction, short ticksPerQuarterNote, int multiplier = 1)
-        {
-            var baseLength = fraction.Dotted
-                ? (multiplier * 6 * ticksPerQuarterNote / fraction.Fraction)
-                : (multiplier * 4 * ticksPerQuarterNote / fraction.Fraction);
-
-            var tuplet = fraction.Tuplet;
-            return tuplet == null
-                ? baseLength
-                : (multiplier * tuplet.SpaceSize * baseLength / tuplet.NotesCount);
+            return time.Fractions.ToTicks(ticksPerQuarterNote);
         }
 
         #endregion
