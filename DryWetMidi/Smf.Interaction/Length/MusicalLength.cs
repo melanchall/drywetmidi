@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -8,12 +7,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
-        public MusicalLength(MusicalLengthFraction fraction)
+        public MusicalLength(MusicalFraction fraction)
             : this(fraction, 1)
         {
         }
 
-        public MusicalLength(MusicalLengthFraction fraction, int fractionCount)
+        public MusicalLength(MusicalFraction fraction, int fractionCount)
         {
             if (fraction == null)
                 throw new ArgumentNullException(nameof(fraction));
@@ -21,49 +20,151 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (fractionCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(fractionCount), fractionCount, "Fraction count is negative.");
 
-            Fractions = new[] { new MusicalLengthFractionCount(fraction, fractionCount) };
+            Fraction = new[] { new MusicalFractionCount(fraction, fractionCount) }.ToMathFraction();
         }
 
-        public MusicalLength(params MusicalLengthFractionCount[] fractionsCounts)
-            : this((IEnumerable<MusicalLengthFractionCount>)fractionsCounts)
+        public MusicalLength(params MusicalFractionCount[] fractionsCounts)
+            : this(fractionsCounts as IEnumerable<MusicalFractionCount>)
         {
         }
 
-        public MusicalLength(IEnumerable<MusicalLengthFractionCount> fractionsCounts)
+        public MusicalLength(IEnumerable<MusicalFractionCount> fractionsCounts)
         {
             if (fractionsCounts == null)
                 throw new ArgumentNullException(nameof(fractionsCounts));
 
-            Fractions = fractionsCounts.Simplify();
+            Fraction = fractionsCounts.ToMathFraction();
+        }
+
+        public MusicalLength(Fraction fraction)
+        {
+            if (fraction == null)
+                throw new ArgumentNullException(nameof(fraction));
+
+            Fraction = fraction;
         }
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<MusicalLengthFractionCount> Fractions { get; } = Enumerable.Empty<MusicalLengthFractionCount>();
+        public Fraction Fraction { get; }
+
+        #endregion
+
+        #region Methods
+
+        public bool Equals(MusicalLength length)
+        {
+            if (ReferenceEquals(null, length))
+                return false;
+
+            if (ReferenceEquals(this, length))
+                return true;
+
+            return Fraction.Equals(length.Fraction);
+        }
 
         #endregion
 
         #region Operators
 
-        public static implicit operator MusicalLength(MusicalLengthFraction fraction)
+        public static implicit operator MusicalLength(MusicalFraction fraction)
         {
             return new MusicalLength(fraction);
         }
 
-        public static implicit operator MusicalLength(MusicalLengthFractionCount fractionCount)
+        public static implicit operator MusicalLength(MusicalFractionCount fractionCount)
         {
             return new MusicalLength(fractionCount);
+        }
+
+        public static MusicalLength operator +(MusicalLength length1, MusicalLength length2)
+        {
+            if (length1 == null)
+                throw new ArgumentNullException(nameof(length1));
+
+            if (length2 == null)
+                throw new ArgumentNullException(nameof(length2));
+
+            return new MusicalLength(length1.Fraction + length2.Fraction);
+        }
+
+        public static MusicalLength operator -(MusicalLength length1, MusicalLength length2)
+        {
+            if (length1 == null)
+                throw new ArgumentNullException(nameof(length1));
+
+            if (length2 == null)
+                throw new ArgumentNullException(nameof(length2));
+
+            if (length1.Fraction < length2.Fraction)
+                throw new ArgumentException("First length is less than second one.", nameof(length1));
+
+            return new MusicalLength(length1.Fraction - length2.Fraction);
+        }
+
+        public static bool operator <(MusicalLength length1, MusicalLength length2)
+        {
+            if (length1 == null)
+                throw new ArgumentNullException(nameof(length1));
+
+            if (length2 == null)
+                throw new ArgumentNullException(nameof(length2));
+
+            return length1.Fraction < length2.Fraction;
+        }
+
+        public static bool operator >(MusicalLength length1, MusicalLength length2)
+        {
+            if (length1 == null)
+                throw new ArgumentNullException(nameof(length1));
+
+            if (length2 == null)
+                throw new ArgumentNullException(nameof(length2));
+
+            return length1.Fraction > length2.Fraction;
+        }
+
+        public static bool operator <=(MusicalLength length1, MusicalLength length2)
+        {
+            if (length1 == null)
+                throw new ArgumentNullException(nameof(length1));
+
+            if (length2 == null)
+                throw new ArgumentNullException(nameof(length2));
+
+            return length1.Fraction <= length2.Fraction;
+        }
+
+        public static bool operator >=(MusicalLength length1, MusicalLength length2)
+        {
+            if (length1 == null)
+                throw new ArgumentNullException(nameof(length1));
+
+            if (length2 == null)
+                throw new ArgumentNullException(nameof(length2));
+
+            return length1.Fraction >= length2.Fraction;
         }
 
         #endregion
 
         #region Overrides
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as MusicalLength);
+        }
+
+        public override int GetHashCode()
+        {
+            return Fraction.GetHashCode();
+        }
+
         public override string ToString()
         {
-            return string.Join(" + ", Fractions);
+            return Fraction.ToString();
         }
 
         #endregion

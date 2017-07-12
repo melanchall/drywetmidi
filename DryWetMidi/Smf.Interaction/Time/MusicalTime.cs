@@ -1,7 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -10,39 +8,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public sealed class MusicalTime : ITime
     {
+        #region Constants
+
+        private const int DefaultBeatLength = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicalTime"/>.
         /// </summary>
         public MusicalTime()
-            : this(0, 0, 0, TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote)
-        {
-        }
-
-        public MusicalTime(MusicalLengthFraction fraction)
-            : this(fraction, 1)
-        {
-        }
-
-        public MusicalTime(MusicalLengthFraction fraction, int fractionCount)
-        {
-            if (fraction == null)
-                throw new ArgumentNullException(nameof(fraction));
-
-            if (fractionCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(fractionCount), fractionCount, "Fraction count is negative.");
-
-            Fractions = new[] { new MusicalLengthFractionCount(fraction, fractionCount) };
-        }
-
-        public MusicalTime(params MusicalLengthFractionCount[] fractionsCounts)
-            : this((IEnumerable<MusicalLengthFractionCount>)fractionsCounts)
-        {
-        }
-
-        public MusicalTime(IEnumerable<MusicalLengthFractionCount> fractionsCounts)
-            : this(0, 0, 0, TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote, null)
+            : this(0, 0, 0)
         {
         }
 
@@ -57,7 +35,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative. -or-
         /// <paramref name="beats"/> is negative. -or- <paramref name="ticks"/> is negative. -or-
         /// <paramref name="beatLength"/> is zero or negative.</exception>
-        public MusicalTime(int bars, int beats, int ticks, int beatLength, IEnumerable<MusicalLengthFractionCount> fractionsCounts = null)
+        public MusicalTime(int bars, int beats, int ticks, int beatLength = DefaultBeatLength)
         {
             if (bars < 0)
                 throw new ArgumentOutOfRangeException("Number of bars is negative.", bars, nameof(bars));
@@ -75,8 +53,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             Beats = beats + ticks / beatLength;
             Ticks = ticks % beatLength;
             BeatLength = beatLength;
-
-            Fractions = fractionsCounts?.Simplify() ?? Enumerable.Empty<MusicalLengthFractionCount>();
         }
 
         #endregion
@@ -101,9 +77,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets length of a beat of the time represented by the current <see cref="MusicalTime"/>.
         /// </summary>
-        public int BeatLength { get; }
-
-        public IEnumerable<MusicalLengthFractionCount> Fractions { get; } = Enumerable.Empty<MusicalLengthFractionCount>();
+        public int BeatLength { get; } = DefaultBeatLength;
 
         #endregion
 

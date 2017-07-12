@@ -41,10 +41,11 @@
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MusicalLengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\MusicalLength.cs" />
-    <Compile Include="Smf.Interaction\MusicalLengthFraction\MusicalLengthFraction.cs" />
-    <Compile Include="Smf.Interaction\MusicalLengthFraction\MusicalLengthFractionCount.cs" />
-    <Compile Include="Smf.Interaction\MusicalLengthFraction\MusicalLengthFractionUtilities.cs" />
-    <Compile Include="Smf.Interaction\MusicalLengthFraction\TupletDefinition.cs" />
+    <Compile Include="Smf.Interaction\MusicalFraction\Fraction.cs" />
+    <Compile Include="Smf.Interaction\MusicalFraction\MusicalFraction.cs" />
+    <Compile Include="Smf.Interaction\MusicalFraction\MusicalFractionCount.cs" />
+    <Compile Include="Smf.Interaction\MusicalFraction\MusicalFractionUtilities.cs" />
+    <Compile Include="Smf.Interaction\MusicalFraction\TupletDefinition.cs" />
     <Compile Include="Smf\ChunksConverters\ChunksConverterFactory.cs" />
     <Compile Include="Smf\ChunksConverters\IChunksConverter.cs" />
     <Compile Include="Smf\ChunksConverters\MultiSequenceChunksConverter.cs" />

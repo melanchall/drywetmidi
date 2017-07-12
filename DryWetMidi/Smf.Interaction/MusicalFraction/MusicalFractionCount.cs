@@ -2,11 +2,11 @@
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public sealed class MusicalLengthFractionCount
+    public sealed class MusicalFractionCount
     {
         #region Constructor
 
-        public MusicalLengthFractionCount(MusicalLengthFraction fraction, int count)
+        public MusicalFractionCount(MusicalFraction fraction, int count)
         {
             if (fraction == null)
                 throw new ArgumentNullException(nameof(fraction));
@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public MusicalLengthFraction Fraction { get; }
+        public MusicalFraction Fraction { get; }
 
         public int Count { get; }
 
@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="fractionCount">The object to compare with the current object.</param>
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public bool Equals(MusicalLengthFractionCount fractionCount)
+        public bool Equals(MusicalFractionCount fractionCount)
         {
             if (ReferenceEquals(null, fractionCount))
                 return false;
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as MusicalLengthFractionCount);
+            return Equals(obj as MusicalFractionCount);
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -48,12 +47,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        private static long ConvertFromByTicksPerQuarterNote(MusicalLength time, short ticksPerQuarterNote)
+        private static long ConvertFromByTicksPerQuarterNote(MusicalLength length, short ticksPerQuarterNote)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
+            if (length == null)
+                throw new ArgumentNullException(nameof(length));
 
-            return time.Fractions.ToTicks(ticksPerQuarterNote);
+            return 4 * length.Fraction.Numerator * ticksPerQuarterNote / length.Fraction.Denominator;
         }
 
         #endregion

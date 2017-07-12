@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
     internal static class NumberUtilities
     {
+        #region Methods
+
         /// <summary>
         /// Ckecks if a number is a power of 2.
         /// </summary>
@@ -51,5 +55,28 @@ namespace Melanchall.DryWetMidi.Common
 
             return n1 * n2;
         }
+
+        internal static int GreatestCommonDivisor(int a, int b)
+        {
+            int remainder;
+
+            while (b != 0)
+            {
+                remainder = a % b;
+                a = b;
+                b = remainder;
+            }
+
+            return a;
+        }
+
+        internal static int LeastCommonMultiple(IEnumerable<int> numbers)
+        {
+            return !numbers.Skip(1).Any()
+                ? numbers.First()
+                : LeastCommonMultiple(numbers.First(), LeastCommonMultiple(numbers.Skip(1)));
+        }
+
+        #endregion
     }
 }
