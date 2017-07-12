@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time2 == null)
                 throw new ArgumentNullException(nameof(time2));
 
-            beatLength = NumberUtilities.LeastCommonMultiple(time1.BeatLength, time2.BeatLength);
+            beatLength = (int)MathUtilities.LeastCommonMultiple(time1.BeatLength, time2.BeatLength);
             ticks1 = beatLength * time1.Ticks / time1.BeatLength;
             ticks2 = beatLength * time2.Ticks / time2.BeatLength;
         }

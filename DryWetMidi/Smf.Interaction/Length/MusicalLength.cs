@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -21,6 +22,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentOutOfRangeException(nameof(fractionCount), fractionCount, "Fraction count is negative.");
 
             Fraction = new[] { new MusicalFractionCount(fraction, fractionCount) }.ToMathFraction();
+        }
+
+        public MusicalLength(params MusicalFraction[] fractions)
+            : this(fractions as IEnumerable<MusicalFraction>)
+        {
+        }
+
+        public MusicalLength(IEnumerable<MusicalFraction> fractions)
+            : this(fractions?.Select(f => new MusicalFractionCount(f, 1)))
+        {
         }
 
         public MusicalLength(params MusicalFractionCount[] fractionsCounts)
@@ -68,6 +79,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         #region Operators
+
+        public static implicit operator MusicalLength(Fraction fraction)
+        {
+            return new MusicalLength(fraction);
+        }
 
         public static implicit operator MusicalLength(MusicalFraction fraction)
         {

@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             #region Constructor
 
-            public EqualizedFractions(int numerator1, int numerator2, int denominator)
+            public EqualizedFractions(long numerator1, long numerator2, long denominator)
             {
                 Numerator1 = numerator1;
                 Numerator2 = numerator2;
@@ -24,11 +24,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             #region Properties
 
-            public int Numerator1 { get; }
+            public long Numerator1 { get; }
 
-            public int Numerator2 { get; }
+            public long Numerator2 { get; }
 
-            public int Denominator { get; }
+            public long Denominator { get; }
 
             #endregion
         }
@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
-        public Fraction(int numerator, int denominator)
+        public Fraction(long numerator, long denominator)
         {
             Numerator = numerator;
             Denominator = denominator;
@@ -47,9 +47,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public int Numerator { get; }
+        public long Numerator { get; }
 
-        public int Denominator { get; }
+        public long Denominator { get; }
 
         #endregion
 
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(this, fraction))
                 return true;
 
-            var denominator = NumberUtilities.LeastCommonMultiple(Denominator, fraction.Denominator);
+            var denominator = MathUtilities.LeastCommonMultiple(Denominator, fraction.Denominator);
             return (Numerator * Denominator / denominator) ==
                    (fraction.Numerator * fraction.Denominator / denominator);
         }
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (!fractions.Any())
                 return new Fraction(0, 1);
 
-            var denominator = NumberUtilities.LeastCommonMultiple(fractions.Select(f => f.Denominator));
+            var denominator = MathUtilities.LeastCommonMultiple(fractions.Select(f => f.Denominator));
             var numerator = fractions.Sum(f => f.Numerator * denominator / f.Denominator);
 
             return Simplify(new Fraction(numerator, denominator));
@@ -87,14 +87,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (fraction == null)
                 throw new ArgumentNullException(nameof(fraction));
 
-            var greatestCommonDivisor = NumberUtilities.GreatestCommonDivisor(fraction.Numerator, fraction.Denominator);
+            var greatestCommonDivisor = MathUtilities.GreatestCommonDivisor(fraction.Numerator, fraction.Denominator);
             return new Fraction(fraction.Numerator / greatestCommonDivisor,
                                 fraction.Denominator / greatestCommonDivisor);
         }
 
         private static EqualizedFractions Equalize(Fraction fraction1, Fraction fraction2)
         {
-            var denominator = NumberUtilities.LeastCommonMultiple(fraction1.Denominator, fraction2.Denominator);
+            var denominator = MathUtilities.LeastCommonMultiple(fraction1.Denominator, fraction2.Denominator);
             return new EqualizedFractions(fraction1.Numerator * fraction1.Denominator / denominator,
                                           fraction2.Numerator * fraction2.Denominator,
                                           denominator);

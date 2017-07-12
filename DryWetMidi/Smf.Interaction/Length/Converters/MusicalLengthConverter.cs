@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -8,12 +9,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ILength ConvertTo(long length, long time, TempoMap tempoMap)
         {
-            throw new NotImplementedException();
+            if (length < 0)
+                throw new ArgumentOutOfRangeException(nameof(length), length, "Length is negative.");
+
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+
+            if (tempoMap == null)
+                throw new ArgumentNullException(nameof(tempoMap));
+
+            var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
+            if (ticksPerQuarterNoteTimeDivision != null)
+                return ConvertToByTicksPerQuarterNote(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
+
+            throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
         }
 
         public ILength ConvertTo(long length, ITime time, TempoMap tempoMap)
         {
-            throw new NotImplementedException();
+            return ConvertTo(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
@@ -47,11 +61,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        private static MusicalLength ConvertToByTicksPerQuarterNote(long length, short ticksPerQuarterNote)
+        {
+            var xy = MathUtilities.SolveDiophantineEquation(4 * ticksPerQuarterNote, -length);
+            return new MusicalLength(new Fraction(Math.Abs(xy.Item1), Math.Abs(xy.Item2)));
+        }
+
         private static long ConvertFromByTicksPerQuarterNote(MusicalLength length, short ticksPerQuarterNote)
         {
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
-
             return 4 * length.Fraction.Numerator * ticksPerQuarterNote / length.Fraction.Denominator;
         }
 

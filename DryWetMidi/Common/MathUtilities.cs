@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
-    internal static class NumberUtilities
+    internal static class MathUtilities
     {
         #region Methods
 
@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <returns>Least common multiple of <paramref name="a"/> and <paramref name="b"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="a"/> is zero or negative. -or-
         /// <paramref name="b"/> is zero or negative.</exception>
-        internal static int LeastCommonMultiple(int a, int b)
+        internal static long LeastCommonMultiple(long a, long b)
         {
             if (a <= 0)
                 throw new ArgumentOutOfRangeException(nameof(a), a, "First number is zero or negative.");
@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Common
             if (b <= 0)
                 throw new ArgumentOutOfRangeException(nameof(b), b, "Second number is zero or negative.");
 
-            int n1, n2;
+            long n1, n2;
 
             if (a > b)
             {
@@ -56,9 +56,16 @@ namespace Melanchall.DryWetMidi.Common
             return n1 * n2;
         }
 
-        internal static int GreatestCommonDivisor(int a, int b)
+        internal static long LeastCommonMultiple(IEnumerable<long> numbers)
         {
-            int remainder;
+            return !numbers.Skip(1).Any()
+                ? numbers.First()
+                : LeastCommonMultiple(numbers.First(), LeastCommonMultiple(numbers.Skip(1)));
+        }
+
+        internal static long GreatestCommonDivisor(long a, long b)
+        {
+            long remainder;
 
             while (b != 0)
             {
@@ -70,11 +77,10 @@ namespace Melanchall.DryWetMidi.Common
             return a;
         }
 
-        internal static int LeastCommonMultiple(IEnumerable<int> numbers)
+        internal static Tuple<long, long> SolveDiophantineEquation(long a, long b)
         {
-            return !numbers.Skip(1).Any()
-                ? numbers.First()
-                : LeastCommonMultiple(numbers.First(), LeastCommonMultiple(numbers.Skip(1)));
+            var greatestCommonDivisor = GreatestCommonDivisor(a, b);
+            return Tuple.Create(b / greatestCommonDivisor, -a / greatestCommonDivisor);
         }
 
         #endregion

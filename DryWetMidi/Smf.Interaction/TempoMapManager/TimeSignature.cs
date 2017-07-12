@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (denominator <= 0)
                 throw new ArgumentOutOfRangeException("Denominator is zero or negative.", denominator, nameof(denominator));
 
-            if (!NumberUtilities.IsPowerOfTwo(denominator))
+            if (!MathUtilities.IsPowerOfTwo(denominator))
                 throw new ArgumentException("Denominator is not a power of two.", nameof(denominator));
 
             Numerator = numerator;

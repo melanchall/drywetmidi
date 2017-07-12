@@ -173,6 +173,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Operators
 
+        public static implicit operator MetricTime(TimeSpan timeSpan)
+        {
+            return new MetricTime(timeSpan);
+        }
+
         /// <summary>
         /// Adds two specified <see cref="MetricTime"/> instances.
         /// </summary>
