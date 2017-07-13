@@ -112,15 +112,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
-        /// Converts the current <see cref="MetricLength"/> object to the <see cref="TimeSpan"/>.
-        /// </summary>
-        /// <returns>An instance of the <see cref="TimeSpan"/> that represents current <see cref="MetricLength"/>.</returns>
-        public TimeSpan ToTimeSpan()
-        {
-            return _time.ToTimeSpan();
-        }
-
-        /// <summary>
         /// Converts the value of the current <see cref="MetricLength"/> object to its equivalent string
         /// representation by using the specified format.
         /// </summary>
@@ -156,6 +147,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static implicit operator MetricLength(TimeSpan timeSpan)
         {
             return new MetricLength(timeSpan);
+        }
+
+        public static explicit operator TimeSpan(MetricLength length)
+        {
+            if (length == null)
+                throw new ArgumentNullException(nameof(length));
+
+            return (TimeSpan)length._time;
         }
 
         /// <summary>
