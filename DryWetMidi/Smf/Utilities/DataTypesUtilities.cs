@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>Single unsigned 16-bit integer number made of seven-bit halfs.</returns>
         public static ushort Combine(SevenBitNumber head, SevenBitNumber tail)
         {
-            return (byte)((head << 7) | tail);
+            return (ushort)((head << 7) | tail);
         }
 
         /// <summary>
