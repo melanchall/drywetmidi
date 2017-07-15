@@ -35,6 +35,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Constants
+
+        public static readonly Fraction NoFraction = new Fraction(1, 1);
+
+        #endregion
+
         #region Constructor
 
         public Fraction(long numerator, long denominator)
@@ -57,15 +63,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public bool Equals(Fraction fraction)
         {
-            if (ReferenceEquals(null, fraction))
-                return false;
-
-            if (ReferenceEquals(this, fraction))
-                return true;
-
-            var denominator = MathUtilities.LeastCommonMultiple(Denominator, fraction.Denominator);
-            return (Numerator * Denominator / denominator) ==
-                   (fraction.Numerator * fraction.Denominator / denominator);
+            return this == fraction;
         }
 
         public static Fraction Sum(IEnumerable<Fraction> fractions)
@@ -103,6 +101,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         #region Operators
+
+        public static bool operator ==(Fraction fraction1, Fraction fraction2)
+        {
+            if (ReferenceEquals(fraction1, fraction2))
+                return true;
+
+            if (ReferenceEquals(null, fraction1) || ReferenceEquals(null, fraction2))
+                return false;
+
+            var denominator = MathUtilities.LeastCommonMultiple(fraction1.Denominator, fraction2.Denominator);
+            return (fraction1.Numerator * fraction1.Denominator / denominator) ==
+                   (fraction2.Numerator * fraction2.Denominator / denominator);
+        }
+
+        public static bool operator !=(Fraction fraction1, Fraction fraction2)
+        {
+            return !(fraction1 == fraction2);
+        }
 
         public static Fraction operator +(Fraction fraction1, Fraction fraction2)
         {

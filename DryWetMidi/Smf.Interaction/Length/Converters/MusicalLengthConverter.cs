@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -20,7 +19,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
-                return ConvertToByTicksPerQuarterNote(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
+                return new MusicalLength(FractionUtilities.FromTicks(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote));
 
             throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
         }
@@ -47,7 +46,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
-                return ConvertFromByTicksPerQuarterNote(musicalLength, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
+                return FractionUtilities.ToTicks(musicalLength.Fraction, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
 
             throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
         }
@@ -55,21 +54,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public long ConvertFrom(ILength length, ITime time, TempoMap tempoMap)
         {
             return ConvertFrom(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
-        }
-
-        #endregion
-
-        #region Methods
-
-        private static MusicalLength ConvertToByTicksPerQuarterNote(long length, short ticksPerQuarterNote)
-        {
-            var xy = MathUtilities.SolveDiophantineEquation(4 * ticksPerQuarterNote, -length);
-            return new MusicalLength(new Fraction(Math.Abs(xy.Item1), Math.Abs(xy.Item2)));
-        }
-
-        private static long ConvertFromByTicksPerQuarterNote(MusicalLength length, short ticksPerQuarterNote)
-        {
-            return 4 * length.Fraction.Numerator * ticksPerQuarterNote / length.Fraction.Denominator;
         }
 
         #endregion

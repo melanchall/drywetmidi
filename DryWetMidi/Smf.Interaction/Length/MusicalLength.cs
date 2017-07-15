@@ -8,11 +8,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
-        public MusicalLength(MusicalFraction fraction)
-            : this(fraction, 1)
-        {
-        }
-
         public MusicalLength(MusicalFraction fraction, int fractionCount)
         {
             if (fraction == null)
@@ -73,27 +68,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(this, length))
                 return true;
 
-            return Fraction.Equals(length.Fraction);
+            return Fraction == length.Fraction;
         }
 
         #endregion
 
         #region Operators
-
-        public static implicit operator MusicalLength(Fraction fraction)
-        {
-            return new MusicalLength(fraction);
-        }
-
-        public static implicit operator MusicalLength(MusicalFraction fraction)
-        {
-            return new MusicalLength(fraction);
-        }
-
-        public static implicit operator MusicalLength(MusicalFractionCount fractionCount)
-        {
-            return new MusicalLength(fractionCount);
-        }
 
         public static MusicalLength operator +(MusicalLength length1, MusicalLength length2)
         {

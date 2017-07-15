@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    internal static class MusicalFractionUtilities
+    internal static class FractionUtilities
     {
         #region Methods
 
@@ -15,6 +16,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             return Fraction.Sum(fractionsCounts.Where(c => c != null && c.Fraction != null && c.Count > 0)
                                                .Select(ToMathFraction));
+        }
+
+        internal static Fraction FromTicks(long ticks, short ticksPerQuarterNote)
+        {
+            var xy = MathUtilities.SolveDiophantineEquation(4 * ticksPerQuarterNote, -ticks);
+            return new Fraction(Math.Abs(xy.Item1), Math.Abs(xy.Item2));
+        }
+
+        internal static long ToTicks(Fraction fraction, short ticksPerQuarterNote)
+        {
+            return 4 * fraction.Numerator * ticksPerQuarterNote / fraction.Denominator;
         }
 
         private static Fraction ToMathFraction(MusicalFractionCount fractionsCount)

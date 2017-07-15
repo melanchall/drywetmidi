@@ -1,5 +1,6 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -8,34 +9,69 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public sealed class MusicalTime : ITime
     {
-        #region Constants
-
-        private const int DefaultBeatLength = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicalTime"/>.
         /// </summary>
         public MusicalTime()
-            : this(0, 0, 0)
+            : this(0, 0)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicalTime"/> with the specified
-        /// numbers of bars, beats and ticks and the specified beat length.
+        /// numbers of bars, beats.
         /// </summary>
         /// <param name="bars">Number of bars.</param>
         /// <param name="beats">Number of beats.</param>
-        /// <param name="ticks">Number of ticks.</param>
-        /// <param name="beatLength">Length of a beat in ticks.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative. -or-
-        /// <paramref name="beats"/> is negative. -or- <paramref name="ticks"/> is negative. -or-
-        /// <paramref name="beatLength"/> is zero or negative.</exception>
-        public MusicalTime(int bars, int beats, int ticks, int beatLength = DefaultBeatLength)
+        /// <paramref name="beats"/> is negative.</exception>
+        public MusicalTime(int bars, int beats)
+            : this(bars, beats, Fraction.NoFraction)
+        {
+        }
+
+        public MusicalTime(Fraction fraction)
+            : this(0, 0, fraction)
+        {
+        }
+
+        public MusicalTime(MusicalFraction fraction, int fractionCount)
+        {
+            if (fraction == null)
+                throw new ArgumentNullException(nameof(fraction));
+
+            if (fractionCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(fractionCount), fractionCount, "Fraction count is negative.");
+
+            Fraction = new[] { new MusicalFractionCount(fraction, fractionCount) }.ToMathFraction();
+        }
+
+        public MusicalTime(params MusicalFraction[] fractions)
+            : this(fractions as IEnumerable<MusicalFraction>)
+        {
+        }
+
+        public MusicalTime(IEnumerable<MusicalFraction> fractions)
+            : this(fractions?.Select(f => new MusicalFractionCount(f, 1)))
+        {
+        }
+
+        public MusicalTime(params MusicalFractionCount[] fractionsCounts)
+            : this(fractionsCounts as IEnumerable<MusicalFractionCount>)
+        {
+        }
+
+        public MusicalTime(IEnumerable<MusicalFractionCount> fractionsCounts)
+        {
+            if (fractionsCounts == null)
+                throw new ArgumentNullException(nameof(fractionsCounts));
+
+            Fraction = fractionsCounts.ToMathFraction();
+        }
+
+        public MusicalTime(int bars, int beats, Fraction fraction)
         {
             if (bars < 0)
                 throw new ArgumentOutOfRangeException("Number of bars is negative.", bars, nameof(bars));
@@ -43,16 +79,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (beats < 0)
                 throw new ArgumentOutOfRangeException("Number of beats is negative.", beats, nameof(beats));
 
-            if (ticks < 0)
-                throw new ArgumentOutOfRangeException("Number of ticks is negative.", ticks, nameof(ticks));
-
-            if (beatLength <= 0)
-                throw new ArgumentOutOfRangeException("Beat length is zero or negative.", beatLength, nameof(beatLength));
+            if (fraction == null)
+                throw new ArgumentNullException(nameof(fraction));
 
             Bars = bars;
-            Beats = beats + ticks / beatLength;
-            Ticks = ticks % beatLength;
-            BeatLength = beatLength;
+            Beats = beats;
+            Fraction = fraction;
         }
 
         #endregion
@@ -69,15 +101,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         public int Beats { get; }
 
-        /// <summary>
-        /// Gets the ticks component of the time represented by the current <see cref="MusicalTime"/>.
-        /// </summary>
-        public int Ticks { get; }
-
-        /// <summary>
-        /// Gets length of a beat of the time represented by the current <see cref="MusicalTime"/>.
-        /// </summary>
-        public int BeatLength { get; } = DefaultBeatLength;
+        public Fraction Fraction { get; }
 
         #endregion
 
@@ -98,31 +122,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             return Bars == time.Bars &&
                    Beats == time.Beats &&
-                   Ticks == time.Ticks &&
-                   BeatLength == time.BeatLength;
-        }
-
-        private static void EqualizeTicks(MusicalTime time1, MusicalTime time2, out int beatLength, out int ticks1, out int ticks2)
-        {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
-
-            beatLength = (int)MathUtilities.LeastCommonMultiple(time1.BeatLength, time2.BeatLength);
-            ticks1 = beatLength * time1.Ticks / time1.BeatLength;
-            ticks2 = beatLength * time2.Ticks / time2.BeatLength;
-        }
-
-        private static void GetPartsDifferencies(MusicalTime time1, MusicalTime time2, out int barsDifference, out int beatsDifference, out int ticksDifference)
-        {
-            barsDifference = time1.Bars - time2.Bars;
-            beatsDifference = time1.Beats - time2.Beats;
-
-            int beatLength, ticks1, ticks2;
-            EqualizeTicks(time1, time2, out beatLength, out ticks1, out ticks2);
-            ticksDifference = ticks1 - ticks2;
+                   Fraction == time.Fraction;
         }
 
         #endregion
@@ -146,13 +146,27 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time2 == null)
                 throw new ArgumentNullException(nameof(time2));
 
-            int beatLength, ticks1, ticks2;
-            EqualizeTicks(time1, time2, out beatLength, out ticks1, out ticks2);
-
             return new MusicalTime(time1.Bars + time2.Bars,
                                    time1.Beats + time2.Beats,
-                                   ticks1 + ticks2,
-                                   beatLength);
+                                   time1.Fraction + time2.Fraction);
+        }
+
+        public static MusicalTime operator +(MusicalTime time, MusicalLength length)
+        {
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (length == null)
+                throw new ArgumentNullException(nameof(length));
+
+            return new MusicalTime(time.Bars,
+                                   time.Beats,
+                                   time.Fraction + length.Fraction);
+        }
+
+        public static MusicalTime operator +(MusicalLength length, MusicalTime time)
+        {
+            return time + length;
         }
 
         /// <summary>
@@ -175,14 +189,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             if (time1 < time2)
                 throw new ArgumentException("First time is less than second one.", nameof(time1));
-
-            int beatLength, ticks1, ticks2;
-            EqualizeTicks(time1, time2, out beatLength, out ticks1, out ticks2);
-
+            
             return new MusicalTime(time1.Bars - time2.Bars,
                                    time1.Beats - time2.Beats,
-                                   ticks1 - ticks2,
-                                   beatLength);
+                                   time1.Fraction - time2.Fraction);
         }
 
         /// <summary>
@@ -203,12 +213,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time2 == null)
                 throw new ArgumentNullException(nameof(time2));
 
-            int barsDifference, beatsDifference, ticksDifference;
-            GetPartsDifferencies(time1, time2, out barsDifference, out beatsDifference, out ticksDifference);
-
-            return barsDifference < 0 ||
-                   (barsDifference == 0 && (beatsDifference < 0 ||
-                                            (beatsDifference == 0 && ticksDifference < 0)));
+            return time1.Bars < time2.Bars ||
+                   (time1.Bars == time2.Bars && (time1.Beats < time2.Beats ||
+                                                 (time1.Beats == time2.Beats && time1.Fraction < time2.Fraction)));
         }
 
         /// <summary>
@@ -229,12 +236,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time2 == null)
                 throw new ArgumentNullException(nameof(time2));
 
-            int barsDifference, beatsDifference, ticksDifference;
-            GetPartsDifferencies(time1, time2, out barsDifference, out beatsDifference, out ticksDifference);
-
-            return barsDifference > 0 ||
-                   (barsDifference == 0 && (beatsDifference > 0 ||
-                                            (beatsDifference == 0 && ticksDifference > 0)));
+            return time1.Bars > time2.Bars ||
+                   (time1.Bars == time2.Bars && (time1.Beats > time2.Beats ||
+                                                 (time1.Beats == time2.Beats && time1.Fraction > time2.Fraction)));
         }
 
         /// <summary>
@@ -255,12 +259,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time2 == null)
                 throw new ArgumentNullException(nameof(time2));
 
-            int barsDifference, beatsDifference, ticksDifference;
-            GetPartsDifferencies(time1, time2, out barsDifference, out beatsDifference, out ticksDifference);
-
-            return barsDifference < 0 ||
-                   (barsDifference == 0 && (beatsDifference < 0 ||
-                                            (beatsDifference == 0 && ticksDifference <= 0)));
+            return time1.Bars <= time2.Bars ||
+                   (time1.Bars == time2.Bars && (time1.Beats <= time2.Beats ||
+                                                 (time1.Beats == time2.Beats && time1.Fraction <= time2.Fraction)));
         }
 
         /// <summary>
@@ -281,12 +282,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time2 == null)
                 throw new ArgumentNullException(nameof(time2));
 
-            int barsDifference, beatsDifference, ticksDifference;
-            GetPartsDifferencies(time1, time2, out barsDifference, out beatsDifference, out ticksDifference);
-
-            return barsDifference > 0 ||
-                   (barsDifference == 0 && (beatsDifference > 0 ||
-                                            (beatsDifference == 0 && ticksDifference >= 0)));
+            return time1.Bars >= time2.Bars ||
+                   (time1.Bars == time2.Bars && (time1.Beats >= time2.Beats ||
+                                                 (time1.Beats == time2.Beats && time1.Fraction >= time2.Fraction)));
         }
 
         #endregion
@@ -311,8 +309,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             return Bars.GetHashCode() ^
                    Beats.GetHashCode() ^
-                   Ticks.GetHashCode() ^
-                   BeatLength.GetHashCode();
+                   Fraction.GetHashCode();
         }
 
         /// <summary>
@@ -321,7 +318,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{Bars}:{Beats}[{BeatLength}]:{Ticks}";
+            return $"{Bars}:{Beats}:{Fraction}";
         }
 
         #endregion
