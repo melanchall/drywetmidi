@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return new MusicalLength(FractionUtilities.FromTicks(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote));
 
-            throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
+            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
         }
 
         public ILength ConvertTo(long length, ITime time, TempoMap tempoMap)
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return FractionUtilities.ToTicks(musicalLength.Fraction, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
 
-            throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
+            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
         }
 
         public long ConvertFrom(ILength length, ITime time, TempoMap tempoMap)

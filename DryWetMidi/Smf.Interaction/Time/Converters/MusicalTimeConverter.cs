@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return ConvertToByTicksPerQuarterNote(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
-            throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
+            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
         }
 
         public long ConvertFrom(ITime time, TempoMap tempoMap)
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return ConvertFromByTicksPerQuarterNote(musicalTime, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
-            throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
+            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
         }
 
         #endregion

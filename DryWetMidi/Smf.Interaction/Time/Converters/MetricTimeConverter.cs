@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return ConvertToByTicksPerQuarterNote(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
-            throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
+            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
         }
 
         public long ConvertFrom(ITime time, TempoMap tempoMap)
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return ConvertFromByTicksPerQuarterNote(metricTime, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
-            throw new NotSupportedException("Time division other than TicksPerQuarterNoteTimeDivision not supported.");
+            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
         }
 
         #endregion
@@ -58,15 +58,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var tempoLine = tempoMap.TempoLine;
             var tempoChanges = tempoLine.Values.Where(v => v.Time < time);
             if (!tempoChanges.Any())
-                return new MetricTime(GetMicroseconds(time, Tempo.Default, ticksPerQuarterNote));
+                return new MetricTime(RoundMicroseconds(GetMicroseconds(time, Tempo.Default, ticksPerQuarterNote)));
 
             //
 
-            var accumulatedMicroseconds = 0L;
+            var accumulatedMicroseconds = 0d;
             var lastTime = 0L;
             var lastTempo = Tempo.Default;
 
-            foreach (var tempoChange in tempoChanges.Concat(new[] { CreateTempoChange(time, tempoLine) }))
+            foreach (var tempoChange in tempoChanges.Concat(new[] { new ValueChange<Tempo>(time, tempoLine.AtTime(time)) }))
             {
                 var tempoChangeTime = tempoChange.Time;
 
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 lastTime = tempoChangeTime;
             }
 
-            return new MetricTime(accumulatedMicroseconds);
+            return new MetricTime(RoundMicroseconds(accumulatedMicroseconds));
         }
 
         private static long ConvertFromByTicksPerQuarterNote(MetricTime time, short ticksPerQuarterNote, TempoMap tempoMap)
@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var timeMicroseconds = time.TotalMicroseconds;
 
-            var accumulatedMicroseconds = 0L;
+            var accumulatedMicroseconds = 0d;
             var lastTime = 0L;
             var lastTempo = Tempo.Default;
 
@@ -107,19 +107,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 lastTime = tempoChangeTime;
             }
 
-            return lastTime + (timeMicroseconds - accumulatedMicroseconds) * ticksPerQuarterNote / lastTempo.MicrosecondsPerQuarterNote;
+            return (long)Math.Round(lastTime + (timeMicroseconds - accumulatedMicroseconds) * ticksPerQuarterNote / lastTempo.MicrosecondsPerQuarterNote);
         }
 
-        private static ValueChange<Tempo> CreateTempoChange(long time, ValueLine<Tempo> tempoLine)
-        {
-            return new ValueChange<Tempo>(time, tempoLine.AtTime(time));
-        }
-
-        private static long GetMicroseconds(long time, Tempo tempo, short ticksPerQuarterNote)
+        private static double GetMicroseconds(long time, Tempo tempo, short ticksPerQuarterNote)
         {
             return time == 0
                 ? 0
-                : time * tempo.MicrosecondsPerQuarterNote / ticksPerQuarterNote;
+                : time * tempo.MicrosecondsPerQuarterNote / (double)ticksPerQuarterNote;
+        }
+
+        private static long RoundMicroseconds(double microseconds)
+        {
+            return (long)Math.Round(microseconds);
         }
 
         #endregion

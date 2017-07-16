@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -8,9 +9,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     internal static class LengthConverterFactory
     {
         #region Fields
-
-        private static readonly ILengthConverter _metricLengthConverter = new MetricLengthConverter();
-        private static readonly ILengthConverter _musicalLengthConverter = new MusicalLengthConverter();
+        
+        private static readonly Dictionary<Type, ILengthConverter> _converters = new Dictionary<Type, ILengthConverter>
+        {
+            [typeof(MetricLength)] = new MetricLengthConverter(),
+            [typeof(MusicalLength)] = new MusicalLengthConverter()
+        };
 
         #endregion
 
@@ -35,21 +39,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="lengthType">Type of an object's length to get converter for.</param>
         /// <returns>Converter to convert length between <see cref="long"/> and <paramref name="lengthType"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="lengthType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="lengthType"/> doesn't implement <see cref="ILength"/>.</exception>
         /// <exception cref="NotSupportedException"><paramref name="lengthType"/> is not supported.</exception>
         internal static ILengthConverter GetConverter(Type lengthType)
         {
-            if (lengthType == null)
-                throw new ArgumentNullException(nameof(lengthType));
-
-            if (!typeof(ILength).IsAssignableFrom(lengthType))
-                throw new ArgumentException($"Length type doesn't implement {nameof(ILength)} interface.", nameof(lengthType));
-
-            if (lengthType == typeof(MetricLength))
-                return _metricLengthConverter;
-            else if (lengthType == typeof(MusicalLength))
-                return _musicalLengthConverter;
+            ILengthConverter converter;
+            if (_converters.TryGetValue(lengthType, out converter))
+                return converter;
 
             throw new NotSupportedException($"Converter for {lengthType} is not supported.");
         }

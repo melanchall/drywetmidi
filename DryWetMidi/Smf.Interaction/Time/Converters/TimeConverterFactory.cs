@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -9,8 +10,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Fields
 
-        private static readonly ITimeConverter _metricTimeConverter = new MetricTimeConverter();
-        private static readonly ITimeConverter _musicalTimeConverter = new MusicalTimeConverter();
+        private static readonly Dictionary<Type, ITimeConverter> _converters = new Dictionary<Type, ITimeConverter>
+        {
+            [typeof(MetricTime)] = new MetricTimeConverter(),
+            [typeof(MusicalTime)] = new MusicalTimeConverter()
+        };
 
         #endregion
 
@@ -35,21 +39,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="timeType">Type of an object's time to get converter for.</param>
         /// <returns>Converter to convert time between <see cref="long"/> and <paramref name="timeType"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="timeType"/> doesn't implement <see cref="ITime"/>.</exception>
         /// <exception cref="NotSupportedException"><paramref name="timeType"/> is not supported.</exception>
         internal static ITimeConverter GetConverter(Type timeType)
         {
-            if (timeType == null)
-                throw new ArgumentNullException(nameof(timeType));
-
-            if (!typeof(ITime).IsAssignableFrom(timeType))
-                throw new ArgumentException($"Time type doesn't implement {nameof(ITime)} interface.", nameof(timeType));
-
-            if (timeType == typeof(MetricTime))
-                return _metricTimeConverter;
-            else if (timeType == typeof(MusicalTime))
-                return _musicalTimeConverter;
+            ITimeConverter converter;
+            if (_converters.TryGetValue(timeType, out converter))
+                return converter;
 
             throw new NotSupportedException($"Converter for {timeType} is not supported.");
         }
