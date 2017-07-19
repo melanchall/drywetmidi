@@ -44,14 +44,28 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public bool Equals(TupletDefinition tupletDefinition)
         {
-            if (ReferenceEquals(null, tupletDefinition))
-                return false;
+            return this == tupletDefinition;
+        }
 
-            if (ReferenceEquals(this, tupletDefinition))
+        #endregion
+
+        #region Operators
+
+        public static bool operator ==(TupletDefinition tupletDefinition1, TupletDefinition tupletDefinition2)
+        {
+            if (ReferenceEquals(tupletDefinition1, tupletDefinition2))
                 return true;
 
-            return NotesCount == tupletDefinition.NotesCount &&
-                   SpaceSize == tupletDefinition.SpaceSize;
+            if (ReferenceEquals(null, tupletDefinition1) || ReferenceEquals(null, tupletDefinition2))
+                return false;
+
+            return tupletDefinition1.NotesCount == tupletDefinition2.NotesCount &&
+                   tupletDefinition1.SpaceSize == tupletDefinition2.SpaceSize;
+        }
+
+        public static bool operator !=(TupletDefinition tupletDefinition1, TupletDefinition tupletDefinition2)
+        {
+            return !(tupletDefinition1 == tupletDefinition2);
         }
 
         #endregion

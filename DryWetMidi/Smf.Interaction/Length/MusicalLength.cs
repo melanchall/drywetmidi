@@ -75,6 +75,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Operators
 
+        public static implicit operator MusicalLength(Fraction fraction)
+        {
+            return new MusicalLength(fraction);
+        }
+
+        public static implicit operator MusicalLength(MusicalFraction fraction)
+        {
+            return new MusicalLength(fraction);
+        }
+
+        public static implicit operator MusicalLength(MusicalFractionCount fractionCount)
+        {
+            return new MusicalLength(fractionCount);
+        }
+
+        public static implicit operator Fraction(MusicalLength length)
+        {
+            return length.Fraction;
+        }
+
         public static MusicalLength operator +(MusicalLength length1, MusicalLength length2)
         {
             if (length1 == null)

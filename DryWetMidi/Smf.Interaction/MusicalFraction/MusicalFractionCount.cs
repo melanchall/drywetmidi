@@ -4,7 +4,23 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class MusicalFractionCount
     {
+        #region Constants
+
+        private const int DefaultCount = 1;
+
+        #endregion
+
         #region Constructor
+
+        public MusicalFractionCount()
+            : this(new MusicalFraction())
+        {
+        }
+
+        public MusicalFractionCount(MusicalFraction fraction)
+            : this(fraction, DefaultCount)
+        {
+        }
 
         public MusicalFractionCount(MusicalFraction fraction, int count)
         {
@@ -37,14 +53,28 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public bool Equals(MusicalFractionCount fractionCount)
         {
-            if (ReferenceEquals(null, fractionCount))
-                return false;
+            return this == fractionCount;
+        }
 
-            if (ReferenceEquals(this, fractionCount))
+        #endregion
+
+        #region Operators
+
+        public static bool operator ==(MusicalFractionCount fractionCount1, MusicalFractionCount fractionCount2)
+        {
+            if (ReferenceEquals(fractionCount1, fractionCount2))
                 return true;
 
-            return Fraction.Equals(fractionCount.Fraction) &&
-                   Count == fractionCount.Count;
+            if (ReferenceEquals(null, fractionCount1) || ReferenceEquals(null, fractionCount2))
+                return false;
+
+            return fractionCount1.Fraction == fractionCount2.Fraction &&
+                   fractionCount1.Count == fractionCount2.Count;
+        }
+
+        public static bool operator !=(MusicalFractionCount fractionCount1, MusicalFractionCount fractionCount2)
+        {
+            return !(fractionCount1 == fractionCount2);
         }
 
         #endregion

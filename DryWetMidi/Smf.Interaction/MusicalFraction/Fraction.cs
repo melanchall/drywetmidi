@@ -37,11 +37,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constants
 
-        public static readonly Fraction NoFraction = new Fraction(1, 1);
+        public static readonly Fraction NoFraction = new Fraction();
+
+        private const long DefaultNumerator = 0;
+        private const long DefaultDenominator = 1;
 
         #endregion
 
         #region Constructor
+
+        public Fraction()
+        {
+        }
 
         public Fraction(long numerator, long denominator)
         {
@@ -53,9 +60,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public long Numerator { get; }
+        public long Numerator { get; } = DefaultNumerator;
 
-        public long Denominator { get; }
+        public long Denominator { get; } = DefaultDenominator;
 
         #endregion
 
@@ -93,8 +100,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private static EqualizedFractions Equalize(Fraction fraction1, Fraction fraction2)
         {
             var denominator = MathUtilities.LeastCommonMultiple(fraction1.Denominator, fraction2.Denominator);
-            return new EqualizedFractions(fraction1.Numerator * fraction1.Denominator / denominator,
-                                          fraction2.Numerator * fraction2.Denominator,
+            return new EqualizedFractions(fraction1.Numerator * denominator / fraction1.Denominator,
+                                          fraction2.Numerator * denominator / fraction2.Denominator,
                                           denominator);
         }
 
@@ -110,9 +117,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(null, fraction1) || ReferenceEquals(null, fraction2))
                 return false;
 
-            var denominator = MathUtilities.LeastCommonMultiple(fraction1.Denominator, fraction2.Denominator);
-            return (fraction1.Numerator * fraction1.Denominator / denominator) ==
-                   (fraction2.Numerator * fraction2.Denominator / denominator);
+            var equalizedFractions = Equalize(fraction1, fraction2);
+            return equalizedFractions.Numerator1 == equalizedFractions.Numerator2;
         }
 
         public static bool operator !=(Fraction fraction1, Fraction fraction2)
@@ -211,7 +217,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public override string ToString()
         {
-            return $"{Numerator}/{Denominator}";
+            return Numerator > 0
+                ? $"{Numerator}/{Denominator}"
+                : "0";
         }
 
         #endregion

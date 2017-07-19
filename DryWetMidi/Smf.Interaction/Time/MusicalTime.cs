@@ -164,11 +164,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                    time.Fraction + length.Fraction);
         }
 
-        public static MusicalTime operator +(MusicalLength length, MusicalTime time)
-        {
-            return time + length;
-        }
-
         /// <summary>
         /// Subtracts a specified <see cref="MusicalTime"/> from another specified <see cref="MusicalTime"/>.
         /// </summary>
@@ -193,6 +188,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MusicalTime(time1.Bars - time2.Bars,
                                    time1.Beats - time2.Beats,
                                    time1.Fraction - time2.Fraction);
+        }
+
+        public static MusicalTime operator -(MusicalTime time, MusicalLength length)
+        {
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (length == null)
+                throw new ArgumentNullException(nameof(length));
+
+            if (time.Fraction < length.Fraction)
+                throw new ArgumentException("First fraction is less than second one.", nameof(time));
+
+            return new MusicalTime(time.Bars,
+                                   time.Beats,
+                                   time.Fraction - length.Fraction);
         }
 
         /// <summary>

@@ -169,12 +169,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MetricTime(timeSpan);
         }
 
-        public static explicit operator TimeSpan(MetricTime time)
+        public static implicit operator TimeSpan(MetricTime time)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            return new TimeSpan(time._timeSpan.Ticks);
+            return time._timeSpan;
         }
 
         /// <summary>
@@ -195,6 +192,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentNullException(nameof(time2));
 
             return new MetricTime(time1.TotalMicroseconds + time2.TotalMicroseconds);
+        }
+
+        public static MetricTime operator +(MetricTime time, MetricLength length)
+        {
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (length == null)
+                throw new ArgumentNullException(nameof(length));
+
+            return new MetricTime(time.TotalMicroseconds + length.TotalMicroseconds);
         }
 
         /// <summary>
@@ -219,6 +227,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("First time is less than second one.", nameof(time1));
 
             return new MetricTime(time1.TotalMicroseconds - time2.TotalMicroseconds);
+        }
+
+        public static MetricTime operator -(MetricTime time, MetricLength length)
+        {
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            if (length == null)
+                throw new ArgumentNullException(nameof(length));
+
+            if (time.TotalMicroseconds < length.TotalMicroseconds)
+                throw new ArgumentException("Time is less than length.", nameof(time));
+
+            return new MetricTime(time.TotalMicroseconds - length.TotalMicroseconds);
         }
 
         /// <summary>

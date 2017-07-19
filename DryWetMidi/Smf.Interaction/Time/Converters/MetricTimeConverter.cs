@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 var tempoChangeTime = tempoChange.Time;
 
                 var microseconds = GetMicroseconds(tempoChangeTime - lastTime, lastTempo, ticksPerQuarterNote);
-                if (accumulatedMicroseconds + microseconds >= timeMicroseconds)
+                if (IsGreaterOrEqual(accumulatedMicroseconds + microseconds, timeMicroseconds))
                     break;
 
                 accumulatedMicroseconds += microseconds;
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 lastTime = tempoChangeTime;
             }
 
-            return (long)Math.Round(lastTime + (timeMicroseconds - accumulatedMicroseconds) * ticksPerQuarterNote / lastTempo.MicrosecondsPerQuarterNote);
+            return RoundMicroseconds(lastTime + (timeMicroseconds - accumulatedMicroseconds) * ticksPerQuarterNote / lastTempo.MicrosecondsPerQuarterNote);
         }
 
         private static double GetMicroseconds(long time, Tempo tempo, short ticksPerQuarterNote)
@@ -120,6 +120,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private static long RoundMicroseconds(double microseconds)
         {
             return (long)Math.Round(microseconds);
+        }
+
+        private static bool IsGreaterOrEqual(double value, long reference)
+        {
+            const double epsilon = 0.001;
+            return value > reference || Math.Abs(value - reference) <= epsilon;
         }
 
         #endregion

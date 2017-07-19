@@ -149,12 +149,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MetricLength(timeSpan);
         }
 
-        public static explicit operator TimeSpan(MetricLength length)
+        public static implicit operator TimeSpan(MetricLength length)
         {
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
-
-            return (TimeSpan)length._time;
+            return length._time;
         }
 
         /// <summary>

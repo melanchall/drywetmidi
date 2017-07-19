@@ -46,6 +46,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
+        public MusicalFraction()
+            : this(WholeFraction, false, null)
+        {
+        }
+
         public MusicalFraction(int fraction)
             : this(fraction, false, null)
         {
@@ -92,15 +97,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public bool Equals(MusicalFraction fraction)
         {
-            if (ReferenceEquals(null, fraction))
-                return false;
+            return this == fraction;
+        }
 
-            if (ReferenceEquals(this, fraction))
+        #endregion
+
+        #region Operators
+
+        public static bool operator==(MusicalFraction fraction1, MusicalFraction fraction2)
+        {
+            if (ReferenceEquals(fraction1, fraction2))
                 return true;
 
-            return Fraction == fraction.Fraction &&
-                   Dotted == fraction.Dotted &&
-                   (Tuplet?.Equals(fraction.Tuplet) ?? ReferenceEquals(null, fraction.Tuplet));
+            if (ReferenceEquals(null, fraction1) || ReferenceEquals(null, fraction2))
+                return false;
+
+            return fraction1.Fraction == fraction2.Fraction &&
+                   fraction1.Dotted == fraction2.Dotted &&
+                   fraction1.Tuplet == fraction2.Tuplet;
+        }
+
+        public static bool operator !=(MusicalFraction fraction1, MusicalFraction fraction2)
+        {
+            return !(fraction1 == fraction2);
         }
 
         #endregion
