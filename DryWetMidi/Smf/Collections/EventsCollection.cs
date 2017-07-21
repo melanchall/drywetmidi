@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,33 +26,6 @@ namespace Melanchall.DryWetMidi.Smf
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EventsCollection"/> with the specified events.
-        /// </summary>
-        /// <param name="events">Events to add to the events collection.</param>
-        /// <remarks>
-        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
-        /// track chunk structure. End Of Track event will be written to the track chunk automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
-        /// <paramref name="events"/> contain null.
-        /// </exception>
-        private EventsCollection(IEnumerable<MidiEvent> events)
-        {
-            if (events == null)
-                throw new ArgumentNullException(nameof(events));
-
-            if (events.Any(e => e is EndOfTrackEvent))
-                throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(events));
-
-            if (events.Any(e => e == null))
-                throw new ArgumentException("Null cannot be added to events collection.", nameof(events));
-
-            AddRange(events);
-        }
-
         #endregion
 
         #region Properties
@@ -75,8 +49,7 @@ namespace Melanchall.DryWetMidi.Smf
             }
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
+                ThrowIf.ArgumentIsNull(nameof(value), value);
 
                 if (index < 0 || index >= _events.Count)
                     throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
@@ -95,14 +68,6 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
-        /// Removes all events from the <see cref="EventsCollection"/>.
-        /// </summary>
-        public void Clear()
-        {
-            _events.Clear();
-        }
-
-        /// <summary>
         /// Adds an event to the end of collection.
         /// </summary>
         /// <param name="midiEvent">The event to be added to the end of the collection.</param>
@@ -112,15 +77,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is an instance of <see cref="EndOfTrackEvent"/>.
-        /// </exception>
         public void Add(MidiEvent midiEvent)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
-
-            if (midiEvent is EndOfTrackEvent)
-                throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             _events.Add(midiEvent);
         }
@@ -135,21 +94,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
-        /// <paramref name="events"/> contain null.
-        /// </exception>
         public void AddRange(IEnumerable<MidiEvent> events)
         {
-            if (events == null)
-                throw new ArgumentNullException(nameof(events));
+            ThrowIf.ArgumentIsNull(nameof(events), events);
 
-            if (events.OfType<EndOfTrackEvent>().Any())
-                throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(events));
-
-            if (events.Any(e => e == null))
-                throw new ArgumentException("Null cannot be added to events collection.", nameof(events));
-
-            _events.AddRange(events);
+            _events.AddRange(events.Where(e => e != null));
         }
 
         /// <summary>
@@ -163,17 +112,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="index">The zero-based index at which the event should be inserted.</param>
         /// <param name="midiEvent">The event to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is an instance of <see cref="EndOfTrackEvent"/>.
-        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void Insert(int index, MidiEvent midiEvent)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
-
-            if (midiEvent is EndOfTrackEvent)
-                throw new ArgumentException("End Of Track cannot be inserted to events collection.", nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             if (index < 0 || index >= _events.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
@@ -192,17 +135,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="index">The zero-based index at which the events should be inserted.</param>
         /// <param name="midiEvents">The events to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="midiEvents"/> contains an instance of
-        /// <see cref="EndOfTrackEvent"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void InsertRange(int index, IEnumerable<MidiEvent> midiEvents)
         {
-            if (midiEvents == null)
-                throw new ArgumentNullException(nameof(midiEvents));
-
-            if (midiEvents.OfType<EndOfTrackEvent>().Any())
-                throw new ArgumentException("End Of Track cannot be inserted to events collection.", nameof(midiEvents));
+            ThrowIf.ArgumentIsNull(nameof(midiEvents), midiEvents);
 
             if (index < 0 || index >= _events.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
@@ -219,8 +156,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         public bool Remove(MidiEvent midiEvent)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             return _events.Remove(midiEvent);
         }
@@ -248,8 +184,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
         public int RemoveAll(Predicate<MidiEvent> match)
         {
-            if (match == null)
-                throw new ArgumentNullException(nameof(match));
+            ThrowIf.ArgumentIsNull(nameof(match), match);
 
             return _events.RemoveAll(match);
         }
@@ -264,10 +199,17 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         public int IndexOf(MidiEvent midiEvent)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             return _events.IndexOf(midiEvent);
+        }
+
+        /// <summary>
+        /// Removes all events from the <see cref="EventsCollection"/>.
+        /// </summary>
+        public void Clear()
+        {
+            _events.Clear();
         }
 
         #endregion

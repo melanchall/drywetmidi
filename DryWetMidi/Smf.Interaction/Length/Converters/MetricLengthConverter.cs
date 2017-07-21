@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -8,14 +9,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ILength ConvertTo(long length, long time, TempoMap tempoMap)
         {
-            if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), length, "Length is negative.");
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.LengthIsNegative(nameof(length), length);
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             //
 
@@ -32,14 +28,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(length), length);
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             var metricLength = length as MetricLength;
             if (metricLength == null)

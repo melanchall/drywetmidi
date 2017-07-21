@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -24,8 +25,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MusicalFractionCount(MusicalFraction fraction, int count)
         {
-            if (fraction == null)
-                throw new ArgumentNullException(nameof(fraction));
+            ThrowIf.ArgumentIsNull(nameof(fraction), fraction);
 
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count), count, "Count is zero or negative.");

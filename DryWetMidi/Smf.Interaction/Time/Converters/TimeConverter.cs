@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -22,11 +23,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TTime ConvertTo<TTime>(long time, TempoMap tempoMap)
             where TTime : ITime
         {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             return (TTime)GetConverter<TTime>().ConvertTo(time, tempoMap);
         }
@@ -44,11 +42,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TTime ConvertTo<TTime>(ITime time, TempoMap tempoMap)
             where TTime : ITime
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             return ConvertTo<TTime>(ConvertFrom(time, tempoMap), tempoMap);
         }
@@ -63,11 +58,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="tempoMap"/> is null.</exception>
         public static long ConvertFrom(ITime time, TempoMap tempoMap)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             return TimeConverterFactory.GetConverter(time.GetType())
                                        .ConvertFrom(time, tempoMap);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -87,8 +88,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// about the source or destination.</param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
-                throw new ArgumentNullException(nameof(info));
+            ThrowIf.ArgumentIsNull(nameof(info), info);
 
             info.AddValue(FileFormatSerializationPropertyName, FileFormat);
 

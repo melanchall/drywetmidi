@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Common\MathUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
+    <Compile Include="Common\ThrowIf.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MusicalLengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\MusicalLength.cs" />
     <Compile Include="Smf.Interaction\MusicalFraction\Fraction.cs" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -185,22 +186,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static MetricTime operator +(MetricTime time1, MetricTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return new MetricTime(time1.TotalMicroseconds + time2.TotalMicroseconds);
         }
 
         public static MetricTime operator +(MetricTime time, MetricLength length)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(length), length);
 
             return new MetricTime(time.TotalMicroseconds + length.TotalMicroseconds);
         }
@@ -217,11 +212,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentException"><paramref name="time1"/> is less than <paramref name="time2"/>.</exception>
         public static MetricTime operator -(MetricTime time1, MetricTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             if (time1 < time2)
                 throw new ArgumentException("First time is less than second one.", nameof(time1));
@@ -231,11 +223,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static MetricTime operator -(MetricTime time, MetricLength length)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(length), length);
 
             if (time.TotalMicroseconds < length.TotalMicroseconds)
                 throw new ArgumentException("Time is less than length.", nameof(time));
@@ -255,11 +244,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator <(MetricTime time1, MetricTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds < time2.TotalMicroseconds;
         }
@@ -276,11 +262,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator >(MetricTime time1, MetricTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds > time2.TotalMicroseconds;
         }
@@ -297,11 +280,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator <=(MetricTime time1, MetricTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds <= time2.TotalMicroseconds;
         }
@@ -318,11 +298,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator >=(MetricTime time1, MetricTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds >= time2.TotalMicroseconds;
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,11 +26,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
         {
-            if (eventsCollections == null)
-                throw new ArgumentNullException(nameof(eventsCollections));
-
-            if (timeDivision == null)
-                throw new ArgumentNullException(nameof(timeDivision));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollections), eventsCollections);
+            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
 
             return new TempoMapManager(timeDivision, eventsCollections);
         }
@@ -48,11 +46,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<TrackChunk> trackChunks, TimeDivision timeDivision)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
-
-            if (timeDivision == null)
-                throw new ArgumentNullException(nameof(timeDivision));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
+            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
 
             return trackChunks.Select(c => c.Events).ManageTempoMap(timeDivision);
         }
@@ -67,8 +62,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static TempoMapManager ManageTempoMap(this MidiFile file)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             return file.GetTrackChunks().ManageTempoMap(file.TimeDivision);
         }
@@ -86,11 +80,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMap GetTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
         {
-            if (eventsCollections == null)
-                throw new ArgumentNullException(nameof(eventsCollections));
-
-            if (timeDivision == null)
-                throw new ArgumentNullException(nameof(timeDivision));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollections), eventsCollections);
+            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
 
             return eventsCollections.Any()
                 ? eventsCollections.ManageTempoMap(timeDivision).TempoMap
@@ -110,11 +101,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMap GetTempoMap(this IEnumerable<TrackChunk> trackChunks, TimeDivision timeDivision)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
-
-            if (timeDivision == null)
-                throw new ArgumentNullException(nameof(timeDivision));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
+            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
 
             return trackChunks.Any()
                 ? trackChunks.ManageTempoMap(timeDivision).TempoMap
@@ -129,8 +117,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static TempoMap GetTempoMap(this MidiFile file)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             return file.GetTrackChunks().Any()
                 ? file.ManageTempoMap().TempoMap

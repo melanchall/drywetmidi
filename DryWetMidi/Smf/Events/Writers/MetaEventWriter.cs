@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -8,8 +9,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             if (!(midiEvent is MetaEvent))
                 throw new ArgumentException("Event is not Meta event.", nameof(midiEvent));
@@ -44,8 +44,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             if (!(midiEvent is MetaEvent))
                 throw new ArgumentException("Event is not Meta event.", nameof(midiEvent));

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,8 +26,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ChordsManager ManageChords(this EventsCollection eventsCollection, long notesTolerance = 0, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -49,8 +49,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ChordsManager ManageChords(this TrackChunk trackChunk, long notesTolerance = 0, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -60,8 +59,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static IEnumerable<Chord> GetChords(this EventsCollection eventsCollection, long notesTolerance = 0)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -80,8 +78,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this TrackChunk trackChunk, long notesTolerance = 0)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -100,8 +97,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this IEnumerable<TrackChunk> trackChunks, long notesTolerance = 0)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -122,8 +118,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this MidiFile file, long notesTolerance = 0)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -133,11 +128,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -153,16 +145,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void ProcessChords(this TrackChunk trackChunk, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             trackChunk.Events.ProcessChords(action, match, notesTolerance);
         }
 
         public static void ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -172,16 +162,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void ProcessChords(this MidiFile file, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             file.GetTrackChunks().ProcessChords(action, match, notesTolerance);
         }
 
         public static void RemoveChords(this EventsCollection eventsCollection, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -194,16 +182,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void RemoveChords(this TrackChunk trackChunk, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             trackChunk.Events.RemoveChords(match, notesTolerance);
         }
 
         public static void RemoveChords(this IEnumerable<TrackChunk> trackChunks, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -213,8 +199,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void RemoveChords(this MidiFile file, Predicate<Chord> match = null, long notesTolerance = 0)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             file.GetTrackChunks().RemoveChords(match, notesTolerance);
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -38,8 +39,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public ChordsManager(EventsCollection eventsCollection, long notesTolerance = 0, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             if (notesTolerance < 0)
                 throw new ArgumentOutOfRangeException(nameof(notesTolerance), notesTolerance, "Notes tolerance is negative.");
@@ -114,40 +114,35 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private void SubscribeToChordEvents(Chord chord)
         {
-            if (chord == null)
-                throw new ArgumentNullException(nameof(chord));
+            ThrowIf.ArgumentIsNull(nameof(chord), chord);
 
             chord.NotesCollectionChanged += OnChordNotesCollectionChanged;
         }
 
         private void UnsubscribeFromChordEvents(Chord chord)
         {
-            if (chord == null)
-                throw new ArgumentNullException(nameof(chord));
+            ThrowIf.ArgumentIsNull(nameof(chord), chord);
 
             chord.NotesCollectionChanged -= OnChordNotesCollectionChanged;
         }
 
         private void AddNotes(IEnumerable<Note> notes)
         {
-            if (notes == null)
-                throw new ArgumentNullException(nameof(notes));
+            ThrowIf.ArgumentIsNull(nameof(notes), notes);
 
             _notesManager.Notes.Add(notes);
         }
 
         private void RemoveNotes(IEnumerable<Note> notes)
         {
-            if (notes == null)
-                throw new ArgumentNullException(nameof(notes));
+            ThrowIf.ArgumentIsNull(nameof(notes), notes);
 
             _notesManager.Notes.Remove(notes);
         }
 
         private static IEnumerable<Chord> CreateChords(IEnumerable<Note> notes, long notesTolerance)
         {
-            if (notes == null)
-                throw new ArgumentNullException(nameof(notes));
+            ThrowIf.ArgumentIsNull(nameof(notes), notes);
 
             var lastNoteEndTime = long.MinValue;
             Chord chord = null;

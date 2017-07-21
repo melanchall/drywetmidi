@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,8 +40,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MusicalTime(MusicalFraction fraction, int fractionCount)
         {
-            if (fraction == null)
-                throw new ArgumentNullException(nameof(fraction));
+            ThrowIf.ArgumentIsNull(nameof(fraction), fraction);
 
             if (fractionCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(fractionCount), fractionCount, "Fraction count is negative.");
@@ -65,8 +65,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MusicalTime(IEnumerable<MusicalFractionCount> fractionsCounts)
         {
-            if (fractionsCounts == null)
-                throw new ArgumentNullException(nameof(fractionsCounts));
+            ThrowIf.ArgumentIsNull(nameof(fractionsCounts), fractionsCounts);
 
             Fraction = fractionsCounts.ToMathFraction();
         }
@@ -79,8 +78,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (beats < 0)
                 throw new ArgumentOutOfRangeException("Number of beats is negative.", beats, nameof(beats));
 
-            if (fraction == null)
-                throw new ArgumentNullException(nameof(fraction));
+            ThrowIf.ArgumentIsNull(nameof(fraction), fraction);
 
             Bars = bars;
             Beats = beats;
@@ -140,11 +138,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static MusicalTime operator +(MusicalTime time1, MusicalTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return new MusicalTime(time1.Bars + time2.Bars,
                                    time1.Beats + time2.Beats,
@@ -153,11 +148,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static MusicalTime operator +(MusicalTime time, MusicalLength length)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(length), length);
 
             return new MusicalTime(time.Bars,
                                    time.Beats,
@@ -176,11 +168,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentException"><paramref name="time1"/> is less than <paramref name="time2"/>.</exception>
         public static MusicalTime operator -(MusicalTime time1, MusicalTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             if (time1 < time2)
                 throw new ArgumentException("First time is less than second one.", nameof(time1));
@@ -192,11 +181,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static MusicalTime operator -(MusicalTime time, MusicalLength length)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(length), length);
 
             if (time.Fraction < length.Fraction)
                 throw new ArgumentException("First fraction is less than second one.", nameof(time));
@@ -218,11 +204,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator <(MusicalTime time1, MusicalTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.Bars < time2.Bars ||
                    (time1.Bars == time2.Bars && (time1.Beats < time2.Beats ||
@@ -241,11 +224,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator >(MusicalTime time1, MusicalTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.Bars > time2.Bars ||
                    (time1.Bars == time2.Bars && (time1.Beats > time2.Beats ||
@@ -264,11 +244,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator <=(MusicalTime time1, MusicalTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.Bars <= time2.Bars ||
                    (time1.Bars == time2.Bars && (time1.Beats <= time2.Beats ||
@@ -287,11 +264,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator >=(MusicalTime time1, MusicalTime time2)
         {
-            if (time1 == null)
-                throw new ArgumentNullException(nameof(time1));
-
-            if (time2 == null)
-                throw new ArgumentNullException(nameof(time2));
+            ThrowIf.ArgumentIsNull(nameof(time1), time1);
+            ThrowIf.ArgumentIsNull(nameof(time2), time2);
 
             return time1.Bars >= time2.Bars ||
                    (time1.Bars == time2.Bars && (time1.Beats >= time2.Beats ||

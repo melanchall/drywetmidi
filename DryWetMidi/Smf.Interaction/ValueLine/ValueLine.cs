@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,8 +51,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public TValue AtTime(long time)
         {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+            ThrowIf.TimeIsNegative(nameof(time), time);
 
             return _values.Where(p => p.Time <= time)
                           .OrderBy(p => p.Time)
@@ -69,11 +69,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         internal void SetValue(long time, TValue value)
         {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(value), value);
 
             var currentValue = AtTime(time);
             if (currentValue.Equals(value))
@@ -102,11 +99,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="endTime"/> is negative.</exception>
         internal void DeleteValues(long startTime, long endTime)
         {
-            if (startTime < 0)
-                throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start time is negative.");
-
-            if (endTime < 0)
-                throw new ArgumentOutOfRangeException(nameof(endTime), endTime, "End time is negative.");
+            ThrowIf.StartTimeIsNegative(nameof(startTime), startTime);
+            ThrowIf.EndTimeIsNegative(nameof(endTime), endTime);
 
             _values.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
         }

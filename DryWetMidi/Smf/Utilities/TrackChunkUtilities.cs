@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,8 +20,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
         public static IEnumerable<TrackChunk> GetTrackChunks(this MidiFile midiFile)
         {
-            if (midiFile == null)
-                throw new ArgumentNullException(nameof(midiFile));
+            ThrowIf.ArgumentIsNull(nameof(midiFile), midiFile);
 
             return midiFile.Chunks.OfType<TrackChunk>();
         }
@@ -37,8 +37,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static TrackChunk Merge(this IEnumerable<TrackChunk> trackChunks)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             return ConvertTrackChunks(trackChunks, MidiFileFormat.SingleTrack).First();
 
@@ -56,8 +55,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static IEnumerable<TrackChunk> Explode(this TrackChunk trackChunk)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             return ConvertTrackChunks(new[] { trackChunk }, MidiFileFormat.MultiTrack);
 

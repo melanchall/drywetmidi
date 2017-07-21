@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -20,11 +21,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         internal ValueChange(long time, TValue value)
         {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(value), value);
 
             Time = time;
             Value = value;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -18,8 +19,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null.</exception>
         internal TempoMap(TimeDivision timeDivision)
         {
-            if (timeDivision == null)
-                throw new ArgumentNullException(nameof(timeDivision));
+            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
 
             TimeDivision = timeDivision;
         }

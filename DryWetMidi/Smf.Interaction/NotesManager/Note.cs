@@ -125,15 +125,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// -or- <paramref name="timedNoteOffEvent"/> doesn't wrap Note Off event.</exception>
         internal Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
         {
-            if (timedNoteOnEvent == null)
-                throw new ArgumentNullException(nameof(timedNoteOnEvent));
+            ThrowIf.ArgumentIsNull(nameof(timedNoteOnEvent), timedNoteOnEvent);
 
             var noteOnEvent = timedNoteOnEvent.Event as NoteOnEvent;
             if (noteOnEvent == null)
                 throw new ArgumentException("Timed event doesn't wrap a Note On event.", nameof(timedNoteOnEvent));
 
-            if (timedNoteOffEvent == null)
-                throw new ArgumentNullException(nameof(timedNoteOffEvent));
+            ThrowIf.ArgumentIsNull(nameof(timedNoteOffEvent), timedNoteOffEvent);
 
             var noteOffEvent = timedNoteOffEvent.Event as NoteOffEvent;
             if (noteOffEvent == null)
@@ -164,8 +162,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             get { return TimedNoteOnEvent.Time; }
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Time is negative.");
+                ThrowIf.TimeIsNegative(nameof(value), value);
 
                 TimedNoteOffEvent.Time = value + Length;
                 TimedNoteOnEvent.Time = value;
@@ -175,13 +172,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets or sets length of the note in units defined by the time division of a MIDI file.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Length is negative.</exception>
         public long Length
         {
             get { return TimedNoteOffEvent.Time - TimedNoteOnEvent.Time; }
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Length is negative.");
+                ThrowIf.LengthIsNegative(nameof(value), value);
 
                 TimedNoteOffEvent.Time = TimedNoteOnEvent.Time + value;
             }

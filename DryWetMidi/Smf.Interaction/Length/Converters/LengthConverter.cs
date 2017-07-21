@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -24,14 +25,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TLength ConvertTo<TLength>(long length, long time, TempoMap tempoMap)
             where TLength : ILength
         {
-            if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), length, "Length is negative.");
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.LengthIsNegative(nameof(length), length);
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             return (TLength)GetConverter<TLength>().ConvertTo(length, time, tempoMap);
         }
@@ -51,14 +47,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TLength ConvertTo<TLength>(ILength length, long time, TempoMap tempoMap)
             where TLength : ILength
         {
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(length), length);
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             return ConvertTo<TLength>(ConvertFrom(length, time, tempoMap), time, tempoMap);
         }
@@ -75,14 +66,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="tempoMap"/> is null.</exception>
         public static long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
-            if (length == null)
-                throw new ArgumentNullException(nameof(length));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(length), length);
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             return LengthConverterFactory.GetConverter(length.GetType())
                                          .ConvertFrom(length, time, tempoMap);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -8,8 +9,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             var sysExEvent = midiEvent as SysExEvent;
             if (sysExEvent == null)
@@ -37,8 +37,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             if (!(midiEvent is SysExEvent))
                 throw new ArgumentException("Event is not SysEx event.", nameof(midiEvent));
@@ -51,8 +50,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public byte GetStatusByte(MidiEvent midiEvent)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             if (!(midiEvent is SysExEvent))
                 throw new ArgumentException("Event is not SysEx event.", nameof(midiEvent));

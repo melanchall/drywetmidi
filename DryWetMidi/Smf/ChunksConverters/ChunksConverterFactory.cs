@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -33,8 +34,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="NotSupportedException"><paramref name="format"/> is not supported yet.</exception>
         public static IChunksConverter GetConverter(MidiFileFormat format)
         {
-            if (!Enum.IsDefined(typeof(MidiFileFormat), format))
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
+            ThrowIf.EnumArgumentIsInvalid<MidiFileFormat>(nameof(format), (int)format);
 
             IChunksConverter converter;
             if (_converters.TryGetValue(format, out converter))

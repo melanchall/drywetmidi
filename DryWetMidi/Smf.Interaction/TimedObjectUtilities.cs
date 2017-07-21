@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,11 +26,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap tempoMap)
             where TTime : ITime
         {
-            if (obj == null)
-                throw new ArgumentNullException(nameof(obj));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(obj), obj);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             return TimeConverter.ConvertTo<TTime>(obj.Time, tempoMap);
         }
@@ -51,11 +49,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ITimedObject
         {
-            if (objects == null)
-                throw new ArgumentNullException(nameof(objects));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+            ThrowIf.ArgumentIsNull(nameof(objects), objects);
+            ThrowIf.TimeIsNegative(nameof(time), time);
 
             return objects.Where(o => o.Time == time);
         }
@@ -78,14 +73,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
             where TObject : ITimedObject
         {
-            if (objects == null)
-                throw new ArgumentNullException(nameof(objects));
-
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(objects), objects);
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
             return AtTime(objects, convertedTime);

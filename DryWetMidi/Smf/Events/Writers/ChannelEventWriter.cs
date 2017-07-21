@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -9,8 +10,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             var channelEvent = midiEvent as ChannelEvent;
             if (channelEvent == null)
@@ -39,8 +39,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             if (!(midiEvent is ChannelEvent))
                 throw new ArgumentException("Event is not Channel event.", nameof(midiEvent));
@@ -52,8 +51,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public byte GetStatusByte(MidiEvent midiEvent)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             var channelEvent = midiEvent as ChannelEvent;
             if (channelEvent == null)

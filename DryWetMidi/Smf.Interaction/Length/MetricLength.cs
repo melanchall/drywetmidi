@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -42,8 +43,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is null.</exception>
         public MetricLength(MetricTime time)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
 
             _time = new MetricTime(time.TotalMicroseconds);
         }
@@ -165,11 +165,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length2"/> is null.</exception>
         public static MetricLength operator +(MetricLength length1, MetricLength length2)
         {
-            if (length1 == null)
-                throw new ArgumentNullException(nameof(length1));
-
-            if (length2 == null)
-                throw new ArgumentNullException(nameof(length2));
+            ThrowIf.ArgumentIsNull(nameof(length1), length1);
+            ThrowIf.ArgumentIsNull(nameof(length2), length2);
 
             return new MetricLength(length1.TotalMicroseconds + length2.TotalMicroseconds);
         }
@@ -186,11 +183,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentException"><paramref name="length1"/> is less than <paramref name="length2"/>.</exception>
         public static MetricLength operator -(MetricLength length1, MetricLength length2)
         {
-            if (length1 == null)
-                throw new ArgumentNullException(nameof(length1));
-
-            if (length2 == null)
-                throw new ArgumentNullException(nameof(length2));
+            ThrowIf.ArgumentIsNull(nameof(length1), length1);
+            ThrowIf.ArgumentIsNull(nameof(length2), length2);
 
             if (length1 < length2)
                 throw new ArgumentException("First length is less than second one.", nameof(length1));
@@ -210,11 +204,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length2"/> is null.</exception>
         public static bool operator <(MetricLength length1, MetricLength length2)
         {
-            if (length1 == null)
-                throw new ArgumentNullException(nameof(length1));
-
-            if (length2 == null)
-                throw new ArgumentNullException(nameof(length2));
+            ThrowIf.ArgumentIsNull(nameof(length1), length1);
+            ThrowIf.ArgumentIsNull(nameof(length2), length2);
 
             return length1.TotalMicroseconds < length2.TotalMicroseconds;
         }
@@ -231,11 +222,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length2"/> is null.</exception>
         public static bool operator >(MetricLength length1, MetricLength length2)
         {
-            if (length1 == null)
-                throw new ArgumentNullException(nameof(length1));
-
-            if (length2 == null)
-                throw new ArgumentNullException(nameof(length2));
+            ThrowIf.ArgumentIsNull(nameof(length1), length1);
+            ThrowIf.ArgumentIsNull(nameof(length2), length2);
 
             return length1.TotalMicroseconds > length2.TotalMicroseconds;
         }
@@ -252,11 +240,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length2"/> is null.</exception>
         public static bool operator <=(MetricLength length1, MetricLength length2)
         {
-            if (length1 == null)
-                throw new ArgumentNullException(nameof(length1));
-
-            if (length2 == null)
-                throw new ArgumentNullException(nameof(length2));
+            ThrowIf.ArgumentIsNull(nameof(length1), length1);
+            ThrowIf.ArgumentIsNull(nameof(length2), length2);
 
             return length1.TotalMicroseconds <= length2.TotalMicroseconds;
         }
@@ -273,11 +258,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length2"/> is null.</exception>
         public static bool operator >=(MetricLength length1, MetricLength length2)
         {
-            if (length1 == null)
-                throw new ArgumentNullException(nameof(length1));
-
-            if (length2 == null)
-                throw new ArgumentNullException(nameof(length2));
+            ThrowIf.ArgumentIsNull(nameof(length1), length1);
+            ThrowIf.ArgumentIsNull(nameof(length2), length2);
 
             return length1.TotalMicroseconds >= length2.TotalMicroseconds;
         }

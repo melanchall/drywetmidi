@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.IO;
 using System.Text;
 
@@ -27,8 +28,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// or is already closed.</exception>
         public MidiReader(Stream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
+            ThrowIf.ArgumentIsNull(nameof(stream), stream);
 
             _binaryReader = new BinaryReader(stream, Encoding.ASCII);
         }

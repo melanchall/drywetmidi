@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,8 +23,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public static TimedEventsManager ManageTimedEvents(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             return new TimedEventsManager(eventsCollection, sameTimeEventsComparison);
         }
@@ -40,16 +40,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static TimedEventsManager ManageTimedEvents(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             return trackChunk.Events.ManageTimedEvents(sameTimeEventsComparison);
         }
 
         public static IEnumerable<TimedEvent> GetTimedEvents(this EventsCollection eventsCollection)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             return eventsCollection.ManageTimedEvents().Events;
         }
@@ -62,8 +60,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static IEnumerable<TimedEvent> GetTimedEvents(this TrackChunk trackChunk)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             return trackChunk.Events.GetTimedEvents();
         }
@@ -76,8 +73,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static IEnumerable<TimedEvent> GetTimedEvents(this IEnumerable<TrackChunk> trackChunks)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             return trackChunks.Where(c => c != null)
                               .SelectMany(GetTimedEvents)
@@ -92,8 +88,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static IEnumerable<TimedEvent> GetTimedEvents(this MidiFile file)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             return file.GetTrackChunks().GetTimedEvents();
         }
@@ -111,14 +106,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, long time)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
-
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
-
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
+            ThrowIf.TimeIsNegative(nameof(time), time);
 
             eventsCollection.Add(new TimedEvent(midiEvent, time));
         }
@@ -138,28 +128,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="tempoMap"/> is null.</exception>
         public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, ITime time, TempoMap tempoMap)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
-
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
-
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             eventsCollection.AddEvent(midiEvent, TimeConverter.ConvertFrom(time, tempoMap));
         }
 
         public static void ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             using (var timedEventsManager = eventsCollection.ManageTimedEvents())
             {
@@ -172,22 +152,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             trackChunk.Events.ProcessTimedEvents(action, match);
         }
 
         public static void ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -197,19 +171,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             file.GetTrackChunks().ProcessTimedEvents(action, match);
         }
 
         public static void RemoveTimedEvents(this EventsCollection eventsCollection, Predicate<TimedEvent> match = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             using (var timedEventsManager = eventsCollection.ManageTimedEvents())
             {
@@ -219,16 +189,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void RemoveTimedEvents(this TrackChunk trackChunk, Predicate<TimedEvent> match = null)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             trackChunk.Events.RemoveTimedEvents(match);
         }
 
         public static void RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match = null)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -238,8 +206,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void RemoveTimedEvents(this MidiFile file, Predicate<TimedEvent> match = null)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             file.GetTrackChunks().RemoveTimedEvents(match);
         }

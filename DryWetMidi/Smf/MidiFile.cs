@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -43,18 +44,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="chunks"/> contain instances of <see cref="HeaderChunk"/>; or
-        /// <paramref name="chunks"/> contain null.</exception>
         public MidiFile(IEnumerable<MidiChunk> chunks)
         {
-            if (chunks == null)
-                throw new ArgumentNullException(nameof(chunks));
-
-            if (chunks.Any(c => c is HeaderChunk))
-                throw new ArgumentException("Header chunk cannot be added to chunks collection.", nameof(chunks));
-
-            if (chunks.Any(c => c == null))
-                throw new ArgumentException("Null cannot be added to chunks collection.", nameof(chunks));
+            ThrowIf.ArgumentIsNull(nameof(chunks), chunks);
 
             Chunks.AddRange(chunks);
         }
@@ -69,11 +61,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="chunks"/> contain instances of <see cref="HeaderChunk"/>; or
-        /// <paramref name="chunks"/> contain null.</exception>
         public MidiFile(params MidiChunk[] chunks)
+            : this(chunks as IEnumerable<MidiChunk>)
         {
-            Chunks.AddRange(chunks);
         }
 
         #endregion
@@ -201,8 +191,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// exceeds maximum value allowed for MIDI file.</exception>
         public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
-            if (!Enum.IsDefined(typeof(MidiFileFormat), format))
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
+            ThrowIf.EnumArgumentIsInvalid<MidiFileFormat>(nameof(format), (int)format);
 
             using (var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile))
             {
@@ -243,8 +232,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// just read is invalid.</exception>
         private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
+            ThrowIf.ArgumentIsNull(nameof(stream), stream);
 
             if (stream.Position >= stream.Length)
                 throw new InvalidOperationException("Cannot read MIDI file from the stream with position at the end of it.");
@@ -360,11 +348,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// exceeds maximum value allowed for MIDI file.</exception>
         private void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
+            ThrowIf.ArgumentIsNull(nameof(stream), stream);
 
-            if (!Enum.IsDefined(typeof(MidiFileFormat), format))
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(MidiFileFormat));
+            ThrowIf.EnumArgumentIsInvalid<MidiFileFormat>(nameof(format), (int)format);
 
             if (TimeDivision == null)
                 throw new InvalidOperationException("Time division is null.");

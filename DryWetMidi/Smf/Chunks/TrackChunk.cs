@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,20 +43,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
-        /// <paramref name="events"/> contain null.
-        /// </exception>
         public TrackChunk(IEnumerable<MidiEvent> events)
             : this()
         {
-            if (events == null)
-                throw new ArgumentNullException(nameof(events));
-
-            if (events.Any(e => e is EndOfTrackEvent))
-                throw new ArgumentException("End Of Track cannot be added to events collection.", nameof(events));
-
-            if (events.Any(e => e == null))
-                throw new ArgumentException("Null cannot be added to events collection.", nameof(events));
+            ThrowIf.ArgumentIsNull(nameof(events), events);
 
             Events.AddRange(events);
         }

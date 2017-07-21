@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -9,11 +10,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ITime ConvertTo(long time, TempoMap tempoMap)
         {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
@@ -24,11 +22,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public long ConvertFrom(ITime time, TempoMap tempoMap)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             var metricTime = time as MetricTime;
             if (metricTime == null)
@@ -47,11 +42,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static MetricTime ConvertToByTicksPerQuarterNote(long time, short ticksPerQuarterNote, TempoMap tempoMap)
         {
-            if (time < 0)
-                throw new ArgumentOutOfRangeException(nameof(time), time, "Time is negative.");
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             //
 
@@ -80,11 +72,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long ConvertFromByTicksPerQuarterNote(MetricTime time, short ticksPerQuarterNote, TempoMap tempoMap)
         {
-            if (time == null)
-                throw new ArgumentNullException(nameof(time));
-
-            if (tempoMap == null)
-                throw new ArgumentNullException(nameof(tempoMap));
+            ThrowIf.ArgumentIsNull(nameof(time), time);
+            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
 
             //
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -22,8 +23,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="midiEvent">An event to wrap into <see cref="TimedEvent"/>.</param>
         public TimedEvent(MidiEvent midiEvent)
         {
-            if (midiEvent == null)
-                throw new ArgumentNullException(nameof(midiEvent));
+            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
 
             Event = midiEvent;
         }
@@ -58,8 +58,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             get { return _time; }
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Time is negative.");
+                ThrowIf.TimeIsNegative(nameof(value), value);
 
                 _time = value;
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,8 +23,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public static NotesManager ManageNotes(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             return new NotesManager(eventsCollection, sameTimeEventsComparison);
         }
@@ -40,16 +40,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static NotesManager ManageNotes(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
         }
 
         public static IEnumerable<Note> GetNotes(this EventsCollection eventsCollection)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             return eventsCollection.ManageNotes().Notes;
         }
@@ -62,8 +60,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this TrackChunk trackChunk)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             return trackChunk.Events.GetNotes();
         }
@@ -76,8 +73,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             return trackChunks.Where(c => c != null)
                               .SelectMany(GetNotes)
@@ -92,19 +88,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this MidiFile file)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             return file.GetTrackChunks().GetNotes();
         }
 
         public static void ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, Predicate<Note> match = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             using (var notesManager = eventsCollection.ManageNotes())
             {
@@ -117,22 +109,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void ProcessNotes(this TrackChunk trackChunk, Action<Note> action, Predicate<Note> match = null)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             trackChunk.Events.ProcessNotes(action, match);
         }
 
         public static void ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, Predicate<Note> match = null)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -142,19 +128,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void ProcessNotes(this MidiFile file, Action<Note> action, Predicate<Note> match = null)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
+            ThrowIf.ArgumentIsNull(nameof(action), action);
 
             file.GetTrackChunks().ProcessNotes(action, match);
         }
 
         public static void RemoveNotes(this EventsCollection eventsCollection, Predicate<Note> match = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             using (var notesManager = eventsCollection.ManageNotes())
             {
@@ -164,16 +146,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void RemoveNotes(this TrackChunk trackChunk, Predicate<Note> match = null)
         {
-            if (trackChunk == null)
-                throw new ArgumentNullException(nameof(trackChunk));
+            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
 
             trackChunk.Events.RemoveNotes(match);
         }
 
         public static void RemoveNotes(this IEnumerable<TrackChunk> trackChunks, Predicate<Note> match = null)
         {
-            if (trackChunks == null)
-                throw new ArgumentNullException(nameof(trackChunks));
+            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -183,8 +163,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static void RemoveNotes(this MidiFile file, Predicate<Note> match = null)
         {
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            ThrowIf.ArgumentIsNull(nameof(file), file);
 
             file.GetTrackChunks().RemoveNotes(match);
         }

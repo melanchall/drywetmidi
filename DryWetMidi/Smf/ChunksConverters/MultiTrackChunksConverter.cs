@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,8 +44,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
         {
-            if (chunks == null)
-                throw new ArgumentNullException(nameof(chunks));
+            ThrowIf.ArgumentIsNull(nameof(chunks), chunks);
 
             var trackChunks = chunks.OfType<TrackChunk>().ToArray();
             if (trackChunks.Length != 1)

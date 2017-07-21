@@ -96,8 +96,7 @@ namespace Melanchall.DryWetMidi.Smf
         public SmpteOffsetEvent(SmpteFormat format, byte hours, byte minutes, byte seconds, byte frames, byte subFrames)
             : this()
         {
-            if (!Enum.IsDefined(typeof(SmpteFormat), format))
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(SmpteFormat));
+            ThrowIf.EnumArgumentIsInvalid<SmpteFormat>(nameof(format), (int)format);
 
             Format = format;
             Hours = hours;

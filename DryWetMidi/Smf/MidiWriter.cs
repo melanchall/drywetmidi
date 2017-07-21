@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.IO;
 using System.Text;
 
@@ -64,8 +65,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteBytes(byte[] bytes)
         {
-            if (bytes == null)
-                throw new ArgumentNullException(nameof(bytes));
+            ThrowIf.ArgumentIsNull(nameof(bytes), bytes);
 
             _binaryWriter.Write(bytes);
         }

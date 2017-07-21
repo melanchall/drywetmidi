@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,8 +42,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public NotesManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            if (eventsCollection == null)
-                throw new ArgumentNullException(nameof(eventsCollection));
+            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
 
             _timedEventsManager = eventsCollection.ManageTimedEvents(sameTimeEventsComparison);
 
@@ -102,8 +102,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static IEnumerable<Note> CreateNotes(IEnumerable<TimedEvent> events)
         {
-            if (events == null)
-                throw new ArgumentNullException(nameof(events));
+            ThrowIf.ArgumentIsNull(nameof(events), events);
 
             var noteOnTimedEvents = new List<TimedEvent>();
 
@@ -142,8 +141,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)
         {
-            if (notes == null)
-                throw new ArgumentNullException(nameof(notes));
+            ThrowIf.ArgumentIsNull(nameof(notes), notes);
 
             return notes.SelectMany(n => new[] { n.TimedNoteOnEvent, n.TimedNoteOffEvent });
         }

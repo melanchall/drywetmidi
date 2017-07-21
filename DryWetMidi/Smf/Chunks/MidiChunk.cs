@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.IO;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -39,8 +40,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </exception>
         public MidiChunk(string id)
         {
-            if (id == null)
-                throw new ArgumentNullException(nameof(id));
+            ThrowIf.ArgumentIsNull(nameof(id), id);
 
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException("ID is empty string.", nameof(id));

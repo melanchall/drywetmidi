@@ -75,11 +75,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static Fraction Sum(IEnumerable<Fraction> fractions)
         {
-            if (fractions == null)
-                throw new ArgumentNullException(nameof(fractions));
+            ThrowIf.ArgumentIsNull(nameof(fractions), fractions);
 
             if (!fractions.Any())
-                return new Fraction(0, 1);
+                return new Fraction();
 
             var denominator = MathUtilities.LeastCommonMultiple(fractions.Select(f => f.Denominator));
             var numerator = fractions.Sum(f => f.Numerator * denominator / f.Denominator);
@@ -89,8 +88,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static Fraction Simplify(Fraction fraction)
         {
-            if (fraction == null)
-                throw new ArgumentNullException(nameof(fraction));
+            ThrowIf.ArgumentIsNull(nameof(fraction), fraction);
 
             var greatestCommonDivisor = MathUtilities.GreatestCommonDivisor(fraction.Numerator, fraction.Denominator);
             return new Fraction(fraction.Numerator / greatestCommonDivisor,
@@ -128,11 +126,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static Fraction operator +(Fraction fraction1, Fraction fraction2)
         {
-            if (fraction1 == null)
-                throw new ArgumentNullException(nameof(fraction1));
-
-            if (fraction2 == null)
-                throw new ArgumentNullException(nameof(fraction2));
+            ThrowIf.ArgumentIsNull(nameof(fraction1), fraction1);
+            ThrowIf.ArgumentIsNull(nameof(fraction2), fraction2);
 
             var equalizedFractions = Equalize(fraction1, fraction2);
             return Simplify(new Fraction(equalizedFractions.Numerator1 + equalizedFractions.Numerator2, equalizedFractions.Denominator));
@@ -140,11 +135,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static Fraction operator -(Fraction fraction1, Fraction fraction2)
         {
-            if (fraction1 == null)
-                throw new ArgumentNullException(nameof(fraction1));
-
-            if (fraction2 == null)
-                throw new ArgumentNullException(nameof(fraction2));
+            ThrowIf.ArgumentIsNull(nameof(fraction1), fraction1);
+            ThrowIf.ArgumentIsNull(nameof(fraction2), fraction2);
 
             var equalizedFractions = Equalize(fraction1, fraction2);
             if (equalizedFractions.Numerator1 < equalizedFractions.Numerator2)
@@ -155,11 +147,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool operator <(Fraction fraction1, Fraction fraction2)
         {
-            if (fraction1 == null)
-                throw new ArgumentNullException(nameof(fraction1));
-
-            if (fraction2 == null)
-                throw new ArgumentNullException(nameof(fraction2));
+            ThrowIf.ArgumentIsNull(nameof(fraction1), fraction1);
+            ThrowIf.ArgumentIsNull(nameof(fraction2), fraction2);
 
             var equalizedFractions = Equalize(fraction1, fraction2);
             return equalizedFractions.Numerator1 < equalizedFractions.Numerator2;
@@ -167,11 +156,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool operator >(Fraction fraction1, Fraction fraction2)
         {
-            if (fraction1 == null)
-                throw new ArgumentNullException(nameof(fraction1));
-
-            if (fraction2 == null)
-                throw new ArgumentNullException(nameof(fraction2));
+            ThrowIf.ArgumentIsNull(nameof(fraction1), fraction1);
+            ThrowIf.ArgumentIsNull(nameof(fraction2), fraction2);
 
             var equalizedFractions = Equalize(fraction1, fraction2);
             return equalizedFractions.Numerator1 > equalizedFractions.Numerator2;
@@ -179,11 +165,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool operator <=(Fraction fraction1, Fraction fraction2)
         {
-            if (fraction1 == null)
-                throw new ArgumentNullException(nameof(fraction1));
-
-            if (fraction2 == null)
-                throw new ArgumentNullException(nameof(fraction2));
+            ThrowIf.ArgumentIsNull(nameof(fraction1), fraction1);
+            ThrowIf.ArgumentIsNull(nameof(fraction2), fraction2);
 
             var equalizedFractions = Equalize(fraction1, fraction2);
             return equalizedFractions.Numerator1 <= equalizedFractions.Numerator2;
@@ -191,11 +174,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool operator >=(Fraction fraction1, Fraction fraction2)
         {
-            if (fraction1 == null)
-                throw new ArgumentNullException(nameof(fraction1));
-
-            if (fraction2 == null)
-                throw new ArgumentNullException(nameof(fraction2));
+            ThrowIf.ArgumentIsNull(nameof(fraction1), fraction1);
+            ThrowIf.ArgumentIsNull(nameof(fraction2), fraction2);
 
             var equalizedFractions = Equalize(fraction1, fraction2);
             return equalizedFractions.Numerator1 >= equalizedFractions.Numerator2;
