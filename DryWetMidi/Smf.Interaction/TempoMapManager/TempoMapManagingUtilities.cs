@@ -26,8 +26,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
         {
-            ThrowIf.ArgumentIsNull(nameof(eventsCollections), eventsCollections);
-            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
             return new TempoMapManager(timeDivision, eventsCollections);
         }
@@ -46,8 +46,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<TrackChunk> trackChunks, TimeDivision timeDivision)
         {
-            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
-            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
             return trackChunks.Select(c => c.Events).ManageTempoMap(timeDivision);
         }
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static TempoMapManager ManageTempoMap(this MidiFile file)
         {
-            ThrowIf.ArgumentIsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(file), file);
 
             return file.GetTrackChunks().ManageTempoMap(file.TimeDivision);
         }
@@ -80,8 +80,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMap GetTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
         {
-            ThrowIf.ArgumentIsNull(nameof(eventsCollections), eventsCollections);
-            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
             return eventsCollections.Any()
                 ? eventsCollections.ManageTempoMap(timeDivision).TempoMap
@@ -101,8 +101,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeDivision"/> is null.</exception>
         public static TempoMap GetTempoMap(this IEnumerable<TrackChunk> trackChunks, TimeDivision timeDivision)
         {
-            ThrowIf.ArgumentIsNull(nameof(trackChunks), trackChunks);
-            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
             return trackChunks.Any()
                 ? trackChunks.ManageTempoMap(timeDivision).TempoMap
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static TempoMap GetTempoMap(this MidiFile file)
         {
-            ThrowIf.ArgumentIsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(file), file);
 
             return file.GetTrackChunks().Any()
                 ? file.ManageTempoMap().TempoMap

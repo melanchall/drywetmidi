@@ -21,8 +21,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         internal ValueChange(long time, TValue value)
         {
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(value), value);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(value), value);
 
             Time = time;
             Value = value;

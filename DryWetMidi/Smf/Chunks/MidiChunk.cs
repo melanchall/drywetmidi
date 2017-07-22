@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </exception>
         public MidiChunk(string id)
         {
-            ThrowIf.ArgumentIsNull(nameof(id), id);
+            ThrowIfArgument.IsNull(nameof(id), id);
 
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException("ID is empty string.", nameof(id));

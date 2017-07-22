@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -26,10 +27,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentOutOfRangeException">Parameters count is negative number which is unallowable.</exception>
         protected ChannelEvent(int parametersCount)
         {
-            if (parametersCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(parametersCount),
-                                                      parametersCount,
-                                                      "Parameters count is negative number which is unallowable.");
+            ThrowIfArgument.IsNegative(nameof(parametersCount),
+                                        parametersCount,
+                                        "Parameters count is negative number which is unallowable.");
 
             _parameters = new SevenBitNumber[parametersCount];
         }

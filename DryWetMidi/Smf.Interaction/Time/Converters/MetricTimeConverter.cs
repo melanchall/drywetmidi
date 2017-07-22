@@ -10,20 +10,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ITime ConvertTo(long time, TempoMap tempoMap)
         {
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
                 return ConvertToByTicksPerQuarterNote(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
-            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
+            ThrowIfTimeDivision.IsNotSupportedForTimeConversion(tempoMap.TimeDivision);
+            return null;
         }
 
         public long ConvertFrom(ITime time, TempoMap tempoMap)
         {
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var metricTime = time as MetricTime;
             if (metricTime == null)
@@ -33,7 +34,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return ConvertFromByTicksPerQuarterNote(metricTime, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
-            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
+            ThrowIfTimeDivision.IsNotSupportedForTimeConversion(tempoMap.TimeDivision);
+            return 0;
         }
 
         #endregion
@@ -42,8 +44,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static MetricTime ConvertToByTicksPerQuarterNote(long time, short ticksPerQuarterNote, TempoMap tempoMap)
         {
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             //
 
@@ -72,8 +74,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long ConvertFromByTicksPerQuarterNote(MetricTime time, short ticksPerQuarterNote, TempoMap tempoMap)
         {
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             //
 

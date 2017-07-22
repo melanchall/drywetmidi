@@ -9,15 +9,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ILength ConvertTo(long length, long time, TempoMap tempoMap)
         {
-            ThrowIf.LengthIsNegative(nameof(length), length);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfLengthArgument.IsNegative(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
                 return new MusicalLength(FractionUtilities.FromTicks(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote));
 
-            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
+            ThrowIfTimeDivision.IsNotSupportedForLengthConversion(tempoMap.TimeDivision);
+            return null;
         }
 
         public ILength ConvertTo(long length, ITime time, TempoMap tempoMap)
@@ -27,9 +28,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
-            ThrowIf.ArgumentIsNull(nameof(length), length);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var musicalLength = length as MusicalLength;
             if (musicalLength == null)
@@ -39,7 +40,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision != null)
                 return FractionUtilities.ToTicks(musicalLength.Fraction, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
 
-            throw new NotSupportedException($"Time division other than {nameof(TicksPerQuarterNoteTimeDivision)} not supported.");
+            ThrowIfTimeDivision.IsNotSupportedForLengthConversion(tempoMap.TimeDivision);
+            return 0;
         }
 
         public long ConvertFrom(ILength length, ITime time, TempoMap tempoMap)

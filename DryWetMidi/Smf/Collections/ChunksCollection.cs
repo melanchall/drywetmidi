@@ -33,17 +33,14 @@ namespace Melanchall.DryWetMidi.Smf
         {
             get
             {
-                if (index < 0 || index >= _chunks.Count)
-                    throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+                ThrowIfArgument.IsInvalidIndex(nameof(index), index, _chunks.Count);
 
                 return _chunks[index];
             }
             set
             {
-                ThrowIf.ArgumentIsNull(nameof(value), value);
-
-                if (index < 0 || index >= _chunks.Count)
-                    throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+                ThrowIfArgument.IsNull(nameof(value), value);
+                ThrowIfArgument.IsInvalidIndex(nameof(index), index, _chunks.Count);
 
                 _chunks[index] = value;
             }
@@ -70,7 +67,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
         public void Add(MidiChunk chunk)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunk), chunk);
+            ThrowIfArgument.IsNull(nameof(chunk), chunk);
 
             _chunks.Add(chunk);
         }
@@ -87,7 +84,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
         public void AddRange(IEnumerable<MidiChunk> chunks)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunks), chunks);
+            ThrowIfArgument.IsNull(nameof(chunks), chunks);
 
             _chunks.AddRange(chunks.Where(c => c != null));
         }
@@ -107,10 +104,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void Insert(int index, MidiChunk chunk)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunk), chunk);
-
-            if (index < 0 || index >= _chunks.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+            ThrowIfArgument.IsNull(nameof(chunk), chunk);
+            ThrowIfArgument.IsInvalidIndex(nameof(index), index, _chunks.Count);
 
             _chunks.Insert(index, chunk);
         }
@@ -130,10 +125,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void InsertRange(int index, IEnumerable<MidiChunk> chunks)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunks), chunks);
-
-            if (index < 0 || index >= _chunks.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+            ThrowIfArgument.IsNull(nameof(chunks), chunks);
+            ThrowIfArgument.IsInvalidIndex(nameof(index), index, _chunks.Count);
 
             _chunks.InsertRange(index, chunks.Where(c => c != null));
         }
@@ -147,7 +140,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
         public bool Remove(MidiChunk chunk)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunk), chunk);
+            ThrowIfArgument.IsNull(nameof(chunk), chunk);
 
             return _chunks.Remove(chunk);
         }
@@ -160,8 +153,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// is equal to or greater than <see cref="Count"/>.</exception>
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= _chunks.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+            ThrowIfArgument.IsInvalidIndex(nameof(index), index, _chunks.Count);
 
             _chunks.RemoveAt(index);
         }
@@ -175,7 +167,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
         public int RemoveAll(Predicate<MidiChunk> match)
         {
-            ThrowIf.ArgumentIsNull(nameof(match), match);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return _chunks.RemoveAll(match);
         }
@@ -190,7 +182,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
         public int IndexOf(MidiChunk chunk)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunk), chunk);
+            ThrowIfArgument.IsNull(nameof(chunk), chunk);
 
             return _chunks.IndexOf(chunk);
         }

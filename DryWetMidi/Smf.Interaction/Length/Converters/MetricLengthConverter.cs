@@ -9,9 +9,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ILength ConvertTo(long length, long time, TempoMap tempoMap)
         {
-            ThrowIf.LengthIsNegative(nameof(length), length);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfLengthArgument.IsNegative(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             //
 
@@ -28,9 +28,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
-            ThrowIf.ArgumentIsNull(nameof(length), length);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var metricLength = length as MetricLength;
             if (metricLength == null)

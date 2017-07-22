@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public NotesManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             _timedEventsManager = eventsCollection.ManageTimedEvents(sameTimeEventsComparison);
 
@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static IEnumerable<Note> CreateNotes(IEnumerable<TimedEvent> events)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             var noteOnTimedEvents = new List<TimedEvent>();
 
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)
         {
-            ThrowIf.ArgumentIsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
 
             return notes.SelectMany(n => new[] { n.TimedNoteOnEvent, n.TimedNoteOffEvent });
         }

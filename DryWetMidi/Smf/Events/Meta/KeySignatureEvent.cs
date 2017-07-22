@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -73,8 +74,7 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _key; }
             set
             {
-                if (value < MinKey || value > MaxKey)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Key is out of range.");
+                ThrowIfArgument.IsOutOfRange(nameof(value), value, MinKey, MaxKey, "Key is out of range.");
 
                 _key = value;
             }
@@ -89,8 +89,7 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _scale; }
             set
             {
-                if (value < MinScale || value > MaxScale)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Scale is out of range.");
+                ThrowIfArgument.IsOutOfRange(nameof(value), value, MinScale, MaxScale, "Scale is out of range.");
 
                 _scale = value;
             }

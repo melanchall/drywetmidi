@@ -25,10 +25,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MusicalFractionCount(MusicalFraction fraction, int count)
         {
-            ThrowIf.ArgumentIsNull(nameof(fraction), fraction);
-
-            if (count <= 0)
-                throw new ArgumentOutOfRangeException(nameof(count), count, "Count is zero or negative.");
+            ThrowIfArgument.IsNull(nameof(fraction), fraction);
+            ThrowIfArgument.IsNegative(nameof(count), count, "Count is negative.");
 
             Fraction = fraction;
             Count = count;

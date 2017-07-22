@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
         public MidiFile(IEnumerable<MidiChunk> chunks)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunks), chunks);
+            ThrowIfArgument.IsNull(nameof(chunks), chunks);
 
             Chunks.AddRange(chunks);
         }
@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// exceeds maximum value allowed for MIDI file.</exception>
         public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
-            ThrowIf.EnumArgumentIsInvalid<MidiFileFormat>(nameof(format), (int)format);
+            ThrowIfArgument.IsInvalidEnumValueOf<MidiFileFormat>(nameof(format), format);
 
             using (var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile))
             {
@@ -206,9 +206,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="settings">Settings according to which the file must be read.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file was read from the stream.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">Position of the stream is placed at its end.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
-        /// or is already closed.</exception>
+        /// or is already closed. -or- Position of the stream is beyond its end.</exception>
         /// <exception cref="IOException">An I/O error occurred while reading from the stream.</exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
@@ -232,10 +231,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// just read is invalid.</exception>
         private static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
-            ThrowIf.ArgumentIsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
             if (stream.Position >= stream.Length)
-                throw new InvalidOperationException("Cannot read MIDI file from the stream with position at the end of it.");
+                throw new ArgumentException("Cannot read MIDI file from the stream with position at the end of it.", nameof(stream));
 
             //
 
@@ -348,9 +347,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// exceeds maximum value allowed for MIDI file.</exception>
         private void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
-            ThrowIf.ArgumentIsNull(nameof(stream), stream);
-
-            ThrowIf.EnumArgumentIsInvalid<MidiFileFormat>(nameof(format), (int)format);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsInvalidEnumValueOf<MidiFileFormat>(nameof(format), format);
 
             if (TimeDivision == null)
                 throw new InvalidOperationException("Time division is null.");

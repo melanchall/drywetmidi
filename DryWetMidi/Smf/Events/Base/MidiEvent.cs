@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -33,15 +34,13 @@ namespace Melanchall.DryWetMidi.Smf
         /// Delta-time is in some fraction of a beat (or a second, for recording a track with SMPTE times), as specified
         /// by the file's time division.
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">Delta-time is negative.</exception>
         public long DeltaTime
         {
             get { return _deltaTime; }
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(value),
-                                                          value,
-                                                          "Delta-time have to be non-negative number.");
+                ThrowIfArgument.IsNegative(nameof(value), value, "Delta-time is negative.");
 
                 _deltaTime = value;
             }

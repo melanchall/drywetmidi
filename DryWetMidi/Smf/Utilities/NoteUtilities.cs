@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
         public static NoteName GetNoteName(this NoteEvent noteEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(noteEvent), noteEvent);
+            ThrowIfArgument.IsNull(nameof(noteEvent), noteEvent);
 
             return GetNoteName(noteEvent.NoteNumber);
         }
@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
         public static int GetNoteOctave(this NoteEvent noteEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(noteEvent), noteEvent);
+            ThrowIfArgument.IsNull(nameof(noteEvent), noteEvent);
 
             return GetNoteOctave(noteEvent.NoteNumber);
         }
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// name and octave.</exception>
         public static void SetNoteNumber(this NoteEvent noteEvent, NoteName noteName, int octave)
         {
-            ThrowIf.ArgumentIsNull(nameof(noteEvent), noteEvent);
+            ThrowIfArgument.IsNull(nameof(noteEvent), noteEvent);
 
             noteEvent.NoteNumber = GetNoteNumber(noteName, octave);
         }
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// name and octave.</exception>
         public static SevenBitNumber GetNoteNumber(NoteName noteName, int octave)
         {
-            ThrowIf.EnumArgumentIsInvalid<NoteName>(nameof(noteName), (int)noteName);
+            ThrowIfArgument.IsInvalidEnumValueOf<NoteName>(nameof(noteName), noteName);
 
             var noteNumber = (octave + OctaveOffset) * OctaveSize + (int)noteName;
             if (noteNumber < SevenBitNumber.MinValue || noteNumber > SevenBitNumber.MaxValue)

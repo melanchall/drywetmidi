@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -23,10 +22,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="midiEvent">Event to get writer for.</param>
         /// <returns>Writer for the event.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         internal static IEventWriter GetWriter(MidiEvent midiEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
+            Debug.Assert(midiEvent != null);
 
             //
 

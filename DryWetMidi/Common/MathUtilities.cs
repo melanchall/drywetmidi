@@ -28,11 +28,8 @@ namespace Melanchall.DryWetMidi.Common
         /// <paramref name="b"/> is zero or negative.</exception>
         internal static long LeastCommonMultiple(long a, long b)
         {
-            if (a <= 0)
-                throw new ArgumentOutOfRangeException(nameof(a), a, "First number is zero or negative.");
-
-            if (b <= 0)
-                throw new ArgumentOutOfRangeException(nameof(b), b, "Second number is zero or negative.");
+            ThrowIfArgument.IsNonpositive(nameof(a), a, "First number is zero or negative.");
+            ThrowIfArgument.IsNonpositive(nameof(b), b, "Second number is zero or negative.");
 
             long n1, n2;
 

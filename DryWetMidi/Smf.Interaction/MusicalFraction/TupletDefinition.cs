@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -15,11 +15,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public TupletDefinition(int notesCount, int spaceSize)
         {
-            if (notesCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(notesCount), notesCount, "Notes count is less than 1.");
-
-            if (spaceSize < 1)
-                throw new ArgumentOutOfRangeException(nameof(spaceSize), spaceSize, "Space size is less than 1.");
+            ThrowIfArgument.IsNonpositive(nameof(notesCount), notesCount, "Notes count is less than 1.");
+            ThrowIfArgument.IsNonpositive(nameof(spaceSize), spaceSize, "Space size is less than 1.");
 
             NotesCount = notesCount;
             SpaceSize = spaceSize;

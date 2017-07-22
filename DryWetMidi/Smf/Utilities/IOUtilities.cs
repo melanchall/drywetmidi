@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using Melanchall.DryWetMidi.Common;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -38,8 +39,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         internal static FileStream OpenFileForRead(string filePath)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentException("File path is null or contains white-spaces only.", nameof(filePath));
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path");
 
             try
             {
@@ -57,8 +57,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         internal static FileStream OpenFileForWrite(string filePath, bool overwriteFile)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentException("File path is null or contains white-spaces only.", nameof(filePath));
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path");
 
             try
             {

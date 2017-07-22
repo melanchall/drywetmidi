@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -58,10 +59,9 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _microsecondsPerBeat; }
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException("Value of microseconds per quarter note is negative.",
-                                                          value,
-                                                          nameof(value));
+                ThrowIfArgument.IsNegative(nameof(value),
+                                            value,
+                                            "Value of microseconds per quarter note is negative.");
 
                 _microsecondsPerBeat = value;
             }

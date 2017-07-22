@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="midiEvent">An event to wrap into <see cref="TimedEvent"/>.</param>
         public TimedEvent(MidiEvent midiEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
             Event = midiEvent;
         }
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             get { return _time; }
             set
             {
-                ThrowIf.TimeIsNegative(nameof(value), value);
+                ThrowIfTimeArgument.IsNegative(nameof(value), value);
 
                 _time = value;
             }

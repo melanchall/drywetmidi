@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteBytes(byte[] bytes)
         {
-            ThrowIf.ArgumentIsNull(nameof(bytes), bytes);
+            ThrowIfArgument.IsNull(nameof(bytes), bytes);
 
             _binaryWriter.Write(bytes);
         }

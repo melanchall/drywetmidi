@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         internal NotesCollection(IEnumerable<Note> notes)
         {
-            ThrowIf.ArgumentIsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
 
             _notes.AddRange(notes);
         }
@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public void Add(IEnumerable<Note> notes)
         {
-            ThrowIf.ArgumentIsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
 
             _notes.AddRange(notes);
             OnNotesAdded(notes);
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public void Add(params Note[] notes)
         {
-            ThrowIf.ArgumentIsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
 
             Add((IEnumerable<Note>)notes);
         }
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public void Remove(IEnumerable<Note> notes)
         {
-            ThrowIf.ArgumentIsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
 
             foreach (var n in notes.ToList())
             {
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public void Remove(params Note[] notes)
         {
-            ThrowIf.ArgumentIsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
 
             Remove((IEnumerable<Note>)notes);
         }
@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
         public void RemoveAll(Predicate<Note> match)
         {
-            ThrowIf.ArgumentIsNull(nameof(match), match);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             var removedNotes = _notes.Where(n => match(n)).ToList();
             _notes.RemoveAll(match);

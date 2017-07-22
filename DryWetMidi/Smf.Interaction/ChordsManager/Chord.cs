@@ -50,8 +50,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public Chord(IEnumerable<Note> notes, long time)
         {
-            ThrowIf.ArgumentIsNull(nameof(notes), notes);
-            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
             Notes = new NotesCollection(notes);
             Notes.CollectionChanged += OnNotesCollectionChanged;
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             get { return Notes.FirstOrDefault()?.Time ?? 0; }
             set
             {
-                ThrowIf.TimeIsNegative(nameof(value), value);
+                ThrowIfTimeArgument.IsNegative(nameof(value), value);
 
                 var currentTime = Time;
 

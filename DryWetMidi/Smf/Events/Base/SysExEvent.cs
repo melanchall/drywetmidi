@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -76,11 +77,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="size">Size of the event's content.</param>
         internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
         {
-            if (size < 0)
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    size,
-                    "Non-negative size have to be specified in order to read SysEx event.");
+            ThrowIfArgument.IsNegative(nameof(size),
+                                        size,
+                                        "Non-negative size have to be specified in order to read SysEx event.");
 
             Data = reader.ReadBytes(size);
         }

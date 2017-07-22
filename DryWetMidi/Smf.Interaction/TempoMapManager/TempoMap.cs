@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null.</exception>
         internal TempoMap(TimeDivision timeDivision)
         {
-            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
             TimeDivision = timeDivision;
         }

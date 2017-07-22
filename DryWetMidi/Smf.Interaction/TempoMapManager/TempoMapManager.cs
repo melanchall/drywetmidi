@@ -42,11 +42,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentException"><paramref name="eventsCollections"/> is empty.</exception>
         public TempoMapManager(TimeDivision timeDivision, IEnumerable<EventsCollection> eventsCollections)
         {
-            ThrowIf.ArgumentIsNull(nameof(timeDivision), timeDivision);
-            ThrowIf.ArgumentIsNull(nameof(eventsCollections), eventsCollections);
-
-            if (!eventsCollections.Any())
-                throw new ArgumentException("Collection of EventsCollection is empty.", nameof(eventsCollections));
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
+            ThrowIfArgument.IsEmptyCollection(nameof(eventsCollections), eventsCollections, "Collection of EventsCollection is empty.");
 
             _timedEventsManagers = eventsCollections.Where(events => events != null)
                                                     .Select(events => events.ManageTimedEvents())
@@ -84,8 +82,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="timeSignature"/> is null.</exception>
         public void SetTimeSignature(long time, TimeSignature timeSignature)
         {
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(timeSignature), timeSignature);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
 
             TempoMap.TimeSignatureLine.SetValue(time, timeSignature);
         }
@@ -101,8 +99,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="timeSignature"/> is null.</exception>
         public void SetTimeSignature(ITime time, TimeSignature timeSignature)
         {
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(timeSignature), timeSignature);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
 
             SetTimeSignature(TimeConverter.ConvertFrom(time, TempoMap), timeSignature);
         }
@@ -114,7 +112,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative.</exception>
         public void ClearTimeSignature(long startTime)
         {
-            ThrowIf.StartTimeIsNegative(nameof(startTime), startTime);
+            ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
 
             TempoMap.TimeSignatureLine.DeleteValues(startTime);
         }
@@ -126,7 +124,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
         public void ClearTimeSignature(ITime startTime)
         {
-            ThrowIf.ArgumentIsNull(nameof(startTime), startTime);
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
             ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap));
         }
@@ -140,8 +138,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="endTime"/> is negative.</exception>
         public void ClearTimeSignature(long startTime, long endTime)
         {
-            ThrowIf.StartTimeIsNegative(nameof(startTime), startTime);
-            ThrowIf.EndTimeIsNegative(nameof(endTime), endTime);
+            ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
+            ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
             TempoMap.TimeSignatureLine.DeleteValues(startTime, endTime);
         }
@@ -155,8 +153,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="endTime"/> is null.</exception>
         public void ClearTimeSignature(ITime startTime, ITime endTime)
         {
-            ThrowIf.ArgumentIsNull(nameof(startTime), startTime);
-            ThrowIf.ArgumentIsNull(nameof(endTime), endTime);
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
+            ThrowIfArgument.IsNull(nameof(endTime), endTime);
 
             ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap),
                                TimeConverter.ConvertFrom(endTime, TempoMap));
@@ -172,8 +170,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="tempo"/> is null.</exception>
         public void SetTempo(long time, Tempo tempo)
         {
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempo), tempo);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempo), tempo);
 
             TempoMap.TempoLine.SetValue(time, tempo);
         }
@@ -188,8 +186,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="tempo"/> is null.</exception>
         public void SetTempo(ITime time, Tempo tempo)
         {
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempo), tempo);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempo), tempo);
 
             SetTempo(TimeConverter.ConvertFrom(time, TempoMap), tempo);
         }
@@ -201,7 +199,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative.</exception>
         public void ClearTempo(long startTime)
         {
-            ThrowIf.StartTimeIsNegative(nameof(startTime), startTime);
+            ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
 
             TempoMap.TempoLine.DeleteValues(startTime);
         }
@@ -213,7 +211,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
         public void ClearTempo(ITime startTime)
         {
-            ThrowIf.ArgumentIsNull(nameof(startTime), startTime);
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
             ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap));
         }
@@ -227,8 +225,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="endTime"/> is negative.</exception>
         public void ClearTempo(long startTime, long endTime)
         {
-            ThrowIf.StartTimeIsNegative(nameof(startTime), startTime);
-            ThrowIf.EndTimeIsNegative(nameof(endTime), endTime);
+            ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
+            ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
             TempoMap.TempoLine.DeleteValues(startTime, endTime);
         }
@@ -242,8 +240,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="endTime"/> is null.</exception>
         public void ClearTempo(ITime startTime, ITime endTime)
         {
-            ThrowIf.ArgumentIsNull(nameof(startTime), startTime);
-            ThrowIf.ArgumentIsNull(nameof(endTime), endTime);
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
+            ThrowIfArgument.IsNull(nameof(endTime), endTime);
 
             ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap),
                        TimeConverter.ConvertFrom(endTime, TempoMap));
@@ -325,7 +323,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static TimedEvent GetSetTempoTimedEvent(ValueChange<Tempo> tempo)
         {
-            ThrowIf.ArgumentIsNull(nameof(tempo), tempo);
+            ThrowIfArgument.IsNull(nameof(tempo), tempo);
 
             return new TimedEvent(new SetTempoEvent(tempo.Value.MicrosecondsPerQuarterNote),
                                   tempo.Time);
@@ -333,7 +331,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static TimedEvent GetTimeSignatureTimedEvent(ValueChange<TimeSignature> timeSignature)
         {
-            ThrowIf.ArgumentIsNull(nameof(timeSignature), timeSignature);
+            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
 
             return new TimedEvent(new TimeSignatureEvent((byte)timeSignature.Value.Numerator,
                                                          (byte)timeSignature.Value.Denominator),

@@ -27,8 +27,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TLength LengthAs<TLength>(this ILengthedObject obj, TempoMap tempoMap)
             where TLength : ILength
         {
-            ThrowIf.ArgumentIsNull(nameof(obj), obj);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return LengthConverter.ConvertTo<TLength>(obj.Length, obj.Time, tempoMap);
         }
@@ -134,11 +134,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time, LengthedObjectPart matchBy)
             where TObject : ILengthedObject
         {
-            ThrowIf.ArgumentIsNull(nameof(objects), objects);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.EnumArgumentIsInvalid<LengthedObjectPart>(nameof(matchBy), (int)matchBy);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsInvalidEnumValueOf<LengthedObjectPart>(nameof(matchBy), matchBy);
 
-            return objects.Where(o => IsObjectAtTime(o, time, matchBy));
+            return objects.Where(o => o != null && IsObjectAtTime(o, time, matchBy));
         }
 
         /// <summary>
@@ -161,10 +161,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy)
             where TObject : ILengthedObject
         {
-            ThrowIf.ArgumentIsNull(nameof(objects), objects);
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
-            ThrowIf.EnumArgumentIsInvalid<LengthedObjectPart>(nameof(matchBy), (int)matchBy);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsInvalidEnumValueOf<LengthedObjectPart>(nameof(matchBy), matchBy);
 
             var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
             return AtTime(objects, convertedTime, matchBy);
@@ -182,8 +182,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private static bool IsObjectAtTime<TObject>(TObject obj, long time, LengthedObjectPart matchBy)
             where TObject : ILengthedObject
         {
-            ThrowIf.ArgumentIsNull(nameof(obj), obj);
-
             var startTime = obj.Time;
             if (startTime == time && (matchBy == LengthedObjectPart.Start || matchBy == LengthedObjectPart.Entire))
                 return true;

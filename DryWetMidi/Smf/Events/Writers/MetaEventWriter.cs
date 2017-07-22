@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -9,10 +8,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
-
-            if (!(midiEvent is MetaEvent))
-                throw new ArgumentException("Event is not Meta event.", nameof(midiEvent));
+            VerifyEvent(midiEvent);
 
             //
 
@@ -30,7 +26,7 @@ namespace Melanchall.DryWetMidi.Smf
             {
                 var eventType = midiEvent.GetType();
                 if (!StandardEventTypes.Meta.TryGetStatusByte(eventType, out statusByte) && settings.CustomMetaEventTypes?.TryGetStatusByte(eventType, out statusByte) != true)
-                    throw new InvalidOperationException($"Unable to write the {eventType} event.");
+                    Debug.Fail($"Unable to write the {eventType} event.");
             }
 
             writer.WriteByte(statusByte);
@@ -44,10 +40,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
-
-            if (!(midiEvent is MetaEvent))
-                throw new ArgumentException("Event is not Meta event.", nameof(midiEvent));
+            VerifyEvent(midiEvent);
 
             //
 
@@ -57,7 +50,20 @@ namespace Melanchall.DryWetMidi.Smf
 
         public byte GetStatusByte(MidiEvent midiEvent)
         {
+            VerifyEvent(midiEvent);
+
             return EventStatusBytes.Global.Meta;
+        }
+
+        #endregion
+
+        #region Methods
+
+        [Conditional("DEBUG")]
+        private static void VerifyEvent(MidiEvent midiEvent)
+        {
+            Debug.Assert(midiEvent != null);
+            Debug.Assert(midiEvent is MetaEvent, "Event is not Meta event.");
         }
 
         #endregion

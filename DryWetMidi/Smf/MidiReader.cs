@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// or is already closed.</exception>
         public MidiReader(Stream stream)
         {
-            ThrowIf.ArgumentIsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
             _binaryReader = new BinaryReader(stream, Encoding.ASCII);
         }

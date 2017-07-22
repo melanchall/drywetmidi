@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         public SmpteTimeDivision(SmpteFormat format, byte resolution)
         {
-            ThrowIf.EnumArgumentIsInvalid<SmpteFormat>(nameof(format), (int)format);
+            ThrowIfArgument.IsInvalidEnumValueOf<SmpteFormat>(nameof(format), format);
 
             Format = format;
             Resolution = resolution;

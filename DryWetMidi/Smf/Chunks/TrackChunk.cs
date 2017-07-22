@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Smf
         public TrackChunk(IEnumerable<MidiEvent> events)
             : this()
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             Events.AddRange(events);
         }

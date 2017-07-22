@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -34,10 +35,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// is zero or negative.</exception>
         public Tempo(long microsecondsPerQuarterNote)
         {
-            if (microsecondsPerQuarterNote <= 0)
-                throw new ArgumentOutOfRangeException("Number of microseconds per quarter note is zero or negative.",
-                                                      microsecondsPerQuarterNote,
-                                                      nameof(microsecondsPerQuarterNote));
+            ThrowIfArgument.IsNonpositive(nameof(microsecondsPerQuarterNote),
+                                          microsecondsPerQuarterNote,
+                                          "Number of microseconds per quarter note is zero or negative.");
 
             MicrosecondsPerQuarterNote = microsecondsPerQuarterNote;
         }
@@ -71,10 +71,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// is zero or negative.</exception>
         public static Tempo FromMillisecondsPerQuarterNote(long millisecondsPerQuarterNote)
         {
-            if (millisecondsPerQuarterNote <= 0)
-                throw new ArgumentOutOfRangeException("Number of milliseconds per quarter note is zero or negative.",
-                                                      millisecondsPerQuarterNote,
-                                                      nameof(millisecondsPerQuarterNote));
+            ThrowIfArgument.IsNonpositive(nameof(millisecondsPerQuarterNote),
+                                          millisecondsPerQuarterNote,
+                                          "Number of milliseconds per quarter note is zero or negative.");
 
             return new Tempo(millisecondsPerQuarterNote * MicrosecondsInMillisecond);
         }
@@ -90,10 +89,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// is zero or negative.</exception>
         public static Tempo FromBeatsPerMinute(long beatsPerMinute)
         {
-            if (beatsPerMinute <= 0)
-                throw new ArgumentOutOfRangeException("Number of beats per minute is zero or negative.",
-                                                      beatsPerMinute,
-                                                      nameof(beatsPerMinute));
+            ThrowIfArgument.IsNonpositive(nameof(beatsPerMinute),
+                                          beatsPerMinute,
+                                          "Number of beats per minute is zero or negative.");
 
             return new Tempo(MicrosecondsInMinute / beatsPerMinute);
         }

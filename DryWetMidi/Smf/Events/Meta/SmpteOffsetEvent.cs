@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Smf
         public SmpteOffsetEvent(SmpteFormat format, byte hours, byte minutes, byte seconds, byte frames, byte subFrames)
             : this()
         {
-            ThrowIf.EnumArgumentIsInvalid<SmpteFormat>(nameof(format), (int)format);
+            ThrowIfArgument.IsInvalidEnumValueOf<SmpteFormat>(nameof(format), format);
 
             Format = format;
             Hours = hours;
@@ -124,10 +124,11 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _hours; }
             set
             {
-                if (value > MaxHours)
-                    throw new ArgumentOutOfRangeException(nameof(value),
-                                                          value,
-                                                          $"Hours number is out of valid range (0-{MaxHours}).");
+                ThrowIfArgument.IsOutOfRange(nameof(value),
+                                             value,
+                                             0,
+                                             MaxHours,
+                                             $"Hours number is out of valid range (0-{MaxHours}).");
 
                 _hours = value;
             }
@@ -142,10 +143,11 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _minutes; }
             set
             {
-                if (value > MaxMinutes)
-                    throw new ArgumentOutOfRangeException(nameof(value),
-                                                          value,
-                                                          $"Minutes number is out of valid range (0-{MaxMinutes}).");
+                ThrowIfArgument.IsOutOfRange(nameof(value),
+                                             value,
+                                             0,
+                                             MaxMinutes,
+                                             $"Minutes number is out of valid range (0-{MaxMinutes}).");
 
                 _minutes = value;
             }
@@ -160,10 +162,11 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _seconds; }
             set
             {
-                if (value > MaxSeconds)
-                    throw new ArgumentOutOfRangeException(nameof(value),
-                                                          value,
-                                                          $"Seconds number is out of valid range (0-{MaxSeconds}).");
+                ThrowIfArgument.IsOutOfRange(nameof(value),
+                                             value,
+                                             0,
+                                             MaxSeconds,
+                                             $"Seconds number is out of valid range (0-{MaxSeconds}).");
 
                 _seconds = value;
             }
@@ -184,10 +187,11 @@ namespace Melanchall.DryWetMidi.Smf
             set
             {
                 var maxFrames = MaxFrames[Format];
-                if (value > maxFrames)
-                    throw new ArgumentOutOfRangeException(nameof(value),
-                                                          value,
-                                                          $"Frames number is out of valid range (0-{maxFrames}).");
+                ThrowIfArgument.IsOutOfRange(nameof(value),
+                                             value,
+                                             0,
+                                             maxFrames,
+                                             $"Frames number is out of valid range (0-{maxFrames}).");
 
                 _frames = value;
             }
@@ -202,10 +206,11 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _subFrames; }
             set
             {
-                if (value > MaxSubFrames)
-                    throw new ArgumentOutOfRangeException(nameof(value),
-                                                          value,
-                                                          $"Sub-frames number is out of valid range (0-{MaxSubFrames}).");
+                ThrowIfArgument.IsOutOfRange(nameof(value),
+                                             value,
+                                             0,
+                                             MaxSubFrames,
+                                             $"Sub-frames number is out of valid range (0-{MaxSubFrames}).");
 
                 _subFrames = value;
             }

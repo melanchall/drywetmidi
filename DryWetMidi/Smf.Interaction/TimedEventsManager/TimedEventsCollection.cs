@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
         internal TimedEventsCollection(IEnumerable<TimedEvent> events, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             _eventsComparer = new TimedEventsComparer(sameTimeEventsComparison);
             _timedEvents.AddRange(events);
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
         public void Add(IEnumerable<TimedEvent> events)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             _timedEvents.AddRange(events);
         }
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
         public void Add(params TimedEvent[] events)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             Add((IEnumerable<TimedEvent>)events);
         }
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
         public void Remove(IEnumerable<TimedEvent> events)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             foreach (var e in events.ToList())
             {
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
         public void Remove(params TimedEvent[] events)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             Remove((IEnumerable<TimedEvent>)events);
         }
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
         public void RemoveAll(Predicate<TimedEvent> predicate)
         {
-            ThrowIf.ArgumentIsNull(nameof(predicate), predicate);
+            ThrowIfArgument.IsNull(nameof(predicate), predicate);
 
             _timedEvents.RemoveAll(predicate);
         }

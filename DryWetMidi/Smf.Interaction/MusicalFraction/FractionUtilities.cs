@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         internal static Fraction ToMathFraction(this IEnumerable<MusicalFractionCount> fractionsCounts)
         {
-            ThrowIf.ArgumentIsNull(nameof(fractionsCounts), fractionsCounts);
+            ThrowIfArgument.IsNull(nameof(fractionsCounts), fractionsCounts);
 
             return Fraction.Sum(fractionsCounts.Where(c => c != null && c.Fraction != null && c.Count > 0)
                                                .Select(ToMathFraction));

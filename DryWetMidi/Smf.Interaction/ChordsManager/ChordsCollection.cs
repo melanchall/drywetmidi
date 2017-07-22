@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         
         internal ChordsCollection(IEnumerable<Chord> chords)
         {
-            ThrowIf.ArgumentIsNull(nameof(chords), chords);
+            ThrowIfArgument.IsNull(nameof(chords), chords);
 
             _chords.AddRange(chords);
         }
@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
         public void Add(IEnumerable<Chord> chords)
         {
-            ThrowIf.ArgumentIsNull(nameof(chords), chords);
+            ThrowIfArgument.IsNull(nameof(chords), chords);
 
             _chords.AddRange(chords);
             OnChordsAdded(chords);
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
         public void Add(params Chord[] chords)
         {
-            ThrowIf.ArgumentIsNull(nameof(chords), chords);
+            ThrowIfArgument.IsNull(nameof(chords), chords);
 
             Add((IEnumerable<Chord>)chords);
         }
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
         public void Remove(IEnumerable<Chord> chords)
         {
-            ThrowIf.ArgumentIsNull(nameof(chords), chords);
+            ThrowIfArgument.IsNull(nameof(chords), chords);
 
             var removedChords = chords.ToList();
 
@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
         public void Remove(params Chord[] chords)
         {
-            ThrowIf.ArgumentIsNull(nameof(chords), chords);
+            ThrowIfArgument.IsNull(nameof(chords), chords);
 
             Remove((IEnumerable<Chord>)chords);
         }
@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
         public void RemoveAll(Predicate<Chord> match)
         {
-            ThrowIf.ArgumentIsNull(nameof(match), match);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             var removedChords = _chords.Where(c => match(c)).ToList();
             _chords.RemoveAll(match);

@@ -31,16 +31,16 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>An instance of the <see cref="IChunksConverter"/> appropriate for
         /// <paramref name="format"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
-        /// <exception cref="NotSupportedException"><paramref name="format"/> is not supported yet.</exception>
+        /// <exception cref="NotSupportedException"><paramref name="format"/> is not supported.</exception>
         public static IChunksConverter GetConverter(MidiFileFormat format)
         {
-            ThrowIf.EnumArgumentIsInvalid<MidiFileFormat>(nameof(format), (int)format);
+            ThrowIfArgument.IsInvalidEnumValueOf<MidiFileFormat>(nameof(format), format);
 
             IChunksConverter converter;
             if (_converters.TryGetValue(format, out converter))
                 return converter;
 
-            throw new NotImplementedException($"Converter for the {format} format is not implemented.");
+            throw new NotSupportedException($"Converter for the {format} format is not supported.");
         }
 
         #endregion

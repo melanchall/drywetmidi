@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public TValue AtTime(long time)
         {
-            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
             return _values.Where(p => p.Time <= time)
                           .OrderBy(p => p.Time)
@@ -69,8 +69,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         internal void SetValue(long time, TValue value)
         {
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(value), value);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(value), value);
 
             var currentValue = AtTime(time);
             if (currentValue.Equals(value))
@@ -99,8 +99,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="endTime"/> is negative.</exception>
         internal void DeleteValues(long startTime, long endTime)
         {
-            ThrowIf.StartTimeIsNegative(nameof(startTime), startTime);
-            ThrowIf.EndTimeIsNegative(nameof(endTime), endTime);
+            ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
+            ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
             _values.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
         }

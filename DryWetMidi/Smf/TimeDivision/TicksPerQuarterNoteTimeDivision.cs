@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -30,10 +31,12 @@ namespace Melanchall.DryWetMidi.Smf
         /// the specified ticks number per a quarter-note.
         /// </summary>
         /// <param name="ticksPerQuarterNote">Number of ticks which make up a quarter-note.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ticksPerQuarterNote"/> is negative.</exception>
         public TicksPerQuarterNoteTimeDivision(short ticksPerQuarterNote)
         {
-            if (ticksPerQuarterNote < 0)
-                throw new ArgumentException("Ticks per quarter-note must be non-negative number.", nameof(ticksPerQuarterNote));
+            ThrowIfArgument.IsNegative(nameof(ticksPerQuarterNote),
+                                        ticksPerQuarterNote,
+                                        "Ticks per quarter-note must be non-negative number.");
 
             TicksPerQuarterNote = ticksPerQuarterNote;
         }

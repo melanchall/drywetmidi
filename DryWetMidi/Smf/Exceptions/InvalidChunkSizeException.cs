@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// about the source or destination.</param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            ThrowIf.ArgumentIsNull(nameof(info), info);
+            ThrowIfArgument.IsNull(nameof(info), info);
 
             info.AddValue(ExpectedSizeSerializationPropertyName, ExpectedSize);
             info.AddValue(ActualSizeSerializationPropertyName, ActualSize);

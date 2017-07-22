@@ -25,9 +25,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TLength ConvertTo<TLength>(long length, long time, TempoMap tempoMap)
             where TLength : ILength
         {
-            ThrowIf.LengthIsNegative(nameof(length), length);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfLengthArgument.IsNegative(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return (TLength)GetConverter<TLength>().ConvertTo(length, time, tempoMap);
         }
@@ -47,9 +47,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TLength ConvertTo<TLength>(ILength length, long time, TempoMap tempoMap)
             where TLength : ILength
         {
-            ThrowIf.ArgumentIsNull(nameof(length), length);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return ConvertTo<TLength>(ConvertFrom(length, time, tempoMap), time, tempoMap);
         }
@@ -66,9 +66,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="tempoMap"/> is null.</exception>
         public static long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
-            ThrowIf.ArgumentIsNull(nameof(length), length);
-            ThrowIf.TimeIsNegative(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return LengthConverterFactory.GetConverter(length.GetType())
                                          .ConvertFrom(length, time, tempoMap);

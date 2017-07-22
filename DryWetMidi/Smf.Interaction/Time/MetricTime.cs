@@ -39,10 +39,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="totalMicroseconds"/> is negative.</exception>
         public MetricTime(long totalMicroseconds)
         {
-            if (totalMicroseconds < 0)
-                throw new ArgumentOutOfRangeException(nameof(totalMicroseconds),
-                                                      totalMicroseconds,
-                                                      "Number of microseconds is negative.");
+            ThrowIfArgument.IsNegative(nameof(totalMicroseconds),
+                                       totalMicroseconds,
+                                       "Number of microseconds is negative.");
 
             _timeSpan = new TimeSpan(totalMicroseconds * TicksInMicrosecond);
         }
@@ -84,17 +83,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="milliseconds"/> is negative.</exception>
         public MetricTime(int hours, int minutes, int seconds, int milliseconds)
         {
-            if (hours < 0)
-                throw new ArgumentOutOfRangeException(nameof(hours), hours, "Number of hours is negative.");
-
-            if (minutes < 0)
-                throw new ArgumentOutOfRangeException(nameof(minutes), minutes, "Number of minutes is negative.");
-
-            if (seconds < 0)
-                throw new ArgumentOutOfRangeException(nameof(seconds), seconds, "Number of seconds is negative.");
-
-            if (milliseconds < 0)
-                throw new ArgumentOutOfRangeException(nameof(milliseconds), milliseconds, "Number of milliseconds is negative.");
+            ThrowIfArgument.IsNegative(nameof(hours), hours, "Number of hours is negative.");
+            ThrowIfArgument.IsNegative(nameof(minutes), minutes, "Number of minutes is negative.");
+            ThrowIfArgument.IsNegative(nameof(seconds), seconds, "Number of seconds is negative.");
+            ThrowIfArgument.IsNegative(nameof(milliseconds), milliseconds, "Number of milliseconds is negative.");
 
             _timeSpan = new TimeSpan(0, hours, minutes, seconds, milliseconds);
         }
@@ -186,16 +178,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static MetricTime operator +(MetricTime time1, MetricTime time2)
         {
-            ThrowIf.ArgumentIsNull(nameof(time1), time1);
-            ThrowIf.ArgumentIsNull(nameof(time2), time2);
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
 
             return new MetricTime(time1.TotalMicroseconds + time2.TotalMicroseconds);
         }
 
         public static MetricTime operator +(MetricTime time, MetricLength length)
         {
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(length), length);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
 
             return new MetricTime(time.TotalMicroseconds + length.TotalMicroseconds);
         }
@@ -212,8 +204,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentException"><paramref name="time1"/> is less than <paramref name="time2"/>.</exception>
         public static MetricTime operator -(MetricTime time1, MetricTime time2)
         {
-            ThrowIf.ArgumentIsNull(nameof(time1), time1);
-            ThrowIf.ArgumentIsNull(nameof(time2), time2);
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
 
             if (time1 < time2)
                 throw new ArgumentException("First time is less than second one.", nameof(time1));
@@ -223,8 +215,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static MetricTime operator -(MetricTime time, MetricLength length)
         {
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(length), length);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
 
             if (time.TotalMicroseconds < length.TotalMicroseconds)
                 throw new ArgumentException("Time is less than length.", nameof(time));
@@ -244,8 +236,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator <(MetricTime time1, MetricTime time2)
         {
-            ThrowIf.ArgumentIsNull(nameof(time1), time1);
-            ThrowIf.ArgumentIsNull(nameof(time2), time2);
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds < time2.TotalMicroseconds;
         }
@@ -262,8 +254,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator >(MetricTime time1, MetricTime time2)
         {
-            ThrowIf.ArgumentIsNull(nameof(time1), time1);
-            ThrowIf.ArgumentIsNull(nameof(time2), time2);
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds > time2.TotalMicroseconds;
         }
@@ -280,8 +272,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator <=(MetricTime time1, MetricTime time2)
         {
-            ThrowIf.ArgumentIsNull(nameof(time1), time1);
-            ThrowIf.ArgumentIsNull(nameof(time2), time2);
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds <= time2.TotalMicroseconds;
         }
@@ -298,8 +290,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="time2"/> is null.</exception>
         public static bool operator >=(MetricTime time1, MetricTime time2)
         {
-            ThrowIf.ArgumentIsNull(nameof(time1), time1);
-            ThrowIf.ArgumentIsNull(nameof(time2), time2);
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
 
             return time1.TotalMicroseconds >= time2.TotalMicroseconds;
         }

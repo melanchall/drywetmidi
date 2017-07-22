@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -9,11 +8,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
-
-            var sysExEvent = midiEvent as SysExEvent;
-            if (sysExEvent == null)
-                throw new ArgumentException("Event is not SysEx event.", nameof(midiEvent));
+            VerifyEvent(midiEvent);
 
             //
 
@@ -23,7 +18,7 @@ namespace Melanchall.DryWetMidi.Smf
 
                 byte statusByte;
                 if (!StandardEventTypes.SysEx.TryGetStatusByte(eventType, out statusByte))
-                    throw new InvalidOperationException($"Unable to write the {eventType} event.");
+                    Debug.Fail($"Unable to write the {eventType} event.");
 
                 writer.WriteByte(statusByte);
             }
@@ -37,10 +32,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
-
-            if (!(midiEvent is SysExEvent))
-                throw new ArgumentException("Event is not SysEx event.", nameof(midiEvent));
+            VerifyEvent(midiEvent);
 
             //
 
@@ -50,18 +42,26 @@ namespace Melanchall.DryWetMidi.Smf
 
         public byte GetStatusByte(MidiEvent midiEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
-
-            if (!(midiEvent is SysExEvent))
-                throw new ArgumentException("Event is not SysEx event.", nameof(midiEvent));
+            VerifyEvent(midiEvent);
 
             //
 
             byte statusByte;
             if (!StandardEventTypes.SysEx.TryGetStatusByte(midiEvent.GetType(), out statusByte))
-                throw new Exception();
+                Debug.Fail($"No status byte defined for {midiEvent.GetType()}.");
 
             return statusByte;
+        }
+
+        #endregion
+
+        #region Methods
+
+        [Conditional("DEBUG")]
+        private static void VerifyEvent(MidiEvent midiEvent)
+        {
+            Debug.Assert(midiEvent != null);
+            Debug.Assert(midiEvent is SysExEvent, "Event is not SysEx event.");
         }
 
         #endregion

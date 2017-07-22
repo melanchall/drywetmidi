@@ -42,17 +42,14 @@ namespace Melanchall.DryWetMidi.Smf
         {
             get
             {
-                if (index < 0 || index >= _events.Count)
-                    throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+                ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
                 return _events[index];
             }
             set
             {
-                ThrowIf.ArgumentIsNull(nameof(value), value);
-
-                if (index < 0 || index >= _events.Count)
-                    throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+                ThrowIfArgument.IsNull(nameof(value), value);
+                ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
                 _events[index] = value;
             }
@@ -79,7 +76,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         public void Add(MidiEvent midiEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
             _events.Add(midiEvent);
         }
@@ -96,7 +93,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
         public void AddRange(IEnumerable<MidiEvent> events)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             _events.AddRange(events.Where(e => e != null));
         }
@@ -116,10 +113,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void Insert(int index, MidiEvent midiEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
-
-            if (index < 0 || index >= _events.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
             _events.Insert(index, midiEvent);
         }
@@ -139,10 +134,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
         public void InsertRange(int index, IEnumerable<MidiEvent> midiEvents)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvents), midiEvents);
-
-            if (index < 0 || index >= _events.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
+            ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
             _events.InsertRange(index, midiEvents);
         }
@@ -156,7 +149,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         public bool Remove(MidiEvent midiEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
             return _events.Remove(midiEvent);
         }
@@ -169,8 +162,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// is equal to or greater than <see cref="Count"/>.</exception>
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= _events.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, "Index is out of range.");
+            ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
             _events.RemoveAt(index);
         }
@@ -184,7 +176,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
         public int RemoveAll(Predicate<MidiEvent> match)
         {
-            ThrowIf.ArgumentIsNull(nameof(match), match);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return _events.RemoveAll(match);
         }
@@ -199,7 +191,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         public int IndexOf(MidiEvent midiEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
             return _events.IndexOf(midiEvent);
         }

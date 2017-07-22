@@ -98,10 +98,10 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _denominator; }
             set
             {
-                if (!MathUtilities.IsPowerOfTwo(value))
-                    throw new ArgumentOutOfRangeException(nameof(value),
-                                                          value,
-                                                          "Denominator is zero or is not a power of two.");
+                ThrowIfArgument.DoesntSatisfyCondition(nameof(value),
+                                                       value,
+                                                       MathUtilities.IsPowerOfTwo,
+                                                       "Denominator is zero or is not a power of two.");
 
                 _denominator = value;
             }

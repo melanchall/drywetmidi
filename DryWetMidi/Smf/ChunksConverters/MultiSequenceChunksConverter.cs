@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunks), chunks);
+            ThrowIfArgument.IsNull(nameof(chunks), chunks);
 
             var trackChunks = chunks.OfType<TrackChunk>().ToArray();
             if (trackChunks.Length == 0)
@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         private static ushort? GetSequenceNumber(TrackChunk trackChunk)
         {
-            ThrowIf.ArgumentIsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
             return trackChunk.Events
                              .TakeWhile(m => m.DeltaTime == 0)

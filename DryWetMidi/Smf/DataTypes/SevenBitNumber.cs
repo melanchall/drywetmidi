@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -46,8 +47,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// [<see cref="MinValue"/>; <see cref="MaxValue"/>] range.</exception>
         public SevenBitNumber(byte value)
         {
-            if (value < Min || value > Max)
-                throw new ArgumentOutOfRangeException(nameof(value), value, "Value is out of range valid for seven-bit number.");
+            ThrowIfArgument.IsOutOfRange(nameof(value), value, Min, Max, "Value is out of range valid for seven-bit number.");
 
             _value = value;
         }

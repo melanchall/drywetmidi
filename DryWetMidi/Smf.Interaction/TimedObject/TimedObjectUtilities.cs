@@ -26,8 +26,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap tempoMap)
             where TTime : ITime
         {
-            ThrowIf.ArgumentIsNull(nameof(obj), obj);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return TimeConverter.ConvertTo<TTime>(obj.Time, tempoMap);
         }
@@ -49,8 +49,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ITimedObject
         {
-            ThrowIf.ArgumentIsNull(nameof(objects), objects);
-            ThrowIf.TimeIsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
             return objects.Where(o => o.Time == time);
         }
@@ -73,9 +73,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
             where TObject : ITimedObject
         {
-            ThrowIf.ArgumentIsNull(nameof(objects), objects);
-            ThrowIf.ArgumentIsNull(nameof(time), time);
-            ThrowIf.ArgumentIsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
             return AtTime(objects, convertedTime);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -68,8 +69,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MusicalFraction(int fraction, bool dotted, TupletDefinition tupletDefinition)
         {
-            if (fraction <= 0)
-                throw new ArgumentOutOfRangeException(nameof(fraction), fraction, "Fraction is zero or negative.");
+            ThrowIfArgument.IsNonpositive(nameof(fraction), fraction, "Fraction is zero or negative.");
 
             Fraction = fraction;
             Dotted = dotted;

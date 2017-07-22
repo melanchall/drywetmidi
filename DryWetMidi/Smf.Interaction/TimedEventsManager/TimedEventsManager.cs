@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public TimedEventsManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            ThrowIf.ArgumentIsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             _eventsCollection = eventsCollection;
             Events = new TimedEventsCollection(CreateTimedEvents(eventsCollection));
@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static IEnumerable<TimedEvent> CreateTimedEvents(EventsCollection events)
         {
-            ThrowIf.ArgumentIsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(events), events);
 
             var time = 0L;
 

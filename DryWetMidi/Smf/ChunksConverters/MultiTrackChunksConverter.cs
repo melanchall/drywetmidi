@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
         {
-            ThrowIf.ArgumentIsNull(nameof(chunks), chunks);
+            ThrowIfArgument.IsNull(nameof(chunks), chunks);
 
             var trackChunks = chunks.OfType<TrackChunk>().ToArray();
             if (trackChunks.Length != 1)

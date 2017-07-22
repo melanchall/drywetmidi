@@ -11,10 +11,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MusicalLength(MusicalFraction fraction, int fractionCount)
         {
-            ThrowIf.ArgumentIsNull(nameof(fraction), fraction);
-
-            if (fractionCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(fractionCount), fractionCount, "Fraction count is negative.");
+            ThrowIfArgument.IsNull(nameof(fraction), fraction);
+            ThrowIfArgument.IsNegative(nameof(fractionCount), fractionCount, "Fraction count is negative.");
 
             Fraction = new[] { new MusicalFractionCount(fraction, fractionCount) }.ToMathFraction();
         }
@@ -36,14 +34,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MusicalLength(IEnumerable<MusicalFractionCount> fractionsCounts)
         {
-            ThrowIf.ArgumentIsNull(nameof(fractionsCounts), fractionsCounts);
+            ThrowIfArgument.IsNull(nameof(fractionsCounts), fractionsCounts);
 
             Fraction = fractionsCounts.ToMathFraction();
         }
 
         public MusicalLength(Fraction fraction)
         {
-            ThrowIf.ArgumentIsNull(nameof(fraction), fraction);
+            ThrowIfArgument.IsNull(nameof(fraction), fraction);
 
             Fraction = fraction;
         }
@@ -95,16 +93,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static MusicalLength operator +(MusicalLength length1, MusicalLength length2)
         {
-            ThrowIf.ArgumentIsNull(nameof(length1), length1);
-            ThrowIf.ArgumentIsNull(nameof(length2), length2);
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
 
             return new MusicalLength(length1.Fraction + length2.Fraction);
         }
 
         public static MusicalLength operator -(MusicalLength length1, MusicalLength length2)
         {
-            ThrowIf.ArgumentIsNull(nameof(length1), length1);
-            ThrowIf.ArgumentIsNull(nameof(length2), length2);
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
 
             if (length1.Fraction < length2.Fraction)
                 throw new ArgumentException("First length is less than second one.", nameof(length1));
@@ -114,32 +112,32 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool operator <(MusicalLength length1, MusicalLength length2)
         {
-            ThrowIf.ArgumentIsNull(nameof(length1), length1);
-            ThrowIf.ArgumentIsNull(nameof(length2), length2);
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
 
             return length1.Fraction < length2.Fraction;
         }
 
         public static bool operator >(MusicalLength length1, MusicalLength length2)
         {
-            ThrowIf.ArgumentIsNull(nameof(length1), length1);
-            ThrowIf.ArgumentIsNull(nameof(length2), length2);
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
 
             return length1.Fraction > length2.Fraction;
         }
 
         public static bool operator <=(MusicalLength length1, MusicalLength length2)
         {
-            ThrowIf.ArgumentIsNull(nameof(length1), length1);
-            ThrowIf.ArgumentIsNull(nameof(length2), length2);
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
 
             return length1.Fraction <= length2.Fraction;
         }
 
         public static bool operator >=(MusicalLength length1, MusicalLength length2)
         {
-            ThrowIf.ArgumentIsNull(nameof(length1), length1);
-            ThrowIf.ArgumentIsNull(nameof(length2), length2);
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
 
             return length1.Fraction >= length2.Fraction;
         }

@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -119,30 +120,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="timedNoteOnEvent">Wrapped <see cref="NoteOnEvent"/>.</param>
         /// <param name="timedNoteOffEvent">Wrapped <see cref="NoteOffEvent"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="timedNoteOnEvent"/> is null. -or-
-        /// <paramref name="timedNoteOffEvent"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="timedNoteOnEvent"/> doesn't wrap a Note On event.
-        /// -or- <paramref name="timedNoteOffEvent"/> doesn't wrap Note Off event.</exception>
         internal Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(timedNoteOnEvent), timedNoteOnEvent);
+            Debug.Assert(timedNoteOnEvent != null);
+            Debug.Assert(timedNoteOnEvent.Event is NoteOnEvent, "Timed event doesn't wrap a Note On event.");
 
-            var noteOnEvent = timedNoteOnEvent.Event as NoteOnEvent;
-            if (noteOnEvent == null)
-                throw new ArgumentException("Timed event doesn't wrap a Note On event.", nameof(timedNoteOnEvent));
-
-            ThrowIf.ArgumentIsNull(nameof(timedNoteOffEvent), timedNoteOffEvent);
-
-            var noteOffEvent = timedNoteOffEvent.Event as NoteOffEvent;
-            if (noteOffEvent == null)
-                throw new ArgumentException("Timed event doesn't wrap a Note Off event.", nameof(timedNoteOffEvent));
+            Debug.Assert(timedNoteOffEvent != null);
+            Debug.Assert(timedNoteOffEvent.Event is NoteOffEvent, "Timed event doesn't wrap a Note Off event.");
 
             //
+
+            var noteOnEvent = (NoteOnEvent)timedNoteOnEvent.Event;
+            var noteOffEvent = (NoteOffEvent)timedNoteOffEvent.Event;
 
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
-
-            //
 
             NoteNumber = noteOnEvent.NoteNumber;
             Velocity = noteOnEvent.Velocity;
@@ -162,7 +154,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             get { return TimedNoteOnEvent.Time; }
             set
             {
-                ThrowIf.TimeIsNegative(nameof(value), value);
+                ThrowIfTimeArgument.IsNegative(nameof(value), value);
 
                 TimedNoteOffEvent.Time = value + Length;
                 TimedNoteOnEvent.Time = value;
@@ -178,7 +170,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             get { return TimedNoteOffEvent.Time - TimedNoteOnEvent.Time; }
             set
             {
-                ThrowIf.LengthIsNegative(nameof(value), value);
+                ThrowIfLengthArgument.IsNegative(nameof(value), value);
 
                 TimedNoteOffEvent.Time = TimedNoteOnEvent.Time + value;
             }

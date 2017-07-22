@@ -27,18 +27,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="numerator">Numerator of the time signature which defines number of beats.</param>
         /// <param name="denominator">Denominator of the time signature which defines beat length.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="numerator"/> is zero or negative. -or-
-        /// <paramref name="denominator"/> is zero or negative.</exception>
-        /// <exception cref="ArgumentException"><paramref name="denominator"/> is not a power of two.</exception>
+        /// <paramref name="denominator"/> is zero or negative. -or- <paramref name="denominator"/> is not a
+        /// power of two.</exception>
         public TimeSignature(int numerator, int denominator)
         {
-            if (numerator <= 0)
-                throw new ArgumentOutOfRangeException("Numerator is zero or negative.", numerator, nameof(numerator));
-
-            if (denominator <= 0)
-                throw new ArgumentOutOfRangeException("Denominator is zero or negative.", denominator, nameof(denominator));
-
-            if (!MathUtilities.IsPowerOfTwo(denominator))
-                throw new ArgumentException("Denominator is not a power of two.", nameof(denominator));
+            ThrowIfArgument.IsNonpositive(nameof(numerator), numerator, "Numerator is zero or negative.");
+            ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is zero or negative.");
+            ThrowIfArgument.DoesntSatisfyCondition(nameof(denominator),
+                                                   denominator,
+                                                   MathUtilities.IsPowerOfTwo,
+                                                   "Denominator is not a power of two.");
 
             Numerator = numerator;
             Denominator = denominator;

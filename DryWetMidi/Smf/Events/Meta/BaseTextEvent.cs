@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -85,11 +86,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// negative number.</exception>
         protected sealed override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            if (size < 0)
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    size,
-                    "Text event cannot be read since the size is negative number.");
+            ThrowIfArgument.IsNegative(nameof(size),
+                                        size,
+                                        "Text event cannot be read since the size is negative number.");
 
             Text = reader.ReadString(size);
         }

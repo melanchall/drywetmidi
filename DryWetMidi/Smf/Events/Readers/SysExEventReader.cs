@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -18,7 +19,7 @@ namespace Melanchall.DryWetMidi.Smf
                 : null;
 
             if (midiEvent == null)
-                throw new InvalidOperationException("Unknown SysEx event.");
+                Debug.Fail("Unknown SysEx event.");
 
             //
 

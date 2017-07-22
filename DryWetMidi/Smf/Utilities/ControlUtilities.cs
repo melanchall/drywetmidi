@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentNullException"><paramref name="controlChangeEvent"/> is null.</exception>
         public static ControlName GetControlName(this ControlChangeEvent controlChangeEvent)
         {
-            ThrowIf.ArgumentIsNull(nameof(controlChangeEvent), controlChangeEvent);
+            ThrowIfArgument.IsNull(nameof(controlChangeEvent), controlChangeEvent);
 
             return GetControlName(controlChangeEvent.ControlNumber);
         }
