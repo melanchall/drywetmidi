@@ -1,7 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -36,36 +34,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public MusicalTime(Fraction fraction)
             : this(0, 0, fraction)
         {
-        }
-
-        public MusicalTime(MusicalFraction fraction, int fractionCount)
-        {
-            ThrowIfArgument.IsNull(nameof(fraction), fraction);
-            ThrowIfArgument.IsNegative(nameof(fractionCount), fractionCount, "Fraction count is negative.");
-
-            Fraction = new[] { new MusicalFractionCount(fraction, fractionCount) }.ToMathFraction();
-        }
-
-        public MusicalTime(params MusicalFraction[] fractions)
-            : this(fractions as IEnumerable<MusicalFraction>)
-        {
-        }
-
-        public MusicalTime(IEnumerable<MusicalFraction> fractions)
-            : this(fractions?.Select(f => new MusicalFractionCount(f, 1)))
-        {
-        }
-
-        public MusicalTime(params MusicalFractionCount[] fractionsCounts)
-            : this(fractionsCounts as IEnumerable<MusicalFractionCount>)
-        {
-        }
-
-        public MusicalTime(IEnumerable<MusicalFractionCount> fractionsCounts)
-        {
-            ThrowIfArgument.IsNull(nameof(fractionsCounts), fractionsCounts);
-
-            Fraction = fractionsCounts.ToMathFraction();
         }
 
         public MusicalTime(int bars, int beats, Fraction fraction)

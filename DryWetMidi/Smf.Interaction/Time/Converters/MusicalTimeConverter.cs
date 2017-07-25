@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            var fraction = FractionUtilities.FromTicks(deltaTime % beatLength, ticksPerQuarterNote);
+            var fraction = Fraction.FromTicks(deltaTime % beatLength, ticksPerQuarterNote);
 
             //
 
@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var beatLength = GetBeatLength(lastTimeSignature, ticksPerQuarterNote);
             return lastTime + (timeBars - accumulatedBars) * GetBarLength(lastTimeSignature, ticksPerQuarterNote) +
                    time.Beats * beatLength +
-                   FractionUtilities.ToTicks(time.Fraction, ticksPerQuarterNote);
+                   time.Fraction.ToTicks(ticksPerQuarterNote);
         }
 
         private static int GetBarsCount(long time, TimeSignature timeSignature, short ticksPerQuarterNote)

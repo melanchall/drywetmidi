@@ -53,13 +53,6 @@ namespace Melanchall.DryWetMidi.Common
             return n1 * n2;
         }
 
-        internal static long LeastCommonMultiple(IEnumerable<long> numbers)
-        {
-            return !numbers.Skip(1).Any()
-                ? numbers.First()
-                : LeastCommonMultiple(numbers.First(), LeastCommonMultiple(numbers.Skip(1)));
-        }
-
         internal static long GreatestCommonDivisor(long a, long b)
         {
             long remainder;

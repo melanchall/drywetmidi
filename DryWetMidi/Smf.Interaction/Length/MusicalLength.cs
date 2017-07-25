@@ -1,43 +1,11 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class MusicalLength : ILength
     {
         #region Constructor
-
-        public MusicalLength(MusicalFraction fraction, int fractionCount)
-        {
-            ThrowIfArgument.IsNull(nameof(fraction), fraction);
-            ThrowIfArgument.IsNegative(nameof(fractionCount), fractionCount, "Fraction count is negative.");
-
-            Fraction = new[] { new MusicalFractionCount(fraction, fractionCount) }.ToMathFraction();
-        }
-
-        public MusicalLength(params MusicalFraction[] fractions)
-            : this(fractions as IEnumerable<MusicalFraction>)
-        {
-        }
-
-        public MusicalLength(IEnumerable<MusicalFraction> fractions)
-            : this(fractions?.Select(f => new MusicalFractionCount(f, 1)))
-        {
-        }
-
-        public MusicalLength(params MusicalFractionCount[] fractionsCounts)
-            : this(fractionsCounts as IEnumerable<MusicalFractionCount>)
-        {
-        }
-
-        public MusicalLength(IEnumerable<MusicalFractionCount> fractionsCounts)
-        {
-            ThrowIfArgument.IsNull(nameof(fractionsCounts), fractionsCounts);
-
-            Fraction = fractionsCounts.ToMathFraction();
-        }
 
         public MusicalLength(Fraction fraction)
         {
@@ -74,16 +42,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static implicit operator MusicalLength(Fraction fraction)
         {
             return new MusicalLength(fraction);
-        }
-
-        public static implicit operator MusicalLength(MusicalFraction fraction)
-        {
-            return new MusicalLength(fraction);
-        }
-
-        public static implicit operator MusicalLength(MusicalFractionCount fractionCount)
-        {
-            return new MusicalLength(fractionCount);
         }
 
         public static implicit operator Fraction(MusicalLength length)

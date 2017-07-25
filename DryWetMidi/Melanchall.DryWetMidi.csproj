@@ -42,11 +42,7 @@
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MusicalLengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\MusicalLength.cs" />
-    <Compile Include="Smf.Interaction\MusicalFraction\Fraction.cs" />
-    <Compile Include="Smf.Interaction\MusicalFraction\MusicalFraction.cs" />
-    <Compile Include="Smf.Interaction\MusicalFraction\MusicalFractionCount.cs" />
-    <Compile Include="Smf.Interaction\MusicalFraction\FractionUtilities.cs" />
-    <Compile Include="Smf.Interaction\MusicalFraction\TupletDefinition.cs" />
+    <Compile Include="Smf.Interaction\Length\Fraction.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfLengthArgument.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfNotesTolerance.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfTimeArgument.cs" />
