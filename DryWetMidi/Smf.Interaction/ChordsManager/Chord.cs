@@ -36,8 +36,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="notes">Notes to combine into an chord.</param>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public Chord(IEnumerable<Note> notes)
-            : this(notes, 0)
         {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+
+            Notes = new NotesCollection(notes);
+            Notes.CollectionChanged += OnNotesCollectionChanged;
         }
 
         /// <summary>
@@ -49,12 +52,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public Chord(IEnumerable<Note> notes, long time)
+            : this(notes)
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
-
-            Notes = new NotesCollection(notes);
-            Notes.CollectionChanged += OnNotesCollectionChanged;
 
             Time = time;
         }
