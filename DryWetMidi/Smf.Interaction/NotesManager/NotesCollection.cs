@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            _notes.AddRange(notes);
+            _notes.AddRange(notes.Where(n => n != null));
         }
 
         #endregion
