@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            var fraction = Fraction.FromTicks(deltaTime % beatLength, ticksPerQuarterNote);
+            var fraction = FractionUtilities.FromTicks(deltaTime % beatLength, ticksPerQuarterNote);
 
             //
 

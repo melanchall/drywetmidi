@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
-                return new MusicalLength(Fraction.FromTicks(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote));
+                return new MusicalLength(FractionUtilities.FromTicks(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote));
 
             ThrowIfTimeDivision.IsNotSupportedForLengthConversion(tempoMap.TimeDivision);
             return null;

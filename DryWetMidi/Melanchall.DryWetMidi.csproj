@@ -41,8 +41,10 @@
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MusicalLengthConverter.cs" />
+    <Compile Include="Smf.Interaction\Length\MusicalFraction.cs" />
     <Compile Include="Smf.Interaction\Length\MusicalLength.cs" />
-    <Compile Include="Smf.Interaction\Length\Fraction.cs" />
+    <Compile Include="Common\Fraction.cs" />
+    <Compile Include="Smf.Interaction\Utilities\FractionUtilities.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfLengthArgument.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfNotesTolerance.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfTimeArgument.cs" />
