@@ -94,20 +94,63 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public bool Equals(MusicalTime time)
         {
-            if (ReferenceEquals(null, time))
-                return false;
-
-            if (ReferenceEquals(this, time))
-                return true;
-
-            return Bars == time.Bars &&
-                   Beats == time.Beats &&
-                   Fraction == time.Fraction;
+            return this == time;
         }
 
         #endregion
 
         #region Operators
+
+        /// <summary>
+        /// Casts <see cref="Common.Fraction"/> to <see cref="MusicalTime"/>.
+        /// </summary>
+        /// <param name="fraction"><see cref="Common.Fraction"/> to cast to <see cref="MusicalTime"/>.</param>
+        public static implicit operator MusicalTime(Fraction fraction)
+        {
+            return new MusicalTime(fraction);
+        }
+
+        /// <summary>
+        /// Casts <see cref="MusicalTime"/> to <see cref="Common.Fraction"/>.
+        /// </summary>
+        /// <param name="time"><see cref="MusicalTime"/> to cast to <see cref="Common.Fraction"/>.</param>
+        public static explicit operator Fraction(MusicalTime time)
+        {
+            if (time.Bars != 0 || time.Beats != 0)
+                throw new ArgumentException("Time has nonzero bars or beats number.", nameof(time));
+
+            return time.Fraction;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="MusicalTime"/> objects are equal.
+        /// </summary>
+        /// <param name="time1">The first <see cref="MusicalTime"/> to compare.</param>
+        /// <param name="time2">The second <see cref="MusicalTime"/> to compare.</param>
+        /// <returns>true if the times are equal, false otherwise.</returns>
+        public static bool operator ==(MusicalTime time1, MusicalTime time2)
+        {
+            if (ReferenceEquals(time1, time2))
+                return true;
+
+            if (ReferenceEquals(null, time1) || ReferenceEquals(null, time2))
+                return false;
+
+            return time1.Bars == time2.Bars &&
+                   time1.Beats == time2.Beats &&
+                   time1.Fraction == time2.Fraction;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="MusicalTime"/> objects are not equal.
+        /// </summary>
+        /// <param name="time1">The first <see cref="MusicalTime"/> to compare.</param>
+        /// <param name="time2">The second <see cref="MusicalTime"/> to compare.</param>
+        /// <returns>false if the times are equal, true otherwise.</returns>
+        public static bool operator !=(MusicalTime time1, MusicalTime time2)
+        {
+            return !(time1 == time2);
+        }
 
         /// <summary>
         /// Adds two specified <see cref="MusicalTime"/> instances.

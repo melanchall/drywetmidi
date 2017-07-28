@@ -144,13 +144,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public bool Equals(MetricTime time)
         {
-            if (ReferenceEquals(null, time))
-                return false;
-
-            if (ReferenceEquals(this, time))
-                return true;
-
-            return TotalMicroseconds == time.TotalMicroseconds;
+            return this == time;
         }
 
         #endregion
@@ -173,6 +167,34 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static implicit operator TimeSpan(MetricTime time)
         {
             return time._timeSpan;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="MetricTime"/> objects are equal.
+        /// </summary>
+        /// <param name="time1">The first <see cref="MetricTime"/> to compare.</param>
+        /// <param name="time2">The second <see cref="MetricTime"/> to compare.</param>
+        /// <returns>true if the times are equal, false otherwise.</returns>
+        public static bool operator ==(MetricTime time1, MetricTime time2)
+        {
+            if (ReferenceEquals(time1, time2))
+                return true;
+
+            if (ReferenceEquals(null, time1) || ReferenceEquals(null, time2))
+                return false;
+
+            return time1.TotalMicroseconds == time2.TotalMicroseconds;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="MetricTime"/> objects are not equal.
+        /// </summary>
+        /// <param name="time1">The first <see cref="MetricTime"/> to compare.</param>
+        /// <param name="time2">The second <see cref="MetricTime"/> to compare.</param>
+        /// <returns>false if the times are equal, true otherwise.</returns>
+        public static bool operator !=(MetricTime time1, MetricTime time2)
+        {
+            return !(time1 == time2);
         }
 
         /// <summary>

@@ -103,8 +103,8 @@ namespace Melanchall.DryWetMidi.Common
         /// <summary>
         /// Determines if two <see cref="Fraction"/> objects are equal.
         /// </summary>
-        /// <param name="fraction1">The first fraction to compare.</param>
-        /// <param name="fraction2">The second fraction to compare.</param>
+        /// <param name="fraction1">The first <see cref="Fraction"/> to compare.</param>
+        /// <param name="fraction2">The second <see cref="Fraction"/> to compare.</param>
         /// <returns>true if the fractions are equal, false otherwise.</returns>
         public static bool operator ==(Fraction fraction1, Fraction fraction2)
         {
@@ -121,8 +121,8 @@ namespace Melanchall.DryWetMidi.Common
         /// <summary>
         /// Determines if two <see cref="Fraction"/> objects are not equal.
         /// </summary>
-        /// <param name="fraction1">The first fraction to compare.</param>
-        /// <param name="fraction2">The second fraction to compare.</param>
+        /// <param name="fraction1">The first <see cref="Fraction"/> to compare.</param>
+        /// <param name="fraction2">The second <see cref="Fraction"/> to compare.</param>
         /// <returns>false if the fractions are equal, true otherwise.</returns>
         public static bool operator !=(Fraction fraction1, Fraction fraction2)
         {

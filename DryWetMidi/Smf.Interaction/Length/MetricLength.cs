@@ -131,13 +131,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public bool Equals(MetricLength length)
         {
-            if (ReferenceEquals(null, length))
-                return false;
-
-            if (ReferenceEquals(this, length))
-                return true;
-
-            return TotalMicroseconds == length.TotalMicroseconds;
+            return this == length;
         }
 
         #endregion
@@ -160,6 +154,34 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static implicit operator TimeSpan(MetricLength length)
         {
             return length._time;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="MetricLength"/> objects are equal.
+        /// </summary>
+        /// <param name="length1">The first <see cref="MetricLength"/> to compare.</param>
+        /// <param name="length2">The second <see cref="MetricLength"/> to compare.</param>
+        /// <returns>true if the lengths are equal, false otherwise.</returns>
+        public static bool operator ==(MetricLength length1, MetricLength length2)
+        {
+            if (ReferenceEquals(length1, length2))
+                return true;
+
+            if (ReferenceEquals(null, length1) || ReferenceEquals(null, length2))
+                return false;
+
+            return length1.TotalMicroseconds == length2.TotalMicroseconds;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="MetricLength"/> objects are not equal.
+        /// </summary>
+        /// <param name="length1">The first <see cref="MetricLength"/> to compare.</param>
+        /// <param name="length2">The second <see cref="MetricLength"/> to compare.</param>
+        /// <returns>false if the lengths are equal, true otherwise.</returns>
+        public static bool operator !=(MetricLength length1, MetricLength length2)
+        {
+            return !(length1 == length2);
         }
 
         /// <summary>
