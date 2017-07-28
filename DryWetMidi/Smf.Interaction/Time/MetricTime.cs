@@ -4,7 +4,7 @@ using System;
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
-    /// Represents metric time on an object expressed in hours, minutes and seconds.
+    /// Represents metric time of an object expressed in hours, minutes and seconds.
     /// </summary>
     public sealed class MetricTime : ITime, IFormattable
     {
@@ -157,11 +157,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Operators
 
+        /// <summary>
+        /// Casts <see cref="TimeSpan"/> to <see cref="MetricTime"/>.
+        /// </summary>
+        /// <param name="timeSpan"><see cref="TimeSpan"/> to cast to <see cref="MetricTime"/>.</param>
         public static implicit operator MetricTime(TimeSpan timeSpan)
         {
             return new MetricTime(timeSpan);
         }
 
+        /// <summary>
+        /// Casts <see cref="MetricTime"/> to <see cref="TimeSpan"/>.
+        /// </summary>
+        /// <param name="time"><see cref="MetricTime"/> to cast to <see cref="TimeSpan"/>.</param>
         public static implicit operator TimeSpan(MetricTime time)
         {
             return time._timeSpan;
@@ -184,6 +192,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MetricTime(time1.TotalMicroseconds + time2.TotalMicroseconds);
         }
 
+        /// <summary>
+        /// Sums <see cref="MetricTime"/> and <see cref="MetricLength"/>.
+        /// </summary>
+        /// <param name="time">The <see cref="MetricTime"/> to add.</param>
+        /// <param name="length">The <see cref="MetricLength"/> to add.</param>
+        /// <returns>The sum of <paramref name="time"/> and <paramref name="length"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
         public static MetricTime operator +(MetricTime time, MetricLength length)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -213,6 +229,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MetricTime(time1.TotalMicroseconds - time2.TotalMicroseconds);
         }
 
+        /// <summary>
+        /// Subtracts <see cref="MetricLength"/> from <see cref="MetricTime"/>.
+        /// </summary>
+        /// <param name="time">The minuend.</param>
+        /// <param name="length">The subtrahend.</param>
+        /// <returns>The result of subtracting <paramref name="length"/> from <paramref name="time"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="time"/> is less than <paramref name="length"/>.</exception>
         public static MetricTime operator -(MetricTime time, MetricLength length)
         {
             ThrowIfArgument.IsNull(nameof(time), time);

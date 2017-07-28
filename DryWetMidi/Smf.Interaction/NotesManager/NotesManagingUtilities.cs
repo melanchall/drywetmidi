@@ -45,6 +45,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
         }
 
+        /// <summary>
+        /// Gets notes contained in the specified <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes.</param>
+        /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public static IEnumerable<Note> GetNotes(this EventsCollection eventsCollection)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -53,7 +59,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified track chunk.
+        /// Gets notes contained in the specified <see cref="TrackChunk"/>.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
@@ -66,7 +72,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified track chunks.
+        /// Gets notes contained in the specified collection of <see cref="TrackChunk"/>.
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
@@ -81,7 +87,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified MIDI file.
+        /// Gets notes contained in the specified <see cref="MidiFile"/>.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
@@ -93,6 +99,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return file.GetTrackChunks().GetNotes();
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
+        /// <paramref name="eventsCollection"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
+        /// <paramref name="action"/> is null.</exception>
         public static void ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -107,6 +122,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
+        /// <paramref name="trackChunk"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="action"/> is null.</exception>
         public static void ProcessNotes(this TrackChunk trackChunk, Action<Note> action, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -115,6 +139,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             trackChunk.Events.ProcessNotes(action, match);
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Note"/> contained in the collection of
+        /// <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
+        /// <paramref name="trackChunks"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="action"/> is null.</exception>
         public static void ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -126,6 +160,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for notes to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
+        /// <paramref name="file"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null. -or-
+        /// <paramref name="action"/> is null.</exception>
         public static void ProcessNotes(this MidiFile file, Action<Note> action, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -134,6 +177,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             file.GetTrackChunks().ProcessNotes(action, match);
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to remove.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
         public static void RemoveNotes(this EventsCollection eventsCollection, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -144,6 +193,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to remove.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static void RemoveNotes(this TrackChunk trackChunk, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -151,6 +206,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             trackChunk.Events.RemoveNotes(match);
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to remove.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static void RemoveNotes(this IEnumerable<TrackChunk> trackChunks, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -161,6 +222,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for notes to remove.</param>
+        /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         public static void RemoveNotes(this MidiFile file, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);

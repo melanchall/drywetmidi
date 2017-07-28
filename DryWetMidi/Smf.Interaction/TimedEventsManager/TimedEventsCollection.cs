@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(events), events);
 
             _eventsComparer = new TimedEventsComparer(sameTimeEventsComparison);
-            _timedEvents.AddRange(events);
+            _timedEvents.AddRange(events.Where(e => e != null));
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(events), events);
 
-            _timedEvents.AddRange(events);
+            _timedEvents.AddRange(events.Where(e => e != null));
         }
 
         /// <summary>

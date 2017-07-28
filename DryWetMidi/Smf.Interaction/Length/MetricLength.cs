@@ -4,7 +4,7 @@ using System;
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
-    /// Represents metric length on an object expressed in hours, minutes and seconds.
+    /// Represents metric length of an object expressed in hours, minutes and seconds.
     /// </summary>
     public sealed class MetricLength : ILength, IFormattable
     {
@@ -144,11 +144,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Operators
 
+        /// <summary>
+        /// Casts <see cref="TimeSpan"/> to <see cref="MetricLength"/>.
+        /// </summary>
+        /// <param name="timeSpan"><see cref="TimeSpan"/> to cast to <see cref="MetricLength"/>.</param>
         public static implicit operator MetricLength(TimeSpan timeSpan)
         {
             return new MetricLength(timeSpan);
         }
 
+        /// <summary>
+        /// Casts <see cref="MetricLength"/> to <see cref="TimeSpan"/>.
+        /// </summary>
+        /// <param name="length"><see cref="MetricLength"/> to cast to <see cref="TimeSpan"/>.</param>
         public static implicit operator TimeSpan(MetricLength length)
         {
             return length._time;

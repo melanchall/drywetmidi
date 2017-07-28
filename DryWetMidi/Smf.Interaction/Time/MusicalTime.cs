@@ -4,7 +4,8 @@ using System;
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
-    /// Represents musical time on an object expressed in bars, beats and ticks.
+    /// Represents musical time of an object expressed in bars, beats and fraction of the
+    /// whole note length.
     /// </summary>
     public sealed class MusicalTime : ITime
     {
@@ -20,22 +21,38 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicalTime"/> with the specified
-        /// numbers of bars, beats.
+        /// number of bars and beats.
         /// </summary>
         /// <param name="bars">Number of bars.</param>
         /// <param name="beats">Number of beats.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative. -or-
         /// <paramref name="beats"/> is negative.</exception>
         public MusicalTime(int bars, int beats)
-            : this(bars, beats, Fraction.NoFraction)
+            : this(bars, beats, Fraction.ZeroFraction)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MusicalTime"/> with the specified
+        /// fraction of the whole note length.
+        /// </summary>
+        /// <param name="fraction">Fraction of the whole note length.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="fraction"/> is null.</exception>
         public MusicalTime(Fraction fraction)
             : this(0, 0, fraction)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MusicalTime"/> with the specified
+        /// number of bars, beats and fraction of the whole note length.
+        /// </summary>
+        /// <param name="bars">Number of bars.</param>
+        /// <param name="beats">Number of beats.</param>
+        /// <param name="fraction">Fraction of the whole note length.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative. -or-
+        /// <paramref name="beats"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="fraction"/> is null.</exception>
         public MusicalTime(int bars, int beats, Fraction fraction)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Number of bars is negative.");
@@ -61,6 +78,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         public int Beats { get; }
 
+        /// <summary>
+        /// Gets the fraction component of the time represented by the current <see cref="MusicalTime"/>.
+        /// </summary>
         public Fraction Fraction { get; }
 
         #endregion
@@ -108,6 +128,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                    time1.Fraction + time2.Fraction);
         }
 
+        /// <summary>
+        /// Sums <see cref="MusicalTime"/> and <see cref="MusicalLength"/>.
+        /// </summary>
+        /// <param name="time">The <see cref="MusicalTime"/> to add.</param>
+        /// <param name="length">The <see cref="MusicalLength"/> to add.</param>
+        /// <returns>The sum of <paramref name="time"/> and <paramref name="length"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
         public static MusicalTime operator +(MusicalTime time, MusicalLength length)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -141,6 +169,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                    time1.Fraction - time2.Fraction);
         }
 
+        /// <summary>
+        /// Subtracts <see cref="MusicalLength"/> from <see cref="MusicalTime"/>.
+        /// </summary>
+        /// <param name="time">The minuend.</param>
+        /// <param name="length">The subtrahend.</param>
+        /// <returns>The result of subtracting <paramref name="length"/> from <paramref name="time"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="time"/> is less than <paramref name="length"/>.</exception>
         public static MusicalTime operator -(MusicalTime time, MusicalLength length)
         {
             ThrowIfArgument.IsNull(nameof(time), time);

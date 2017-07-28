@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
 
-            _chords.AddRange(chords);
+            _chords.AddRange(chords.Where(c => c != null));
         }
 
         #endregion
@@ -48,8 +48,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
 
-            _chords.AddRange(chords);
-            OnChordsAdded(chords);
+            var addedChords = chords.Where(c => c != null).ToList();
+            _chords.AddRange(addedChords);
+            OnChordsAdded(addedChords);
         }
 
         /// <summary>
@@ -73,11 +74,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
 
-            var removedChords = chords.ToList();
-
-            foreach (var c in removedChords)
+            var removedChords = new List<Chord>();
+            foreach (var c in chords)
             {
-                _chords.Remove(c);
+                if (_chords.Remove(c))
+                    removedChords.Add(c);
             }
 
             OnChordsRemoved(removedChords);

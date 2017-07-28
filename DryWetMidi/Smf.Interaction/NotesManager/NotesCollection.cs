@@ -48,8 +48,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            _notes.AddRange(notes.Where(n => n != null));
-            OnNotesAdded(notes);
+            var addedNotes = notes.Where(n => n != null).ToList();
+            _notes.AddRange(addedNotes);
+            OnNotesAdded(addedNotes);
         }
 
         /// <summary>
@@ -73,12 +74,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
+            var removedNotes = new List<Note>();
             foreach (var n in notes.ToList())
             {
-                _notes.Remove(n);
+                if (_notes.Remove(n))
+                    removedNotes.Add(n);
             }
 
-            OnNotesRemoved(notes);
+            OnNotesRemoved(removedNotes);
         }
 
         /// <summary>
