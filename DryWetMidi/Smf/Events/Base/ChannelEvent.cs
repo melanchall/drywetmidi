@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Smf
         {
             ThrowIfArgument.IsNegative(nameof(parametersCount),
                                         parametersCount,
-                                        "Parameters count is negative number which is unallowable.");
+                                        "Parameters count is negative.");
 
             _parameters = new SevenBitNumber[parametersCount];
         }
@@ -62,28 +62,36 @@ namespace Melanchall.DryWetMidi.Smf
         /// Determines whether the specified event is equal to the current one.
         /// </summary>
         /// <param name="channelEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
         /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(ChannelEvent channelEvent)
+        protected bool Equals(ChannelEvent channelEvent, bool respectDeltaTime)
         {
-            return Equals(channelEvent, true);
+            return base.Equals(channelEvent, respectDeltaTime) && _parameters.SequenceEqual(channelEvent._parameters);
         }
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Calculates a hash code for cahnnel event.
         /// </summary>
-        /// <param name="channelEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(ChannelEvent channelEvent, bool respectDeltaTime)
+        /// <param name="eventStatusByte">The status byte of the current channel event.</param>
+        /// <returns>A hash code for the current channel event.</returns>
+        /// <remarks>
+        /// There is no need to use XOR and prime numbers since hash code for a channel event
+        /// can be effectively constructed as StatusByte|Parameter0|Parameter1...|ParameterN.
+        /// This form guarantees that result number will be unique for every channel event type
+        /// and set of parameters.
+        /// </remarks>
+        protected int CalculateHashCode(byte eventStatusByte)
         {
-            if (ReferenceEquals(null, channelEvent))
-                return false;
+            int result = eventStatusByte;
 
-            if (ReferenceEquals(this, channelEvent))
-                return true;
+            foreach (var parameter in _parameters)
+            {
+                result <<= 7;
+                result |= parameter;
+            }
 
-            return base.Equals(channelEvent, respectDeltaTime) && _parameters.SequenceEqual(channelEvent._parameters);
+            return result;
         }
 
         #endregion
@@ -159,25 +167,6 @@ namespace Melanchall.DryWetMidi.Smf
                        _parameters.Length);
 
             return channelEvent;
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ChannelEvent);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() ^ _parameters.GetHashCode();
         }
 
         #endregion

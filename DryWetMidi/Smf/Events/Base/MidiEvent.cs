@@ -102,10 +102,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// Determines whether the specified event is equal to the current one.
         /// </summary>
         /// <param name="midiEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="DeltaTime"/> will be taken into an account
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
         /// while comparing events; if false - delta-times will be ignored.</param>
         /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        public virtual bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
         {
             if (ReferenceEquals(null, midiEvent))
                 return false;

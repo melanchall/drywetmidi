@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// </summary>
     /// <remarks>
     /// There are several meta events that have text content and the same structure. All these
-    /// events are derivde from <see cref="BaseTextEvent"/>.
+    /// events are derived from <see cref="BaseTextEvent"/>.
     /// </remarks>
     public abstract class BaseTextEvent : MetaEvent
     {
@@ -48,27 +48,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// Determines whether the specified event is equal to the current one.
         /// </summary>
         /// <param name="baseTextEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(BaseTextEvent baseTextEvent)
-        {
-            return Equals(baseTextEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="baseTextEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
         /// while comparing events; if false - delta-times will be ignored.</param>
         /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(BaseTextEvent baseTextEvent, bool respectDeltaTime)
+        protected bool Equals(BaseTextEvent baseTextEvent, bool respectDeltaTime)
         {
-            if (ReferenceEquals(null, baseTextEvent))
-                return false;
-
-            if (ReferenceEquals(this, baseTextEvent))
-                return true;
-
             return base.Equals(baseTextEvent, respectDeltaTime) && Text == baseTextEvent.Text;
         }
 

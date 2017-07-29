@@ -39,27 +39,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// Determines whether the specified event is equal to the current one.
         /// </summary>
         /// <param name="sysExEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(SysExEvent sysExEvent)
-        {
-            return Equals(sysExEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="sysExEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
         /// while comparing events; if false - delta-times will be ignored.</param>
         /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(SysExEvent sysExEvent, bool respectDeltaTime)
+        protected bool Equals(SysExEvent sysExEvent, bool respectDeltaTime)
         {
-            if (ReferenceEquals(null, sysExEvent))
-                return false;
-
-            if (ReferenceEquals(this, sysExEvent))
-                return true;
-
             return base.Equals(sysExEvent, respectDeltaTime) &&
                    Completed == sysExEvent.Completed &&
                    ArrayUtilities.Equals(Data, sysExEvent.Data);
@@ -126,7 +110,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as SysExEvent);
+            return Equals(obj as SysExEvent, true);
         }
 
         /// <summary>

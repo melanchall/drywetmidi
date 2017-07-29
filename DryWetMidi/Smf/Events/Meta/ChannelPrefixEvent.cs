@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a MIDI Channel Prefix meta event.
@@ -7,7 +9,7 @@
     /// The MIDI channel prefix meta message specifies a MIDI channel so that meta messages that
     /// follow are specific to a channel.
     /// </remarks>
-    public sealed class ChannelPrefixEvent : MetaEvent
+    public sealed class ChannelPrefixEvent : MetaEvent, IEquatable<ChannelPrefixEvent>
     {
         #region Constructor
 
@@ -40,34 +42,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<ChannelPrefixEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="channelPrefixEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="channelPrefixEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(ChannelPrefixEvent channelPrefixEvent)
         {
             return Equals(channelPrefixEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="channelPrefixEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(ChannelPrefixEvent channelPrefixEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, channelPrefixEvent))
-                return false;
-
-            if (ReferenceEquals(this, channelPrefixEvent))
-                return true;
-
-            return base.Equals(channelPrefixEvent, respectDeltaTime) && Channel == channelPrefixEvent.Channel;
         }
 
         #endregion
@@ -111,6 +95,19 @@
         protected override MidiEvent CloneEvent()
         {
             return new ChannelPrefixEvent(Channel);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var channelPrefixEvent = midiEvent as ChannelPrefixEvent;
+            return Equals(channelPrefixEvent, respectDeltaTime) && Channel == channelPrefixEvent.Channel;
         }
 
         /// <summary>

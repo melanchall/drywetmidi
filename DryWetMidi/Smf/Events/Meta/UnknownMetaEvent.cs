@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// Any meta event DryWetMIDI doesn't know about will be read as an instance of the
     /// <see cref="UnknownMetaEvent"/>.
     /// </remarks>
-    public sealed class UnknownMetaEvent : MetaEvent
+    public sealed class UnknownMetaEvent : MetaEvent, IEquatable<UnknownMetaEvent>
     {
         #region Constructor
 
@@ -53,35 +53,16 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
-        #region Methods
+        #region IEquatable<UnknownMetaEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="unknownMetaEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="unknownMetaEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(UnknownMetaEvent unknownMetaEvent)
         {
             return Equals(unknownMetaEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="unknownMetaEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(UnknownMetaEvent unknownMetaEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, unknownMetaEvent))
-                return false;
-
-            if (ReferenceEquals(this, unknownMetaEvent))
-                return true;
-
-            return base.Equals(unknownMetaEvent, respectDeltaTime) &&
-                   ArrayUtilities.Equals(Data, unknownMetaEvent.Data);
         }
 
         #endregion
@@ -133,6 +114,20 @@ namespace Melanchall.DryWetMidi.Smf
         protected override MidiEvent CloneEvent()
         {
             return new UnknownMetaEvent(StatusByte, Data?.Clone() as byte[]);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var unknownMetaEvent = midiEvent as UnknownMetaEvent;
+            return Equals(unknownMetaEvent, respectDeltaTime) &&
+                   ArrayUtilities.Equals(Data, unknownMetaEvent.Data);
         }
 
         /// <summary>

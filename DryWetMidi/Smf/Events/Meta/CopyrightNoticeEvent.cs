@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Copyright Notice meta event.
@@ -6,7 +8,7 @@
     /// <remarks>
     /// The MIDI copyright notice meta message places a copyright notice in a MIDI file.
     /// </remarks>
-    public sealed class CopyrightNoticeEvent : BaseTextEvent
+    public sealed class CopyrightNoticeEvent : BaseTextEvent, IEquatable<CopyrightNoticeEvent>
     {
         #region Constructor
 
@@ -29,34 +31,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<CopyrightNoticeEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="copyrightNoticeEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="copyrightNoticeEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(CopyrightNoticeEvent copyrightNoticeEvent)
         {
             return Equals(copyrightNoticeEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="copyrightNoticeEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(CopyrightNoticeEvent copyrightNoticeEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, copyrightNoticeEvent))
-                return false;
-
-            if (ReferenceEquals(this, copyrightNoticeEvent))
-                return true;
-
-            return base.Equals(copyrightNoticeEvent, respectDeltaTime);
         }
 
         #endregion
@@ -70,6 +54,18 @@
         protected override MidiEvent CloneEvent()
         {
             return new CopyrightNoticeEvent(Text);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as CopyrightNoticeEvent, respectDeltaTime);
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentNullException(parameterName);
         }
 
-        internal static void IsInvalidEnumValueOf<TEnum>(string parameterName, TEnum argument)
+        internal static void IsInvalidEnumValue<TEnum>(string parameterName, TEnum argument)
             where TEnum : struct
         {
             if (!Enum.IsDefined(typeof(TEnum), argument))

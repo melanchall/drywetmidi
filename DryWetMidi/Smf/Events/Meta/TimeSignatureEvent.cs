@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// <remarks>
     /// The MIDI time signature meta message defines the musical time signature of a MIDI sequence.
     /// </remarks>
-    public sealed class TimeSignatureEvent : MetaEvent
+    public sealed class TimeSignatureEvent : MetaEvent, IEquatable<TimeSignatureEvent>
     {
         #region Constants
 
@@ -119,38 +119,16 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
-        #region Methods
+        #region IEquatable<TimeSignatureEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="timeSignatureEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="timeSignatureEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(TimeSignatureEvent timeSignatureEvent)
         {
             return Equals(timeSignatureEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="timeSignatureEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(TimeSignatureEvent timeSignatureEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, timeSignatureEvent))
-                return false;
-
-            if (ReferenceEquals(this, timeSignatureEvent))
-                return true;
-
-            return base.Equals(timeSignatureEvent, respectDeltaTime) &&
-                   Numerator == timeSignatureEvent.Numerator &&
-                   Denominator == timeSignatureEvent.Denominator &&
-                   ClocksPerClick == timeSignatureEvent.ClocksPerClick &&
-                   NumberOf32ndNotesPerBeat == timeSignatureEvent.NumberOf32ndNotesPerBeat;
         }
 
         #endregion
@@ -204,6 +182,23 @@ namespace Melanchall.DryWetMidi.Smf
         protected override MidiEvent CloneEvent()
         {
             return new TimeSignatureEvent(Numerator, Denominator, ClocksPerClick, NumberOf32ndNotesPerBeat);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var timeSignatureEvent = midiEvent as TimeSignatureEvent;
+            return Equals(timeSignatureEvent, respectDeltaTime) &&
+                   Numerator == timeSignatureEvent.Numerator &&
+                   Denominator == timeSignatureEvent.Denominator &&
+                   ClocksPerClick == timeSignatureEvent.ClocksPerClick &&
+                   NumberOf32ndNotesPerBeat == timeSignatureEvent.NumberOf32ndNotesPerBeat;
         }
 
         /// <summary>

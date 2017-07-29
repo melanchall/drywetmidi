@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// name and octave.</exception>
         public static SevenBitNumber GetNoteNumber(NoteName noteName, int octave)
         {
-            ThrowIfArgument.IsInvalidEnumValueOf<NoteName>(nameof(noteName), noteName);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
             var noteNumber = (octave + OctaveOffset) * OctaveSize + (int)noteName;
             if (noteNumber < SevenBitNumber.MinValue || noteNumber > SevenBitNumber.MaxValue)

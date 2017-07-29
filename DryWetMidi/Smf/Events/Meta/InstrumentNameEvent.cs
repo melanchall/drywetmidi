@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents an Instrument Name meta event.
@@ -9,7 +11,7 @@
     /// intended instrumentation for a track (e.g. 'Piano' or 'Flute', etc). If used, it is
     /// reccommended to place this event near the start of a track.
     /// </remarks>
-    public sealed class InstrumentNameEvent : BaseTextEvent
+    public sealed class InstrumentNameEvent : BaseTextEvent, IEquatable<InstrumentNameEvent>
     {
         #region Constructor
 
@@ -32,34 +34,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<InstrumentNameEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="instrumentNameEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="instrumentNameEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(InstrumentNameEvent instrumentNameEvent)
         {
             return Equals(instrumentNameEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="instrumentNameEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(InstrumentNameEvent instrumentNameEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, instrumentNameEvent))
-                return false;
-
-            if (ReferenceEquals(this, instrumentNameEvent))
-                return true;
-
-            return base.Equals(instrumentNameEvent, respectDeltaTime);
         }
 
         #endregion
@@ -73,6 +57,18 @@
         protected override MidiEvent CloneEvent()
         {
             return new InstrumentNameEvent(Text);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as InstrumentNameEvent, respectDeltaTime);
         }
 
         /// <summary>

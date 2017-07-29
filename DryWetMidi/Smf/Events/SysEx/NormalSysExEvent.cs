@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a normal system exclusive event.
@@ -14,7 +16,7 @@
     /// subsequent packets use the 0xF7 status (suzh events will be read as <see cref="EscapeSysExEvent"/>).
     /// This use of the 0xF7 status is referred to as a continuation event.
     /// </remarks>
-    public sealed class NormalSysExEvent : SysExEvent
+    public sealed class NormalSysExEvent : SysExEvent, IEquatable<NormalSysExEvent>
     {
         #region Constructor
 
@@ -37,39 +39,33 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<NormalSysExEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="normalSysExEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="normalSysExEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(NormalSysExEvent normalSysExEvent)
         {
             return Equals(normalSysExEvent, true);
         }
 
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="normalSysExEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(NormalSysExEvent normalSysExEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, normalSysExEvent))
-                return false;
-
-            if (ReferenceEquals(this, normalSysExEvent))
-                return true;
-
-            return base.Equals(normalSysExEvent, respectDeltaTime);
-        }
-
         #endregion
 
         #region Overrides
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as NormalSysExEvent, respectDeltaTime);
+        }
 
         /// <summary>
         /// Returns a string that represents the current object.

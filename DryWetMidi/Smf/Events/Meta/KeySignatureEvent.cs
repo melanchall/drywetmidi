@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// <remarks>
     /// The MIDI key signature meta message specifies the key signature and scale of a MIDI file.
     /// </remarks>
-    public sealed class KeySignatureEvent : MetaEvent
+    public sealed class KeySignatureEvent : MetaEvent, IEquatable<KeySignatureEvent>
     {
         #region Constants
 
@@ -99,36 +99,6 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Methods
 
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="keySignatureEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(KeySignatureEvent keySignatureEvent)
-        {
-            return Equals(keySignatureEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="keySignatureEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(KeySignatureEvent keySignatureEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, keySignatureEvent))
-                return false;
-
-            if (ReferenceEquals(this, keySignatureEvent))
-                return true;
-
-            return base.Equals(keySignatureEvent, respectDeltaTime) &&
-                   Key == keySignatureEvent.Key &&
-                   Scale == keySignatureEvent.Scale;
-        }
-
         private static int ProcessValue(int value, string property, int min, int max, InvalidMetaEventParameterValuePolicy policy)
         {
             if (value >= min && value <= max)
@@ -143,6 +113,20 @@ namespace Melanchall.DryWetMidi.Smf
             }
 
             return value;
+        }
+
+        #endregion
+
+        #region IEquatable<KeySignatureEvent>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="keySignatureEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(KeySignatureEvent keySignatureEvent)
+        {
+            return Equals(keySignatureEvent, true);
         }
 
         #endregion
@@ -199,6 +183,21 @@ namespace Melanchall.DryWetMidi.Smf
         protected override MidiEvent CloneEvent()
         {
             return new KeySignatureEvent(Key, Scale);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var keySignatureEvent = midiEvent as KeySignatureEvent;
+            return Equals(keySignatureEvent, respectDeltaTime) &&
+                   Key == keySignatureEvent.Key &&
+                   Scale == keySignatureEvent.Scale;
         }
 
         /// <summary>

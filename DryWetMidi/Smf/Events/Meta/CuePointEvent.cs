@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Cue Point meta event.
@@ -9,7 +11,7 @@
     /// video or stage production at that point in the musical score. E.g. 'Car crashes',
     /// 'Door opens', etc.
     /// </remarks>
-    public sealed class CuePointEvent : BaseTextEvent
+    public sealed class CuePointEvent : BaseTextEvent, IEquatable<CuePointEvent>
     {
         #region Constructor
 
@@ -32,34 +34,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<CuePointEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="cuePointEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="cuePointEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(CuePointEvent cuePointEvent)
         {
             return Equals(cuePointEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="cuePointEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(CuePointEvent cuePointEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, cuePointEvent))
-                return false;
-
-            if (ReferenceEquals(this, cuePointEvent))
-                return true;
-
-            return base.Equals(cuePointEvent, respectDeltaTime);
         }
 
         #endregion
@@ -73,6 +57,18 @@
         protected override MidiEvent CloneEvent()
         {
             return new CuePointEvent(Text);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as CuePointEvent, respectDeltaTime);
         }
 
         /// <summary>

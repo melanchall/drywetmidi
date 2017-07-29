@@ -1,35 +1,19 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
-    internal sealed class EndOfTrackEvent : MetaEvent
+    internal sealed class EndOfTrackEvent : MetaEvent, IEquatable<EndOfTrackEvent>
     {
-        #region Methods
+        #region IEquatable<EndOfTrackEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="endOfTrackEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="endOfTrackEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(EndOfTrackEvent endOfTrackEvent)
         {
             return Equals(endOfTrackEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="endOfTrackEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(EndOfTrackEvent endOfTrackEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, endOfTrackEvent))
-                return false;
-
-            if (ReferenceEquals(this, endOfTrackEvent))
-                return true;
-
-            return base.Equals(endOfTrackEvent, respectDeltaTime);
         }
 
         #endregion
@@ -71,6 +55,11 @@
         protected override MidiEvent CloneEvent()
         {
             return new EndOfTrackEvent();
+        }
+
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as EndOfTrackEvent, respectDeltaTime);
         }
 
         /// <summary>

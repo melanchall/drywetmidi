@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Program Name meta event.
@@ -8,7 +10,7 @@
     /// immediately subsequent Bank Select and Program Change messages. It serves to aid the
     /// end user in making an intelligent program choice when using different hardware.
     /// </remarks>
-    public sealed class ProgramNameEvent : BaseTextEvent
+    public sealed class ProgramNameEvent : BaseTextEvent, IEquatable<ProgramNameEvent>
     {
         #region Constructor
 
@@ -31,34 +33,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<ProgramNameEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="programNameEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="programNameEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(ProgramNameEvent programNameEvent)
         {
             return Equals(programNameEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="programNameEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(ProgramNameEvent programNameEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, programNameEvent))
-                return false;
-
-            if (ReferenceEquals(this, programNameEvent))
-                return true;
-
-            return base.Equals(programNameEvent, respectDeltaTime);
         }
 
         #endregion
@@ -72,6 +56,18 @@
         protected override MidiEvent CloneEvent()
         {
             return new ProgramNameEvent(Text);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as ProgramNameEvent, respectDeltaTime);
         }
 
         /// <summary>

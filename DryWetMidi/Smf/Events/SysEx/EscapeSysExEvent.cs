@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Reprsents an "escape" system exclusive event which defines an escape sequence.
@@ -16,7 +18,7 @@
     ///   the last packet and flag should be cleared.
     /// - If an event with 0xF7 status is encountered whilst flag is clear, then this event is an escape sequence.
     /// </remarks>
-    public sealed class EscapeSysExEvent : SysExEvent
+    public sealed class EscapeSysExEvent : SysExEvent, IEquatable<EscapeSysExEvent>
     {
         #region Constructor
 
@@ -39,39 +41,33 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<EscapeSysExEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="escapeSysExEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="escapeSysExEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(EscapeSysExEvent escapeSysExEvent)
         {
             return Equals(escapeSysExEvent, true);
         }
 
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="escapeSysExEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(EscapeSysExEvent escapeSysExEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, escapeSysExEvent))
-                return false;
-
-            if (ReferenceEquals(this, escapeSysExEvent))
-                return true;
-
-            return base.Equals(escapeSysExEvent, respectDeltaTime);
-        }
-
         #endregion
 
         #region Overrides
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as EscapeSysExEvent, respectDeltaTime);
+        }
 
         /// <summary>
         /// Returns a string that represents the current object.

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Text meta event.
@@ -6,7 +8,7 @@
     /// <remarks>
     /// The MIDI text meta message defines some text to be carried within a MIDI file.
     /// </remarks>
-    public sealed class TextEvent : BaseTextEvent
+    public sealed class TextEvent : BaseTextEvent, IEquatable<TextEvent>
     {
         #region Constructor
 
@@ -29,34 +31,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<TextEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="textEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="textEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(TextEvent textEvent)
         {
             return Equals(textEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="textEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(TextEvent textEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, textEvent))
-                return false;
-
-            if (ReferenceEquals(this, textEvent))
-                return true;
-
-            return base.Equals(textEvent, respectDeltaTime);
         }
 
         #endregion
@@ -70,6 +54,18 @@
         protected override MidiEvent CloneEvent()
         {
             return new TextEvent(Text);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as TextEvent, respectDeltaTime);
         }
 
         /// <summary>

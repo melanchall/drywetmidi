@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="NotSupportedException"><paramref name="format"/> is not supported.</exception>
         public static IChunksConverter GetConverter(MidiFileFormat format)
         {
-            ThrowIfArgument.IsInvalidEnumValueOf<MidiFileFormat>(nameof(format), format);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
             IChunksConverter converter;
             if (_converters.TryGetValue(format, out converter))

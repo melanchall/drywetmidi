@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// The MIDI set tempo meta message sets the tempo of a MIDI sequence in terms
     /// of microseconds per quarter note.
     /// </remarks>
-    public sealed class SetTempoEvent : MetaEvent
+    public sealed class SetTempoEvent : MetaEvent, IEquatable<SetTempoEvent>
     {
         #region Constants
 
@@ -69,35 +69,16 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
-        #region Methods
+        #region IEquatable<SetTempoEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="setTempoEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="setTempoEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(SetTempoEvent setTempoEvent)
         {
             return Equals(setTempoEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="setTempoEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(SetTempoEvent setTempoEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, setTempoEvent))
-                return false;
-
-            if (ReferenceEquals(this, setTempoEvent))
-                return true;
-
-            return base.Equals(setTempoEvent, respectDeltaTime) &&
-                   MicrosecondsPerQuarterNote == setTempoEvent.MicrosecondsPerQuarterNote;
         }
 
         #endregion
@@ -141,6 +122,20 @@ namespace Melanchall.DryWetMidi.Smf
         protected override MidiEvent CloneEvent()
         {
             return new SetTempoEvent(MicrosecondsPerQuarterNote);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var setTempoEvent = midiEvent as SetTempoEvent;
+            return Equals(setTempoEvent, respectDeltaTime) &&
+                   MicrosecondsPerQuarterNote == setTempoEvent.MicrosecondsPerQuarterNote;
         }
 
         /// <summary>

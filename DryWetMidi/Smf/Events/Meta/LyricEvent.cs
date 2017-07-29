@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Lyric meta event.
@@ -6,7 +8,7 @@
     /// <remarks>
     /// The MIDI lyrics meta message shows the lyrics of a song at a particular time in the MIDI sequence.
     /// </remarks>
-    public sealed class LyricEvent : BaseTextEvent
+    public sealed class LyricEvent : BaseTextEvent, IEquatable<LyricEvent>
     {
         #region Constructor
 
@@ -29,34 +31,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<LyricEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="lyricEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="lyricEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(LyricEvent lyricEvent)
         {
             return Equals(lyricEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="lyricEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(LyricEvent lyricEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, lyricEvent))
-                return false;
-
-            if (ReferenceEquals(this, lyricEvent))
-                return true;
-
-            return base.Equals(lyricEvent, respectDeltaTime);
         }
 
         #endregion
@@ -70,6 +54,18 @@
         protected override MidiEvent CloneEvent()
         {
             return new LyricEvent(Text);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            return Equals(midiEvent as LyricEvent, respectDeltaTime);
         }
 
         /// <summary>

@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsInvalidEnumValueOf<LengthedObjectPart>(nameof(matchBy), matchBy);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(matchBy), matchBy);
 
             return objects.Where(o => o != null && IsObjectAtTime(o, time, matchBy));
         }
@@ -164,7 +164,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsInvalidEnumValueOf<LengthedObjectPart>(nameof(matchBy), matchBy);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(matchBy), matchBy);
 
             var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
             return AtTime(objects, convertedTime, matchBy);

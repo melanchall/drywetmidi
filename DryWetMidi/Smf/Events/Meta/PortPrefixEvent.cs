@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a MIDI Port meta event.
@@ -7,7 +9,7 @@
     /// This optional event specifies the MIDI output port on which data within a track chunk
     /// will be transmitted.
     /// </remarks>
-    public sealed class PortPrefixEvent : MetaEvent
+    public sealed class PortPrefixEvent : MetaEvent, IEquatable<PortPrefixEvent>
     {
         #region Constructor
 
@@ -40,34 +42,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<PortPrefixEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="portPrefixEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="portPrefixEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(PortPrefixEvent portPrefixEvent)
         {
             return Equals(portPrefixEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="portPrefixEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(PortPrefixEvent portPrefixEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, portPrefixEvent))
-                return false;
-
-            if (ReferenceEquals(this, portPrefixEvent))
-                return true;
-
-            return base.Equals(portPrefixEvent, respectDeltaTime) && Port == portPrefixEvent.Port;
         }
 
         #endregion
@@ -112,6 +96,19 @@
         protected override MidiEvent CloneEvent()
         {
             return new PortPrefixEvent(Port);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var portPrefixEvent = midiEvent as PortPrefixEvent;
+            return Equals(portPrefixEvent, respectDeltaTime) && Port == portPrefixEvent.Port;
         }
 
         /// <summary>

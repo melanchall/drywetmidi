@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// of a MIDI track from the start of a sequence in terms of SMPTE time
     /// (hours:minutes:seconds:frames:subframes).
     /// </remarks>
-    public sealed class SmpteOffsetEvent : MetaEvent
+    public sealed class SmpteOffsetEvent : MetaEvent, IEquatable<SmpteOffsetEvent>
     {
         #region Constants
 
@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Smf
         public SmpteOffsetEvent(SmpteFormat format, byte hours, byte minutes, byte seconds, byte frames, byte subFrames)
             : this()
         {
-            ThrowIfArgument.IsInvalidEnumValueOf<SmpteFormat>(nameof(format), format);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
             Format = format;
             Hours = hours;
@@ -221,39 +221,6 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="smpteOffsetEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(SmpteOffsetEvent smpteOffsetEvent)
-        {
-            return Equals(smpteOffsetEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="smpteOffsetEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(SmpteOffsetEvent smpteOffsetEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, smpteOffsetEvent))
-                return false;
-
-            if (ReferenceEquals(this, smpteOffsetEvent))
-                return true;
-
-            return base.Equals(smpteOffsetEvent, respectDeltaTime) &&
-                   Hours == smpteOffsetEvent.Hours &&
-                   Minutes == smpteOffsetEvent.Minutes &&
-                   Seconds == smpteOffsetEvent.Seconds &&
-                   Frames == smpteOffsetEvent.Frames &&
-                   SubFrames == smpteOffsetEvent.SubFrames;
-        }
-
-        /// <summary>
         /// Gets SMPTE format from a byte containing format and number of hours.
         /// </summary>
         /// <param name="formatAndHours">Byte containing format and number of hours.</param>
@@ -297,6 +264,20 @@ namespace Melanchall.DryWetMidi.Smf
             }
 
             return value;
+        }
+
+        #endregion
+
+        #region IEquatable<SmpteOffsetEvent>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="smpteOffsetEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(SmpteOffsetEvent smpteOffsetEvent)
+        {
+            return Equals(smpteOffsetEvent, true);
         }
 
         #endregion
@@ -367,6 +348,24 @@ namespace Melanchall.DryWetMidi.Smf
         protected override MidiEvent CloneEvent()
         {
             return new SmpteOffsetEvent(Format, Hours, Minutes, Seconds, Frames, SubFrames);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var smpteOffsetEvent = midiEvent as SmpteOffsetEvent;
+            return Equals(smpteOffsetEvent, respectDeltaTime) &&
+                   Hours == smpteOffsetEvent.Hours &&
+                   Minutes == smpteOffsetEvent.Minutes &&
+                   Seconds == smpteOffsetEvent.Seconds &&
+                   Frames == smpteOffsetEvent.Frames &&
+                   SubFrames == smpteOffsetEvent.SubFrames;
         }
 
         /// <summary>

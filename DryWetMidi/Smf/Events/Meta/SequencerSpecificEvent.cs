@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// The MIDI sequencer specific meta message carries information that is specific to a
     /// MIDI sequencer produced by a certain MIDI manufacturer.
     /// </remarks>
-    public sealed class SequencerSpecificEvent : MetaEvent
+    public sealed class SequencerSpecificEvent : MetaEvent, IEquatable<SequencerSpecificEvent>
     {
         #region Constructor
 
@@ -43,35 +43,16 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
-        #region Methods
+        #region IEquatable<SequencerSpecificEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="sequencerSpecificEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="sequencerSpecificEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(SequencerSpecificEvent sequencerSpecificEvent)
         {
             return Equals(sequencerSpecificEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="sequencerSpecificEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(SequencerSpecificEvent sequencerSpecificEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, sequencerSpecificEvent))
-                return false;
-
-            if (ReferenceEquals(this, sequencerSpecificEvent))
-                return true;
-
-            return base.Equals(sequencerSpecificEvent, respectDeltaTime) &&
-                   ArrayUtilities.Equals(Data, sequencerSpecificEvent.Data);
         }
 
         #endregion
@@ -123,6 +104,20 @@ namespace Melanchall.DryWetMidi.Smf
         protected override MidiEvent CloneEvent()
         {
             return new SequencerSpecificEvent(Data?.Clone() as byte[]);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var sequencerSpecificEvent = midiEvent as SequencerSpecificEvent;
+            return Equals(sequencerSpecificEvent, respectDeltaTime) &&
+                   ArrayUtilities.Equals(Data, sequencerSpecificEvent.Data);
         }
 
         /// <summary>

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Sequence Number meta event.
@@ -7,7 +9,7 @@
     /// The MIDI sequence number meta message defines the number of a sequence in type 0 and 1 MIDI files,
     /// or the pattern number in type 2 MIDI files.
     /// </remarks>
-    public sealed class SequenceNumberEvent : MetaEvent
+    public sealed class SequenceNumberEvent : MetaEvent, IEquatable<SequenceNumberEvent>
     {
         #region Constructor
 
@@ -40,34 +42,16 @@
 
         #endregion
 
-        #region Methods
+        #region IEquatable<SequenceNumberEvent>
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="sequenceNumberEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        /// <param name="sequenceNumberEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(SequenceNumberEvent sequenceNumberEvent)
         {
             return Equals(sequenceNumberEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="sequenceNumberEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the <see cref="MidiEvent.DeltaTime"/> will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(SequenceNumberEvent sequenceNumberEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, sequenceNumberEvent))
-                return false;
-
-            if (ReferenceEquals(this, sequenceNumberEvent))
-                return true;
-
-            return base.Equals(sequenceNumberEvent, respectDeltaTime) && Number == sequenceNumberEvent.Number;
         }
 
         #endregion
@@ -117,6 +101,19 @@
         protected override MidiEvent CloneEvent()
         {
             return new SequenceNumberEvent(Number);
+        }
+
+        /// <summary>
+        /// Determines whether the specified event is equal to the current one.
+        /// </summary>
+        /// <param name="midiEvent">The event to compare with the current one.</param>
+        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
+        /// while comparing events; if false - delta-times will be ignored.</param>
+        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
+        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
+        {
+            var sequenceNumberEvent = midiEvent as SequenceNumberEvent;
+            return Equals(sequenceNumberEvent, respectDeltaTime) && Number == sequenceNumberEvent.Number;
         }
 
         /// <summary>

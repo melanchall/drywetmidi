@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// exceeds maximum value allowed for MIDI file.</exception>
         public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
-            ThrowIfArgument.IsInvalidEnumValueOf<MidiFileFormat>(nameof(format), format);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
             using (var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile))
             {
@@ -348,7 +348,7 @@ namespace Melanchall.DryWetMidi.Smf
         private void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
-            ThrowIfArgument.IsInvalidEnumValueOf<MidiFileFormat>(nameof(format), format);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
             if (TimeDivision == null)
                 throw new InvalidOperationException("Time division is null.");
