@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents a musical note.
     /// </summary>
-    public sealed class Note : ILengthedObject
+    public sealed class Note : ILengthedObject, IEquatable<Note>
     {
         #region Constants
 
@@ -238,6 +238,45 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             NoteNumber = NoteUtilities.GetNoteNumber(noteName, octave);
         }
 
+        /// <summary>
+        /// Determines whether the specified note is equal to the current one.
+        /// </summary>
+        /// <param name="note">The note to compare with the current one.</param>
+        /// <param name="respectTime">If true the time will be taken into an account while comparing
+        /// notes; if false - times will be ignored.</param>
+        /// <param name="respectLength">If true the length will be taken into an account while comparing
+        /// notes; if false - lengths will be ignored.</param>
+        /// <returns>true if the specified note is equal to the current one; otherwise, false.</returns>
+        public bool Equals(Note note, bool respectTime, bool respectLength)
+        {
+            if (ReferenceEquals(null, note))
+                return false;
+
+            if (ReferenceEquals(this, note))
+                return true;
+
+            return NoteNumber == note.NoteNumber &&
+                   Channel == note.Channel &&
+                   Velocity == note.Velocity &&
+                   OffVelocity == note.OffVelocity &&
+                   (!respectTime || Time == note.Time) &&
+                   (!respectLength || Length == note.Length);
+        }
+
+        #endregion
+
+        #region IEquatable<Note>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="note">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(Note note)
+        {
+            return Equals(note, true, true);
+        }
+
         #endregion
 
         #region Overrides
@@ -249,6 +288,30 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public override string ToString()
         {
             return $"{NoteName.ToString().Replace("Sharp", "#")}{Octave} at {Time}";
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Note);
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return NoteNumber.GetHashCode() ^
+                   Channel.GetHashCode() ^
+                   Velocity.GetHashCode() ^
+                   OffVelocity.GetHashCode() ^
+                   Time.GetHashCode() ^
+                   Length.GetHashCode();
         }
 
         #endregion

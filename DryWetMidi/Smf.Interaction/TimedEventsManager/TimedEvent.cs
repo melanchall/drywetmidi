@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents wrapper for the <see cref="MidiEvent"/> that provides absolute time of an event.
     /// </summary>
-    public sealed class TimedEvent : ITimedObject
+    public sealed class TimedEvent : ITimedObject, IEquatable<TimedEvent>
     {
         #region Fields
 
@@ -66,6 +66,42 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Determines whether the specified timed event is equal to the current one.
+        /// </summary>
+        /// <param name="timedEvent">The timed event to compare with the current one.</param>
+        /// <param name="respectTime">If true the time will be taken into an account while comparing
+        /// events; if false - times will be ignored.</param>
+        /// <returns>true if the specified timed event is equal to the current one; otherwise, false.</returns>
+        public bool Equals(TimedEvent timedEvent, bool respectTime)
+        {
+            if (ReferenceEquals(null, timedEvent))
+                return false;
+
+            if (ReferenceEquals(this, timedEvent))
+                return true;
+
+            return Event.Equals(timedEvent.Event, false) && (!respectTime || Time == timedEvent.Time);
+        }
+
+        #endregion
+
+        #region IEquatable<TimedEvent>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="timedEvent">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(TimedEvent timedEvent)
+        {
+            return Equals(timedEvent, true);
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -75,6 +111,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public override string ToString()
         {
             return $"Event at {Time}: {Event}";
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as TimedEvent);
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return Event.GetHashCode() ^ Time.GetHashCode();
         }
 
         #endregion
