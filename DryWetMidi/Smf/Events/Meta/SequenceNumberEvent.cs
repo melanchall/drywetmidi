@@ -88,8 +88,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Gets the size of the content of a MIDI meta event.
         /// </summary>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        protected override int GetContentSize()
+        protected override int GetContentSize(WritingSettings settings)
         {
             return 2;
         }
@@ -113,7 +114,7 @@ namespace Melanchall.DryWetMidi.Smf
         public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
         {
             var sequenceNumberEvent = midiEvent as SequenceNumberEvent;
-            return Equals(sequenceNumberEvent, respectDeltaTime) && Number == sequenceNumberEvent.Number;
+            return base.Equals(sequenceNumberEvent, respectDeltaTime) && Number == sequenceNumberEvent.Number;
         }
 
         /// <summary>

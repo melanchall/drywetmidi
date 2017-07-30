@@ -68,8 +68,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Gets the size of the content of a MIDI event.
         /// </summary>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        internal abstract int GetSize();
+        internal abstract int GetSize(WritingSettings settings);
 
         /// <summary>
         /// Clones event by creating a copy of it.

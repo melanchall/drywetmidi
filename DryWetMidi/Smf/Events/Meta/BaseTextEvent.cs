@@ -71,10 +71,15 @@ namespace Melanchall.DryWetMidi.Smf
         protected sealed override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             ThrowIfArgument.IsNegative(nameof(size),
-                                        size,
-                                        "Text event cannot be read since the size is negative number.");
+                                       size,
+                                       "Text event cannot be read since the size is negative number.");
 
-            Text = reader.ReadString(size);
+            if (size == 0)
+                return;
+
+            var bytes = reader.ReadBytes(size);
+            var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
+            Text = encoding.GetString(bytes);
         }
 
         /// <summary>
@@ -84,16 +89,28 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         protected sealed override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
-            writer.WriteString(Text);
+            var text = Text;
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
+            var bytes = encoding.GetBytes(text);
+            writer.WriteBytes(bytes);
         }
 
         /// <summary>
         /// Gets the size of the content of a MIDI meta event.
         /// </summary>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        protected sealed override int GetContentSize()
+        protected sealed override int GetContentSize(WritingSettings settings)
         {
-            return Text?.Length ?? 0;
+            var text = Text;
+            if (string.IsNullOrEmpty(text))
+                return 0;
+
+            var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
+            return encoding.GetByteCount(Text);
         }
 
         /// <summary>

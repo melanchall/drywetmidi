@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Smf
 
             //
 
-            return (writeStatusByte ? 1 : 0) + midiEvent.GetSize();
+            return (writeStatusByte ? 1 : 0) + midiEvent.GetSize(settings);
         }
 
         public byte GetStatusByte(MidiEvent midiEvent)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Text;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -140,5 +139,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// if some types don't meet these requirements.
         /// </summary>
         public EventTypesCollection CustomMetaEventTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a
+        /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
+        /// </summary>
+        public Encoding TextEncoding { get; set; } = SmfUtilities.DefaultEncoding;
     }
 }

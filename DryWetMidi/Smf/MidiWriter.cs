@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.IO;
-using System.Text;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -28,7 +27,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// or is already closed.</exception>
         public MidiWriter(Stream stream)
         {
-            _binaryWriter = new BinaryWriter(stream, Encoding.ASCII);
+            _binaryWriter = new BinaryWriter(stream, SmfUtilities.DefaultEncoding);
         }
 
         #endregion

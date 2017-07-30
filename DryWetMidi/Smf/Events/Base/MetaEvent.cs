@@ -34,10 +34,11 @@
         /// <summary>
         /// Gets the size of the content of a MIDI event.
         /// </summary>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        internal sealed override int GetSize()
+        internal sealed override int GetSize(WritingSettings settings)
         {
-            return GetContentSize();
+            return GetContentSize(settings);
         }
 
         #endregion
@@ -62,8 +63,9 @@
         /// <summary>
         /// Gets the size of the content of a MIDI meta event.
         /// </summary>
+        /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        protected abstract int GetContentSize();
+        protected abstract int GetContentSize(WritingSettings settings);
 
         #endregion
     }

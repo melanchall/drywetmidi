@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.IO;
-using System.Text;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -30,7 +29,7 @@ namespace Melanchall.DryWetMidi.Smf
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
-            _binaryReader = new BinaryReader(stream, Encoding.ASCII);
+            _binaryReader = new BinaryReader(stream, SmfUtilities.DefaultEncoding);
         }
 
         #endregion

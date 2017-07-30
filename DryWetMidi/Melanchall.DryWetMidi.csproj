@@ -196,6 +196,7 @@
     <Compile Include="Common\NoteName.cs" />
     <Compile Include="Smf\Utilities\IOUtilities.cs" />
     <Compile Include="Smf\Utilities\NoteUtilities.cs" />
+    <Compile Include="Smf\Utilities\SmfUtilities.cs" />
     <Compile Include="Smf\Utilities\TrackChunkUtilities.cs" />
     <Compile Include="Smf\WritingSettings\CompressionPolicy.cs" />
     <Compile Include="Smf\WritingSettings\WritingSettings.cs" />
