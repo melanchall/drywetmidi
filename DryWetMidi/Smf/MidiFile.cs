@@ -205,10 +205,18 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="stream">Stream to read file from.</param>
         /// <param name="settings">Settings according to which the file must be read.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file was read from the stream.</returns>
+        /// <remarks>
+        /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
+        /// and <see cref="Stream.Length"/> properties.
+        /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
-        /// or is already closed. -or- Position of the stream is beyond its end.</exception>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading. -or
+        /// <paramref name="stream"/> doesn't support seeking. -or- <paramref name="stream"/> is already read.</exception>
         /// <exception cref="IOException">An I/O error occurred while reading from the stream.</exception>
+        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed. -or-
+        /// Underlying stream reader is disposed.</exception>
+        /// <exception cref="NotSupportedException">Unable to get position of the <paramref name="stream"/>. -or
+        /// Unable to get length of the <paramref name="stream"/>.</exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the <paramref name="settings"/>.</exception>
@@ -229,12 +237,18 @@ namespace Melanchall.DryWetMidi.Smf
         /// just read is invalid.</exception>
         /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
         /// just read is invalid.</exception>
-        private static MidiFile Read(Stream stream, ReadingSettings settings = null)
+        public static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
+            if (!stream.CanRead)
+                throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+
+            if (!stream.CanSeek)
+                throw new ArgumentException("Stream doesn't support seeking.", nameof(stream));
+
             if (stream.Position >= stream.Length)
-                throw new ArgumentException("Cannot read MIDI file from the stream with position at the end of it.", nameof(stream));
+                throw new ArgumentException("Stream is already read.", nameof(stream));
 
             //
 
@@ -290,7 +304,6 @@ namespace Melanchall.DryWetMidi.Smf
                             }
 
                             headerChunkIsRead = true;
-
                             continue;
                         }
 
@@ -339,19 +352,24 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="format">Format of the file to be written.</param>
         /// <param name="settings">Settings according to which the file must be written.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="stream"/> does not support writing,
-        /// or is already closed.</exception>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="InvalidOperationException">Time division is null.</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing to the stream.</exception>
+        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed. -or-
+        /// Underlying stream writer is disposed.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
-        private void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
+        public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
             if (TimeDivision == null)
                 throw new InvalidOperationException("Time division is null.");
+
+            if (!stream.CanWrite)
+                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
             //
 

@@ -275,10 +275,17 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         public void Dispose()
         {
+            Dispose(true);
+        }
+
+        private void Dispose(bool disposing)
+        {
             if (_disposed)
                 return;
 
-            _binaryReader.Dispose();
+            if (disposing)
+                _binaryReader.Dispose();
+
             _disposed = true;
         }
 
