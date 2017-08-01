@@ -142,3 +142,23 @@ IEnumerable<Chord> chordsAt20seconds = midiFile.GetChords()
                                                        tempoMap,
                                                        LengthedObjectPart.Entire);
 ```
+
+To create a MIDI file with single note which length will be equal to length of two triplet eighth notes you can use this code:
+
+```csharp
+var midiFile = new MidiFile();
+var tempoMap = midiFile.GetTempoMap();
+
+var trackChunk = new TrackChunk();
+using (var notesManager = trackChunk.ManageNotes())
+{
+    var length = LengthConverter.ConvertFrom(new MusicalLength(2 * MusicalFraction.EighthTriplet),
+                                             0,
+                                             tempoMap);
+    var note = new Note(NoteName.A, 4, length);
+    notesManager.Notes.Add(note);
+}
+
+midiFile.Chunks.Add(trackChunk);
+midiFile.Write("Single note great song.mid");
+```
