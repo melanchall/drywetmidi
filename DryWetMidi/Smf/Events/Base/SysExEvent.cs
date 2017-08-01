@@ -1,5 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -120,7 +122,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ Completed.GetHashCode() ^ (Data?.GetHashCode() ?? 0);
+            return base.GetHashCode() ^
+                   Completed.GetHashCode() ^
+                   ArrayUtilities.GetHashCode(Data);
         }
 
         #endregion

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -11,13 +13,18 @@ namespace Melanchall.DryWetMidi.Smf
             if (ReferenceEquals(array1, array2))
                 return true;
 
-            if (array1 == null || array2 == null)
+            if (ReferenceEquals(array1, null) || ReferenceEquals(array2, null))
                 return false;
 
             if (array1.Length != array2.Length)
                 return false;
 
             return array1.SequenceEqual(array2);
+        }
+
+        internal static int GetHashCode<T>(T[] array)
+        {
+            return (array as IStructuralEquatable)?.GetHashCode(EqualityComparer<T>.Default) ?? 0;
         }
 
         #endregion

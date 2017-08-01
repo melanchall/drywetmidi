@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ (Data?.GetHashCode() ?? 0);
+            return base.GetHashCode() ^ ArrayUtilities.GetHashCode(Data);
         }
 
         #endregion
