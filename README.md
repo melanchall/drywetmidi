@@ -115,10 +115,9 @@ To get duration of a MIDI file as `TimeSpan` use this code:
 
 ```csharp
 TempoMap tempoMap = midiFile.GetTempoMap();
-var midiFileDuration = midiFile.GetTimedEvents()
-                               .LastOrDefault(e => e.Event is NoteOffEvent)
-                               ?.TimeAs<MetricTime>(tempoMap)
-                               ?.ToTimeSpan() ?? new TimeSpan();
+TimeSpan midiFileDuration = midiFile.GetTimedEvents()
+                                    .LastOrDefault(e => e.Event is NoteOffEvent)
+                                    ?.TimeAs<MetricTime>(tempoMap) ?? new MetricTime();
 ```
 
 Suppose you want to remove all C# notes from a MIDI file. It can be done with this code:
@@ -131,6 +130,12 @@ foreach (var trackChunk in midiFile.GetTrackChunks())
         notesManager.Notes.RemoveAll(n => n.NoteName == NoteName.CSharp);
     }
 }
+```
+
+or
+
+```csharp
+midiFile.RemoveNotes(n => n.NoteName == NoteName.CSharp);
 ```
 
 To get all chords of a MIDI file at 20 seconds from the start of the file write this:
