@@ -119,6 +119,12 @@ namespace Melanchall.DryWetMidi.Smf
             return (SevenBitNumber)noteNumber;
         }
 
+        public static bool IsNoteValid(NoteName noteName, int octave)
+        {
+            var noteNumber = (octave + OctaveOffset) * OctaveSize + (int)noteName;
+            return noteNumber >= SevenBitNumber.MinValue && noteNumber <= SevenBitNumber.MaxValue;
+        }
+
         #endregion
     }
 }

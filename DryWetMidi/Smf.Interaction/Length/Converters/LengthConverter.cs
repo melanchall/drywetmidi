@@ -32,6 +32,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return (TLength)GetConverter<TLength>().ConvertTo(length, time, tempoMap);
         }
 
+        public static ILength ConvertTo(long length, long time, Type lengthType, TempoMap tempoMap)
+        {
+            ThrowIfLengthArgument.IsNegative(nameof(length), length);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return LengthConverterFactory.GetConverter(lengthType)
+                                         .ConvertTo(length, time, tempoMap);
+        }
+
         /// <summary>
         /// Converts length from one length type to another one.
         /// </summary>
