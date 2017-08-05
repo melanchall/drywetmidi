@@ -7,8 +7,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Constructor
 
         public NoteDefinition(NoteName noteName, int octave)
+            : this(NoteUtilities.GetNoteNumber(noteName, octave))
         {
-            NoteNumber = NoteUtilities.GetNoteNumber(noteName, octave);
         }
 
         public NoteDefinition(SevenBitNumber noteNumber)

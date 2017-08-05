@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melanchall.DryWetMidi", "DryWetMidi\Melanchall.DryWetMidi.csproj", "{499FDD77-17E3-4249-AAE5-50941A47D35E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melanchall.DryWetMidi.Tests", "DryWetMidi.Tests\Melanchall.DryWetMidi.Tests.csproj", "{59309BC6-E1C3-40E8-AC58-C3793A5988B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

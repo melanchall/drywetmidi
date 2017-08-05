@@ -6,6 +6,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
+        public static readonly PatternActionResult DoNothing = new PatternActionResult();
+
+        #endregion
+
+        #region Constructor
+
         public PatternActionResult()
         {
         }

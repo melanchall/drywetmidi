@@ -4,6 +4,11 @@
     {
         #region Constructor
 
+        public MoveToTimeAction()
+            : this(null)
+        {
+        }
+
         public MoveToTimeAction(ITime time)
         {
             Time = time;
@@ -22,7 +27,9 @@
         public PatternActionResult Invoke(long time, PatternContext context)
         {
             context.SaveTime(time);
-            return new PatternActionResult(TimeConverter.ConvertFrom(Time, context.TempoMap));
+            return new PatternActionResult(Time != null
+                ? TimeConverter.ConvertFrom(Time, context.TempoMap)
+                : context.RestoreTime());
         }
 
         #endregion

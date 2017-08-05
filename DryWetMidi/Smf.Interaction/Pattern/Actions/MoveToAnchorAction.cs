@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -14,8 +13,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
+        public MoveToAnchorAction(AnchorPosition position)
+            : this(null, position)
+        {
+        }
+
         public MoveToAnchorAction(object anchor, AnchorPosition position)
             : this(anchor, position, -1)
+        {
+        }
+
+        public MoveToAnchorAction(AnchorPosition position, int index)
+            : this(null, position, index)
         {
         }
 

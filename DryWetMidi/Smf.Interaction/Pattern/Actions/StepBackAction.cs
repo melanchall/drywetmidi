@@ -32,11 +32,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
-        public StepBackAction()
-            : this(null)
-        {
-        }
-
         public StepBackAction(ILength step)
             : base(step)
         {
@@ -51,24 +46,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var step = Step;
             var tempoMap = context.TempoMap;
 
-            // Step back by the specified length
+            var stepType = step.GetType();
+            var length = LengthConverter.ConvertTo(time, 0, stepType, tempoMap);
 
-            if (step != null)
-            {
-                var stepType = step.GetType();
-                var length = LengthConverter.ConvertTo(time, 0, stepType, tempoMap);
+            context.SaveTime(time);
 
-                context.SaveTime(time);
-
-                var newTime = _lengthToTimeConverters[stepType](length, step);
-                return new PatternActionResult(newTime == null
-                    ? 0
-                    : TimeConverter.ConvertFrom(newTime, tempoMap));
-            }
-
-            // Step back to the last saved time
-
-            return new PatternActionResult(context.RestoreTime());
+            var newTime = _lengthToTimeConverters[stepType](length, step);
+            return new PatternActionResult(newTime == null
+                ? 0
+                : TimeConverter.ConvertFrom(newTime, tempoMap));
         }
 
         #endregion

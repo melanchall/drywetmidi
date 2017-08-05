@@ -4,9 +4,10 @@
     {
         #region Constructor
 
-        public AddNoteAction(NoteDefinition noteDefinition, ILength length)
+        public AddNoteAction(NoteDefinition noteDefinition, SevenBitNumber velocity, ILength length)
         {
             NoteDefinition = noteDefinition;
+            Velocity = velocity;
             Length = length;
         }
 
@@ -15,6 +16,8 @@
         #region Properties
 
         public NoteDefinition NoteDefinition { get; }
+
+        public SevenBitNumber Velocity { get; }
 
         public ILength Length { get; }
 
@@ -28,8 +31,11 @@
 
             var noteLength = LengthConverter.ConvertFrom(Length, time, context.TempoMap);
 
-            var note = new Note(NoteDefinition.NoteNumber, noteLength, time);
-            note.Channel = context.Channel;
+            var note = new Note(NoteDefinition.NoteNumber, noteLength, time)
+            {
+                Channel = context.Channel,
+                Velocity = Velocity
+            };
 
             return new PatternActionResult(time + noteLength, new[] { note });
         }

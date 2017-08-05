@@ -4,6 +4,11 @@
     {
         #region Constructor
 
+        public AddAnchorAction()
+            : this(null)
+        {
+        }
+
         public AddAnchorAction(object anchor)
         {
             Anchor = anchor;
@@ -22,7 +27,7 @@
         public PatternActionResult Invoke(long time, PatternContext context)
         {
             context.AnchorTime(Anchor, time);
-            return new PatternActionResult(time);
+            return PatternActionResult.DoNothing;
         }
 
         #endregion

@@ -9,6 +9,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private readonly Stack<long> _timeHistory = new Stack<long>();
         private readonly Dictionary<object, List<long>> _anchors = new Dictionary<object, List<long>>();
+        private readonly List<long> _anchorsList = new List<long>();
         private readonly List<Note> _notes = new List<Note>();
 
         #endregion
@@ -29,6 +30,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public FourBitNumber Channel { get; }
 
+        //public SevenBitNumber DefaultVelocity { get; set; } = Note.DefaultVelocity;
+
+        //public ILength DefaultNoteLength { get; set; } = (MusicalLength)MusicalFraction.Quarter;
+
+        //public ILength DefaultStep { get; set; } = (MusicalLength)MusicalFraction.Quarter;
+
+        //public OctaveDefinition DefaultOctave { get; set; } = OctaveDefinition.Get(4);
+
         #endregion
 
         #region Methods
@@ -48,6 +57,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public void AnchorTime(object anchor, long time)
         {
             GetAnchorTimesList(anchor).Add(time);
+
+            if (anchor != null)
+                _anchorsList.Add(time);
         }
 
         public IReadOnlyList<long> GetAnchorTimes(object anchor)
@@ -57,6 +69,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private List<long> GetAnchorTimesList(object anchor)
         {
+            if (anchor == null)
+                return _anchorsList;
+
             List<long> times;
             if (!_anchors.TryGetValue(anchor, out times))
                 _anchors.Add(anchor, times = new List<long>());
