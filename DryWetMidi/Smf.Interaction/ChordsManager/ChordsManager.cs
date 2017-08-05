@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -142,23 +143,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            var lastNoteEndTime = long.MinValue;
-            Chord chord = null;
+            var channelsCount = FourBitNumber.MaxValue - FourBitNumber.MinValue + 1;
+            var lastNoteEndTimes = Enumerable.Range(0, channelsCount).Select(i => long.MinValue).ToArray();
+            var chords = new Chord[channelsCount];
 
             foreach (var note in notes)
             {
+                var channel = note.Channel;
+
+                var lastNoteEndTime = lastNoteEndTimes[channel];
+                var chord = chords[channel];
+
                 var noteTime = note.Time;
                 if (noteTime >= lastNoteEndTime || noteTime - chord.Time > notesTolerance)
                 {
                     if (chord != null)
                         yield return chord;
 
-                    chord = new Chord();
+                    chords[channel] = chord = new Chord();
                 }
 
                 chord.Notes.Add(note);
 
-                lastNoteEndTime = noteTime + note.Length;
+                lastNoteEndTimes[channel] = noteTime + note.Length;
             }
         }
 
