@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Smf.Interaction\ChordsManager\ChordTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternTests.cs" />
   </ItemGroup>
   <ItemGroup>
