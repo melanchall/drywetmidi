@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -128,6 +130,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        public FourBitNumber Channel
+        {
+            get => GetNotesProperty(n => n.Channel, "Chord's notes have different channels.");
+            set => SetNotesProperty(n => n.Channel, value);
+        }
+
+        public SevenBitNumber Velocity
+        {
+            get => GetNotesProperty(n => n.Velocity, "Chord's notes have different velocities.");
+            set => SetNotesProperty(n => n.Velocity, value);
+        }
+
+        public SevenBitNumber OffVelocity
+        {
+            get => GetNotesProperty(n => n.OffVelocity, "Chord's notes have different off velocities.");
+            set => SetNotesProperty(n => n.OffVelocity, value);
+        }
+
         #endregion
 
         #region Methods
@@ -135,6 +155,34 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)
         {
             NotesCollectionChanged?.Invoke(collection, args);
+        }
+
+        private TValue GetNotesProperty<TValue>(Func<Note, TValue> valueSelector, string differentValuesMessage)
+        {
+            if (!Notes.Any())
+                throw new InvalidOperationException("Chord doesn't contain notes.");
+
+            var values = Notes.Select(valueSelector).Distinct().ToArray();
+            if (values.Length > 1)
+                throw new InvalidOperationException(differentValuesMessage);
+
+            return values.First();
+        }
+
+        private void SetNotesProperty<TValue>(Expression<Func<Note, TValue>> propertySelector, TValue value)
+        {
+            var propertySelectorExpression = propertySelector.Body as MemberExpression;
+            if (propertySelectorExpression == null)
+                return;
+
+            var property = propertySelectorExpression.Member as PropertyInfo;
+            if (property == null)
+                return;
+
+            foreach (var note in Notes)
+            {
+                property.SetValue(note, value);
+            }
         }
 
         #endregion
