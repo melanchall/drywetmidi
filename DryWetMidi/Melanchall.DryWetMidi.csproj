@@ -59,6 +59,7 @@
     <Compile Include="Smf.Interaction\Pattern\PatternBuilder.cs" />
     <Compile Include="Smf.Interaction\Pattern\IPatternAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternContext.cs" />
+    <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollection.cs" />
     <Compile Include="Smf.Interaction\Utilities\FractionUtilities.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfLengthArgument.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIfNotesTolerance.cs" />

@@ -1,6 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,11 +12,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <see cref="TimedEventsCollection"/> can be enumerated returning timed events in order
     /// of increasing <see cref="TimedEvent.Time"/>.
     /// </remarks>
-    public sealed class TimedEventsCollection : IEnumerable<TimedEvent>
+    public sealed class TimedEventsCollection : TimedObjectsCollection<TimedEvent>
     {
         #region Fields
 
-        private readonly List<TimedEvent> _timedEvents = new List<TimedEvent>();
         private readonly TimedEventsComparer _eventsComparer;
 
         #endregion
@@ -38,86 +35,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
         internal TimedEventsCollection(IEnumerable<TimedEvent> events, Comparison<MidiEvent> sameTimeEventsComparison = null)
+            : base(events)
         {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
             _eventsComparer = new TimedEventsComparer(sameTimeEventsComparison);
-            _timedEvents.AddRange(events.Where(e => e != null));
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Adds timed events into this <see cref="TimedEventsCollection"/>.
-        /// </summary>
-        /// <param name="events">Events to add.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        public void Add(IEnumerable<TimedEvent> events)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            _timedEvents.AddRange(events.Where(e => e != null));
-        }
-
-        /// <summary>
-        /// Adds timed events into this <see cref="TimedEventsCollection"/>.
-        /// </summary>
-        /// <param name="events">Events to add.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        public void Add(params TimedEvent[] events)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            Add((IEnumerable<TimedEvent>)events);
-        }
-
-        /// <summary>
-        /// Removes timed events from this <see cref="TimedEventsCollection"/>.
-        /// </summary>
-        /// <param name="events">Events to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        public void Remove(IEnumerable<TimedEvent> events)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            foreach (var e in events.ToList())
-            {
-                _timedEvents.Remove(e);
-            }
-        }
-
-        /// <summary>
-        /// Removes timed events from this <see cref="TimedEventsCollection"/>.
-        /// </summary>
-        /// <param name="events">Events to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        public void Remove(params TimedEvent[] events)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            Remove((IEnumerable<TimedEvent>)events);
-        }
-
-        /// <summary>
-        /// Removes all the timed events that match the conditions defined by the specified predicate.
-        /// </summary>
-        /// <param name="predicate">Delegate that defines the conditions of the events to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
-        public void RemoveAll(Predicate<TimedEvent> predicate)
-        {
-            ThrowIfArgument.IsNull(nameof(predicate), predicate);
-
-            _timedEvents.RemoveAll(predicate);
-        }
-
-        /// <summary>
-        /// Removes all timed events from this <see cref="TimedEventsCollection"/>.
-        /// </summary>
-        public void Clear()
-        {
-            _timedEvents.Clear();
         }
 
         #endregion
@@ -128,18 +48,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-        public IEnumerator<TimedEvent> GetEnumerator()
+        public override IEnumerator<TimedEvent> GetEnumerator()
         {
-            return _timedEvents.OrderBy(e => e, _eventsComparer).GetEnumerator();
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            return _objects.OrderBy(e => e, _eventsComparer).GetEnumerator();
         }
 
         #endregion
