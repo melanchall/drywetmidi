@@ -177,5 +177,83 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         #endregion
+
+        #region Test methods
+
+        [TestMethod]
+        [Description("Get length of Chord without notes.")]
+        public void Length_Get_NoNotes()
+        {
+            Assert.AreEqual(0, GetChord_NoNotes().Length);
+        }
+
+        [TestMethod]
+        [Description("Get length of Chord with time of zero.")]
+        public void Length_Get_ZeroTime()
+        {
+            Assert.AreEqual(200, GetChord_ZeroTime().Length);
+        }
+
+        [TestMethod]
+        [Description("Get length of Chord with time of nonzero number.")]
+        public void Length_Get_NonzeroTime()
+        {
+            Assert.AreEqual(200, GetChord_NonzeroTime().Length);
+        }
+
+        [TestMethod]
+        [Description("Set length of Chord without notes.")]
+        public void Length_Set_NoNotes()
+        {
+            var chord = GetChord_NoNotes();
+            chord.Length = 100;
+
+            Assert.AreEqual(0, chord.Length);
+        }
+
+        [TestMethod]
+        [Description("Set length of Chord with time of zero.")]
+        public void Length_Set_ZeroTime()
+        {
+            var chord = GetChord_ZeroTime();
+            chord.Length = 500;
+
+            Assert.AreEqual(500, chord.Length);
+        }
+
+        [TestMethod]
+        [Description("Set length of Chord with time of nonzero number.")]
+        public void Length_Set_NonzeroTime()
+        {
+            var chord = GetChord_NonzeroTime();
+            chord.Length = 500;
+
+            Assert.AreEqual(500, chord.Length);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static Chord GetChord_NoNotes()
+        {
+            return new Chord();
+        }
+
+        private static Chord GetChord_ZeroTime()
+        {
+            return new Chord(new Note(SevenBitNumber.MaxValue, 100),
+                             new Note(SevenBitNumber.MaxValue, 100, 50),
+                             new Note(SevenBitNumber.MaxValue, 100, 100));
+        }
+
+        private static Chord GetChord_NonzeroTime()
+        {
+            return new Chord(new Note(SevenBitNumber.MaxValue, 100, 50),
+                             new Note(SevenBitNumber.MaxValue, 100, 100),
+                             new Note(SevenBitNumber.MaxValue, 100, 150));
+        }
+
+        #endregion
     }
 }

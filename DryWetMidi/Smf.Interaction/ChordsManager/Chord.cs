@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Gets length of the chord in units defined by the time division of a MIDI file.
+        /// Gets or sets length of the chord in units defined by the time division of a MIDI file.
         /// </summary>
         public long Length
         {
@@ -118,33 +118,40 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 foreach (var note in Notes)
                 {
                     var noteStartTime = note.Time;
-                    if (noteStartTime < startTime)
-                        startTime = noteStartTime;
+                    startTime = Math.Min(noteStartTime, startTime);
 
                     var noteEndTime = noteStartTime + note.Length;
-                    if (noteEndTime > endTime)
-                        endTime = noteEndTime;
+                    endTime = Math.Max(noteEndTime, endTime);
                 }
 
                 return endTime - startTime;
+            }
+            set
+            {
+                var lengthChange = value - Length;
+
+                foreach (var note in Notes)
+                {
+                    note.Length += lengthChange;
+                }
             }
         }
 
         public FourBitNumber Channel
         {
-            get => GetNotesProperty(n => n.Channel, "Chord's notes have different channels.");
+            get => GetNotesProperty(n => n.Channel);
             set => SetNotesProperty(n => n.Channel, value);
         }
 
         public SevenBitNumber Velocity
         {
-            get => GetNotesProperty(n => n.Velocity, "Chord's notes have different velocities.");
+            get => GetNotesProperty(n => n.Velocity);
             set => SetNotesProperty(n => n.Velocity, value);
         }
 
         public SevenBitNumber OffVelocity
         {
-            get => GetNotesProperty(n => n.OffVelocity, "Chord's notes have different off velocities.");
+            get => GetNotesProperty(n => n.OffVelocity);
             set => SetNotesProperty(n => n.OffVelocity, value);
         }
 
@@ -157,32 +164,33 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             NotesCollectionChanged?.Invoke(collection, args);
         }
 
-        private TValue GetNotesProperty<TValue>(Func<Note, TValue> valueSelector, string differentValuesMessage)
+        private TValue GetNotesProperty<TValue>(Expression<Func<Note, TValue>> propertySelector)
         {
             if (!Notes.Any())
                 throw new InvalidOperationException("Chord doesn't contain notes.");
 
-            var values = Notes.Select(valueSelector).Distinct().ToArray();
+            var propertyInfo = GetPropertyInfo(propertySelector);
+
+            var values = Notes.Select(n => (TValue)propertyInfo.GetValue(n)).Distinct().ToArray();
             if (values.Length > 1)
-                throw new InvalidOperationException(differentValuesMessage);
+                throw new InvalidOperationException($"Chord's notes have different values of the {propertyInfo.Name} property.");
 
             return values.First();
         }
 
         private void SetNotesProperty<TValue>(Expression<Func<Note, TValue>> propertySelector, TValue value)
         {
-            var propertySelectorExpression = propertySelector.Body as MemberExpression;
-            if (propertySelectorExpression == null)
-                return;
-
-            var property = propertySelectorExpression.Member as PropertyInfo;
-            if (property == null)
-                return;
+            var propertyInfo = GetPropertyInfo(propertySelector);
 
             foreach (var note in Notes)
             {
-                property.SetValue(note, value);
+                propertyInfo.SetValue(note, value);
             }
+        }
+
+        private static PropertyInfo GetPropertyInfo<TValue>(Expression<Func<Note, TValue>> propertySelector)
+        {
+            return (propertySelector.Body as MemberExpression)?.Member as PropertyInfo;
         }
 
         #endregion
