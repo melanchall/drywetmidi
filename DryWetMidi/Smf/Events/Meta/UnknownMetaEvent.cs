@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Smf
     /// Any meta event DryWetMIDI doesn't know about will be read as an instance of the
     /// <see cref="UnknownMetaEvent"/>.
     /// </remarks>
-    public sealed class UnknownMetaEvent : MetaEvent, IEquatable<UnknownMetaEvent>
+    public sealed class UnknownMetaEvent : MetaEvent
     {
         #region Constructor
 
@@ -50,20 +50,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Gets the content of the meta event as array of bytes.
         /// </summary>
         public byte[] Data { get; private set; }
-
-        #endregion
-
-        #region IEquatable<UnknownMetaEvent>
-
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="unknownMetaEvent">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
-        public bool Equals(UnknownMetaEvent unknownMetaEvent)
-        {
-            return Equals(unknownMetaEvent, true);
-        }
 
         #endregion
 
@@ -118,45 +104,12 @@ namespace Melanchall.DryWetMidi.Smf
         }
 
         /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="midiEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public override bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
-        {
-            var unknownMetaEvent = midiEvent as UnknownMetaEvent;
-            return base.Equals(unknownMetaEvent, respectDeltaTime) &&
-                   ArrayUtilities.Equals(Data, unknownMetaEvent.Data);
-        }
-
-        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Unknown meta event ({StatusByte})";
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as UnknownMetaEvent);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() ^ ArrayUtilities.GetHashCode(Data);
         }
 
         #endregion

@@ -1,7 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
@@ -32,24 +30,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Gets or sets the event's data.
         /// </summary>
         public byte[] Data { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="sysExEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        protected bool Equals(SysExEvent sysExEvent, bool respectDeltaTime)
-        {
-            return base.Equals(sysExEvent, respectDeltaTime) &&
-                   Completed == sysExEvent.Completed &&
-                   ArrayUtilities.Equals(Data, sysExEvent.Data);
-        }
 
         #endregion
 
@@ -104,27 +84,6 @@ namespace Melanchall.DryWetMidi.Smf
             sysExEvent.Data = Data?.Clone() as byte[];
 
             return sysExEvent;
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as SysExEvent, true);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() ^
-                   Completed.GetHashCode() ^
-                   ArrayUtilities.GetHashCode(Data);
         }
 
         #endregion

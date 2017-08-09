@@ -42,22 +42,6 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
-        #region Methods
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="baseTextEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        protected bool Equals(BaseTextEvent baseTextEvent, bool respectDeltaTime)
-        {
-            return base.Equals(baseTextEvent, respectDeltaTime) && Text == baseTextEvent.Text;
-        }
-
-        #endregion
-
         #region Overrides
 
         /// <summary>
@@ -111,15 +95,6 @@ namespace Melanchall.DryWetMidi.Smf
 
             var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
             return encoding.GetByteCount(Text);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() ^ (Text?.GetHashCode() ?? 0);
         }
 
         #endregion

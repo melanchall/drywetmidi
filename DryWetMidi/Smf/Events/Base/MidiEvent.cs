@@ -89,57 +89,6 @@ namespace Melanchall.DryWetMidi.Smf
             return midiEvent;
         }
 
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="midiEvent">The event to compare with the current one.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public bool Equals(MidiEvent midiEvent)
-        {
-            return Equals(midiEvent, true);
-        }
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="midiEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        public virtual bool Equals(MidiEvent midiEvent, bool respectDeltaTime)
-        {
-            if (ReferenceEquals(null, midiEvent))
-                return false;
-
-            if (ReferenceEquals(this, midiEvent))
-                return true;
-
-            return !respectDeltaTime || DeltaTime == midiEvent.DeltaTime;
-        }
-
-        #endregion
-
-        #region Overrides
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as MidiEvent);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return DeltaTime.GetHashCode();
-        }
-
         #endregion
     }
 }

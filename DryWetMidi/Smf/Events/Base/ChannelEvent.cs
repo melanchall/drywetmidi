@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -52,46 +51,6 @@ namespace Melanchall.DryWetMidi.Smf
         {
             get { return _parameters[index]; }
             set { _parameters[index] = value; }
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Determines whether the specified event is equal to the current one.
-        /// </summary>
-        /// <param name="channelEvent">The event to compare with the current one.</param>
-        /// <param name="respectDeltaTime">If true the delta-times will be taken into an account
-        /// while comparing events; if false - delta-times will be ignored.</param>
-        /// <returns>true if the specified event is equal to the current one; otherwise, false.</returns>
-        protected bool Equals(ChannelEvent channelEvent, bool respectDeltaTime)
-        {
-            return base.Equals(channelEvent, respectDeltaTime) && _parameters.SequenceEqual(channelEvent._parameters);
-        }
-
-        /// <summary>
-        /// Calculates a hash code for cahnnel event.
-        /// </summary>
-        /// <param name="eventStatusByte">The status byte of the current channel event.</param>
-        /// <returns>A hash code for the current channel event.</returns>
-        /// <remarks>
-        /// There is no need to use XOR and prime numbers since hash code for a channel event
-        /// can be effectively constructed as StatusByte|Parameter0|Parameter1...|ParameterN.
-        /// This form guarantees that result number will be unique for every channel event type
-        /// and set of parameters.
-        /// </remarks>
-        protected int CalculateHashCode(byte eventStatusByte)
-        {
-            int result = eventStatusByte;
-
-            foreach (var parameter in _parameters)
-            {
-                result <<= 7;
-                result |= parameter;
-            }
-
-            return result;
         }
 
         #endregion
