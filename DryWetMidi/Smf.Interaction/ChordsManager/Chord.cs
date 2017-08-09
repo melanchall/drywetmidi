@@ -209,39 +209,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 : "Empty notes collection";
         }
 
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(obj, this))
-                return true;
-
-            var chord = obj as Chord;
-            if (chord == null)
-                return false;
-
-            return Notes.SequenceEqual(chord.Notes);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            int result = 0;
-
-            foreach (var note in Notes)
-            {
-                result = ((result << 5) + result) ^ note.GetHashCode();
-            }
-
-            return result;
-        }
-
         #endregion
     }
 }

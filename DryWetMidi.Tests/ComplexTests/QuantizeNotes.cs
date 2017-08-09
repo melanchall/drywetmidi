@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 
-namespace Melanchall.DryWetMidi.Tests.ComplexTests
+namespace Melanchall.DryWetMidi.Tests
 {
     [TestClass]
     public class QuantizeNotes

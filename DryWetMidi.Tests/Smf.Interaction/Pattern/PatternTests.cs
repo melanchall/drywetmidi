@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -207,7 +208,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             })
             .ToList();
 
-            CollectionAssert.AreEqual(expectedNotes, midiFile.GetNotes().ToList());
+            Assert.IsTrue(NoteEquality.Equals(expectedNotes, midiFile.GetNotes()));
         }
     }
 }
