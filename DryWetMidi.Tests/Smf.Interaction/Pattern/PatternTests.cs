@@ -49,6 +49,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             #endregion
         }
 
+        #region Test methods
+
         [TestMethod]
         [Description("Add two notes where first one takes default length and velocity and the second takes specified ones.")]
         public void Note_MixedLengthAndVelocity()
@@ -188,6 +190,75 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .Build();
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        [Description("Try to repeat last action one time in case of no actions exist at the moment.")]
+        public void Repeat_Last_Single_NoActions()
+        {
+            new PatternBuilder().Repeat();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        [Description("Try to repeat last action several times in case of no actions exist at the moment.")]
+        public void Repeat_Last_Multiple_Valid_NoActions()
+        {
+            new PatternBuilder().Repeat(2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Description("Try to repeat last action invalid number of times in case of no actions exist at the moment.")]
+        public void Repeat_Last_Multiple_Invalid_NoActions()
+        {
+            new PatternBuilder().Repeat(-7);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Repeat_Previous_NoActions()
+        {
+            new PatternBuilder().Repeat(2, 2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Repeat_Previous_NotEnoughActions()
+        {
+            new PatternBuilder()
+                .Anchor()
+                .Repeat(2, 2);
+        }
+
+        [TestMethod]
+        [Description("Repeat some actions and insert a note.")]
+        public void Repeat_Previous()
+        {
+            var pattern = new PatternBuilder()
+                .DefaultStep((MusicalLength)MusicalFraction.Eighth)
+
+                .Anchor("A")
+                .StepForward()
+                .Anchor("B")
+                .Repeat(2, 2)
+                .MoveToNthAnchor("B", 2)
+                .Note(NoteName.A)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A,
+                             4,
+                             new MusicalTime(3 * MusicalFraction.Eighth),
+                             (MusicalLength)MusicalFraction.Quarter)
+            });
+        }
+
+        #endregion
+
+        #region Private methods
+
         private static void TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos)
         {
             var channel = (FourBitNumber)2;
@@ -205,10 +276,11 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                     Velocity = i.Velocity,
                     Channel = channel
                 };
-            })
-            .ToList();
+            });
 
             Assert.IsTrue(NoteEquality.Equals(expectedNotes, midiFile.GetNotes()));
         }
+
+        #endregion
     }
 }

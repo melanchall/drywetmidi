@@ -10,8 +10,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Fields
 
         private readonly List<IPatternAction> _actions = new List<IPatternAction>();
-        private readonly Dictionary<object, int> _anchorCounters = new Dictionary<object, int>();
 
+        private readonly Dictionary<object, int> _anchorCounters = new Dictionary<object, int>();
         private int _globalAnchorsCounter = 0;
 
         private SevenBitNumber _defaultVelocity = Interaction.Note.DefaultVelocity;
@@ -41,6 +41,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public PatternBuilder Note(NoteName noteName, SevenBitNumber velocity, ILength length)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
+            ThrowIfArgument.IsNull(nameof(length), length);
 
             return Note(_defaultOctave.GetNoteDefinition(noteName), velocity, length);
         }
@@ -65,9 +66,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return AddAction(new AddNoteAction(noteDefinition,
-                                               velocity,
-                                               length));
+            return AddAction(new AddNoteAction(noteDefinition, velocity, length));
         }
 
         public PatternBuilder Pattern(Pattern pattern)
@@ -81,18 +80,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(anchor), anchor);
 
-            if (!_anchorCounters.ContainsKey(anchor))
-                _anchorCounters.Add(anchor, 0);
-
-            _anchorCounters[anchor]++;
-            _globalAnchorsCounter++;
+            UpdateAnchorsCounters(anchor);
 
             return AddAction(new AddAnchorAction(anchor));
         }
 
         public PatternBuilder Anchor()
         {
-            _globalAnchorsCounter++;
+            UpdateAnchorsCounters(null);
 
             return AddAction(new AddAnchorAction());
         }
@@ -199,6 +194,72 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return AddAction(new MoveToAnchorAction(AnchorPosition.Nth, index));
         }
 
+        /// <summary>
+        /// Repeats the specified number of previous actions.
+        /// </summary>
+        /// <param name="actionsCount">Number of previous actions to repeat.</param>
+        /// <param name="repetitionsCount">Count of repetitions.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// Note that <see cref="DefaultNoteLength(ILength)"/>, <see cref="DefaultOctave(int)"/>,
+        /// <see cref="DefaultStep(ILength)"/> and <see cref="DefaultVelocity(SevenBitNumber)"/> are not
+        /// actions and will not be repeated since default values applies immidiately on next actions.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="actionsCount"/> is
+        /// negative. -or- <paramref name="actionsCount"/> is greater than count of existing actions. -or-
+        /// <paramref name="repetitionsCount"/> is negative.</exception>
+        public PatternBuilder Repeat(int actionsCount, int repetitionsCount)
+        {
+            ThrowIfArgument.IsNegative(nameof(actionsCount), actionsCount, "Actions count is negative.");
+            ThrowIfArgument.IsGreaterThan(nameof(actionsCount),
+                                          actionsCount,
+                                          _actions.Count,
+                                          "Actions count is greater than existing actions count.");
+            ThrowIfArgument.IsNegative(nameof(repetitionsCount), repetitionsCount, "Repetitions count is negative.");
+
+            return RepeatActions(actionsCount, repetitionsCount);
+        }
+
+        /// <summary>
+        /// Repeats the previous action the specified number of times.
+        /// </summary>
+        /// <param name="repetitionsCount">Count of repetitions.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// Note that <see cref="DefaultNoteLength(ILength)"/>, <see cref="DefaultOctave(int)"/>,
+        /// <see cref="DefaultStep(ILength)"/> and <see cref="DefaultVelocity(SevenBitNumber)"/> are not
+        /// actions and will not be repeated since default values applies immidiately on next actions.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repetitionsCount"/> is negative.</exception>
+        /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
+        public PatternBuilder Repeat(int repetitionsCount)
+        {
+            ThrowIfArgument.IsNegative(nameof(repetitionsCount), repetitionsCount, "Repetitions count is negative.");
+
+            if (!_actions.Any())
+                throw new InvalidOperationException("There is no action to repeat.");
+
+            return RepeatActions(1, repetitionsCount);
+        }
+
+        /// <summary>
+        /// Repeats the previous action one time.
+        /// </summary>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// Note that <see cref="DefaultNoteLength(ILength)"/>, <see cref="DefaultOctave(int)"/>,
+        /// <see cref="DefaultStep(ILength)"/> and <see cref="DefaultVelocity(SevenBitNumber)"/> are not
+        /// actions and will not be repeated since default values applies immidiately on next actions.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
+        public PatternBuilder Repeat()
+        {
+            if (!_actions.Any())
+                throw new InvalidOperationException("There is no action to repeat.");
+
+            return RepeatActions(1, 1);
+        }
+
         public PatternBuilder DefaultVelocity(SevenBitNumber velocity)
         {
             _defaultVelocity = velocity;
@@ -248,6 +309,36 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException($"Anchor {anchor} doesn't exist.", nameof(anchor));
 
             return counter;
+        }
+
+        private void UpdateAnchorsCounters(object anchor)
+        {
+            _globalAnchorsCounter++;
+
+            if (anchor == null)
+                return;
+
+            if (!_anchorCounters.ContainsKey(anchor))
+                _anchorCounters.Add(anchor, 0);
+
+            _anchorCounters[anchor]++;
+        }
+
+        private PatternBuilder RepeatActions(int actionsCount, int repetitionsCount)
+        {
+            var actionsToRepeat = _actions.Skip(_actions.Count - actionsCount).ToList();
+            var newActions = Enumerable.Range(0, repetitionsCount).SelectMany(i => actionsToRepeat);
+
+            foreach (var action in newActions)
+            {
+                var addAnchorAction = action as AddAnchorAction;
+                if (addAnchorAction != null)
+                    UpdateAnchorsCounters(addAnchorAction.Anchor);
+
+                _actions.Add(action);
+            }
+
+            return this;
         }
 
         #endregion
