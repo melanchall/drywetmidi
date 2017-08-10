@@ -23,6 +23,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        #region Note
+
         public PatternBuilder Note(NoteName noteName)
         {
             return Note(noteName, _defaultVelocity, _defaultNoteLength);
@@ -69,12 +71,70 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return AddAction(new AddNoteAction(noteDefinition, velocity, length));
         }
 
+        #endregion
+
+        #region Chord
+
+        public PatternBuilder Chord(IEnumerable<NoteName> noteNames)
+        {
+            return Chord(noteNames, _defaultVelocity, _defaultNoteLength);
+        }
+
+        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ILength length)
+        {
+            return Chord(noteNames, _defaultVelocity, length);
+        }
+
+        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, SevenBitNumber velocity)
+        {
+            return Chord(noteNames, velocity, _defaultNoteLength);
+        }
+
+        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, SevenBitNumber velocity, ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(noteNames), noteNames);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(noteNames.Select(n => _defaultOctave.GetNoteDefinition(n)), velocity, length);
+        }
+
+        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions)
+        {
+            return Chord(noteDefinitions, _defaultVelocity, _defaultNoteLength);
+        }
+
+        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ILength length)
+        {
+            return Chord(noteDefinitions, _defaultVelocity, length);
+        }
+
+        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, SevenBitNumber velocity)
+        {
+            return Chord(noteDefinitions, velocity, _defaultNoteLength);
+        }
+
+        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, SevenBitNumber velocity, ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(noteDefinitions), noteDefinitions);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return AddAction(new AddChordAction(noteDefinitions, velocity, length));
+        }
+
+        #endregion
+
+        #region Pattern
+
         public PatternBuilder Pattern(Pattern pattern)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
 
             return AddAction(new AddPatternAction(pattern));
         }
+
+        #endregion
+
+        #region Anchor
 
         public PatternBuilder Anchor(object anchor)
         {
@@ -90,42 +150,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             UpdateAnchorsCounters(null);
 
             return AddAction(new AddAnchorAction());
-        }
-
-        public PatternBuilder StepForward(ILength step)
-        {
-            ThrowIfArgument.IsNull(nameof(step), step);
-
-            return AddAction(new StepForwardAction(step));
-        }
-
-        public PatternBuilder StepForward()
-        {
-            return AddAction(new StepForwardAction(_defaultStep));
-        }
-
-        public PatternBuilder StepBack(ILength step)
-        {
-            ThrowIfArgument.IsNull(nameof(step), step);
-
-            return AddAction(new StepBackAction(step));
-        }
-
-        public PatternBuilder StepBack()
-        {
-            return AddAction(new StepBackAction(_defaultStep));
-        }
-
-        public PatternBuilder MoveToTime(ITime time)
-        {
-            ThrowIfArgument.IsNull(nameof(time), time);
-
-            return AddAction(new MoveToTimeAction(time));
-        }
-
-        public PatternBuilder MoveToPreviousTime()
-        {
-            return AddAction(new MoveToTimeAction());
         }
 
         public PatternBuilder MoveToFirstAnchor(object anchor)
@@ -194,6 +218,50 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return AddAction(new MoveToAnchorAction(AnchorPosition.Nth, index));
         }
 
+        #endregion
+
+        #region Move
+
+        public PatternBuilder StepForward(ILength step)
+        {
+            ThrowIfArgument.IsNull(nameof(step), step);
+
+            return AddAction(new StepForwardAction(step));
+        }
+
+        public PatternBuilder StepForward()
+        {
+            return AddAction(new StepForwardAction(_defaultStep));
+        }
+
+        public PatternBuilder StepBack(ILength step)
+        {
+            ThrowIfArgument.IsNull(nameof(step), step);
+
+            return AddAction(new StepBackAction(step));
+        }
+
+        public PatternBuilder StepBack()
+        {
+            return AddAction(new StepBackAction(_defaultStep));
+        }
+
+        public PatternBuilder MoveToTime(ITime time)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+
+            return AddAction(new MoveToTimeAction(time));
+        }
+
+        public PatternBuilder MoveToPreviousTime()
+        {
+            return AddAction(new MoveToTimeAction());
+        }
+
+        #endregion
+
+        #region Repeat
+
         /// <summary>
         /// Repeats the specified number of previous actions.
         /// </summary>
@@ -260,6 +328,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return RepeatActions(1, 1);
         }
 
+        #endregion
+
+        #region Default
+
         public PatternBuilder DefaultVelocity(SevenBitNumber velocity)
         {
             _defaultVelocity = velocity;
@@ -287,6 +359,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _defaultOctave = OctaveDefinition.Get(octave);
             return this;
         }
+
+        #endregion
 
         public Pattern Build()
         {

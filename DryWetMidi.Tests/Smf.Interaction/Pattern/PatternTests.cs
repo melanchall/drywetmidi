@@ -78,6 +78,35 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        public void Chord_DefaultOctave()
+        {
+            var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = 2;
+
+            var chordTime = new MetricTime(0, 1, 12);
+            var chordLength = (MusicalLength)MusicalFraction.SixteenthTriplet;
+
+            var pattern = new PatternBuilder()
+                .DefaultVelocity(defaultVelocity)
+                .DefaultOctave(defaultOctave)
+
+                .MoveToTime(chordTime)
+                .Chord(new[]
+                {
+                    NoteName.C,
+                    NoteName.G
+                }, chordLength)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, defaultOctave, chordTime, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.G, defaultOctave, chordTime, chordLength, defaultVelocity)
+            });
+        }
+
+        [TestMethod]
         [Description("Add unkeyed anchor after some time movings, jump to the anchor with MoveToFirstAnchor and add note.")]
         public void MoveToFirstAnchor_Unkeyed_OneUnkeyed()
         {
