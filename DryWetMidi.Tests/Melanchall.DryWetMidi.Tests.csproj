@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternTests.cs" />
+    <Compile Include="Smf.Interaction\Time\MathTimeTests.cs" />
     <Compile Include="Utilities\Equality\EventEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
   </ItemGroup>

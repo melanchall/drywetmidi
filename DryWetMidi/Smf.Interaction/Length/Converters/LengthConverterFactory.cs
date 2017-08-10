@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private static readonly Dictionary<Type, ILengthConverter> _converters = new Dictionary<Type, ILengthConverter>
         {
             [typeof(MetricLength)] = new MetricLengthConverter(),
-            [typeof(MusicalLength)] = new MusicalLengthConverter()
+            [typeof(MusicalLength)] = new MusicalLengthConverter(),
+            [typeof(MathLength)] = new MathLengthConverter(),
         };
 
         #endregion

@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var startTime = TimeConverter.ConvertTo<MetricTime>(time, tempoMap);
             var endTime = new MetricTime(startTime.TotalMicroseconds + metricLength.TotalMicroseconds);
 
-            return TimeConverter.ConvertFrom(endTime - startTime, tempoMap);
+            return TimeConverter.ConvertFrom(endTime, tempoMap) - time;
         }
 
         public long ConvertFrom(ILength length, ITime time, TempoMap tempoMap)

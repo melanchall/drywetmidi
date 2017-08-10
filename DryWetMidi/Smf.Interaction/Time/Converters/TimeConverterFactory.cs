@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private static readonly Dictionary<Type, ITimeConverter> _converters = new Dictionary<Type, ITimeConverter>
         {
             [typeof(MetricTime)] = new MetricTimeConverter(),
-            [typeof(MusicalTime)] = new MusicalTimeConverter()
+            [typeof(MusicalTime)] = new MusicalTimeConverter(),
+            [typeof(MathTime)] = new MathTimeConverter(),
         };
 
         #endregion

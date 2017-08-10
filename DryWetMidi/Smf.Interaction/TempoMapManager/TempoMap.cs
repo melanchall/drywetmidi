@@ -36,12 +36,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets an object that holds changes of the time signature through the time.
         /// </summary>
-        public ValueLine<TimeSignature> TimeSignatureLine { get; } = new ValueLine<TimeSignature>(TimeSignature.Default);
+        public ValueLine<TimeSignature> TimeSignatureLine { get; private set; } = new ValueLine<TimeSignature>(TimeSignature.Default);
 
         /// <summary>
         /// Gets an object that holds changes of the tempo through the time.
         /// </summary>
-        public ValueLine<Tempo> TempoLine { get; } = new ValueLine<Tempo>(Tempo.Default);
+        public ValueLine<Tempo> TempoLine { get; private set; } = new ValueLine<Tempo>(Tempo.Default);
+
+        #endregion
+
+        #region Methods
+
+        internal TempoMap Reverse(long centerTime)
+        {
+            return new TempoMap(TimeDivision)
+            {
+                TempoLine = TempoLine.Reverse(centerTime),
+                TimeSignatureLine = TimeSignatureLine.Reverse(centerTime)
+            };
+        }
 
         #endregion
     }

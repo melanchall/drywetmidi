@@ -105,6 +105,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _values.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
         }
 
+        internal ValueLine<TValue> Reverse(long centerTime)
+        {
+            var maxTime = 2 * centerTime;
+            var changes = Values.Where(c => c.Time <= maxTime);
+
+            var values = new[] { _defaultValue }.Concat(changes.Select(c => c.Value)).Reverse();
+            var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());
+
+            var result = new ValueLine<TValue>(_defaultValue);
+            result._values.AddRange(values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)));
+
+            return result;
+        }
+
         #endregion
     }
 }
