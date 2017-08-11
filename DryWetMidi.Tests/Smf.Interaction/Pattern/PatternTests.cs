@@ -225,6 +225,82 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Step back by metric step and add note.")]
+        public void StepBack_Metric()
+        {
+            var pattern = new PatternBuilder()
+                .MoveToTime(new MetricTime(0, 0, 10))
+                .StepForward(new MetricLength(0, 0, 30))
+                .StepBack(new MetricLength(0, 0, 37))
+
+                .Note(OctaveDefinition.Get(0).A)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, new MetricTime(0, 0, 3), (MusicalLength)MusicalFraction.Quarter)
+            });
+        }
+
+        [TestMethod]
+        [Description("Step back by metric step beyond zero and add note.")]
+        public void StepBack_Metric_BeyondZero()
+        {
+            var pattern = new PatternBuilder()
+                .MoveToTime(new MetricTime(0, 0, 10))
+                .StepForward(new MetricLength(0, 0, 30))
+                .StepBack(new MetricLength(0, 1, 37))
+
+                .Note(OctaveDefinition.Get(0).A)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, new MetricTime(0, 0, 0), (MusicalLength)MusicalFraction.Quarter)
+            });
+        }
+
+        [TestMethod]
+        [Description("Step back by musical step and add note.")]
+        public void StepBack_Musical()
+        {
+            var pattern = new PatternBuilder()
+                .MoveToTime(new MusicalTime(MusicalFraction.Eighth))
+                .StepForward(new MusicalLength(MusicalFraction.Whole))
+                .StepBack(new MusicalLength(MusicalFraction.Half))
+
+                .Note(OctaveDefinition.Get(0).A)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, new MusicalTime(new Fraction(5, 8)), (MusicalLength)MusicalFraction.Quarter)
+            });
+        }
+
+        [TestMethod]
+        [Description("Step back by musical step beyond zero and add note.")]
+        public void StepBack_Musical_BeyondZero()
+        {
+            var pattern = new PatternBuilder()
+                .MoveToTime(new MetricTime(0, 0, 10))
+                .StepForward(new MetricLength(0, 0, 30))
+                .StepBack(new MusicalLength(1000 * MusicalFraction.Quarter))
+
+                .Note(OctaveDefinition.Get(0).A)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, new MetricTime(0, 0, 0), (MusicalLength)MusicalFraction.Quarter)
+            });
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         [Description("Try to repeat last action one time in case of no actions exist at the moment.")]
         public void Repeat_Last_Single_NoActions()
@@ -293,7 +369,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Private methods
 
-        private static void TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos)
+        private static void TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, ValueChange<Tempo> tempoChange = null)
         {
             var channel = (FourBitNumber)2;
 

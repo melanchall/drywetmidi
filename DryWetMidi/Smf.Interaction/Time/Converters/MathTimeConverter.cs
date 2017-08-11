@@ -21,7 +21,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (mathTime == null)
                 throw new ArgumentException($"Time is not an instance of {nameof(MathTime)}.", nameof(time));
 
-            var result = TimeConverter.ConvertFrom(mathTime.Time, tempoMap);
+            var result = mathTime.Time != null
+                ? TimeConverter.ConvertFrom(mathTime.Time, tempoMap)
+                : mathTime.MidiTime;
             
             switch (mathTime.Operation)
             {

@@ -16,11 +16,23 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             Operation = operation;
         }
 
+        public MathTime(long time, ILength offset, MathOperation operation = MathOperation.Sum)
+        {
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(offset), offset);
+
+            MidiTime = time;
+            Offset = offset;
+            Operation = operation;
+        }
+
         #endregion
 
         #region Properties
 
         public ITime Time { get; }
+
+        public long MidiTime { get; }
 
         public ILength Offset { get; }
 
