@@ -29,6 +29,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
+        public TempoMapManager()
+            : this(new TicksPerQuarterNoteTimeDivision())
+        {
+        }
+
+        public TempoMapManager(TimeDivision timeDivision)
+        {
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+
+            TempoMap = new TempoMap(timeDivision);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TempoMapManager"/> with the specified time division
         /// and events collections.
@@ -247,6 +259,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                        TimeConverter.ConvertFrom(endTime, TempoMap));
         }
 
+        public void ClearTempoMap()
+        {
+            TempoMap.TempoLine.Clear();
+            TempoMap.TimeSignatureLine.Clear();
+        }
+
+        public void ReplaceTempoMap(TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            TempoMap.TimeDivision = tempoMap.TimeDivision.Clone();
+            TempoMap.TempoLine.ReplaceValues(tempoMap.TempoLine);
+            TempoMap.TimeSignatureLine.ReplaceValues(tempoMap.TimeSignatureLine);
+        }
+
         /// <summary>
         /// Saves tempo map changes that were made with the <see cref="TempoMapManager"/> updating
         /// underlying events collections.
@@ -259,6 +286,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         public void SaveChanges()
         {
+            // We are managing new tempo map
+
+            if (_timedEventsManagers == null)
+                return;
+
+            // Update existing tempo map
+
             foreach (var events in _timedEventsManagers.Select(m => m.Events))
             {
                 events.RemoveAll(IsTempoMapEvent);

@@ -124,6 +124,33 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 : new TempoMap(file.TimeDivision);
         }
 
+        public static void ReplaceTempoMap(this IEnumerable<EventsCollection> eventsCollections, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            using (var tempoMapManager = eventsCollections.ManageTempoMap(tempoMap.TimeDivision))
+            {
+                tempoMapManager.ReplaceTempoMap(tempoMap);
+            }
+        }
+
+        public static void ReplaceTempoMap(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            trackChunks.Select(c => c.Events).ReplaceTempoMap(tempoMap);
+        }
+
+        public static void ReplaceTempoMap(this MidiFile file, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            file.GetTrackChunks().ReplaceTempoMap(tempoMap);
+        }
+
         #endregion
     }
 }

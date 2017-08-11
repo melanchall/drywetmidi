@@ -8,6 +8,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public sealed class TempoMap
     {
+        #region Constants
+
+        public static readonly TempoMap Default = new TempoMap(new TicksPerQuarterNoteTimeDivision());
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -31,7 +37,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets the time division used by a tempo map.
         /// </summary>
-        public TimeDivision TimeDivision { get; }
+        public TimeDivision TimeDivision { get; internal set; }
 
         /// <summary>
         /// Gets an object that holds changes of the time signature through the time.

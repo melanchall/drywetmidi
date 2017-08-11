@@ -105,6 +105,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _values.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
         }
 
+        internal void Clear()
+        {
+            _values.Clear();
+        }
+
+        internal void ReplaceValues(ValueLine<TValue> valueLine)
+        {
+            _values.Clear();
+            _values.AddRange(valueLine._values);
+        }
+
         internal ValueLine<TValue> Reverse(long centerTime)
         {
             var maxTime = 2 * centerTime;
