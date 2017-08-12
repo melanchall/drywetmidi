@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 var timeSignatureChangeTime = timeSignatureChange.Time;
 
                 var bars = GetBarsCount(timeSignatureChangeTime - lastTime, lastTimeSignature, ticksPerQuarterNote);
-                if (accumulatedBars + bars >= timeBars)
+                if (accumulatedBars + bars > timeBars)
                     break;
 
                 accumulatedBars += bars;

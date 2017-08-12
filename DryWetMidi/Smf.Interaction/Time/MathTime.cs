@@ -7,21 +7,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Constructor
 
         public MathTime(ITime time, ILength offset, MathOperation operation = MathOperation.Sum)
+            : this(offset, operation)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(offset), offset);
 
             Time = time;
-            Offset = offset;
-            Operation = operation;
         }
 
         public MathTime(long time, ILength offset, MathOperation operation = MathOperation.Sum)
+            : this(offset, operation)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(offset), offset);
 
             MidiTime = time;
+        }
+
+        private MathTime(ILength offset, MathOperation operation = MathOperation.Sum)
+        {
+            ThrowIfArgument.IsNull(nameof(offset), offset);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(operation), operation);
+
             Offset = offset;
             Operation = operation;
         }
@@ -37,6 +42,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public ILength Offset { get; }
 
         public MathOperation Operation { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            var operationString = Operation == MathOperation.Sum
+                ? "+"
+                : "-";
+
+            return $"({Time ?? (object)MidiTime} {operationString} {Offset})";
+        }
 
         #endregion
     }
