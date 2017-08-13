@@ -137,18 +137,33 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Gets or sets channel to play the chord on.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Unable to get channel since a chord doesn't contain notes.
+        /// -or- Unable to get channel since chord's notes have different <see cref="Note.Velocity"/>.</exception>
         public FourBitNumber Channel
         {
             get => GetNotesProperty(n => n.Channel);
             set => SetNotesProperty(n => n.Channel, value);
         }
 
+        /// <summary>
+        /// Gets or sets velocity of the underlying <see cref="NoteOnEvent"/> events of a chord's notes.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Unable to get velocity since a chord doesn't contain notes.
+        /// -or- Unable to get velocity since chord's notes have different <see cref="Note.Velocity"/>.</exception>
         public SevenBitNumber Velocity
         {
             get => GetNotesProperty(n => n.Velocity);
             set => SetNotesProperty(n => n.Velocity, value);
         }
 
+        /// <summary>
+        /// Gets or sets velocity of the underlying <see cref="NoteOffEvent"/> events of a chord's notes.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Unable to get off velocity since a chord doesn't contain notes.
+        /// -or- Unable to get off velocity since chord's notes have different <see cref="Note.OffVelocity"/>.</exception>
         public SevenBitNumber OffVelocity
         {
             get => GetNotesProperty(n => n.OffVelocity);
@@ -164,6 +179,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             NotesCollectionChanged?.Invoke(collection, args);
         }
 
+        /// <summary>
+        /// Gets value of the specified note's property.
+        /// </summary>
+        /// <typeparam name="TValue">Type of a note's property.</typeparam>
+        /// <param name="propertySelector">Expression that represent a note's property.</param>
+        /// <returns>Value of the specified note's property.</returns>
+        /// <exception cref="InvalidOperationException">Chord doesn't contain notes. -or-
+        /// Chord's notes have different values of the specified property.</exception>
         private TValue GetNotesProperty<TValue>(Expression<Func<Note, TValue>> propertySelector)
         {
             if (!Notes.Any())

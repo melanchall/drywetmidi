@@ -27,11 +27,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Overrides
 
+        /// <summary>
+        /// Performs an action when objects are added to the collection.
+        /// </summary>
+        /// <param name="addedObjects">Collection of added objects.</param>
         protected override void OnObjectsAdded(IEnumerable<Note> addedObjects)
         {
             OnCollectionChanged(addedObjects, null);
         }
 
+        /// <summary>
+        /// Performs an action when objects are removed from the collection.
+        /// </summary>
+        /// <param name="removedObjects">Collection of removed objects.</param>
         protected override void OnObjectsRemoved(IEnumerable<Note> removedObjects)
         {
             OnCollectionChanged(null, removedObjects);

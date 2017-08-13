@@ -7,17 +7,33 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Represents a basic collection of the <see cref="ITimedObject"/>.
+    /// </summary>
+    /// <typeparam name="TObject">The type of elements in the collection.</typeparam>
     public abstract class TimedObjectsCollection<TObject> : IEnumerable<TObject>
         where TObject : ITimedObject
     {
         #region Fields
 
+        /// <summary>
+        /// Internal list of timed objects.
+        /// </summary>
         protected readonly List<TObject> _objects = new List<TObject>();
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimedObjectsCollection{TObject}"/> with
+        /// the specified timed objects.
+        /// </summary>
+        /// <param name="objects">Collection of timed objects to populate the <see cref="TimedObjectsCollection{TObject}"/>.</param>
+        /// <remarks>
+        /// Note that null objects will be automatically filtered out so the collection will not
+        /// contain them.
+        /// </remarks>
         internal TimedObjectsCollection(IEnumerable<TObject> objects)
         {
             Debug.Assert(objects != null);
@@ -111,10 +127,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             OnObjectsRemoved(removedObjects);
         }
 
+        /// <summary>
+        /// Performs an action when objects are added to the collection.
+        /// </summary>
+        /// <param name="addedObjects">Collection of added objects.</param>
         protected virtual void OnObjectsAdded(IEnumerable<TObject> addedObjects)
         {
         }
 
+        /// <summary>
+        /// Performs an action when objects are removed from the collection.
+        /// </summary>
+        /// <param name="removedObjects">Collection of removed objects.</param>
         protected virtual void OnObjectsRemoved(IEnumerable<TObject> removedObjects)
         {
         }

@@ -16,6 +16,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Fields
+
+        private NoteDefinition _noteDefinition;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -109,7 +115,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="time">Absolute time of the note in units defined by the time division of a MIDI file.</param>
         public Note(SevenBitNumber noteNumber, long length, long time)
         {
-            NoteNumber = noteNumber;
+            _noteDefinition = new NoteDefinition(noteNumber);
+
             Length = length;
             Time = time;
         }
@@ -136,7 +143,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
 
-            NoteNumber = noteOnEvent.NoteNumber;
+            _noteDefinition = new NoteDefinition(noteOnEvent.NoteNumber);
+
             Velocity = noteOnEvent.Velocity;
             OffVelocity = noteOffEvent.Velocity;
             Channel = noteOnEvent.Channel;
@@ -164,7 +172,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets or sets length of the note in units defined by the time division of a MIDI file.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Length is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Value is negative.</exception>
         public long Length
         {
             get { return TimedNoteOffEvent.Time - TimedNoteOnEvent.Time; }
@@ -179,7 +187,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets or sets number of the note (60 is middle C).
         /// </summary>
-        public SevenBitNumber NoteNumber { get; set; }
+        public SevenBitNumber NoteNumber
+        {
+            get => _noteDefinition.NoteNumber;
+            set => _noteDefinition = new NoteDefinition(value);
+        }
 
         /// <summary>
         /// Gets or sets velocity of the underlying <see cref="NoteOnEvent"/>.
@@ -199,12 +211,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets name of the note.
         /// </summary>
-        public NoteName NoteName => NoteUtilities.GetNoteName(NoteNumber);
+        public NoteName NoteName => _noteDefinition.NoteName;
 
         /// <summary>
         /// Gets octave of the note.
         /// </summary>
-        public int Octave => NoteUtilities.GetNoteOctave(NoteNumber);
+        public int Octave => _noteDefinition.Octave;
 
         /// <summary>
         /// Gets Note On timed event of the note.
@@ -235,7 +247,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// name and octave.</exception>
         public void SetNoteNameAndOctave(NoteName noteName, int octave)
         {
-            NoteNumber = NoteUtilities.GetNoteNumber(noteName, octave);
+            _noteDefinition = new NoteDefinition(noteName, octave);
         }
 
         #endregion
@@ -248,7 +260,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{NoteName.ToString().Replace("Sharp", "#")}{Octave}";
+            return _noteDefinition.ToString();
         }
 
         #endregion
