@@ -52,6 +52,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                          MaxOctave,
                                          $"Octave number is out of [{MinOctave}, {MaxOctave}] range.");
 
+            Number = octave;
+
             _notesDefinitions = Enum.GetValues(typeof(NoteName))
                                     .Cast<NoteName>()
                                     .Where(n => NoteUtilities.IsNoteValid(n, octave))
@@ -62,6 +64,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets the number of an octave represented by the current <see cref="OctaveDefinition"/>.
+        /// </summary>
+        public int Number { get; }
 
         /// <summary>
         /// Gets the definition of the C note of an octave defined by the current <see cref="OctaveDefinition"/>.
@@ -173,6 +180,70 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                          $"Octave number is out of [{MinOctave}, {MaxOctave}] range.");
 
             return OctaveDefinitions[octave];
+        }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Determines if two <see cref="OctaveDefinition"/> objects are equal.
+        /// </summary>
+        /// <param name="octaveDefinition1">The first <see cref="OctaveDefinition"/> to compare.</param>
+        /// <param name="octaveDefinition2">The second <see cref="OctaveDefinition"/> to compare.</param>
+        /// <returns>true if the octave definitions are equal, false otherwise.</returns>
+        public static bool operator ==(OctaveDefinition octaveDefinition1, OctaveDefinition octaveDefinition2)
+        {
+            if (ReferenceEquals(octaveDefinition1, octaveDefinition2))
+                return true;
+
+            if (ReferenceEquals(null, octaveDefinition1) || ReferenceEquals(null, octaveDefinition2))
+                return false;
+
+            return octaveDefinition1.Number == octaveDefinition2.Number;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="OctaveDefinition"/> objects are not equal.
+        /// </summary>
+        /// <param name="octaveDefinition1">The first <see cref="OctaveDefinition"/> to compare.</param>
+        /// <param name="octaveDefinition2">The second <see cref="OctaveDefinition"/> to compare.</param>
+        /// <returns>false if the octave definitions are equal, true otherwise.</returns>
+        public static bool operator !=(OctaveDefinition octaveDefinition1, OctaveDefinition octaveDefinition2)
+        {
+            return !(octaveDefinition1 == octaveDefinition2);
+        }
+
+        #endregion
+
+        #region Overrides
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return $"Octave {Number}";
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            return this == (obj as OctaveDefinition);
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return Number.GetHashCode();
         }
 
         #endregion

@@ -61,6 +61,38 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Operators
+
+        /// <summary>
+        /// Determines if two <see cref="NoteDefinition"/> objects are equal.
+        /// </summary>
+        /// <param name="noteDefinition1">The first <see cref="NoteDefinition"/> to compare.</param>
+        /// <param name="noteDefinition2">The second <see cref="NoteDefinition"/> to compare.</param>
+        /// <returns>true if the note definitions are equal, false otherwise.</returns>
+        public static bool operator ==(NoteDefinition noteDefinition1, NoteDefinition noteDefinition2)
+        {
+            if (ReferenceEquals(noteDefinition1, noteDefinition2))
+                return true;
+
+            if (ReferenceEquals(null, noteDefinition1) || ReferenceEquals(null, noteDefinition2))
+                return false;
+
+            return noteDefinition1.NoteNumber == noteDefinition2.NoteNumber;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="NoteDefinition"/> objects are not equal.
+        /// </summary>
+        /// <param name="noteDefinition1">The first <see cref="NoteDefinition"/> to compare.</param>
+        /// <param name="noteDefinition2">The second <see cref="NoteDefinition"/> to compare.</param>
+        /// <returns>false if the note definitions are equal, true otherwise.</returns>
+        public static bool operator !=(NoteDefinition noteDefinition1, NoteDefinition noteDefinition2)
+        {
+            return !(noteDefinition1 == noteDefinition2);
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -79,14 +111,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            var noteDefinition = obj as NoteDefinition;
-            if (ReferenceEquals(null, noteDefinition))
-                return false;
-
-            return NoteNumber == noteDefinition.NoteNumber;
+            return this == (obj as NoteDefinition);
         }
 
         /// <summary>
