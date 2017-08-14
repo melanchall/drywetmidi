@@ -18,8 +18,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
                 Assert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
                                 ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.TempoLine.Values.Any());
-                Assert.IsFalse(tempoMap.TimeSignatureLine.Values.Any());
+                Assert.IsFalse(tempoMap.Tempo.Values.Any());
+                Assert.IsFalse(tempoMap.TimeSignature.Values.Any());
             }
         }
 
@@ -32,8 +32,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 var tempoMap = tempoMapManager.TempoMap;
 
                 Assert.AreEqual(100, ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.TempoLine.Values.Any());
-                Assert.IsFalse(tempoMap.TimeSignatureLine.Values.Any());
+                Assert.IsFalse(tempoMap.Tempo.Values.Any());
+                Assert.IsFalse(tempoMap.TimeSignature.Values.Any());
             }
         }
 
@@ -52,8 +52,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
                 Assert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
                                 ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.TempoLine.Values.Any());
-                Assert.IsFalse(tempoMap.TimeSignatureLine.Values.Any());
+                Assert.IsFalse(tempoMap.Tempo.Values.Any());
+                Assert.IsFalse(tempoMap.TimeSignature.Values.Any());
             }
         }
     }

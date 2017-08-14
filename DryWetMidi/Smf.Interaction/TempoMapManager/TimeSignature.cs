@@ -58,6 +58,39 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Operators
+
+        /// <summary>
+        /// Determines if two <see cref="TimeSignature"/> objects are equal.
+        /// </summary>
+        /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
+        /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
+        /// <returns>true if the time signatures are equal, false otherwise.</returns>
+        public static bool operator ==(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        {
+            if (ReferenceEquals(timeSignature1, timeSignature2))
+                return true;
+
+            if (ReferenceEquals(null, timeSignature1) || ReferenceEquals(null, timeSignature2))
+                return false;
+
+            return timeSignature1.Numerator == timeSignature2.Numerator &&
+                   timeSignature1.Denominator == timeSignature2.Denominator;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="TimeSignature"/> objects are not equal.
+        /// </summary>
+        /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
+        /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
+        /// <returns>false if the time signatures are equal, true otherwise.</returns>
+        public static bool operator !=(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        {
+            return !(timeSignature1 == timeSignature2);
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -76,15 +109,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            var timeSignature = obj as TimeSignature;
-            if (ReferenceEquals(null, timeSignature))
-                return false;
-
-            return Numerator == timeSignature.Numerator &&
-                   Denominator == timeSignature.Denominator;
+            return this == (obj as TimeSignature);
         }
 
         /// <summary>

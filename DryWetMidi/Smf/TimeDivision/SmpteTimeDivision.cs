@@ -43,6 +43,39 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
+        #region Operators
+
+        /// <summary>
+        /// Determines if two <see cref="SmpteTimeDivision"/> objects are equal.
+        /// </summary>
+        /// <param name="timeDivision1">The first <see cref="SmpteTimeDivision"/> to compare.</param>
+        /// <param name="timeDivision2">The second <see cref="SmpteTimeDivision"/> to compare.</param>
+        /// <returns>true if the time divisions are equal, false otherwise.</returns>
+        public static bool operator ==(SmpteTimeDivision timeDivision1, SmpteTimeDivision timeDivision2)
+        {
+            if (ReferenceEquals(timeDivision1, timeDivision2))
+                return true;
+
+            if (ReferenceEquals(null, timeDivision1) || ReferenceEquals(null, timeDivision2))
+                return false;
+
+            return timeDivision1.Format == timeDivision2.Format &&
+                   timeDivision1.Resolution == timeDivision2.Resolution;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="SmpteTimeDivision"/> objects are not equal.
+        /// </summary>
+        /// <param name="timeDivision1">The first <see cref="SmpteTimeDivision"/> to compare.</param>
+        /// <param name="timeDivision2">The second <see cref="SmpteTimeDivision"/> to compare.</param>
+        /// <returns>false if the time divisions are equal, true otherwise.</returns>
+        public static bool operator !=(SmpteTimeDivision timeDivision1, SmpteTimeDivision timeDivision2)
+        {
+            return !(timeDivision1 == timeDivision2);
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override short ToInt16()
@@ -57,6 +90,34 @@ namespace Melanchall.DryWetMidi.Smf
         public override TimeDivision Clone()
         {
             return new SmpteTimeDivision(Format, Resolution);
+        }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return $"{Format} frames / sec, {Resolution} subdivisions / frame";
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            return this == (obj as SmpteTimeDivision);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer hash code.</returns>
+        public override int GetHashCode()
+        {
+            return Format.GetHashCode() ^ Resolution.GetHashCode();
         }
 
         #endregion

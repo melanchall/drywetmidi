@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
 
-            TempoMap.TimeSignatureLine.SetValue(time, timeSignature);
+            TempoMap.TimeSignature.SetValue(time, timeSignature);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
 
-            TempoMap.TimeSignatureLine.DeleteValues(startTime);
+            TempoMap.TimeSignature.DeleteValues(startTime);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
             ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
-            TempoMap.TimeSignatureLine.DeleteValues(startTime, endTime);
+            TempoMap.TimeSignature.DeleteValues(startTime, endTime);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempo), tempo);
 
-            TempoMap.TempoLine.SetValue(time, tempo);
+            TempoMap.Tempo.SetValue(time, tempo);
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
 
-            TempoMap.TempoLine.DeleteValues(startTime);
+            TempoMap.Tempo.DeleteValues(startTime);
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
             ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
-            TempoMap.TempoLine.DeleteValues(startTime, endTime);
+            TempoMap.Tempo.DeleteValues(startTime, endTime);
         }
 
         /// <summary>
@@ -277,8 +277,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         public void ClearTempoMap()
         {
-            TempoMap.TempoLine.Clear();
-            TempoMap.TimeSignatureLine.Clear();
+            TempoMap.Tempo.Clear();
+            TempoMap.TimeSignature.Clear();
         }
 
         /// <summary>
@@ -291,8 +291,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             TempoMap.TimeDivision = tempoMap.TimeDivision.Clone();
-            TempoMap.TempoLine.ReplaceValues(tempoMap.TempoLine);
-            TempoMap.TimeSignatureLine.ReplaceValues(tempoMap.TimeSignatureLine);
+            TempoMap.Tempo.ReplaceValues(tempoMap.Tempo);
+            TempoMap.TimeSignature.ReplaceValues(tempoMap.TimeSignature);
         }
 
         /// <summary>
@@ -320,8 +320,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             var firstEventsCollection = _timedEventsManagers.First().Events;
-            firstEventsCollection.Add(TempoMap.TempoLine.Values.Select(GetSetTempoTimedEvent));
-            firstEventsCollection.Add(TempoMap.TimeSignatureLine.Values.Select(GetTimeSignatureTimedEvent));
+            firstEventsCollection.Add(TempoMap.Tempo.Values.Select(GetSetTempoTimedEvent));
+            firstEventsCollection.Add(TempoMap.TimeSignature.Values.Select(GetTimeSignatureTimedEvent));
 
             foreach (var timedEventsManager in _timedEventsManagers)
             {
@@ -342,9 +342,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 if (timeSignatureEvent == null)
                     continue;
 
-                TempoMap.TimeSignatureLine.SetValue(timedEvent.Time,
-                                                    new TimeSignature(timeSignatureEvent.Numerator,
-                                                                      timeSignatureEvent.Denominator));
+                TempoMap.TimeSignature.SetValue(timedEvent.Time,
+                                                new TimeSignature(timeSignatureEvent.Numerator,
+                                                                  timeSignatureEvent.Denominator));
             }
         }
 
@@ -356,8 +356,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 if (setTempoEvent == null)
                     continue;
 
-                TempoMap.TempoLine.SetValue(timedEvent.Time,
-                                            new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
+                TempoMap.Tempo.SetValue(timedEvent.Time,
+                                        new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
             }
         }
 

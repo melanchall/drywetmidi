@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var lastTime = 0L;
             var lastTimeSignature = TimeSignature.Default;
 
-            foreach (var timeSignatureChange in tempoMap.TimeSignatureLine.Values.Where(v => v.Time <= time))
+            foreach (var timeSignatureChange in tempoMap.TimeSignature.Values.Where(v => v.Time <= time))
             {
                 var timeSignatureChangeTime = timeSignatureChange.Time;
 
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var lastTime = 0L;
             var lastTimeSignature = TimeSignature.Default;
 
-            foreach (var timeSignatureChange in tempoMap.TimeSignatureLine.Values)
+            foreach (var timeSignatureChange in tempoMap.TimeSignature.Values)
             {
                 var timeSignatureChangeTime = timeSignatureChange.Time;
 

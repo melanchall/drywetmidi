@@ -87,13 +87,45 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// number of beats per minute.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="beatsPerMinute"/>
         /// is zero or negative.</exception>
-        public static Tempo FromBeatsPerMinute(long beatsPerMinute)
+        public static Tempo FromBeatsPerMinute(int beatsPerMinute)
         {
             ThrowIfArgument.IsNonpositive(nameof(beatsPerMinute),
                                           beatsPerMinute,
                                           "Number of beats per minute is zero or negative.");
 
             return new Tempo(MicrosecondsInMinute / beatsPerMinute);
+        }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Determines if two <see cref="Tempo"/> objects are equal.
+        /// </summary>
+        /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
+        /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
+        /// <returns>true if the tempos are equal, false otherwise.</returns>
+        public static bool operator ==(Tempo tempo1, Tempo tempo2)
+        {
+            if (ReferenceEquals(tempo1, tempo2))
+                return true;
+
+            if (ReferenceEquals(null, tempo1) || ReferenceEquals(null, tempo2))
+                return false;
+
+            return tempo1.MicrosecondsPerQuarterNote == tempo2.MicrosecondsPerQuarterNote;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="Tempo"/> objects are not equal.
+        /// </summary>
+        /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
+        /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
+        /// <returns>false if the tempos are equal, true otherwise.</returns>
+        public static bool operator !=(Tempo tempo1, Tempo tempo2)
+        {
+            return !(tempo1 == tempo2);
         }
 
         #endregion
@@ -116,14 +148,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            var tempo = obj as Tempo;
-            if (ReferenceEquals(null, tempo))
-                return false;
-
-            return MicrosecondsPerQuarterNote == tempo.MicrosecondsPerQuarterNote;
+            return this == (obj as Tempo);
         }
 
         /// <summary>

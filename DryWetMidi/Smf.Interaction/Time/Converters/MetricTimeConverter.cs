@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            var tempoLine = tempoMap.TempoLine;
+            var tempoLine = tempoMap.Tempo;
             var tempoChanges = tempoLine.Values.Where(v => v.Time < time);
             if (!tempoChanges.Any())
                 return new MetricTime(RoundMicroseconds(GetMicroseconds(time, Tempo.Default, ticksPerQuarterNote)));
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var lastTime = 0L;
             var lastTempo = Tempo.Default;
 
-            foreach (var tempoChange in tempoMap.TempoLine.Values)
+            foreach (var tempoChange in tempoMap.Tempo.Values)
             {
                 var tempoChangeTime = tempoChange.Time;
 
