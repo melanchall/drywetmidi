@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var mathLength = length as MathLength;
             if (mathLength == null)
-                throw new ArgumentException($"Length is not an instance of {nameof(MathLength)}.", nameof(length));
+                throw new ArgumentException($"Length is not an instance of the {nameof(MathLength)}.", nameof(length));
 
             var convertedLength1 = LengthConverter.ConvertFrom(mathLength.Length1, time, tempoMap);
             var endTime1 = time + convertedLength1;

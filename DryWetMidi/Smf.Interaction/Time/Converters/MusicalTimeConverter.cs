@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var musicalTime = time as MusicalTime;
             if (musicalTime == null)
-                throw new ArgumentException("Time is not a musical time.", nameof(time));
+                throw new ArgumentException($"Time is not an instance of the {nameof(MusicalTime)}.", nameof(time));
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)

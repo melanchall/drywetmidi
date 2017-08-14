@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var metricLength = length as MetricLength;
             if (metricLength == null)
-                throw new ArgumentException("Length is not a metric length.", nameof(length));
+                throw new ArgumentException($"Length is not an instance of the {nameof(MetricLength)}.", nameof(length));
 
             var startTime = TimeConverter.ConvertTo<MetricTime>(time, tempoMap);
             var endTime = new MetricTime(startTime.TotalMicroseconds + metricLength.TotalMicroseconds);

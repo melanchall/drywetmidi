@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var metricTime = time as MetricTime;
             if (metricTime == null)
-                throw new ArgumentException("Time is not a metric time.", nameof(time));
+                throw new ArgumentException($"Time is not an instance of the {nameof(MetricTime)}.", nameof(time));
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)

@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var musicalLength = length as MusicalLength;
             if (musicalLength == null)
-                throw new ArgumentException("Length is not a musical length.", nameof(length));
+                throw new ArgumentException($"Length is not an instance of the {nameof(MusicalLength)}.", nameof(length));
 
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision != null)
