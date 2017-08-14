@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -29,11 +30,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TempoMapManager"/> that can be used
+        /// to manage new tempo map with the default time division (96 ticks per quarter note).
+        /// </summary>
         public TempoMapManager()
             : this(new TicksPerQuarterNoteTimeDivision())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TempoMapManager"/> with the
+        /// specified time division.
+        /// </summary>
+        /// <param name="timeDivision">Time division of a new tempo that will be managed by this manager.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null.</exception>
         public TempoMapManager(TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -56,7 +67,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
             ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
-            ThrowIfArgument.IsEmptyCollection(nameof(eventsCollections), eventsCollections, "Collection of EventsCollection is empty.");
+            ThrowIfArgument.IsEmptyCollection(nameof(eventsCollections),
+                                              eventsCollections,
+                                              $"Collection of {nameof(EventsCollection)} is empty.");
 
             _timedEventsManagers = eventsCollections.Where(events => events != null)
                                                     .Select(events => events.ManageTimedEvents())
@@ -259,12 +272,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                        TimeConverter.ConvertFrom(endTime, TempoMap));
         }
 
+        /// <summary>
+        /// Clears current tempo map removing all changes of tempo and time signature.
+        /// </summary>
         public void ClearTempoMap()
         {
             TempoMap.TempoLine.Clear();
             TempoMap.TimeSignatureLine.Clear();
         }
 
+        /// <summary>
+        /// Replaces current tempo map with the specified one.
+        /// </summary>
+        /// <param name="tempoMap">Tempo map to replace the current one.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
         public void ReplaceTempoMap(TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -355,21 +376,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return timedEvent?.Event is TimeSignatureEvent;
         }
 
-        private static TimedEvent GetSetTempoTimedEvent(ValueChange<Tempo> tempo)
+        private static TimedEvent GetSetTempoTimedEvent(ValueChange<Tempo> tempoChange)
         {
-            ThrowIfArgument.IsNull(nameof(tempo), tempo);
+            Debug.Assert(tempoChange != null);
 
-            return new TimedEvent(new SetTempoEvent(tempo.Value.MicrosecondsPerQuarterNote),
-                                  tempo.Time);
+            return new TimedEvent(new SetTempoEvent(tempoChange.Value.MicrosecondsPerQuarterNote),
+                                  tempoChange.Time);
         }
 
-        private static TimedEvent GetTimeSignatureTimedEvent(ValueChange<TimeSignature> timeSignature)
+        private static TimedEvent GetTimeSignatureTimedEvent(ValueChange<TimeSignature> timeSignatureChange)
         {
-            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
+            Debug.Assert(timeSignatureChange != null);
 
-            return new TimedEvent(new TimeSignatureEvent((byte)timeSignature.Value.Numerator,
-                                                         (byte)timeSignature.Value.Denominator),
-                                  timeSignature.Time);
+            var timeSignature = timeSignatureChange.Value;
+            return new TimedEvent(new TimeSignatureEvent((byte)timeSignature.Numerator,
+                                                         (byte)timeSignature.Denominator),
+                                  timeSignatureChange.Time);
         }
 
         #endregion

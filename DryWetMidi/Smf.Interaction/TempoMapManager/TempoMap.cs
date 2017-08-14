@@ -10,6 +10,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constants
 
+        /// <summary>
+        /// The default tempo map which uses 4/4 time signature and tempo of 500,000 microseconds per quarter note.
+        /// </summary>
         public static readonly TempoMap Default = new TempoMap(new TicksPerQuarterNoteTimeDivision());
 
         #endregion
@@ -53,7 +56,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        internal TempoMap Reverse(long centerTime)
+        /// <summary>
+        /// Flips the tempo map relative to the specified time.
+        /// </summary>
+        /// <param name="centerTime">The time the tempo map should be flipped relative to.</param>
+        /// <returns>The tempo mup flipped relative to the <paramref name="centerTime"/>.</returns>
+        internal TempoMap Flip(long centerTime)
         {
             return new TempoMap(TimeDivision)
             {

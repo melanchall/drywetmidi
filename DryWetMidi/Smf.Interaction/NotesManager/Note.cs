@@ -12,6 +12,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constants
 
+        /// <summary>
+        /// Default velocity.
+        /// </summary>
         public static readonly SevenBitNumber DefaultVelocity = (SevenBitNumber)100;
 
         #endregion

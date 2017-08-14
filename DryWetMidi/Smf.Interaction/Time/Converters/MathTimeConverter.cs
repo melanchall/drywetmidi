@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                     return result + LengthConverter.ConvertFrom(mathTime.Offset, result, tempoMap);
 
                 case MathOperation.Subtract:
-                    return result - LengthConverter.ConvertFrom(mathTime.Offset, result, tempoMap.Reverse(result));
+                    return result - LengthConverter.ConvertFrom(mathTime.Offset, result, tempoMap.Flip(result));
             }
 
             throw new NotImplementedException($"Conversion from the {nameof(MathTime)} with {mathTime.Operation} operation is not implemented.");

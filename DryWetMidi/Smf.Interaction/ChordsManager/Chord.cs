@@ -21,6 +21,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Constants
+
+        private static readonly Expression<Func<Note, FourBitNumber>> ChannelPropertySelector = n => n.Channel;
+        private static readonly Expression<Func<Note, SevenBitNumber>> VelocityPropertySelector = n => n.Velocity;
+        private static readonly Expression<Func<Note, SevenBitNumber>> OffVelocityPropertySelector = n => n.OffVelocity;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -144,8 +152,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// -or- Unable to get channel since chord's notes have different <see cref="Note.Velocity"/>.</exception>
         public FourBitNumber Channel
         {
-            get => GetNotesProperty(n => n.Channel);
-            set => SetNotesProperty(n => n.Channel, value);
+            get => GetNotesProperty(ChannelPropertySelector);
+            set => SetNotesProperty(ChannelPropertySelector, value);
         }
 
         /// <summary>
@@ -155,8 +163,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// -or- Unable to get velocity since chord's notes have different <see cref="Note.Velocity"/>.</exception>
         public SevenBitNumber Velocity
         {
-            get => GetNotesProperty(n => n.Velocity);
-            set => SetNotesProperty(n => n.Velocity, value);
+            get => GetNotesProperty(VelocityPropertySelector);
+            set => SetNotesProperty(VelocityPropertySelector, value);
         }
 
         /// <summary>
@@ -166,8 +174,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// -or- Unable to get off velocity since chord's notes have different <see cref="Note.OffVelocity"/>.</exception>
         public SevenBitNumber OffVelocity
         {
-            get => GetNotesProperty(n => n.OffVelocity);
-            set => SetNotesProperty(n => n.OffVelocity, value);
+            get => GetNotesProperty(OffVelocityPropertySelector);
+            set => SetNotesProperty(OffVelocityPropertySelector, value);
         }
 
         #endregion
