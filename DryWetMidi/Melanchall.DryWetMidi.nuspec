@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>Melanchall.DryWetMidi</id>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <title>DryWetMIDI</title>
     <authors>melanchall</authors>
     <owners>melanchall</owners>
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://github.com/melanchall/drywetmidi</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/NuGet/1.2.0/icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/NuGet/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
 DryWetMIDI is the .NET library to work with MIDI files. It allows:
