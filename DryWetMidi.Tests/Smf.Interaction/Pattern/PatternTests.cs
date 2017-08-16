@@ -78,6 +78,59 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Add several notes with metric lengths.")]
+        public void Note_Multiple_MetricLengths()
+        {
+            var pattern = new PatternBuilder()
+                .DefaultOctave(2)
+
+                .Note(NoteName.G, new MetricLength(0, 0, 24))
+                .Note(NoteName.A, new MetricLength(0, 1, 0))
+                .Note(NoteName.B, new MetricLength(0, 0, 5))
+
+                .Build();
+
+            var midiFile = TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.G, 2, null, new MetricLength(0, 0, 24)),
+                new NoteInfo(NoteName.A, 2, new MetricTime(0, 0, 24), new MetricLength(0, 1, 0)),
+                new NoteInfo(NoteName.B, 2, new MetricTime(0, 1, 24), new MetricLength(0, 0, 5)),
+            });
+
+            var tempoMap = midiFile.GetTempoMap();
+            Assert.AreEqual(new MetricLength(0, 1, 29),
+                            new MetricLength(midiFile.GetTimedEvents().Last().TimeAs<MetricTime>(tempoMap)));
+        }
+
+        [TestMethod]
+        [Description("Add several notes with metric lengths.")]
+        public void Note_Multiple_MetricLengths_TempoChanged()
+        {
+            var pattern = new PatternBuilder()
+                .DefaultOctave(2)
+
+                .Note(NoteName.G, new MetricLength(0, 0, 24))
+                .Note(NoteName.A, new MetricLength(0, 1, 0))
+                .Note(NoteName.B, new MetricLength(0, 0, 5))
+
+                .Build();
+
+            var midiFile = TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.G, 2, null, new MetricLength(0, 0, 24)),
+                new NoteInfo(NoteName.A, 2, new MetricTime(0, 0, 24), new MetricLength(0, 1, 0)),
+                new NoteInfo(NoteName.B, 2, new MetricTime(0, 1, 24), new MetricLength(0, 0, 5)),
+            },
+            Enumerable.Range(0, 7)
+                      .Select(i => Tuple.Create(i * 1000L, new Tempo(i * 100 + 10)))
+                      .ToArray());
+
+            var tempoMap = midiFile.GetTempoMap();
+            Assert.AreEqual(new MetricLength(0, 1, 29).TotalMicroseconds,
+                            new MetricLength(midiFile.GetTimedEvents().Last().TimeAs<MetricTime>(tempoMap)).TotalMicroseconds);
+        }
+
+        [TestMethod]
         [Description("Add chord with default velocity and octave.")]
         public void Chord_DefaultOctave()
         {
@@ -369,12 +422,22 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Private methods
 
-        private static void TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, ValueChange<Tempo> tempoChange = null)
+        private static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params Tuple<long, Tempo>[] tempoChanges)
         {
             var channel = (FourBitNumber)2;
 
-            var midiFile = pattern.ToFile(channel);
-            var tempoMap = midiFile.GetTempoMap();
+            TempoMap tempoMap = null;
+            using (var tempoMapManager = new TempoMapManager())
+            {
+                foreach (var tempoChange in tempoChanges)
+                {
+                    tempoMapManager.SetTempo(tempoChange.Item1, tempoChange.Item2);
+                }
+
+                tempoMap = tempoMapManager.TempoMap;
+            }
+
+            var midiFile = pattern.ToFile(tempoMap, channel);
 
             var expectedNotes = expectedNotesInfos.Select(i =>
             {
@@ -389,6 +452,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
 
             Assert.IsTrue(NoteEquality.Equals(expectedNotes, midiFile.GetNotes()));
+
+            return midiFile;
         }
 
         #endregion

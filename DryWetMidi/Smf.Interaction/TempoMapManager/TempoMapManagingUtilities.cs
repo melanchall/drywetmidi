@@ -187,6 +187,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                               $"Collection of {nameof(TrackChunk)} of the file is empty.");
 
             trackChunks.ReplaceTempoMap(tempoMap);
+
+            file.TimeDivision = tempoMap.TimeDivision.Clone();
         }
 
         #endregion

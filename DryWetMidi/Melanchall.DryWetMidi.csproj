@@ -67,10 +67,10 @@
     <Compile Include="Smf.Interaction\Time\MathTime.cs" />
     <Compile Include="Smf.Interaction\Utilities\FractionUtilities.cs" />
     <Compile Include="Smf.Interaction\Utilities\MathOperation.cs" />
-    <Compile Include="Smf.Interaction\Utilities\ThrowIfLengthArgument.cs" />
-    <Compile Include="Smf.Interaction\Utilities\ThrowIfNotesTolerance.cs" />
-    <Compile Include="Smf.Interaction\Utilities\ThrowIfTimeArgument.cs" />
-    <Compile Include="Smf.Interaction\Utilities\ThrowIfTimeDivision.cs" />
+    <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfLengthArgument.cs" />
+    <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfNotesTolerance.cs" />
+    <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfTimeArgument.cs" />
+    <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfTimeDivision.cs" />
     <Compile Include="Smf\ChunksConverters\ChunksConverterFactory.cs" />
     <Compile Include="Smf\ChunksConverters\IChunksConverter.cs" />
     <Compile Include="Smf\ChunksConverters\MultiSequenceChunksConverter.cs" />

@@ -103,9 +103,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static double GetMicroseconds(long time, Tempo tempo, short ticksPerQuarterNote)
         {
-            return time == 0
-                ? 0
-                : time * tempo.MicrosecondsPerQuarterNote / (double)ticksPerQuarterNote;
+            return time * tempo.MicrosecondsPerQuarterNote / (double)ticksPerQuarterNote;
         }
 
         private static long RoundMicroseconds(double microseconds)
