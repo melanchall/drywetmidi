@@ -32,24 +32,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public PatternBuilder Note(IntervalDefinition intervalDefinition)
         {
-            return Note(intervalDefinition, _velocity, _noteLength);
+            return Note(intervalDefinition, _noteLength, _velocity);
         }
 
         public PatternBuilder Note(IntervalDefinition intervalDefinition, ILength length)
         {
-            return Note(intervalDefinition, _velocity, length);
+            return Note(intervalDefinition, length, _velocity);
         }
 
         public PatternBuilder Note(IntervalDefinition intervalDefinition, SevenBitNumber velocity)
         {
-            return Note(intervalDefinition, velocity, _noteLength);
+            return Note(intervalDefinition, _noteLength, velocity);
         }
 
-        public PatternBuilder Note(IntervalDefinition intervalDefinition, SevenBitNumber velocity, ILength length)
+        public PatternBuilder Note(IntervalDefinition intervalDefinition, ILength length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
 
-            return Note(_rootNote.Transpose(intervalDefinition), velocity, length);
+            return Note(_rootNote.Transpose(intervalDefinition), length, velocity);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         public PatternBuilder Note(NoteName noteName)
         {
-            return Note(noteName, _velocity, _noteLength);
+            return Note(noteName, _noteLength, _velocity);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
         public PatternBuilder Note(NoteName noteName, ILength length)
         {
-            return Note(noteName, _velocity, length);
+            return Note(noteName, length, _velocity);
         }
 
         /// <summary>
@@ -101,26 +101,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         public PatternBuilder Note(NoteName noteName, SevenBitNumber velocity)
         {
-            return Note(noteName, velocity, _noteLength);
+            return Note(noteName, _noteLength, velocity);
         }
 
         /// <summary>
         /// Adds a note by the specified note name using specified velocity and length, and default octave.
         /// </summary>
         /// <param name="noteName">The name of a note.</param>
-        /// <param name="velocity">The velocity of a note.</param>
         /// <param name="length">The length of a note.</param>
+        /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteName noteName, SevenBitNumber velocity, ILength length)
+        public PatternBuilder Note(NoteName noteName, ILength length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
-            return Note(_octave.GetNoteDefinition(noteName), velocity, length);
+            return Note(_octave.GetNoteDefinition(noteName), length, velocity);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
         public PatternBuilder Note(NoteDefinition noteDefinition)
         {
-            return Note(noteDefinition, _velocity, _noteLength);
+            return Note(noteDefinition, _noteLength, _velocity);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Note(NoteDefinition noteDefinition, ILength length)
         {
-            return Note(noteDefinition, _velocity, length);
+            return Note(noteDefinition, length, _velocity);
         }
 
         /// <summary>
@@ -169,19 +169,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
         public PatternBuilder Note(NoteDefinition noteDefinition, SevenBitNumber velocity)
         {
-            return Note(noteDefinition, velocity, _noteLength);
+            return Note(noteDefinition, _noteLength, velocity);
         }
 
         /// <summary>
         /// Adds a note by the specified definition using specified velocity and length.
         /// </summary>
         /// <param name="noteDefinition">The definition of a note.</param>
-        /// <param name="velocity">The velocity of a note.</param>
         /// <param name="length">The length of a note.</param>
+        /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteDefinition noteDefinition, SevenBitNumber velocity, ILength length)
+        public PatternBuilder Note(NoteDefinition noteDefinition, ILength length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -192,6 +192,38 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         #region Chord
+
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions, NoteDefinition rootNoteDefinition)
+        {
+            return Chord(intervalDefinitions, rootNoteDefinition, _noteLength, _velocity);
+        }
+
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+                                    NoteDefinition rootNoteDefinition,
+                                    ILength length)
+        {
+            return Chord(intervalDefinitions, rootNoteDefinition, length, _velocity);
+        }
+
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+                                    NoteDefinition rootNoteDefinition,
+                                    SevenBitNumber velocity)
+        {
+            return Chord(intervalDefinitions, rootNoteDefinition, _noteLength, velocity);
+        }
+
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+                                    NoteDefinition rootNoteDefinition,
+                                    ILength length,
+                                    SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNull(nameof(intervalDefinitions), intervalDefinitions);
+            ThrowIfArgument.IsNull(nameof(rootNoteDefinition), rootNoteDefinition);
+
+            return Chord(new[] { rootNoteDefinition }.Concat(intervalDefinitions.Select(i => rootNoteDefinition.Transpose(i))),
+                         length,
+                         velocity);
+        }
 
         /// <summary>
         /// Adds a chord by the specified notes names using default velocity, length and octave.
@@ -207,7 +239,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames)
         {
-            return Chord(noteNames, _velocity, _noteLength);
+            return Chord(noteNames, _noteLength, _velocity);
         }
 
         /// <summary>
@@ -225,7 +257,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ILength length)
         {
-            return Chord(noteNames, _velocity, length);
+            return Chord(noteNames, length, _velocity);
         }
 
         /// <summary>
@@ -242,27 +274,27 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames, SevenBitNumber velocity)
         {
-            return Chord(noteNames, velocity, _noteLength);
+            return Chord(noteNames, _noteLength, velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified notes names using specified velocity and length, and default octave.
         /// </summary>
         /// <param name="noteNames">Names of notes that represent a chord.</param>
-        /// <param name="velocity">The velocity of a chord.</param>
         /// <param name="length">The length of a chord.</param>
+        /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, SevenBitNumber velocity, ILength length)
+        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ILength length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteNames), noteNames);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return Chord(noteNames.Select(n => _octave.GetNoteDefinition(n)), velocity, length);
+            return Chord(noteNames.Select(n => _octave.GetNoteDefinition(n)), length, velocity);
         }
 
         /// <summary>
@@ -278,7 +310,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions)
         {
-            return Chord(noteDefinitions, _velocity, _noteLength);
+            return Chord(noteDefinitions, _noteLength, _velocity);
         }
 
         /// <summary>
@@ -295,7 +327,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ILength length)
         {
-            return Chord(noteDefinitions, _velocity, length);
+            return Chord(noteDefinitions, length, _velocity);
         }
 
         /// <summary>
@@ -311,19 +343,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, SevenBitNumber velocity)
         {
-            return Chord(noteDefinitions, velocity, _noteLength);
+            return Chord(noteDefinitions, _noteLength, velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified notes definitions using specified velocity and length.
         /// </summary>
         /// <param name="noteDefinitions">Definitions of notes that represent a chord.</param>
-        /// <param name="velocity">The velocity of a chord.</param>
         /// <param name="length">The length of a chord.</param>
+        /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, SevenBitNumber velocity, ILength length)
+        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ILength length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinitions), noteDefinitions);
             ThrowIfArgument.IsNull(nameof(length), length);

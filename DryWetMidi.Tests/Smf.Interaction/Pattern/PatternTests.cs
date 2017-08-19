@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .SetVelocity(defaultVelocity)
 
                 .Note(OctaveDefinition.Get(0).A)
-                .Note(OctaveDefinition.Get(1).C, specifiedVelocity, specifiedLength)
+                .Note(OctaveDefinition.Get(1).C, specifiedLength, specifiedVelocity)
 
                 .Build();
 
@@ -131,6 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Add several notes by intervals.")]
         public void Note_Multiple_Interval()
         {
             var defaultNoteLength = (MusicalLength)MusicalFraction.Quarter;
@@ -184,6 +185,35 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new NoteInfo(NoteName.G, defaultOctave, chordTime1, chordLength, defaultVelocity),
                 new NoteInfo(NoteName.C, defaultOctave, chordTime2, chordLength, defaultVelocity),
                 new NoteInfo(NoteName.G, defaultOctave, chordTime2, chordLength, defaultVelocity)
+            });
+        }
+
+        [TestMethod]
+        [Description("Add several chords by interval.")]
+        public void Chord_Interval()
+        {
+            var defaultNoteLength = (MusicalLength)MusicalFraction.Quarter;
+            var defaultVelocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(defaultNoteLength)
+                .SetVelocity(defaultVelocity)
+                .SetRootNote(NoteDefinition.Get(NoteName.CSharp, 5))
+
+                .Chord(new[] { IntervalDefinition.Two, IntervalDefinition.Five }, OctaveDefinition.Get(2).A)
+                .Chord(new[] { IntervalDefinition.Two, -IntervalDefinition.Ten }, OctaveDefinition.Get(2).B)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 2, null, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.B, 2, null, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.D, 3, null, defaultNoteLength, defaultVelocity),
+
+                new NoteInfo(NoteName.B, 2, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 3, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 2, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity),
             });
         }
 
