@@ -52,6 +52,7 @@
     <Compile Include="ComplexTests\QuantizeNotes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordTests.cs" />
+    <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinitionTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternTests.cs" />
     <Compile Include="Smf.Interaction\TempoMapManager\TempoMapManagerTests.cs" />
     <Compile Include="Smf.Interaction\TempoMapManager\TempoMapTests.cs" />

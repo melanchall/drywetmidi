@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="time">Absolute time of the note in units defined by the time division of a MIDI file.</param>
         public Note(SevenBitNumber noteNumber, long length, long time)
         {
-            _noteDefinition = new NoteDefinition(noteNumber);
+            _noteDefinition = NoteDefinition.Get(noteNumber);
 
             Length = length;
             Time = time;
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
 
-            _noteDefinition = new NoteDefinition(noteOnEvent.NoteNumber);
+            _noteDefinition = NoteDefinition.Get(noteOnEvent.NoteNumber);
 
             Velocity = noteOnEvent.Velocity;
             OffVelocity = noteOffEvent.Velocity;
@@ -193,7 +193,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public SevenBitNumber NoteNumber
         {
             get => _noteDefinition.NoteNumber;
-            set => _noteDefinition = new NoteDefinition(value);
+            set => _noteDefinition = NoteDefinition.Get(value);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// name and octave.</exception>
         public void SetNoteNameAndOctave(NoteName noteName, int octave)
         {
-            _noteDefinition = new NoteDefinition(noteName, octave);
+            _noteDefinition = NoteDefinition.Get(noteName, octave);
         }
 
         #endregion

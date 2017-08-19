@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                     .Cast<NoteName>()
                                     .Where(n => NoteUtilities.IsNoteValid(n, octave))
                                     .ToDictionary(n => n,
-                                                  n => new NoteDefinition(n, octave));
+                                                  n => NoteDefinition.Get(n, octave));
         }
 
         #endregion

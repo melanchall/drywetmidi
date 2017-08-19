@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -9,33 +10,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public sealed class NoteDefinition
     {
-        #region Constructor
+        #region Fields
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NoteDefinition"/> with the
-        /// specified note name and octave number.
-        /// </summary>
-        /// <param name="noteName">The name of a note.</param>
-        /// <param name="octave">The octave number.</param>
-        /// <remarks>
-        /// Octave number is specified in scientific pitch notation which means that 4 must be
-        /// passed to <paramref name="octave"/> to get the middle C definition.
-        /// </remarks>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
-        /// invalid value.</exception>
-        /// <exception cref="ArgumentException">Note number is out of range for the specified note
-        /// name and octave.</exception>
-        public NoteDefinition(NoteName noteName, int octave)
-            : this(NoteUtilities.GetNoteNumber(noteName, octave))
-        {
-        }
+        private static readonly Dictionary<SevenBitNumber, NoteDefinition> _cache =
+            new Dictionary<SevenBitNumber, NoteDefinition>();
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoteDefinition"/> with the
         /// specified note number.
         /// </summary>
         /// <param name="noteNumber">The number of a note (60 is middle C).</param>
-        public NoteDefinition(SevenBitNumber noteNumber)
+        private NoteDefinition(SevenBitNumber noteNumber)
         {
             NoteNumber = noteNumber;
         }
@@ -58,6 +47,43 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Gets the octave number of a note.
         /// </summary>
         public int Octave => NoteUtilities.GetNoteOctave(NoteNumber);
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Returns a <see cref="NoteDefinition"/> for the specified note number.
+        /// </summary>
+        /// <param name="noteNumber">The number of a note (60 is middle C).</param>
+        /// <returns>A <see cref="NoteDefinition"/> for the <paramref name="noteNumber"/>.</returns>
+        public static NoteDefinition Get(SevenBitNumber noteNumber)
+        {
+            NoteDefinition noteDefinition;
+            if (!_cache.TryGetValue(noteNumber, out noteDefinition))
+                _cache.Add(noteNumber, noteDefinition = new NoteDefinition(noteNumber));
+
+            return noteDefinition;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="NoteDefinition"/> for the specified note name and octave number.
+        /// </summary>
+        /// <param name="noteName">The name of a note.</param>
+        /// <param name="octave">The octave number.</param>
+        /// <returns>A <see cref="NoteDefinition"/> for the <paramref name="noteName"/> and <paramref name="octave"/>.</returns>
+        /// <remarks>
+        /// Octave number is specified in scientific pitch notation which means that 4 must be
+        /// passed to <paramref name="octave"/> to get the middle C definition.
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentException">Note number is out of range for the specified note
+        /// name and octave.</exception>
+        public static NoteDefinition Get(NoteName noteName, int octave)
+        {
+            return Get(NoteUtilities.GetNoteNumber(noteName, octave));
+        }
 
         #endregion
 
