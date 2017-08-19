@@ -62,8 +62,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var specifiedVelocity = (SevenBitNumber)95;
 
             var pattern = new PatternBuilder()
-                .DefaultNoteLength(defaultNoteLength)
-                .DefaultVelocity(defaultVelocity)
+                .SetNoteLength(defaultNoteLength)
+                .SetVelocity(defaultVelocity)
 
                 .Note(OctaveDefinition.Get(0).A)
                 .Note(OctaveDefinition.Get(1).C, specifiedVelocity, specifiedLength)
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void Note_Multiple_MetricLengths()
         {
             var pattern = new PatternBuilder()
-                .DefaultOctave(2)
+                .SetOctave(2)
 
                 .Note(NoteName.G, new MetricLength(0, 0, 24))
                 .Note(NoteName.A, new MetricLength(0, 1, 0))
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void Note_Multiple_MetricLengths_TempoChanged()
         {
             var pattern = new PatternBuilder()
-                .DefaultOctave(2)
+                .SetOctave(2)
 
                 .Note(NoteName.G, new MetricLength(0, 0, 24))
                 .Note(NoteName.A, new MetricLength(0, 1, 0))
@@ -131,6 +131,29 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        public void Note_Multiple_Interval()
+        {
+            var defaultNoteLength = (MusicalLength)MusicalFraction.Quarter;
+            var defaultVelocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(defaultNoteLength)
+                .SetVelocity(defaultVelocity)
+                .SetRootNote(NoteDefinition.Get(NoteName.CSharp, 5))
+
+                .Note(IntervalDefinition.Two)
+                .Note(-IntervalDefinition.Four)
+
+                .Build();
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.DSharp, 5, null, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.A, 4, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity)
+            });
+        }
+
+        [TestMethod]
         [Description("Add chord with default velocity and octave.")]
         public void Chord_DefaultOctave()
         {
@@ -142,8 +165,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var chordTime2 = new MathTime(chordTime1, chordLength);
 
             var pattern = new PatternBuilder()
-                .DefaultVelocity(defaultVelocity)
-                .DefaultOctave(defaultOctave)
+                .SetVelocity(defaultVelocity)
+                .SetOctave(defaultOctave)
 
                 .MoveToTime(chordTime1)
                 .Chord(new[]
@@ -398,7 +421,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void Repeat_Previous()
         {
             var pattern = new PatternBuilder()
-                .DefaultStep((MusicalLength)MusicalFraction.Eighth)
+                .SetStep((MusicalLength)MusicalFraction.Eighth)
 
                 .Anchor("A")
                 .StepForward()

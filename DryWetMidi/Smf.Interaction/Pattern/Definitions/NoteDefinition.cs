@@ -52,6 +52,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        public NoteDefinition Transpose(IntervalDefinition intervalDefinition)
+        {
+            return Get((SevenBitNumber)(NoteNumber + intervalDefinition.Steps));
+        }
+
         /// <summary>
         /// Returns a <see cref="NoteDefinition"/> for the specified note number.
         /// </summary>
@@ -115,6 +120,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static bool operator !=(NoteDefinition noteDefinition1, NoteDefinition noteDefinition2)
         {
             return !(noteDefinition1 == noteDefinition2);
+        }
+
+        public static NoteDefinition operator +(NoteDefinition noteDefinition, int steps)
+        {
+            ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
+
+            return noteDefinition.Transpose(IntervalDefinition.FromSteps(steps));
+        }
+
+        public static NoteDefinition operator -(NoteDefinition noteDefinition, int steps)
+        {
+            return noteDefinition + (-steps);
         }
 
         #endregion

@@ -104,6 +104,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Operators
 
+        public static implicit operator int(IntervalDefinition intervalDefinition)
+        {
+            return intervalDefinition.Steps;
+        }
+
+        public static implicit operator IntervalDefinition(SevenBitNumber interval)
+        {
+            return GetUp(interval);
+        }
+
         public static bool operator ==(IntervalDefinition intervalDefinition1, IntervalDefinition intervalDefinition2)
         {
             if (ReferenceEquals(intervalDefinition1, intervalDefinition2))
@@ -132,6 +142,34 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
 
             return FromSteps(intervalDefinition.Steps - steps);
+        }
+
+        public static IntervalDefinition operator *(IntervalDefinition intervalDefinition, int multiplier)
+        {
+            ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
+
+            return FromSteps(intervalDefinition.Steps * multiplier);
+        }
+
+        public static IntervalDefinition operator /(IntervalDefinition intervalDefinition, int divisor)
+        {
+            ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
+
+            return FromSteps(intervalDefinition.Steps / divisor);
+        }
+
+        public static IntervalDefinition operator +(IntervalDefinition intervalDefinition)
+        {
+            ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
+
+            return intervalDefinition.Up();
+        }
+
+        public static IntervalDefinition operator -(IntervalDefinition intervalDefinition)
+        {
+            ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
+
+            return intervalDefinition.Down();
         }
 
         #endregion

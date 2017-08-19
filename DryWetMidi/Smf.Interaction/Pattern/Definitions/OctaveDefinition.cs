@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -11,28 +12,27 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public sealed class OctaveDefinition
     {
+        #region Fields
+
+        private static readonly Dictionary<int, OctaveDefinition> _cache = new Dictionary<int, OctaveDefinition>();
+
+        private readonly Dictionary<NoteName, NoteDefinition> _notesDefinitions;
+
+        #endregion
+
         #region Constants
 
         /// <summary>
         /// The smalles possible value of an octave's number.
         /// </summary>
-        public static readonly int MinOctave = NoteUtilities.GetNoteOctave(SevenBitNumber.MinValue);
+        public static readonly int MinOctaveNumber = NoteUtilities.GetNoteOctave(SevenBitNumber.MinValue);
 
         /// <summary>
         /// The largest possible value of an octave's number.
         /// </summary>
-        public static readonly int MaxOctave = NoteUtilities.GetNoteOctave(SevenBitNumber.MaxValue);
+        public static readonly int MaxOctaveNumber = NoteUtilities.GetNoteOctave(SevenBitNumber.MaxValue);
 
-        private static readonly Dictionary<int, OctaveDefinition> OctaveDefinitions =
-            Enumerable.Range(MinOctave, MaxOctave - MinOctave + 1)
-                      .ToDictionary(o => o,
-                                    o => new OctaveDefinition(o));
-
-        #endregion
-
-        #region Fields
-
-        private readonly Dictionary<NoteName, NoteDefinition> _notesDefinitions;
+        public static readonly OctaveDefinition Default = Get(4);
 
         #endregion
 
@@ -44,13 +44,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="octave">The number of an octave.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
-        public OctaveDefinition(int octave)
+        private OctaveDefinition(int octave)
         {
-            ThrowIfArgument.IsOutOfRange(nameof(octave),
-                                         octave,
-                                         MinOctave,
-                                         MaxOctave,
-                                         $"Octave number is out of [{MinOctave}, {MaxOctave}] range.");
+            Debug.Assert(octave >= MinOctaveNumber && octave <= MaxOctaveNumber,
+                         "An octave's number is out of range.");
 
             Number = octave;
 
@@ -175,11 +172,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsOutOfRange(nameof(octave),
                                          octave,
-                                         MinOctave,
-                                         MaxOctave,
-                                         $"Octave number is out of [{MinOctave}, {MaxOctave}] range.");
+                                         MinOctaveNumber,
+                                         MaxOctaveNumber,
+                                         $"Octave number is out of [{MinOctaveNumber}, {MaxOctaveNumber}] range.");
 
-            return OctaveDefinitions[octave];
+            OctaveDefinition octaveDefinition;
+            if (!_cache.TryGetValue(octave, out octaveDefinition))
+                _cache.Add(octave, octaveDefinition = new OctaveDefinition(octave));
+
+            return octaveDefinition;
         }
 
         #endregion
