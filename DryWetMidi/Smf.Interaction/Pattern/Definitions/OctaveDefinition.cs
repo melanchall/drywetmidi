@@ -32,7 +32,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         public static readonly int MaxOctaveNumber = NoteUtilities.GetNoteOctave(SevenBitNumber.MaxValue);
 
-        public static readonly OctaveDefinition Default = Get(4);
+        /// <summary>
+        /// The octave which contains the middle C note (C4).
+        /// </summary>
+        public static readonly OctaveDefinition Middle = Get(4);
 
         #endregion
 

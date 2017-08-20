@@ -52,9 +52,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Returns the current <see cref="NoteDefinition"/> transposed by the specified
+        /// <see cref="IntervalDefinition"/>.
+        /// </summary>
+        /// <param name="intervalDefinition">The <see cref="IntervalDefinition"/> to transpose the current
+        /// <see cref="NoteDefinition"/> by.</param>
+        /// <returns>The current <see cref="NoteDefinition"/> transposed by the <paramref name="intervalDefinition"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
         public NoteDefinition Transpose(IntervalDefinition intervalDefinition)
         {
-            return Get((SevenBitNumber)(NoteNumber + intervalDefinition.Steps));
+            return Get((SevenBitNumber)(NoteNumber + intervalDefinition.HalfSteps));
         }
 
         /// <summary>
@@ -122,16 +130,34 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return !(noteDefinition1 == noteDefinition2);
         }
 
-        public static NoteDefinition operator +(NoteDefinition noteDefinition, int steps)
+        /// <summary>
+        /// Transposes the specified <see cref="NoteDefinition"/>.
+        /// </summary>
+        /// <param name="noteDefinition">The <see cref="NoteDefinition"/> to transpose.</param>
+        /// <param name="halfSteps">The number of half steps to transpose the <paramref name="noteDefinition"/> by.</param>
+        /// <returns>The <see cref="NoteDefinition"/> which is the <paramref name="noteDefinition"/>
+        /// transposed by the <paramref name="halfSteps"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
+        public static NoteDefinition operator +(NoteDefinition noteDefinition, int halfSteps)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
 
-            return noteDefinition.Transpose(IntervalDefinition.FromSteps(steps));
+            return noteDefinition.Transpose(IntervalDefinition.FromHalfSteps(halfSteps));
         }
 
-        public static NoteDefinition operator -(NoteDefinition noteDefinition, int steps)
+        /// <summary>
+        /// Transposes the specified <see cref="NoteDefinition"/>.
+        /// </summary>
+        /// <param name="noteDefinition">The <see cref="NoteDefinition"/> to transpose.</param>
+        /// <param name="halfSteps">The number of half steps to transpose the <paramref name="noteDefinition"/> by.</param>
+        /// <returns>The <see cref="NoteDefinition"/> which is the <paramref name="noteDefinition"/>
+        /// transposed by the <paramref name="halfSteps"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
+        public static NoteDefinition operator -(NoteDefinition noteDefinition, int halfSteps)
         {
-            return noteDefinition + (-steps);
+            return noteDefinition + (-halfSteps);
         }
 
         #endregion

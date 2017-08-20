@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Check that interval definitions of the same steps number are equal by reference.")]
         public void CheckReferences()
         {
-            Assert.IsTrue(ReferenceEquals(IntervalDefinition.FromSteps(10), IntervalDefinition.FromSteps(10)));
+            Assert.IsTrue(ReferenceEquals(IntervalDefinition.FromHalfSteps(10), IntervalDefinition.FromHalfSteps(10)));
         }
 
         #endregion
