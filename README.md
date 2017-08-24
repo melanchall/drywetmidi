@@ -15,6 +15,7 @@ With the DryWetMIDI you can:
 * Implement [custom meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks) that can be written to and read from MIDI files.
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
 * Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the **High-level data managing** section of the Wiki).
+* Build musical compositions (See [Pattern](https://github.com/melanchall/drywetmidi/wiki/Pattern) page of the library Wiki).
 
 ## Getting Started
 
@@ -166,4 +167,30 @@ using (var notesManager = trackChunk.ManageNotes())
 
 midiFile.Chunks.Add(trackChunk);
 midiFile.Write("Single note great song.mid");
+```
+
+You can even build a musical composition:
+
+```csharp
+Pattern pattern = new PatternBuilder()
+     
+    // Insert a pause of 5 seconds
+    .StepForward(new MetricLength(0, 0, 5))
+
+    // Insert an eighth C# note of the 4th octave
+    .Note(OctaveDefinition.Get(4).CSharp, (MusicalLength)MusicalFraction.Eighth)
+
+    // Set default note length to triplet eighth and default octave to 5
+    .SetNoteLength((MusicalLength)MusicalFraction.EighthTriplet)
+    .SetOctave(5)
+
+    // Now we can add triplet eighth notes of the 5th octave in a simple way
+    .Note(NoteName.A)
+    .Note(NoteName.B)
+    .Note(NoteName.GSharp)
+
+    // Get pattern
+    .Build();
+
+MidiFile midiFile = pattern.ToFile(TempoMap.Default);
 ```
