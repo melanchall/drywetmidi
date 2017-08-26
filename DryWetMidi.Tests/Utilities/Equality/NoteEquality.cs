@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
-    public static class NoteEquality
+    internal static class NoteEquality
     {
         #region Nested classes
 

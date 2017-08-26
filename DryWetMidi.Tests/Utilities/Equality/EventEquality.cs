@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
-    public static class EventEquality
+    internal static class EventEquality
     {
         private static class ArrayUtilities
         {

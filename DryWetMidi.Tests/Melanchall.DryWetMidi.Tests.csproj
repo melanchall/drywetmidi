@@ -60,6 +60,7 @@
     <Compile Include="Smf.Interaction\Time\MathTimeTests.cs" />
     <Compile Include="Utilities\Equality\EventEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
+    <Compile Include="Utilities\Equality\TimedEventEquality.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

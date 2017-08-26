@@ -799,6 +799,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Text
+
+        public PatternBuilder Lyrics(string text)
+        {
+            ThrowIfArgument.IsNull(nameof(text), text);
+
+            return AddAction(new AddTextEventAction<LyricEvent>(text));
+        }
+
+        public PatternBuilder Marker(string marker)
+        {
+            ThrowIfArgument.IsNull(nameof(marker), marker);
+
+            return AddAction(new AddTextEventAction<MarkerEvent>(marker));
+        }
+
+        #endregion
+
         #region Default
 
         /// <summary>

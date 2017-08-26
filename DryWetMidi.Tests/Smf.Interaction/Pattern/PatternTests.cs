@@ -49,6 +49,27 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             #endregion
         }
 
+        private sealed class TimedEventInfo
+        {
+            #region Constructor
+
+            public TimedEventInfo(MidiEvent midiEvent, ITime time)
+            {
+                Event = midiEvent;
+                Time = time;
+            }
+
+            #endregion
+
+            #region Properties
+
+            public MidiEvent Event { get; }
+
+            public ITime Time { get; }
+
+            #endregion
+        }
+
         #region Test methods
 
         [TestMethod]
@@ -471,6 +492,118 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
+        [TestMethod]
+        [Description("Add single lyrics event.")]
+        public void Lyrics_Single()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A)
+                .Lyrics("A")
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Quarter)
+            });
+        }
+
+        [TestMethod]
+        [Description("Add multiple lyrics events.")]
+        public void Lyrics_Multiple()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A)
+                .Lyrics("A")
+                .Note(NoteName.A)
+                .Lyrics("B")
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Quarter),
+                new TimedEventInfo(new LyricEvent("B"), (MusicalTime)MusicalFraction.Half)
+            });
+        }
+
+        [TestMethod]
+        [Description("Add lyrics events using repeat.")]
+        public void Lyrics_Repeat()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A)
+                .Lyrics("A")
+                .Repeat(2, 1)
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Quarter),
+                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Half)
+            });
+        }
+
+        [TestMethod]
+        [Description("Add single marker event.")]
+        public void Marker_Single()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A)
+                .Marker("Marker 1")
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new MarkerEvent("Marker 1"), (MusicalTime)MusicalFraction.Quarter)
+            });
+        }
+
+        [TestMethod]
+        [Description("Add multiple marker events.")]
+        public void Marker_Multiple()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A)
+                .Marker("Marker 1")
+                .Note(NoteName.A)
+                .Marker("Marker 2")
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new MarkerEvent("Marker 1"), (MusicalTime)MusicalFraction.Quarter),
+                new TimedEventInfo(new MarkerEvent("Marker 2"), (MusicalTime)MusicalFraction.Half)
+            });
+        }
+
+        [TestMethod]
+        [Description("Add marker events using repeat.")]
+        public void Marker_Repeat()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A)
+                .Marker("Marker")
+                .Repeat(2, 1)
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new MarkerEvent("Marker"), (MusicalTime)MusicalFraction.Quarter),
+                new TimedEventInfo(new MarkerEvent("Marker"), (MusicalTime)MusicalFraction.Half)
+            });
+        }
+
         #endregion
 
         #region Private methods
@@ -505,6 +638,34 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
 
             Assert.IsTrue(NoteEquality.Equals(expectedNotes, midiFile.GetNotes()));
+
+            return midiFile;
+        }
+
+        private static MidiFile TestTimedEvents(Pattern pattern, ICollection<TimedEventInfo> expectedTimedEventsInfos, params Tuple<long, Tempo>[] tempoChanges)
+        {
+            var channel = (FourBitNumber)2;
+
+            TempoMap tempoMap = null;
+            using (var tempoMapManager = new TempoMapManager())
+            {
+                foreach (var tempoChange in tempoChanges)
+                {
+                    tempoMapManager.SetTempo(tempoChange.Item1, tempoChange.Item2);
+                }
+
+                tempoMap = tempoMapManager.TempoMap;
+            }
+
+            var midiFile = pattern.ToFile(tempoMap, channel);
+
+            var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
+                new TimedEvent(i.Event,
+                               TimeConverter.ConvertFrom(i.Time ?? new MetricTime(), tempoMap)));
+
+            var actualTimedEvents = midiFile.GetTimedEvents();
+
+            Assert.IsTrue(expectedTimedEvents.All(expected => actualTimedEvents.Any(actual => TimedEventEquality.Equals(expected, actual))));
 
             return midiFile;
         }

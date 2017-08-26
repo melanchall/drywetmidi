@@ -60,6 +60,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 notesManager.Notes.Add(result.Notes ?? Enumerable.Empty<Note>());
             }
 
+            using (var eventsManager = trackChunk.ManageTimedEvents())
+            {
+                eventsManager.Events.Add(result.Events ?? Enumerable.Empty<TimedEvent>());
+            }
+
             //
 
             return trackChunk;
@@ -109,6 +114,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         internal PatternActionResult InvokeActions(long time, PatternContext context)
         {
             var notes = new List<Note>();
+            var events = new List<TimedEvent>();
 
             foreach (var action in Actions)
             {
@@ -121,9 +127,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 var addedNotes = actionResult.Notes;
                 if (addedNotes != null)
                     notes.AddRange(addedNotes);
+
+                var addedEvents = actionResult.Events;
+                if (addedEvents != null)
+                    events.AddRange(addedEvents);
             }
 
-            return new PatternActionResult(time, notes);
+            return new PatternActionResult(time, notes, events);
         }
 
         #endregion

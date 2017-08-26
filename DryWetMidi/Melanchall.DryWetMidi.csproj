@@ -46,6 +46,7 @@
     <Compile Include="Smf.Interaction\Length\MusicalFraction.cs" />
     <Compile Include="Smf.Interaction\Length\MusicalLength.cs" />
     <Compile Include="Common\Fraction.cs" />
+    <Compile Include="Smf.Interaction\Pattern\Actions\AddTextEventAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinition.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDirection.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\OctaveDefinition.cs" />
