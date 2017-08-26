@@ -254,6 +254,35 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Chord
 
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions, NoteName rootNoteName)
+        {
+            return Chord(intervalDefinitions, rootNoteName, _noteLength, _velocity);
+        }
+
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+                                    NoteName rootNoteName,
+                                    ILength length)
+        {
+            return Chord(intervalDefinitions, rootNoteName, length, _velocity);
+        }
+
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+                                    NoteName rootNoteName,
+                                    SevenBitNumber velocity)
+        {
+            return Chord(intervalDefinitions, rootNoteName, _noteLength, velocity);
+        }
+
+        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+                                    NoteName rootNoteName,
+                                    ILength length,
+                                    SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
+
+            return Chord(intervalDefinitions, _octave.GetNoteDefinition(rootNoteName), length, velocity);
+        }
+
         /// <summary>
         /// Adds a chord by the specified intervals relative to the root note using default
         /// length and velocity.
