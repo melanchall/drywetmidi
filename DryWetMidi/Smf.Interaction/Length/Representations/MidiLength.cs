@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf.Interaction
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class MidiLength : ILength
     {
@@ -64,6 +66,24 @@
         public override int GetHashCode()
         {
             return Length.GetHashCode();
+        }
+
+        #endregion
+
+        #region ILength
+
+        public ILength Multiply(int multiplier)
+        {
+            ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
+
+            return new MidiLength(Length * multiplier);
+        }
+
+        public ILength Divide(int divisor)
+        {
+            ThrowIfArgument.IsNegative(nameof(divisor), divisor, "Divisor is negative.");
+
+            return new MidiLength(Length / divisor);
         }
 
         #endregion

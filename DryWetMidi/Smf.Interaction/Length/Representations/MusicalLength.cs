@@ -229,5 +229,23 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         #endregion
+
+        #region ILength
+
+        public ILength Multiply(int multiplier)
+        {
+            ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
+
+            return new MusicalLength(Fraction * multiplier);
+        }
+
+        public ILength Divide(int divisor)
+        {
+            ThrowIfArgument.IsNegative(nameof(divisor), divisor, "Divisor is negative.");
+
+            return new MusicalLength(Fraction / divisor);
+        }
+
+        #endregion
     }
 }

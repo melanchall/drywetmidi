@@ -5,5 +5,8 @@
     /// </summary>
     public interface ILength
     {
+        ILength Multiply(int multiplier);
+
+        ILength Divide(int divisor);
     }
 }
