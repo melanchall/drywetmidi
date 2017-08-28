@@ -40,11 +40,14 @@
     <Compile Include="Common\MathUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
-    <Compile Include="Smf.Interaction\Length\MathLength.cs" />
+    <Compile Include="Smf.Interaction\Length\Converters\MidiLengthConverter.cs" />
+    <Compile Include="Smf.Interaction\Length\LengthUtilities.cs" />
+    <Compile Include="Smf.Interaction\Length\Representations\MathLength.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MathLengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MusicalLengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\MusicalFraction.cs" />
-    <Compile Include="Smf.Interaction\Length\MusicalLength.cs" />
+    <Compile Include="Smf.Interaction\Length\Representations\MidiLength.cs" />
+    <Compile Include="Smf.Interaction\Length\Representations\MusicalLength.cs" />
     <Compile Include="Common\Fraction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddTextEventAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinition.cs" />
@@ -167,7 +170,7 @@
     <Compile Include="Smf.Interaction\Length\Converters\ILengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\LengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\LengthConverterFactory.cs" />
-    <Compile Include="Smf.Interaction\Length\MetricLength.cs" />
+    <Compile Include="Smf.Interaction\Length\Representations\MetricLength.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MetricLengthConverter.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesCollection.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesCollectionChangedEventArgs.cs" />

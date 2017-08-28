@@ -12,11 +12,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw new NotSupportedException($"Conversion to the {nameof(MathLength)} is not supported.");
         }
 
-        public ILength ConvertTo(long length, ITime time, TempoMap tempoMap)
-        {
-            throw new NotSupportedException($"Conversion to the {nameof(MathLength)} is not supported.");
-        }
-
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -40,11 +35,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             throw new NotImplementedException($"Conversion from the {nameof(MathLength)} with {mathLength.Operation} operation is not implemented.");
-        }
-
-        public long ConvertFrom(ILength length, ITime time, TempoMap tempoMap)
-        {
-            return ConvertFrom(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         #endregion

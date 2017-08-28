@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return (TLength)GetConverter<TLength>().ConvertTo(length, time, tempoMap);
+            return (TLength)LengthConverterFactory.GetConverter<TLength>().ConvertTo(length, time, tempoMap);
         }
 
         /// <summary>
@@ -133,19 +133,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return ConvertFrom(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
-        }
-
-        /// <summary>
-        /// Gets converter that can be used to convert length of an object from <see cref="long"/>
-        /// to the specified length type and vice versa.
-        /// </summary>
-        /// <typeparam name="TLength">Type that will represent the length of an object.</typeparam>
-        /// <returns>Converter to convert length between <see cref="long"/> and <typeparamref name="TLength"/>.</returns>
-        /// <exception cref="NotSupportedException"><typeparamref name="TLength"/> is not supported.</exception>
-        public static ILengthConverter GetConverter<TLength>()
-            where TLength : ILength
-        {
-            return LengthConverterFactory.GetConverter<TLength>();
         }
 
         #endregion

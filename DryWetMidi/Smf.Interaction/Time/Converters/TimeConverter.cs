@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return (TTime)GetConverter<TTime>().ConvertTo(time, tempoMap);
+            return (TTime)TimeConverterFactory.GetConverter<TTime>().ConvertTo(time, tempoMap);
         }
 
         /// <summary>
@@ -63,19 +63,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             return TimeConverterFactory.GetConverter(time.GetType())
                                        .ConvertFrom(time, tempoMap);
-        }
-
-        /// <summary>
-        /// Gets converter that can be used to convert time of an object from <see cref="long"/>
-        /// to the specified time type and vice versa.
-        /// </summary>
-        /// <typeparam name="TTime">Type that will represent the time of an object.</typeparam>
-        /// <returns>Converter to convert time between <see cref="long"/> and <typeparamref name="TTime"/>.</returns>
-        /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
-        public static ITimeConverter GetConverter<TTime>()
-            where TTime : ITime
-        {
-            return TimeConverterFactory.GetConverter<TTime>();
         }
 
         #endregion

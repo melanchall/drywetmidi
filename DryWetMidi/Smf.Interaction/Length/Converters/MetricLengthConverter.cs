@@ -21,11 +21,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MetricLength(endTime - startTime);
         }
 
-        public ILength ConvertTo(long length, ITime time, TempoMap tempoMap)
-        {
-            return ConvertTo(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
-        }
-
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -40,11 +35,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var endTime = new MetricTime(startTime.TotalMicroseconds + metricLength.TotalMicroseconds);
 
             return TimeConverter.ConvertFrom(endTime, tempoMap) - time;
-        }
-
-        public long ConvertFrom(ILength length, ITime time, TempoMap tempoMap)
-        {
-            return ConvertFrom(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         #endregion

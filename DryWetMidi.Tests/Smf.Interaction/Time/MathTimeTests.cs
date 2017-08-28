@@ -47,8 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var mathLength = new MathLength(new MetricLength(0, 0, 20),
-                                            new MetricLength(0, 0, 50));
+            var mathLength = new MetricLength(0, 0, 20).Add(new MetricLength(0, 0, 50));
             var mathTime = new MetricTime(0, 2, 0).Subtract(mathLength);
 
             Assert.AreEqual(TimeConverter.ConvertFrom(new MetricTime(0, 0, 50), tempoMap),

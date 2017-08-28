@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.DSharp, 5, null, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.A, 4, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity)
+                new NoteInfo(NoteName.A, 4, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity)
             });
         }
 
@@ -232,9 +232,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new NoteInfo(NoteName.B, 2, null, defaultNoteLength, defaultVelocity),
                 new NoteInfo(NoteName.D, 3, null, defaultNoteLength, defaultVelocity),
 
-                new NoteInfo(NoteName.B, 2, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 3, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 2, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.B, 2, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 3, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 2, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity),
             });
         }
 

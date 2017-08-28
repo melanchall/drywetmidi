@@ -21,11 +21,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return null;
         }
 
-        public ILength ConvertTo(long length, ITime time, TempoMap tempoMap)
-        {
-            return ConvertTo(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
-        }
-
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -42,11 +37,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             ThrowIfTimeDivision.IsNotSupportedForLengthConversion(tempoMap.TimeDivision);
             return 0;
-        }
-
-        public long ConvertFrom(ILength length, ITime time, TempoMap tempoMap)
-        {
-            return ConvertFrom(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         #endregion
