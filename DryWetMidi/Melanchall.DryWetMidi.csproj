@@ -68,8 +68,9 @@
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollection.cs" />
     <Compile Include="Smf.Interaction\Time\Converters\MathTimeConverter.cs" />
     <Compile Include="Smf.Interaction\Time\Converters\MidiTimeConverter.cs" />
-    <Compile Include="Smf.Interaction\Time\MathTime.cs" />
-    <Compile Include="Smf.Interaction\Time\MidiTime.cs" />
+    <Compile Include="Smf.Interaction\Time\Representations\MathTime.cs" />
+    <Compile Include="Smf.Interaction\Time\Representations\MidiTime.cs" />
+    <Compile Include="Smf.Interaction\Time\TimeUtilities.cs" />
     <Compile Include="Smf.Interaction\Utilities\FractionUtilities.cs" />
     <Compile Include="Smf.Interaction\Utilities\MathOperation.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfLengthArgument.cs" />
@@ -191,9 +192,9 @@
     <Compile Include="Smf.Interaction\Time\Converters\TimeConverter.cs" />
     <Compile Include="Smf.Interaction\Time\Converters\TimeConverterFactory.cs" />
     <Compile Include="Smf.Interaction\Time\ITime.cs" />
-    <Compile Include="Smf.Interaction\Time\MetricTime.cs" />
+    <Compile Include="Smf.Interaction\Time\Representations\MetricTime.cs" />
     <Compile Include="Smf.Interaction\Time\Converters\MetricTimeConverter.cs" />
-    <Compile Include="Smf.Interaction\Time\MusicalTime.cs" />
+    <Compile Include="Smf.Interaction\Time\Representations\MusicalTime.cs" />
     <Compile Include="Smf\MidiFile.cs" />
     <Compile Include="Smf\MidiFileFormat.cs" />
     <Compile Include="Smf\MidiReader.cs" />

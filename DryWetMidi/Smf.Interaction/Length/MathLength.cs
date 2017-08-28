@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MathTime"/> with the specified
+        /// Initializes a new instance of the <see cref="MathLength"/> with the specified
         /// lengths and mathematical operation.
         /// </summary>
         /// <param name="length1">The <see cref="ILength"/> to add <paramref name="length2"/> to or
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="length2"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="operation"/> specified
         /// an invalid value.</exception>
-        public MathLength(ILength length1, ILength length2, MathOperation operation = MathOperation.Sum)
+        public MathLength(ILength length1, ILength length2, MathOperation operation = MathOperation.Add)
         {
             ThrowIfArgument.IsNull(nameof(length1), length1);
             ThrowIfArgument.IsNull(nameof(length2), length2);
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            var operationString = Operation == MathOperation.Sum
+            var operationString = Operation == MathOperation.Add
                 ? "+"
                 : "-";
 

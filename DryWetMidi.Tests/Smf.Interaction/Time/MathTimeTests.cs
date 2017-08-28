@@ -12,9 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var tempoMap = TempoMap.Default;
 
-            var mathTime = new MathTime(new MetricTime(0, 1, 30),
-                                        new MetricLength(0, 1, 0),
-                                        MathOperation.Subtract);
+            var mathTime = new MetricTime(0, 1, 30).Subtract(new MetricLength(0, 1, 0));
 
             Assert.AreEqual(TimeConverter.ConvertFrom(new MetricTime(0, 0, 30), tempoMap),
                             TimeConverter.ConvertFrom(mathTime, tempoMap));
@@ -31,9 +29,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var mathTime = new MathTime(new MetricTime(0, 1, 30),
-                                        new MetricLength(0, 1, 0),
-                                        MathOperation.Subtract);
+            var mathTime = new MetricTime(0, 1, 30).Subtract(new MetricLength(0, 1, 0));
 
             Assert.AreEqual(TimeConverter.ConvertFrom(new MetricTime(0, 0, 30), tempoMap),
                             TimeConverter.ConvertFrom(mathTime, tempoMap));
@@ -53,9 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             var mathLength = new MathLength(new MetricLength(0, 0, 20),
                                             new MetricLength(0, 0, 50));
-            var mathTime = new MathTime(new MetricTime(0, 2, 0),
-                                        mathLength,
-                                        MathOperation.Subtract);
+            var mathTime = new MetricTime(0, 2, 0).Subtract(mathLength);
 
             Assert.AreEqual(TimeConverter.ConvertFrom(new MetricTime(0, 0, 50), tempoMap),
                             TimeConverter.ConvertFrom(mathTime, tempoMap));
@@ -67,9 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var tempoMap = TempoMap.Default;
 
-            var mathTime = new MathTime(new MusicalTime(2, 0),
-                                        new MusicalLength(MusicalFraction.Quarter),
-                                        MathOperation.Subtract);
+            var mathTime = new MusicalTime(2, 0).Subtract(new MusicalLength(MusicalFraction.Quarter));
 
             Assert.AreEqual(TimeConverter.ConvertFrom(new MusicalTime(7 * MusicalFraction.Quarter), tempoMap),
                             TimeConverter.ConvertFrom(mathTime, tempoMap));
@@ -96,9 +88,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var mathTime = new MathTime(new MusicalTime(3, 2),
-                                        new MusicalLength(3 * MusicalFraction.Quarter),
-                                        MathOperation.Subtract);
+            var mathTime = new MusicalTime(3, 2).Subtract(new MusicalLength(3 * MusicalFraction.Quarter));
 
             Assert.AreEqual(TimeConverter.ConvertFrom(new MusicalTime(2, 0, MusicalFraction.Quarter), tempoMap),
                             TimeConverter.ConvertFrom(mathTime, tempoMap));

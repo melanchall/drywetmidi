@@ -2,14 +2,14 @@
 {
     /// <summary>
     /// Represents a simple math operation used by the <see cref="MathTime"/> and the <see cref="MathLength"/>.
-    /// The default is <see cref="Sum"/>.
+    /// The default is <see cref="Add"/>.
     /// </summary>
     public enum MathOperation
     {
         /// <summary>
-        /// Summation.
+        /// Addition.
         /// </summary>
-        Sum = 0,
+        Add = 0,
 
         /// <summary>
         /// Subtraction.

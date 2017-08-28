@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             switch (mathLength.Operation)
             {
-                case MathOperation.Sum:
+                case MathOperation.Add:
                     return convertedLength1 + LengthConverter.ConvertFrom(mathLength.Length2, endTime1, tempoMap);
 
                 case MathOperation.Subtract:

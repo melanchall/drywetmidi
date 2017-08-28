@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.DSharp, 5, null, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.A, 4, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity)
+                new NoteInfo(NoteName.A, 4, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity)
             });
         }
 
@@ -184,7 +184,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             var chordLength = (MusicalLength)MusicalFraction.SixteenthTriplet;
             var chordTime1 = new MetricTime(0, 1, 12);
-            var chordTime2 = new MathTime(chordTime1, chordLength);
+            var chordTime2 = chordTime1.Add(chordLength);
 
             var pattern = new PatternBuilder()
                 .SetVelocity(defaultVelocity)
@@ -232,9 +232,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new NoteInfo(NoteName.B, 2, null, defaultNoteLength, defaultVelocity),
                 new NoteInfo(NoteName.D, 3, null, defaultNoteLength, defaultVelocity),
 
-                new NoteInfo(NoteName.B, 2, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 3, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 2, new MathTime(new MusicalTime(), defaultNoteLength), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.B, 2, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 3, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 2, new MusicalTime().Add(defaultNoteLength), defaultNoteLength, defaultVelocity),
             });
         }
 
