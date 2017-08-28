@@ -137,16 +137,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return _timeSpan.ToString(format);
         }
 
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="time">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public bool Equals(MetricTime time)
-        {
-            return this == time;
-        }
-
         #endregion
 
         #region Operators
@@ -354,7 +344,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as MetricTime);
+            return this == (obj as MetricTime);
         }
 
         /// <summary>

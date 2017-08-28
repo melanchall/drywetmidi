@@ -85,20 +85,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
-        #region Methods
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="time">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public bool Equals(MusicalTime time)
-        {
-            return this == time;
-        }
-
-        #endregion
-
         #region Operators
 
         /// <summary>
@@ -325,7 +311,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as MusicalTime);
+            return this == (obj as MusicalTime);
         }
 
         /// <summary>
