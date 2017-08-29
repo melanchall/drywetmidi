@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\FractionTests.cs" />
     <Compile Include="ComplexTests\MergeNotes.cs" />
     <Compile Include="ComplexTests\QuantizeNotes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

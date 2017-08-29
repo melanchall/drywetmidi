@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -78,6 +79,31 @@ namespace Melanchall.DryWetMidi.Common
         public bool Equals(Fraction fraction)
         {
             return this == fraction;
+        }
+
+        public static bool TryParse(string input, out Fraction fraction)
+        {
+            return FractionParser.TryParse(input, out fraction) == FractionParser.ParsingResult.Parsed;
+        }
+
+        public static Fraction Parse(string input)
+        {
+            switch (FractionParser.TryParse(input, out var fraction))
+            {
+                case FractionParser.ParsingResult.InputStringIsNullOrWhiteSpace:
+                    throw new ArgumentException("Input string is null or contains white-spaces only.", nameof(input));
+
+                case FractionParser.ParsingResult.NotMatched:
+                    throw new FormatException("Input string has invalid fraction format.");
+
+                case FractionParser.ParsingResult.NumeratorIsOutOfRange:
+                    throw new FormatException("Numerator is out of range.");
+
+                case FractionParser.ParsingResult.DenominatorIsOutOfRange:
+                    throw new FormatException("Denominator is out of range.");
+            }
+
+            return fraction;
         }
 
         /// <summary>

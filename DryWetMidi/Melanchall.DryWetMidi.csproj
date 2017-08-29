@@ -37,6 +37,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Fraction\FractionParser.cs" />
     <Compile Include="Common\MathUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
@@ -48,7 +49,7 @@
     <Compile Include="Smf.Interaction\Length\MusicalFraction.cs" />
     <Compile Include="Smf.Interaction\Length\Representations\MidiLength.cs" />
     <Compile Include="Smf.Interaction\Length\Representations\MusicalLength.cs" />
-    <Compile Include="Common\Fraction.cs" />
+    <Compile Include="Common\Fraction\Fraction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddTextEventAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinition.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDirection.cs" />
