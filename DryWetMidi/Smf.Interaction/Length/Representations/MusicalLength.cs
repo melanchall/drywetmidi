@@ -46,6 +46,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return this == length;
         }
 
+        public static bool TryParse(string input, out MusicalLength length)
+        {
+            length = null;
+
+            if (!Fraction.TryParse(input, out var fraction))
+                return false;
+
+            length = fraction;
+            return true;
+        }
+
+        public static MusicalLength Parse(string input)
+        {
+            return Fraction.Parse(input);
+        }
+
         #endregion
 
         #region Operators
