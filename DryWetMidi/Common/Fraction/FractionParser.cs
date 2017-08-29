@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -39,16 +40,16 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
-        internal static ParsingResult TryParse(string s, out Fraction fraction)
+        internal static ParsingResult TryParse(string input, out Fraction fraction)
         {
-            fraction = null;
+            fraction = Fraction.ZeroFraction;
 
-            if (string.IsNullOrWhiteSpace(s))
+            if (string.IsNullOrWhiteSpace(input))
                 return ParsingResult.InputStringIsNullOrWhiteSpace;
 
-            s = s.Trim();
+            input = input.Trim();
 
-            var match = _regex.Match(s);
+            var match = _regex.Match(input);
             if (!match.Success)
                 return ParsingResult.NotMatched;
 
@@ -60,6 +61,26 @@ namespace Melanchall.DryWetMidi.Common
 
             fraction = new Fraction(numerator, denominator);
             return ParsingResult.Parsed;
+        }
+
+        internal static Exception GetException(ParsingResult parsingResult, string inputStringParameterName)
+        {
+            switch (parsingResult)
+            {
+                case ParsingResult.InputStringIsNullOrWhiteSpace:
+                    throw new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
+
+                case ParsingResult.NotMatched:
+                    throw new FormatException("Input string has invalid fraction format.");
+
+                case ParsingResult.NumeratorIsOutOfRange:
+                    throw new FormatException("Numerator is out of range.");
+
+                case ParsingResult.DenominatorIsOutOfRange:
+                    throw new FormatException("Denominator is out of range.");
+            }
+
+            return null;
         }
 
         private static bool ParseFractionPart(Match match, string groupName, out long value)

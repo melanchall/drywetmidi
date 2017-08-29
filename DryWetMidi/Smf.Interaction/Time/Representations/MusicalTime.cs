@@ -85,6 +85,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Methods
+
+        public static bool TryParse(string input, out MusicalTime time)
+        {
+            return MusicalTimeParser.TryParse(input, out time) == MusicalTimeParser.ParsingResult.Parsed;
+        }
+
+        public static MusicalTime Parse(string input)
+        {
+            var parsingResult = MusicalTimeParser.TryParse(input, out var fraction);
+            if (parsingResult == MusicalTimeParser.ParsingResult.Parsed)
+                return fraction;
+
+            throw MusicalTimeParser.GetException(parsingResult, nameof(input));
+        }
+
+        #endregion
+
         #region Operators
 
         /// <summary>
@@ -331,7 +349,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{Bars}:{Beats}:{Fraction}";
+            return $"{Bars}.{Beats}.{Fraction}";
         }
 
         #endregion

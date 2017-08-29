@@ -72,6 +72,7 @@
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollection.cs" />
     <Compile Include="Smf.Interaction\Time\Converters\MathTimeConverter.cs" />
     <Compile Include="Smf.Interaction\Time\Converters\MidiTimeConverter.cs" />
+    <Compile Include="Smf.Interaction\Time\Parsers\MusicalTimeParser.cs" />
     <Compile Include="Smf.Interaction\Time\Representations\MathTime.cs" />
     <Compile Include="Smf.Interaction\Time\Representations\MidiTime.cs" />
     <Compile Include="Smf.Interaction\Time\TimeUtilities.cs" />

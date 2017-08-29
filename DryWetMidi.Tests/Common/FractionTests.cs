@@ -13,32 +13,28 @@ namespace Melanchall.DryWetMidi.Tests.Common
         [Description("Try parse valid fraction represented by numerator and denominator.")]
         public void TryParse_NumeratorAndDenominator()
         {
-            Fraction.TryParse("3/4", out var actualFraction);
-            Assert.AreEqual(new Fraction(3, 4), actualFraction);
+            TestTryParse("3/4", new Fraction(3, 4));
         }
 
         [TestMethod]
         [Description("Try parse valid fraction represented by numerator and divider.")]
         public void TryParse_NumeratorAndSlash()
         {
-            Fraction.TryParse("3/", out var actualFraction);
-            Assert.AreEqual(new Fraction(3, 1), actualFraction);
+            TestTryParse("3/", new Fraction(3, 1));
         }
 
         [TestMethod]
         [Description("Try parse valid fraction represented by numerator only.")]
         public void TryParse_Numerator()
         {
-            Fraction.TryParse("3", out var actualFraction);
-            Assert.AreEqual(new Fraction(3, 1), actualFraction);
+            TestTryParse("3", new Fraction(3, 1));
         }
 
         [TestMethod]
         [Description("Try parse valid fraction represented by divider and denominator.")]
         public void TryParse_SlashAndDenominator()
         {
-            Fraction.TryParse("/4", out var actualFraction);
-            Assert.AreEqual(new Fraction(1, 4), actualFraction);
+            TestTryParse("/4", new Fraction(1, 4));
         }
 
         [TestMethod]
@@ -96,6 +92,16 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public void Parse_Invalid_DenominatorIsOutOfRange()
         {
             Assert.ThrowsException<FormatException>(() => Fraction.Parse("1/9223372036854775808"));
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static void TestTryParse(string input, Fraction expectedFraction)
+        {
+            Fraction.TryParse(input, out var actualFraction);
+            Assert.AreEqual(expectedFraction, actualFraction);
         }
 
         #endregion
