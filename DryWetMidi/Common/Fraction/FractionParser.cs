@@ -68,16 +68,16 @@ namespace Melanchall.DryWetMidi.Common
             switch (parsingResult)
             {
                 case ParsingResult.InputStringIsNullOrWhiteSpace:
-                    throw new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
+                    return new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
 
                 case ParsingResult.NotMatched:
-                    throw new FormatException("Input string has invalid fraction format.");
+                    return new FormatException("Input string has invalid fraction format.");
 
                 case ParsingResult.NumeratorIsOutOfRange:
-                    throw new FormatException("Numerator is out of range.");
+                    return new FormatException("Numerator is out of range.");
 
                 case ParsingResult.DenominatorIsOutOfRange:
-                    throw new FormatException("Denominator is out of range.");
+                    return new FormatException("Denominator is out of range.");
             }
 
             return null;

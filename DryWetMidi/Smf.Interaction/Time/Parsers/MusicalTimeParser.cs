@@ -84,25 +84,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             switch (parsingResult)
             {
                 case ParsingResult.InputStringIsNullOrWhiteSpace:
-                    throw new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
+                    return new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
 
                 case ParsingResult.NotMatched:
-                    throw new FormatException("Input string has invalid musical time format.");
+                    return new FormatException("Input string has invalid musical time format.");
 
                 case ParsingResult.BarsIsOutOfRange:
-                    throw new FormatException("Bars number is out of range.");
+                    return new FormatException("Bars number is out of range.");
 
                 case ParsingResult.BeatsIsOutOfRange:
-                    throw new FormatException("Beats number is out of range.");
+                    return new FormatException("Beats number is out of range.");
 
                 case ParsingResult.FractionNotMatched:
-                    throw new FormatException("Input string has invalid fraction format.");
+                    return new FormatException("Input string has invalid fraction format.");
 
                 case ParsingResult.FractionNumeratorIsOutOfRange:
-                    throw new FormatException("Fraction's numerator is out of range.");
+                    return new FormatException("Fraction's numerator is out of range.");
 
                 case ParsingResult.FractionDenominatorIsOutOfRange:
-                    throw new FormatException("Fraction's denominator is out of range.");
+                    return new FormatException("Fraction's denominator is out of range.");
             }
 
             return null;
