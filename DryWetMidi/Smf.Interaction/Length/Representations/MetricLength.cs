@@ -124,14 +124,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return _time.ToString(format);
         }
 
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="length">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public bool Equals(MetricLength length)
+        public static bool TryParse(string input, out MetricLength length)
         {
-            return this == length;
+            length = null;
+
+            if (!MetricTime.TryParse(input, out var time))
+                return false;
+
+            length = new MetricLength(time);
+            return true;
+        }
+
+        public static MetricLength Parse(string input)
+        {
+            return new MetricLength(MetricTime.Parse(input));
         }
 
         #endregion
@@ -305,7 +311,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as MetricLength);
+            return this == (obj as MetricLength);
         }
 
         /// <summary>

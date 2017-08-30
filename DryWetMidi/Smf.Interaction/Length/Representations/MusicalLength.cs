@@ -36,16 +36,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="length">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public bool Equals(MusicalLength length)
-        {
-            return this == length;
-        }
-
         public static bool TryParse(string input, out MusicalLength length)
         {
             length = null;
@@ -223,7 +213,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as MusicalLength);
+            return this == (obj as MusicalLength);
         }
 
         /// <summary>

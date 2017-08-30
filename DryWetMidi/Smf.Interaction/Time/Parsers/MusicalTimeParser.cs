@@ -1,6 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -30,18 +30,34 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string BeatsGroupName = "b";
         private const string FractionGroupName = "f";
 
-        private static readonly string BarsGroup = $@"(?<{BarsGroupName}>\d+)";
-        private static readonly string BeatsGroup = $@"(?<{BeatsGroupName}>\d+)";
+        private static readonly string BarsGroup = ParsingUtilities.GetNumberGroup(BarsGroupName);
+        private static readonly string BeatsGroup = ParsingUtilities.GetNumberGroup(BeatsGroupName);
         private static readonly string FractionGroup = $@"(?<{FractionGroupName}>.+)";
 
         private static readonly string Divider = Regex.Escape(".");
 
         private static readonly string[] Patterns = new[]
         {
-            $"{BarsGroup}{Divider}{BeatsGroup}{Divider}{FractionGroup}",
-            $"{BarsGroup}{Divider}{BeatsGroup}",
-            $"{FractionGroup}",
+            // bars.beats.fraction -> bars.beats.fraction
+            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}\s*{Divider}\s*{FractionGroup}",
+
+            // bars.beats -> bars.beats.0/1
+            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
+
+            // fraction -> 0.0.fraction
+            $@"{FractionGroup}",
         };
+
+        private static readonly Dictionary<ParsingResult, string> FormatExceptionMessages =
+            new Dictionary<ParsingResult, string>
+            {
+                [ParsingResult.NotMatched] = "Input string has invalid musical time format.",
+                [ParsingResult.BarsIsOutOfRange] = "Bars number is out of range.",
+                [ParsingResult.BeatsIsOutOfRange] = "Beats number is out of range.",
+                [ParsingResult.FractionNotMatched] = "Input string has invalid fraction format.",
+                [ParsingResult.FractionNumeratorIsOutOfRange] = "Fraction's numerator is out of range.",
+                [ParsingResult.FractionDenominatorIsOutOfRange] = "Fraction's denominator is out of range."
+            };
 
         #endregion
 
@@ -54,18 +70,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (string.IsNullOrWhiteSpace(input))
                 return ParsingResult.InputStringIsNullOrWhiteSpace;
 
-            input = input.Trim();
-
-            var match = Patterns.Select(p => Regex.Match(input, $"^{p}$")).FirstOrDefault(m => m.Success);
+            var match = ParsingUtilities.Match(input, Patterns);
             if (match == null)
                 return ParsingResult.NotMatched;
 
             // Parse bars, beats
 
-            if (!ParseBarsBeats(match, BarsGroupName, out var bars))
+            if (!ParsingUtilities.ParseInt(match, BarsGroupName, 0, out var bars))
                 return ParsingResult.BarsIsOutOfRange;
 
-            if (!ParseBarsBeats(match, BeatsGroupName, out var beats))
+            if (!ParsingUtilities.ParseInt(match, BeatsGroupName, 0, out var beats))
                 return ParsingResult.BeatsIsOutOfRange;
 
             // Parse fraction
@@ -95,39 +109,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         internal static Exception GetException(ParsingResult parsingResult, string inputStringParameterName)
         {
-            switch (parsingResult)
-            {
-                case ParsingResult.InputStringIsNullOrWhiteSpace:
-                    return new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
+            if (parsingResult == ParsingResult.InputStringIsNullOrWhiteSpace)
+                return new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
 
-                case ParsingResult.NotMatched:
-                    return new FormatException("Input string has invalid musical time format.");
-
-                case ParsingResult.BarsIsOutOfRange:
-                    return new FormatException("Bars number is out of range.");
-
-                case ParsingResult.BeatsIsOutOfRange:
-                    return new FormatException("Beats number is out of range.");
-
-                case ParsingResult.FractionNotMatched:
-                    return new FormatException("Input string has invalid fraction format.");
-
-                case ParsingResult.FractionNumeratorIsOutOfRange:
-                    return new FormatException("Fraction's numerator is out of range.");
-
-                case ParsingResult.FractionDenominatorIsOutOfRange:
-                    return new FormatException("Fraction's denominator is out of range.");
-            }
-
-            return null;
-        }
-
-        private static bool ParseBarsBeats(Match match, string groupName, out int value)
-        {
-            value = 0;
-
-            var group = match.Groups[groupName];
-            return !group.Success || int.TryParse(group.Value, out value);
+            return FormatExceptionMessages.TryGetValue(parsingResult, out var formatExceptionMessage)
+                ? new FormatException(formatExceptionMessage)
+                : null;
         }
 
         #endregion

@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
-        [Description("Parse string representation of a fraction.")]
+        [Description("Parse string representation of a time.")]
         public void Parse_ToString()
         {
             var expectedTime = new MusicalTime(3, 6, new Fraction(3, 8));

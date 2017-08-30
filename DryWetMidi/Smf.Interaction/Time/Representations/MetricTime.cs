@@ -137,6 +137,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return _timeSpan.ToString(format);
         }
 
+        public static bool TryParse(string input, out MetricTime time)
+        {
+            return MetricTimeParser.TryParse(input, out time) == MetricTimeParser.ParsingResult.Parsed;
+        }
+
+        public static MetricTime Parse(string input)
+        {
+            var parsingResult = MetricTimeParser.TryParse(input, out var fraction);
+            if (parsingResult == MetricTimeParser.ParsingResult.Parsed)
+                return fraction;
+
+            throw MetricTimeParser.GetException(parsingResult, nameof(input));
+        }
+
         #endregion
 
         #region Operators
@@ -362,7 +376,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return _timeSpan.ToString();
+            return $"{Hours}:{Minutes}:{Seconds}:{Milliseconds}";
         }
 
         #endregion

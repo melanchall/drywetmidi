@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
@@ -25,17 +25,30 @@ namespace Melanchall.DryWetMidi.Common
         private const string NumeratorGroupName = "n";
         private const string DenominatorGroupName = "d";
 
-        private static readonly string NumeratorGroup = $@"(?<{NumeratorGroupName}>\d+)";
-        private static readonly string DenominatorGroup = $@"(?<{DenominatorGroupName}>\d+)";
+        private static readonly string NumeratorGroup = ParsingUtilities.GetNumberGroup(NumeratorGroupName);
+        private static readonly string DenominatorGroup = ParsingUtilities.GetNumberGroup(DenominatorGroupName);
 
         private static readonly string Divider = Regex.Escape("/");
 
         private static readonly string[] Patterns = new[]
         {
-            $"{NumeratorGroup}{Divider}{DenominatorGroup}",
-            $"{NumeratorGroup}",
-            $"{Divider}{DenominatorGroup}",
+            // numerator/denominator -> numerator/denominator
+            $@"{NumeratorGroup}\s*{Divider}\s*{DenominatorGroup}",
+
+            // numerator -> numerator/1
+            $@"{NumeratorGroup}",
+
+            // /denominator -> 1/denominator
+            $@"{Divider}\s*{DenominatorGroup}",
         };
+
+        private static readonly Dictionary<ParsingResult, string> FormatExceptionMessages =
+            new Dictionary<ParsingResult, string>
+            {
+                [ParsingResult.NotMatched] = "Input string has invalid fraction format.",
+                [ParsingResult.NumeratorIsOutOfRange] = "Numerator is out of range.",
+                [ParsingResult.DenominatorIsOutOfRange] = "Denominator is out of range."
+    };
 
         #endregion
 
@@ -48,16 +61,14 @@ namespace Melanchall.DryWetMidi.Common
             if (string.IsNullOrWhiteSpace(input))
                 return ParsingResult.InputStringIsNullOrWhiteSpace;
 
-            input = input.Trim();
-
-            var match = Patterns.Select(p => Regex.Match(input, $"^{p}$")).FirstOrDefault(m => m.Success);
+            var match = ParsingUtilities.Match(input, Patterns);
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            if (!ParseFractionPart(match, NumeratorGroupName, out var numerator))
+            if (!ParsingUtilities.ParseLong(match, NumeratorGroupName, 1, out var numerator))
                 return ParsingResult.NumeratorIsOutOfRange;
 
-            if (!ParseFractionPart(match, DenominatorGroupName, out var denominator))
+            if (!ParsingUtilities.ParseLong(match, DenominatorGroupName, 1, out var denominator))
                 return ParsingResult.DenominatorIsOutOfRange;
 
             fraction = new Fraction(numerator, denominator);
@@ -66,30 +77,12 @@ namespace Melanchall.DryWetMidi.Common
 
         internal static Exception GetException(ParsingResult parsingResult, string inputStringParameterName)
         {
-            switch (parsingResult)
-            {
-                case ParsingResult.InputStringIsNullOrWhiteSpace:
-                    return new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
+            if (parsingResult == ParsingResult.InputStringIsNullOrWhiteSpace)
+                return new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
 
-                case ParsingResult.NotMatched:
-                    return new FormatException("Input string has invalid fraction format.");
-
-                case ParsingResult.NumeratorIsOutOfRange:
-                    return new FormatException("Numerator is out of range.");
-
-                case ParsingResult.DenominatorIsOutOfRange:
-                    return new FormatException("Denominator is out of range.");
-            }
-
-            return null;
-        }
-
-        private static bool ParseFractionPart(Match match, string groupName, out long value)
-        {
-            value = 1;
-
-            var group = match.Groups[groupName];
-            return !group.Success || long.TryParse(group.Value, out value);
+            return FormatExceptionMessages.TryGetValue(parsingResult, out var formatExceptionMessage)
+                ? new FormatException(formatExceptionMessage)
+                : null;
         }
 
         #endregion
