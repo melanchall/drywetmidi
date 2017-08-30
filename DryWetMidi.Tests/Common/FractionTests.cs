@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
@@ -10,59 +9,24 @@ namespace Melanchall.DryWetMidi.Tests.Common
         #region Test methods
 
         [TestMethod]
-        [Description("Try parse valid fraction represented by numerator and denominator.")]
-        public void TryParse_NumeratorAndDenominator()
+        [Description("Try parse fraction in form of 'Numerator/Denominator'.")]
+        public void TryParse_NumeratorDenominator()
         {
             TestTryParse("3/4", new Fraction(3, 4));
         }
 
         [TestMethod]
-        [Description("Try parse valid fraction represented by numerator and divider.")]
-        public void TryParse_NumeratorAndSlash()
-        {
-            TestTryParse("3/", new Fraction(3, 1));
-        }
-
-        [TestMethod]
-        [Description("Try parse valid fraction represented by numerator only.")]
+        [Description("Try parse fraction in form of 'Numerator'.")]
         public void TryParse_Numerator()
         {
             TestTryParse("3", new Fraction(3, 1));
         }
 
         [TestMethod]
-        [Description("Try parse valid fraction represented by divider and denominator.")]
-        public void TryParse_SlashAndDenominator()
+        [Description("Try parse fraction in form of '/Denominator'.")]
+        public void TryParse_Denominator()
         {
             TestTryParse("/4", new Fraction(1, 4));
-        }
-
-        [TestMethod]
-        [Description("Parse valid fraction represented by numerator and denominator.")]
-        public void Parse_NumeratorAndDenominator()
-        {
-            Assert.AreEqual(new Fraction(3, 4), Fraction.Parse("3/4"));
-        }
-
-        [TestMethod]
-        [Description("Parse valid fraction represented by numerator and divider.")]
-        public void Parse_NumeratorAndSlash()
-        {
-            Assert.AreEqual(new Fraction(3, 1), Fraction.Parse("3/"));
-        }
-
-        [TestMethod]
-        [Description("Parse valid fraction represented by numerator only.")]
-        public void Parse_Numerator()
-        {
-            Assert.AreEqual(new Fraction(3, 1), Fraction.Parse("3"));
-        }
-
-        [TestMethod]
-        [Description("Parse valid fraction represented by divider and denominator.")]
-        public void Parse_SlashAndDenominator()
-        {
-            Assert.AreEqual(new Fraction(1, 4), Fraction.Parse("/4"));
         }
 
         [TestMethod]
@@ -71,27 +35,6 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var expectedFraction = new Fraction(5, 17);
             Assert.AreEqual(expectedFraction, Fraction.Parse(expectedFraction.ToString()));
-        }
-
-        [TestMethod]
-        [Description("Parse null input string.")]
-        public void Parse_Invalid_NullString()
-        {
-            Assert.ThrowsException<ArgumentException>(() => Fraction.Parse(null));
-        }
-
-        [TestMethod]
-        [Description("Parse input string with numerator is out of range.")]
-        public void Parse_Invalid_NumeratorIsOutOfRange()
-        {
-            Assert.ThrowsException<FormatException>(() => Fraction.Parse("9223372036854775808/2"));
-        }
-
-        [TestMethod]
-        [Description("Parse input string with denominator is out of range.")]
-        public void Parse_Invalid_DenominatorIsOutOfRange()
-        {
-            Assert.ThrowsException<FormatException>(() => Fraction.Parse("1/9223372036854775808"));
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -29,7 +30,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string BeatsGroupName = "b";
         private const string FractionGroupName = "f";
 
-        private static readonly Regex _regex = new Regex($@"^((?<{BarsGroupName}>\d+)?\s*([\.]\s*(?<{BeatsGroupName}>\d+)?)?\s*[\.])?(?<{FractionGroupName}>.*)$");
+        private static readonly string BarsGroup = $@"(?<{BarsGroupName}>\d+)";
+        private static readonly string BeatsGroup = $@"(?<{BeatsGroupName}>\d+)";
+        private static readonly string FractionGroup = $@"(?<{FractionGroupName}>.+)";
+
+        private static readonly string Divider = Regex.Escape(".");
+
+        private static readonly string[] Patterns = new[]
+        {
+            $"{BarsGroup}{Divider}{BeatsGroup}{Divider}{FractionGroup}",
+            $"{BarsGroup}{Divider}{BeatsGroup}",
+            $"{FractionGroup}",
+        };
 
         #endregion
 
@@ -44,8 +56,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             input = input.Trim();
 
-            var match = _regex.Match(input);
-            if (!match.Success)
+            var match = Patterns.Select(p => Regex.Match(input, $"^{p}$")).FirstOrDefault(m => m.Success);
+            if (match == null)
                 return ParsingResult.NotMatched;
 
             // Parse bars, beats
@@ -66,8 +78,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 {
                     case FractionParser.ParsingResult.NotMatched:
                         return ParsingResult.FractionNotMatched;
+
                     case FractionParser.ParsingResult.NumeratorIsOutOfRange:
                         return ParsingResult.FractionNumeratorIsOutOfRange;
+
                     case FractionParser.ParsingResult.DenominatorIsOutOfRange:
                         return ParsingResult.FractionDenominatorIsOutOfRange;
                 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
@@ -24,17 +25,17 @@ namespace Melanchall.DryWetMidi.Common
         private const string NumeratorGroupName = "n";
         private const string DenominatorGroupName = "d";
 
-        // Valid formats:
-        //     n / d -> n / d
-        //     n /   -> n / 1
-        //     n     -> n / 1
-        //     / d   -> 1 / d
-        //
-        // / can be one of the following symbols:
-        //     /
-        //     :
-        //     ÷
-        private static readonly Regex _regex = new Regex($@"^(?<{NumeratorGroupName}>\d+)?\s*[\/:÷]?\s*(?<{DenominatorGroupName}>\d+)?$");
+        private static readonly string NumeratorGroup = $@"(?<{NumeratorGroupName}>\d+)";
+        private static readonly string DenominatorGroup = $@"(?<{DenominatorGroupName}>\d+)";
+
+        private static readonly string Divider = Regex.Escape("/");
+
+        private static readonly string[] Patterns = new[]
+        {
+            $"{NumeratorGroup}{Divider}{DenominatorGroup}",
+            $"{NumeratorGroup}",
+            $"{Divider}{DenominatorGroup}",
+        };
 
         #endregion
 
@@ -49,8 +50,8 @@ namespace Melanchall.DryWetMidi.Common
 
             input = input.Trim();
 
-            var match = _regex.Match(input);
-            if (!match.Success)
+            var match = Patterns.Select(p => Regex.Match(input, $"^{p}$")).FirstOrDefault(m => m.Success);
+            if (match == null)
                 return ParsingResult.NotMatched;
 
             if (!ParseFractionPart(match, NumeratorGroupName, out var numerator))
