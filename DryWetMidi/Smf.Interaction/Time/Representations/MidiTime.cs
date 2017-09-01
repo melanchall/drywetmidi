@@ -19,6 +19,24 @@
 
         #endregion
 
+        #region Methods
+
+        public static bool TryParse(string input, out MidiTime time)
+        {
+            return MidiTimeParser.TryParse(input, out time) == MidiTimeParser.ParsingResult.Parsed;
+        }
+
+        public static MidiTime Parse(string input)
+        {
+            var parsingResult = MidiTimeParser.TryParse(input, out var fraction);
+            if (parsingResult == MidiTimeParser.ParsingResult.Parsed)
+                return fraction;
+
+            throw MidiTimeParser.GetException(parsingResult, nameof(input));
+        }
+
+        #endregion
+
         #region Operators
 
         public static explicit operator MidiTime(long time)

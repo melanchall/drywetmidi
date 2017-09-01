@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -6,6 +7,12 @@ namespace Melanchall.DryWetMidi.Common
 {
     internal static class ParsingUtilities
     {
+        #region Constants
+
+        private const NumberStyles NumberStyle = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite;
+
+        #endregion
+
         #region Methods
 
         public static string GetNumberGroup(string groupName)
@@ -24,7 +31,7 @@ namespace Melanchall.DryWetMidi.Common
             value = defaultValue;
 
             var group = match.Groups[groupName];
-            return !group.Success || int.TryParse(group.Value, out value);
+            return !group.Success || int.TryParse(group.Value, NumberStyle, null, out value);
         }
 
         public static bool ParseLong(Match match, string groupName, long defaultValue, out long value)
@@ -32,7 +39,7 @@ namespace Melanchall.DryWetMidi.Common
             value = defaultValue;
 
             var group = match.Groups[groupName];
-            return !group.Success || long.TryParse(group.Value, out value);
+            return !group.Success || long.TryParse(group.Value, NumberStyle, null, out value);
         }
 
         #endregion

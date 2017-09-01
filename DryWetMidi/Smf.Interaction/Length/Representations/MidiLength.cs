@@ -21,6 +21,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Methods
+
+        public static bool TryParse(string input, out MidiLength length)
+        {
+            length = null;
+
+            if (!MidiTime.TryParse(input, out var time))
+                return false;
+
+            length = new MidiLength(time);
+            return true;
+        }
+
+        public static MidiLength Parse(string input)
+        {
+            return new MidiLength(MidiTime.Parse(input));
+        }
+
+        #endregion
+
         #region Operators
 
         public static explicit operator MidiLength(long length)
