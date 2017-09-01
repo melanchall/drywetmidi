@@ -39,7 +39,9 @@
   <ItemGroup>
     <Compile Include="Common\Fraction\FractionParser.cs" />
     <Compile Include="Common\MathUtilities.cs" />
-    <Compile Include="Common\ParsingUtilities.cs" />
+    <Compile Include="Common\Parsing\ParsingResult.cs" />
+    <Compile Include="Common\Parsing\ParsingStatus.cs" />
+    <Compile Include="Common\Parsing\ParsingUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MidiLengthConverter.cs" />

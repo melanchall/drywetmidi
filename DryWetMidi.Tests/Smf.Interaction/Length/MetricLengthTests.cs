@@ -30,13 +30,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction.Length
         }
 
         [TestMethod]
-        [Description("Try parse metric length in form of 'Milliseconds'.")]
-        public void TryParse_Milliseconds()
-        {
-            TestTryParse("430", new MetricLength(0, 0, 0, 430));
-        }
-
-        [TestMethod]
         [Description("Parse string representation of a length.")]
         public void Parse_ToString()
         {

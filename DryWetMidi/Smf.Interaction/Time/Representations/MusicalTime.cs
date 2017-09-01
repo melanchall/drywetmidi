@@ -89,16 +89,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool TryParse(string input, out MusicalTime time)
         {
-            return MusicalTimeParser.TryParse(input, out time) == MusicalTimeParser.ParsingResult.Parsed;
+            return MusicalTimeParser.TryParse(input, out time).Status == ParsingStatus.Parsed;
         }
 
         public static MusicalTime Parse(string input)
         {
             var parsingResult = MusicalTimeParser.TryParse(input, out var fraction);
-            if (parsingResult == MusicalTimeParser.ParsingResult.Parsed)
+            if (parsingResult.Status == ParsingStatus.Parsed)
                 return fraction;
 
-            throw MusicalTimeParser.GetException(parsingResult, nameof(input));
+            throw parsingResult.Exception;
         }
 
         #endregion

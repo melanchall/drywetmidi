@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf.Interaction
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class MidiTime : ITime
     {
@@ -23,16 +25,16 @@
 
         public static bool TryParse(string input, out MidiTime time)
         {
-            return MidiTimeParser.TryParse(input, out time) == MidiTimeParser.ParsingResult.Parsed;
+            return MidiTimeParser.TryParse(input, out time).Status == ParsingStatus.Parsed;
         }
 
         public static MidiTime Parse(string input)
         {
             var parsingResult = MidiTimeParser.TryParse(input, out var fraction);
-            if (parsingResult == MidiTimeParser.ParsingResult.Parsed)
+            if (parsingResult.Status == ParsingStatus.Parsed)
                 return fraction;
 
-            throw MidiTimeParser.GetException(parsingResult, nameof(input));
+            throw parsingResult.Exception;
         }
 
         #endregion

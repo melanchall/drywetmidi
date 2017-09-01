@@ -139,16 +139,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool TryParse(string input, out MetricTime time)
         {
-            return MetricTimeParser.TryParse(input, out time) == MetricTimeParser.ParsingResult.Parsed;
+            return MetricTimeParser.TryParse(input, out time).Status == ParsingStatus.Parsed;
         }
 
         public static MetricTime Parse(string input)
         {
             var parsingResult = MetricTimeParser.TryParse(input, out var fraction);
-            if (parsingResult == MetricTimeParser.ParsingResult.Parsed)
+            if (parsingResult.Status == ParsingStatus.Parsed)
                 return fraction;
 
-            throw MetricTimeParser.GetException(parsingResult, nameof(input));
+            throw parsingResult.Exception;
         }
 
         #endregion

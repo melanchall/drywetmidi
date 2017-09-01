@@ -12,8 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Try parse MIDI time in form of 'time'.")]
         public void TryParse_Valid()
         {
-            MidiTime.TryParse("123", out var actualTime);
-            Assert.AreEqual((MidiTime)123, actualTime);
+            ParsingTester.TestTryParse("123", (MidiTime)123);
         }
 
         [TestMethod]
@@ -34,18 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Parse string representation of a time.")]
         public void Parse_ToString()
         {
-            var expectedTime = new MidiTime(987);
-            Assert.AreEqual(expectedTime, MidiTime.Parse(expectedTime.ToString()));
-        }
-
-        #endregion
-
-        #region Private methods
-
-        private static void TestTryParse(string input, MidiTime expectedTime)
-        {
-            MidiTime.TryParse(input, out var actualTime);
-            Assert.AreEqual(expectedTime, actualTime);
+            ParsingTester.TestToString(new MidiTime(987));
         }
 
         #endregion

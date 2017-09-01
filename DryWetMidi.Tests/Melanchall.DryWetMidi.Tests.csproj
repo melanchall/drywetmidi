@@ -64,6 +64,7 @@
     <Compile Include="Smf.Interaction\Time\MetricTimeTests.cs" />
     <Compile Include="Smf.Interaction\Time\MidiTimeTests.cs" />
     <Compile Include="Smf.Interaction\Time\MusicalTimeTests.cs" />
+    <Compile Include="Smf.Interaction\Time\ParsingTester.cs" />
     <Compile Include="Utilities\Equality\EventEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
     <Compile Include="Utilities\Equality\TimedEventEquality.cs" />
