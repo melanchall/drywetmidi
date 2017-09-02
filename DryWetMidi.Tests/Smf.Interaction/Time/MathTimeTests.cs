@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
@@ -6,6 +7,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
     [TestClass]
     public class MathTimeTests
     {
+        #region Test methods
+
         [TestMethod]
         [Description("Subtract metric length from metric time.")]
         public void Conversion_Metric_Metric_Subtract()
@@ -92,5 +95,37 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreEqual(TimeConverter.ConvertFrom(new MusicalTime(2, 0, MusicalFraction.Quarter), tempoMap),
                             TimeConverter.ConvertFrom(mathTime, tempoMap));
         }
+
+        [TestMethod]
+        [Description("Try parse musical time plus musical length.")]
+        public void TryParse_MusicalPlusMusical()
+        {
+            TimeParsingTester.TestTryParse("0.0.4/5 + 6/8",
+                                           new MathTime(new MusicalTime(new Fraction(4, 5)),
+                                                        new MusicalLength(new Fraction(6, 8)),
+                                                        MathOperation.Add));
+        }
+
+        [TestMethod]
+        [Description("Try parse musical time plus metric length.")]
+        public void TryParse_MusicalPlusMetric()
+        {
+            TimeParsingTester.TestTryParse("4/5 + 7:56",
+                                           new MathTime(new MusicalTime(new Fraction(4, 5)),
+                                                        new MetricLength(0, 7, 56),
+                                                        MathOperation.Add));
+        }
+
+        [TestMethod]
+        [Description("Try parse metric time minus MIDI length.")]
+        public void TryParse_MetricMinusMidi()
+        {
+            TimeParsingTester.TestTryParse("0:0:0:123 - 756",
+                                           new MathTime(new MetricTime(0, 0, 0, 123),
+                                                        new MidiLength(756),
+                                                        MathOperation.Subtract));
+        }
+
+        #endregion
     }
 }

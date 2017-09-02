@@ -5,7 +5,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     internal static class MetricTimeParser
     {
-
         #region Constants
 
         private const string HoursGroupName = "h";

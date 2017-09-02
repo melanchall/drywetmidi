@@ -9,6 +9,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static readonly Func<string, Tuple<ParsingResult, ITime>>[] Parsers = new Func<string, Tuple<ParsingResult, ITime>>[]
         {
+            input => Tuple.Create(MathTimeParser.TryParse(input, out var time), (ITime)time),
             input => Tuple.Create(MidiTimeParser.TryParse(input, out var time), (ITime)time),
             input => Tuple.Create(MetricTimeParser.TryParse(input, out var time), (ITime)time),
             input => Tuple.Create(MusicalTimeParser.TryParse(input, out var time), (ITime)time),
@@ -38,7 +39,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             time = null;
 
-            if (MidiTime.TryParse(input, out var midiTime))
+            if (MathTime.TryParse(input, out var mathTime))
+                time = mathTime;
+            else if (MidiTime.TryParse(input, out var midiTime))
                 time = midiTime;
             else if (MetricTime.TryParse(input, out var metricTime))
                 time = metricTime;

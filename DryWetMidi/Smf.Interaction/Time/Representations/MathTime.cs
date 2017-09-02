@@ -64,6 +64,46 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Methods
+
+        public static bool TryParse(string input, out MathTime time)
+        {
+            return MathTimeParser.TryParse(input, out time).Status == ParsingStatus.Parsed;
+        }
+
+        public static MathTime Parse(string input)
+        {
+            var parsingResult = MathTimeParser.TryParse(input, out var fraction);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return fraction;
+
+            throw parsingResult.Exception;
+        }
+
+        #endregion
+
+        #region Operators
+
+        public static bool operator ==(MathTime time1, MathTime time2)
+        {
+            if (ReferenceEquals(time1, time2))
+                return true;
+
+            if (ReferenceEquals(null, time1) || ReferenceEquals(null, time2))
+                return false;
+
+            return time1.Time.Equals(time2.Time) &&
+                   time1.Offset.Equals(time2.Offset) &&
+                   time1.Operation == time2.Operation;
+        }
+
+        public static bool operator !=(MathTime time1, MathTime time2)
+        {
+            return !(time1 == time2);
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -77,6 +117,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 : "-";
 
             return $"({Time} {operationString} {Offset})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this == (obj as MathTime);
+        }
+
+        public override int GetHashCode()
+        {
+            return Time.GetHashCode() ^ Operation.GetHashCode() ^ Offset.GetHashCode();
         }
 
         #endregion
