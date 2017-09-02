@@ -9,6 +9,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static readonly Func<string, Tuple<ParsingResult, ILength>>[] Parsers = new Func<string, Tuple<ParsingResult, ILength>>[]
         {
+            input => Tuple.Create(MathLengthParser.TryParse(input, out var length), (ILength)length),
             input => Tuple.Create(MidiLengthParser.TryParse(input, out var length), (ILength)length),
             input => Tuple.Create(MetricLengthParser.TryParse(input, out var length), (ILength)length),
             input => Tuple.Create(MusicalLengthParser.TryParse(input, out var length), (ILength)length),
@@ -45,7 +46,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             length = null;
 
-            if (MidiLength.TryParse(input, out var midiLength))
+            if (MathLength.TryParse(input, out var mathLength))
+                length = mathLength;
+            else if (MidiLength.TryParse(input, out var midiLength))
                 length = midiLength;
             else if (MetricLength.TryParse(input, out var metricLength))
                 length = metricLength;

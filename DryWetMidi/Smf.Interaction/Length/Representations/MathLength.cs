@@ -59,6 +59,46 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Methods
+
+        public static bool TryParse(string input, out MathLength length)
+        {
+            return MathLengthParser.TryParse(input, out length).Status == ParsingStatus.Parsed;
+        }
+
+        public static MathLength Parse(string input)
+        {
+            var parsingResult = MathLengthParser.TryParse(input, out var fraction);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return fraction;
+
+            throw parsingResult.Exception;
+        }
+
+        #endregion
+
+        #region Operators
+
+        public static bool operator ==(MathLength length1, MathLength length2)
+        {
+            if (ReferenceEquals(length1, length2))
+                return true;
+
+            if (ReferenceEquals(null, length1) || ReferenceEquals(null, length2))
+                return false;
+
+            return length1.Length1.Equals(length2.Length1) &&
+                   length1.Length2.Equals(length2.Length2) &&
+                   length1.Operation == length2.Operation;
+        }
+
+        public static bool operator !=(MathLength length1, MathLength length2)
+        {
+            return !(length1 == length2);
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -71,7 +111,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 ? "+"
                 : "-";
 
-            return $"({Length1} {operationString} {Length2})";
+            return $"({Length1.ToString()} {operationString} {Length2.ToString()})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this == (obj as MathLength);
+        }
+
+        public override int GetHashCode()
+        {
+            return Length1.GetHashCode() ^ Operation.GetHashCode() ^ Length2.GetHashCode();
         }
 
         #endregion

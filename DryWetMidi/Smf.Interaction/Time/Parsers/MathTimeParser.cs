@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string OperationGroupName = "op";
 
         private static readonly string TimeGroup = $@"(?<{TimeGroupName}>.+?)";
-        private static readonly string OffsetGroup = $@"(?<{OffsetGroupName}>.+)";
+        private static readonly string OffsetGroup = $@"(?<{OffsetGroupName}>.+?)";
 
         private static readonly string[] Patterns = new[]
         {

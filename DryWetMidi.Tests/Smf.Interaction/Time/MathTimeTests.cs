@@ -126,6 +126,15 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         MathOperation.Subtract));
         }
 
+        [TestMethod]
+        [Description("Parse string representation of a time.")]
+        public void TryParse_ToString()
+        {
+            TimeParsingTester.TestToString(new MathTime(new MetricTime(0, 0, 0, 123),
+                                                        new MidiLength(756),
+                                                        MathOperation.Subtract));
+        }
+
         #endregion
     }
 }
