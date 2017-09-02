@@ -83,16 +83,16 @@ namespace Melanchall.DryWetMidi.Common
 
         public static bool TryParse(string input, out Fraction fraction)
         {
-            return FractionParser.TryParse(input, out fraction) == FractionParser.ParsingResult.Parsed;
+            return FractionParser.TryParse(input, out fraction).Status == ParsingStatus.Parsed;
         }
 
         public static Fraction Parse(string input)
         {
             var parsingResult = FractionParser.TryParse(input, out var fraction);
-            if (parsingResult == FractionParser.ParsingResult.Parsed)
+            if (parsingResult.Status == ParsingStatus.Parsed)
                 return fraction;
 
-            throw FractionParser.GetException(parsingResult, nameof(input));
+            throw parsingResult.Exception;
         }
 
         /// <summary>

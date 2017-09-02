@@ -46,6 +46,9 @@
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MidiLengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\LengthUtilities.cs" />
+    <Compile Include="Smf.Interaction\Length\Parsers\MetricLengthParser.cs" />
+    <Compile Include="Smf.Interaction\Length\Parsers\MidiLengthParser.cs" />
+    <Compile Include="Smf.Interaction\Length\Parsers\MusicalLengthParser.cs" />
     <Compile Include="Smf.Interaction\Length\Representations\MathLength.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MathLengthConverter.cs" />
     <Compile Include="Smf.Interaction\Length\Converters\MusicalLengthConverter.cs" />

@@ -30,9 +30,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static MidiTime Parse(string input)
         {
-            var parsingResult = MidiTimeParser.TryParse(input, out var fraction);
+            var parsingResult = MidiTimeParser.TryParse(input, out var time);
             if (parsingResult.Status == ParsingStatus.Parsed)
-                return fraction;
+                return time;
 
             throw parsingResult.Exception;
         }

@@ -1,25 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
 {
     internal static class FractionParser
     {
-        #region Nested types
-
-        internal enum ParsingResult
-        {
-            Parsed,
-
-            InputStringIsNullOrWhiteSpace,
-            NotMatched,
-            NumeratorIsOutOfRange,
-            DenominatorIsOutOfRange,
-        }
-
-        #endregion
-
         #region Constants
 
         private const string NumeratorGroupName = "n";
@@ -35,20 +19,12 @@ namespace Melanchall.DryWetMidi.Common
             // numerator/denominator -> numerator/denominator
             $@"{NumeratorGroup}\s*{Divider}\s*{DenominatorGroup}",
 
-            // numerator -> numerator/1
-            $@"{NumeratorGroup}",
-
             // /denominator -> 1/denominator
             $@"{Divider}\s*{DenominatorGroup}",
         };
 
-        private static readonly Dictionary<ParsingResult, string> FormatExceptionMessages =
-            new Dictionary<ParsingResult, string>
-            {
-                [ParsingResult.NotMatched] = "Input string has invalid fraction format.",
-                [ParsingResult.NumeratorIsOutOfRange] = "Numerator is out of range.",
-                [ParsingResult.DenominatorIsOutOfRange] = "Denominator is out of range."
-    };
+        private const string NumeratorIsOutOfRange = "Numerator is out of range.";
+        private const string DenominatorIsOutOfRange = "Denominator is out of range.";
 
         #endregion
 
@@ -59,30 +35,20 @@ namespace Melanchall.DryWetMidi.Common
             fraction = Fraction.ZeroFraction;
 
             if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.InputStringIsNullOrWhiteSpace;
+                return ParsingResult.EmptyInputString;
 
             var match = ParsingUtilities.Match(input, Patterns);
             if (match == null)
                 return ParsingResult.NotMatched;
 
             if (!ParsingUtilities.ParseLong(match, NumeratorGroupName, 1, out var numerator))
-                return ParsingResult.NumeratorIsOutOfRange;
+                return new ParsingResult(NumeratorIsOutOfRange);
 
             if (!ParsingUtilities.ParseLong(match, DenominatorGroupName, 1, out var denominator))
-                return ParsingResult.DenominatorIsOutOfRange;
+                return new ParsingResult(DenominatorIsOutOfRange);
 
             fraction = new Fraction(numerator, denominator);
             return ParsingResult.Parsed;
-        }
-
-        internal static Exception GetException(ParsingResult parsingResult, string inputStringParameterName)
-        {
-            if (parsingResult == ParsingResult.InputStringIsNullOrWhiteSpace)
-                return new ArgumentException("Input string is null or contains white-spaces only.", inputStringParameterName);
-
-            return FormatExceptionMessages.TryGetValue(parsingResult, out var formatExceptionMessage)
-                ? new FormatException(formatExceptionMessage)
-                : null;
         }
 
         #endregion

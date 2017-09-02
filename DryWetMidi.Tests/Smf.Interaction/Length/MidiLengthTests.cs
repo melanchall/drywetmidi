@@ -12,8 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Try parse MIDI length in form of 'length'.")]
         public void TryParse_Valid()
         {
-            MidiLength.TryParse("123", out var actualLength);
-            Assert.AreEqual((MidiLength)123, actualLength);
+            LengthParsingTester.TestTryParse("123", (MidiLength)123);
         }
 
         [TestMethod]
@@ -34,18 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Parse string representation of a length.")]
         public void Parse_ToString()
         {
-            var expectedLength = new MidiLength(987);
-            Assert.AreEqual(expectedLength, MidiLength.Parse(expectedLength.ToString()));
-        }
-
-        #endregion
-
-        #region Private methods
-
-        private static void TestTryParse(string input, MidiLength expectedLength)
-        {
-            MidiLength.TryParse(input, out var actualLength);
-            Assert.AreEqual(expectedLength, actualLength);
+            LengthParsingTester.TestToString(new MidiLength(987));
         }
 
         #endregion

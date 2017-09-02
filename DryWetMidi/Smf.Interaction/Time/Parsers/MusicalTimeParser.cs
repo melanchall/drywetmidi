@@ -32,8 +32,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string BarsIsOutOfRange = "Bars number is out of range.";
         private const string BeatsIsOutOfRange = "Beats number is out of range.";
         private const string FractionNotMatched = "Input string has invalid fraction format.";
-        private const string FractionNumeratorIsOutOfRange = "Fraction's numerator is out of range.";
-        private const string FractionDenominatorIsOutOfRange = "Fraction's denominator is out of range.";
 
         #endregion
 
@@ -64,16 +62,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var fractionGroup = match.Groups[FractionGroupName];
             if (fractionGroup.Success)
             {
-                switch (FractionParser.TryParse(fractionGroup.Value, out fraction))
+                var fractionParsingResult = FractionParser.TryParse(fractionGroup.Value, out fraction);
+                switch (fractionParsingResult.Status)
                 {
-                    case FractionParser.ParsingResult.NotMatched:
+                    case ParsingStatus.EmptyInputString:
+                    case ParsingStatus.NotMatched:
                         return new ParsingResult(FractionNotMatched);
 
-                    case FractionParser.ParsingResult.NumeratorIsOutOfRange:
-                        return new ParsingResult(FractionNumeratorIsOutOfRange);
-
-                    case FractionParser.ParsingResult.DenominatorIsOutOfRange:
-                        return new ParsingResult(FractionDenominatorIsOutOfRange);
+                    case ParsingStatus.FormatError:
+                        return new ParsingResult(fractionParsingResult.Error);
                 }
             }
 

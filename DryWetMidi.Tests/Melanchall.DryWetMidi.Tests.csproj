@@ -53,8 +53,10 @@
     <Compile Include="ComplexTests\QuantizeNotes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordTests.cs" />
+    <Compile Include="Smf.Interaction\Length\LengthParsingTester.cs" />
     <Compile Include="Smf.Interaction\Length\MetricLengthTests.cs" />
     <Compile Include="Smf.Interaction\Length\MidiLengthTests.cs" />
+    <Compile Include="Smf.Interaction\Length\MusicalLengthTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinitionTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\NoteDefinitionTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternTests.cs" />
@@ -64,7 +66,7 @@
     <Compile Include="Smf.Interaction\Time\MetricTimeTests.cs" />
     <Compile Include="Smf.Interaction\Time\MidiTimeTests.cs" />
     <Compile Include="Smf.Interaction\Time\MusicalTimeTests.cs" />
-    <Compile Include="Smf.Interaction\Time\ParsingTester.cs" />
+    <Compile Include="Smf.Interaction\Time\TimeParsingTester.cs" />
     <Compile Include="Utilities\Equality\EventEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
     <Compile Include="Utilities\Equality\TimedEventEquality.cs" />

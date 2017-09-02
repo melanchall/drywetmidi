@@ -16,13 +16,6 @@ namespace Melanchall.DryWetMidi.Tests.Common
         }
 
         [TestMethod]
-        [Description("Try parse fraction in form of 'Numerator'.")]
-        public void TryParse_Numerator()
-        {
-            TestTryParse("3", new Fraction(3, 1));
-        }
-
-        [TestMethod]
         [Description("Try parse fraction in form of '/Denominator'.")]
         public void TryParse_Denominator()
         {

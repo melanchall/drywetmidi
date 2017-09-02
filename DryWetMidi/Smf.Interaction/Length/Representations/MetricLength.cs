@@ -126,18 +126,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool TryParse(string input, out MetricLength length)
         {
-            length = null;
-
-            if (!MetricTime.TryParse(input, out var time))
-                return false;
-
-            length = new MetricLength(time);
-            return true;
+            return MetricLengthParser.TryParse(input, out length).Status == ParsingStatus.Parsed;
         }
 
         public static MetricLength Parse(string input)
         {
-            return new MetricLength(MetricTime.Parse(input));
+            var parsingResult = MetricLengthParser.TryParse(input, out var length);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return length;
+
+            throw parsingResult.Exception;
         }
 
         #endregion

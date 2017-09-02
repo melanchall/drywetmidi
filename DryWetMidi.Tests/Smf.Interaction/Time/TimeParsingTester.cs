@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
-    internal static class ParsingTester
+    internal static class TimeParsingTester
     {
         #region Methods
 

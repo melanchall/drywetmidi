@@ -38,18 +38,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool TryParse(string input, out MusicalLength length)
         {
-            length = null;
-
-            if (!Fraction.TryParse(input, out var fraction))
-                return false;
-
-            length = fraction;
-            return true;
+            return MusicalLengthParser.TryParse(input, out length).Status == ParsingStatus.Parsed;
         }
 
         public static MusicalLength Parse(string input)
         {
-            return Fraction.Parse(input);
+            var parsingResult = MusicalLengthParser.TryParse(input, out var length);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return length;
+
+            throw parsingResult.Exception;
         }
 
         #endregion
