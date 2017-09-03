@@ -168,6 +168,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return CreateDottedTuplet(fraction, dotsCount, NoTupletNotesCount, NoTupletSpaceSize);
         }
 
+        public static Fraction CreateDotted(long numerator, long denominator, int dotsCount)
+        {
+            return CreateDottedTuplet(numerator, denominator, dotsCount, NoTupletNotesCount, NoTupletSpaceSize);
+        }
+
         /// <summary>
         /// Creates an instance of the <see cref="Fraction"/> that represents the specified tuplet fraction,
         /// e.g. 1/12 for triplet eighth.
@@ -201,12 +206,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static Fraction CreateDottedTuplet(long fraction, int dotsCount, int tupletNotesCount, int tupletSpaceSize)
         {
             ThrowIfArgument.IsNonpositive(nameof(fraction), fraction, "Fraction is zero or negative.");
+
+            return CreateDottedTuplet(1, fraction, dotsCount, tupletNotesCount, tupletSpaceSize);
+        }
+
+        public static Fraction CreateDottedTuplet(long numerator, long denominator, int dotsCount, int tupletNotesCount, int tupletSpaceSize)
+        {
+            ThrowIfArgument.IsNegative(nameof(numerator), numerator, "Numerator is negative.");
+            ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is negative.");
             ThrowIfArgument.IsNegative(nameof(dotsCount), dotsCount, "Dots count is negative.");
             ThrowIfArgument.IsNonpositive(nameof(tupletNotesCount), tupletNotesCount, "Tuplet's notes count is zero or negative.");
             ThrowIfArgument.IsNonpositive(nameof(tupletSpaceSize), tupletSpaceSize, "Tuplet's space size is zero or negative.");
 
-            // [1] create simple fraction:
-            //     f = 1 / fraction
+            // [1] create fraction:
+            //     f = numerator / denominator
             //
             // [2] add dots:
             //     f = f * (2 ^ (dotsCount + 1) - 1) / 2 ^ dotsCount
@@ -214,8 +227,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             // [3] make tuplet:
             //     f = f * tupletSpaceSize / tupletNotesCount
 
-            return new Fraction(((1 << dotsCount + 1) - 1) * tupletSpaceSize,
-                                fraction * (1 << dotsCount) * tupletNotesCount);
+            return new Fraction(numerator * ((1 << dotsCount + 1) - 1) * tupletSpaceSize,
+                                denominator * (1 << dotsCount) * tupletNotesCount);
         }
 
         /// <summary>

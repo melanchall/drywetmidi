@@ -31,6 +31,48 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Try parse musical time in form of 'FractionMnemonic'.")]
+        public void TryParse_FractionMnemonic()
+        {
+            TimeParsingTester.TestTryParse("w", (MusicalTime)MusicalFraction.Whole);
+        }
+
+        [TestMethod]
+        [Description("Try parse musical time in form of 'Bars.Beats.FractionMnemonic'.")]
+        public void TryParse_BarsBeatsFractionMnemonicDots()
+        {
+            TimeParsingTester.TestTryParse("1.2.w.", new MusicalTime(1, 2, MusicalFraction.WholeDotted));
+        }
+
+        [TestMethod]
+        [Description("Try parse musical time in form of 'FractionMnemonic TupletMnemonic Dots'.")]
+        public void TryParse_FractionMnemonic_TupletMnemonic_Dots()
+        {
+            TimeParsingTester.TestTryParse("e t .", (MusicalTime)MusicalFraction.CreateDottedTriplet(8, 1));
+        }
+
+        [TestMethod]
+        [Description("Try parse musical time in form of 'FractionMnemonic Tuplet'.")]
+        public void TryParse_FractionMnemonic_Tuplet()
+        {
+            TimeParsingTester.TestTryParse("h [ 3 : 2 ]", (MusicalTime)MusicalFraction.HalfTriplet);
+        }
+
+        [TestMethod]
+        [Description("Try parse musical time in form of '/Denominator Tuplet Dots'.")]
+        public void TryParse_Fraction_Tuplet_Dots()
+        {
+            TimeParsingTester.TestTryParse("/3[4:7]..", (MusicalTime)MusicalFraction.CreateDottedTuplet(3, 2, 4, 7));
+        }
+
+        [TestMethod]
+        [Description("Try parse musical time in form of 'Numerator/Denominator Dots'.")]
+        public void TryParse_Fraction_Dots()
+        {
+            TimeParsingTester.TestTryParse("2/3..", (MusicalTime)MusicalFraction.CreateDotted(2, 3, 2));
+        }
+
+        [TestMethod]
         [Description("Parse string representation of a time.")]
         public void Parse_ToString()
         {

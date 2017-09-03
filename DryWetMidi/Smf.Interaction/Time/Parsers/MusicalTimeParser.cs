@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var fractionGroup = match.Groups[FractionGroupName];
             if (fractionGroup.Success)
             {
-                var fractionParsingResult = FractionParser.TryParse(fractionGroup.Value, out fraction);
+                var fractionParsingResult = MusicalFractionParser.TryParse(fractionGroup.Value, out fraction);
                 switch (fractionParsingResult.Status)
                 {
                     case ParsingStatus.EmptyInputString:

@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             length = null;
 
-            var result = FractionParser.TryParse(input, out var fraction);
+            var result = MusicalFractionParser.TryParse(input, out var fraction);
             if (result.Status == ParsingStatus.Parsed)
                 length = new MusicalLength(fraction);
 
