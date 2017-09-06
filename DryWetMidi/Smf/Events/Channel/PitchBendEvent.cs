@@ -49,13 +49,13 @@
         {
             get
             {
-                return DataTypesUtilities.Combine(this[PitchValueLsbParameterIndex],
-                                                  this[PitchValueMsbParameterIndex]);
+                return DataTypesUtilities.Combine(this[PitchValueMsbParameterIndex],
+                                                  this[PitchValueLsbParameterIndex]);
             }
             set
             {
-                this[PitchValueLsbParameterIndex] = value.GetHead();
-                this[PitchValueMsbParameterIndex] = value.GetTail();
+                this[PitchValueLsbParameterIndex] = value.GetTail();
+                this[PitchValueMsbParameterIndex] = value.GetHead();
             }
         }
 
