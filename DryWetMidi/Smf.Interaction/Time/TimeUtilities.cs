@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -13,6 +14,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             input => Tuple.Create(MidiTimeParser.TryParse(input, out var time), (ITime)time),
             input => Tuple.Create(MetricTimeParser.TryParse(input, out var time), (ITime)time),
             input => Tuple.Create(MusicalTimeParser.TryParse(input, out var time), (ITime)time),
+        };
+
+        private static readonly Func<ITime, ITime, long, long, TempoMap, ILength>[] Subtracters = new Func<ITime, ITime, long, long, TempoMap, ILength>[]
+        {
+            TryToSubtractFromMetricTime,
+            TryToSubtractFromMusicalTime,
+            TryToSubtractFromMidiTime,
+            TryToSubtractFromMathTime
         };
 
         #endregion
@@ -33,6 +42,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(length), length);
 
             return new MathTime(time, length, MathOperation.Subtract);
+        }
+
+        public static ILength Subtract(this ITime minuend, ITime subtrahend, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(minuend), minuend);
+            ThrowIfArgument.IsNull(nameof(subtrahend), subtrahend);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            var convertedMinuend = TimeConverter.ConvertFrom(minuend, tempoMap);
+            var convertedSubtrahend = TimeConverter.ConvertFrom(subtrahend, tempoMap);
+
+            var length = convertedMinuend - convertedSubtrahend;
+            if (length < 0)
+                throw new ArgumentException("First time is less than the second one.", nameof(minuend));
+
+            var result = Subtracters.Select(s => s(minuend, subtrahend, convertedSubtrahend, length, tempoMap))
+                                    .FirstOrDefault(l => l != null);
+
+            return result ?? throw new ArgumentException("First time is of unknown type.", nameof(minuend));
         }
 
         public static bool TryParse(string input, out ITime time)
@@ -69,6 +97,58 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             throw new FormatException("Time has unknown format.");
+        }
+
+        private static ILength TryToSubtractFromMetricTime(ITime minuend, ITime subtrahend, long time, long length, TempoMap tempoMap)
+        {
+            var metricMinuend = minuend as MetricTime;
+            if (metricMinuend == null)
+                return null;
+
+            var metricSubtrahend = subtrahend as MetricTime;
+            return metricSubtrahend != null
+                ? new MetricLength(metricMinuend - metricSubtrahend)
+                : LengthConverter.ConvertTo<MetricLength>(length, time, tempoMap);
+        }
+
+        private static ILength TryToSubtractFromMusicalTime(ITime minuend, ITime subtrahend, long time, long length, TempoMap tempoMap)
+        {
+            var musicalMinuend = minuend as MusicalTime;
+            if (musicalMinuend == null)
+                return null;
+
+            var musicalSubtrahend = subtrahend as MusicalTime;
+            if (musicalSubtrahend != null)
+            {
+                if (musicalMinuend.Bars == 0 && musicalMinuend.Beats == 0 &&
+                    musicalSubtrahend.Bars == 0 && musicalSubtrahend.Beats == 0)
+                    return new MusicalLength(musicalMinuend.Fraction - musicalSubtrahend.Fraction);
+            }
+
+            return LengthConverter.ConvertTo<MusicalLength>(length, time, tempoMap);
+        }
+
+        private static ILength TryToSubtractFromMidiTime(ITime minuend, ITime subtrahend, long time, long length, TempoMap tempoMap)
+        {
+            var midiMinuend = minuend as MidiTime;
+            if (midiMinuend == null)
+                return null;
+
+            var midiSubtrahend = subtrahend as MidiTime;
+            return midiSubtrahend != null
+                ? new MidiLength(midiMinuend - midiSubtrahend)
+                : LengthConverter.ConvertTo<MidiLength>(length, time, tempoMap);
+        }
+
+        private static ILength TryToSubtractFromMathTime(ITime minuend, ITime subtrahend, long time, long length, TempoMap tempoMap)
+        {
+            var mathMinuend = minuend as MathTime;
+            if (mathMinuend == null)
+                return null;
+
+            return new MathLength(mathMinuend.Time.Subtract(subtrahend, tempoMap),
+                                  mathMinuend.Offset,
+                                  mathMinuend.Operation);
         }
 
         #endregion
