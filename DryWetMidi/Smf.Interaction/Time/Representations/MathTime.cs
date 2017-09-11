@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 ? "+"
                 : "-";
 
-            return $"({Time.ToString()} {operationString} {Offset.ToString()})";
+            return $"({Time} {operationString} {Offset})";
         }
 
         public override bool Equals(object obj)

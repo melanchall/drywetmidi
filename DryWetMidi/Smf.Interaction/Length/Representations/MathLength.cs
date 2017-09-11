@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 ? "+"
                 : "-";
 
-            return $"({Length1.ToString()} {operationString} {Length2.ToString()})";
+            return $"({Length1} {operationString} {Length2})";
         }
 
         public override bool Equals(object obj)

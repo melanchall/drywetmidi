@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents metric length of an object expressed in hours, minutes and seconds.
     /// </summary>
-    public sealed class MetricLength : ILength, IFormattable
+    public sealed class MetricLength : ILength
     {
         #region Fields
 
@@ -110,19 +110,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Converts the value of the current <see cref="MetricLength"/> object to its equivalent string
-        /// representation by using the specified format.
-        /// </summary>
-        /// <param name="format">A standard or custom <see cref="TimeSpan"/> format string.</param>
-        /// <returns>The string representation of the current <see cref="MetricLength"/> value in the format
-        /// specified by the format parameter.</returns>
-        /// <exception cref="FormatException"><paramref name="format"/> is not recognized or is not supported.</exception>
-        public string ToString(string format)
-        {
-            return _time.ToString(format);
-        }
 
         public static bool TryParse(string input, out MetricLength length)
         {
@@ -328,25 +315,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public override string ToString()
         {
             return _time.ToString();
-        }
-
-        #endregion
-
-        #region IFormattable
-
-        /// <summary>
-        /// Converts the value of the current <see cref="MetricLength"/> object to its equivalent string
-        /// representation by using the specified format and culture-specific formatting
-        /// information.
-        /// </summary>
-        /// <param name="format">A standard or custom <see cref="TimeSpan"/> format string.</param>
-        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
-        /// <returns>The string representation of the current <see cref="MetricLength"/> value, as specified
-        /// by <paramref name="format"/> and <paramref name="formatProvider"/>.</returns>
-        /// <exception cref="FormatException"><paramref name="format"/> is not recognized or is not supported.</exception>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return _time.ToString(format, formatProvider);
         }
 
         #endregion
