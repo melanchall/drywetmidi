@@ -341,18 +341,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 : LengthUtilities.Subtract(this, length);
         }
 
-        public ILength Multiply(int multiplier)
+        public ILength Multiply(double multiplier)
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new MetricLength(TotalMicroseconds * multiplier);
+            return new MetricLength((long)Math.Round(TotalMicroseconds * multiplier));
         }
 
-        public ILength Divide(int divisor)
+        public ILength Divide(double divisor)
         {
             ThrowIfArgument.IsNegative(nameof(divisor), divisor, "Divisor is negative.");
 
-            return new MetricLength(TotalMicroseconds / divisor);
+            return new MetricLength((long)Math.Round(TotalMicroseconds / divisor));
         }
 
         #endregion

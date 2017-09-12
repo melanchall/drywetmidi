@@ -19,6 +19,8 @@ namespace Melanchall.DryWetMidi.Common
         private const long DefaultNumerator = 0;
         private const long DefaultDenominator = 1;
 
+        private const int DoubleFractionMultiplier = 1000;
+
         #endregion
 
         #region Constructor
@@ -161,6 +163,15 @@ namespace Melanchall.DryWetMidi.Common
                                 fraction.Denominator);
         }
 
+        public static Fraction operator *(Fraction fraction, double number)
+        {
+            ThrowIfArgument.IsNull(nameof(fraction), fraction);
+            ThrowIfArgument.IsNegative(nameof(number), number, "Number is negative.");
+
+            return new Fraction((long)Math.Round(fraction.Numerator * number * DoubleFractionMultiplier),
+                                fraction.Denominator * DoubleFractionMultiplier);
+        }
+
         /// <summary>
         /// Multiplies the specified nonnegative integer number by <see cref="Fraction"/>.
         /// </summary>
@@ -170,6 +181,11 @@ namespace Melanchall.DryWetMidi.Common
         /// <exception cref="ArgumentNullException"><paramref name="fraction"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is negative.</exception>
         public static Fraction operator *(long number, Fraction fraction)
+        {
+            return fraction * number;
+        }
+
+        public static Fraction operator *(double number, Fraction fraction)
         {
             return fraction * number;
         }
@@ -206,6 +222,15 @@ namespace Melanchall.DryWetMidi.Common
 
             return new Fraction(fraction.Numerator,
                                 fraction.Denominator * number);
+        }
+
+        public static Fraction operator /(Fraction fraction, double number)
+        {
+            ThrowIfArgument.IsNull(nameof(fraction), fraction);
+            ThrowIfArgument.IsNonpositive(nameof(number), number, "Number is zero or negative.");
+
+            return new Fraction(fraction.Numerator * DoubleFractionMultiplier,
+                                (long)Math.Round(fraction.Denominator * number * DoubleFractionMultiplier));
         }
 
         /// <summary>

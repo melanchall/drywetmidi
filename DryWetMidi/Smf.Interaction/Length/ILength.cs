@@ -9,8 +9,8 @@
 
         ILength Subtract(ILength length);
 
-        ILength Multiply(int multiplier);
+        ILength Multiply(double multiplier);
 
-        ILength Divide(int divisor);
+        ILength Divide(double divisor);
     }
 }

@@ -142,7 +142,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return LengthUtilities.Subtract(this, length);
         }
 
-        public ILength Multiply(int multiplier)
+        public ILength Multiply(double multiplier)
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                   Operation);
         }
 
-        public ILength Divide(int divisor)
+        public ILength Divide(double divisor)
         {
             ThrowIfArgument.IsNegative(nameof(divisor), divisor, "Divisor is negative.");
 

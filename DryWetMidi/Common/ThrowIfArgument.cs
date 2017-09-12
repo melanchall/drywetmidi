@@ -41,6 +41,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentOutOfRangeException(parameterName, value, message);
         }
 
+        internal static void IsOutOfRange(string parameterName, double value, double min, double max, string message)
+        {
+            if (value < min || value > max)
+                throw new ArgumentOutOfRangeException(parameterName, value, message);
+        }
+
         internal static void DoesntSatisfyCondition(string parameterName, int value, Predicate<int> condition, string message)
         {
             if (!condition(value))
@@ -67,12 +73,22 @@ namespace Melanchall.DryWetMidi.Common
             IsOutOfRange(parameterName, value, reference, long.MaxValue, message);
         }
 
+        internal static void IsLessThan(string parameterName, double value, double reference, string message)
+        {
+            IsOutOfRange(parameterName, value, reference, double.MaxValue, message);
+        }
+
         internal static void IsNegative(string parameterName, int value, string message)
         {
             IsLessThan(parameterName, value, MinNonnegativeValue, message);
         }
 
         internal static void IsNegative(string parameterName, long value, string message)
+        {
+            IsLessThan(parameterName, value, MinNonnegativeValue, message);
+        }
+
+        internal static void IsNegative(string parameterName, double value, string message)
         {
             IsLessThan(parameterName, value, MinNonnegativeValue, message);
         }
@@ -85,6 +101,11 @@ namespace Melanchall.DryWetMidi.Common
         internal static void IsNonpositive(string parameterName, long value, string message)
         {
             IsLessThan(parameterName, value, MinPositiveValue, message);
+        }
+
+        internal static void IsNonpositive(string parameterName, double value, string message)
+        {
+            IsLessThan(parameterName, value, double.Epsilon, message);
         }
 
         internal static void IsNullOrWhiteSpaceString(string parameterName, string value, string stringDescription)

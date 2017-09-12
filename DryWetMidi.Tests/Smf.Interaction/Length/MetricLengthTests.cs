@@ -91,11 +91,31 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Multiply metric length by double value.")]
+        public void Multiply_Double()
+        {
+            var actual = new MetricLength(0, 1, 30).Multiply(3.5);
+            var expected = new MetricLength(0, 5, 15);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         [Description("Divide metric length.")]
         public void Divide()
         {
             var actual = new MetricLength(3, 1, 30).Divide(3);
             var expected = new MetricLength(1, 0, 30);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Divide metric length by double value.")]
+        public void Divide_Double()
+        {
+            var actual = new MetricLength(0, 0, 55).Divide(5.5);
+            var expected = new MetricLength(0, 0, 10);
 
             Assert.AreEqual(expected, actual);
         }

@@ -91,11 +91,31 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Multiply MIDI length by double value.")]
+        public void Multiply_Double()
+        {
+            var actual = ((MidiLength)350).Multiply(3.5);
+            var expected = (MidiLength)1225;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         [Description("Divide MIDI length.")]
         public void Divide()
         {
             var actual = ((MidiLength)450).Divide(3);
             var expected = (MidiLength)150;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Divide MIDI length by double value.")]
+        public void Divide_Double()
+        {
+            var actual = ((MidiLength)1225).Divide(3.5);
+            var expected = (MidiLength)350;
 
             Assert.AreEqual(expected, actual);
         }

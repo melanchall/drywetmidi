@@ -120,10 +120,30 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Multiply musical length by double value.")]
+        public void Multiply_Double()
+        {
+            var actual = ((MusicalLength)MusicalFraction.Half).Multiply(3.5);
+            var expected = (MusicalLength)(MusicalFraction.WholeDotted + MusicalFraction.Quarter);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         [Description("Divide musical length.")]
         public void Divide()
         {
             var actual = new MusicalLength(9 * MusicalFraction.EighthTriplet).Divide(3);
+            var expected = (MusicalLength)MusicalFraction.Quarter;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Divide musical length by double value.")]
+        public void Divide_Double()
+        {
+            var actual = ((MusicalLength)(MusicalFraction.HalfDotted + MusicalFraction.Eighth)).Divide(3.5);
             var expected = (MusicalLength)MusicalFraction.Quarter;
 
             Assert.AreEqual(expected, actual);
