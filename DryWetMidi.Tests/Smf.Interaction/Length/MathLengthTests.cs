@@ -2,7 +2,7 @@
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Melanchall.DryWetMidi.Tests.Smf.Interaction.Length
+namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestClass]
     public class MathLengthTests

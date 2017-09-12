@@ -236,6 +236,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region ILength
 
+        public ILength Add(ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            var musicalLength = length as MusicalLength;
+            return musicalLength != null
+                ? this + musicalLength
+                : LengthUtilities.Add(this, length);
+        }
+
+        public ILength Subtract(ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            var musicalLength = length as MusicalLength;
+            return musicalLength != null
+                ? this - musicalLength
+                : LengthUtilities.Subtract(this, length);
+        }
+
         public ILength Multiply(int multiplier)
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");

@@ -128,6 +128,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region ILength
 
+        public ILength Add(ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return LengthUtilities.Add(this, length);
+        }
+
+        public ILength Subtract(ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return LengthUtilities.Subtract(this, length);
+        }
+
         public ILength Multiply(int multiplier)
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");

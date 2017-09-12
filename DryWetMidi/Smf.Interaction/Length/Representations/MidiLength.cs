@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -67,6 +68,57 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return !(length1 == length2);
         }
 
+        public static MidiLength operator +(MidiLength length1, MidiLength length2)
+        {
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
+
+            return new MidiLength(length1.Length + length2.Length);
+        }
+
+        public static MidiLength operator -(MidiLength length1, MidiLength length2)
+        {
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
+
+            if (length1.Length < length2.Length)
+                throw new ArgumentException("First length is less than second one.", nameof(length1));
+
+            return new MidiLength(length1.Length - length2.Length);
+        }
+
+        public static bool operator <(MidiLength length1, MidiLength length2)
+        {
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
+
+            return length1.Length < length2.Length;
+        }
+
+        public static bool operator >(MidiLength length1, MidiLength length2)
+        {
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
+
+            return length1.Length > length2.Length;
+        }
+
+        public static bool operator <=(MidiLength length1, MidiLength length2)
+        {
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
+
+            return length1.Length <= length2.Length;
+        }
+
+        public static bool operator >=(MidiLength length1, MidiLength length2)
+        {
+            ThrowIfArgument.IsNull(nameof(length1), length1);
+            ThrowIfArgument.IsNull(nameof(length2), length2);
+
+            return length1.Length >= length2.Length;
+        }
+
         #endregion
 
         #region Overrides
@@ -89,6 +141,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         #region ILength
+
+        public ILength Add(ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            var midiLength = length as MidiLength;
+            return midiLength != null
+                ? this + midiLength
+                : LengthUtilities.Add(this, length);
+        }
+
+        public ILength Subtract(ILength length)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            var midiLength = length as MidiLength;
+            return midiLength != null
+                ? this - midiLength
+                : LengthUtilities.Subtract(this, length);
+        }
 
         public ILength Multiply(int multiplier)
         {

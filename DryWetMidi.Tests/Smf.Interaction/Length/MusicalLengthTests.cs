@@ -2,7 +2,7 @@
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Melanchall.DryWetMidi.Tests.Smf.Interaction.Length
+namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestClass]
     public sealed class MusicalLengthTests
@@ -63,6 +63,70 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction.Length
         public void Parse_ToString()
         {
             LengthParsingTester.TestToString((MusicalLength)new Fraction(5, 17));
+        }
+
+        [TestMethod]
+        [Description("Add musical length.")]
+        public void Add_Musical()
+        {
+            var actual = ((MusicalLength)MusicalFraction.Half).Add((MusicalLength)MusicalFraction.Quarter);
+            var expected = (MusicalLength)MusicalFraction.HalfDotted;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Add metric length.")]
+        public void Add_Metric()
+        {
+            var actual = ((MusicalLength)MusicalFraction.Half).Add(new MetricLength(0, 1, 30));
+            var expected = new MathLength((MusicalLength)MusicalFraction.Half,
+                                          new MetricLength(0, 1, 30),
+                                          MathOperation.Add);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Subtract musical length.")]
+        public void Subtract_Musical()
+        {
+            var actual = ((MusicalLength)MusicalFraction.Half).Subtract((MusicalLength)MusicalFraction.Quarter);
+            var expected = (MusicalLength)MusicalFraction.Quarter;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Subtract MIDI length.")]
+        public void Subtract_Midi()
+        {
+            var actual = ((MusicalLength)MusicalFraction.Half).Subtract(new MidiLength(300));
+            var expected = new MathLength((MusicalLength)MusicalFraction.Half,
+                                          new MidiLength(300),
+                                          MathOperation.Subtract);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Multiply musical length.")]
+        public void Multiply()
+        {
+            var actual = ((MusicalLength)MusicalFraction.Half).Multiply(3);
+            var expected = (MusicalLength)MusicalFraction.WholeDotted;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Description("Divide musical length.")]
+        public void Divide()
+        {
+            var actual = new MusicalLength(9 * MusicalFraction.EighthTriplet).Divide(3);
+            var expected = (MusicalLength)MusicalFraction.Quarter;
+
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion

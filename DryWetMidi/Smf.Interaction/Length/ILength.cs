@@ -5,6 +5,10 @@
     /// </summary>
     public interface ILength
     {
+        ILength Add(ILength length);
+
+        ILength Subtract(ILength length);
+
         ILength Multiply(int multiplier);
 
         ILength Divide(int divisor);
