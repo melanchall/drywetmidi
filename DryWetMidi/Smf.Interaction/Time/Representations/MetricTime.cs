@@ -189,23 +189,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Adds two specified <see cref="MetricTime"/> instances.
-        /// </summary>
-        /// <param name="time1">The first time to add.</param>
-        /// <param name="time2">The second time to add.</param>
-        /// <returns>An object whose value is the sum of the values of <paramref name="time1"/> and
-        /// <paramref name="time2"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time1"/> is null. -or-
-        /// <paramref name="time2"/> is null.</exception>
-        public static MetricTime operator +(MetricTime time1, MetricTime time2)
-        {
-            ThrowIfArgument.IsNull(nameof(time1), time1);
-            ThrowIfArgument.IsNull(nameof(time2), time2);
-
-            return new MetricTime(time1.TotalMicroseconds + time2.TotalMicroseconds);
-        }
-
-        /// <summary>
         /// Sums <see cref="MetricTime"/> and <see cref="MetricLength"/>.
         /// </summary>
         /// <param name="time">The <see cref="MetricTime"/> to add.</param>
@@ -231,7 +214,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="time1"/> is null. -or-
         /// <paramref name="time2"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="time1"/> is less than <paramref name="time2"/>.</exception>
-        public static MetricTime operator -(MetricTime time1, MetricTime time2)
+        public static MetricLength operator -(MetricTime time1, MetricTime time2)
         {
             ThrowIfArgument.IsNull(nameof(time1), time1);
             ThrowIfArgument.IsNull(nameof(time2), time2);
@@ -239,7 +222,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (time1 < time2)
                 throw new ArgumentException("First time is less than second one.", nameof(time1));
 
-            return new MetricTime(time1.TotalMicroseconds - time2.TotalMicroseconds);
+            return new MetricLength(time1.TotalMicroseconds - time2.TotalMicroseconds);
         }
 
         /// <summary>

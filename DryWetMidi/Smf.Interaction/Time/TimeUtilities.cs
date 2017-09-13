@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var metricSubtrahend = subtrahend as MetricTime;
             return metricSubtrahend != null
-                ? new MetricLength(metricMinuend - metricSubtrahend)
+                ? metricMinuend - metricSubtrahend
                 : LengthConverter.ConvertTo<MetricLength>(length, time, tempoMap);
         }
 
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var midiSubtrahend = subtrahend as MidiTime;
             return midiSubtrahend != null
-                ? new MidiLength(midiMinuend - midiSubtrahend)
+                ? midiMinuend - midiSubtrahend
                 : LengthConverter.ConvertTo<MidiLength>(length, time, tempoMap);
         }
 

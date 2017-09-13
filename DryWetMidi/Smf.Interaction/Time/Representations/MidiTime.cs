@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -65,6 +66,68 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static bool operator !=(MidiTime time1, MidiTime time2)
         {
             return !(time1 == time2);
+        }
+
+        public static MidiTime operator +(MidiTime time, MidiLength length)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return new MidiTime(time.Time + length.Length);
+        }
+
+        public static MidiLength operator -(MidiTime time1, MidiTime time2)
+        {
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
+
+            if (time1 < time2)
+                throw new ArgumentException("First time is less than second one.", nameof(time1));
+
+            return new MidiLength(time1.Time - time2.Time);
+        }
+
+        public static MidiTime operator -(MidiTime time, MidiLength length)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            if (time.Time < length.Length)
+                throw new ArgumentException("Time is less than length.", nameof(time));
+
+            return new MidiTime(time.Time - length.Length);
+        }
+
+        public static bool operator <(MidiTime time1, MidiTime time2)
+        {
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
+
+            return time1.Time < time2.Time;
+        }
+
+        public static bool operator >(MidiTime time1, MidiTime time2)
+        {
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
+
+            return time1.Time > time2.Time;
+        }
+
+        public static bool operator <=(MidiTime time1, MidiTime time2)
+        {
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
+
+            return time1.Time <= time2.Time;
+        }
+
+        public static bool operator >=(MidiTime time1, MidiTime time2)
+        {
+            ThrowIfArgument.IsNull(nameof(time1), time1);
+            ThrowIfArgument.IsNull(nameof(time2), time2);
+
+            return time1.Time >= time2.Time;
         }
 
         #endregion

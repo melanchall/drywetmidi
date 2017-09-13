@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var startTime = TimeConverter.ConvertTo<MetricTime>(time, tempoMap);
             var endTime = TimeConverter.ConvertTo<MetricTime>(time + length, tempoMap);
 
-            return new MetricLength(endTime - startTime);
+            return endTime - startTime;
         }
 
         public long ConvertFrom(ILength length, long time, TempoMap tempoMap)
