@@ -350,7 +350,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ILength Divide(double divisor)
         {
-            ThrowIfArgument.IsNegative(nameof(divisor), divisor, "Divisor is negative.");
+            ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is negative.");
 
             return new MetricLength((long)Math.Round(TotalMicroseconds / divisor));
         }
