@@ -80,6 +80,7 @@
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollection.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\ITimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\LengthConverter.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\Converters\MathTimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\MetricTimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\MidiTimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\MusicalTimeSpanConverter.cs" />

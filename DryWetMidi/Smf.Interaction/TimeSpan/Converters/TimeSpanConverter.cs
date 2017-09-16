@@ -12,6 +12,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [typeof(MidiTimeSpan)] = new MidiTimeSpanConverter(),
             [typeof(MetricTimeSpan)] = new MetricTimeSpanConverter(),
             [typeof(MusicalTimeSpan)] = new MusicalTimeSpanConverter(),
+            [typeof(MathTimeSpan)] = new MathTimeSpanConverter()
         };
 
         #endregion
