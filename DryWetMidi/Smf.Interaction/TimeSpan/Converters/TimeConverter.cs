@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -22,6 +23,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return ConvertTo<TTimeSpan>(ConvertFrom(time, tempoMap), tempoMap);
+        }
+
+        public static ITimeSpan ConvertTo(ITimeSpan time, Type timeType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(timeType), timeType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeSpanConverter.ConvertTo(time, timeType, 0, tempoMap);
         }
 
         public static long ConvertFrom(ITimeSpan time, TempoMap tempoMap)

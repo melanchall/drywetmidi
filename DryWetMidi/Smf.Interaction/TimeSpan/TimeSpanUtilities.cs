@@ -9,7 +9,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static readonly Func<string, Tuple<ParsingResult, ITimeSpan>>[] Parsers = new Func<string, Tuple<ParsingResult, ITimeSpan>>[]
         {
-            input => Tuple.Create(MathTimeSpanParser.TryParse(input, out var length), (ITimeSpan)length),
             input => Tuple.Create(MidiTimeSpanParser.TryParse(input, out var length), (ITimeSpan)length),
             input => Tuple.Create(MetricTimeSpanParser.TryParse(input, out var length), (ITimeSpan)length),
             input => Tuple.Create(MusicalTimeSpanParser.TryParse(input, out var length), (ITimeSpan)length),
@@ -23,9 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             timeSpan = null;
 
-            if (MathTimeSpan.TryParse(input, out var mathTimeSpan))
-                timeSpan = mathTimeSpan;
-            else if (MidiTimeSpan.TryParse(input, out var midiTimeSpan))
+            if (MidiTimeSpan.TryParse(input, out var midiTimeSpan))
                 timeSpan = midiTimeSpan;
             else if (MetricTimeSpan.TryParse(input, out var metricTimeSpan))
                 timeSpan = metricTimeSpan;
@@ -55,14 +52,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw new FormatException("Time span has unknown format.");
         }
 
-        internal static ITimeSpan Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
+        internal static ITimeSpan Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperationMode operationMode)
         {
-            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Add);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(operationMode), operationMode);
+            ThrowIfOperationModeIsUnspecified(operationMode);
+
+            if (operationMode == MathOperationMode.TimeTime)
+                throw new ArgumentException("Times cannot be added.", nameof(operationMode));
+
+            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Add, operationMode);
         }
 
-        internal static ITimeSpan Subtract(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
+        internal static ITimeSpan Subtract(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperationMode operationMode)
         {
-            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(operationMode), operationMode);
+            ThrowIfOperationModeIsUnspecified(operationMode);
+
+            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, operationMode);
+        }
+
+        private static void ThrowIfOperationModeIsUnspecified(MathOperationMode operationMode)
+        {
+            if (operationMode == MathOperationMode.Unspecified)
+                throw new ArgumentException("Operation mode is not specified.", nameof(operationMode));
         }
 
         #endregion

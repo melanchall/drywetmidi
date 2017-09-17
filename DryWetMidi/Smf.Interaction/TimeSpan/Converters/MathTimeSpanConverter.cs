@@ -1,10 +1,31 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     internal sealed class MathTimeSpanConverter : ITimeSpanConverter
     {
+        #region Constants
+
+        private static readonly Dictionary<Tuple<MathOperation, MathOperation>, MathOperation> OperationTransformations =
+            new Dictionary<Tuple<MathOperation, MathOperation>, MathOperation>
+            {
+                [Tuple.Create(MathOperation.Add, MathOperation.Add)] = MathOperation.Add,
+                [Tuple.Create(MathOperation.Add, MathOperation.Subtract)] = MathOperation.Subtract,
+                [Tuple.Create(MathOperation.Subtract, MathOperation.Add)] = MathOperation.Subtract,
+                [Tuple.Create(MathOperation.Subtract, MathOperation.Subtract)] = MathOperation.Add
+            };
+
+        private static readonly Dictionary<MathOperationMode, Func<MathTimeSpan, long, TempoMap, long>> Converters =
+            new Dictionary<MathOperationMode, Func<MathTimeSpan, long, TempoMap, long>>
+            {
+                [MathOperationMode.TimeTime] = ConvertFromTimeTime,
+                [MathOperationMode.TimeLength] = ConvertFromTimeLength,
+                [MathOperationMode.LengthLength] = ConvertFromLengthLength
+            };
+
+        #endregion
+
         #region ITimeSpanConverter
 
         public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap)
@@ -14,27 +35,100 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
         {
-            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            var mathTimeSpan = (MathTimeSpan)timeSpan;
 
-            var mathTimeSpan = timeSpan as MathTimeSpan;
-            if (mathTimeSpan == null)
-                throw new ArgumentException($"Time span is not an instance of the {nameof(MathTimeSpan)}.", nameof(timeSpan));
+            if (Converters.TryGetValue(mathTimeSpan.OperationMode, out var converter))
+                return converter(mathTimeSpan, time, tempoMap);
+            else
+                throw new ArgumentException($"{mathTimeSpan.OperationMode} mode is not supported by the converter.", nameof(timeSpan));
+        }
 
+        #endregion
+
+        #region Methods
+
+        private static long ConvertFromLengthLength(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
+        {
             var convertedTimeSpan1 = LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan1, time, tempoMap);
             var endTime1 = time + convertedTimeSpan1;
 
             switch (mathTimeSpan.Operation)
             {
                 case MathOperation.Add:
-                    return convertedTimeSpan1 + LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2, endTime1, tempoMap);
+                    return convertedTimeSpan1 + LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                                                                             endTime1,
+                                                                             tempoMap);
 
                 case MathOperation.Subtract:
-                    return convertedTimeSpan1 - LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2, endTime1, tempoMap.Flip(endTime1));
-            }
+                    return convertedTimeSpan1 - LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                                                                             endTime1,
+                                                                             tempoMap.Flip(endTime1));
 
-            throw new NotImplementedException($"Conversion from the {nameof(MathTimeSpan)} with {mathTimeSpan.Operation} operation is not implemented.");
+                default:
+                    throw new ArgumentException($"{mathTimeSpan.Operation} is not supported by the converter.", nameof(mathTimeSpan));
+            }
+        }
+
+        private static long ConvertFromTimeLength(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
+        {
+            var convertedTimeSpan1 = TimeConverter2.ConvertFrom(mathTimeSpan.TimeSpan1, tempoMap);
+
+            switch (mathTimeSpan.Operation)
+            {
+                case MathOperation.Add:
+                    return convertedTimeSpan1 + LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                                                                             convertedTimeSpan1,
+                                                                             tempoMap);
+
+                case MathOperation.Subtract:
+                    return convertedTimeSpan1 - LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                                                                             convertedTimeSpan1,
+                                                                             tempoMap.Flip(convertedTimeSpan1));
+
+                default:
+                    throw new ArgumentException($"{mathTimeSpan.Operation} is not supported by the converter.", nameof(mathTimeSpan));
+            }
+        }
+
+        private static long ConvertFromTimeTime(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
+        {
+            var timeSpan1 = mathTimeSpan.TimeSpan1;
+            var timeSpan2 = mathTimeSpan.TimeSpan2;
+
+            // Ensure that the first time span is not an instance of the MathTimeSpan. If it is,
+            // convert it to the type of its first time span. For example, if we the following
+            // time span was passed to the method:
+            //
+            //     (a1 + b1) + c
+            //
+            // the time span will be transformed to:
+            //
+            //     a2 + c
+
+            var timeSpan1AsMath = mathTimeSpan.TimeSpan1 as MathTimeSpan;
+            if (timeSpan1AsMath != null)
+                timeSpan1 = TimeSpanConverter.ConvertTo(timeSpan1AsMath, timeSpan1AsMath.TimeSpan1.GetType(), time, tempoMap);
+
+            // To subtract one time from another one we need to convert the second time span
+            // to the type of the first one. After that result of subtraction will be of the
+            // first time span type. And finally we convert result time span according to the
+            // specified time. For example, time span shown above will be transformed first to
+            //
+            //     a3
+            //
+            // and then will be converted to MIDI time.
+
+            switch (mathTimeSpan.Operation)
+            {
+                case MathOperation.Subtract:
+                    {
+                        var convertedTimeSpan2 = TimeConverter2.ConvertTo(timeSpan2, timeSpan1.GetType(), tempoMap);
+                        return TimeSpanConverter.ConvertFrom(timeSpan1.Subtract(convertedTimeSpan2), time, tempoMap);
+                    }
+
+                default:
+                    throw new ArgumentException($"{mathTimeSpan.Operation} is not supported by the converter.", nameof(mathTimeSpan));
+            }
         }
 
         #endregion

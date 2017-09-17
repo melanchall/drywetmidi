@@ -2,9 +2,9 @@
 {
     public interface ITimeSpan
     {
-        ITimeSpan Add(ITimeSpan timeSpan);
+        ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode));
 
-        ITimeSpan Subtract(ITimeSpan timeSpan);
+        ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode));
 
         ITimeSpan Multiply(double multiplier);
 

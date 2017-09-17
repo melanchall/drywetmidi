@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -10,15 +9,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap)
         {
-            ThrowIfLengthArgument.IsNegative(nameof(timeSpan), timeSpan);
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
-
-            //
 
             var startTimeSpan = TicksToMetricTimeSpan(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
             var endTimeSpan = TicksToMetricTimeSpan(time + timeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
@@ -28,22 +21,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
         {
-            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            var metricTimeSpan = timeSpan as MetricTimeSpan;
-            if (metricTimeSpan == null)
-                throw new ArgumentException($"Time span is not an instance of the {nameof(MetricTimeSpan)}.", nameof(timeSpan));
-
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
-            //
-
             var startTimeSpan = TicksToMetricTimeSpan(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
-            var endTimeSpan = startTimeSpan + metricTimeSpan;
+            var endTimeSpan = startTimeSpan + (MetricTimeSpan)timeSpan;
 
             return MetricTimeSpanToTicks(endTimeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap) - time;
         }

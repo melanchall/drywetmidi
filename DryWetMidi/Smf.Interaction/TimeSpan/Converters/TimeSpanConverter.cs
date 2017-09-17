@@ -25,37 +25,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return (TTimeSpan)GetConverter<TTimeSpan>().ConvertTo(timeSpan, time, tempoMap);
         }
 
-        public static TTimeSpan ConvertTo<TTimeSpan>(long timeSpan, ITimeSpan time, TempoMap tempoMap)
-            where TTimeSpan : ITimeSpan
-        {
-            return ConvertTo<TTimeSpan>(timeSpan, TimeToMidi(time, tempoMap), tempoMap);
-        }
-
         public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan timeSpan, long time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
             return ConvertTo<TTimeSpan>(ConvertFrom(timeSpan, time, tempoMap), time, tempoMap);
         }
 
-        public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan timeSpan, ITimeSpan time, TempoMap tempoMap)
-            where TTimeSpan : ITimeSpan
+        public static ITimeSpan ConvertTo(ITimeSpan timeSpan, Type timeSpanType, long time, TempoMap tempoMap)
         {
-            return ConvertTo<TTimeSpan>(timeSpan, TimeToMidi(time, tempoMap), tempoMap);
+            return GetConverter(timeSpanType).ConvertTo(ConvertFrom(timeSpan, time, tempoMap), time, tempoMap);
         }
 
         public static long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
         {
             return GetConverter(timeSpan.GetType()).ConvertFrom(timeSpan, time, tempoMap);
-        }
-
-        public static long ConvertFrom(ITimeSpan timeSpan, ITimeSpan time, TempoMap tempoMap)
-        {
-            return ConvertFrom(timeSpan, TimeToMidi(time, tempoMap), tempoMap);
-        }
-
-        private static long TimeToMidi(ITimeSpan time, TempoMap tempoMap)
-        {
-            return ConvertFrom(time, 0, tempoMap);
         }
 
         private static ITimeSpanConverter GetConverter<TTimeSpan>()

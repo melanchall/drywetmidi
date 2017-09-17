@@ -87,7 +87,7 @@
     <Compile Include="Smf.Interaction\TimeSpan\Converters\TimeConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\TimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\ITimeSpan.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\Parsers\MathTimeSpanParser.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\MathOperationMode.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Parsers\MetricTimeSpanParser.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Parsers\MidiTimeSpanParser.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Parsers\MusicalTimeSpanParser.cs" />

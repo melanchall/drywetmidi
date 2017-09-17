@@ -1,9 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -11,38 +7,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region ITimeSpanConverter
 
-        public ITimeSpan ConvertTo(long length, long time, TempoMap tempoMap)
+        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap)
         {
-            ThrowIfLengthArgument.IsNegative(nameof(length), length);
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             //
 
-            return (MusicalTimeSpan)TicksToFraction(length, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
+            return (MusicalTimeSpan)TicksToFraction(timeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
         }
 
-        public long ConvertFrom(ITimeSpan length, long time, TempoMap tempoMap)
+        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
         {
-            ThrowIfArgument.IsNull(nameof(length), length);
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            var musicalTimeSpan = length as MusicalTimeSpan;
-            if (musicalTimeSpan == null)
-                throw new ArgumentException($"Time span is not an instance of the {nameof(MusicalTimeSpan)}.", nameof(length));
-
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
-            //
-
-            return FractionToTicks(musicalTimeSpan.Fraction, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
+            return FractionToTicks(((MusicalTimeSpan)timeSpan).Fraction, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
         }
 
         #endregion
