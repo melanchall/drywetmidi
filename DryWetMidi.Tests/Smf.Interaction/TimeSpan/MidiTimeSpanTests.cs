@@ -81,9 +81,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Subtract MIDI time span.")]
         public void Subtract_Musical()
         {
-            var actual = ((MidiTimeSpan)300).Subtract((MusicalTimeSpan)MusicalFraction.QuarterDotted, MathOperationMode.LengthLength);
+            var actual = ((MidiTimeSpan)300).Subtract(MusicalTimeSpan.Quarter.SingleDotted(), MathOperationMode.LengthLength);
             var expected = new MathTimeSpan((MidiTimeSpan)300,
-                                            (MusicalTimeSpan)MusicalFraction.QuarterDotted,
+                                            MusicalTimeSpan.Quarter.SingleDotted(),
                                             MathOperation.Subtract,
                                             MathOperationMode.LengthLength);
 

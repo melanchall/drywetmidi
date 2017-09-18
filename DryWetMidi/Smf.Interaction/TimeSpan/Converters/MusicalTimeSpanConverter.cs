@@ -15,7 +15,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            return (MusicalTimeSpan)TicksToFraction(timeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
+            var xy = MathUtilities.SolveDiophantineEquation(4 * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, -timeSpan);
+            return new MusicalTimeSpan(Math.Abs(xy.Item1), Math.Abs(xy.Item2));
         }
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
@@ -24,22 +25,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
-            return FractionToTicks(((MusicalTimeSpan)timeSpan).Fraction, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
-        }
+            var musicalTimeSpan = (MusicalTimeSpan)timeSpan;
 
-        #endregion
-
-        #region Methods
-
-        private static Fraction TicksToFraction(long ticks, short ticksPerQuarterNote)
-        {
-            var xy = MathUtilities.SolveDiophantineEquation(4 * ticksPerQuarterNote, -ticks);
-            return new Fraction(Math.Abs(xy.Item1), Math.Abs(xy.Item2));
-        }
-
-        private static long FractionToTicks(Fraction fraction, short ticksPerQuarterNote)
-        {
-            return 4 * fraction.Numerator * ticksPerQuarterNote / fraction.Denominator;
+            return 4 * musicalTimeSpan.Numerator * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote / musicalTimeSpan.Denominator;
         }
 
         #endregion

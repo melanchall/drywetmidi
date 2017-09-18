@@ -5,24 +5,150 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     public sealed class MusicalTimeSpan : ITimeSpan
     {
+        #region Constants
+
+        /// <summary>
+        /// <see cref="MusicalTimeSpan"/> that corresponds to the whole length.
+        /// </summary>
+        public static readonly MusicalTimeSpan Whole = new MusicalTimeSpan(WholeFraction);
+
+        /// <summary>
+        /// <see cref="MusicalTimeSpan"/> that corresponds to the half length.
+        /// </summary>
+        public static readonly MusicalTimeSpan Half = new MusicalTimeSpan(HalfFraction);
+
+        /// <summary>
+        /// <see cref="MusicalTimeSpan"/> that corresponds to the quarter length.
+        /// </summary>
+        public static readonly MusicalTimeSpan Quarter = new MusicalTimeSpan(QuarterFraction);
+
+        /// <summary>
+        /// <see cref="MusicalTimeSpan"/> that corresponds to the eighth length.
+        /// </summary>
+        public static readonly MusicalTimeSpan Eighth = new MusicalTimeSpan(EighthFraction);
+
+        /// <summary>
+        /// <see cref="MusicalTimeSpan"/> that corresponds to the sixteenth length.
+        /// </summary>
+        public static readonly MusicalTimeSpan Sixteenth = new MusicalTimeSpan(SixteenthFraction);
+
+        /// <summary>
+        /// <see cref="MusicalTimeSpan"/> that corresponds to the thirty-second length.
+        /// </summary>
+        public static readonly MusicalTimeSpan ThirtySecond = new MusicalTimeSpan(ThirtySecondFraction);
+
+        /// <summary>
+        /// <see cref="MusicalTimeSpan"/> that corresponds to the sixty-fourth length.
+        /// </summary>
+        public static readonly MusicalTimeSpan SixtyFourth = new MusicalTimeSpan(SixtyFourthFraction);
+
+        private const long ZeroTimeSpanNumerator = 0;
+        private const long ZeroTimeSpanDenominator = 1;
+
+        private const long FractionNumerator = 1;
+
+        private const int DoubleFractionMultiplier = 1000000;
+
+        private const int WholeFraction = 1;
+        private const int HalfFraction = 2;
+        private const int QuarterFraction = 4;
+        private const int EighthFraction = 8;
+        private const int SixteenthFraction = 16;
+        private const int ThirtySecondFraction = 32;
+        private const int SixtyFourthFraction = 64;
+
+        private const int TripletNotesCount = 3;
+        private const int TripletSpaceSize = 2;
+
+        private const int DupletNotesCount = 2;
+        private const int DupletSpaceSize = 3;
+
+        private const int NoTupletNotesCount = 1;
+        private const int NoTupletSpaceSize = 1;
+
+        private const int NoDotsCount = 0;
+        private const int SingleDotCount = 1;
+        private const int DoubleDotCount = 2;
+
+        #endregion
+
         #region Constructor
 
-        public MusicalTimeSpan(Fraction fraction)
+        public MusicalTimeSpan()
+            : this(ZeroTimeSpanNumerator, ZeroTimeSpanDenominator)
         {
-            ThrowIfArgument.IsNull(nameof(fraction), fraction);
+        }
 
-            Fraction = fraction;
+        public MusicalTimeSpan(long fraction)
+            : this(FractionNumerator, fraction)
+        {
+        }
+
+        public MusicalTimeSpan(long numerator, long denominator)
+        {
+            ThrowIfArgument.IsNegative(nameof(numerator), numerator, "Numerator is negative.");
+            ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is negative.");
+
+            var greatestCommonDivisor = MathUtilities.GreatestCommonDivisor(numerator, denominator);
+
+            Numerator = numerator / greatestCommonDivisor;
+            Denominator = denominator / greatestCommonDivisor;
         }
 
         #endregion
 
         #region Properties
 
-        public Fraction Fraction { get; }
+        /// <summary>
+        /// Gets the numerator of the current <see cref="MusicalTimeSpan"/>.
+        /// </summary>
+        public long Numerator { get; } = ZeroTimeSpanNumerator;
+
+        /// <summary>
+        /// Gets the denominator of the current <see cref="MusicalTimeSpan"/>.
+        /// </summary>
+        public long Denominator { get; } = ZeroTimeSpanDenominator;
 
         #endregion
 
         #region Methods
+
+        public MusicalTimeSpan Dotted(int dotsCount)
+        {
+            ThrowIfArgument.IsNegative(nameof(dotsCount), dotsCount, "Dots count is negative.");
+
+            return new MusicalTimeSpan(Numerator * ((1 << dotsCount + 1) - 1),
+                                       Denominator * (1 << dotsCount));
+        }
+
+        public MusicalTimeSpan SingleDotted()
+        {
+            return Dotted(SingleDotCount);
+        }
+
+        public MusicalTimeSpan DoubleDotted()
+        {
+            return Dotted(DoubleDotCount);
+        }
+
+        public MusicalTimeSpan Tuplet(int tupletNotesCount, int tupletSpaceSize)
+        {
+            ThrowIfArgument.IsNonpositive(nameof(tupletNotesCount), tupletNotesCount, "Tuplet's notes count is zero or negative.");
+            ThrowIfArgument.IsNonpositive(nameof(tupletSpaceSize), tupletSpaceSize, "Tuplet's space size is zero or negative.");
+
+            return new MusicalTimeSpan(Numerator * tupletSpaceSize,
+                                       Denominator * tupletNotesCount);
+        }
+
+        public MusicalTimeSpan Triplet()
+        {
+            return Tuplet(TripletNotesCount, TripletSpaceSize);
+        }
+
+        public MusicalTimeSpan Duplet()
+        {
+            return Tuplet(DupletNotesCount, DupletSpaceSize);
+        }
 
         public static bool TryParse(string input, out MusicalTimeSpan timeSpan)
         {
@@ -38,19 +164,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw parsingResult.Exception;
         }
 
+        /// <summary>
+        /// Reduces the specified musical time spans to the common denominator.
+        /// </summary>
+        /// <param name="fraction1">First time span.</param>
+        /// <param name="fraction2">Second time span.</param>
+        /// <param name="numerator1">Numerator of the reduced first time span.</param>
+        /// <param name="numerator2">Numerator of the reduced second time span.</param>
+        /// <param name="denominator">Common denominator of reduced time spans.</param>
+        private static void ReduceToCommonDenominator(MusicalTimeSpan fraction1,
+                                                      MusicalTimeSpan fraction2,
+                                                      out long numerator1,
+                                                      out long numerator2,
+                                                      out long denominator)
+        {
+            denominator = MathUtilities.LeastCommonMultiple(fraction1.Denominator, fraction2.Denominator);
+
+            numerator1 = fraction1.Numerator * denominator / fraction1.Denominator;
+            numerator2 = fraction2.Numerator * denominator / fraction2.Denominator;
+        }
+
         #endregion
 
         #region Operators
-
-        public static implicit operator MusicalTimeSpan(Fraction fraction)
-        {
-            return new MusicalTimeSpan(fraction);
-        }
-
-        public static implicit operator Fraction(MusicalTimeSpan timeSpan)
-        {
-            return timeSpan.Fraction;
-        }
 
         public static bool operator ==(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
@@ -60,7 +196,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(null, timeSpan1) || ReferenceEquals(null, timeSpan2))
                 return false;
 
-            return timeSpan1.Fraction == timeSpan2.Fraction;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            return numerator1 == numerator2;
         }
 
         public static bool operator !=(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
@@ -68,12 +205,36 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return !(timeSpan1 == timeSpan2);
         }
 
+        public static MusicalTimeSpan operator *(MusicalTimeSpan timeSpan, long number)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+            ThrowIfArgument.IsNegative(nameof(number), number, "Number is negative.");
+
+            return new MusicalTimeSpan(timeSpan.Numerator * number,
+                                       timeSpan.Denominator);
+        }
+
+        public static MusicalTimeSpan operator *(long number, MusicalTimeSpan timeSpan)
+        {
+            return timeSpan * number;
+        }
+
+        public static MusicalTimeSpan operator /(MusicalTimeSpan timeSpan, long number)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+            ThrowIfArgument.IsNonpositive(nameof(number), number, "Number is zero or negative.");
+
+            return new MusicalTimeSpan(timeSpan.Numerator,
+                                       timeSpan.Denominator * number);
+        }
+
         public static MusicalTimeSpan operator +(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return new MusicalTimeSpan(timeSpan1.Fraction + timeSpan2.Fraction);
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out var denominator);
+            return new MusicalTimeSpan(numerator1 + numerator2, denominator);
         }
 
         public static MusicalTimeSpan operator -(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
@@ -81,10 +242,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            if (timeSpan1.Fraction < timeSpan2.Fraction)
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out var denominator);
+            if (numerator1 < numerator2)
                 throw new ArgumentException("First time span is less than second one.", nameof(timeSpan1));
 
-            return new MusicalTimeSpan(timeSpan1.Fraction - timeSpan2.Fraction);
+            return new MusicalTimeSpan(numerator1 - numerator2, denominator);
         }
 
         public static bool operator <(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
@@ -92,7 +254,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Fraction < timeSpan2.Fraction;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            return numerator1 < numerator2;
         }
 
         public static bool operator >(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
@@ -100,7 +263,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Fraction > timeSpan2.Fraction;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            return numerator1 > numerator2;
         }
 
         public static bool operator <=(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
@@ -108,7 +272,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Fraction <= timeSpan2.Fraction;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            return numerator1 <= numerator2;
         }
 
         public static bool operator >=(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
@@ -116,7 +281,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Fraction >= timeSpan2.Fraction;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            return numerator1 >= numerator2;
         }
 
         #endregion
@@ -139,7 +305,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            return Fraction.GetHashCode();
+            return Numerator.GetHashCode() ^ Denominator.GetHashCode();
         }
 
         /// <summary>
@@ -148,7 +314,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return Fraction.ToString();
+            return $"{Numerator}/{Denominator}";
         }
 
         #endregion
@@ -179,14 +345,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new MusicalTimeSpan(Fraction * multiplier);
+            return new MusicalTimeSpan((long)Math.Round(Numerator * multiplier * DoubleFractionMultiplier),
+                                       Denominator * DoubleFractionMultiplier);
         }
 
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new MusicalTimeSpan(Fraction / divisor);
+            return new MusicalTimeSpan(Numerator * DoubleFractionMultiplier,
+                                       (long)Math.Round(Denominator * divisor * DoubleFractionMultiplier));
         }
 
         #endregion

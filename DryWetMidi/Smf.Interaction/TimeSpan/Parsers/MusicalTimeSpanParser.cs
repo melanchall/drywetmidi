@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            timeSpan = MusicalFraction.CreateDottedTuplet(numerator, denominator, dots, tupletNotesCount, tupletSpaceSize);
+            timeSpan = new MusicalTimeSpan(numerator, denominator).Dotted(dots).Tuplet(tupletNotesCount, tupletSpaceSize);
             return ParsingResult.Parsed;
         }
 
