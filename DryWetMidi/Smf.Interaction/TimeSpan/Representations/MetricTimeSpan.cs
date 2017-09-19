@@ -87,16 +87,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        public static bool TryParse(string input, out MetricTimeSpan time)
+        public static bool TryParse(string input, out MetricTimeSpan timeSpan)
         {
-            return MetricTimeSpanParser.TryParse(input, out time).Status == ParsingStatus.Parsed;
+            return MetricTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
         }
 
         public static MetricTimeSpan Parse(string input)
         {
-            var parsingResult = MetricTimeSpanParser.TryParse(input, out var time);
+            var parsingResult = MetricTimeSpanParser.TryParse(input, out var timeSpan);
             if (parsingResult.Status == ParsingStatus.Parsed)
-                return time;
+                return timeSpan;
 
             throw parsingResult.Exception;
         }
@@ -218,7 +218,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region ITimeSpan
 
-        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode))
+        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
@@ -228,7 +228,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 : TimeSpanUtilities.Add(this, timeSpan, operationMode);
         }
 
-        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode))
+        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 

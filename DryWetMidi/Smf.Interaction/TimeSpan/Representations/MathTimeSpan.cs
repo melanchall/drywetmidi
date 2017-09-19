@@ -51,24 +51,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
-        //#region Methods
-
-        //public static bool TryParse(string input, out MathTimeSpan timeSpan)
-        //{
-        //    return MathTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
-        //}
-
-        //public static MathTimeSpan Parse(string input)
-        //{
-        //    var parsingResult = MathTimeSpanParser.TryParse(input, out var timeSpan);
-        //    if (parsingResult.Status == ParsingStatus.Parsed)
-        //        return timeSpan;
-
-        //    throw parsingResult.Exception;
-        //}
-
-        //#endregion
-
         #region Operators
 
         public static bool operator ==(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
@@ -122,14 +104,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region ITimeSpan
 
-        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode))
+        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
             return TimeSpanUtilities.Add(this, timeSpan, operationMode);
         }
 
-        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode))
+        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 

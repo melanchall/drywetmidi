@@ -10,6 +10,7 @@ namespace Melanchall.DryWetMidi.Common
         #region Constants
 
         private const NumberStyles NumberStyle = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite;
+        private const NumberStyles NegativeNumberStyle = NumberStyle | NumberStyles.AllowLeadingSign;
 
         #endregion
 
@@ -26,20 +27,26 @@ namespace Melanchall.DryWetMidi.Common
                            .FirstOrDefault(m => m.Success);
         }
 
-        public static bool ParseInt(Match match, string groupName, int defaultValue, out int value)
+        public static bool ParseInt(Match match, string groupName, int defaultValue, out int value, bool allowNegative = false)
         {
             value = defaultValue;
 
             var group = match.Groups[groupName];
-            return !group.Success || int.TryParse(group.Value, NumberStyle, null, out value);
+            return !group.Success || int.TryParse(group.Value,
+                                                  allowNegative ? NegativeNumberStyle : NumberStyle,
+                                                  null,
+                                                  out value);
         }
 
-        public static bool ParseLong(Match match, string groupName, long defaultValue, out long value)
+        public static bool ParseLong(Match match, string groupName, long defaultValue, out long value, bool allowNegative = false)
         {
             value = defaultValue;
 
             var group = match.Groups[groupName];
-            return !group.Success || long.TryParse(group.Value, NumberStyle, null, out value);
+            return !group.Success || long.TryParse(group.Value,
+                                                   allowNegative ? NegativeNumberStyle : NumberStyle,
+                                                   null,
+                                                   out value);
         }
 
         #endregion

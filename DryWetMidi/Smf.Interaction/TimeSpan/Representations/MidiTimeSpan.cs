@@ -142,7 +142,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region ITimeSpan
 
-        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode))
+        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 : TimeSpanUtilities.Add(this, timeSpan, operationMode);
         }
 
-        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode = default(MathOperationMode))
+        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 

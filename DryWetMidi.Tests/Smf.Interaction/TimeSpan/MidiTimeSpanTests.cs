@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Add MIDI time span.")]
         public void Add_Midi()
         {
-            var actual = ((MidiTimeSpan)300).Add((MidiTimeSpan)40);
+            var actual = ((MidiTimeSpan)300).Add((MidiTimeSpan)40, MathOperationMode.TimeLength);
             var expected = (MidiTimeSpan)340;
 
             Assert.AreEqual(expected, actual);
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Subtract MIDI time span.")]
         public void Subtract_Midi()
         {
-            var actual = ((MidiTimeSpan)300).Subtract((MidiTimeSpan)40);
+            var actual = ((MidiTimeSpan)300).Subtract((MidiTimeSpan)40, MathOperationMode.TimeLength);
             var expected = (MidiTimeSpan)260;
 
             Assert.AreEqual(expected, actual);

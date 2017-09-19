@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 case MathOperation.Subtract:
                     {
                         var convertedTimeSpan2 = TimeConverter2.ConvertTo(timeSpan2, timeSpan1.GetType(), tempoMap);
-                        return TimeSpanConverter.ConvertFrom(timeSpan1.Subtract(convertedTimeSpan2), time, tempoMap);
+                        return TimeSpanConverter.ConvertFrom(timeSpan1.Subtract(convertedTimeSpan2, MathOperationMode.TimeTime), time, tempoMap);
                     }
 
                 default:
