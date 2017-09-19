@@ -1,11 +1,24 @@
-﻿using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     internal static class TimeSpanTestingUtilities
     {
+        #region Constants
+
+        private static readonly IEnumerable<TempoMap> TempoMaps = new[]
+        {
+            GetDefaultTempoMap(),
+            GetSimpleTempoMap(),
+            GetComplexTempoMap()
+        };
+
+        #endregion
+
         #region Methods
 
         public static void TryParse(string input, ITimeSpan expectedTimeSpan)
@@ -45,45 +58,60 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                           mathTimeSpan.OperationMode == operationMode,
                           "Result is not a math time span.");
 
-            switch (operationMode)
+            foreach (var tempoMap in TempoMaps)
             {
-                case MathOperationMode.TimeLength:
-                    Add_TimeLength_Tests(timeSpan1, timeSpan2, 100, TempoMap.Default);
-                    break;
+                for (var i = 0; i < 20; i++)
+                {
+                    switch (operationMode)
+                    {
+                        case MathOperationMode.TimeLength:
+                            Assert.AreEqual(timeSpan1,
+                                            TimeConverter2.ConvertTo(mathTimeSpan.Subtract(timeSpan2, MathOperationMode.TimeLength), timeSpan1.GetType(), tempoMap),
+                                            $"(t + l) - l != t");
+                            break;
 
-                case MathOperationMode.LengthLength:
-                    // TODO
-                    break;
+                        case MathOperationMode.LengthLength:
+                            var time = i * 1000;
+                            Assert.AreEqual(timeSpan1,
+                                            LengthConverter2.ConvertTo(mathTimeSpan.Subtract(timeSpan2, MathOperationMode.LengthLength), timeSpan1.GetType(), time, tempoMap),
+                                            $"(l1 + l2) - l2 != l1 | time = {time}");
+                            break;
+                    }
+                }
             }
         }
 
-        private static void Add_TimeLength_Tests(ITimeSpan timeSpan1, ITimeSpan timeSpan2, long time, TempoMap tempoMap)
+        private static TempoMap GetDefaultTempoMap()
         {
-            var timeSpan = timeSpan1.Add(timeSpan2, MathOperationMode.TimeLength);
+            return TempoMap.Default;
+        }
 
-            //
+        private static TempoMap GetSimpleTempoMap()
+        {
+            return TempoMap.Create(Tempo.FromBeatsPerMinute(200), new TimeSignature(5, 8));
+        }
 
-            var timeSpanMunusLength = timeSpan.Subtract(timeSpan2, MathOperationMode.TimeLength);
+        private static TempoMap GetComplexTempoMap()
+        {
+            const int tempoChangesCount = 10;
+            const int timeSignatureChangesCount = 10;
 
-            Assert.AreEqual(TimeConverter2.ConvertFrom(timeSpan1, tempoMap),
-                            TimeConverter2.ConvertFrom(timeSpanMunusLength, tempoMap),
-                            "(t + l) - l != t");
+            using (var tempoMapManager = new TempoMapManager())
+            {
+                var ticksPerQuarterNote = ((TicksPerQuarterNoteTimeDivision)tempoMapManager.TempoMap.TimeDivision).TicksPerQuarterNote;
 
-            Assert.AreEqual(timeSpan1,
-                            TimeConverter2.ConvertTo(timeSpanMunusLength, timeSpan1.GetType(), tempoMap),
-                            "[(t + l) - l]_t != t");
+                for (var i = 0; i < tempoChangesCount; i++)
+                {
+                    tempoMapManager.SetTempo(i * 2000 + 100, new Tempo((i + 1) * ticksPerQuarterNote * 1000));
+                }
 
-            //
+                for (var i = 0; i < timeSignatureChangesCount; i++)
+                {
+                    tempoMapManager.SetTimeSignature(i * 2500 + 50, new TimeSignature(i + 1, 8));
+                }
 
-            var timeSpanMunusTime = timeSpan.Subtract(timeSpan1, MathOperationMode.TimeTime);
-
-            Assert.AreEqual(LengthConverter2.ConvertFrom(timeSpan2, time, tempoMap),
-                            LengthConverter2.ConvertFrom(timeSpanMunusTime, time, tempoMap),
-                            "(t + l) - t != l");
-
-            Assert.AreEqual(timeSpan2,
-                            LengthConverter2.ConvertTo(timeSpanMunusTime, timeSpan2.GetType(), time, tempoMap),
-                            "[(t + l) - t]_l != l");
+                return tempoMapManager.TempoMap;
+            }
         }
 
         #endregion

@@ -47,8 +47,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private const long FractionNumerator = 1;
 
-        private const int DoubleFractionMultiplier = 1000000;
-
         private const int WholeFraction = 1;
         private const int HalfFraction = 2;
         private const int QuarterFraction = 4;
@@ -345,16 +343,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new MusicalTimeSpan((long)Math.Round(Numerator * multiplier * DoubleFractionMultiplier),
-                                       Denominator * DoubleFractionMultiplier);
+            return new MusicalTimeSpan((long)Math.Round(Numerator * multiplier),
+                                       Denominator);
         }
 
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new MusicalTimeSpan(Numerator * DoubleFractionMultiplier,
-                                       (long)Math.Round(Denominator * divisor * DoubleFractionMultiplier));
+            return new MusicalTimeSpan(Numerator,
+                                       (long)Math.Round(Denominator * divisor));
         }
 
         #endregion

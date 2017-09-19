@@ -130,6 +130,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             SetTimeSignature(TimeConverter.ConvertFrom(time, TempoMap), timeSignature);
         }
 
+        public void SetTimeSignature(ITimeSpan time, TimeSignature timeSignature)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
+
+            SetTimeSignature(TimeConverter2.ConvertFrom(time, TempoMap), timeSignature);
+        }
+
         /// <summary>
         /// Removes all changes of time signature that occured since the specified time.
         /// </summary>
@@ -152,6 +160,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
             ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap));
+        }
+
+        public void ClearTimeSignature(ITimeSpan startTime)
+        {
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
+
+            ClearTimeSignature(TimeConverter2.ConvertFrom(startTime, TempoMap));
         }
 
         /// <summary>
@@ -183,6 +198,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap),
                                TimeConverter.ConvertFrom(endTime, TempoMap));
+        }
+
+        public void ClearTimeSignature(ITimeSpan startTime, ITimeSpan endTime)
+        {
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
+            ThrowIfArgument.IsNull(nameof(endTime), endTime);
+
+            ClearTimeSignature(TimeConverter2.ConvertFrom(startTime, TempoMap),
+                               TimeConverter2.ConvertFrom(endTime, TempoMap));
         }
 
         /// <summary>
@@ -217,6 +241,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             SetTempo(TimeConverter.ConvertFrom(time, TempoMap), tempo);
         }
 
+        public void SetTempo(ITimeSpan time, Tempo tempo)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempo), tempo);
+
+            SetTempo(TimeConverter2.ConvertFrom(time, TempoMap), tempo);
+        }
+
         /// <summary>
         /// Removes all changes of tempo that occured since the specified time.
         /// </summary>
@@ -239,6 +271,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
             ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap));
+        }
+
+        public void ClearTempo(ITimeSpan startTime)
+        {
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
+
+            ClearTempo(TimeConverter2.ConvertFrom(startTime, TempoMap));
         }
 
         /// <summary>
@@ -270,6 +309,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap),
                        TimeConverter.ConvertFrom(endTime, TempoMap));
+        }
+
+        public void ClearTempo(ITimeSpan startTime, ITimeSpan endTime)
+        {
+            ThrowIfArgument.IsNull(nameof(startTime), startTime);
+            ThrowIfArgument.IsNull(nameof(endTime), endTime);
+
+            ClearTempo(TimeConverter2.ConvertFrom(startTime, TempoMap),
+                       TimeConverter2.ConvertFrom(endTime, TempoMap));
         }
 
         /// <summary>
