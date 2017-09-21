@@ -7,6 +7,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
+        public MidiTimeSpan()
+            : this(0)
+        {
+        }
+
         public MidiTimeSpan(long timeSpan)
         {
             ThrowIfLengthArgument.IsNegative(nameof(timeSpan), timeSpan);

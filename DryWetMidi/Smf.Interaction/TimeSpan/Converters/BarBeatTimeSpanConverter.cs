@@ -17,11 +17,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var endTime = time + timeSpan;
 
             var timeSignatureLine = tempoMap.TimeSignature;
+            var lastTimeSignature = timeSignatureLine.Values.LastOrDefault(v => v.Time < endTime)?.Value ?? TimeSignature.Default;
             var timeSignatureChanges = timeSignatureLine
                 .Values
                 .SkipWhile(v => v.Time < time)
-                .Where(v => v.Time < time + timeSpan)
-                .Concat(new[] { new ValueChange<TimeSignature>(endTime, timeSignatureLine.AtTime(endTime)) })
+                .TakeWhile(v => v.Time < endTime)
+                .Concat(new[] { new ValueChange<TimeSignature>(endTime, lastTimeSignature) })
                 .ToList();
 
             var timeSignature = timeSignatureLine.AtTime(time);
@@ -33,12 +34,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             foreach (var timeSignatureChange in timeSignatureChanges)
             {
-                var deltaTime = timeSignatureChange.Time - time;
-
-                //
-
                 ticksToCompleteBar = (long)Math.Round(ticksToCompleteBar * previousTimeSignature.Denominator / (double)timeSignature.Denominator);
 
+                var deltaTime = timeSignatureChange.Time - time;
                 deltaTime -= ticksToCompleteBar;
 
                 if (deltaTime >= 0)
@@ -78,7 +76,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
         {
-            throw new NotImplementedException();
+            var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
+            if (ticksPerQuarterNoteTimeDivision == null)
+                throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
+
+            var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
+
+            var barBeatTimeSpan = (BarBeatTimeSpan)timeSpan;
+
+            return 0;
         }
 
         #endregion
