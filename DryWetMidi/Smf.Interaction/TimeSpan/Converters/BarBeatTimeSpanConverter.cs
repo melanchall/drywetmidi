@@ -29,36 +29,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var previousTimeSignature = timeSignature;
             var ticksToCompleteBar = 0L;
             var remainingTicks = 0L;
-
             var bars = 0L;
 
             foreach (var timeSignatureChange in timeSignatureChanges)
             {
                 ticksToCompleteBar = (long)Math.Round(ticksToCompleteBar * previousTimeSignature.Denominator / (double)timeSignature.Denominator);
 
-                var deltaTime = timeSignatureChange.Time - time;
-                deltaTime -= ticksToCompleteBar;
-
-                if (deltaTime >= 0)
-                {
-                    if (ticksToCompleteBar > 0)
-                        bars++;
-
-                    ticksToCompleteBar = 0;
-                }
-
-                if (deltaTime < 0)
-                {
-                    ticksToCompleteBar = -deltaTime;
-                }
-                else
-                {
-                    var barLength = GetBarLength(timeSignature, ticksPerQuarterNote);
-                    bars += deltaTime / barLength;
-                    remainingTicks = deltaTime % barLength;
-                    if (remainingTicks > 0)
-                        ticksToCompleteBar = barLength - remainingTicks;
-                }
+                ConvertBars(timeSignatureChange,
+                            time,
+                            GetBarLength(timeSignature, ticksPerQuarterNote),
+                            ref bars,
+                            ref ticksToCompleteBar,
+                            ref remainingTicks);
 
                 //
 
@@ -83,13 +65,74 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
 
             var barBeatTimeSpan = (BarBeatTimeSpan)timeSpan;
+            long beats = barBeatTimeSpan.Beats;
 
-            return 0;
+            var timeSignatureLine = tempoMap.TimeSignature;
+            var timeSignature = timeSignatureLine.AtTime(time);
+            var previousTimeSignature = timeSignature;
+
+            var startTime = time;
+            var ticksToCompleteBar = 0L;
+            var remainingTicks = 0L;
+            var bars = 0L;
+
+            while (bars < barBeatTimeSpan.Bars)
+            {
+                ticksToCompleteBar = (long)Math.Round(ticksToCompleteBar * previousTimeSignature.Denominator / (double)timeSignature.Denominator);
+
+                var barLength = GetBarLength(timeSignature, ticksPerQuarterNote);
+                var remainingBars = barBeatTimeSpan.Bars - bars;
+                var endTime = time + ticksToCompleteBar + (remainingBars - Math.Sign(ticksToCompleteBar)) * barLength;
+
+                var timeSignatureChange = timeSignatureLine.Values.FirstOrDefault(v => v.Time > time && v.Time < endTime)
+                    ?? new ValueChange<TimeSignature>(endTime, timeSignature);
+
+                ConvertBars(timeSignatureChange,
+                            time,
+                            barLength,
+                            ref bars,
+                            ref ticksToCompleteBar,
+                            ref remainingTicks);
+
+                //
+
+                previousTimeSignature = timeSignature;
+                timeSignature = timeSignatureChange.Value;
+                time = timeSignatureChange.Time;
+            }
+
+            return time - startTime;
         }
 
         #endregion
 
         #region Methods
+
+        private static void ConvertBars(ValueChange<TimeSignature> tsc, long time, long barLength, ref long bars, ref long ticksToCompleteBar, ref long remainingTicks)
+        {
+            var deltaTime = tsc.Time - time;
+            deltaTime -= ticksToCompleteBar;
+
+            if (deltaTime >= 0)
+            {
+                if (ticksToCompleteBar > 0)
+                    bars++;
+
+                ticksToCompleteBar = 0;
+            }
+
+            if (deltaTime < 0)
+            {
+                ticksToCompleteBar = -deltaTime;
+            }
+            else
+            {
+                bars += deltaTime / barLength;
+                remainingTicks = deltaTime % barLength;
+                if (remainingTicks > 0)
+                    ticksToCompleteBar = barLength - remainingTicks;
+            }
+        }
 
         private static int GetBarsCount(long time, TimeSignature timeSignature, short ticksPerQuarterNote)
         {
