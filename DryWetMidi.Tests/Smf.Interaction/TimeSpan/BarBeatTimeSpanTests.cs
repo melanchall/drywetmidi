@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
@@ -22,7 +23,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4
             //  |----+----+----+----|----+----+----+----|----+----+----+----|
             //  0                   1                   2                   3
-            //   <=====================================>
+            //  |=======================================|
+            //  ^                   ^                   ^
 
             TestConversion(new BarBeatTimeSpan(2, 0),
                            2 * MusicalTimeSpan.Whole,
@@ -36,7 +38,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4
             //  |----+----+----+----|----+----+----+----|----+----+----+----|
             //  0                   1                   2                   3
-            //        <=====================================>
+            //       |=======================================|
+            //       ^                   ^                   ^
 
             TestConversion(new BarBeatTimeSpan(2, 0),
                            2 * MusicalTimeSpan.Whole,
@@ -50,7 +53,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //   <================================>
+            //  |==================================|
+            //  ^                   ^              ^
 
             TestConversion(new BarBeatTimeSpan(2, 0),
                            MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth,
@@ -64,7 +68,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //   <==========================>
+            //  |============================|
+            //  ^                   ^  '  '  '
 
             TestConversion(new BarBeatTimeSpan(1, 3),
                            MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.Eighth,
@@ -78,7 +83,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //        <=======>
+            //       |=========|
+            //       ^    '    '
 
             TestConversion(new BarBeatTimeSpan(0, 2),
                            MusicalTimeSpan.Half,
@@ -92,7 +98,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //                          <===>
+            //                         |=====|
+            //                         ^  '  '
 
             TestConversion(new BarBeatTimeSpan(0, 2),
                            MusicalTimeSpan.Quarter,
@@ -106,7 +113,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //             <================>
+            //            |==================|
+            //            ^               ^  '
 
             TestConversion(new BarBeatTimeSpan(1, 1),
                            MusicalTimeSpan.Half + 3 * MusicalTimeSpan.Eighth,
@@ -120,7 +128,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //             <==========================>
+            //            |============================|
+            //            ^               ^            ^
 
             TestConversion(new BarBeatTimeSpan(2, 0),
                            MusicalTimeSpan.Half + 5 * MusicalTimeSpan.Eighth + 2 * MusicalTimeSpan.Sixteenth,
@@ -134,7 +143,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //                       <================>
+            //                      |==================|
+            //                      ^              ^ ' '
 
             TestConversion(new BarBeatTimeSpan(1, 2),
                            5 * MusicalTimeSpan.Eighth + 2 * MusicalTimeSpan.Sixteenth,
@@ -148,12 +158,28 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             // 4/4                 5/8            5/16
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
-            //             <======================>
+            //            |========================|
+            //            ^               ^  '  '  '
 
             TestConversion(new BarBeatTimeSpan(1, 3),
                            MusicalTimeSpan.Half + 5 * MusicalTimeSpan.Eighth,
                            MusicalTimeSpan.Half,
                            SimpleTempoMap);
+        }
+
+        [TestMethod]
+        public void Convert_Complex_1()
+        {
+            // 4/4                                     5/8            5/16                          5/8
+            //  |----+----+----+----|----+----+----+----|--+--+--+--+--|-+-+-+-+-|-+-+-+-+-|-+-+-+-+-|--+--+--+--+--|
+            //  0                   1                   2              3         4         5         6              7
+            //            |==========================================================|
+            //            ^                   ^               ^            ^         ^
+
+            TestConversion(new BarBeatTimeSpan(4, 0),
+                           MusicalTimeSpan.Half + MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth + 7 * MusicalTimeSpan.Sixteenth,
+                           MusicalTimeSpan.Half,
+                           ComplexTempoMap);
         }
 
         #endregion
@@ -190,14 +216,26 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         private static TempoMap GenerateComplexTempoMap()
         {
-            // 4/4                                     5/8            5/16
-            //  |----+----+----+----|----+----+----+----|--+--+--+--+--|-+-+-+-+-|
-            //  0                   1                   2              3         4
+            // 4/4                                     5/8            5/16                          5/8
+            //  |----+----+----+----|----+----+----+----|--+--+--+--+--|-+-+-+-+-|-+-+-+-+-|-+-+-+-+-|--+--+--+--+--|
+            //  0                   1                   2              3         4         5         6              7
+
+            var steps = new[]
+            {
+                Tuple.Create(2 * MusicalTimeSpan.Whole, new TimeSignature(5, 8)),
+                Tuple.Create(5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
+                Tuple.Create(15 * MusicalTimeSpan.Sixteenth, new TimeSignature(5, 8)),
+            };
 
             using (var tempoMapManager = new TempoMapManager())
             {
-                tempoMapManager.SetTimeSignature(2 * MusicalTimeSpan.Whole, new TimeSignature(5, 8));
-                tempoMapManager.SetTimeSignature(2 * MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16));
+                var time = new MusicalTimeSpan();
+
+                foreach (var step in steps)
+                {
+                    time += step.Item1;
+                    tempoMapManager.SetTimeSignature(time, step.Item2);
+                }
 
                 return tempoMapManager.TempoMap;
             }
