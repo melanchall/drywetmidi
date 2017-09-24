@@ -12,23 +12,31 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
         }
 
-        public BarBeatTimeSpan(int bars, int beats)
+        public BarBeatTimeSpan(long bars, long beats)
+            : this(bars, beats, 0)
+        {
+        }
+
+        public BarBeatTimeSpan(long bars, long beats, long ticks)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
-
-            // TODO: zero bars, negative beats
+            ThrowIfArgument.IsNegative(nameof(beats), beats, "Beats number is negative.");
+            ThrowIfArgument.IsNegative(nameof(ticks), ticks, "Ticks number is negative.");
 
             Bars = bars;
             Beats = beats;
+            Ticks = ticks;
         }
 
         #endregion
 
         #region Properties
 
-        public int Bars { get; }
+        public long Bars { get; }
 
-        public int Beats { get; }
+        public long Beats { get; }
+
+        public long Ticks { get; }
 
         #endregion
 
@@ -48,6 +56,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw parsingResult.Exception;
         }
 
+        private static void CalculateDifferencies(BarBeatTimeSpan timeSpan1,
+                                                  BarBeatTimeSpan timeSpan2,
+                                                  out long barsDifference,
+                                                  out long beatsDifference,
+                                                  out long ticksDifference)
+        {
+            barsDifference = timeSpan1.Bars - timeSpan2.Bars;
+            beatsDifference = timeSpan1.Beats - timeSpan2.Beats;
+            ticksDifference = timeSpan1.Ticks - timeSpan2.Ticks;
+        }
+
         #endregion
 
         #region Operators
@@ -61,7 +80,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return false;
 
             return timeSpan1.Bars == timeSpan2.Bars &&
-                   timeSpan1.Beats == timeSpan2.Beats;
+                   timeSpan1.Beats == timeSpan2.Beats &&
+                   timeSpan1.Ticks == timeSpan2.Ticks;
         }
 
         public static bool operator !=(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
@@ -75,7 +95,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
             return new BarBeatTimeSpan(timeSpan1.Bars + timeSpan2.Bars,
-                                       timeSpan1.Beats + timeSpan2.Beats);
+                                       timeSpan1.Beats + timeSpan2.Beats,
+                                       timeSpan1.Ticks + timeSpan2.Ticks);
         }
 
         public static BarBeatTimeSpan operator -(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
@@ -87,7 +108,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("First time span is less than second one.", nameof(timeSpan1));
 
             return new BarBeatTimeSpan(timeSpan1.Bars - timeSpan2.Bars,
-                                       timeSpan1.Beats - timeSpan2.Beats);
+                                       timeSpan1.Beats - timeSpan2.Beats,
+                                       timeSpan1.Ticks - timeSpan2.Ticks);
         }
 
         public static bool operator <(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
@@ -95,8 +117,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Bars < timeSpan2.Bars ||
-                   (timeSpan1.Bars == timeSpan2.Bars && timeSpan1.Beats < timeSpan2.Beats);
+            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta < 0)));
         }
 
         public static bool operator >(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
@@ -104,8 +126,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Bars > timeSpan2.Bars ||
-                   (timeSpan1.Bars == timeSpan2.Bars && timeSpan1.Beats > timeSpan2.Beats);
+            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            return barsDelta > 0 || (barsDelta == 0 && (beatsDelta > 0 || (beatsDelta == 0 && ticksDelta > 0)));
         }
 
         public static bool operator <=(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
@@ -113,8 +135,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Bars < timeSpan2.Bars ||
-                   (timeSpan1.Bars == timeSpan2.Bars && timeSpan1.Beats <= timeSpan2.Beats);
+            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta <= 0)));
         }
 
         public static bool operator >=(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
@@ -122,8 +144,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.Bars < timeSpan2.Bars ||
-                   (timeSpan1.Bars == timeSpan2.Bars && timeSpan1.Beats >= timeSpan2.Beats);
+            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta >= 0)));
         }
 
         #endregion
@@ -155,7 +177,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{Bars}.{Beats}";
+            return $"{Bars}.{Beats}.{Ticks}";
         }
 
         #endregion
@@ -186,16 +208,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new BarBeatTimeSpan((int)Math.Round(Bars * multiplier),
-                                       (int)Math.Round(Beats * multiplier));
+            return new BarBeatTimeSpan((long)Math.Round(Bars * multiplier),
+                                       (long)Math.Round(Beats * multiplier),
+                                       (long)Math.Round(Ticks * multiplier));
         }
 
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new BarBeatTimeSpan((int)Math.Round(Bars / divisor),
-                                       (int)Math.Round(Beats / divisor));
+            return new BarBeatTimeSpan((long)Math.Round(Bars / divisor),
+                                       (long)Math.Round(Beats / divisor),
+                                       (long)Math.Round(Ticks / divisor));
         }
 
         #endregion

@@ -9,19 +9,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private const string BarsGroupName = "bars";
         private const string BeatsGroupName = "beats";
+        private const string TicksGroupName = "ticks";
 
-        private static readonly string BarsGroup = $@"(?<{BarsGroupName}>\d+)";
-        private static readonly string BeatsGroup = $@"(?<{BeatsGroupName}>\-?\d+)";
+        private static readonly string BarsGroup = ParsingUtilities.GetNumberGroup(BarsGroupName);
+        private static readonly string BeatsGroup = ParsingUtilities.GetNumberGroup(BeatsGroupName);
+        private static readonly string TicksGroup = ParsingUtilities.GetNumberGroup(TicksGroupName);
 
         private static readonly string Divider = Regex.Escape(".");
 
         private static readonly string[] Patterns = new[]
         {
-            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
+            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}\s*{Divider}\s*{TicksGroup}",
         };
 
         private const string BarsIsOutOfRange = "Bars number is out of range.";
         private const string BeatsIsOutOfRange = "Beats number is out of range.";
+        private const string TicksIsOutOfRange = "Ticks number is out of range.";
 
         #endregion
 
@@ -38,13 +41,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            if (!ParsingUtilities.ParseInt(match, BarsGroupName, 0, out var bars))
+            if (!ParsingUtilities.ParseLong(match, BarsGroupName, 0, out var bars))
                 return new ParsingResult(BarsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseInt(match, BeatsGroupName, 0, out var beats))
+            if (!ParsingUtilities.ParseLong(match, BeatsGroupName, 0, out var beats))
                 return new ParsingResult(BeatsIsOutOfRange);
 
-            timeSpan = new BarBeatTimeSpan(bars, beats);
+            if (!ParsingUtilities.ParseLong(match, TicksGroupName, 0, out var ticks))
+                return new ParsingResult(BeatsIsOutOfRange);
+
+            timeSpan = new BarBeatTimeSpan(bars, beats, ticks);
             return ParsingResult.Parsed;
         }
 

@@ -16,42 +16,79 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var endTime = time + timeSpan;
 
+            //
+
             var timeSignatureLine = tempoMap.TimeSignature;
-            var lastTimeSignature = timeSignatureLine.Values.LastOrDefault(v => v.Time < endTime)?.Value ?? TimeSignature.Default;
             var timeSignatureChanges = timeSignatureLine
                 .Values
-                .SkipWhile(v => v.Time < time)
-                .TakeWhile(v => v.Time < endTime)
-                .Concat(new[] { new ValueChange<TimeSignature>(endTime, lastTimeSignature) })
+                .Where(v => v.Time > time && v.Time < endTime)
                 .ToList();
 
-            var timeSignature = timeSignatureLine.AtTime(time);
-            var previousTimeSignature = timeSignature;
-            var ticksToCompleteBar = 0L;
-            var remainingTicks = 0L;
             var bars = 0L;
 
-            foreach (var timeSignatureChange in timeSignatureChanges)
+            // Calculate count of complete bars between time signature changes
+
+            for (int i = 0; i < timeSignatureChanges.Count - 1; i++)
             {
-                ticksToCompleteBar = (long)Math.Round(ticksToCompleteBar * previousTimeSignature.Denominator / (double)timeSignature.Denominator);
+                var timeSignatureChange = timeSignatureChanges[i];
+                var nextTime = timeSignatureChanges[i + 1].Time;
 
-                ConvertComponents(timeSignatureChange,
-                                  time,
-                                  GetBarLength(timeSignature, ticksPerQuarterNote),
-                                  ref bars,
-                                  ref ticksToCompleteBar,
-                                  ref remainingTicks);
-
-                time = timeSignatureChange.Time;
-
-                previousTimeSignature = timeSignature;
-                timeSignature = timeSignatureChange.Value;
+                var barLength = GetBarLength(timeSignatureChange.Value, ticksPerQuarterNote);
+                bars += (nextTime - timeSignatureChange.Time) / barLength;
             }
 
-            var beatLength = GetBeatLength(timeSignature, ticksPerQuarterNote);
-            var beats = Math.DivRem(remainingTicks, beatLength, out var ticks);
+            // Calculate components before first time signature change and after last time signature change
 
-            return new BarBeatTimeSpan((int)bars, (int)beats/*, ticks*/);
+            var firstTime = timeSignatureChanges.FirstOrDefault()?.Time ?? time;
+            var lastTime = timeSignatureChanges.LastOrDefault()?.Time ?? time;
+
+            var firstTimeSignature = timeSignatureLine.AtTime(time);
+            var lastTimeSignature = timeSignatureLine.AtTime(lastTime);
+
+            CalculateComponents(firstTime - time,
+                                firstTimeSignature,
+                                ticksPerQuarterNote,
+                                out var barsBefore,
+                                out var beatsBefore,
+                                out var ticksBefore);
+
+            CalculateComponents(time + timeSpan - lastTime,
+                                lastTimeSignature,
+                                ticksPerQuarterNote,
+                                out var barsAfter,
+                                out var beatsAfter,
+                                out var ticksAfter);
+
+            bars += barsBefore + barsAfter;
+
+            // Try to complete a bar
+
+            var beats = beatsBefore + beatsAfter;
+            if (beats > 0)
+            {
+                if (beatsBefore > 0 && beats >= firstTimeSignature.Numerator)
+                {
+                    bars++;
+                    beats -= firstTimeSignature.Numerator;
+                }
+            }
+
+            // Try to complete a beat
+
+            var ticks = ticksBefore + ticksAfter;
+            if (ticks > 0)
+            {
+                var beatLength = GetBeatLength(firstTimeSignature, ticksPerQuarterNote);
+                if (ticksBefore > 0 && ticks >= beatLength)
+                {
+                    beats++;
+                    ticks -= beatLength;
+                }
+            }
+
+            //
+
+            return new BarBeatTimeSpan((int)bars, (int)beats, (int)ticks);
         }
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
@@ -65,99 +102,120 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var timeSignatureLine = tempoMap.TimeSignature;
 
-            var startTime = time;
+            //
 
-            time = StepComponents(time, barBeatTimeSpan.Bars, timeSignatureLine, ticksPerQuarterNote, GetBarLength);
-            time = StepComponents(time, barBeatTimeSpan.Beats, timeSignatureLine, ticksPerQuarterNote, GetBeatLength);
+            long bars = barBeatTimeSpan.Bars;
+            long beats = barBeatTimeSpan.Beats;
+            long ticks = barBeatTimeSpan.Ticks;
 
-            return time - startTime;
+            var startTimeSignature = timeSignatureLine.AtTime(time);
+            var startBarLength = GetBarLength(startTimeSignature, ticksPerQuarterNote);
+            var startBeatLength = GetBeatLength(startTimeSignature, ticksPerQuarterNote);
+
+            var totalTicks = bars * startBarLength + beats * startBeatLength + ticks;
+            var timeSignatureChanges = timeSignatureLine.Values
+                                                        .Where(v => v.Time > time && v.Time < time + totalTicks)
+                                                        .ToList();
+
+            var lastBarLength = 0L;
+            var lastBeatLength = 0L;
+
+            var firstTimeSignatureChange = timeSignatureChanges.FirstOrDefault();
+            var lastTimeSignature = firstTimeSignatureChange?.Value ?? startTimeSignature;
+            var lastTime = firstTimeSignatureChange?.Time ?? time;
+
+            CalculateComponents(lastTime - time,
+                                startTimeSignature,
+                                ticksPerQuarterNote,
+                                out var barsBefore,
+                                out var beatsBefore,
+                                out var ticksBefore);
+
+            bars -= barsBefore;
+
+            // Balance bars
+
+            foreach (var timeSignatureChange in timeSignatureLine.Values.Where(v => v.Time > lastTime).ToList())
+            {
+                var deltaTime = timeSignatureChange.Time - lastTime;
+
+                lastBarLength = GetBarLength(lastTimeSignature, ticksPerQuarterNote);
+                lastBeatLength = GetBeatLength(lastTimeSignature, ticksPerQuarterNote);
+
+                var currentBars = Math.Min(deltaTime / lastBarLength, bars);
+                bars -= currentBars;
+                lastTime += currentBars * lastBarLength;
+
+                if (bars == 0)
+                    break;
+
+                lastTimeSignature = timeSignatureChange.Value;
+            }
+
+            if (bars > 0)
+            {
+                lastBarLength = GetBarLength(lastTimeSignature, ticksPerQuarterNote);
+                lastBeatLength = GetBeatLength(lastTimeSignature, ticksPerQuarterNote);
+                lastTime += bars * lastBarLength;
+            }
+
+            if (beats == beatsBefore && ticks == ticksBefore)
+                return lastTime - time;
+
+            // Balance beats
+
+            if (beatsBefore > beats && lastBarLength > 0)
+            {
+                lastTime += -lastBarLength + (startTimeSignature.Numerator - beatsBefore) * lastBeatLength;
+                beatsBefore = 0;
+            }
+
+            if (beatsBefore < beats)
+            {
+                lastBeatLength = GetBeatLength(timeSignatureLine.AtTime(lastTime), ticksPerQuarterNote);
+                lastTime += (beats - beatsBefore) * lastBeatLength;
+            }
+
+            // Balance ticks
+
+            if (ticksBefore > ticks && lastBeatLength > 0)
+            {
+                lastTime += -lastBeatLength + startBeatLength - ticksBefore;
+                ticksBefore = 0;
+            }
+
+            if (ticksBefore < ticks)
+                lastTime += ticks - ticksBefore;
+
+            //
+
+            return lastTime - time;
         }
 
         #endregion
 
         #region Methods
 
-        // TODO: improve accuracy (via rational fraction)
-        private static long StepComponents(long time,
-                                           long componentsCount,
-                                           ValueLine<TimeSignature> timeSignatureLine,
-                                           short ticksPerQuarterNote,
-                                           Func<TimeSignature, short, int> getComponentLength)
+        private static void CalculateComponents(long totalTicks,
+                                                TimeSignature timeSignature,
+                                                short ticksPerQuarterNote,
+                                                out long bars,
+                                                out long beats,
+                                                out long ticks)
         {
-            var ticksToCompleteComponent = 0L;
-            var remainingTicks = 0L;
-            var components = 0L;
+            var barLength = GetBarLength(timeSignature, ticksPerQuarterNote);
+            bars = Math.DivRem(totalTicks, barLength, out ticks);
 
-            var timeSignature = timeSignatureLine.AtTime(time);
-            var previousTimeSignature = timeSignature;
-
-            while (components < componentsCount)
-            {
-                ticksToCompleteComponent = (long)Math.Round(ticksToCompleteComponent * previousTimeSignature.Denominator / (double)timeSignature.Denominator);
-
-                var componentLength = getComponentLength(timeSignature, ticksPerQuarterNote);
-                var remainingComponents = componentsCount - components;
-                var endTime = time + ticksToCompleteComponent + (remainingComponents - Math.Sign(ticksToCompleteComponent)) * componentLength;
-
-                var timeSignatureChange = timeSignatureLine.Values.FirstOrDefault(v => v.Time > time && v.Time < endTime)
-                    ?? new ValueChange<TimeSignature>(endTime, timeSignature);
-
-                ConvertComponents(timeSignatureChange,
-                                  time,
-                                  componentLength,
-                                  ref components,
-                                  ref ticksToCompleteComponent,
-                                  ref remainingTicks);
-
-                time = timeSignatureChange.Time;
-
-                previousTimeSignature = timeSignature;
-                timeSignature = timeSignatureChange.Value;
-            }
-
-            return time;
+            var beatLength = GetBeatLength(timeSignature, ticksPerQuarterNote);
+            beats = Math.DivRem(ticks, beatLength, out ticks);
         }
 
-        // TODO: improve accuracy (via rational fraction)
-        private static void ConvertComponents(ValueChange<TimeSignature> timeSignatureChange,
-                                              long time,
-                                              long componentLength,
-                                              ref long components,
-                                              ref long ticksToCompleteComponents,
-                                              ref long remainingTicks)
-        {
-            var deltaTime = timeSignatureChange.Time - time;
-            deltaTime -= ticksToCompleteComponents;
-
-            if (deltaTime >= 0)
-            {
-                if (ticksToCompleteComponents > 0)
-                    components++;
-
-                ticksToCompleteComponents = 0;
-            }
-
-            if (deltaTime < 0)
-            {
-                // TODO: check this scenario!
-                ticksToCompleteComponents = -deltaTime;
-                return;
-            }
-
-            components += deltaTime / componentLength;
-            remainingTicks = deltaTime % componentLength;
-            if (remainingTicks > 0)
-                ticksToCompleteComponents = componentLength - remainingTicks;
-        }
-
-        // TODO: improve accuracy (via rational fraction)
         private static int GetBarLength(TimeSignature timeSignature, short ticksPerQuarterNote)
         {
             var beatLength = GetBeatLength(timeSignature, ticksPerQuarterNote);
             return timeSignature.Numerator * beatLength;
         }
 
-        // TODO: improve accuracy (via rational fraction)
         private static int GetBeatLength(TimeSignature timeSignature, short ticksPerQuarterNote)
         {
             return 4 * ticksPerQuarterNote / timeSignature.Denominator;
