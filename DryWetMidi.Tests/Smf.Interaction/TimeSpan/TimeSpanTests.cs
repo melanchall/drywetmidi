@@ -1,7 +1,9 @@
 ﻿using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
@@ -34,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         protected sealed class TimeSpansOperationInfo : TimeSpanOperationInfo
         {
-            public TimeSpansOperationInfo(ITimeSpan timeSpan1, ITimeSpan timeSpan2, ITimeSpan expectedTimeSpan)
+            public TimeSpansOperationInfo(ITimeSpan timeSpan1, ITimeSpan timeSpan2, ITimeSpan expectedTimeSpan = null)
                 : base(expectedTimeSpan)
             {
                 TimeSpan1 = timeSpan1;
@@ -79,50 +81,64 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         protected abstract IEnumerable<TimeSpansOperationInfo> TimeSpansToAdd { get; }
 
-        protected abstract IEnumerable<TimeSpansOperationInfo> TimeSpansToSubtract { get; }
+        //protected abstract IEnumerable<TimeSpansOperationInfo> TimeSpansToSubtract { get; }
 
-        protected abstract IEnumerable<TimeSpanAndDoubleOperationInfo> TimeSpansToMultiply { get; }
+        //protected abstract IEnumerable<TimeSpanAndDoubleOperationInfo> TimeSpansToMultiply { get; }
 
-        protected abstract IEnumerable<TimeSpanAndDoubleOperationInfo> TimeSpansToDivide { get; }
+        //protected abstract IEnumerable<TimeSpanAndDoubleOperationInfo> TimeSpansToDivide { get; }
 
         #endregion
 
         #region Test methods
 
         [TestMethod]
-        [Description("Test TryParse method.")]
-        public void TryParse()
-        {
-            foreach (var timeSpan in TimeSpansToParse)
-            {
-                TimeSpanUtilities.TryParse(timeSpan.Input, out var actualTimeSpan);
-                Assert.AreEqual(timeSpan.ExpectedTimeSpan,
-                                actualTimeSpan,
-                                $"TryParse gave invalid result for '{timeSpan.Input}'.");
-            }
-        }
-
-        [TestMethod]
-        [Description("Test Parse method.")]
         public void Parse()
         {
             foreach (var timeSpan in TimeSpansToParse)
             {
-                Assert.AreEqual(timeSpan.ExpectedTimeSpan,
-                                TimeSpanUtilities.Parse(timeSpan.Input),
-                                $"Parse gave invalid result for '{timeSpan.Input}'.");
+                var input = timeSpan.Input;
+                var expectedTimeSpan = timeSpan.ExpectedTimeSpan;
+
+                TimeSpanUtilities.TryParse(input, out var actualTimeSpan);
+                Assert.AreEqual(expectedTimeSpan,
+                                actualTimeSpan,
+                                "TryParse: incorrect result.");
+
+                actualTimeSpan = TimeSpanUtilities.Parse(input);
+                Assert.AreEqual(expectedTimeSpan,
+                                actualTimeSpan,
+                                "Parse: incorrect result.");
+
+                Assert.AreEqual(expectedTimeSpan,
+                                TimeSpanUtilities.Parse(expectedTimeSpan.ToString()),
+                                "Parse: string representation was not parsed to the original time span.");
             }
         }
 
         [TestMethod]
-        [Description("Test Parse method passing string representation of an expected time span obtained via ToString.")]
-        public void ParseToString()
+        public void Add_TimeTime()
         {
-            foreach (var timeSpan in TimeSpansToParse)
+            foreach (var timeSpan in TimeSpansToAdd.Where(ts => ts.ExpectedTimeSpan == null))
             {
-                Assert.AreEqual(timeSpan.ExpectedTimeSpan,
-                                TimeSpanUtilities.Parse(timeSpan.ExpectedTimeSpan.ToString()),
-                                $"Parse gave invalid result for string representation of {timeSpan.ExpectedTimeSpan}.");
+                Assert.ThrowsException<ArgumentException>(() => timeSpan.TimeSpan1.Add(timeSpan.TimeSpan2, MathOperationMode.TimeTime));
+            }
+        }
+
+        [TestMethod]
+        public void Add_TimeLength()
+        {
+            foreach (var timeSpan in TimeSpansToAdd)
+            {
+                Add(timeSpan.TimeSpan1, timeSpan.TimeSpan2, timeSpan.ExpectedTimeSpan, MathOperationMode.TimeLength);
+            }
+        }
+
+        [TestMethod]
+        public void Add_LengthLength()
+        {
+            foreach (var timeSpan in TimeSpansToAdd)
+            {
+                Add(timeSpan.TimeSpan1, timeSpan.TimeSpan2, timeSpan.ExpectedTimeSpan, MathOperationMode.LengthLength);
             }
         }
 
@@ -130,8 +146,16 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Private methods
 
-        private static void Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperationMode operationMode)
+        private static void Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2, ITimeSpan expectedTimeSpan, MathOperationMode operationMode)
         {
+            if (expectedTimeSpan != null)
+            {
+                Assert.AreEqual(expectedTimeSpan, timeSpan1.Add(timeSpan2, operationMode));
+                return;
+            }
+
+            //
+
             var mathTimeSpan = timeSpan1.Add(timeSpan2, operationMode) as MathTimeSpan;
 
             Assert.IsTrue(mathTimeSpan != null &&
@@ -176,7 +200,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         private static TempoMap GetComplexTempoMap()
         {
-            const int tempoChangesCount = 10;
+            const int tempoChangesCount = 2;
             const int timeSignatureChangesCount = 10;
 
             using (var tempoMapManager = new TempoMapManager())
@@ -188,10 +212,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                     tempoMapManager.SetTempo(i * 2000 + 100, new Tempo((i + 1) * ticksPerQuarterNote * 1000));
                 }
 
-                for (var i = 0; i < timeSignatureChangesCount; i++)
-                {
-                    tempoMapManager.SetTimeSignature(i * 2500 + 50, new TimeSignature(i + 1, 8));
-                }
+                //for (var i = 0; i < timeSignatureChangesCount; i++)
+                //{
+                //    tempoMapManager.SetTimeSignature(i * 2500 + 50, new TimeSignature(i + 1, 8));
+                //}
 
                 return tempoMapManager.TempoMap;
             }

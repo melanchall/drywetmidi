@@ -2,17 +2,37 @@
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestClass]
-    public sealed class BarBeatTimeSpanTests
+    public sealed class BarBeatTimeSpanTests : TimeSpanTests
     {
         #region Constants
 
         private static readonly TempoMap DefaultTempoMap = GenerateDefaultTempoMap();
         private static readonly TempoMap SimpleTempoMap = GenerateSimpleTempoMap();
         private static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
+
+        #endregion
+
+        #region Overrides
+
+        protected override IEnumerable<TimeSpanParseInfo> TimeSpansToParse => new[]
+        {
+            new TimeSpanParseInfo("0.0.0", new BarBeatTimeSpan()),
+            new TimeSpanParseInfo("1.0.0", new BarBeatTimeSpan(1, 0, 0)),
+            new TimeSpanParseInfo("0.10.5", new BarBeatTimeSpan(0, 10, 5)),
+            new TimeSpanParseInfo("100.20.0", new BarBeatTimeSpan(100, 20, 0)),
+        };
+
+        protected override IEnumerable<TimeSpansOperationInfo> TimeSpansToAdd => new[]
+        {
+            new TimeSpansOperationInfo(new BarBeatTimeSpan(0, 1, 2), new BarBeatTimeSpan(10, 0, 0), new BarBeatTimeSpan(10, 1, 2)),
+            new TimeSpansOperationInfo(new BarBeatTimeSpan(0, 1, 2), new MetricTimeSpan(0, 1, 30)),
+            new TimeSpansOperationInfo(new BarBeatTimeSpan(0, 1, 2), MusicalTimeSpan.Quarter.Triplet()),
+        };
 
         #endregion
 
@@ -388,7 +408,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
-        #endregion
+        #region Complex
 
         [TestMethod]
         public void Convert_Complex_1()
@@ -449,6 +469,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                            2 * MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth + 12 * MusicalTimeSpan.Sixteenth,
                            ComplexTempoMap);
         }
+
+        #endregion
+
+        #endregion
 
         #endregion
 

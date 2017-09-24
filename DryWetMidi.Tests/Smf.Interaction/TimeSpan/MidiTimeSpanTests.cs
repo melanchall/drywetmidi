@@ -1,71 +1,29 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestClass]
-    public sealed class MidiTimeSpanTests
+    public sealed class MidiTimeSpanTests : TimeSpanTests
     {
-        #region TestMethods
+        #region Overrides
 
-        [TestMethod]
-        [Description("Try parse MIDI time span in form of 'length'.")]
-        public void TryParse_Valid()
+        protected override IEnumerable<TimeSpanParseInfo> TimeSpansToParse => new[]
         {
-            TimeSpanTestingUtilities.TryParse("123", (MidiTimeSpan)123);
-        }
+            new TimeSpanParseInfo("0", new MidiTimeSpan()),
+            new TimeSpanParseInfo("123", new MidiTimeSpan(123)),
+        };
 
-        [TestMethod]
-        [Description("Try parse negative MIDI time span.")]
-        public void TryParse_Inalid_Negative()
+        protected override IEnumerable<TimeSpansOperationInfo> TimeSpansToAdd => new[]
         {
-            Assert.IsFalse(MidiTimeSpan.TryParse("-234", out var length));
-        }
+            new TimeSpansOperationInfo((MidiTimeSpan)300, (MidiTimeSpan)40, (MidiTimeSpan)340),
+            new TimeSpansOperationInfo((MidiTimeSpan)300, new MetricTimeSpan(0, 1, 30)),
+        };
 
-        [TestMethod]
-        [Description("Try parse NaN time span.")]
-        public void TryParse_Inalid_NaN()
-        {
-            Assert.IsFalse(MidiTimeSpan.TryParse("abc", out var length));
-        }
+        #endregion
 
-        [TestMethod]
-        [Description("Parse string representation of a time span.")]
-        public void Parse_ToString()
-        {
-            TimeSpanTestingUtilities.ParseToString(new MidiTimeSpan(987));
-        }
-
-        [TestMethod]
-        [Description("Add MIDI time span.")]
-        public void Add_Midi()
-        {
-            var actual = ((MidiTimeSpan)300).Add((MidiTimeSpan)40, MathOperationMode.TimeLength);
-            var expected = (MidiTimeSpan)340;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        [Description("Add non-MIDI time to MIDI time.")]
-        public void Add_NonMidi_TimeTime()
-        {
-            TimeSpanTestingUtilities.Add_TimeTime((MidiTimeSpan)300, new MetricTimeSpan(0, 1, 30));
-        }
-
-        [TestMethod]
-        [Description("Add non-MIDI length to MIDI time.")]
-        public void Add_NonMidi_TimeLength()
-        {
-            TimeSpanTestingUtilities.Add_TimeLength((MidiTimeSpan)300, new MetricTimeSpan(0, 1, 30));
-        }
-
-        [TestMethod]
-        [Description("Add non-MIDI length to MIDI length.")]
-        public void Add_NonMidi_LengthLength()
-        {
-            TimeSpanTestingUtilities.Add_LengthLength((MidiTimeSpan)300, new MetricTimeSpan(0, 1, 30));
-        }
+        #region Test methods
 
         [TestMethod]
         [Description("Subtract MIDI time span.")]
