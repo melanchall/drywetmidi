@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             #region Fields
 
-            private readonly long _toleranceInMicroseconds;
+            private readonly long _tolerance;
 
             #endregion
 
@@ -21,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             public MetricTimeSpanEqualityComparer(long toleranceInMicroseconds)
             {
-                _toleranceInMicroseconds = toleranceInMicroseconds;
+                _tolerance = toleranceInMicroseconds;
             }
 
             #endregion
@@ -30,10 +31,45 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             public bool Equals(ITimeSpan x, ITimeSpan y)
             {
-                var metricTimeSpan1 = (MetricTimeSpan)x;
-                var metricTimeSpan2 = (MetricTimeSpan)y;
+                var metricX = (MetricTimeSpan)x;
+                var metricY = (MetricTimeSpan)y;
 
-                return Math.Abs(metricTimeSpan1.TotalMicroseconds - metricTimeSpan2.TotalMicroseconds) < _toleranceInMicroseconds;
+                return Math.Abs(metricX.TotalMicroseconds - metricY.TotalMicroseconds) <= _tolerance;
+            }
+
+            public int GetHashCode(ITimeSpan obj)
+            {
+                return obj.GetHashCode();
+            }
+
+            #endregion
+        }
+
+        private sealed class MidiTimeSpanEqualityComparer : IEqualityComparer<ITimeSpan>
+        {
+            #region Fields
+
+            private readonly long _tolerance;
+
+            #endregion
+
+            #region Constructor
+
+            public MidiTimeSpanEqualityComparer(long toleranceInTicks)
+            {
+                _tolerance = toleranceInTicks;
+            }
+
+            #endregion
+
+            #region IEqualityComparer<ITimeSpan>
+
+            public bool Equals(ITimeSpan x, ITimeSpan y)
+            {
+                var midiX = (MidiTimeSpan)x;
+                var midiY = (MidiTimeSpan)y;
+
+                return Math.Abs(midiX.TimeSpan - midiY.TimeSpan) <= _tolerance;
             }
 
             public int GetHashCode(ITimeSpan obj)
@@ -48,17 +84,37 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Constants
 
+        public static readonly TempoMap DefaultTempoMap = GenerateDefaultTempoMap();
+        public static readonly TempoMap SimpleTempoMap = GenerateSimpleTempoMap();
+        public static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
+
         private const long MetricTimeSpanEqualityTolerance = 500; // μs
+        private const long MidiTimeSpanEqualityTolerance = 1; // ticks
 
         private static readonly Dictionary<Type, IEqualityComparer<ITimeSpan>> TimeSpanComparers =
             new Dictionary<Type, IEqualityComparer<ITimeSpan>>
             {
-                [typeof(MetricTimeSpan)] = new MetricTimeSpanEqualityComparer(MetricTimeSpanEqualityTolerance)
+                [typeof(MetricTimeSpan)] = new MetricTimeSpanEqualityComparer(MetricTimeSpanEqualityTolerance),
+                [typeof(MidiTimeSpan)] = new MidiTimeSpanEqualityComparer(MidiTimeSpanEqualityTolerance),
             };
 
         #endregion
 
         #region Methods
+
+        public static void TestConversion<TTimeSpan>(TTimeSpan timeSpan, ITimeSpan referenceTimeSpan, ITimeSpan time, TempoMap tempoMap)
+            where TTimeSpan : ITimeSpan
+        {
+            time = time ?? new MidiTimeSpan();
+
+            Assert.AreEqual(timeSpan,
+                            LengthConverter2.ConvertTo<TTimeSpan>(referenceTimeSpan, time, tempoMap),
+                            "ConvertTo failed.");
+
+            Assert.AreEqual(LengthConverter2.ConvertFrom(referenceTimeSpan, time, tempoMap),
+                            LengthConverter2.ConvertFrom(timeSpan, time, tempoMap),
+                            "ConvertFrom failed.");
+        }
 
         public static void Parse(string input, ITimeSpan expectedTimeSpan)
         {
@@ -194,6 +250,67 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                           "Result is not a math time span.");
 
             return mathTimeSpan;
+        }
+
+        private static TempoMap GenerateDefaultTempoMap()
+        {
+            // 4/4
+            //  |----+----+----+----|----+----+----+----|----+----+----+----|
+            //  0                   1                   2                   3
+
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(480)))
+            {
+                return tempoMapManager.TempoMap;
+            }
+        }
+
+        private static TempoMap GenerateSimpleTempoMap()
+        {
+            // 4/4                 5/8            5/16
+            //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
+            //  0                   1              2         3
+
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(480)))
+            {
+                tempoMapManager.SetTimeSignature(MusicalTimeSpan.Whole, new TimeSignature(5, 8));
+                tempoMapManager.SetTimeSignature(MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16));
+
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 30), Tempo.FromMillisecondsPerQuarterNote(600));
+
+                return tempoMapManager.TempoMap;
+            }
+        }
+
+        private static TempoMap GenerateComplexTempoMap()
+        {
+            // 4/4                                     5/8            5/16                          5/8
+            //  |----+----+----+----|----+----+----+----|--+--+--+--+--|-+-+-+-+-|-+-+-+-+-|-+-+-+-+-|--+--+--+--+--|
+            //  0                   1                   2              3         4         5         6              7
+
+            var steps = new[]
+            {
+                Tuple.Create(2 * MusicalTimeSpan.Whole, new TimeSignature(5, 8)),
+                Tuple.Create(5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
+                Tuple.Create(15 * MusicalTimeSpan.Sixteenth, new TimeSignature(5, 8)),
+            };
+
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(480)))
+            {
+                var time = new MusicalTimeSpan();
+
+                foreach (var step in steps)
+                {
+                    time += step.Item1;
+                    tempoMapManager.SetTimeSignature(time, step.Item2);
+                }
+
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 30), Tempo.FromMillisecondsPerQuarterNote(600));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 31), Tempo.FromMillisecondsPerQuarterNote(640));
+
+                return tempoMapManager.TempoMap;
+            }
         }
 
         #endregion
