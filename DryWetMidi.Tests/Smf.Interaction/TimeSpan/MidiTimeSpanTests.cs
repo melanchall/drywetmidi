@@ -1,35 +1,18 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestClass]
-    public sealed class MidiTimeSpanTests : TimeSpanTests
+    public sealed class MidiTimeSpanTests
     {
-        #region Overrides
-
-        protected override IEnumerable<TimeSpanParseInfo> TimeSpansToParse => new[]
-        {
-            new TimeSpanParseInfo("0", new MidiTimeSpan()),
-            new TimeSpanParseInfo("123", new MidiTimeSpan(123)),
-        };
-
-        protected override IEnumerable<TimeSpansOperationInfo> TimeSpansToAdd => new[]
-        {
-            new TimeSpansOperationInfo((MidiTimeSpan)300, (MidiTimeSpan)40, (MidiTimeSpan)340),
-            new TimeSpansOperationInfo((MidiTimeSpan)300, new MetricTimeSpan(0, 1, 30)),
-        };
-
-        #endregion
-
         #region Test methods
 
         [TestMethod]
         [Description("Subtract MIDI time span.")]
         public void Subtract_Midi()
         {
-            var actual = ((MidiTimeSpan)300).Subtract((MidiTimeSpan)40, MathOperationMode.TimeLength);
+            var actual = ((MidiTimeSpan)300).Subtract((MidiTimeSpan)40, TimeSpanMode.TimeLength);
             var expected = (MidiTimeSpan)260;
 
             Assert.AreEqual(expected, actual);
@@ -39,11 +22,11 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Subtract MIDI time span.")]
         public void Subtract_Musical()
         {
-            var actual = ((MidiTimeSpan)300).Subtract(MusicalTimeSpan.Quarter.SingleDotted(), MathOperationMode.LengthLength);
+            var actual = ((MidiTimeSpan)300).Subtract(MusicalTimeSpan.Quarter.SingleDotted(), TimeSpanMode.LengthLength);
             var expected = new MathTimeSpan((MidiTimeSpan)300,
                                             MusicalTimeSpan.Quarter.SingleDotted(),
                                             MathOperation.Subtract,
-                                            MathOperationMode.LengthLength);
+                                            TimeSpanMode.LengthLength);
 
             Assert.AreEqual(expected, actual);
         }
@@ -66,8 +49,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
                 var expected = TimeConverter2.ConvertFrom(time1, tempoMap);
 
-                var length = time1.Subtract(time2, MathOperationMode.TimeTime);
-                var actual = TimeConverter2.ConvertFrom(time2.Add(length, MathOperationMode.TimeLength), tempoMap);
+                var length = time1.Subtract(time2, TimeSpanMode.TimeTime);
+                var actual = TimeConverter2.ConvertFrom(time2.Add(length, TimeSpanMode.TimeLength), tempoMap);
 
                 Assert.AreEqual(expected, actual);
             }

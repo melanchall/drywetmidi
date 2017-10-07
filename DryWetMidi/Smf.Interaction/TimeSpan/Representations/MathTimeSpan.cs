@@ -11,30 +11,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string TimeModeString = "T";
         private const string LengthModeString = "L";
 
-        private static readonly Dictionary<MathOperationMode, Tuple<string, string>> ModeStrings =
-            new Dictionary<MathOperationMode, Tuple<string, string>>
+        private static readonly Dictionary<TimeSpanMode, Tuple<string, string>> ModeStrings =
+            new Dictionary<TimeSpanMode, Tuple<string, string>>
             {
-                [MathOperationMode.Unspecified] = Tuple.Create(string.Empty, string.Empty),
-                [MathOperationMode.TimeTime] = Tuple.Create(TimeModeString, TimeModeString),
-                [MathOperationMode.TimeLength] = Tuple.Create(TimeModeString, LengthModeString),
-                [MathOperationMode.LengthLength] = Tuple.Create(LengthModeString, LengthModeString),
+                [TimeSpanMode.TimeTime] = Tuple.Create(TimeModeString, TimeModeString),
+                [TimeSpanMode.TimeLength] = Tuple.Create(TimeModeString, LengthModeString),
+                [TimeSpanMode.LengthLength] = Tuple.Create(LengthModeString, LengthModeString),
             };
 
         #endregion
 
         #region Constructor
 
-        public MathTimeSpan(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperation operation, MathOperationMode operationMode)
+        public MathTimeSpan(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperation operation, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
             ThrowIfArgument.IsInvalidEnumValue(nameof(operation), operation);
-            ThrowIfArgument.IsInvalidEnumValue(nameof(operationMode), operationMode);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
             TimeSpan1 = timeSpan1;
             TimeSpan2 = timeSpan2;
             Operation = operation;
-            OperationMode = operationMode;
+            Mode = mode;
         }
 
         #endregion
@@ -47,7 +46,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public MathOperation Operation { get; }
 
-        public MathOperationMode OperationMode { get; }
+        public TimeSpanMode Mode { get; }
 
         #endregion
 
@@ -64,7 +63,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return timeSpan1.TimeSpan1.Equals(timeSpan2.TimeSpan1) &&
                    timeSpan1.TimeSpan2.Equals(timeSpan2.TimeSpan2) &&
                    timeSpan1.Operation == timeSpan2.Operation &&
-                   timeSpan1.OperationMode == timeSpan2.OperationMode;
+                   timeSpan1.Mode == timeSpan2.Mode;
         }
 
         public static bool operator !=(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
@@ -82,7 +81,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 ? "+"
                 : "-";
 
-            var modeStrings = ModeStrings[OperationMode];
+            var modeStrings = ModeStrings[Mode];
 
             return $"({TimeSpan1}{modeStrings.Item1} {operationString} {TimeSpan2}{modeStrings.Item2})";
         }
@@ -97,25 +96,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpan1.GetHashCode() ^
                    TimeSpan2.GetHashCode() ^
                    Operation.GetHashCode() ^
-                   OperationMode.GetHashCode();
+                   Mode.GetHashCode();
         }
 
         #endregion
 
         #region ITimeSpan
 
-        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode)
+        public ITimeSpan Add(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
-            return TimeSpanUtilities.Add(this, timeSpan, operationMode);
+            return TimeSpanUtilities.Add(this, timeSpan, mode);
         }
 
-        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode)
+        public ITimeSpan Subtract(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
-            return TimeSpanUtilities.Subtract(this, timeSpan, operationMode);
+            return TimeSpanUtilities.Subtract(this, timeSpan, mode);
         }
 
         public ITimeSpan Multiply(double multiplier)
@@ -125,7 +124,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MathTimeSpan(TimeSpan1.Multiply(multiplier),
                                     TimeSpan2.Multiply(multiplier),
                                     Operation,
-                                    OperationMode);
+                                    Mode);
         }
 
         public ITimeSpan Divide(double divisor)
@@ -135,7 +134,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MathTimeSpan(TimeSpan1.Divide(divisor),
                                     TimeSpan2.Divide(divisor),
                                     Operation,
-                                    OperationMode);
+                                    Mode);
         }
 
         #endregion

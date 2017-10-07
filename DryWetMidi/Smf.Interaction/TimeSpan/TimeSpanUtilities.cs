@@ -55,29 +55,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw new FormatException("Time span has unknown format.");
         }
 
-        internal static ITimeSpan Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperationMode operationMode)
+        internal static ITimeSpan Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2, TimeSpanMode mode)
         {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(operationMode), operationMode);
-            ThrowIfOperationModeIsUnspecified(operationMode);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
-            if (operationMode == MathOperationMode.TimeTime)
-                throw new ArgumentException("Times cannot be added.", nameof(operationMode));
+            if (mode == TimeSpanMode.TimeTime)
+                throw new ArgumentException("Times cannot be added.", nameof(mode));
 
-            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Add, operationMode);
+            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Add, mode);
         }
 
-        internal static ITimeSpan Subtract(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperationMode operationMode)
+        internal static ITimeSpan Subtract(ITimeSpan timeSpan1, ITimeSpan timeSpan2, TimeSpanMode mode)
         {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(operationMode), operationMode);
-            ThrowIfOperationModeIsUnspecified(operationMode);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
-            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, operationMode);
-        }
-
-        private static void ThrowIfOperationModeIsUnspecified(MathOperationMode operationMode)
-        {
-            if (operationMode == MathOperationMode.Unspecified)
-                throw new ArgumentException("Operation mode is not specified.", nameof(operationMode));
+            return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, mode);
         }
 
         #endregion

@@ -7,32 +7,13 @@ using System.Collections.Generic;
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestClass]
-    public sealed class BarBeatTimeSpanTests : TimeSpanTests
+    public sealed class BarBeatTimeSpanTests
     {
         #region Constants
 
         private static readonly TempoMap DefaultTempoMap = GenerateDefaultTempoMap();
         private static readonly TempoMap SimpleTempoMap = GenerateSimpleTempoMap();
         private static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
-
-        #endregion
-
-        #region Overrides
-
-        protected override IEnumerable<TimeSpanParseInfo> TimeSpansToParse => new[]
-        {
-            new TimeSpanParseInfo("0.0.0", new BarBeatTimeSpan()),
-            new TimeSpanParseInfo("1.0.0", new BarBeatTimeSpan(1, 0, 0)),
-            new TimeSpanParseInfo("0.10.5", new BarBeatTimeSpan(0, 10, 5)),
-            new TimeSpanParseInfo("100.20.0", new BarBeatTimeSpan(100, 20, 0)),
-        };
-
-        protected override IEnumerable<TimeSpansOperationInfo> TimeSpansToAdd => new[]
-        {
-            new TimeSpansOperationInfo(new BarBeatTimeSpan(0, 1, 2), new BarBeatTimeSpan(10, 0, 0), new BarBeatTimeSpan(10, 1, 2)),
-            new TimeSpansOperationInfo(new BarBeatTimeSpan(0, 1, 2), new MetricTimeSpan(0, 1, 30)),
-            new TimeSpansOperationInfo(new BarBeatTimeSpan(0, 1, 2), MusicalTimeSpan.Quarter.Triplet()),
-        };
 
         #endregion
 
@@ -43,6 +24,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         #region Default
 
         [TestMethod]
+        [Description("Conversion of two 4/4 bars placed at bar start.")]
         public void Convert_Default_1()
         {
             // 4/4
@@ -58,6 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of two 4/4 bars placed at beat start.")]
         public void Convert_Default_2()
         {
             // 4/4
@@ -73,6 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of arbitrary time span overlaying one 4/4 bar.")]
         public void Convert_Default_3()
         {
             // 4/4
@@ -88,6 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of 4/4 time span placed at beat start and ended at bar start.")]
         public void Convert_Default_4()
         {
             // 4/4
@@ -103,6 +88,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of arbitrary time span overlaying one 4/4 bar.")]
         public void Convert_Default_5()
         {
             // 4/4
@@ -118,6 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of two 4/4 beats crossing bar start.")]
         public void Convert_Default_6()
         {
             // 4/4
@@ -133,6 +120,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of two 4/4 beats at the middle of bar.")]
         public void Convert_Default_7()
         {
             // 4/4
@@ -148,6 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of one 4/4 beat placed at beat start and ended at bar start.")]
         public void Convert_Default_8()
         {
             // 4/4
@@ -163,6 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [TestMethod]
+        [Description("Conversion of one 4/4 beat placed at subbeat position.")]
         public void Convert_Default_9()
         {
             // 4/4
@@ -474,6 +464,174 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region Parse
+
+        [TestMethod]
+        [Description("Parse zero bar-beat time span.")]
+        public void Parse_1()
+        {
+            TimeSpanTestUtilities.Parse("0.0.0", new BarBeatTimeSpan());
+        }
+
+        [TestMethod]
+        [Description("Parse one-bar time span.")]
+        public void Parse_2()
+        {
+            TimeSpanTestUtilities.Parse("1.0.0", new BarBeatTimeSpan(1, 0, 0));
+        }
+
+        [TestMethod]
+        [Description("Parse arbitrary bar-beat time span.")]
+        public void Parse_3()
+        {
+            TimeSpanTestUtilities.Parse("0.10.5", new BarBeatTimeSpan(0, 10, 5));
+        }
+
+        [TestMethod]
+        [Description("Parse arbitrary bar-beat time span.")]
+        public void Parse_4()
+        {
+            TimeSpanTestUtilities.Parse("100.20.0", new BarBeatTimeSpan(100, 20, 0));
+        }
+
+        #endregion
+
+        #region Add
+
+        [TestMethod]
+        public void Add_SameType_1()
+        {
+            TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(0, 0, 0),
+                                               new BarBeatTimeSpan(0, 0, 0),
+                                               new BarBeatTimeSpan(0, 0, 0),
+                                               TimeSpanMode.TimeTime);
+        }
+
+        [TestMethod]
+        public void Add_SameType_2()
+        {
+            TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(10, 0, 10),
+                                               new BarBeatTimeSpan(0, 0, 0),
+                                               new BarBeatTimeSpan(10, 0, 10),
+                                               TimeSpanMode.TimeTime);
+        }
+
+        [TestMethod]
+        public void Add_SameType_3()
+        {
+            TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(10, 0, 10),
+                                               new BarBeatTimeSpan(0, 3, 5),
+                                               new BarBeatTimeSpan(10, 3, 15),
+                                               TimeSpanMode.TimeTime);
+        }
+
+        [TestMethod]
+        public void Add_TimeLength_1()
+        {
+            TimeSpanTestUtilities.Add_TimeLength(new BarBeatTimeSpan(1, 2, 10),
+                                                 new MetricTimeSpan(0, 2, 30),
+                                                 DefaultTempoMap);
+        }
+
+        [TestMethod]
+        public void Add_TimeLength_2()
+        {
+            TimeSpanTestUtilities.Add_TimeLength(new BarBeatTimeSpan(1, 2, 10),
+                                                 new MetricTimeSpan(0, 2, 30),
+                                                 SimpleTempoMap);
+        }
+
+        [TestMethod]
+        public void Add_TimeLength_3()
+        {
+            TimeSpanTestUtilities.Add_TimeLength(new BarBeatTimeSpan(1, 2, 10),
+                                                 new MetricTimeSpan(0, 2, 30),
+                                                 ComplexTempoMap);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_1()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   DefaultTempoMap,
+                                                   0);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_2()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   DefaultTempoMap,
+                                                   1000);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_3()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   DefaultTempoMap,
+                                                   100000);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_4()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   SimpleTempoMap,
+                                                   0);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_5()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   SimpleTempoMap,
+                                                   1000);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_6()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   SimpleTempoMap,
+                                                   100000);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_7()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   ComplexTempoMap,
+                                                   0);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_8()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   ComplexTempoMap,
+                                                   1000);
+        }
+
+        [TestMethod]
+        public void Add_LengthLength_9()
+        {
+            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
+                                                   new MetricTimeSpan(0, 2, 30),
+                                                   ComplexTempoMap,
+                                                   100000);
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
@@ -484,11 +642,11 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             Assert.AreEqual(barBeatTimeSpan,
                             LengthConverter2.ConvertTo<BarBeatTimeSpan>(referenceTimeSpan, time, tempoMap),
-                            "Convert to failed.");
+                            "ConvertTo failed.");
 
             Assert.AreEqual(LengthConverter2.ConvertFrom(referenceTimeSpan, time, tempoMap),
                             LengthConverter2.ConvertFrom(barBeatTimeSpan, time, tempoMap),
-                            "Convert from failed.");
+                            "ConvertFrom failed.");
         }
 
         private static TempoMap GenerateDefaultTempoMap()
@@ -513,6 +671,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             {
                 tempoMapManager.SetTimeSignature(MusicalTimeSpan.Whole, new TimeSignature(5, 8));
                 tempoMapManager.SetTimeSignature(MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16));
+
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 30), Tempo.FromMillisecondsPerQuarterNote(600));
 
                 return tempoMapManager.TempoMap;
             }
@@ -540,6 +701,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                     time += step.Item1;
                     tempoMapManager.SetTimeSignature(time, step.Item2);
                 }
+
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 30), Tempo.FromMillisecondsPerQuarterNote(600));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 31), Tempo.FromMillisecondsPerQuarterNote(680));
 
                 return tempoMapManager.TempoMap;
             }

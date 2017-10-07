@@ -1,9 +1,7 @@
 ﻿namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public enum MathOperationMode
+    public enum TimeSpanMode
     {
-        Unspecified = 0,
-
         TimeTime,
         TimeLength,
         LengthLength

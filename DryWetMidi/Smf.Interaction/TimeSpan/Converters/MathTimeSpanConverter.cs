@@ -16,12 +16,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 [Tuple.Create(MathOperation.Subtract, MathOperation.Subtract)] = MathOperation.Add
             };
 
-        private static readonly Dictionary<MathOperationMode, Func<MathTimeSpan, long, TempoMap, long>> Converters =
-            new Dictionary<MathOperationMode, Func<MathTimeSpan, long, TempoMap, long>>
+        private static readonly Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>> Converters =
+            new Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>>
             {
-                [MathOperationMode.TimeTime] = ConvertFromTimeTime,
-                [MathOperationMode.TimeLength] = ConvertFromTimeLength,
-                [MathOperationMode.LengthLength] = ConvertFromLengthLength
+                [TimeSpanMode.TimeTime] = ConvertFromTimeTime,
+                [TimeSpanMode.TimeLength] = ConvertFromTimeLength,
+                [TimeSpanMode.LengthLength] = ConvertFromLengthLength
             };
 
         #endregion
@@ -37,10 +37,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             var mathTimeSpan = (MathTimeSpan)timeSpan;
 
-            if (Converters.TryGetValue(mathTimeSpan.OperationMode, out var converter))
+            if (Converters.TryGetValue(mathTimeSpan.Mode, out var converter))
                 return converter(mathTimeSpan, time, tempoMap);
             else
-                throw new ArgumentException($"{mathTimeSpan.OperationMode} mode is not supported by the converter.", nameof(timeSpan));
+                throw new ArgumentException($"{mathTimeSpan.Mode} mode is not supported by the converter.", nameof(timeSpan));
         }
 
         #endregion
@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 case MathOperation.Subtract:
                     {
                         var convertedTimeSpan2 = TimeConverter2.ConvertTo(timeSpan2, timeSpan1.GetType(), tempoMap);
-                        return TimeSpanConverter.ConvertFrom(timeSpan1.Subtract(convertedTimeSpan2, MathOperationMode.TimeTime), time, tempoMap);
+                        return TimeSpanConverter.ConvertFrom(timeSpan1.Subtract(convertedTimeSpan2, TimeSpanMode.TimeTime), time, tempoMap);
                     }
 
                 default:

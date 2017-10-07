@@ -319,24 +319,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region ITimeSpan
 
-        public ITimeSpan Add(ITimeSpan timeSpan, MathOperationMode operationMode)
+        public ITimeSpan Add(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
             var musicalTimeSpan = timeSpan as MusicalTimeSpan;
             return musicalTimeSpan != null
                 ? this + musicalTimeSpan
-                : TimeSpanUtilities.Add(this, timeSpan, operationMode);
+                : TimeSpanUtilities.Add(this, timeSpan, mode);
         }
 
-        public ITimeSpan Subtract(ITimeSpan timeSpan, MathOperationMode operationMode)
+        public ITimeSpan Subtract(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
             var musicalTimeSpan = timeSpan as MusicalTimeSpan;
             return musicalTimeSpan != null
                 ? this - musicalTimeSpan
-                : TimeSpanUtilities.Subtract(this, timeSpan, operationMode);
+                : TimeSpanUtilities.Subtract(this, timeSpan, mode);
         }
 
         public ITimeSpan Multiply(double multiplier)

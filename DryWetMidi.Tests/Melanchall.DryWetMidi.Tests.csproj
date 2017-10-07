@@ -65,7 +65,7 @@
     <Compile Include="Smf.Interaction\TempoMapManager\TempoMapTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\BarBeatTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MidiTimeSpanTests.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\TimeSpanTests.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\TimeSpanTestUtilities.cs" />
     <Compile Include="Smf.Interaction\Time\MathTimeTests.cs" />
     <Compile Include="Smf.Interaction\Time\MetricTimeTests.cs" />
     <Compile Include="Smf.Interaction\Time\MidiTimeTests.cs" />
