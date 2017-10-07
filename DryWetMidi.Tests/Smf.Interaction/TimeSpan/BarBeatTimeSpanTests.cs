@@ -2,7 +2,6 @@
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
@@ -14,6 +13,13 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         private static readonly TempoMap DefaultTempoMap = GenerateDefaultTempoMap();
         private static readonly TempoMap SimpleTempoMap = GenerateSimpleTempoMap();
         private static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
+
+        private static readonly ITimeSpan MetricSpan = new MetricTimeSpan(0, 2, 30);
+        private static readonly ITimeSpan BarBeatSpan = new BarBeatTimeSpan(1, 2, 10);
+
+        private const long ZeroTime = 0;
+        private const long ShortTime = 1000;
+        private const long LargeTime = 100000;
 
         #endregion
 
@@ -503,8 +509,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(0, 0, 0),
                                                new BarBeatTimeSpan(0, 0, 0),
-                                               new BarBeatTimeSpan(0, 0, 0),
-                                               TimeSpanMode.TimeTime);
+                                               new BarBeatTimeSpan(0, 0, 0));
         }
 
         [TestMethod]
@@ -512,8 +517,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(10, 0, 10),
                                                new BarBeatTimeSpan(0, 0, 0),
-                                               new BarBeatTimeSpan(10, 0, 10),
-                                               TimeSpanMode.TimeTime);
+                                               new BarBeatTimeSpan(10, 0, 10));
         }
 
         [TestMethod]
@@ -521,113 +525,369 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(10, 0, 10),
                                                new BarBeatTimeSpan(0, 3, 5),
-                                               new BarBeatTimeSpan(10, 3, 15),
-                                               TimeSpanMode.TimeTime);
+                                               new BarBeatTimeSpan(10, 3, 15));
         }
 
         [TestMethod]
-        public void Add_TimeLength_1()
+        public void Add_TimeTime_1()
         {
-            TimeSpanTestUtilities.Add_TimeLength(new BarBeatTimeSpan(1, 2, 10),
-                                                 new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_TimeTime(BarBeatSpan,
+                                               MetricSpan);
+        }
+
+        [TestMethod]
+        public void Add_TimeLength_Default_1()
+        {
+            TimeSpanTestUtilities.Add_TimeLength(BarBeatSpan,
+                                                 MetricSpan,
                                                  DefaultTempoMap);
         }
 
         [TestMethod]
-        public void Add_TimeLength_2()
+        public void Add_TimeLength_Simple_1()
         {
-            TimeSpanTestUtilities.Add_TimeLength(new BarBeatTimeSpan(1, 2, 10),
-                                                 new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_TimeLength(BarBeatSpan,
+                                                 MetricSpan,
                                                  SimpleTempoMap);
         }
 
         [TestMethod]
-        public void Add_TimeLength_3()
+        public void Add_TimeLength_Complex_1()
         {
-            TimeSpanTestUtilities.Add_TimeLength(new BarBeatTimeSpan(1, 2, 10),
-                                                 new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_TimeLength(BarBeatSpan,
+                                                 MetricSpan,
                                                  ComplexTempoMap);
         }
 
         [TestMethod]
-        public void Add_LengthLength_1()
+        public void Add_LengthLength_Default_1()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    DefaultTempoMap,
-                                                   0);
+                                                   ZeroTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_2()
+        public void Add_LengthLength_Default_2()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    DefaultTempoMap,
-                                                   1000);
+                                                   ShortTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_3()
+        public void Add_LengthLength_Default_3()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    DefaultTempoMap,
-                                                   100000);
+                                                   LargeTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_4()
+        public void Add_LengthLength_Simple_1()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    SimpleTempoMap,
-                                                   0);
+                                                   ZeroTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_5()
+        public void Add_LengthLength_Simple_2()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    SimpleTempoMap,
-                                                   1000);
+                                                   ShortTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_6()
+        public void Add_LengthLength_Simple_3()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    SimpleTempoMap,
-                                                   100000);
+                                                   LargeTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_7()
+        public void Add_LengthLength_Complex_1()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    ComplexTempoMap,
-                                                   0);
+                                                   ZeroTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_8()
+        public void Add_LengthLength_Complex_2()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    ComplexTempoMap,
-                                                   1000);
+                                                   ShortTime);
         }
 
         [TestMethod]
-        public void Add_LengthLength_9()
+        public void Add_LengthLength_Complex_3()
         {
-            TimeSpanTestUtilities.Add_LengthLength(new BarBeatTimeSpan(1, 2, 10),
-                                                   new MetricTimeSpan(0, 2, 30),
+            TimeSpanTestUtilities.Add_LengthLength(BarBeatSpan,
+                                                   MetricSpan,
                                                    ComplexTempoMap,
-                                                   100000);
+                                                   LargeTime);
+        }
+
+        #endregion
+
+        #region Subtract
+
+        [TestMethod]
+        public void Subtract_SameType_1()
+        {
+            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTimeSpan(0, 0, 0),
+                                                    new BarBeatTimeSpan(0, 0, 0),
+                                                    new BarBeatTimeSpan(0, 0, 0));
+        }
+
+        [TestMethod]
+        public void Subtract_SameType_2()
+        {
+            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTimeSpan(10, 0, 10),
+                                                    new BarBeatTimeSpan(0, 0, 0),
+                                                    new BarBeatTimeSpan(10, 0, 10));
+        }
+
+        [TestMethod]
+        public void Subtract_SameType_3()
+        {
+            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTimeSpan(10, 7, 10),
+                                                    new BarBeatTimeSpan(0, 3, 6),
+                                                    new BarBeatTimeSpan(10, 4, 4));
+        }
+
+        [TestMethod]
+        public void Subtract_TimeTime_Default_1()
+        {
+            TimeSpanTestUtilities.Subtract_TimeTime(MetricSpan,
+                                                    BarBeatSpan,
+                                                    DefaultTempoMap);
+        }
+
+        [TestMethod]
+        public void Subtract_TimeTime_Simple_1()
+        {
+            TimeSpanTestUtilities.Subtract_TimeTime(MetricSpan,
+                                                    BarBeatSpan,
+                                                    SimpleTempoMap);
+        }
+
+        [TestMethod]
+        public void Subtract_TimeTime_Complex_1()
+        {
+            TimeSpanTestUtilities.Subtract_TimeTime(MetricSpan,
+                                                    BarBeatSpan,
+                                                    ComplexTempoMap);
+        }
+
+        [TestMethod]
+        public void Subtract_TimeLength_Default_1()
+        {
+            TimeSpanTestUtilities.Subtract_TimeLength(MetricSpan,
+                                                      BarBeatSpan,
+                                                      DefaultTempoMap);
+        }
+
+        [TestMethod]
+        public void Subtract_TimeLength_Simple_1()
+        {
+            TimeSpanTestUtilities.Subtract_TimeLength(MetricSpan,
+                                                      BarBeatSpan,
+                                                      SimpleTempoMap);
+        }
+
+        [TestMethod]
+        public void Subtract_TimeLength_Complex_1()
+        {
+            TimeSpanTestUtilities.Subtract_TimeLength(MetricSpan,
+                                                      BarBeatSpan,
+                                                      ComplexTempoMap);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Default_1()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        DefaultTempoMap,
+                                                        ZeroTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Default_2()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        DefaultTempoMap,
+                                                        ShortTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Default_3()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        DefaultTempoMap,
+                                                        LargeTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Simple_1()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        SimpleTempoMap,
+                                                        ZeroTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Simple_2()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        SimpleTempoMap,
+                                                        ShortTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Simple_3()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        SimpleTempoMap,
+                                                        LargeTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Complex_1()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        ComplexTempoMap,
+                                                        ZeroTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Complex_2()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        ComplexTempoMap,
+                                                        ShortTime);
+        }
+
+        [TestMethod]
+        public void Subtract_LengthLength_Complex_3()
+        {
+            TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
+                                                        BarBeatSpan,
+                                                        ComplexTempoMap,
+                                                        LargeTime);
+        }
+
+        #endregion
+
+        #region Multiply
+
+        [TestMethod]
+        [Description("Multiply zero time span by zero.")]
+        public void Multiply_1()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(),
+                            new BarBeatTimeSpan().Multiply(0));
+        }
+
+        [TestMethod]
+        [Description("Multiply arbitrary time span by zero.")]
+        public void Multiply_2()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(),
+                            new BarBeatTimeSpan(10, 5, 9).Multiply(0));
+        }
+
+        [TestMethod]
+        [Description("Multiply by integer number.")]
+        public void Multiply_3()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(20, 10, 18),
+                            new BarBeatTimeSpan(10, 5, 9).Multiply(2));
+        }
+
+        [TestMethod]
+        [Description("Multiply by non-integer number.")]
+        public void Multiply_4()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(15, 12, 9),
+                            new BarBeatTimeSpan(10, 8, 6).Multiply(1.5));
+        }
+
+        [TestMethod]
+        [Description("Multiply by negative number.")]
+        public void Multiply_5()
+        {
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new BarBeatTimeSpan().Multiply(-5));
+        }
+
+        #endregion
+
+        #region Divide
+
+        [TestMethod]
+        [Description("Divide arbitrary time span by one.")]
+        public void Divide_1()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(5, 4, 3),
+                            new BarBeatTimeSpan(5, 4, 3).Divide(1));
+        }
+
+        [TestMethod]
+        [Description("Divide arbitrary time span by integer number.")]
+        public void Divide_2()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(5, 3, 4),
+                            new BarBeatTimeSpan(10, 6, 8).Divide(2));
+        }
+
+        [TestMethod]
+        [Description("Divide by non-integer number.")]
+        public void Divide_3()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(8, 2, 4),
+                            new BarBeatTimeSpan(12, 3, 6).Divide(1.5));
+        }
+
+        [TestMethod]
+        [Description("Divide by zero.")]
+        public void Divide_4()
+        {
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new BarBeatTimeSpan().Divide(0));
+        }
+
+        [TestMethod]
+        [Description("Divide by negative number.")]
+        public void Divide_5()
+        {
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new BarBeatTimeSpan().Divide(-8));
+        }
+
+        [TestMethod]
+        [Description("Divide zero time span by one.")]
+        public void Divide_6()
+        {
+            Assert.AreEqual(new BarBeatTimeSpan(),
+                            new BarBeatTimeSpan().Divide(1));
         }
 
         #endregion
@@ -704,7 +964,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
                 tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));
                 tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 30), Tempo.FromMillisecondsPerQuarterNote(600));
-                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 31), Tempo.FromMillisecondsPerQuarterNote(680));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 31), Tempo.FromMillisecondsPerQuarterNote(640));
 
                 return tempoMapManager.TempoMap;
             }
