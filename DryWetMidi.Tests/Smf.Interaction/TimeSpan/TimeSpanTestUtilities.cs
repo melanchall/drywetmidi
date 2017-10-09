@@ -84,6 +84,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Constants
 
+        public const short TicksPerQuarterNote = 480;
+
         public static readonly TempoMap DefaultTempoMap = GenerateDefaultTempoMap();
         public static readonly TempoMap SimpleTempoMap = GenerateSimpleTempoMap();
         public static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
@@ -107,12 +109,17 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             time = time ?? new MidiTimeSpan();
 
-            Assert.AreEqual(timeSpan,
-                            LengthConverter2.ConvertTo<TTimeSpan>(referenceTimeSpan, time, tempoMap),
-                            "ConvertTo failed.");
+            var ticks = LengthConverter2.ConvertFrom(timeSpan, time, tempoMap);
+            AreEqual(timeSpan,
+                     LengthConverter2.ConvertTo<TTimeSpan>(ticks, time, tempoMap),
+                     "Cyclic conversion failed.");
+
+            AreEqual(timeSpan,
+                     LengthConverter2.ConvertTo<TTimeSpan>(referenceTimeSpan, time, tempoMap),
+                     "ConvertTo failed.");
 
             Assert.AreEqual(LengthConverter2.ConvertFrom(referenceTimeSpan, time, tempoMap),
-                            LengthConverter2.ConvertFrom(timeSpan, time, tempoMap),
+                            ticks,
                             "ConvertFrom failed.");
         }
 
@@ -258,7 +265,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //  |----+----+----+----|----+----+----+----|----+----+----+----|
             //  0                   1                   2                   3
 
-            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(480)))
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote)))
             {
                 return tempoMapManager.TempoMap;
             }
@@ -270,7 +277,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //  |----+----+----+----|--+--+--+--+--|-+-+-+-+-|
             //  0                   1              2         3
 
-            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(480)))
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote)))
             {
                 tempoMapManager.SetTimeSignature(MusicalTimeSpan.Whole, new TimeSignature(5, 8));
                 tempoMapManager.SetTimeSignature(MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16));
@@ -295,7 +302,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 Tuple.Create(15 * MusicalTimeSpan.Sixteenth, new TimeSignature(5, 8)),
             };
 
-            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(480)))
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote)))
             {
                 var time = new MusicalTimeSpan();
 
