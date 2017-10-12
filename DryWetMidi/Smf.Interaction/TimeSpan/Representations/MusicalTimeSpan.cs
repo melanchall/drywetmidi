@@ -68,6 +68,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const int SingleDotCount = 1;
         private const int DoubleDotCount = 2;
 
+        private const int NumberOfDigitsAfterDecimalPoint = 3;
+        private static readonly int FractionPartMultiplier = (int)Math.Pow(10, NumberOfDigitsAfterDecimalPoint);
+
         #endregion
 
         #region Constructor
@@ -343,16 +346,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new MusicalTimeSpan((long)Math.Round(Numerator * multiplier),
-                                       Denominator);
+            return new MusicalTimeSpan((long)Math.Round(Numerator * Math.Round(multiplier, NumberOfDigitsAfterDecimalPoint) * FractionPartMultiplier),
+                                       Denominator * FractionPartMultiplier);
         }
 
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new MusicalTimeSpan(Numerator,
-                                       (long)Math.Round(Denominator * divisor));
+            return new MusicalTimeSpan(Numerator * FractionPartMultiplier,
+                                       (long)Math.Round(Denominator * Math.Round(divisor, NumberOfDigitsAfterDecimalPoint) * FractionPartMultiplier));
         }
 
         #endregion
