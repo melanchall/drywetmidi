@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// time until next change of time signature.</param>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
         /// <paramref name="timeSignature"/> is null.</exception>
-        public void SetTimeSignature(ITime time, TimeSignature timeSignature)
+        public void SetTimeSignature(ITimeSpan time, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
@@ -147,7 +147,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="startTime">Time to remove changes of time signature since.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
-        public void ClearTimeSignature(ITime startTime)
+        public void ClearTimeSignature(ITimeSpan startTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="endTime">End of time range to remove changes of time signature in.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
         /// <paramref name="endTime"/> is null.</exception>
-        public void ClearTimeSignature(ITime startTime, ITime endTime)
+        public void ClearTimeSignature(ITimeSpan startTime, ITimeSpan endTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
             ThrowIfArgument.IsNull(nameof(endTime), endTime);
@@ -209,7 +209,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// of tempo.</param>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
         /// <paramref name="tempo"/> is null.</exception>
-        public void SetTempo(ITime time, Tempo tempo)
+        public void SetTempo(ITimeSpan time, Tempo tempo)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempo), tempo);
@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="startTime">Time to remove changes of tempo since.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
-        public void ClearTempo(ITime startTime)
+        public void ClearTempo(ITimeSpan startTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
@@ -263,7 +263,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="endTime">End of time range to remove changes of tempo in.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
         /// <paramref name="endTime"/> is null.</exception>
-        public void ClearTempo(ITime startTime, ITime endTime)
+        public void ClearTempo(ITimeSpan startTime, ITimeSpan endTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
             ThrowIfArgument.IsNull(nameof(endTime), endTime);

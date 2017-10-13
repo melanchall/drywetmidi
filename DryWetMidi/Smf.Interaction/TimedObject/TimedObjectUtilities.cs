@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         /// <summary>
         /// Gets time of an <see cref="ITimedObject"/> as an instance of type that implements the
-        /// <see cref="ITime"/> interface.
+        /// <see cref="ITimeSpan"/> interface.
         /// </summary>
         /// <typeparam name="TTime">Type that will represent the time of the <paramref name="obj"/>.</typeparam>
         /// <param name="obj">Object to get time of.</param>
@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="tempoMap"/> is null.</exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
         public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap tempoMap)
-            where TTime : ITime
+            where TTime : ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(obj), obj);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
-        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
+        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
             where TObject : ITimedObject
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

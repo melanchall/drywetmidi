@@ -132,7 +132,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
         /// <paramref name="midiEvent"/> is null. -or- <paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
-        public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, ITime time, TempoMap tempoMap)
+        public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);

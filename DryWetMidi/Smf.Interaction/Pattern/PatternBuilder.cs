@@ -19,8 +19,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private int _globalAnchorsCounter = 0;
 
         private SevenBitNumber _velocity = Interaction.Note.DefaultVelocity;
-        private ILength _noteLength = (MusicalLength)MusicalFraction.Quarter;
-        private ILength _step = (MusicalLength)MusicalFraction.Quarter;
+        private ITimeSpan _noteLength = MusicalTimeSpan.Quarter;
+        private ITimeSpan _step = MusicalTimeSpan.Quarter;
         private OctaveDefinition _octave = OctaveDefinition.Middle;
         private NoteDefinition _rootNote = OctaveDefinition.Middle.C;
 
@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
-        public PatternBuilder Note(IntervalDefinition intervalDefinition, ILength length)
+        public PatternBuilder Note(IntervalDefinition intervalDefinition, ITimeSpan length)
         {
             return Note(intervalDefinition, length, _velocity);
         }
@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
-        public PatternBuilder Note(IntervalDefinition intervalDefinition, ILength length, SevenBitNumber velocity)
+        public PatternBuilder Note(IntervalDefinition intervalDefinition, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
 
@@ -143,7 +143,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteName noteName, ILength length)
+        public PatternBuilder Note(NoteName noteName, ITimeSpan length)
         {
             return Note(noteName, length, _velocity);
         }
@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteName noteName, ILength length, SevenBitNumber velocity)
+        public PatternBuilder Note(NoteName noteName, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteDefinition noteDefinition, ILength length)
+        public PatternBuilder Note(NoteDefinition noteDefinition, ITimeSpan length)
         {
             return Note(noteDefinition, length, _velocity);
         }
@@ -242,7 +242,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteDefinition noteDefinition, ILength length, SevenBitNumber velocity)
+        public PatternBuilder Note(NoteDefinition noteDefinition, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -261,7 +261,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
                                     NoteName rootNoteName,
-                                    ILength length)
+                                    ITimeSpan length)
         {
             return Chord(intervalDefinitions, rootNoteName, length, _velocity);
         }
@@ -275,7 +275,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
                                     NoteName rootNoteName,
-                                    ILength length,
+                                    ITimeSpan length,
                                     SevenBitNumber velocity)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
@@ -294,7 +294,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <remarks>
         /// The result chord will contain the specified root note and notes produced by transposing
         /// the <paramref name="rootNoteDefinition"/> by the <paramref name="intervalDefinitions"/>.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -326,7 +326,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
                                     NoteDefinition rootNoteDefinition,
-                                    ILength length)
+                                    ITimeSpan length)
         {
             return Chord(intervalDefinitions, rootNoteDefinition, length, _velocity);
         }
@@ -375,7 +375,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
                                     NoteDefinition rootNoteDefinition,
-                                    ILength length,
+                                    ITimeSpan length,
                                     SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(intervalDefinitions), intervalDefinitions);
@@ -417,7 +417,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ILength length)
+        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ITimeSpan length)
         {
             return Chord(noteNames, length, _velocity);
         }
@@ -430,7 +430,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null.</exception>
@@ -451,7 +451,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ILength length, SevenBitNumber velocity)
+        public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteNames), noteNames);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -487,7 +487,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ILength length)
+        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ITimeSpan length)
         {
             return Chord(noteDefinitions, length, _velocity);
         }
@@ -517,7 +517,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ILength length, SevenBitNumber velocity)
+        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinitions), noteDefinitions);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -686,7 +686,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="step">Step to move by.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
-        public PatternBuilder StepForward(ILength step)
+        public PatternBuilder StepForward(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
 
@@ -698,7 +698,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default step use <see cref="SetStep(ILength)"/> method. By default the step is 1/4.
+        /// To set default step use <see cref="SetStep(ITimeSpan)"/> method. By default the step is 1/4.
         /// </remarks>
         public PatternBuilder StepForward()
         {
@@ -711,7 +711,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="step">Step to move by.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
-        public PatternBuilder StepBack(ILength step)
+        public PatternBuilder StepBack(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
 
@@ -723,7 +723,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default step use <see cref="SetStep(ILength)"/> method. By default the step is 1/4.
+        /// To set default step use <see cref="SetStep(ITimeSpan)"/> method. By default the step is 1/4.
         /// </remarks>
         public PatternBuilder StepBack()
         {
@@ -736,7 +736,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="time">Time to move to.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is null.</exception>
-        public PatternBuilder MoveToTime(ITime time)
+        public PatternBuilder MoveToTime(ITimeSpan time)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
 
@@ -889,7 +889,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Setting default note length is not an action and thus will not be stored in a pattern.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
-        public PatternBuilder SetNoteLength(ILength length)
+        public PatternBuilder SetNoteLength(ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
 
@@ -906,7 +906,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Setting default step is not an action and thus will not be stored in a pattern.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
-        public PatternBuilder SetStep(ILength step)
+        public PatternBuilder SetStep(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
 

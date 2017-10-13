@@ -4,7 +4,7 @@
     {
         #region Constructor
 
-        public AddNoteAction(NoteDefinition noteDefinition, SevenBitNumber velocity, ILength length)
+        public AddNoteAction(NoteDefinition noteDefinition, SevenBitNumber velocity, ITimeSpan length)
         {
             NoteDefinition = noteDefinition;
             Velocity = velocity;
@@ -19,7 +19,7 @@
 
         public SevenBitNumber Velocity { get; }
 
-        public ILength Length { get; }
+        public ITimeSpan Length { get; }
 
         #endregion
 

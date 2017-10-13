@@ -4,7 +4,7 @@
     {
         #region Constructor
 
-        public StepAction(ILength step)
+        public StepAction(ITimeSpan step)
         {
             Step = step;
         }
@@ -13,7 +13,7 @@
 
         #region Properties
 
-        public ILength Step { get; }
+        public ITimeSpan Step { get; }
 
         #endregion
 
