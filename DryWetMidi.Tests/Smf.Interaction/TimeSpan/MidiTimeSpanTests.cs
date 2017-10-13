@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var tempoMap = TimeSpanTestUtilities.DefaultTempoMap;
             var time = ShortMetricTime;
 
-            TimeSpanTestUtilities.TestConversion(LengthConverter2.ConvertTo<MidiTimeSpan>(MetricSpan,
+            TimeSpanTestUtilities.TestConversion(LengthConverter.ConvertTo<MidiTimeSpan>(MetricSpan,
                                                                                           time,
                                                                                           tempoMap),
                                                  MetricSpan,
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var tempoMap = TimeSpanTestUtilities.DefaultTempoMap;
             var time = LargeMetricTime;
 
-            TimeSpanTestUtilities.TestConversion(LengthConverter2.ConvertTo<MidiTimeSpan>(MetricSpan,
+            TimeSpanTestUtilities.TestConversion(LengthConverter.ConvertTo<MidiTimeSpan>(MetricSpan,
                                                                                           time,
                                                                                           tempoMap),
                                                  MetricSpan,
@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var tempoMap = TimeSpanTestUtilities.SimpleTempoMap;
             var time = ShortMetricTime;
 
-            TimeSpanTestUtilities.TestConversion(LengthConverter2.ConvertTo<MidiTimeSpan>(MetricSpan,
+            TimeSpanTestUtilities.TestConversion(LengthConverter.ConvertTo<MidiTimeSpan>(MetricSpan,
                                                                                           time,
                                                                                           tempoMap),
                                                  MetricSpan,
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var tempoMap = TimeSpanTestUtilities.SimpleTempoMap;
             var time = LargeMetricTime;
 
-            TimeSpanTestUtilities.TestConversion(LengthConverter2.ConvertTo<MidiTimeSpan>(MetricSpan,
+            TimeSpanTestUtilities.TestConversion(LengthConverter.ConvertTo<MidiTimeSpan>(MetricSpan,
                                                                                           time,
                                                                                           tempoMap),
                                                  MetricSpan,
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var tempoMap = TimeSpanTestUtilities.ComplexTempoMap;
             var time = ShortMetricTime;
 
-            TimeSpanTestUtilities.TestConversion(LengthConverter2.ConvertTo<MidiTimeSpan>(MetricSpan,
+            TimeSpanTestUtilities.TestConversion(LengthConverter.ConvertTo<MidiTimeSpan>(MetricSpan,
                                                                                           time,
                                                                                           tempoMap),
                                                  MetricSpan,
@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var tempoMap = TimeSpanTestUtilities.ComplexTempoMap;
             var time = LargeMetricTime;
 
-            TimeSpanTestUtilities.TestConversion(LengthConverter2.ConvertTo<MidiTimeSpan>(MetricSpan,
+            TimeSpanTestUtilities.TestConversion(LengthConverter.ConvertTo<MidiTimeSpan>(MetricSpan,
                                                                                           time,
                                                                                           tempoMap),
                                                  MetricSpan,

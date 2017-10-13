@@ -9,7 +9,7 @@
         {
         }
 
-        public MoveToTimeAction(ITime time)
+        public MoveToTimeAction(ITimeSpan time)
         {
             Time = time;
         }
@@ -18,7 +18,7 @@
 
         #region Properties
 
-        public ITime Time { get; }
+        public ITimeSpan Time { get; }
 
         #endregion
 

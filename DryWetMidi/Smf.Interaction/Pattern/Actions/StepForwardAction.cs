@@ -4,7 +4,7 @@
     {
         #region Constructor
 
-        public StepForwardAction(ILength step)
+        public StepForwardAction(ITimeSpan step)
             : base(step)
         {
         }

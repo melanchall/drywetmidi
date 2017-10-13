@@ -16,17 +16,17 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             #region Constructor
 
-            public NoteInfo(NoteName noteName, int octave, ITime time, ILength length)
+            public NoteInfo(NoteName noteName, int octave, ITimeSpan time, ITimeSpan length)
                 : this(noteName, octave, time, length, Note.DefaultVelocity)
             {
             }
 
-            public NoteInfo(NoteName noteName, int octave, ITime time, ILength length, SevenBitNumber velocity)
+            public NoteInfo(NoteName noteName, int octave, ITimeSpan time, ITimeSpan length, SevenBitNumber velocity)
                 : this(NoteUtilities.GetNoteNumber(noteName, octave), time, length, velocity)
             {
             }
 
-            public NoteInfo(SevenBitNumber noteNumber, ITime time, ILength length, SevenBitNumber velocity)
+            public NoteInfo(SevenBitNumber noteNumber, ITimeSpan time, ITimeSpan length, SevenBitNumber velocity)
             {
                 NoteNumber = noteNumber;
                 Time = time;
@@ -40,9 +40,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             public SevenBitNumber NoteNumber { get; }
 
-            public ITime Time { get; }
+            public ITimeSpan Time { get; }
 
-            public ILength Length { get; }
+            public ITimeSpan Length { get; }
 
             public SevenBitNumber Velocity { get; }
 
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             #region Constructor
 
-            public TimedEventInfo(MidiEvent midiEvent, ITime time)
+            public TimedEventInfo(MidiEvent midiEvent, ITimeSpan time)
             {
                 Event = midiEvent;
                 Time = time;
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             public MidiEvent Event { get; }
 
-            public ITime Time { get; }
+            public ITimeSpan Time { get; }
 
             #endregion
         }
@@ -76,10 +76,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Add two notes where first one takes default length and velocity and the second takes specified ones.")]
         public void Note_MixedLengthAndVelocity()
         {
-            var defaultNoteLength = (MusicalLength)MusicalFraction.Quarter;
+            var defaultNoteLength = MusicalTimeSpan.Quarter;
             var defaultVelocity = (SevenBitNumber)90;
 
-            var specifiedLength = new MetricLength(0, 0, 10);
+            var specifiedLength = new MetricTimeSpan(0, 0, 10);
             var specifiedVelocity = (SevenBitNumber)95;
 
             var pattern = new PatternBuilder()
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, null, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.C, 1, (MusicalTime)MusicalFraction.Quarter, specifiedLength, specifiedVelocity)
+                new NoteInfo(NoteName.C, 1, MusicalTimeSpan.Quarter, specifiedLength, specifiedVelocity)
             });
         }
 
@@ -105,22 +105,22 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var pattern = new PatternBuilder()
                 .SetOctave(2)
 
-                .Note(NoteName.G, new MetricLength(0, 0, 24))
-                .Note(NoteName.A, new MetricLength(0, 1, 0))
-                .Note(NoteName.B, new MetricLength(0, 0, 5))
+                .Note(NoteName.G, new MetricTimeSpan(0, 0, 24))
+                .Note(NoteName.A, new MetricTimeSpan(0, 1, 0))
+                .Note(NoteName.B, new MetricTimeSpan(0, 0, 5))
 
                 .Build();
 
             var midiFile = TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.G, 2, null, new MetricLength(0, 0, 24)),
-                new NoteInfo(NoteName.A, 2, new MetricTime(0, 0, 24), new MetricLength(0, 1, 0)),
-                new NoteInfo(NoteName.B, 2, new MetricTime(0, 1, 24), new MetricLength(0, 0, 5)),
+                new NoteInfo(NoteName.G, 2, null, new MetricTimeSpan(0, 0, 24)),
+                new NoteInfo(NoteName.A, 2, new MetricTimeSpan(0, 0, 24), new MetricTimeSpan(0, 1, 0)),
+                new NoteInfo(NoteName.B, 2, new MetricTimeSpan(0, 1, 24), new MetricTimeSpan(0, 0, 5)),
             });
 
             var tempoMap = midiFile.GetTempoMap();
-            Assert.AreEqual(new MetricLength(0, 1, 29),
-                            new MetricLength(midiFile.GetTimedEvents().Last().TimeAs<MetricTime>(tempoMap)));
+            Assert.AreEqual(new MetricTimeSpan(0, 1, 29),
+                            new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)));
         }
 
         [TestMethod]
@@ -130,32 +130,32 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var pattern = new PatternBuilder()
                 .SetOctave(2)
 
-                .Note(NoteName.G, new MetricLength(0, 0, 24))
-                .Note(NoteName.A, new MetricLength(0, 1, 0))
-                .Note(NoteName.B, new MetricLength(0, 0, 5))
+                .Note(NoteName.G, new MetricTimeSpan(0, 0, 24))
+                .Note(NoteName.A, new MetricTimeSpan(0, 1, 0))
+                .Note(NoteName.B, new MetricTimeSpan(0, 0, 5))
 
                 .Build();
 
             var midiFile = TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.G, 2, null, new MetricLength(0, 0, 24)),
-                new NoteInfo(NoteName.A, 2, new MetricTime(0, 0, 24), new MetricLength(0, 1, 0)),
-                new NoteInfo(NoteName.B, 2, new MetricTime(0, 1, 24), new MetricLength(0, 0, 5)),
+                new NoteInfo(NoteName.G, 2, null, new MetricTimeSpan(0, 0, 24)),
+                new NoteInfo(NoteName.A, 2, new MetricTimeSpan(0, 0, 24), new MetricTimeSpan(0, 1, 0)),
+                new NoteInfo(NoteName.B, 2, new MetricTimeSpan(0, 1, 24), new MetricTimeSpan(0, 0, 5)),
             },
             Enumerable.Range(0, 7)
                       .Select(i => Tuple.Create(i * 1000L, new Tempo(i * 100 + 10)))
                       .ToArray());
 
             var tempoMap = midiFile.GetTempoMap();
-            Assert.AreEqual(new MetricLength(0, 1, 29).TotalMicroseconds,
-                            new MetricLength(midiFile.GetTimedEvents().Last().TimeAs<MetricTime>(tempoMap)).TotalMicroseconds);
+            Assert.AreEqual(new MetricTimeSpan(0, 1, 29).TotalMicroseconds,
+                            new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)).TotalMicroseconds);
         }
 
         [TestMethod]
         [Description("Add several notes by intervals.")]
         public void Note_Multiple_Interval()
         {
-            var defaultNoteLength = (MusicalLength)MusicalFraction.Quarter;
+            var defaultNoteLength = MusicalTimeSpan.Quarter;
             var defaultVelocity = (SevenBitNumber)90;
 
             var pattern = new PatternBuilder()
@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.DSharp, 5, null, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.A, 4, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity)
+                new NoteInfo(NoteName.A, 4, defaultNoteLength, defaultNoteLength, defaultVelocity)
             });
         }
 
@@ -182,9 +182,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var defaultVelocity = (SevenBitNumber)90;
             var defaultOctave = 2;
 
-            var chordLength = (MusicalLength)MusicalFraction.SixteenthTriplet;
-            var chordTime1 = new MetricTime(0, 1, 12);
-            var chordTime2 = chordTime1.Add(chordLength);
+            var chordLength = MusicalTimeSpan.Sixteenth.Triplet();
+            var chordTime1 = new MetricTimeSpan(0, 1, 12);
+            var chordTime2 = chordTime1.Add(chordLength, TimeSpanMode.TimeLength);
 
             var pattern = new PatternBuilder()
                 .SetVelocity(defaultVelocity)
@@ -213,7 +213,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Add several chords by interval.")]
         public void Chord_Interval()
         {
-            var defaultNoteLength = (MusicalLength)MusicalFraction.Quarter;
+            var defaultNoteLength = MusicalTimeSpan.Quarter;
             var defaultVelocity = (SevenBitNumber)90;
 
             var pattern = new PatternBuilder()
@@ -232,9 +232,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new NoteInfo(NoteName.B, 2, null, defaultNoteLength, defaultVelocity),
                 new NoteInfo(NoteName.D, 3, null, defaultNoteLength, defaultVelocity),
 
-                new NoteInfo(NoteName.B, 2, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 3, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 2, defaultNoteLength.ToTime(), defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.B, 2, defaultNoteLength, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 3, defaultNoteLength, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.CSharp, 2, defaultNoteLength, defaultNoteLength, defaultVelocity),
             });
         }
 
@@ -242,16 +242,16 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Add unkeyed anchor after some time movings, jump to the anchor with MoveToFirstAnchor and add note.")]
         public void MoveToFirstAnchor_Unkeyed_OneUnkeyed()
         {
-            var moveTime = new MetricTime(0, 0, 10);
-            var step = new MetricLength(0, 0, 11);
+            var moveTime = new MetricTimeSpan(0, 0, 10);
+            var step = new MetricTimeSpan(0, 0, 11);
             var anchorTime = moveTime + step;
 
             var pattern = new PatternBuilder()
                 .MoveToTime(moveTime)
                 .StepForward(step)
                 .Anchor()
-                .MoveToTime(new MetricTime(0, 0, 30))
-                .StepBack(new MetricLength(0, 0, 5))
+                .MoveToTime(new MetricTimeSpan(0, 0, 30))
+                .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
                 .Note(OctaveDefinition.Get(0).A)
@@ -260,7 +260,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, anchorTime, (MusicalLength)MusicalFraction.Quarter)
+                new NoteInfo(NoteName.A, 0, anchorTime, MusicalTimeSpan.Quarter)
             });
         }
 
@@ -268,17 +268,17 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Add unkeyed and keyed anchors after some time movings, jump to an anchor with MoveToFirstAnchor and add note.")]
         public void MoveToFirstAnchor_Unkeyed_OneUnkeyedAndOneKeyed()
         {
-            var moveTime = new MetricTime(0, 0, 10);
-            var step = new MetricLength(0, 0, 11);
+            var moveTime = new MetricTimeSpan(0, 0, 10);
+            var step = new MetricTimeSpan(0, 0, 11);
             var anchorTime = moveTime + step;
 
             var pattern = new PatternBuilder()
                 .MoveToTime(moveTime)
                 .StepForward(step)
                 .Anchor()
-                .MoveToTime(new MetricTime(0, 0, 30))
+                .MoveToTime(new MetricTimeSpan(0, 0, 30))
                 .Anchor("Test")
-                .StepBack(new MetricLength(0, 0, 5))
+                .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
                 .Note(OctaveDefinition.Get(0).A)
@@ -287,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, anchorTime, (MusicalLength)MusicalFraction.Quarter)
+                new NoteInfo(NoteName.A, 0, anchorTime, MusicalTimeSpan.Quarter)
             });
         }
 
@@ -295,15 +295,15 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Add unkeyed and keyed anchors after some time movings, jump to an anchor with MoveToFirstAnchor(key) and add note.")]
         public void MoveToFirstAnchor_Keyed_OneUnkeyedAndOneKeyed()
         {
-            var anchorTime = new MetricTime(0, 0, 30);
+            var anchorTime = new MetricTimeSpan(0, 0, 30);
 
             var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTime(0, 0, 10))
-                .StepForward(new MetricLength(0, 0, 11))
+                .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                .StepForward(new MetricTimeSpan(0, 0, 11))
                 .Anchor()
                 .MoveToTime(anchorTime)
                 .Anchor("Test")
-                .StepBack(new MetricLength(0, 0, 5))
+                .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor("Test")
 
                 .Note(OctaveDefinition.Get(0).A)
@@ -312,7 +312,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, anchorTime, (MusicalLength)MusicalFraction.Quarter)
+                new NoteInfo(NoteName.A, 0, anchorTime, MusicalTimeSpan.Quarter)
             });
         }
 
@@ -322,10 +322,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void MoveToFirstAnchor_Unkeyed_NoAnchors()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTime(0, 0, 10))
-                .StepForward(new MetricLength(0, 0, 11))
-                .MoveToTime(new MetricTime(0, 0, 30))
-                .StepBack(new MetricLength(0, 0, 5))
+                .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                .StepForward(new MetricTimeSpan(0, 0, 11))
+                .MoveToTime(new MetricTimeSpan(0, 0, 30))
+                .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
                 .Note(OctaveDefinition.Get(0).A)
@@ -339,11 +339,11 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void MoveToFirstAnchor_Keyed_NoKeyedAnchors()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTime(0, 0, 10))
-                .StepForward(new MetricLength(0, 0, 11))
-                .MoveToTime(new MetricTime(0, 0, 30))
+                .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                .StepForward(new MetricTimeSpan(0, 0, 11))
+                .MoveToTime(new MetricTimeSpan(0, 0, 30))
                 .Anchor()
-                .StepBack(new MetricLength(0, 0, 5))
+                .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor("Test")
 
                 .Note(OctaveDefinition.Get(0).A)
@@ -356,9 +356,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void StepBack_Metric()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTime(0, 0, 10))
-                .StepForward(new MetricLength(0, 0, 30))
-                .StepBack(new MetricLength(0, 0, 37))
+                .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                .StepForward(new MetricTimeSpan(0, 0, 30))
+                .StepBack(new MetricTimeSpan(0, 0, 37))
 
                 .Note(OctaveDefinition.Get(0).A)
 
@@ -366,7 +366,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, new MetricTime(0, 0, 3), (MusicalLength)MusicalFraction.Quarter)
+                new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 3), MusicalTimeSpan.Quarter)
             });
         }
 
@@ -375,9 +375,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void StepBack_Metric_BeyondZero()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTime(0, 0, 10))
-                .StepForward(new MetricLength(0, 0, 30))
-                .StepBack(new MetricLength(0, 1, 37))
+                .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                .StepForward(new MetricTimeSpan(0, 0, 30))
+                .StepBack(new MetricTimeSpan(0, 1, 37))
 
                 .Note(OctaveDefinition.Get(0).A)
 
@@ -385,7 +385,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, new MetricTime(0, 0, 0), (MusicalLength)MusicalFraction.Quarter)
+                new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 0), MusicalTimeSpan.Quarter)
             });
         }
 
@@ -394,9 +394,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void StepBack_Musical()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(new MusicalTime(MusicalFraction.Eighth))
-                .StepForward(new MusicalLength(MusicalFraction.Whole))
-                .StepBack(new MusicalLength(MusicalFraction.Half))
+                .MoveToTime(MusicalTimeSpan.Eighth)
+                .StepForward(MusicalTimeSpan.Whole)
+                .StepBack(MusicalTimeSpan.Half)
 
                 .Note(OctaveDefinition.Get(0).A)
 
@@ -404,7 +404,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, new MusicalTime(new Fraction(5, 8)), (MusicalLength)MusicalFraction.Quarter)
+                new NoteInfo(NoteName.A, 0, new MusicalTimeSpan(5, 8), MusicalTimeSpan.Quarter)
             });
         }
 
@@ -413,9 +413,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void StepBack_Musical_BeyondZero()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTime(0, 0, 10))
-                .StepForward(new MetricLength(0, 0, 30))
-                .StepBack(new MusicalLength(1000 * MusicalFraction.Quarter))
+                .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                .StepForward(new MetricTimeSpan(0, 0, 30))
+                .StepBack(1000 * MusicalTimeSpan.Quarter)
 
                 .Note(OctaveDefinition.Get(0).A)
 
@@ -423,7 +423,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, new MetricTime(0, 0, 0), (MusicalLength)MusicalFraction.Quarter)
+                new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 0), MusicalTimeSpan.Quarter)
             });
         }
 
@@ -472,7 +472,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void Repeat_Previous()
         {
             var pattern = new PatternBuilder()
-                .SetStep((MusicalLength)MusicalFraction.Eighth)
+                .SetStep(MusicalTimeSpan.Eighth)
 
                 .Anchor("A")
                 .StepForward()
@@ -487,8 +487,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             {
                 new NoteInfo(NoteName.A,
                              4,
-                             new MusicalTime(3 * MusicalFraction.Eighth),
-                             (MusicalLength)MusicalFraction.Quarter)
+                             3 * MusicalTimeSpan.Eighth,
+                             MusicalTimeSpan.Quarter)
             });
         }
 
@@ -505,7 +505,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Quarter)
+                new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Quarter)
             });
         }
 
@@ -524,8 +524,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Quarter),
-                new TimedEventInfo(new LyricEvent("B"), (MusicalTime)MusicalFraction.Half)
+                new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Quarter),
+                new TimedEventInfo(new LyricEvent("B"), MusicalTimeSpan.Half)
             });
         }
 
@@ -543,8 +543,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Quarter),
-                new TimedEventInfo(new LyricEvent("A"), (MusicalTime)MusicalFraction.Half)
+                new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Quarter),
+                new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Half)
             });
         }
 
@@ -561,7 +561,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new MarkerEvent("Marker 1"), (MusicalTime)MusicalFraction.Quarter)
+                new TimedEventInfo(new MarkerEvent("Marker 1"), MusicalTimeSpan.Quarter)
             });
         }
 
@@ -580,8 +580,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new MarkerEvent("Marker 1"), (MusicalTime)MusicalFraction.Quarter),
-                new TimedEventInfo(new MarkerEvent("Marker 2"), (MusicalTime)MusicalFraction.Half)
+                new TimedEventInfo(new MarkerEvent("Marker 1"), MusicalTimeSpan.Quarter),
+                new TimedEventInfo(new MarkerEvent("Marker 2"), MusicalTimeSpan.Half)
             });
         }
 
@@ -599,8 +599,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new MarkerEvent("Marker"), (MusicalTime)MusicalFraction.Quarter),
-                new TimedEventInfo(new MarkerEvent("Marker"), (MusicalTime)MusicalFraction.Half)
+                new TimedEventInfo(new MarkerEvent("Marker"), MusicalTimeSpan.Quarter),
+                new TimedEventInfo(new MarkerEvent("Marker"), MusicalTimeSpan.Half)
             });
         }
 
@@ -627,7 +627,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             var expectedNotes = expectedNotesInfos.Select(i =>
             {
-                var expectedTime = TimeConverter.ConvertFrom(i.Time ?? new MetricTime(), tempoMap);
+                var expectedTime = TimeConverter.ConvertFrom(i.Time ?? new MetricTimeSpan(), tempoMap);
                 var expectedLength = LengthConverter.ConvertFrom(i.Length, expectedTime, tempoMap);
 
                 return new Note(i.NoteNumber, expectedLength, expectedTime)
@@ -661,7 +661,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
                 new TimedEvent(i.Event,
-                               TimeConverter.ConvertFrom(i.Time ?? new MetricTime(), tempoMap)));
+                               TimeConverter.ConvertFrom(i.Time ?? new MetricTimeSpan(), tempoMap)));
 
             var actualTimedEvents = midiFile.GetTimedEvents();
 

@@ -3,7 +3,7 @@ using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public static class TimeConverter2
+    public static class TimeConverter
     {
         #region Methods
 

@@ -109,16 +109,16 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             time = time ?? new MidiTimeSpan();
 
-            var ticks = LengthConverter2.ConvertFrom(timeSpan, time, tempoMap);
+            var ticks = LengthConverter.ConvertFrom(timeSpan, time, tempoMap);
             AreEqual(timeSpan,
-                     LengthConverter2.ConvertTo<TTimeSpan>(ticks, time, tempoMap),
+                     LengthConverter.ConvertTo<TTimeSpan>(ticks, time, tempoMap),
                      "Cyclic conversion failed.");
 
             AreEqual(timeSpan,
-                     LengthConverter2.ConvertTo<TTimeSpan>(referenceTimeSpan, time, tempoMap),
+                     LengthConverter.ConvertTo<TTimeSpan>(referenceTimeSpan, time, tempoMap),
                      "ConvertTo failed.");
 
-            Assert.AreEqual(LengthConverter2.ConvertFrom(referenceTimeSpan, time, tempoMap),
+            Assert.AreEqual(LengthConverter.ConvertFrom(referenceTimeSpan, time, tempoMap),
                             ticks,
                             "ConvertFrom failed.");
         }
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var mathTimeSpan = CheckMathTimeSpan(timeSpan1, timeSpan2, MathOperation.Add, TimeSpanMode.TimeLength);
 
             AreEqual(timeSpan1,
-                     TimeConverter2.ConvertTo(mathTimeSpan.Subtract(timeSpan2, TimeSpanMode.TimeLength),
+                     TimeConverter.ConvertTo(mathTimeSpan.Subtract(timeSpan2, TimeSpanMode.TimeLength),
                                               timeSpan1.GetType(),
                                               tempoMap),
                      $"({timeSpan1} + {timeSpan2}) - {timeSpan2} != {timeSpan1}.");
@@ -172,7 +172,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var mathTimeSpan = CheckMathTimeSpan(timeSpan1, timeSpan2, MathOperation.Add, TimeSpanMode.LengthLength);
 
             AreEqual(timeSpan1,
-                     LengthConverter2.ConvertTo(mathTimeSpan.Subtract(timeSpan2, TimeSpanMode.LengthLength),
+                     LengthConverter.ConvertTo(mathTimeSpan.Subtract(timeSpan2, TimeSpanMode.LengthLength),
                                                 timeSpan1.GetType(),
                                                 time,
                                                 tempoMap),
@@ -195,7 +195,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var mathTimeSpan = CheckMathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, TimeSpanMode.TimeTime);
 
             AreEqual(timeSpan1,
-                     TimeConverter2.ConvertTo(timeSpan2.Add(mathTimeSpan, TimeSpanMode.TimeLength),
+                     TimeConverter.ConvertTo(timeSpan2.Add(mathTimeSpan, TimeSpanMode.TimeLength),
                                               timeSpan1.GetType(),
                                               tempoMap),
                      $"{timeSpan2} + ({timeSpan1} - {timeSpan2}) != {timeSpan1}.");
@@ -206,7 +206,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var mathTimeSpan = CheckMathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, TimeSpanMode.TimeLength);
 
             AreEqual(timeSpan1,
-                     TimeConverter2.ConvertTo(mathTimeSpan.Add(timeSpan2, TimeSpanMode.TimeLength),
+                     TimeConverter.ConvertTo(mathTimeSpan.Add(timeSpan2, TimeSpanMode.TimeLength),
                                               timeSpan1.GetType(),
                                               tempoMap),
                      $"({timeSpan1} - {timeSpan2}) + {timeSpan2} != {timeSpan1}.");
@@ -217,7 +217,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var mathTimeSpan = CheckMathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, TimeSpanMode.LengthLength);
 
             AreEqual(timeSpan1,
-                     LengthConverter2.ConvertTo(mathTimeSpan.Add(timeSpan2, TimeSpanMode.LengthLength),
+                     LengthConverter.ConvertTo(mathTimeSpan.Add(timeSpan2, TimeSpanMode.LengthLength),
                                                 timeSpan1.GetType(),
                                                 time,
                                                 tempoMap),

@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         /// <summary>
         /// Gets length of an <see cref="ILengthedObject"/> as an instance of type that
-        /// implements the <see cref="ILength"/> interface.
+        /// implements the <see cref="ITimeSpan"/> interface.
         /// </summary>
         /// <typeparam name="TLength">Type that will represent the length of the <paramref name="obj"/>.</typeparam>
         /// <param name="obj">Object to get length of.</param>
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="tempoMap"/> is null.</exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TLength"/> is not supported.</exception>
         public static TLength LengthAs<TLength>(this ILengthedObject obj, TempoMap tempoMap)
-            where TLength : ILength
+            where TLength : ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(obj), obj);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
-        public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
+        public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
             where TObject : ILengthedObject
         {
             return AtTime(objects, time, tempoMap, LengthedObjectPart.Start);
@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
-        public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap)
+        public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
             where TObject : ILengthedObject
         {
             return AtTime(objects, time, tempoMap, LengthedObjectPart.End);
@@ -158,7 +158,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="matchBy"/> specified an invalid value.</exception>
-        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITime time, TempoMap tempoMap, LengthedObjectPart matchBy)
+        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap, LengthedObjectPart matchBy)
             where TObject : ILengthedObject
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

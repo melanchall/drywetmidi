@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
-        public AddChordAction(IEnumerable<NoteDefinition> noteDefinitions, SevenBitNumber velocity, ILength length)
+        public AddChordAction(IEnumerable<NoteDefinition> noteDefinitions, SevenBitNumber velocity, ITimeSpan length)
         {
             NoteDefinitions = noteDefinitions;
             Velocity = velocity;
@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public SevenBitNumber Velocity { get; }
 
-        public ILength Length { get; }
+        public ITimeSpan Length { get; }
 
         #endregion
 

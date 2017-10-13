@@ -49,18 +49,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long ConvertFromLengthLength(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
         {
-            var convertedTimeSpan1 = LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan1, time, tempoMap);
+            var convertedTimeSpan1 = LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan1, time, tempoMap);
             var endTime1 = time + convertedTimeSpan1;
 
             switch (mathTimeSpan.Operation)
             {
                 case MathOperation.Add:
-                    return convertedTimeSpan1 + LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                    return convertedTimeSpan1 + LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
                                                                              endTime1,
                                                                              tempoMap);
 
                 case MathOperation.Subtract:
-                    return convertedTimeSpan1 - LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                    return convertedTimeSpan1 - LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
                                                                              endTime1,
                                                                              tempoMap.Flip(endTime1));
 
@@ -71,17 +71,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long ConvertFromTimeLength(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
         {
-            var convertedTimeSpan1 = TimeConverter2.ConvertFrom(mathTimeSpan.TimeSpan1, tempoMap);
+            var convertedTimeSpan1 = TimeConverter.ConvertFrom(mathTimeSpan.TimeSpan1, tempoMap);
 
             switch (mathTimeSpan.Operation)
             {
                 case MathOperation.Add:
-                    return convertedTimeSpan1 + LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                    return convertedTimeSpan1 + LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
                                                                              convertedTimeSpan1,
                                                                              tempoMap);
 
                 case MathOperation.Subtract:
-                    return convertedTimeSpan1 - LengthConverter2.ConvertFrom(mathTimeSpan.TimeSpan2,
+                    return convertedTimeSpan1 - LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
                                                                              convertedTimeSpan1,
                                                                              tempoMap.Flip(convertedTimeSpan1));
 
@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             {
                 case MathOperation.Subtract:
                     {
-                        var convertedTimeSpan2 = TimeConverter2.ConvertTo(timeSpan2, timeSpan1.GetType(), tempoMap);
+                        var convertedTimeSpan2 = TimeConverter.ConvertTo(timeSpan2, timeSpan1.GetType(), tempoMap);
                         return TimeSpanConverter.ConvertFrom(timeSpan1.Subtract(convertedTimeSpan2, TimeSpanMode.TimeTime), time, tempoMap);
                     }
 

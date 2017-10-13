@@ -122,20 +122,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// time until next change of time signature.</param>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
         /// <paramref name="timeSignature"/> is null.</exception>
-        public void SetTimeSignature(ITime time, TimeSignature timeSignature)
-        {
-            ThrowIfArgument.IsNull(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
-
-            SetTimeSignature(TimeConverter.ConvertFrom(time, TempoMap), timeSignature);
-        }
-
         public void SetTimeSignature(ITimeSpan time, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
 
-            SetTimeSignature(TimeConverter2.ConvertFrom(time, TempoMap), timeSignature);
+            SetTimeSignature(TimeConverter.ConvertFrom(time, TempoMap), timeSignature);
         }
 
         /// <summary>
@@ -155,18 +147,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="startTime">Time to remove changes of time signature since.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
-        public void ClearTimeSignature(ITime startTime)
-        {
-            ThrowIfArgument.IsNull(nameof(startTime), startTime);
-
-            ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap));
-        }
-
         public void ClearTimeSignature(ITimeSpan startTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
-            ClearTimeSignature(TimeConverter2.ConvertFrom(startTime, TempoMap));
+            ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap));
         }
 
         /// <summary>
@@ -191,22 +176,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="endTime">End of time range to remove changes of time signature in.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
         /// <paramref name="endTime"/> is null.</exception>
-        public void ClearTimeSignature(ITime startTime, ITime endTime)
+        public void ClearTimeSignature(ITimeSpan startTime, ITimeSpan endTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
             ThrowIfArgument.IsNull(nameof(endTime), endTime);
 
             ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap),
                                TimeConverter.ConvertFrom(endTime, TempoMap));
-        }
-
-        public void ClearTimeSignature(ITimeSpan startTime, ITimeSpan endTime)
-        {
-            ThrowIfArgument.IsNull(nameof(startTime), startTime);
-            ThrowIfArgument.IsNull(nameof(endTime), endTime);
-
-            ClearTimeSignature(TimeConverter2.ConvertFrom(startTime, TempoMap),
-                               TimeConverter2.ConvertFrom(endTime, TempoMap));
         }
 
         /// <summary>
@@ -233,20 +209,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// of tempo.</param>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
         /// <paramref name="tempo"/> is null.</exception>
-        public void SetTempo(ITime time, Tempo tempo)
-        {
-            ThrowIfArgument.IsNull(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempo), tempo);
-
-            SetTempo(TimeConverter.ConvertFrom(time, TempoMap), tempo);
-        }
-
         public void SetTempo(ITimeSpan time, Tempo tempo)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempo), tempo);
 
-            SetTempo(TimeConverter2.ConvertFrom(time, TempoMap), tempo);
+            SetTempo(TimeConverter.ConvertFrom(time, TempoMap), tempo);
         }
 
         /// <summary>
@@ -266,18 +234,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="startTime">Time to remove changes of tempo since.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null.</exception>
-        public void ClearTempo(ITime startTime)
-        {
-            ThrowIfArgument.IsNull(nameof(startTime), startTime);
-
-            ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap));
-        }
-
         public void ClearTempo(ITimeSpan startTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
 
-            ClearTempo(TimeConverter2.ConvertFrom(startTime, TempoMap));
+            ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap));
         }
 
         /// <summary>
@@ -302,22 +263,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="endTime">End of time range to remove changes of tempo in.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
         /// <paramref name="endTime"/> is null.</exception>
-        public void ClearTempo(ITime startTime, ITime endTime)
+        public void ClearTempo(ITimeSpan startTime, ITimeSpan endTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
             ThrowIfArgument.IsNull(nameof(endTime), endTime);
 
             ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap),
                        TimeConverter.ConvertFrom(endTime, TempoMap));
-        }
-
-        public void ClearTempo(ITimeSpan startTime, ITimeSpan endTime)
-        {
-            ThrowIfArgument.IsNull(nameof(startTime), startTime);
-            ThrowIfArgument.IsNull(nameof(endTime), endTime);
-
-            ClearTempo(TimeConverter2.ConvertFrom(startTime, TempoMap),
-                       TimeConverter2.ConvertFrom(endTime, TempoMap));
         }
 
         /// <summary>

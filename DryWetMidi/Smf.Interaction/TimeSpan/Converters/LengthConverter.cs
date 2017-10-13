@@ -3,7 +3,7 @@ using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public static class LengthConverter2
+    public static class LengthConverter
     {
         #region Methods
 
@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter2.ConvertFrom(time, tempoMap), tempoMap);
+            return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan length, long time, TempoMap tempoMap)
@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter2.ConvertFrom(time, tempoMap), tempoMap);
+            return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         public static ITimeSpan ConvertTo(ITimeSpan length, Type lengthType, long time, TempoMap tempoMap)
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return TimeSpanConverter.ConvertTo(length, lengthType, TimeConverter2.ConvertFrom(time, tempoMap), tempoMap);
+            return TimeSpanConverter.ConvertTo(length, lengthType, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         public static long ConvertFrom(ITimeSpan length, long time, TempoMap tempoMap)
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return TimeSpanConverter.ConvertFrom(length, TimeConverter2.ConvertFrom(time, tempoMap), tempoMap);
+            return TimeSpanConverter.ConvertFrom(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         #endregion

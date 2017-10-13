@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests
                           new Note(SevenBitNumber.MaxValue, 10, 19));
             }
 
-            Quantize(midiFile, MusicalFraction.Quarter);
+            Quantize(midiFile, MusicalTimeSpan.Quarter);
 
             var actualTimes = midiFile.GetNotes()
                                       .Select(n => n.Time)
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests
 
         #region Private methods
 
-        private static void Quantize(MidiFile midiFile, MusicalLength step)
+        private static void Quantize(MidiFile midiFile, MusicalTimeSpan step)
         {
             var tempoMap = midiFile.GetTempoMap();
             var stepTicks = LengthConverter.ConvertFrom(step, 0, tempoMap);

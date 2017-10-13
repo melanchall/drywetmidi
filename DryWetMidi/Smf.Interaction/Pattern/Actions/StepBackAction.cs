@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
-        public StepBackAction(ILength step)
+        public StepBackAction(ITimeSpan step)
             : base(step)
         {
         }
@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             context.SaveTime(time);
 
-            var convertedTime = TimeConverter.ConvertFrom(((MidiTime)time).Subtract(Step), tempoMap);
+            var convertedTime = TimeConverter.ConvertFrom(((MidiTimeSpan)time).Subtract(Step, TimeSpanMode.TimeLength), tempoMap);
             return new PatternActionResult(Math.Max(convertedTime, 0));
         }
 
