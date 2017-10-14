@@ -37,14 +37,12 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Fraction\FractionParser.cs" />
     <Compile Include="Common\MathUtilities.cs" />
     <Compile Include="Common\Parsing\ParsingResult.cs" />
     <Compile Include="Common\Parsing\ParsingStatus.cs" />
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
-    <Compile Include="Common\Fraction\Fraction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddTextEventAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinition.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDirection.cs" />
@@ -86,8 +84,7 @@
     <Compile Include="Smf.Interaction\TimeSpan\Representations\MidiTimeSpan.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Representations\MusicalTimeSpan.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanUtilities.cs" />
-    <Compile Include="Smf.Interaction\Utilities\FractionUtilities.cs" />
-    <Compile Include="Smf.Interaction\Utilities\MathOperation.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\MathOperation.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfLengthArgument.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfNotesTolerance.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfTimeArgument.cs" />
