@@ -23,13 +23,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Constructor
 
-        public MathTimeSpan(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperation operation, TimeSpanMode mode)
+        internal MathTimeSpan(ITimeSpan timeSpan1, ITimeSpan timeSpan2, MathOperation operation, TimeSpanMode mode)
         {
-            ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
-            ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
-            ThrowIfArgument.IsInvalidEnumValue(nameof(operation), operation);
-            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
-
             TimeSpan1 = timeSpan1;
             TimeSpan2 = timeSpan2;
             Operation = operation;
