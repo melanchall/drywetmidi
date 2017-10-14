@@ -840,6 +840,22 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region Clone
+
+        [TestMethod]
+        public void Clone_1()
+        {
+            TimeSpanTestUtilities.TestClone(new MetricTimeSpan());
+        }
+
+        [TestMethod]
+        public void Clone_2()
+        {
+            TimeSpanTestUtilities.TestClone(new MetricTimeSpan(5, 4, 6, 8));
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods

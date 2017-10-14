@@ -358,6 +358,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                        (long)Math.Round(Denominator * Math.Round(divisor, NumberOfDigitsAfterDecimalPoint) * FractionPartMultiplier));
         }
 
+        public ITimeSpan Clone()
+        {
+            return new MusicalTimeSpan(Numerator, Denominator);
+        }
+
         #endregion
     }
 }

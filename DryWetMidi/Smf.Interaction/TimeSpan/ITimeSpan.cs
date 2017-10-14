@@ -9,5 +9,7 @@
         ITimeSpan Multiply(double multiplier);
 
         ITimeSpan Divide(double divisor);
+
+        ITimeSpan Clone();
     }
 }

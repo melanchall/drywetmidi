@@ -222,6 +222,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                        (long)Math.Round(Ticks / divisor));
         }
 
+        public ITimeSpan Clone()
+        {
+            return new BarBeatTimeSpan(Bars, Beats, Ticks);
+        }
+
         #endregion
     }
 }

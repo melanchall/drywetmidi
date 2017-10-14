@@ -132,6 +132,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                     Mode);
         }
 
+        public ITimeSpan Clone()
+        {
+            return new MathTimeSpan(TimeSpan1.Clone(), TimeSpan2.Clone(), Operation, Mode);
+        }
+
         #endregion
     }
 }

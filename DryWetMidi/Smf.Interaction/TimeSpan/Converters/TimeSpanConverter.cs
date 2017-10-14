@@ -29,11 +29,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan timeSpan, long time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
+            if (timeSpan is TTimeSpan)
+                return (TTimeSpan)timeSpan.Clone();
+
             return ConvertTo<TTimeSpan>(ConvertFrom(timeSpan, time, tempoMap), time, tempoMap);
         }
 
         public static ITimeSpan ConvertTo(ITimeSpan timeSpan, Type timeSpanType, long time, TempoMap tempoMap)
         {
+            if (timeSpan.GetType() == timeSpanType)
+                return timeSpan.Clone();
+
             return GetConverter(timeSpanType).ConvertTo(ConvertFrom(timeSpan, time, tempoMap), time, tempoMap);
         }
 

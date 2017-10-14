@@ -181,6 +181,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MidiTimeSpan((long)Math.Round(TimeSpan / divisor));
         }
 
+        public ITimeSpan Clone()
+        {
+            return new MidiTimeSpan(TimeSpan);
+        }
+
         #endregion
     }
 }

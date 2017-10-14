@@ -706,6 +706,22 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region Clone
+
+        [TestMethod]
+        public void Clone_1()
+        {
+            TimeSpanTestUtilities.TestClone(new MidiTimeSpan());
+        }
+
+        [TestMethod]
+        public void Clone_2()
+        {
+            TimeSpanTestUtilities.TestClone(new MidiTimeSpan(123));
+        }
+
+        #endregion
+
         #endregion
     }
 }

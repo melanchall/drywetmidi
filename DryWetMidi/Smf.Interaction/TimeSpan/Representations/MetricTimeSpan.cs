@@ -252,6 +252,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MetricTimeSpan((long)Math.Round(TotalMicroseconds / divisor));
         }
 
+        public ITimeSpan Clone()
+        {
+            return new MetricTimeSpan(TotalMicroseconds);
+        }
+
         #endregion
     }
 }

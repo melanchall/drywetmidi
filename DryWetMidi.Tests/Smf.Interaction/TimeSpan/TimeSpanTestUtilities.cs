@@ -104,6 +104,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Methods
 
+        public static void TestClone(ITimeSpan timeSpan)
+        {
+            var clone = timeSpan.Clone();
+
+            Assert.AreEqual(timeSpan, clone, "Clone time span doesn't equal to the original one.");
+            Assert.IsFalse(ReferenceEquals(timeSpan, clone), "Clone time span is the same instance as the original one.");
+        }
+
         public static void TestConversion<TTimeSpan>(TTimeSpan timeSpan, ITimeSpan referenceTimeSpan, ITimeSpan time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
