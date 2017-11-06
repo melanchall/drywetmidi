@@ -118,7 +118,7 @@ To get duration of a MIDI file as `TimeSpan` use this code:
 TempoMap tempoMap = midiFile.GetTempoMap();
 TimeSpan midiFileDuration = midiFile.GetTimedEvents()
                                     .LastOrDefault(e => e.Event is NoteOffEvent)
-                                    ?.TimeAs<MetricTime>(tempoMap) ?? new MetricTime();
+                                    ?.TimeAs<MetricTimeSpan>(tempoMap) ?? new MetricTimeSpan();
 ```
 
 Suppose you want to remove all C# notes from a MIDI file. It can be done with this code:
@@ -144,7 +144,7 @@ To get all chords of a MIDI file at 20 seconds from the start of the file write 
 ```csharp
 TempoMap tempoMap = midiFile.GetTempoMap();
 IEnumerable<Chord> chordsAt20seconds = midiFile.GetChords()
-                                               .AtTime(new MetricTime(0, 0, 20),
+                                               .AtTime(new MetricTimeSpan(0, 0, 20),
                                                        tempoMap,
                                                        LengthedObjectPart.Entire);
 ```
@@ -158,7 +158,7 @@ var tempoMap = midiFile.GetTempoMap();
 var trackChunk = new TrackChunk();
 using (var notesManager = trackChunk.ManageNotes())
 {
-    var length = LengthConverter.ConvertFrom(new MusicalLength(2 * MusicalFraction.EighthTriplet),
+    var length = LengthConverter.ConvertFrom(2 * MusicalTimeSpan.Eighth.Triplet(),
                                              0,
                                              tempoMap);
     var note = new Note(NoteName.A, 4, length);
@@ -175,13 +175,13 @@ You can even build a musical composition:
 Pattern pattern = new PatternBuilder()
      
     // Insert a pause of 5 seconds
-    .StepForward(new MetricLength(0, 0, 5))
+    .StepForward(new MetricTimeSpan(0, 0, 5))
 
     // Insert an eighth C# note of the 4th octave
-    .Note(OctaveDefinition.Get(4).CSharp, (MusicalLength)MusicalFraction.Eighth)
+    .Note(OctaveDefinition.Get(4).CSharp, MusicalTimeSpan.Eighth)
 
     // Set default note length to triplet eighth and default octave to 5
-    .SetNoteLength((MusicalLength)MusicalFraction.EighthTriplet)
+    .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
     .SetOctave(5)
 
     // Now we can add triplet eighth notes of the 5th octave in a simple way
