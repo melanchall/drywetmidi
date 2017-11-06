@@ -3,6 +3,9 @@ using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Provides useful utilities for working with <see cref="ITimeSpan"/>.
+    /// </summary>
     public static class TimeSpanUtilities
     {
         #region Constants
@@ -19,6 +22,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Converts the string representation of a time span to its <see cref="ITimeSpan"/> equivalent.
+        /// A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="input">A string containing a time span to convert.</param>
+        /// <param name="timeSpan">When this method returns, contains the <see cref="ITimeSpan"/>
+        /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
+        /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <see cref="String.Empty"/>, is not of the correct format. This parameter is passed uninitialized;
+        /// any value originally supplied in result will be overwritten.</param>
+        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out ITimeSpan timeSpan)
         {
             timeSpan = null;
@@ -35,6 +49,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return timeSpan != null;
         }
 
+        /// <summary>
+        /// Converts the string representation of a time span to its <see cref="ITimeSpan"/> equivalent.
+        /// </summary>
+        /// <param name="input">A string containing a time span to convert.</param>
+        /// <returns>A <see cref="ITimeSpan"/> equivalent to the time span contained in <paramref name="input"/>.</returns>
         public static ITimeSpan Parse(string input)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input string");

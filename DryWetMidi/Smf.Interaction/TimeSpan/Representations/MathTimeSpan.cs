@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Represents a result of summation or subtraction of two <see cref="ITimeSpan"/>.
+    /// </summary>
     public sealed class MathTimeSpan : ITimeSpan
     {
         #region Constants
@@ -35,18 +38,36 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets the first <see cref="ITimeSpan"/>.
+        /// </summary>
         public ITimeSpan TimeSpan1 { get; }
 
+        /// <summary>
+        /// Gets the second <see cref="ITimeSpan"/>.
+        /// </summary>
         public ITimeSpan TimeSpan2 { get; }
 
+        /// <summary>
+        /// Gets the mathematical operation between <see cref="TimeSpan1"/> and <see cref="TimeSpan2"/>.
+        /// </summary>
         public MathOperation Operation { get; }
 
+        /// <summary>
+        /// Get the mode of the mathematical operation represented by the current <see cref="MathTimeSpan"/>.
+        /// </summary>
         public TimeSpanMode Mode { get; }
 
         #endregion
 
         #region Operators
 
+        /// <summary>
+        /// Determines if two <see cref="MathTimeSpan"/> objects are equal.
+        /// </summary>
+        /// <param name="timeSpan1">The first <see cref="MathTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="MathTimeSpan"/> to compare.</param>
+        /// <returns>true if time spans are equal, false otherwise.</returns>
         public static bool operator ==(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, timeSpan2))
@@ -61,6 +82,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                    timeSpan1.Mode == timeSpan2.Mode;
         }
 
+        /// <summary>
+        /// Determines if two <see cref="MathTimeSpan"/> objects are not equal.
+        /// </summary>
+        /// <param name="timeSpan1">The first <see cref="MathTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="MathTimeSpan"/> to compare.</param>
+        /// <returns>false if time spans are equal, true otherwise.</returns>
         public static bool operator !=(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
@@ -70,6 +97,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             var operationString = Operation == MathOperation.Add
@@ -81,11 +112,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return $"({TimeSpan1}{modeStrings.Item1} {operationString} {TimeSpan2}{modeStrings.Item2})";
         }
 
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as MathTimeSpan);
         }
 
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
             return TimeSpan1.GetHashCode() ^
@@ -98,6 +138,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region ITimeSpan
 
+        /// <summary>
+        /// Adds a time span to the current one.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="timeSpan"/> and the current time span have the same type,
+        /// the result time span will be of this type too; otherwise - of the <see cref="MathTimeSpan"/>.
+        /// </remarks>
+        /// <param name="timeSpan">Time span to add to the current one.</param>
+        /// <param name="mode">Mode of the operation that defines meaning of time spans the
+        /// operation will be performed on.</param>
+        /// <returns>Time span that is a sum of the <paramref name="timeSpan"/> and the
+        /// current time span.</returns>
+        /// <exception cref="ArgumentException"><paramref name="mode"/> is invalid.</exception>
         public ITimeSpan Add(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
@@ -105,6 +158,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanUtilities.Add(this, timeSpan, mode);
         }
 
+        /// <summary>
+        /// Subtracts a time span from the current one.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="timeSpan"/> and the current time span have the same type,
+        /// the result time span will be of this type too; otherwise - of the <see cref="MathTimeSpan"/>.
+        /// </remarks>
+        /// <param name="timeSpan">Time span to subtract from the current one.</param>
+        /// <param name="mode">Mode of the operation that defines meaning of time spans the
+        /// operation will be performed on.</param>
+        /// <returns>Time span that is a difference between the <paramref name="timeSpan"/> and the
+        /// current time span.</returns>
         public ITimeSpan Subtract(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
@@ -112,6 +177,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanUtilities.Subtract(this, timeSpan, mode);
         }
 
+        /// <summary>
+        /// Stretches the current time span by multiplying its length by the specified multiplier.
+        /// </summary>
+        /// <param name="multiplier">Multiplier to stretch the time span by.</param>
+        /// <returns>Time span that is the current time span stretched by the <paramref name="multiplier"/>.</returns>
         public ITimeSpan Multiply(double multiplier)
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
@@ -122,6 +192,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                     Mode);
         }
 
+        /// <summary>
+        /// Shrinks the current time span by dividing its length by the specified divisor.
+        /// </summary>
+        /// <param name="divisor">Divisor to shrink the time span by.</param>
+        /// <returns>Time span that is the current time span shrinked by the <paramref name="divisor"/>.</returns>
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNegative(nameof(divisor), divisor, "Divisor is negative.");
@@ -132,6 +207,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                     Mode);
         }
 
+        /// <summary>
+        /// Clones the current time span.
+        /// </summary>
+        /// <returns>Copy of the current time span.</returns>
         public ITimeSpan Clone()
         {
             return new MathTimeSpan(TimeSpan1.Clone(), TimeSpan2.Clone(), Operation, Mode);

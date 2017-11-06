@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set root note use <see cref="SetRootNote(NoteDefinition)"/> method. By default the root note is C4.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set root note use <see cref="SetRootNote(NoteDefinition)"/> method. By default the root note is C4.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null.</exception>
@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="noteDefinition">The definition of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
@@ -254,11 +254,40 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Chord
 
+        /// <summary>
+        /// Adds a chord by the specified intervals and root note's name.
+        /// </summary>
+        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="rootNoteName">The root note's name of the chord.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
+        /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
+        /// velocity is 100.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions, NoteName rootNoteName)
         {
             return Chord(intervalDefinitions, rootNoteName, _noteLength, _velocity);
         }
 
+        /// <summary>
+        /// Adds a chord by the specified intervals, root note's name and length.
+        /// </summary>
+        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="rootNoteName">The root note's name of the chord.</param>
+        /// <param name="length">The length of a chord.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
+        /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
+        /// velocity is 100.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
                                     NoteName rootNoteName,
                                     ITimeSpan length)
@@ -266,6 +295,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return Chord(intervalDefinitions, rootNoteName, length, _velocity);
         }
 
+        /// <summary>
+        /// Adds a chord by the specified intervals, root note's name and velocity.
+        /// </summary>
+        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="rootNoteName">The root note's name of the chord.</param>
+        /// <param name="velocity">The velocity of a chord.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
+        /// is 1/4.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
                                     NoteName rootNoteName,
                                     SevenBitNumber velocity)
@@ -273,6 +316,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return Chord(intervalDefinitions, rootNoteName, _noteLength, velocity);
         }
 
+        /// <summary>
+        /// Adds a chord by the specified intervals, root note's name, length and velocity.
+        /// </summary>
+        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="rootNoteName">The root note's name of the chord.</param>
+        /// <param name="length">The length of a chord.</param>
+        /// <param name="velocity">The velocity of a chord.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
                                     NoteName rootNoteName,
                                     ITimeSpan length,
@@ -343,7 +397,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <remarks>
         /// The result chord will contain the specified root note and notes produced by transposing
         /// the <paramref name="rootNoteDefinition"/> by the <paramref name="intervalDefinitions"/>.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
@@ -394,7 +448,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default octave use <see cref="SetOctave(int)"/> method. By default the octave number is 4.
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -465,7 +519,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="noteDefinitions">Definitions of notes that represent a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -499,7 +553,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default note length use <see cref="SetNoteLength(ILength)"/> method. By default the length
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null.</exception>
@@ -767,8 +821,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="repetitionsCount">Count of repetitions.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// Note that <see cref="SetNoteLength(ILength)"/>, <see cref="SetOctave(int)"/>,
-        /// <see cref="SetStep(ILength)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
+        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave(int)"/>,
+        /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
         /// actions and will not be repeated since default values applies immidiately on next actions.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="actionsCount"/> is
@@ -792,8 +846,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="repetitionsCount">Count of repetitions.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// Note that <see cref="SetNoteLength(ILength)"/>, <see cref="SetOctave(int)"/>,
-        /// <see cref="SetStep(ILength)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
+        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave(int)"/>,
+        /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
         /// actions and will not be repeated since default values applies immidiately on next actions.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repetitionsCount"/> is negative.</exception>
@@ -813,8 +867,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// Note that <see cref="SetNoteLength(ILength)"/>, <see cref="SetOctave(int)"/>,
-        /// <see cref="SetStep(ILength)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
+        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave(int)"/>,
+        /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
         /// actions and will not be repeated since default values applies immidiately on next actions.
         /// </remarks>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
@@ -830,6 +884,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Text
 
+        /// <summary>
+        /// Adds lyrics.
+        /// </summary>
+        /// <param name="text">Text of lyrics.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/> is null.</exception>
         public PatternBuilder Lyrics(string text)
         {
             ThrowIfArgument.IsNull(nameof(text), text);
@@ -837,6 +897,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return AddAction(new AddTextEventAction<LyricEvent>(text));
         }
 
+        /// <summary>
+        /// Adds a marker.
+        /// </summary>
+        /// <param name="marker">The text of marker.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="marker"/> is null.</exception>
         public PatternBuilder Marker(string marker)
         {
             ThrowIfArgument.IsNull(nameof(marker), marker);

@@ -3,10 +3,23 @@ using System;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Provides a way to convert the time of an object from one representation to another.
+    /// </summary>
     public static class TimeConverter
     {
         #region Methods
 
+        /// <summary>
+        /// Converts time from <see cref="long"/> to the specified time type.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">Type that will represent the time of an object.</typeparam>
+        /// <param name="time">Time to convert.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
+        /// <returns>Time as an instance of <typeparamref name="TTimeSpan"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan ConvertTo<TTimeSpan>(long time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
@@ -16,6 +29,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(time, 0, tempoMap);
         }
 
+        /// <summary>
+        /// Converts time from one time type to another one.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">Type that will represent the time of an object.</typeparam>
+        /// <param name="time">Time to convert.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
+        /// <returns>Time as an instance of <typeparamref name="TTimeSpan"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
@@ -25,6 +48,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return ConvertTo<TTimeSpan>(ConvertFrom(time, tempoMap), tempoMap);
         }
 
+        /// <summary>
+        /// Converts time from one time type to another one.
+        /// </summary>
+        /// <param name="time">Time to convert.</param>
+        /// <param name="timeType">Type to convert time to.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
+        /// <returns>Time as an instance of <paramref name="timeType"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="timeType"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="NotSupportedException"><paramref name="timeType"/> is not supported.</exception>
         public static ITimeSpan ConvertTo(ITimeSpan time, Type timeType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -34,6 +67,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo(time, timeType, 0, tempoMap);
         }
 
+        /// <summary>
+        /// Converts time from the specified time type to <see cref="long"/>.
+        /// </summary>
+        /// <param name="time">Time to convert.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
+        /// <returns>Time as <see cref="long"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public static long ConvertFrom(ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(time), time);

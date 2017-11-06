@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public interface ITimeSpanConverter
+    internal interface ITimeSpanConverter
     {
         ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap);
 
