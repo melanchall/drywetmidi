@@ -87,9 +87,9 @@ using (var notesManager = trackChunk.ManageNotes())
     NotesCollection notes = notesManager.Notes;
     notes.Add(new Note(NoteName.A,
                        4,
-                       LengthConverter.ConvertFrom(new MetricLength(0, /* hours */
-                                                                    0, /* minutes */
-                                                                    10 /* seconds */),
+                       LengthConverter.ConvertFrom(new MetricTimeSpan(hours: 0,
+                                                                      minutes: 0,
+                                                                      seconds: 10),
                                                    0,
                                                    tempoMap)));
 }
