@@ -99,7 +99,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="input"/>.</returns>
         public static BarBeatTimeSpan Parse(string input)
         {
-            var parsingResult = BarBeatTimeSpanParser.TryParse(input, out var timeSpan);
+            BarBeatTimeSpan timeSpan;
+            var parsingResult = BarBeatTimeSpanParser.TryParse(input, out timeSpan);
             if (parsingResult.Status == ParsingStatus.Parsed)
                 return timeSpan;
 
@@ -207,7 +208,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            long barsDelta, beatsDelta, ticksDelta;
+            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
             return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta < 0)));
         }
 
@@ -225,7 +227,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            long barsDelta, beatsDelta, ticksDelta;
+            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
             return barsDelta > 0 || (barsDelta == 0 && (beatsDelta > 0 || (beatsDelta == 0 && ticksDelta > 0)));
         }
 
@@ -244,7 +247,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            long barsDelta, beatsDelta, ticksDelta;
+            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
             return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta <= 0)));
         }
 
@@ -263,7 +267,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            CalculateDifferencies(timeSpan1, timeSpan2, out var barsDelta, out var beatsDelta, out var ticksDelta);
+            long barsDelta, beatsDelta, ticksDelta;
+            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
             return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta >= 0)));
         }
 

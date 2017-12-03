@@ -192,8 +192,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         public SevenBitNumber NoteNumber
         {
-            get => _noteDefinition.NoteNumber;
-            set => _noteDefinition = NoteDefinition.Get(value);
+            get { return _noteDefinition.NoteNumber; }
+            set { _noteDefinition = NoteDefinition.Get(value); }
         }
 
         /// <summary>

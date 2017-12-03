@@ -12,10 +12,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static readonly Func<string, Tuple<ParsingResult, ITimeSpan>>[] Parsers = new Func<string, Tuple<ParsingResult, ITimeSpan>>[]
         {
-            input => Tuple.Create(MidiTimeSpanParser.TryParse(input, out var timeSpan), (ITimeSpan)timeSpan),
-            input => Tuple.Create(BarBeatTimeSpanParser.TryParse(input, out var timeSpan), (ITimeSpan)timeSpan),
-            input => Tuple.Create(MetricTimeSpanParser.TryParse(input, out var timeSpan), (ITimeSpan)timeSpan),
-            input => Tuple.Create(MusicalTimeSpanParser.TryParse(input, out var timeSpan), (ITimeSpan)timeSpan),
+            input =>
+            {
+                MidiTimeSpan timeSpan;
+                return Tuple.Create(MidiTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+            },
+            input =>
+            {
+                BarBeatTimeSpan timeSpan;
+                return Tuple.Create(BarBeatTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+            },
+            input =>
+            {
+                MetricTimeSpan timeSpan;
+                return Tuple.Create(MetricTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+            },
+            input =>
+            {
+                MusicalTimeSpan timeSpan;
+                return Tuple.Create(MusicalTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+            },
         };
 
         #endregion
@@ -37,14 +53,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             timeSpan = null;
 
-            if (MidiTimeSpan.TryParse(input, out var midiTimeSpan))
-                timeSpan = midiTimeSpan;
-            else if (BarBeatTimeSpan.TryParse(input, out var barBeatTimeSpan))
-                timeSpan = barBeatTimeSpan;
-            else if (MetricTimeSpan.TryParse(input, out var metricTimeSpan))
-                timeSpan = metricTimeSpan;
-            else if (MusicalTimeSpan.TryParse(input, out var musicalTimeSpan))
-                timeSpan = musicalTimeSpan;
+            foreach (var parser in Parsers)
+            {
+                var parsingResult = parser(input);
+                if (parsingResult.Item1.Status == ParsingStatus.Parsed)
+                {
+                    timeSpan = parsingResult.Item2;
+                    return true;
+                }
+            }
 
             return timeSpan != null;
         }

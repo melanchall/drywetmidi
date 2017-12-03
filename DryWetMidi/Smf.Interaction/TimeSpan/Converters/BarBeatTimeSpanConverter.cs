@@ -45,19 +45,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var firstTimeSignature = timeSignatureLine.AtTime(time);
             var lastTimeSignature = timeSignatureLine.AtTime(lastTime);
 
+            long barsBefore, beatsBefore, ticksBefore;
             CalculateComponents(firstTime - time,
                                 firstTimeSignature,
                                 ticksPerQuarterNote,
-                                out var barsBefore,
-                                out var beatsBefore,
-                                out var ticksBefore);
+                                out barsBefore,
+                                out beatsBefore,
+                                out ticksBefore);
 
+            long barsAfter, beatsAfter, ticksAfter;
             CalculateComponents(time + timeSpan - lastTime,
                                 lastTimeSignature,
                                 ticksPerQuarterNote,
-                                out var barsAfter,
-                                out var beatsAfter,
-                                out var ticksAfter);
+                                out barsAfter,
+                                out beatsAfter,
+                                out ticksAfter);
 
             bars += barsBefore + barsAfter;
 
@@ -124,12 +126,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var lastTimeSignature = firstTimeSignatureChange?.Value ?? startTimeSignature;
             var lastTime = firstTimeSignatureChange?.Time ?? time;
 
+            long barsBefore, beatsBefore, ticksBefore;
             CalculateComponents(lastTime - time,
                                 startTimeSignature,
                                 ticksPerQuarterNote,
-                                out var barsBefore,
-                                out var beatsBefore,
-                                out var ticksBefore);
+                                out barsBefore,
+                                out beatsBefore,
+                                out ticksBefore);
 
             bars -= barsBefore;
 

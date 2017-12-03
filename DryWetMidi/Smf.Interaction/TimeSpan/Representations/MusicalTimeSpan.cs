@@ -227,7 +227,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="input"/>.</returns>
         public static MusicalTimeSpan Parse(string input)
         {
-            var parsingResult = MusicalTimeSpanParser.TryParse(input, out var timeSpan);
+            MusicalTimeSpan timeSpan;
+            var parsingResult = MusicalTimeSpanParser.TryParse(input, out timeSpan);
             if (parsingResult.Status == ParsingStatus.Parsed)
                 return timeSpan;
 
@@ -272,7 +273,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(null, timeSpan1) || ReferenceEquals(null, timeSpan2))
                 return false;
 
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
             return numerator1 == numerator2;
         }
 
@@ -351,7 +353,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out var denominator);
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
             return new MusicalTimeSpan(numerator1 + numerator2, denominator);
         }
 
@@ -370,7 +373,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out var denominator);
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
             if (numerator1 < numerator2)
                 throw new ArgumentException("First time span is less than second one.", nameof(timeSpan1));
 
@@ -391,7 +395,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
             return numerator1 < numerator2;
         }
 
@@ -409,7 +414,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
             return numerator1 > numerator2;
         }
 
@@ -428,7 +434,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
             return numerator1 <= numerator2;
         }
 
@@ -447,7 +454,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out _);
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
             return numerator1 >= numerator2;
         }
 

@@ -152,8 +152,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// -or- Unable to get channel since chord's notes have different <see cref="Note.Velocity"/>.</exception>
         public FourBitNumber Channel
         {
-            get => GetNotesProperty(ChannelPropertySelector);
-            set => SetNotesProperty(ChannelPropertySelector, value);
+            get { return GetNotesProperty(ChannelPropertySelector); }
+            set { SetNotesProperty(ChannelPropertySelector, value); }
         }
 
         /// <summary>
@@ -163,8 +163,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// -or- Unable to get velocity since chord's notes have different <see cref="Note.Velocity"/>.</exception>
         public SevenBitNumber Velocity
         {
-            get => GetNotesProperty(VelocityPropertySelector);
-            set => SetNotesProperty(VelocityPropertySelector, value);
+            get { return GetNotesProperty(VelocityPropertySelector); }
+            set { SetNotesProperty(VelocityPropertySelector, value); }
         }
 
         /// <summary>
@@ -174,8 +174,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// -or- Unable to get off velocity since chord's notes have different <see cref="Note.OffVelocity"/>.</exception>
         public SevenBitNumber OffVelocity
         {
-            get => GetNotesProperty(OffVelocityPropertySelector);
-            set => SetNotesProperty(OffVelocityPropertySelector, value);
+            get { return GetNotesProperty(OffVelocityPropertySelector); }
+            set { SetNotesProperty(OffVelocityPropertySelector, value); }
         }
 
         #endregion

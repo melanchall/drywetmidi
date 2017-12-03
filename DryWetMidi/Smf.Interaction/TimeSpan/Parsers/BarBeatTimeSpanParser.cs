@@ -41,13 +41,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            if (!ParsingUtilities.ParseLong(match, BarsGroupName, 0, out var bars))
+            long bars;
+            if (!ParsingUtilities.ParseLong(match, BarsGroupName, 0, out bars))
                 return new ParsingResult(BarsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseLong(match, BeatsGroupName, 0, out var beats))
+            long beats;
+            if (!ParsingUtilities.ParseLong(match, BeatsGroupName, 0, out beats))
                 return new ParsingResult(BeatsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseLong(match, TicksGroupName, 0, out var ticks))
+            long ticks;
+            if (!ParsingUtilities.ParseLong(match, TicksGroupName, 0, out ticks))
                 return new ParsingResult(BeatsIsOutOfRange);
 
             timeSpan = new BarBeatTimeSpan(bars, beats, ticks);

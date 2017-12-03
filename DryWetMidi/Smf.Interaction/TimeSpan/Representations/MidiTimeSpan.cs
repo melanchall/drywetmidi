@@ -69,7 +69,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="input"/>.</returns>
         public static MidiTimeSpan Parse(string input)
         {
-            var parsingResult = MidiTimeSpanParser.TryParse(input, out var timeSpan);
+            MidiTimeSpan timeSpan;
+            var parsingResult = MidiTimeSpanParser.TryParse(input, out timeSpan);
             if (parsingResult.Status == ParsingStatus.Parsed)
                 return timeSpan;
 

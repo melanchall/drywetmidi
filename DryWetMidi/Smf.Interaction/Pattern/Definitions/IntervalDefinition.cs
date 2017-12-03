@@ -157,10 +157,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(direction), direction);
 
-            if (!_cache.TryGetValue(interval, out Dictionary<IntervalDirection, IntervalDefinition> intervalDefinitions))
+            Dictionary<IntervalDirection, IntervalDefinition> intervalDefinitions;
+            if (!_cache.TryGetValue(interval, out intervalDefinitions))
                 _cache.Add(interval, intervalDefinitions = new Dictionary<IntervalDirection, IntervalDefinition>());
 
-            if (!intervalDefinitions.TryGetValue(direction, out IntervalDefinition intervalDefinition))
+            IntervalDefinition intervalDefinition;
+            if (!intervalDefinitions.TryGetValue(direction, out intervalDefinition))
                 intervalDefinitions.Add(direction, intervalDefinition = new IntervalDefinition(interval, direction));
 
             return intervalDefinition;

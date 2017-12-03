@@ -149,7 +149,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <paramref name="input"/>.</returns>
         public static MetricTimeSpan Parse(string input)
         {
-            var parsingResult = MetricTimeSpanParser.TryParse(input, out var timeSpan);
+            MetricTimeSpan timeSpan;
+            var parsingResult = MetricTimeSpanParser.TryParse(input, out timeSpan);
             if (parsingResult.Status == ParsingStatus.Parsed)
                 return timeSpan;
 

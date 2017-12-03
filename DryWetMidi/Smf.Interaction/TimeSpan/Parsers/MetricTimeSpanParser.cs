@@ -51,16 +51,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            if (!ParsingUtilities.ParseInt(match, HoursGroupName, 0, out var hours))
+            int hours;
+            if (!ParsingUtilities.ParseInt(match, HoursGroupName, 0, out hours))
                 return new ParsingResult(HoursIsOutOfRange);
 
-            if (!ParsingUtilities.ParseInt(match, MinutesGroupName, 0, out var minutes))
+            int minutes;
+            if (!ParsingUtilities.ParseInt(match, MinutesGroupName, 0, out minutes))
                 return new ParsingResult(MinutesIsOutOfRange);
 
-            if (!ParsingUtilities.ParseInt(match, SecondsGroupName, 0, out var seconds))
+            int seconds;
+            if (!ParsingUtilities.ParseInt(match, SecondsGroupName, 0, out seconds))
                 return new ParsingResult(SecondsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseInt(match, MillisecondsGroupName, 0, out var milliseconds))
+            int milliseconds;
+            if (!ParsingUtilities.ParseInt(match, MillisecondsGroupName, 0, out milliseconds))
                 return new ParsingResult(MillisecondsIsOutOfRange);
 
             timeSpan = new MetricTimeSpan(hours, minutes, seconds, milliseconds);

@@ -37,7 +37,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             var mathTimeSpan = (MathTimeSpan)timeSpan;
 
-            if (Converters.TryGetValue(mathTimeSpan.Mode, out var converter))
+            Func<MathTimeSpan, long, TempoMap, long> converter;
+            if (Converters.TryGetValue(mathTimeSpan.Mode, out converter))
                 return converter(mathTimeSpan, time, tempoMap);
             else
                 throw new ArgumentException($"{mathTimeSpan.Mode} mode is not supported by the converter.", nameof(timeSpan));
