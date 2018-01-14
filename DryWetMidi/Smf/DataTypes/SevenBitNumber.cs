@@ -4,7 +4,7 @@ using System;
 namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
-    /// Type that is used to represent a seven-bit number.
+    /// Type that is used to represent a seven-bit number (0-127).
     /// </summary>
     /// <remarks>
     /// Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events.

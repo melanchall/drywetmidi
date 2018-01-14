@@ -4,7 +4,7 @@ using System;
 namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
-    /// Type that is used to represent a four-bit number.
+    /// Type that is used to represent a four-bit number (0-15).
     /// </summary>
     /// <remarks>
     /// Four-bit numbers widely used by MIDI protocol as parameters of MIDI events.
