@@ -229,7 +229,8 @@
     <Compile Include="Smf\Utilities\TrackChunkUtilities.cs" />
     <Compile Include="Smf\WritingSettings\CompressionPolicy.cs" />
     <Compile Include="Smf\WritingSettings\WritingSettings.cs" />
-    <Compile Include="Standards\GeneralMidi.cs" />
+    <Compile Include="Standards\GeneralMidi\GeneralMidi.cs" />
+    <Compile Include="Standards\GeneralMidi\GeneralMidiUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\ChannelEventsClassDiagram.cd" />

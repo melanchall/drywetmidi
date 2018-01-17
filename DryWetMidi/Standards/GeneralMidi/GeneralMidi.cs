@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
+﻿using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Standards
 {
@@ -8,6 +7,8 @@ namespace Melanchall.DryWetMidi.Standards
     /// </summary>
     public static class GeneralMidi
     {
+        #region Enums
+
         /// <summary>
         /// General MIDI Level 1 program (patch).
         /// </summary>
@@ -895,41 +896,12 @@ namespace Melanchall.DryWetMidi.Standards
             OpenTriangle = 80
         }
 
+        #endregion
+
+        #region Constants
+
         public static readonly FourBitNumber PercussionChannel = (FourBitNumber)10;
 
-        public static SevenBitNumber AsSevenBitNumber(this Program program)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
-
-            return (SevenBitNumber)(byte)program;
-        }
-
-        public static SevenBitNumber AsSevenBitNumber(this Percussion percussion)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
-
-            return (SevenBitNumber)(byte)percussion;
-        }
-
-        public static ProgramChangeEvent GetProgramChangeEvent(this Program program)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
-
-            return new ProgramChangeEvent(program.AsSevenBitNumber());
-        }
-
-        public static NoteOnEvent GetNoteOnEvent(this Percussion percussion, SevenBitNumber velocity)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
-
-            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity);
-        }
-
-        public static NoteOffEvent GetNoteOffEvent(this Percussion percussion, SevenBitNumber velocity)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
-
-            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity);
-        }
+        #endregion
     }
 }

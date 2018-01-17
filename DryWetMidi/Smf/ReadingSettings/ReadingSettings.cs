@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Gets or sets reaction of the reading engine on new track chunk if already read
         /// track chunks count is greater or equals the one declared in the file's header chunk.
-        /// The defailt is <see cref="ExtraTrackChunkPolicy.Read"/>.
+        /// The default is <see cref="ExtraTrackChunkPolicy.Read"/>.
         /// </summary>
         public ExtraTrackChunkPolicy ExtraTrackChunkPolicy { get; set; }
 
