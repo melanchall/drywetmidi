@@ -66,6 +66,7 @@
     <Compile Include="Smf.Interaction\Pattern\IPatternAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternContext.cs" />
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollection.cs" />
+    <Compile Include="Smf.Interaction\TimedObject\TimedObjectsComparer.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\BarBeatTimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\ITimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\LengthConverter.cs" />

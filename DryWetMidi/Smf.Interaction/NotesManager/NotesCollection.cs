@@ -33,6 +33,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="addedObjects">Collection of added objects.</param>
         protected override void OnObjectsAdded(IEnumerable<Note> addedObjects)
         {
+            base.OnObjectsAdded(addedObjects);
+
             OnCollectionChanged(addedObjects, null);
         }
 
@@ -42,6 +44,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="removedObjects">Collection of removed objects.</param>
         protected override void OnObjectsRemoved(IEnumerable<Note> removedObjects)
         {
+            base.OnObjectsRemoved(removedObjects);
+
             OnCollectionChanged(null, removedObjects);
         }
 
