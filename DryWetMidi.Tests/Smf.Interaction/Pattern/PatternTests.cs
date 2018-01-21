@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Standards;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -589,18 +590,54 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Add marker events using repeat.")]
         public void Marker_Repeat()
         {
+            const string markerName = "Marker";
+
             var pattern = new PatternBuilder()
 
                 .Note(NoteName.A)
-                .Marker("Marker")
+                .Marker(markerName)
                 .Repeat(2, 1)
 
                 .Build();
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new MarkerEvent("Marker"), MusicalTimeSpan.Quarter),
-                new TimedEventInfo(new MarkerEvent("Marker"), MusicalTimeSpan.Half)
+                new TimedEventInfo(new MarkerEvent(markerName), MusicalTimeSpan.Quarter),
+                new TimedEventInfo(new MarkerEvent(markerName), MusicalTimeSpan.Half)
+            });
+        }
+
+        [TestMethod]
+        [Description("Set program by number.")]
+        public void SetProgram_Number()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A, MusicalTimeSpan.Quarter)
+                .SetProgram((SevenBitNumber)10)
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new ProgramChangeEvent((SevenBitNumber)10), MusicalTimeSpan.Quarter)
+            });
+        }
+
+        [TestMethod]
+        [Description("Set program by General MIDI program.")]
+        public void SetProgram_GeneralMidiProgram()
+        {
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A, MusicalTimeSpan.Quarter)
+                .SetProgram(GeneralMidi.Program.Applause)
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(GeneralMidi.Program.Applause.GetProgramChangeEvent(), MusicalTimeSpan.Quarter)
             });
         }
 

@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Standards;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -993,6 +994,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             _octave = OctaveDefinition.Get(octave);
             return this;
+        }
+
+        public PatternBuilder SetProgram(SevenBitNumber programNumber)
+        {
+            return AddAction(new AddProgramChangeEventAction(programNumber));
+        }
+
+        public PatternBuilder SetProgram(GeneralMidi.Program program)
+        {
+            return AddAction(new AddProgramChangeEventAction(program));
         }
 
         #endregion
