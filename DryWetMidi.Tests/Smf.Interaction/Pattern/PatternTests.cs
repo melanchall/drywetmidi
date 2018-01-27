@@ -611,33 +611,69 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Set program by number.")]
         public void SetProgram_Number()
         {
+            var programNumber = (SevenBitNumber)10;
+            var eventTime = MusicalTimeSpan.Quarter;
+
             var pattern = new PatternBuilder()
 
-                .Note(NoteName.A, MusicalTimeSpan.Quarter)
-                .SetProgram((SevenBitNumber)10)
+                .Note(NoteName.A, eventTime)
+                .SetProgram(programNumber)
 
                 .Build();
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent((SevenBitNumber)10), MusicalTimeSpan.Quarter)
+                new TimedEventInfo(new ProgramChangeEvent(programNumber), eventTime)
             });
         }
 
         [TestMethod]
-        [Description("Set program by General MIDI program.")]
+        [Description("Set program by General MIDI Level 1 program.")]
         public void SetProgram_GeneralMidiProgram()
         {
+            var program = GeneralMidiProgram.Applause;
+            var eventTime = MusicalTimeSpan.Quarter;
+
             var pattern = new PatternBuilder()
 
-                .Note(NoteName.A, MusicalTimeSpan.Quarter)
-                .SetProgram(GeneralMidi.Program.Applause)
+                .Note(NoteName.A, eventTime)
+                .SetProgram(program)
 
                 .Build();
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(GeneralMidi.Program.Applause.GetProgramChangeEvent(), MusicalTimeSpan.Quarter)
+                new TimedEventInfo(new ProgramChangeEvent(program.AsSevenBitNumber()), eventTime)
+            });
+        }
+
+        [TestMethod]
+        [Description("Set program by General MIDI Level 2 program.")]
+        public void SetProgram_GeneralMidi2Program()
+        {
+            var eventsTime = MusicalTimeSpan.Quarter;
+
+            var bankMsbControlNumber = (SevenBitNumber)0x00;
+            var bankMsb = (SevenBitNumber)0x79;
+
+            var bankLsbControlNumber = (SevenBitNumber)0x32;
+            var bankLsb = (SevenBitNumber)0x03;
+
+            var generalMidiProgram = GeneralMidiProgram.BirdTweet;
+            var generalMidi2Program = GeneralMidi2Program.BirdTweet2;
+
+            var pattern = new PatternBuilder()
+
+                .Note(NoteName.A, eventsTime)
+                .SetProgram(generalMidi2Program)
+
+                .Build();
+
+            TestTimedEvents(pattern, new[]
+            {
+                new TimedEventInfo(new ControlChangeEvent(bankMsbControlNumber, bankMsb), eventsTime),
+                new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb), eventsTime),
+                new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()), eventsTime),
             });
         }
 
@@ -698,11 +734,15 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
                 new TimedEvent(i.Event,
-                               TimeConverter.ConvertFrom(i.Time ?? new MetricTimeSpan(), tempoMap)));
+                               TimeConverter.ConvertFrom(i.Time ?? new MidiTimeSpan(), tempoMap)));
 
             var actualTimedEvents = midiFile.GetTimedEvents();
 
-            Assert.IsTrue(expectedTimedEvents.All(expected => actualTimedEvents.Any(actual => TimedEventEquality.Equals(expected, actual))));
+            foreach (var expectedEvent in expectedTimedEvents)
+            {
+                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.Equals(expectedEvent, actual)),
+                              $"There are no event: {expectedEvent}");
+            }
 
             return midiFile;
         }

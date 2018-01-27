@@ -46,7 +46,9 @@
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
-    <Compile Include="Smf.Interaction\Pattern\Actions\AddProgramChangeEventAction.cs" />
+    <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidi2ProgramAction.cs" />
+    <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidiProgramAction.cs" />
+    <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetProgramNumberAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddTextEventAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinition.cs" />
     <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDirection.cs" />
@@ -231,7 +233,11 @@
     <Compile Include="Smf\Utilities\TrackChunkUtilities.cs" />
     <Compile Include="Smf\WritingSettings\CompressionPolicy.cs" />
     <Compile Include="Smf\WritingSettings\WritingSettings.cs" />
+    <Compile Include="Standards\GeneralMidi2\GeneralMidi2Program.cs" />
+    <Compile Include="Standards\GeneralMidi2\GeneralMidi2Utilities.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidi.cs" />
+    <Compile Include="Standards\GeneralMidi\GeneralMidiPercussion.cs" />
+    <Compile Include="Standards\GeneralMidi\GeneralMidiProgram.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidiUtilities.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -998,12 +998,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public PatternBuilder SetProgram(SevenBitNumber programNumber)
         {
-            return AddAction(new AddProgramChangeEventAction(programNumber));
+            return AddAction(new SetProgramNumberAction(programNumber));
         }
 
-        public PatternBuilder SetProgram(GeneralMidi.Program program)
+        public PatternBuilder SetProgram(GeneralMidiProgram program)
         {
-            return AddAction(new AddProgramChangeEventAction(program));
+            return AddAction(new SetGeneralMidiProgramAction(program));
+        }
+
+        public PatternBuilder SetProgram(GeneralMidi2Program program)
+        {
+            return AddAction(new SetGeneralMidi2ProgramAction(program));
         }
 
         #endregion

@@ -2,27 +2,20 @@
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    internal sealed class AddProgramChangeEventAction : IPatternAction
+    internal sealed class SetProgramNumberAction : IPatternAction
     {
         #region Constructor
 
-        public AddProgramChangeEventAction(SevenBitNumber programNumber)
+        public SetProgramNumberAction(SevenBitNumber programNumber)
         {
             ProgramNumber = programNumber;
-        }
-
-        public AddProgramChangeEventAction(GeneralMidi.Program program)
-        {
-            Program = program;
         }
 
         #endregion
 
         #region Properties
 
-        public SevenBitNumber? ProgramNumber { get; }
-
-        public GeneralMidi.Program Program { get; }
+        public SevenBitNumber ProgramNumber { get; }
 
         #endregion
 
@@ -30,9 +23,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public PatternActionResult Invoke(long time, PatternContext context)
         {
-            var programChangeEvent = ProgramNumber != null
-                ? new ProgramChangeEvent(ProgramNumber.Value)
-                : Program.GetProgramChangeEvent();
+            var programChangeEvent = new ProgramChangeEvent(ProgramNumber);
             var timedEvent = new TimedEvent(programChangeEvent, time);
 
             return new PatternActionResult(time, new[] { timedEvent });

@@ -7,35 +7,35 @@ namespace Melanchall.DryWetMidi.Standards
     {
         #region Methods
 
-        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi.Program program)
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidiProgram program)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
 
             return (SevenBitNumber)(byte)program;
         }
 
-        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi.Percussion percussion)
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidiPercussion percussion)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
 
             return (SevenBitNumber)(byte)percussion;
         }
 
-        public static ProgramChangeEvent GetProgramChangeEvent(this GeneralMidi.Program program)
+        public static MidiEvent GetProgramEvent(this GeneralMidiProgram program)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
 
             return new ProgramChangeEvent(program.AsSevenBitNumber());
         }
 
-        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi.Percussion percussion, SevenBitNumber velocity)
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidiPercussion percussion, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
 
             return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity);
         }
 
-        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi.Percussion percussion, SevenBitNumber velocity)
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidiPercussion percussion, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
 
