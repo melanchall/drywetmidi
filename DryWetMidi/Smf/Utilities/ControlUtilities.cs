@@ -23,6 +23,20 @@ namespace Melanchall.DryWetMidi.Smf
             return GetControlName(controlChangeEvent.ControlNumber);
         }
 
+        public static SevenBitNumber AsSevenBitNumber(this ControlName controlName)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(controlName), controlName);
+
+            return (SevenBitNumber)(byte)controlName;
+        }
+
+        public static ControlChangeEvent GetControlChangeEvent(this ControlName controlName, SevenBitNumber controlValue)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(controlName), controlName);
+
+            return new ControlChangeEvent(controlName.AsSevenBitNumber(), controlValue);
+        }
+
         /// <summary>
         /// Gets name of the controller presented by control number.
         /// </summary>

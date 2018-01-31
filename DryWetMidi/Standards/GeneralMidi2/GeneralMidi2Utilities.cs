@@ -42,9 +42,6 @@ namespace Melanchall.DryWetMidi.Standards
 
         private const byte MelodyChannelBankMsb = 0x79;
 
-        private static readonly SevenBitNumber MsbControlNumber = (SevenBitNumber)0x00;
-        private static readonly SevenBitNumber LsbControlNumber = (SevenBitNumber)0x32;
-
         private static readonly Dictionary<GeneralMidi2Program, GeneralMidi2ProgramData> ProgramsData = new[]
         {
             // Piano
@@ -495,8 +492,8 @@ namespace Melanchall.DryWetMidi.Standards
 
             return new[]
             {
-                new ControlChangeEvent(MsbControlNumber, programData.BankMsb),
-                new ControlChangeEvent(LsbControlNumber, programData.BankLsb),
+                ControlName.BankSelect.GetControlChangeEvent(programData.BankMsb),
+                ControlName.LsbForBankSelect.GetControlChangeEvent(programData.BankLsb),
                 programData.GeneralMidiProgram.GetProgramEvent()
             };
         }

@@ -653,10 +653,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var eventsTime = MusicalTimeSpan.Quarter;
 
-            var bankMsbControlNumber = (SevenBitNumber)0x00;
+            var bankMsbControlNumber = ControlName.BankSelect.AsSevenBitNumber();
             var bankMsb = (SevenBitNumber)0x79;
 
-            var bankLsbControlNumber = (SevenBitNumber)0x32;
+            var bankLsbControlNumber = ControlName.LsbForBankSelect.AsSevenBitNumber();
             var bankLsb = (SevenBitNumber)0x03;
 
             var generalMidiProgram = GeneralMidiProgram.BirdTweet;
