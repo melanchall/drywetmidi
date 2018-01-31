@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Smf
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
             var fileFormat = reader.ReadWord();
-            if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), (int)fileFormat))
+            if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), fileFormat))
                 throw new UnknownFileFormatException($"File format {fileFormat} is unknown.", fileFormat);
 
             FileFormat = fileFormat;
