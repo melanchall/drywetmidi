@@ -1,0 +1,326 @@
+
+	
+
+	
+
+
+<HTML>
+<HEAD>
+
+
+
+
+
+
+
+
+
+<!-- PC-NS Stylesheet -->
+<STYLE TYPE=text/css>
+<!-- 
+.xh11 {font-family:Helvetica,San-Serif; font-size:8pt; line-height: 11pt; margin-top: 0pt; }
+.xh211 {font-family:Helvetica,San-Serif; font-size:9pt; }
+.xh9 {font-family:Helvetica,San-Serif; font-size:8pt; }
+.xclist {font-family:Verdana,Helvetica; font-size:9pt; line-height: 12pt; }
+.x0 {font-family:Verdana,Helvetica; }
+.x8 {font-family:Verdana,Helvetica; font-size:7pt; }
+.x9 {font-family:Verdana,Helvetica; font-size:8pt; }
+.x9b {font-family:Verdana,Helvetica; font-size:8pt; font-weight:bold; }
+.x10 {font-family:Verdana,Helvetica; font-size:8pt; }
+.x10b {font-family:Verdana,Helvetica; font-size:8pt; font-weight:bold; }
+.x11 {font-family:Verdana,Helvetica; font-size:9pt; }
+.x11b {font-family:Verdana,Helvetica; font-size:9pt; font-weight:bold; }
+.x11bh {font-family:Verdana,Helvetica; font-size:9pt; line-height: 13pt;  }
+.x12 {font-family:Verdana,Helvetica; font-size:10pt; }
+.x14 {font-family:Verdana,Helvetica; font-size:14pt; }
+.x16 {font-family:Verdana,Helvetica; font-size:16pt; }
+.xhead {font-family:Verdana,Helvetica; font-size:18pt; font-weight:bold; }
+.xcomhead {font-family:Verdana,Helvetica; font-size:12pt; font-weight:bold; color:#FFFFFF; }
+.xcomsubhead {font-family:Verdana,Helvetica; font-size:10pt; margin-left:4pt; }
+.serif	{font-family:Georgia,Times,serif;}
+.xoom0 {font-family:Verdana,Arial; }
+.xoom8 {font-family:Verdana,Arial; font-size:7pt; }
+.xoom9 {font-family:Verdana,Arial; font-size:8pt; }
+.xoom10 {font-family:Verdana,Arial; font-size:8pt; }
+.xoom11 {font-family:Verdana,Arial; font-size:9pt; }
+.xoom12 {font-family:Verdana,Arial; font-size:10pt; }
+.xoom14 {font-family:Verdana,Arial; font-size:12pt; }
+.xoom16 {font-family:Verdana,Arial; font-size:14pt; }
+.xoomhead {font-family:Verdana,Arial; font-size:16pt; font-weight:bold; }
+.xoomcomhead {font-family:Verdana,Arial; font-size:10pt; font-weight:bold;}
+.xoomcomsubhead {font-family:Verdana,Arial; font-size:9pt; margin-left:4pt; }
+-->
+</STYLE>
+
+
+	
+<TITLE>XOOM.com Member Page Not Found!!!</TITLE>
+<META name="resource-type" content=document>
+<META name="description" content="XOOM.COM Get your web space free! Get Chat! See Movies! Cool Stuff all for Free!">
+<META name="keywords" content="XOOM FREE CHAT WEB SPACE MOVIES EMAIL WEB CLIP ART HTML CLIPART CARDS DOWNLOADS">
+<META name=distribution content=global>
+
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" BACKGROUND="http://media.xoom.com/bopics/Background.gif" TEXT="#000000" LINK="#0000CC" VLINK="#0000FF" ALINK="#FF0000">
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=600>
+
+<TR><TD WIDTH=111 VALIGN=TOP BACKGROUND="http://media.xoom.com/bopics/Left_Background.gif">
+<A HREF="http://xoom.com/home/"><IMG SRC="http://media.xoom.com/bopics/logo_corner.gif" WIDTH="111" HEIGHT="113" HSPACE="0" VSPACE="0" BORDER="0"></A>
+
+
+	
+
+	
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=111 BACKGROUND="http://media.xoom.com/spacer.gif">
+<TR><TD ALIGN=CENTER VALIGN=TOP><form action="http://xoom.com/search/do_search.php" METHOD=POST>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=90>
+<TR><TD COLSPAN=3><map name="CONTROL">
+<area shape="rect" coords="2,18,87,31" href="http://xoom.com/join/services.xihtml">
+<area shape="rect" coords="2,34,87,47" href="http://services.xoom.com/services.xihtml">
+<area shape="rect" coords="2,50,87,63" href="http://services.xoom.com/checkemail.xihtml">
+<area shape="rect" coords="2,66,87,79" href="http://xoom.com/sitestatus/">
+<area shape="rect" coords="2,82,87,95" href="http://xoom.com/help/">
+<area shape="rect" coords="2,124,87,136" href="http://xoom.com/communities/">
+<area shape="rect" coords="2,140,87,153" href="http://xoom.com/chathub">
+<area shape="rect" coords="2,156,87,169" href="http://xoom.com/connections">
+</map><IMG SRC="http://media.xoom.com/bopics/buttons_top.gif" WIDTH="90" HEIGHT="172" USEMAP="#CONTROL" HSPACE="0" VSPACE="0" BORDER=0></TD></TR>
+<TR>
+<TD WIDTH=1 BGCOLOR=#000000><SPACER TYPE="BLOCK" WIDTH=1 HEIGHT=1></TD>
+<TD VALIGN=MIDDLE ALIGN=CENTER BGCOLOR=#CCCCCC WIDTH=88 HEIGHT=20><SPAN CLASS=X10>
+<IMG SRC="http://media.xoom.com/bopics/clear.gif" WIDTH="10" HEIGHT="2" HSPACE="0" VSPACE="0"><BR>
+<input type="text" size=6 name="Keywords"><BR>
+<IMG SRC="http://media.xoom.com/bopics/clear.gif" WIDTH="88" HEIGHT="3" HSPACE="0" VSPACE="0"><BR></SPAN>
+</TD>
+<TD WIDTH=1 BGCOLOR=#000000><SPACER TYPE="BLOCK" WIDTH=1 HEIGHT=1></TD>
+</TR><TR><TD VALIGN=TOP ALIGN=CENTER COLSPAN=3>
+<INPUT Name="BUTTON_XOOM" TYPE="image" BORDER=0 VALUE="SEARCH_XOOM" SRC="http://media.xoom.com/bopics/search_button.gif"></TD>
+</TR></TABLE>
+
+<IMG SRC="http://media.xoom.com/bopics/clear.gif" WIDTH="90" HEIGHT="1" HSPACE="0" VSPACE="0"><BR>
+
+<IMG SRC="http://media.xoom.com/bopics/hot_spots_top.gif" WIDTH="90" HEIGHT="25" HSPACE="0" VSPACE="0"><BR>
+
+	
+	<A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=HOTSPOTS.NEW/CID=00001f381ac078ee00000000?1,1" TARGET=_top><IMG SRC="http://admedia.xoom.com/Banners/Match.com/hs_matchcom_new.gif" WIDTH=90 HEIGHT=27 BORDER=0 ALT=""></A><BR>
+	<A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=HOTSPOTS.NEW/CID=00001f381ac078ee00000000?1,4" TARGET=_top><IMG SRC="http://admedia.xoom.com/Banners/Travelscape/hs_travelscape_new.gif" WIDTH=90 HEIGHT=27 BORDER=0 ALT=""></A><BR>
+	<A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=HOTSPOTS.NEW/CID=00001f381ac078ee00000000?1,2" TARGET=_top><IMG SRC="http://admedia.xoom.com/Banners/Ebay/hs_ebay_main_new.gif" WIDTH=90 HEIGHT=27 BORDER=0 ALT=""></A><BR>
+	<A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=HOTSPOTS.NEW/CID=00001f381ac078ee00000000?1,5" TARGET=_top><IMG SRC="http://admedia.xoom.com/Banners/Xoom/hs_shopguide_new.gif" WIDTH=90 HEIGHT=27 BORDER=0 ALT=""></A><BR>
+
+<IMG SRC="http://media.xoom.com/bopics/hot_spots_bottom.gif" WIDTH="90" HEIGHT="1" HSPACE="0" VSPACE="0"><BR>
+
+
+	
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=90 HEIGHT=10><BR>
+
+<!----- BEGIN RESOURCES ----->
+
+
+<IMG SRC="http://media.xoom.com/bopics/resources2.gif" USEMAP="#resources2" BORDER=0 WIDTH=90 HEIGHT=161 ALT="" HSPACE="0" VSPACE="0"><!-- Start of Client Side Image Map information -->
+
+<MAP NAME="resources2">
+	<AREA SHAPE=RECT COORDS="2,18,88,32" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,9" ALT="">
+	<AREA SHAPE=RECT COORDS="2,34,88,48" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,4" ALT="">
+	<AREA SHAPE=RECT COORDS="2,50,88,64" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,5" ALT="">
+	<AREA SHAPE=RECT COORDS="2,65,88,80" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,1" ALT="">
+	<AREA SHAPE=RECT COORDS="2,81,88,96" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,2" ALT="">
+	<AREA SHAPE=RECT COORDS="2,97,88,111" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,3" ALT="">
+	<AREA SHAPE=RECT COORDS="2,112,88,127" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,6" ALT="">
+	<AREA SHAPE=RECT COORDS="2,128,88,143" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,7" ALT="">
+	<AREA SHAPE=RECT COORDS="2,144,88,159" HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=RESOURCES.NAVBAR/SPONSOR=/SECTION=/CID=0000200c4bc9b78600000000?1,8" ALT="">
+</MAP>
+
+<!----- END RESOURCES ----->
+
+
+
+</FORM>
+</TD></TR></TABLE>
+
+	
+</TD>
+
+<TD VALIGN=TOP WIDTH=489>
+<!-- BEGINNING OF RIGHT SIDE -->
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=489><TR>
+<TD HEIGHT=2 BGCOLOR=#000000 COLSPAN=2 WIDTH=489><SPACER TYPE="BLOCK" WIDTH=1 HEIGHT=2></TD></TR>
+</TABLE>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=489><TR><TD BGCOLOR=#FFCC66 ALIGN=CENTER WIDTH=487>
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=487 HEIGHT=3><SPAN CLASS=X8><CENTER><A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=/SPONSOR=/AAMSZ=468x60/SECTION=/CID=000027aa0000000000000000"><IMG SRC="http://admedia.xoom.com/Banners/IPTelephony/062399.cardwithcall3.gif" HEIGHT=60 WIDTH=468 ALT="Click Here!!!!" BORDER=0></A><BR><A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/AREA=/SPONSOR=/AAMSZ=468x60/SECTION=/CID=000027aa0000000000000000">Click Here!!!!</A></CENTER>
+
+</SPAN><IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=487 HEIGHT=3></TD><TD BGCOLOR=#000000 WIDTH=2><SPACER TYPE="BLOCK" WIDTH=2 HEIGHT=2></TD></TR>
+</TABLE>
+
+
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%><!-- 489 -->
+<TR>
+	<TD WIDTH=100% HEIGHT=2 BGCOLOR=#000000 COLSPAN=2><SPACER TYPE="BLOCK" WIDTH=1 HEIGHT=2></TD>
+</TR>
+
+<TR>
+	<TD BGCOLOR=#FFCC66 ALIGN=CENTER WIDTH=100%>
+		<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%>
+		<TR>
+			<TD COLSPAN=4><IMG SRC="http://media.xoom.com/bopics/clear.gif" WIDTH="487" HEIGHT="4" HSPACE="0" VSPACE="0"><BR></TD>
+		</TR>
+
+		<TR>
+			<TD VALIGN=TOP ALIGN=MIDDLE WIDTH=25%><A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/SECTION=/AREA=SPONSORS.COMMERCE/CID=0000200b8226465800000000?1,1" TARGET=_top><IMG SRC="http://view.avenuea.com/view/xoom_necx_042799mg_05/direct/01" BORDER=1 WIDTH=88 HEIGHT=31></A><BR>
+				<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=1><SPAN CLASS=X9><B>HARDWARE</B></SPAN></FONT></TD>
+
+			<TD VALIGN=TOP ALIGN=MIDDLE WIDTH=25%><A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/SECTION=/AREA=SPONSORS.COMMERCE/CID=0000200b8226465800000000?1,2" TARGET=_top><IMG SRC="http://admedia.xoom.com/Banners/KBkids.com/080299.KBkids.88x31.gif" BORDER=1 WIDTH=88 HEIGHT=31></A><BR>
+				<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=1><SPAN CLASS=X9><B>FUN TOYS & MORE!</B></SPAN></FONT></TD>
+
+			<TD VALIGN=TOP ALIGN=MIDDLE WIDTH=25%><A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/SECTION=/AREA=SPONSORS.COMMERCE/CID=0000200b8226465800000000?1,3" TARGET=_top><IMG SRC="http://admedia.xoom.com/Banners/JobOptions/072799.career.gif" BORDER=1 WIDTH=88 HEIGHT=31></A><BR>
+				<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=1><SPAN CLASS=X9><B>POST YOUR RESUME</B></SPAN></FONT></TD>
+
+			<TD VALIGN=TOP ALIGN=MIDDLE WIDTH=25%><A HREF="http://adserver.xoom.com/cgi-bin/accipiter/adclick.exe/SITE=XOOM/SECTION=/AREA=SPONSORS.COMMERCE/CID=0000200b8226465800000000?1,4" TARGET=_top><IMG SRC="http://admedia.xoom.com/Banners/Icom/072699.ico88x31-03.gif" BORDER=1 WIDTH=88 HEIGHT=31></A><BR>
+				<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=1><SPAN CLASS=X9><B>PREMIUM HOSTING</B></SPAN></FONT></TD>
+		</TR>
+		</TABLE>
+	</TD>
+
+	<TD BGCOLOR=#000000 WIDTH=2><SPACER TYPE="BLOCK" WIDTH=2 HEIGHT=2></TD>
+</TR>
+
+<TR>
+	<TD HEIGHT=2 BGCOLOR=#000000 COLSPAN=2><SPACER TYPE="BLOCK" WIDTH=1 HEIGHT=2></TD>
+</TR>
+</TABLE>
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=489><TR><TD WIDTH=489>
+
+
+
+
+<TABLE WIDTH=489 BORDER=0 CELLPADDING=0 CELLSPACING=0 BGCOLOR=#000000>
+<TR><TD WIDTH=10><SPACER TYPE=BLOCK WIDTH=10 HEIGHT=2></TD><TD VALIGN=MIDDLE HEIGHT=22 ALIGN=LEFT>
+<B><A HREF=http://xoom.com><FONT CLASS=X12 COLOR=#66CCFF>VISIT XOOM.COM</FONT></A><FONT CLASS=X12 COLOR=#66CCFF> &gt; </FONT><FONT CLASS=X12 COLOR=#FFFFFF>Member Page Not Found!!!</B></FONT></TD></TR></TABLE>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD VALIGN=TOP>
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=50 HEIGHT=8><BR>
+<FONT CLASS=X14><B>&nbsp;THE MEMBER PAGE<BR>
+&nbsp;YOU REQUESTED<BR>
+&nbsp;COULD NOT BE FOUND!</B><BR></FONT>
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=50 HEIGHT=10><BR>
+<FONT CLASS=X12>&nbsp;Possible reasons:<BR></FONT>
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=50 HEIGHT=3><BR>
+<TABLE BORDER=0 CELLPADDING=8 CELLSPACING=0>
+<TR><TD><FONT CLASS=X9>
+The page may be temporarily <B>offline for maintenance</B>. Check <A HREF="http://xoom.com/sitestatus">Status Page</A>.<BR>
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=50 HEIGHT=7><BR>
+There may be a <B>Typo</B> in the URL.<BR>
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=50 HEIGHT=7><BR>
+This Member Page <B>may no longer exists</B>.<BR>
+<IMG SRC="http://media.xoom.com/spacer.gif" WIDTH=50 HEIGHT=7><BR>
+This Member may have been <B>removed due to violations</B> of our <A HREF=http://xoom.com/TOS>Terms of Service</A>.<P>
+</FONT>
+</TD></TR></TABLE>
+</TD>
+
+<TD VALIGN=TOP WIDTH=225>
+<TABLE CELLPADDING=10 CELLSPACING=0>
+        <TR><TD BGCOLOR=#FFCCCC VALIGN=TOP ALIGN=CENTER>
+                <SPAN CLASS=X14><B>INTERNET DEALS:</B></SPAN>
+                <A href="http://orders.xoom.com/pldc700b/sxmpldc700b07214oh4/?O=404_PAGE"><IMG src="http://orders.xoom.com/pldc700b/media/pldc740b.gif" WIDTH=200 HEIGHT=138 BORDER=2></A><BR>
+                <A href="http://orders.xoom.com/pldc700b/sxmpldc700b07214oh4/?O=404_PAGE">
+                <SPAN CLASS=X12><B>Store up to 500 Photos!<br> The Polaroid PDC 700 digital camera<br> Only $399.95!</B></SPAN></A>
+         </TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+
+<P><CENTER><FONT CLASS=X14><A HREF="http://xoom.com/signup/JoinNow.xihtml?R=0&P=7">Join XOOM.com Now! It's Free!</A></FONT><P></CENTER>
+
+<TABLE WIDTH=489 BORDER=0 CELLPADDING=0 CELLSPACING=0 BGCOLOR=#000000>
+<TR><TD WIDTH=10><SPACER TYPE=BLOCK WIDTH=10 HEIGHT=2></TD><TD VALIGN=MIDDLE HEIGHT=22 ALIGN=LEFT>
+<B><FONT CLASS=X12 COLOR=#FFFFFF>XOOM.com explicitly does not allow the following:</B></FONT></TD></TR></TABLE>
+<BR>
+<UL>
+<FONT CLASS=X9>
+<LI>nudity, pornography, sexual material, hate propaganda or hate
+mongering, swearing, or fraudulent material or activity;
+<LI>any material that violates or infringes in any way upon the rights
+of others, including, without limitation, copyright or trademark
+rights;
+<LI>any material that is threatening, abusive, harassing, defamatory, invasive of privacy or publicity rights, vulgar, obscene, profane, indecent, or otherwise objectionable; or that violates any law or gives rise to any legal liability;
+<LI>material that promotes, encourages, or provides instructional
+information about illegal activities;
+<LI>any software, information, or other material that contains a virus, corrupted data, or any other harmful or damaging component;
+<LI>any raffle, contest, or game requiring payment of a fee by participants.
+<LI>Displaying on your page any paid advertising or other paid sponsorship banner.
+<LI>Removing from your page the XOOM.com &quot;Get a Home Page&quot; banner with a link to XOOM.com or its related directories. 
+<LI>Restricting access to your XOOM.com page(s) only to users with passwords.
+<LI>Sending unsolicited email using a XOOM.com address or containing any
+reference to your XOOM.com home page.
+<LI>Using in the registration of your XOOM.com membership an email account that is or becomes inactive or that is not your own email account.<P>
+</UL>
+
+</FONT>
+<BLOCKQUOTE><FONT CLASS=X12>To read our complete Terms of Service click <A HREF=http://xoom.com/TOS>here</A>.<P>
+
+If you believe your member page has been removed in error, please e-mail the <A HREF=mailto:webmaster@xoom.com>Webmaster</A>.<P>
+
+<A HREF="http://xoom.com/signup/JoinNow.xihtml?R=0&P=7">Join XOOM.com Now! It's Free!</A></FONT><P>
+</BLOCKQUOTE><P><BR>
+
+</TD></TR></TABLE>
+</TD></TR>
+<TR><TD VALIGN=BOTTOM WIDTH=111 HEIGHT=70 BACKGROUND="http://media.xoom.com/bopics/Left_Background.gif"><IMG SRC="http://media.xoom.com/bopics/left_bottom4.gif" ALIGN=BASELINE WIDTH="111" HEIGHT="70" HSPACE="0" VSPACE="0"><BR></TD>
+<TD WIDTH=489 VALIGN=TOP HEIGHT=70>
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=489 HEIGHT=2><TR>
+<TD HEIGHT=2 BGCOLOR=#000000 COLSPAN=2 WIDTH=489><SPACER TYPE="BLOCK" WIDTH=1 HEIGHT=2></TD></TR>
+</TABLE>
+<TABLE WIDTH=489 CELLPADDING=0 CELLSPACING=0 BORDER=0 HEIGHT=66>
+<TR>
+<TD BGCOLOR=#FFCC66 WIDTH=487>
+<IMG SRC="http://media.xoom.com/bopics/clear.gif" WIDTH="314" HEIGHT="5" HSPACE="0" VSPACE="0"><BR> 
+
+<SPAN CLASS=X11>&nbsp;&nbsp;&nbsp;<B>Join XOOM.com today for these free services!</B><br><b></SPAN>
+<SPAN CLASS=X11>&nbsp;&nbsp;&nbsp;</SPAN><SPAN CLASS=X8><A HREF="http://xoom.com/webspace/">Homepages</A> &#149; <A HREF="http://xoom.com/chat/">Chatrooms</A> &#149; <A HREF="http://hotfiles.xoom.com/">Downloads</A> &#149; 
+<A HREF="http://xoom.com/email/">Email</A> - <A HREF="http://xoom.com/clips/website/">Clip Art</A> &#149; <A HREF="http://xoom.com/greetings/">Greeting Cards</A> &#149; <A HREF="http://xoom.com/xines/">Newsletters</A>
+</b>
+</SPAN>
+<IMG SRC="http://media.xoom.com/bopics/clear.gif" WIDTH="314" HEIGHT="2" HSPACE="0" VSPACE="0"><BR> 
+
+
+
+
+
+<SPAN CLASS=X9>
+&nbsp;&nbsp;&nbsp;<A HREF="http://xoom.com/about">About XOOM.com</A> | <A HREF="http://xoom.com/about/advertising">Advertise!</A> | <A HREF="http://xoom.com/PPS">Privacy Policy Statement</A> | <A HREF="http://xoom.com/TOS">Terms of Service</A><BR>
+<A HREF="http://xoom.com/copyright">Copyright</A> &copy; 1997, 1998, 1999 XOOM.com and its licensors. All rights reserved.	
+</SPAN>
+<BR CLEAR=ALL>
+<IMG SRC="http://media.xoom.com/bopics/clear.gif" WIDTH="314" HEIGHT="5" HSPACE="0" VSPACE="0"><BR> 
+</TD>
+<TD WIDTH=2 BGCOLOR=#000000><SPACER TYPE="BLOCK" WIDTH=2 HEIGHT=2></TD>
+</TR>
+
+</TABLE>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=489 HEIGHT=2><TR>
+<TD HEIGHT=2 BGCOLOR=#000000 COLSPAN=2 WIDTH=489><SPACER TYPE="BLOCK" WIDTH=1 HEIGHT=2></TD></TR>
+</TABLE>
+
+</TD>
+</TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP COLSPAN=2><IMG SRC="http://media.xoom.com/bopics/fade_bottom.gif" WIDTH=250 HEIGHT=20></TD></TR>
+</TABLE>
+
+
+
+
+
+</BODY>
+</HTML>
+
+
+
