@@ -278,6 +278,35 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             file.GetTrackChunks().RemoveTimedEvents(match);
         }
 
+        public static void AddTimedEvents(this EventsCollection eventsCollection, IEnumerable<TimedEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            using (var timedEventsManager = eventsCollection.ManageTimedEvents())
+            {
+                timedEventsManager.Events.Add(events);
+            }
+        }
+
+        public static void AddTimedEvents(this TrackChunk trackChunk, IEnumerable<TimedEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            trackChunk.Events.AddTimedEvents(events);
+        }
+
+        public static MidiFile ToFile(this IEnumerable<TimedEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            var trackChunk = new TrackChunk();
+            trackChunk.AddTimedEvents(events);
+
+            return new MidiFile(trackChunk);
+        }
+
         #endregion
     }
 }

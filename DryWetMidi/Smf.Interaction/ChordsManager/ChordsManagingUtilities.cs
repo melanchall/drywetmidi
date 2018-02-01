@@ -291,6 +291,35 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             file.GetTrackChunks().RemoveChords(match, notesTolerance);
         }
 
+        public static void AddChords(this EventsCollection eventsCollection, IEnumerable<Chord> chords)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(chords), chords);
+
+            using (var chordsManager = eventsCollection.ManageChords())
+            {
+                chordsManager.Chords.Add(chords);
+            }
+        }
+
+        public static void AddChords(this TrackChunk trackChunk, IEnumerable<Chord> chords)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(chords), chords);
+
+            trackChunk.Events.AddChords(chords);
+        }
+
+        public static MidiFile ToFile(this IEnumerable<Chord> chords)
+        {
+            ThrowIfArgument.IsNull(nameof(chords), chords);
+
+            var trackChunk = new TrackChunk();
+            trackChunk.AddChords(chords);
+
+            return new MidiFile(trackChunk);
+        }
+
         #endregion
     }
 }
