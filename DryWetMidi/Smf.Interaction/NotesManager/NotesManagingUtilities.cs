@@ -235,6 +235,35 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             file.GetTrackChunks().RemoveNotes(match);
         }
 
+        public static void AddNotes(this EventsCollection eventsCollection, IEnumerable<Note> notes)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+
+            using (var notesManager = eventsCollection.ManageNotes())
+            {
+                notesManager.Notes.Add(notes);
+            }
+        }
+
+        public static void AddNotes(this TrackChunk trackChunk, IEnumerable<Note> notes)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+
+            trackChunk.Events.AddNotes(notes);
+        }
+
+        public static MidiFile ToFile(this IEnumerable<Note> notes)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+
+            var trackChunk = new TrackChunk();
+            trackChunk.AddNotes(notes);
+
+            return new MidiFile(trackChunk);
+        }
+
         #endregion
     }
 }
