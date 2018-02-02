@@ -311,14 +311,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             trackChunk.Events.AddChords(chords);
         }
 
-        public static MidiFile ToFile(this IEnumerable<Chord> chords)
+        public static TrackChunk ToTrackChunk(this IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
 
             var trackChunk = new TrackChunk();
             trackChunk.AddChords(chords);
 
-            return new MidiFile(trackChunk);
+            return trackChunk;
+        }
+
+        public static MidiFile ToFile(this IEnumerable<Chord> chords)
+        {
+            ThrowIfArgument.IsNull(nameof(chords), chords);
+
+            return new MidiFile(chords.ToTrackChunk());
         }
 
         #endregion

@@ -255,14 +255,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             trackChunk.Events.AddNotes(notes);
         }
 
-        public static MidiFile ToFile(this IEnumerable<Note> notes)
+        public static TrackChunk ToTrackChunk(this IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
             var trackChunk = new TrackChunk();
             trackChunk.AddNotes(notes);
 
-            return new MidiFile(trackChunk);
+            return trackChunk;
+        }
+
+        public static MidiFile ToFile(this IEnumerable<Note> notes)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+
+            return new MidiFile(notes.ToTrackChunk());
         }
 
         #endregion
