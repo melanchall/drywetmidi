@@ -103,7 +103,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             return trackChunks.Where(c => c != null)
                               .SelectMany(c => c.GetChords(notesTolerance))
-                              .OrderBy(c => c.Time);
+                              .OrderBy(c => c.Time)
+                              .ToList();
         }
 
         /// <summary>

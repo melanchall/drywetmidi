@@ -156,7 +156,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Smf.Interaction\NotesManager\NotesManagingUtilitiesGetNotesBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\ChordsManager\ChordsManagingUtilities\ChordsManagingUtilitiesGetChordsBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\NotesManagingUtilities\NotesManagingUtilitiesGetNotesBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\TimedEventsManager\TimedEventsManagingUtilities\TimedEventsManagingUtilitiesGetTimedEventsBenchmarks.cs" />
     <Compile Include="Smf\MidiFile\MidiFileReadBenchmarks.cs" />
   </ItemGroup>
   <ItemGroup>
