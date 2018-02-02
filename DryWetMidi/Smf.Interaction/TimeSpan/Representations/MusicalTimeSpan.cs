@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public MusicalTimeSpan(long numerator, long denominator)
         {
             ThrowIfArgument.IsNegative(nameof(numerator), numerator, "Numerator is negative.");
-            ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is negative.");
+            ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is zero or negative.");
 
             var greatestCommonDivisor = MathUtilities.GreatestCommonDivisor(numerator, denominator);
 

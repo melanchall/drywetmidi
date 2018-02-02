@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Smf
             {
                 ThrowIfArgument.IsNonpositive(nameof(value),
                                               value,
-                                              "Value of microseconds per quarter note is negative.");
+                                              "Value of microseconds per quarter note is zero or negative.");
 
                 _microsecondsPerBeat = value;
             }
