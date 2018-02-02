@@ -10,6 +10,8 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
     [TestClass]
     public class MidiFileReadBenchmarks
     {
+        #region Nested classes
+
         [ClrJob(isBaseline: true)]
         public class Benchmarks
         {
@@ -88,11 +90,17 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
             }
         }
 
+        #endregion
+
+        #region Test methods
+
         [TestMethod]
         [Description("Benchmark MidiFile.Read method.")]
         public void Read()
         {
             BenchmarkRunner.Run<Benchmarks>();
         }
+
+        #endregion
     }
 }
