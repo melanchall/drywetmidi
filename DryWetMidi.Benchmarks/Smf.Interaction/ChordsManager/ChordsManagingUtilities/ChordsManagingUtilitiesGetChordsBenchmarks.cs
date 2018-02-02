@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Jobs;
@@ -10,23 +10,23 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 {
     [TestClass]
-    public class NotesManagingUtilitiesGetNotesBenchmarks
+    public class ChordsManagingUtilitiesGetChordsBenchmarks
     {
         #region Nested classes
 
         [ClrJob]
         public class Benchmarks
         {
-            private static readonly MidiFile _midiFile = CreateTestFile();
+            private static readonly IEnumerable<Chord> _midiFileChords = CreateTestFile().GetChords();
 
             [Benchmark]
-            public void GetNotes_MidiFile()
+            public void GetChords_MidiFile()
             {
-                var notes = _midiFile.GetNotes();
+                const int iterationsNumber = 10;
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < iterationsNumber; i++)
                 {
-                    foreach (var note in notes)
+                    foreach (var chord in _midiFileChords)
                     {
                     }
                 }
@@ -35,8 +35,9 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
             private static MidiFile CreateTestFile()
             {
                 const int trackChunksNumber = 100;
-                const int notesNumberPerTrackChunk = 1000;
+                const int chordsPerTrackChunk = 1000;
                 const int noteLength = 100;
+                const int notesPerChord = 10;
 
                 var midiFile = new MidiFile();
 
@@ -44,10 +45,15 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
                 {
                     var trackChunk = new TrackChunk();
 
-                    using (var notesManager = trackChunk.ManageNotes())
+                    using (var chordsManager = trackChunk.ManageChords())
                     {
-                        notesManager.Notes.Add(Enumerable.Range(0, notesNumberPerTrackChunk)
-                                                         .Select(j => new Note((SevenBitNumber)(j % SevenBitNumber.MaxValue), noteLength, j)));
+                        for (int j = 0; j < chordsPerTrackChunk; j++)
+                        {
+                            var noteNumber = (SevenBitNumber)(j % SevenBitNumber.MaxValue);
+                            var notes = Enumerable.Range(0, notesPerChord).Select(_ => new Note(noteNumber, noteLength));
+
+                            chordsManager.Chords.Add(new Chord(notes, j));
+                        }
                     }
 
                     midiFile.Chunks.Add(trackChunk);
@@ -62,8 +68,8 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Test methods
 
         [TestMethod]
-        [Description("Benchmark NotesManagingUtilities.GetNotes method.")]
-        public void GetNotes()
+        [Description("Benchmark ChordsManagingUtilities.GetChords method.")]
+        public void GetChords()
         {
             BenchmarkRunner.Run<Benchmarks>();
         }
