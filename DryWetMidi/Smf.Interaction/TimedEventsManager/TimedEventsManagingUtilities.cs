@@ -298,14 +298,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             trackChunk.Events.AddTimedEvents(events);
         }
 
-        public static MidiFile ToFile(this IEnumerable<TimedEvent> events)
+        public static TrackChunk ToTrackChunk(this IEnumerable<TimedEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
 
             var trackChunk = new TrackChunk();
             trackChunk.AddTimedEvents(events);
 
-            return new MidiFile(trackChunk);
+            return trackChunk;
+        }
+
+        public static MidiFile ToFile(this IEnumerable<TimedEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            return new MidiFile(events.ToTrackChunk());
         }
 
         #endregion
