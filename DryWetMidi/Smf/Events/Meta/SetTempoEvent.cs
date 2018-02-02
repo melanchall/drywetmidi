@@ -58,9 +58,9 @@ namespace Melanchall.DryWetMidi.Smf
             get { return _microsecondsPerBeat; }
             set
             {
-                ThrowIfArgument.IsNegative(nameof(value),
-                                            value,
-                                            "Value of microseconds per quarter note is negative.");
+                ThrowIfArgument.IsNonpositive(nameof(value),
+                                              value,
+                                              "Value of microseconds per quarter note is negative.");
 
                 _microsecondsPerBeat = value;
             }
