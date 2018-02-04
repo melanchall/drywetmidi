@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Smf;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
 using System;
 using System.Collections.Generic;
 using System.Linq;

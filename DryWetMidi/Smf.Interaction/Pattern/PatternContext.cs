@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -29,14 +30,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public TempoMap TempoMap { get; }
 
         public FourBitNumber Channel { get; }
-
-        //public SevenBitNumber DefaultVelocity { get; set; } = Note.DefaultVelocity;
-
-        //public ILength DefaultNoteLength { get; set; } = (MusicalLength)MusicalFraction.Quarter;
-
-        //public ILength DefaultStep { get; set; } = (MusicalLength)MusicalFraction.Quarter;
-
-        //public OctaveDefinition DefaultOctave { get; set; } = OctaveDefinition.Get(4);
 
         #endregion
 

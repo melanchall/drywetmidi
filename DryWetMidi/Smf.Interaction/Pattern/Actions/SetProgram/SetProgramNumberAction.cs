@@ -1,4 +1,4 @@
-﻿using Melanchall.DryWetMidi.Standards;
+﻿using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {

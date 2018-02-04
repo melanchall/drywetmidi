@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Smf;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
