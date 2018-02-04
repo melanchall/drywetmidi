@@ -46,6 +46,10 @@
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
     <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
+    <Compile Include="MusicTheory\Scale\Scale.cs" />
+    <Compile Include="MusicTheory\Scale\ScaleDegree.cs" />
+    <Compile Include="MusicTheory\Scale\ScaleIntervals.cs" />
+    <Compile Include="MusicTheory\Scale\ScaleUtilities.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidi2ProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidiProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetProgramNumberAction.cs" />
