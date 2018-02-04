@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 foreach (var interval in scale.Intervals)
                 {
                     noteNumber += interval;
-                    if (noteNumber < SevenBitNumber.MinValue || noteNumber > SevenBitNumber.MaxValue)
+                    if (!NoteUtilities.IsNoteNumberValid(noteNumber))
                         yield break;
 
                     yield return Note.Get((SevenBitNumber)noteNumber);
