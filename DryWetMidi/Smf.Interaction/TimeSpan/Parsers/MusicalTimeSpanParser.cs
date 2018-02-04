@@ -79,9 +79,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var fractionMnemonicGroup = match.Groups[FractionMnemonicGroupName];
             if (fractionMnemonicGroup.Success)
             {
-                var fractionDefinition = Fractions[fractionMnemonicGroup.Value];
-                numerator = fractionDefinition.Item1;
-                denominator = fractionDefinition.Item2;
+                var fraction = Fractions[fractionMnemonicGroup.Value];
+                numerator = fraction.Item1;
+                denominator = fraction.Item2;
             }
 
             // Tuplet
@@ -97,9 +97,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var tupletMnemonicGroup = match.Groups[TupletMnemonicGroupName];
             if (tupletMnemonicGroup.Success)
             {
-                var tupletDefinition = Tuplets[tupletMnemonicGroup.Value];
-                tupletNotesCount = tupletDefinition.Item1;
-                tupletSpaceSize = tupletDefinition.Item2;
+                var tuplet = Tuplets[tupletMnemonicGroup.Value];
+                tupletNotesCount = tuplet.Item1;
+                tupletSpaceSize = tuplet.Item2;
             }
 
             // Dots

@@ -183,73 +183,73 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
-            return Note(_octave.GetNoteDefinition(noteName), length, velocity);
+            return Note(_octave.GetNote(noteName), length, velocity);
         }
 
         /// <summary>
-        /// Adds a note by the specified definition using default length and velocity.
+        /// Adds a note using default length and velocity.
         /// </summary>
-        /// <param name="noteDefinition">The definition of a note.</param>
+        /// <param name="note">A note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
-        public PatternBuilder Note(MusicTheory.Note noteDefinition)
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        public PatternBuilder Note(MusicTheory.Note note)
         {
-            return Note(noteDefinition, _noteLength, _velocity);
+            return Note(note, _noteLength, _velocity);
         }
 
         /// <summary>
-        /// Adds a note by the specified definition using specified length and default velocity.
+        /// Adds a note using specified length and default velocity.
         /// </summary>
-        /// <param name="noteDefinition">The definition of a note.</param>
+        /// <param name="note">A note.</param>
         /// <param name="length">The length of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(MusicTheory.Note noteDefinition, ITimeSpan length)
+        public PatternBuilder Note(MusicTheory.Note note, ITimeSpan length)
         {
-            return Note(noteDefinition, length, _velocity);
+            return Note(note, length, _velocity);
         }
 
         /// <summary>
-        /// Adds a note by the specified definition using specified velocity and default length.
+        /// Adds a note using specified velocity and default length.
         /// </summary>
-        /// <param name="noteDefinition">The definition of a note.</param>
+        /// <param name="note">A note.</param>
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
-        public PatternBuilder Note(MusicTheory.Note noteDefinition, SevenBitNumber velocity)
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        public PatternBuilder Note(MusicTheory.Note note, SevenBitNumber velocity)
         {
-            return Note(noteDefinition, _noteLength, velocity);
+            return Note(note, _noteLength, velocity);
         }
 
         /// <summary>
-        /// Adds a note by the specified definition using specified velocity and length.
+        /// Adds a note using specified velocity and length.
         /// </summary>
-        /// <param name="noteDefinition">The definition of a note.</param>
-        /// <param name="length">The length of a note.</param>
+        /// <param name="note">The note.</param>
+        /// <param name="length">The length of the note.</param>
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(MusicTheory.Note noteDefinition, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Note(MusicTheory.Note note, ITimeSpan length, SevenBitNumber velocity)
         {
-            ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
+            ThrowIfArgument.IsNull(nameof(note), note);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return AddAction(new AddNoteAction(noteDefinition, velocity, length));
+            return AddAction(new AddNoteAction(note, velocity, length));
         }
 
         #endregion
@@ -259,7 +259,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Adds a chord by the specified intervals and root note's name.
         /// </summary>
-        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="intervals">Intervals that represent the chord.</param>
         /// <param name="rootNoteName">The root note's name of the chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
@@ -268,17 +268,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions, NoteName rootNoteName)
+        public PatternBuilder Chord(IEnumerable<Interval> intervals, NoteName rootNoteName)
         {
-            return Chord(intervalDefinitions, rootNoteName, _noteLength, _velocity);
+            return Chord(intervals, rootNoteName, _noteLength, _velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified intervals, root note's name and length.
         /// </summary>
-        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="intervals">Intervals that represent the chord.</param>
         /// <param name="rootNoteName">The root note's name of the chord.</param>
         /// <param name="length">The length of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
@@ -287,20 +287,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
+        public PatternBuilder Chord(IEnumerable<Interval> intervals,
                                     NoteName rootNoteName,
                                     ITimeSpan length)
         {
-            return Chord(intervalDefinitions, rootNoteName, length, _velocity);
+            return Chord(intervals, rootNoteName, length, _velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified intervals, root note's name and velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="intervals">Intervals that represent the chord.</param>
         /// <param name="rootNoteName">The root note's name of the chord.</param>
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
@@ -309,136 +309,136 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
+        public PatternBuilder Chord(IEnumerable<Interval> intervals,
                                     NoteName rootNoteName,
                                     SevenBitNumber velocity)
         {
-            return Chord(intervalDefinitions, rootNoteName, _noteLength, velocity);
+            return Chord(intervals, rootNoteName, _noteLength, velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified intervals, root note's name, length and velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">Intervals that represent the chord.</param>
+        /// <param name="intervals">Intervals that represent the chord.</param>
         /// <param name="rootNoteName">The root note's name of the chord.</param>
         /// <param name="length">The length of a chord.</param>
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
+        public PatternBuilder Chord(IEnumerable<Interval> intervals,
                                     NoteName rootNoteName,
                                     ITimeSpan length,
                                     SevenBitNumber velocity)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
 
-            return Chord(intervalDefinitions, _octave.GetNoteDefinition(rootNoteName), length, velocity);
+            return Chord(intervals, _octave.GetNote(rootNoteName), length, velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified intervals relative to the root note using default
         /// length and velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
-        /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
-        /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
+        /// <param name="intervals">The <see cref="Interval"/> objects which define
+        /// a numbers of half steps from the <paramref name="rootNote"/>.</param>
+        /// <param name="rootNote">The chord's root note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// The result chord will contain the specified root note and notes produced by transposing
-        /// the <paramref name="rootNoteDefinition"/> by the <paramref name="intervalDefinitions"/>.
+        /// the <paramref name="rootNote"/> by the <paramref name="intervals"/>.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
-        /// <paramref name="rootNoteDefinition"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null. -or-
+        /// <paramref name="rootNote"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions, MusicTheory.Note rootNoteDefinition)
+        public PatternBuilder Chord(IEnumerable<Interval> intervals, MusicTheory.Note rootNote)
         {
-            return Chord(intervalDefinitions, rootNoteDefinition, _noteLength, _velocity);
+            return Chord(intervals, rootNote, _noteLength, _velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified intervals relative to the root note using specified
         /// length and default velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
-        /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
-        /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
+        /// <param name="interval">The <see cref="Interval"/> objects which define
+        /// a numbers of half steps from the <paramref name="rootNote"/>.</param>
+        /// <param name="rootNote">The chord's root note.</param>
         /// <param name="length">The length of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// The result chord will contain the specified root note and notes produced by transposing
-        /// the <paramref name="rootNoteDefinition"/> by the <paramref name="intervalDefinitions"/>.
+        /// the <paramref name="rootNote"/> by the <paramref name="interval"/>.
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
-        /// <paramref name="rootNoteDefinition"/> is null. -or- <paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null. -or-
+        /// <paramref name="rootNote"/> is null. -or- <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
-                                    MusicTheory.Note rootNoteDefinition,
+        public PatternBuilder Chord(IEnumerable<Interval> interval,
+                                    MusicTheory.Note rootNote,
                                     ITimeSpan length)
         {
-            return Chord(intervalDefinitions, rootNoteDefinition, length, _velocity);
+            return Chord(interval, rootNote, length, _velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified intervals relative to the root note using default
         /// length and specified velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
-        /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
-        /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
+        /// <param name="intervals">The <see cref="Interval"/> objects which define
+        /// a numbers of half steps from the <paramref name="rootNote"/>.</param>
+        /// <param name="rootNote">The chord's root note.</param>
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// The result chord will contain the specified root note and notes produced by transposing
-        /// the <paramref name="rootNoteDefinition"/> by the <paramref name="intervalDefinitions"/>.
+        /// the <paramref name="rootNote"/> by the <paramref name="intervals"/>.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
-        /// <paramref name="rootNoteDefinition"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null. -or-
+        /// <paramref name="rootNote"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
-                                    MusicTheory.Note rootNoteDefinition,
+        public PatternBuilder Chord(IEnumerable<Interval> intervals,
+                                    MusicTheory.Note rootNote,
                                     SevenBitNumber velocity)
         {
-            return Chord(intervalDefinitions, rootNoteDefinition, _noteLength, velocity);
+            return Chord(intervals, rootNote, _noteLength, velocity);
         }
 
         /// <summary>
         /// Adds a chord by the specified intervals relative to the root note using specified
         /// length and velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
-        /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
-        /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
+        /// <param name="intervals">The <see cref="Interval"/> objects which define
+        /// a numbers of half steps from the <paramref name="rootNote"/>.</param>
+        /// <param name="rootNote">The chord's root note.</param>
         /// <param name="length">The length of a chord.</param>
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// The result chord will contain the specified root note and notes produced by transposing
-        /// the <paramref name="rootNoteDefinition"/> by the <paramref name="intervalDefinitions"/>.
+        /// the <paramref name="rootNote"/> by the <paramref name="intervals"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
-        /// <paramref name="rootNoteDefinition"/> is null. -or- <paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null. -or-
+        /// <paramref name="rootNote"/> is null. -or- <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
-                                    MusicTheory.Note rootNoteDefinition,
+        public PatternBuilder Chord(IEnumerable<Interval> intervals,
+                                    MusicTheory.Note rootNote,
                                     ITimeSpan length,
                                     SevenBitNumber velocity)
         {
-            ThrowIfArgument.IsNull(nameof(intervalDefinitions), intervalDefinitions);
-            ThrowIfArgument.IsNull(nameof(rootNoteDefinition), rootNoteDefinition);
+            ThrowIfArgument.IsNull(nameof(intervals), intervals);
+            ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
 
-            return Chord(new[] { rootNoteDefinition }.Concat(intervalDefinitions.Where(i => i != null)
-                                                                                .Select(i => rootNoteDefinition.Transpose(i))),
+            return Chord(new[] { rootNote }.Concat(intervals.Where(i => i != null)
+                                                                      .Select(i => rootNote.Transpose(i))),
                          length,
                          velocity);
         }
@@ -512,73 +512,73 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(noteNames), noteNames);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return Chord(noteNames.Select(n => _octave.GetNoteDefinition(n)), length, velocity);
+            return Chord(noteNames.Select(n => _octave.GetNote(n)), length, velocity);
         }
 
         /// <summary>
-        /// Adds a chord by the specified notes definitions using default velocity and length.
+        /// Adds a chord by the specified notes using default velocity and length.
         /// </summary>
-        /// <param name="noteDefinitions">Definitions of notes that represent a chord.</param>
+        /// <param name="notes">Notes that represent a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions)
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes)
         {
-            return Chord(noteDefinitions, _noteLength, _velocity);
+            return Chord(notes, _noteLength, _velocity);
         }
 
         /// <summary>
-        /// Adds a chord by the specified notes definitions using specified length and default velocity.
+        /// Adds a chord by the specified notes using specified length and default velocity.
         /// </summary>
-        /// <param name="noteDefinitions">Definitions of notes that represent a chord.</param>
+        /// <param name="notes">Notes that represent a chord.</param>
         /// <param name="length">The length of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions, ITimeSpan length)
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, ITimeSpan length)
         {
-            return Chord(noteDefinitions, length, _velocity);
+            return Chord(notes, length, _velocity);
         }
 
         /// <summary>
-        /// Adds a chord by the specified notes definitions using specified velocity and default length.
+        /// Adds a chord by the specified notes using specified velocity and default length.
         /// </summary>
-        /// <param name="noteDefinitions">Definitions of notes that represent a chord.</param>
+        /// <param name="notes">Notes that represent a chord.</param>
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions, SevenBitNumber velocity)
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, SevenBitNumber velocity)
         {
-            return Chord(noteDefinitions, _noteLength, velocity);
+            return Chord(notes, _noteLength, velocity);
         }
 
         /// <summary>
-        /// Adds a chord by the specified notes definitions using specified velocity and length.
+        /// Adds a chord by the specified notes using specified velocity and length.
         /// </summary>
-        /// <param name="noteDefinitions">Definitions of notes that represent a chord.</param>
+        /// <param name="notes">Notes that represent a chord.</param>
         /// <param name="length">The length of a chord.</param>
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, ITimeSpan length, SevenBitNumber velocity)
         {
-            ThrowIfArgument.IsNull(nameof(noteDefinitions), noteDefinitions);
+            ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return AddAction(new AddChordAction(noteDefinitions, velocity, length));
+            return AddAction(new AddChordAction(notes, velocity, length));
         }
 
         #endregion
@@ -920,17 +920,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Sets a root note that will be used by next actions of the builder using
         /// <see cref="Interval"/> objects.
         /// </summary>
-        /// <param name="rootNoteDefinition">The definition of the root note.</param>
+        /// <param name="rootNote">The root note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// Setting a root note is not an action and thus will not be stored in a pattern.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="rootNoteDefinition"/> is null.</exception>
-        public PatternBuilder SetRootNote(MusicTheory.Note rootNoteDefinition)
+        /// <exception cref="ArgumentNullException"><paramref name="rootNote"/> is null.</exception>
+        public PatternBuilder SetRootNote(MusicTheory.Note rootNote)
         {
-            ThrowIfArgument.IsNull(nameof(rootNoteDefinition), rootNoteDefinition);
+            ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
 
-            _rootNote = rootNoteDefinition;
+            _rootNote = rootNote;
             return this;
         }
 

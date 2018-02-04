@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.MusicTheory
 {
     /// <summary>
-    /// Represents a note definition, i.e. note name and octave.
+    /// Represents a note, i.e. note name and octave.
     /// </summary>
     public sealed class Note
     {
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="interval">The <see cref="Interval"/> to transpose the current
         /// <see cref="Note"/> by.</param>
         /// <returns>The current <see cref="Note"/> transposed by the <paramref name="interval"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
         public Note Transpose(Interval interval)
         {
             return Get((SevenBitNumber)(NoteNumber + interval.HalfSteps));
@@ -73,11 +73,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Note"/> for the <paramref name="noteNumber"/>.</returns>
         public static Note Get(SevenBitNumber noteNumber)
         {
-            Note noteDefinition;
-            if (!_cache.TryGetValue(noteNumber, out noteDefinition))
-                _cache.Add(noteNumber, noteDefinition = new Note(noteNumber));
+            Note note;
+            if (!_cache.TryGetValue(noteNumber, out note))
+                _cache.Add(noteNumber, note = new Note(noteNumber));
 
-            return noteDefinition;
+            return note;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Note"/> for the <paramref name="noteName"/> and <paramref name="octave"/>.</returns>
         /// <remarks>
         /// Octave number is specified in scientific pitch notation which means that 4 must be
-        /// passed to <paramref name="octave"/> to get the middle C definition.
+        /// passed to <paramref name="octave"/> to get the middle C.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
         /// invalid value.</exception>
@@ -106,59 +106,59 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <summary>
         /// Determines if two <see cref="Note"/> objects are equal.
         /// </summary>
-        /// <param name="noteDefinition1">The first <see cref="Note"/> to compare.</param>
-        /// <param name="noteDefinition2">The second <see cref="Note"/> to compare.</param>
-        /// <returns>true if the note definitions are equal, false otherwise.</returns>
-        public static bool operator ==(Note noteDefinition1, Note noteDefinition2)
+        /// <param name="note1">The first <see cref="Note"/> to compare.</param>
+        /// <param name="note2">The second <see cref="Note"/> to compare.</param>
+        /// <returns>true if the notes are equal, false otherwise.</returns>
+        public static bool operator ==(Note note1, Note note2)
         {
-            if (ReferenceEquals(noteDefinition1, noteDefinition2))
+            if (ReferenceEquals(note1, note2))
                 return true;
 
-            if (ReferenceEquals(null, noteDefinition1) || ReferenceEquals(null, noteDefinition2))
+            if (ReferenceEquals(null, note1) || ReferenceEquals(null, note2))
                 return false;
 
-            return noteDefinition1.NoteNumber == noteDefinition2.NoteNumber;
+            return note1.NoteNumber == note2.NoteNumber;
         }
 
         /// <summary>
         /// Determines if two <see cref="Note"/> objects are not equal.
         /// </summary>
-        /// <param name="noteDefinition1">The first <see cref="Note"/> to compare.</param>
-        /// <param name="noteDefinition2">The second <see cref="Note"/> to compare.</param>
-        /// <returns>false if the note definitions are equal, true otherwise.</returns>
-        public static bool operator !=(Note noteDefinition1, Note noteDefinition2)
+        /// <param name="note1">The first <see cref="Note"/> to compare.</param>
+        /// <param name="note2">The second <see cref="Note"/> to compare.</param>
+        /// <returns>false if the notes are equal, true otherwise.</returns>
+        public static bool operator !=(Note note1, Note note2)
         {
-            return !(noteDefinition1 == noteDefinition2);
+            return !(note1 == note2);
         }
 
         /// <summary>
         /// Transposes the specified <see cref="Note"/>.
         /// </summary>
-        /// <param name="noteDefinition">The <see cref="Note"/> to transpose.</param>
-        /// <param name="halfSteps">The number of half steps to transpose the <paramref name="noteDefinition"/> by.</param>
-        /// <returns>The <see cref="Note"/> which is the <paramref name="noteDefinition"/>
+        /// <param name="note">The <see cref="Note"/> to transpose.</param>
+        /// <param name="halfSteps">The number of half steps to transpose the <paramref name="note"/> by.</param>
+        /// <returns>The <see cref="Note"/> which is the <paramref name="note"/>
         /// transposed by the <paramref name="halfSteps"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
-        public static Note operator +(Note noteDefinition, int halfSteps)
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
+        public static Note operator +(Note note, int halfSteps)
         {
-            ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
+            ThrowIfArgument.IsNull(nameof(note), note);
 
-            return noteDefinition.Transpose(Interval.FromHalfSteps(halfSteps));
+            return note.Transpose(Interval.FromHalfSteps(halfSteps));
         }
 
         /// <summary>
         /// Transposes the specified <see cref="Note"/>.
         /// </summary>
-        /// <param name="noteDefinition">The <see cref="Note"/> to transpose.</param>
-        /// <param name="halfSteps">The number of half steps to transpose the <paramref name="noteDefinition"/> by.</param>
-        /// <returns>The <see cref="Note"/> which is the <paramref name="noteDefinition"/>
+        /// <param name="note">The <see cref="Note"/> to transpose.</param>
+        /// <param name="halfSteps">The number of half steps to transpose the <paramref name="note"/> by.</param>
+        /// <returns>The <see cref="Note"/> which is the <paramref name="note"/>
         /// transposed by the <paramref name="halfSteps"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
-        public static Note operator -(Note noteDefinition, int halfSteps)
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
+        public static Note operator -(Note note, int halfSteps)
         {
-            return noteDefinition + (-halfSteps);
+            return note + (-halfSteps);
         }
 
         #endregion
