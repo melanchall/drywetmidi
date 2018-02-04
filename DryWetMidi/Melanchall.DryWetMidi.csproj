@@ -54,9 +54,9 @@
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidiProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetProgramNumberAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddTextEventAction.cs" />
-    <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDefinition.cs" />
-    <Compile Include="Smf.Interaction\Pattern\Definitions\IntervalDirection.cs" />
-    <Compile Include="Smf.Interaction\Pattern\Definitions\OctaveDefinition.cs" />
+    <Compile Include="MusicTheory\Interval.cs" />
+    <Compile Include="MusicTheory\IntervalDirection.cs" />
+    <Compile Include="MusicTheory\Octave.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddAnchorAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddChordAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\AddPatternAction.cs" />
@@ -67,7 +67,7 @@
     <Compile Include="Smf.Interaction\Pattern\Actions\StepBackAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\StepAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\StepForwardAction.cs" />
-    <Compile Include="Smf.Interaction\Pattern\Definitions\NoteDefinition.cs" />
+    <Compile Include="MusicTheory\Note.cs" />
     <Compile Include="Smf.Interaction\Pattern\Pattern.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternBuilder.cs" />
     <Compile Include="Smf.Interaction\Pattern\IPatternAction.cs" />

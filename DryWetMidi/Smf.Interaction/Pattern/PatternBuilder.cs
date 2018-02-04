@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Standards;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private SevenBitNumber _velocity = Interaction.Note.DefaultVelocity;
         private ITimeSpan _noteLength = MusicalTimeSpan.Quarter;
         private ITimeSpan _step = MusicalTimeSpan.Quarter;
-        private OctaveDefinition _octave = OctaveDefinition.Middle;
-        private NoteDefinition _rootNote = OctaveDefinition.Middle.C;
+        private Octave _octave = Octave.Middle;
+        private MusicTheory.Note _rootNote = Octave.Middle.C;
 
         #endregion
 
@@ -35,83 +36,83 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Adds a note by the specified interval relative to the current root note using
         /// default length and velocity.
         /// </summary>
-        /// <param name="intervalDefinition">The <see cref="IntervalDefinition"/> which defines
+        /// <param name="interval">The <see cref="Interval"/> which defines
         /// a number of half steps from the current root note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(NoteDefinition)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
-        public PatternBuilder Note(IntervalDefinition intervalDefinition)
+        public PatternBuilder Note(Interval interval)
         {
-            return Note(intervalDefinition, _noteLength, _velocity);
+            return Note(interval, _noteLength, _velocity);
         }
 
         /// <summary>
         /// Adds a note by the specified interval relative to the current root note using
         /// specified length and default velocity.
         /// </summary>
-        /// <param name="intervalDefinition">The <see cref="IntervalDefinition"/> which defines
+        /// <param name="interval">The <see cref="Interval"/> which defines
         /// a number of half steps from the current root note.</param>
         /// <param name="length">The length of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(NoteDefinition)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
-        public PatternBuilder Note(IntervalDefinition intervalDefinition, ITimeSpan length)
+        public PatternBuilder Note(Interval interval, ITimeSpan length)
         {
-            return Note(intervalDefinition, length, _velocity);
+            return Note(interval, length, _velocity);
         }
 
         /// <summary>
         /// Adds a note by the specified interval relative to the current root note using
         /// default length and specified velocity.
         /// </summary>
-        /// <param name="intervalDefinition">The <see cref="IntervalDefinition"/> which defines
+        /// <param name="interval">The <see cref="Interval"/> which defines
         /// a number of half steps from the current root note.</param>
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(NoteDefinition)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
-        public PatternBuilder Note(IntervalDefinition intervalDefinition, SevenBitNumber velocity)
+        public PatternBuilder Note(Interval interval, SevenBitNumber velocity)
         {
-            return Note(intervalDefinition, _noteLength, velocity);
+            return Note(interval, _noteLength, velocity);
         }
 
         /// <summary>
         /// Adds a note by the specified interval relative to the current root note using
         /// specified length and velocity.
         /// </summary>
-        /// <param name="intervalDefinition">The <see cref="IntervalDefinition"/> which defines
+        /// <param name="interval">The <see cref="Interval"/> which defines
         /// a number of half steps from the current root note.</param>
         /// <param name="length">The length of a note.</param>
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(NoteDefinition)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null. -or-
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
-        public PatternBuilder Note(IntervalDefinition intervalDefinition, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Note(Interval interval, ITimeSpan length, SevenBitNumber velocity)
         {
-            ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
+            ThrowIfArgument.IsNull(nameof(interval), interval);
 
-            return Note(_rootNote.Transpose(intervalDefinition), length, velocity);
+            return Note(_rootNote.Transpose(interval), length, velocity);
         }
 
         /// <summary>
@@ -196,7 +197,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
-        public PatternBuilder Note(NoteDefinition noteDefinition)
+        public PatternBuilder Note(MusicTheory.Note noteDefinition)
         {
             return Note(noteDefinition, _noteLength, _velocity);
         }
@@ -213,7 +214,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteDefinition noteDefinition, ITimeSpan length)
+        public PatternBuilder Note(MusicTheory.Note noteDefinition, ITimeSpan length)
         {
             return Note(noteDefinition, length, _velocity);
         }
@@ -229,7 +230,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
-        public PatternBuilder Note(NoteDefinition noteDefinition, SevenBitNumber velocity)
+        public PatternBuilder Note(MusicTheory.Note noteDefinition, SevenBitNumber velocity)
         {
             return Note(noteDefinition, _noteLength, velocity);
         }
@@ -243,7 +244,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Note(NoteDefinition noteDefinition, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Note(MusicTheory.Note noteDefinition, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -269,7 +270,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions, NoteName rootNoteName)
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions, NoteName rootNoteName)
         {
             return Chord(intervalDefinitions, rootNoteName, _noteLength, _velocity);
         }
@@ -289,7 +290,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
                                     NoteName rootNoteName,
                                     ITimeSpan length)
         {
@@ -310,7 +311,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
                                     NoteName rootNoteName,
                                     SevenBitNumber velocity)
         {
@@ -328,7 +329,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
                                     NoteName rootNoteName,
                                     ITimeSpan length,
                                     SevenBitNumber velocity)
@@ -342,7 +343,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Adds a chord by the specified intervals relative to the root note using default
         /// length and velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="IntervalDefinition"/> objects which define
+        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
         /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
         /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
@@ -356,7 +357,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
         /// <paramref name="rootNoteDefinition"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions, NoteDefinition rootNoteDefinition)
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions, MusicTheory.Note rootNoteDefinition)
         {
             return Chord(intervalDefinitions, rootNoteDefinition, _noteLength, _velocity);
         }
@@ -365,7 +366,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Adds a chord by the specified intervals relative to the root note using specified
         /// length and default velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="IntervalDefinition"/> objects which define
+        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
         /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
         /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
         /// <param name="length">The length of a chord.</param>
@@ -379,8 +380,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
         /// <paramref name="rootNoteDefinition"/> is null. -or- <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
-                                    NoteDefinition rootNoteDefinition,
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
+                                    MusicTheory.Note rootNoteDefinition,
                                     ITimeSpan length)
         {
             return Chord(intervalDefinitions, rootNoteDefinition, length, _velocity);
@@ -390,7 +391,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Adds a chord by the specified intervals relative to the root note using default
         /// length and specified velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="IntervalDefinition"/> objects which define
+        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
         /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
         /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
         /// <param name="velocity">The velocity of a chord.</param>
@@ -404,8 +405,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
         /// <paramref name="rootNoteDefinition"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
-                                    NoteDefinition rootNoteDefinition,
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
+                                    MusicTheory.Note rootNoteDefinition,
                                     SevenBitNumber velocity)
         {
             return Chord(intervalDefinitions, rootNoteDefinition, _noteLength, velocity);
@@ -415,7 +416,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Adds a chord by the specified intervals relative to the root note using specified
         /// length and velocity.
         /// </summary>
-        /// <param name="intervalDefinitions">The <see cref="IntervalDefinition"/> objects which define
+        /// <param name="intervalDefinitions">The <see cref="Interval"/> objects which define
         /// a numbers of half steps from the <paramref name="rootNoteDefinition"/>.</param>
         /// <param name="rootNoteDefinition">The definition of the chord's root note.</param>
         /// <param name="length">The length of a chord.</param>
@@ -428,8 +429,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="intervalDefinitions"/> is null. -or-
         /// <paramref name="rootNoteDefinition"/> is null. -or- <paramref name="length"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<IntervalDefinition> intervalDefinitions,
-                                    NoteDefinition rootNoteDefinition,
+        public PatternBuilder Chord(IEnumerable<Interval> intervalDefinitions,
+                                    MusicTheory.Note rootNoteDefinition,
                                     ITimeSpan length,
                                     SevenBitNumber velocity)
         {
@@ -525,7 +526,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions)
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions)
         {
             return Chord(noteDefinitions, _noteLength, _velocity);
         }
@@ -542,7 +543,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ITimeSpan length)
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions, ITimeSpan length)
         {
             return Chord(noteDefinitions, length, _velocity);
         }
@@ -558,7 +559,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, SevenBitNumber velocity)
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions, SevenBitNumber velocity)
         {
             return Chord(noteDefinitions, _noteLength, velocity);
         }
@@ -572,7 +573,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinitions"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
-        public PatternBuilder Chord(IEnumerable<NoteDefinition> noteDefinitions, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> noteDefinitions, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinitions), noteDefinitions);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -917,7 +918,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         /// <summary>
         /// Sets a root note that will be used by next actions of the builder using
-        /// <see cref="IntervalDefinition"/> objects.
+        /// <see cref="Interval"/> objects.
         /// </summary>
         /// <param name="rootNoteDefinition">The definition of the root note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
@@ -925,7 +926,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Setting a root note is not an action and thus will not be stored in a pattern.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="rootNoteDefinition"/> is null.</exception>
-        public PatternBuilder SetRootNote(NoteDefinition rootNoteDefinition)
+        public PatternBuilder SetRootNote(MusicTheory.Note rootNoteDefinition)
         {
             ThrowIfArgument.IsNull(nameof(rootNoteDefinition), rootNoteDefinition);
 
@@ -992,7 +993,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
         public PatternBuilder SetOctave(int octave)
         {
-            _octave = OctaveDefinition.Get(octave);
+            _octave = Octave.Get(octave);
             return this;
         }
 

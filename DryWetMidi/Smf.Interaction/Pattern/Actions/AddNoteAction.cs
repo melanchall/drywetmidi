@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
-        public AddNoteAction(NoteDefinition noteDefinition, SevenBitNumber velocity, ITimeSpan length)
+        public AddNoteAction(MusicTheory.Note noteDefinition, SevenBitNumber velocity, ITimeSpan length)
         {
             NoteDefinition = noteDefinition;
             Velocity = velocity;
@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public NoteDefinition NoteDefinition { get; }
+        public MusicTheory.Note NoteDefinition { get; }
 
         public SevenBitNumber Velocity { get; }
 

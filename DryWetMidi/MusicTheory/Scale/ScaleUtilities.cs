@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .NoteName;
         }
 
-        public static IEnumerable<NoteDefinition> GetNotes(this Scale scale)
+        public static IEnumerable<Note> GetNotes(this Scale scale)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
 
@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                                        .SkipWhile(n => NoteUtilities.GetNoteName((SevenBitNumber)n) != scale.RootNoteName)
                                        .First();
 
-            yield return NoteDefinition.Get((SevenBitNumber)noteNumber);
+            yield return Note.Get((SevenBitNumber)noteNumber);
 
             while (true)
             {
@@ -39,12 +39,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     if (noteNumber < SevenBitNumber.MinValue || noteNumber > SevenBitNumber.MaxValue)
                         yield break;
 
-                    yield return NoteDefinition.Get((SevenBitNumber)noteNumber);
+                    yield return Note.Get((SevenBitNumber)noteNumber);
                 }
             }
         }
 
-        public static IEnumerable<NoteDefinition> GetAscendingNotes(this Scale scale, NoteDefinition rootNote)
+        public static IEnumerable<Note> GetAscendingNotes(this Scale scale, Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .SkipWhile(n => n != rootNote);
         }
 
-        public static IEnumerable<NoteDefinition> GetDescendingNotes(this Scale scale, NoteDefinition rootNote)
+        public static IEnumerable<Note> GetDescendingNotes(this Scale scale, Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                                                   .Reverse());
         }
 
-        public static bool IsNoteInScale(this Scale scale, NoteDefinition note)
+        public static bool IsNoteInScale(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .Contains(note);
         }
 
-        public static NoteDefinition GetNextNote(this Scale scale, NoteDefinition note)
+        public static Note GetNextNote(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .FirstOrDefault();
         }
 
-        public static NoteDefinition GetPreviousNote(this Scale scale, NoteDefinition note)
+        public static Note GetPreviousNote(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);

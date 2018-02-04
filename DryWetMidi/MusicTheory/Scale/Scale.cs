@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constructor
 
-        public Scale(IEnumerable<IntervalDefinition> intervals, NoteName rootNoteName)
+        public Scale(IEnumerable<Interval> intervals, NoteName rootNoteName)
         {
             ThrowIfArgument.IsNull(nameof(intervals), intervals);
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Properties
 
-        public IEnumerable<IntervalDefinition> Intervals { get; }
+        public IEnumerable<Interval> Intervals { get; }
 
         public NoteName RootNoteName { get; }
 

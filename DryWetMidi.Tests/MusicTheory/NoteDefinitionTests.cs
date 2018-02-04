@@ -1,10 +1,9 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.MusicTheory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
-namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
+namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
     [TestClass]
     public class NoteDefinitionTests
@@ -15,16 +14,16 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Check that notes definitions of the same note number are equal by reference.")]
         public void CheckReferences()
         {
-            Assert.IsTrue(ReferenceEquals(NoteDefinition.Get((SevenBitNumber)34), NoteDefinition.Get((SevenBitNumber)34)));
+            Assert.IsTrue(ReferenceEquals(Note.Get((SevenBitNumber)34), Note.Get((SevenBitNumber)34)));
         }
 
         [TestMethod]
         [Description("Transpose note definition up.")]
         public void Transpose_Up()
         {
-            var expectedNoteDefinition = NoteDefinition.Get((SevenBitNumber)25);
-            var actualNoteDefinition = NoteDefinition.Get((SevenBitNumber)15)
-                                                     .Transpose(IntervalDefinition.FromHalfSteps(10));
+            var expectedNoteDefinition = Note.Get((SevenBitNumber)25);
+            var actualNoteDefinition = Note.Get((SevenBitNumber)15)
+                                                     .Transpose(Interval.FromHalfSteps(10));
 
             Assert.AreEqual(expectedNoteDefinition, actualNoteDefinition);
         }
@@ -33,9 +32,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Transpose note definition up by maximum value.")]
         public void Transpose_Up_Max()
         {
-            var expectedNoteDefinition = NoteDefinition.Get(SevenBitNumber.MaxValue);
-            var actualNoteDefinition = NoteDefinition.Get(SevenBitNumber.MinValue)
-                                                     .Transpose(IntervalDefinition.GetUp(SevenBitNumber.MaxValue));
+            var expectedNoteDefinition = Note.Get(SevenBitNumber.MaxValue);
+            var actualNoteDefinition = Note.Get(SevenBitNumber.MinValue)
+                                                     .Transpose(Interval.GetUp(SevenBitNumber.MaxValue));
 
             Assert.AreEqual(expectedNoteDefinition, actualNoteDefinition);
         }
@@ -46,8 +45,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
-                NoteDefinition.Get(SevenBitNumber.MaxValue)
-                              .Transpose(IntervalDefinition.GetUp(SevenBitNumber.MaxValue));
+                Note.Get(SevenBitNumber.MaxValue)
+                              .Transpose(Interval.GetUp(SevenBitNumber.MaxValue));
             });
         }
 
@@ -55,9 +54,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Transpose note definition down.")]
         public void Transpose_Down()
         {
-            var expectedNoteDefinition = NoteDefinition.Get((SevenBitNumber)25);
-            var actualNoteDefinition = NoteDefinition.Get((SevenBitNumber)35)
-                                                     .Transpose(IntervalDefinition.FromHalfSteps(-10));
+            var expectedNoteDefinition = Note.Get((SevenBitNumber)25);
+            var actualNoteDefinition = Note.Get((SevenBitNumber)35)
+                                                     .Transpose(Interval.FromHalfSteps(-10));
 
             Assert.AreEqual(expectedNoteDefinition, actualNoteDefinition);
         }
@@ -66,9 +65,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Transpose note definition down by maximum value.")]
         public void Transpose_Down_Max()
         {
-            var expectedNoteDefinition = NoteDefinition.Get(SevenBitNumber.MinValue);
-            var actualNoteDefinition = NoteDefinition.Get(SevenBitNumber.MaxValue)
-                                                     .Transpose(IntervalDefinition.GetDown(SevenBitNumber.MaxValue));
+            var expectedNoteDefinition = Note.Get(SevenBitNumber.MinValue);
+            var actualNoteDefinition = Note.Get(SevenBitNumber.MaxValue)
+                                                     .Transpose(Interval.GetDown(SevenBitNumber.MaxValue));
 
             Assert.AreEqual(expectedNoteDefinition, actualNoteDefinition);
         }
@@ -79,8 +78,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
-                NoteDefinition.Get(SevenBitNumber.MinValue)
-                              .Transpose(IntervalDefinition.GetDown(SevenBitNumber.MaxValue));
+                Note.Get(SevenBitNumber.MinValue)
+                              .Transpose(Interval.GetDown(SevenBitNumber.MaxValue));
             });
         }
 
