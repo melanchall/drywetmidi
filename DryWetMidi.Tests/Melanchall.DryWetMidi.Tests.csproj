@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ComplexTests\MergeNotes.cs" />
     <Compile Include="ComplexTests\QuantizeNotes.cs" />
+    <Compile Include="MusicTheory\Scale\ScaleUtilitiesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordsManagerTests.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordTests.cs" />
