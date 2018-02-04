@@ -1,13 +1,13 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Standards;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {

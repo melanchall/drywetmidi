@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi.Common
+﻿namespace Melanchall.DryWetMidi.MusicTheory
 {
     /// <summary>
     /// Name of a note of the 12-tone chromatic scale.

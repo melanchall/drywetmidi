@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
