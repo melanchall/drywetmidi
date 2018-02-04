@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
-using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
@@ -35,7 +34,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void IsNoteInScale_True()
         {
             var scale = GetCMajorScale();
-            var note = NoteDefinition.Get(NoteName.A, 3);
+            var note = Note.Get(NoteName.A, 3);
 
             Assert.IsTrue(scale.IsNoteInScale(note));
         }
@@ -45,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void IsNoteInScale_False()
         {
             var scale = GetEMajorScale();
-            var note = NoteDefinition.Get(NoteName.G, 2);
+            var note = Note.Get(NoteName.G, 2);
 
             Assert.IsFalse(scale.IsNoteInScale(note));
         }
@@ -56,8 +55,8 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var scale = GetCMajorScale();
 
-            var note = NoteDefinition.Get(NoteName.B, 4);
-            var expectedNote = NoteDefinition.Get(NoteName.C, 5);
+            var note = Note.Get(NoteName.B, 4);
+            var expectedNote = Note.Get(NoteName.C, 5);
 
             Assert.AreEqual(expectedNote, scale.GetNextNote(note));
         }
@@ -68,8 +67,8 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var scale = GetEMajorScale();
 
-            var note = NoteDefinition.Get(NoteName.FSharp, 4);
-            var expectedNote = NoteDefinition.Get(NoteName.GSharp, 4);
+            var note = Note.Get(NoteName.FSharp, 4);
+            var expectedNote = Note.Get(NoteName.GSharp, 4);
 
             Assert.AreEqual(expectedNote, scale.GetNextNote(note));
         }
@@ -80,8 +79,8 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var scale = GetCMajorScale();
 
-            var note = NoteDefinition.Get(NoteName.A, 4);
-            var expectedNote = NoteDefinition.Get(NoteName.G, 4);
+            var note = Note.Get(NoteName.A, 4);
+            var expectedNote = Note.Get(NoteName.G, 4);
 
             Assert.AreEqual(expectedNote, scale.GetPreviousNote(note));
         }
@@ -92,8 +91,8 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var scale = GetEMajorScale();
 
-            var note = NoteDefinition.Get(NoteName.E, 2);
-            var expectedNote = NoteDefinition.Get(NoteName.DSharp, 2);
+            var note = Note.Get(NoteName.E, 2);
+            var expectedNote = Note.Get(NoteName.DSharp, 2);
 
             Assert.AreEqual(expectedNote, scale.GetPreviousNote(note));
         }

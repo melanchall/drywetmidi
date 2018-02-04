@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.MusicTheory;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -21,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Fields
 
-        private NoteDefinition _noteDefinition;
+        private MusicTheory.Note _noteDefinition;
 
         #endregion
 
@@ -118,7 +119,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="time">Absolute time of the note in units defined by the time division of a MIDI file.</param>
         public Note(SevenBitNumber noteNumber, long length, long time)
         {
-            _noteDefinition = NoteDefinition.Get(noteNumber);
+            _noteDefinition = MusicTheory.Note.Get(noteNumber);
 
             Length = length;
             Time = time;
@@ -146,7 +147,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
 
-            _noteDefinition = NoteDefinition.Get(noteOnEvent.NoteNumber);
+            _noteDefinition = MusicTheory.Note.Get(noteOnEvent.NoteNumber);
 
             Velocity = noteOnEvent.Velocity;
             OffVelocity = noteOffEvent.Velocity;
@@ -193,7 +194,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public SevenBitNumber NoteNumber
         {
             get { return _noteDefinition.NoteNumber; }
-            set { _noteDefinition = NoteDefinition.Get(value); }
+            set { _noteDefinition = MusicTheory.Note.Get(value); }
         }
 
         /// <summary>
@@ -250,7 +251,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// name and octave.</exception>
         public void SetNoteNameAndOctave(NoteName noteName, int octave)
         {
-            _noteDefinition = NoteDefinition.Get(noteName, octave);
+            _noteDefinition = MusicTheory.Note.Get(noteName, octave);
         }
 
         #endregion

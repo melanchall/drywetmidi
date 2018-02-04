@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Standards;
@@ -18,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             #region Constructor
 
             public NoteInfo(NoteName noteName, int octave, ITimeSpan time, ITimeSpan length)
-                : this(noteName, octave, time, length, Note.DefaultVelocity)
+                : this(noteName, octave, time, length, DryWetMidi.Smf.Interaction.Note.DefaultVelocity)
             {
             }
 
@@ -87,8 +88,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .SetNoteLength(defaultNoteLength)
                 .SetVelocity(defaultVelocity)
 
-                .Note(OctaveDefinition.Get(0).A)
-                .Note(OctaveDefinition.Get(1).C, specifiedLength, specifiedVelocity)
+                .Note(Octave.Get(0).A)
+                .Note(Octave.Get(1).C, specifiedLength, specifiedVelocity)
 
                 .Build();
 
@@ -162,10 +163,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var pattern = new PatternBuilder()
                 .SetNoteLength(defaultNoteLength)
                 .SetVelocity(defaultVelocity)
-                .SetRootNote(NoteDefinition.Get(NoteName.CSharp, 5))
+                .SetRootNote(DryWetMidi.MusicTheory.Note.Get(NoteName.CSharp, 5))
 
-                .Note(IntervalDefinition.Two)
-                .Note(-IntervalDefinition.Four)
+                .Note(Interval.Two)
+                .Note(-Interval.Four)
 
                 .Build();
 
@@ -220,10 +221,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var pattern = new PatternBuilder()
                 .SetNoteLength(defaultNoteLength)
                 .SetVelocity(defaultVelocity)
-                .SetRootNote(NoteDefinition.Get(NoteName.CSharp, 5))
+                .SetRootNote(DryWetMidi.MusicTheory.Note.Get(NoteName.CSharp, 5))
 
-                .Chord(new[] { IntervalDefinition.Two, IntervalDefinition.Five }, OctaveDefinition.Get(2).A)
-                .Chord(new[] { IntervalDefinition.Two, -IntervalDefinition.Ten }, OctaveDefinition.Get(2).B)
+                .Chord(new[] { Interval.Two, Interval.Five }, Octave.Get(2).A)
+                .Chord(new[] { Interval.Two, -Interval.Ten }, Octave.Get(2).B)
 
                 .Build();
 
@@ -255,7 +256,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
 
@@ -282,7 +283,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
 
@@ -307,7 +308,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor("Test")
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
 
@@ -329,7 +330,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
         }
@@ -347,7 +348,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor("Test")
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
         }
@@ -361,7 +362,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(new MetricTimeSpan(0, 0, 30))
                 .StepBack(new MetricTimeSpan(0, 0, 37))
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
 
@@ -380,7 +381,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(new MetricTimeSpan(0, 0, 30))
                 .StepBack(new MetricTimeSpan(0, 1, 37))
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
 
@@ -399,7 +400,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(MusicalTimeSpan.Whole)
                 .StepBack(MusicalTimeSpan.Half)
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
 
@@ -418,7 +419,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(new MetricTimeSpan(0, 0, 30))
                 .StepBack(1000 * MusicalTimeSpan.Quarter)
 
-                .Note(OctaveDefinition.Get(0).A)
+                .Note(Octave.Get(0).A)
 
                 .Build();
 
@@ -703,7 +704,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 var expectedTime = TimeConverter.ConvertFrom(i.Time ?? new MetricTimeSpan(), tempoMap);
                 var expectedLength = LengthConverter.ConvertFrom(i.Length, expectedTime, tempoMap);
 
-                return new Note(i.NoteNumber, expectedLength, expectedTime)
+                return new DryWetMidi.Smf.Interaction.Note(i.NoteNumber, expectedLength, expectedTime)
                 {
                     Velocity = i.Velocity,
                     Channel = channel

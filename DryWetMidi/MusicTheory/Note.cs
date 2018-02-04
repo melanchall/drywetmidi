@@ -1,30 +1,31 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.MusicTheory
 {
     /// <summary>
     /// Represents a note definition, i.e. note name and octave.
     /// </summary>
-    public sealed class NoteDefinition
+    public sealed class Note
     {
         #region Fields
 
-        private static readonly Dictionary<SevenBitNumber, NoteDefinition> _cache =
-            new Dictionary<SevenBitNumber, NoteDefinition>();
+        private static readonly Dictionary<SevenBitNumber, Note> _cache =
+            new Dictionary<SevenBitNumber, Note>();
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoteDefinition"/> with the
+        /// Initializes a new instance of the <see cref="Note"/> with the
         /// specified note number.
         /// </summary>
         /// <param name="noteNumber">The number of a note (60 is middle C).</param>
-        private NoteDefinition(SevenBitNumber noteNumber)
+        private Note(SevenBitNumber noteNumber)
         {
             NoteNumber = noteNumber;
         }
@@ -53,38 +54,38 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
-        /// Returns the current <see cref="NoteDefinition"/> transposed by the specified
-        /// <see cref="IntervalDefinition"/>.
+        /// Returns the current <see cref="Note"/> transposed by the specified
+        /// <see cref="Interval"/>.
         /// </summary>
-        /// <param name="intervalDefinition">The <see cref="IntervalDefinition"/> to transpose the current
-        /// <see cref="NoteDefinition"/> by.</param>
-        /// <returns>The current <see cref="NoteDefinition"/> transposed by the <paramref name="intervalDefinition"/>.</returns>
+        /// <param name="interval">The <see cref="Interval"/> to transpose the current
+        /// <see cref="Note"/> by.</param>
+        /// <returns>The current <see cref="Note"/> transposed by the <paramref name="interval"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
-        public NoteDefinition Transpose(IntervalDefinition intervalDefinition)
+        public Note Transpose(Interval interval)
         {
-            return Get((SevenBitNumber)(NoteNumber + intervalDefinition.HalfSteps));
+            return Get((SevenBitNumber)(NoteNumber + interval.HalfSteps));
         }
 
         /// <summary>
-        /// Returns a <see cref="NoteDefinition"/> for the specified note number.
+        /// Returns a <see cref="Note"/> for the specified note number.
         /// </summary>
         /// <param name="noteNumber">The number of a note (60 is middle C).</param>
-        /// <returns>A <see cref="NoteDefinition"/> for the <paramref name="noteNumber"/>.</returns>
-        public static NoteDefinition Get(SevenBitNumber noteNumber)
+        /// <returns>A <see cref="Note"/> for the <paramref name="noteNumber"/>.</returns>
+        public static Note Get(SevenBitNumber noteNumber)
         {
-            NoteDefinition noteDefinition;
+            Note noteDefinition;
             if (!_cache.TryGetValue(noteNumber, out noteDefinition))
-                _cache.Add(noteNumber, noteDefinition = new NoteDefinition(noteNumber));
+                _cache.Add(noteNumber, noteDefinition = new Note(noteNumber));
 
             return noteDefinition;
         }
 
         /// <summary>
-        /// Returns a <see cref="NoteDefinition"/> for the specified note name and octave number.
+        /// Returns a <see cref="Note"/> for the specified note name and octave number.
         /// </summary>
         /// <param name="noteName">The name of a note.</param>
         /// <param name="octave">The octave number.</param>
-        /// <returns>A <see cref="NoteDefinition"/> for the <paramref name="noteName"/> and <paramref name="octave"/>.</returns>
+        /// <returns>A <see cref="Note"/> for the <paramref name="noteName"/> and <paramref name="octave"/>.</returns>
         /// <remarks>
         /// Octave number is specified in scientific pitch notation which means that 4 must be
         /// passed to <paramref name="octave"/> to get the middle C definition.
@@ -93,7 +94,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// invalid value.</exception>
         /// <exception cref="ArgumentException">Note number is out of range for the specified note
         /// name and octave.</exception>
-        public static NoteDefinition Get(NoteName noteName, int octave)
+        public static Note Get(NoteName noteName, int octave)
         {
             return Get(NoteUtilities.GetNoteNumber(noteName, octave));
         }
@@ -103,12 +104,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Operators
 
         /// <summary>
-        /// Determines if two <see cref="NoteDefinition"/> objects are equal.
+        /// Determines if two <see cref="Note"/> objects are equal.
         /// </summary>
-        /// <param name="noteDefinition1">The first <see cref="NoteDefinition"/> to compare.</param>
-        /// <param name="noteDefinition2">The second <see cref="NoteDefinition"/> to compare.</param>
+        /// <param name="noteDefinition1">The first <see cref="Note"/> to compare.</param>
+        /// <param name="noteDefinition2">The second <see cref="Note"/> to compare.</param>
         /// <returns>true if the note definitions are equal, false otherwise.</returns>
-        public static bool operator ==(NoteDefinition noteDefinition1, NoteDefinition noteDefinition2)
+        public static bool operator ==(Note noteDefinition1, Note noteDefinition2)
         {
             if (ReferenceEquals(noteDefinition1, noteDefinition2))
                 return true;
@@ -120,42 +121,42 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Determines if two <see cref="NoteDefinition"/> objects are not equal.
+        /// Determines if two <see cref="Note"/> objects are not equal.
         /// </summary>
-        /// <param name="noteDefinition1">The first <see cref="NoteDefinition"/> to compare.</param>
-        /// <param name="noteDefinition2">The second <see cref="NoteDefinition"/> to compare.</param>
+        /// <param name="noteDefinition1">The first <see cref="Note"/> to compare.</param>
+        /// <param name="noteDefinition2">The second <see cref="Note"/> to compare.</param>
         /// <returns>false if the note definitions are equal, true otherwise.</returns>
-        public static bool operator !=(NoteDefinition noteDefinition1, NoteDefinition noteDefinition2)
+        public static bool operator !=(Note noteDefinition1, Note noteDefinition2)
         {
             return !(noteDefinition1 == noteDefinition2);
         }
 
         /// <summary>
-        /// Transposes the specified <see cref="NoteDefinition"/>.
+        /// Transposes the specified <see cref="Note"/>.
         /// </summary>
-        /// <param name="noteDefinition">The <see cref="NoteDefinition"/> to transpose.</param>
+        /// <param name="noteDefinition">The <see cref="Note"/> to transpose.</param>
         /// <param name="halfSteps">The number of half steps to transpose the <paramref name="noteDefinition"/> by.</param>
-        /// <returns>The <see cref="NoteDefinition"/> which is the <paramref name="noteDefinition"/>
+        /// <returns>The <see cref="Note"/> which is the <paramref name="noteDefinition"/>
         /// transposed by the <paramref name="halfSteps"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
-        public static NoteDefinition operator +(NoteDefinition noteDefinition, int halfSteps)
+        public static Note operator +(Note noteDefinition, int halfSteps)
         {
             ThrowIfArgument.IsNull(nameof(noteDefinition), noteDefinition);
 
-            return noteDefinition.Transpose(IntervalDefinition.FromHalfSteps(halfSteps));
+            return noteDefinition.Transpose(Interval.FromHalfSteps(halfSteps));
         }
 
         /// <summary>
-        /// Transposes the specified <see cref="NoteDefinition"/>.
+        /// Transposes the specified <see cref="Note"/>.
         /// </summary>
-        /// <param name="noteDefinition">The <see cref="NoteDefinition"/> to transpose.</param>
+        /// <param name="noteDefinition">The <see cref="Note"/> to transpose.</param>
         /// <param name="halfSteps">The number of half steps to transpose the <paramref name="noteDefinition"/> by.</param>
-        /// <returns>The <see cref="NoteDefinition"/> which is the <paramref name="noteDefinition"/>
+        /// <returns>The <see cref="Note"/> which is the <paramref name="noteDefinition"/>
         /// transposed by the <paramref name="halfSteps"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="noteDefinition"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Result note definition's note number is out of valid range.</exception>
-        public static NoteDefinition operator -(NoteDefinition noteDefinition, int halfSteps)
+        public static Note operator -(Note noteDefinition, int halfSteps)
         {
             return noteDefinition + (-halfSteps);
         }
@@ -180,7 +181,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as NoteDefinition);
+            return this == (obj as Note);
         }
 
         /// <summary>

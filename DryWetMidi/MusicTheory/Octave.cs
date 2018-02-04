@@ -1,22 +1,23 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.MusicTheory
 {
     /// <summary>
-    /// Represents an octave definition defined by its number.
+    /// Represents an octave defined by its number.
     /// </summary>
-    public sealed class OctaveDefinition
+    public sealed class Octave
     {
         #region Fields
 
-        private static readonly Dictionary<int, OctaveDefinition> _cache = new Dictionary<int, OctaveDefinition>();
+        private static readonly Dictionary<int, Octave> _cache = new Dictionary<int, Octave>();
 
-        private readonly Dictionary<NoteName, NoteDefinition> _notesDefinitions;
+        private readonly Dictionary<NoteName, Note> _notesDefinitions;
 
         #endregion
 
@@ -35,19 +36,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// The octave which contains the middle C note (C4).
         /// </summary>
-        public static readonly OctaveDefinition Middle = Get(4);
+        public static readonly Octave Middle = Get(4);
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OctaveDefinition"/> with the
+        /// Initializes a new instance of the <see cref="Octave"/> with the
         /// specified octave number.
         /// </summary>
         /// <param name="octave">The number of an octave.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
-        private OctaveDefinition(int octave)
+        private Octave(int octave)
         {
             Debug.Assert(octave >= MinOctaveNumber && octave <= MaxOctaveNumber,
                          "An octave's number is out of range.");
@@ -58,7 +59,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                     .Cast<NoteName>()
                                     .Where(n => NoteUtilities.IsNoteValid(n, octave))
                                     .ToDictionary(n => n,
-                                                  n => NoteDefinition.Get(n, octave));
+                                                  n => Note.Get(n, octave));
         }
 
         #endregion
@@ -66,81 +67,81 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Properties
 
         /// <summary>
-        /// Gets the number of an octave represented by the current <see cref="OctaveDefinition"/>.
+        /// Gets the number of an octave represented by the current <see cref="Octave"/>.
         /// </summary>
         public int Number { get; }
 
         /// <summary>
-        /// Gets the definition of the C note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the C note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition C => GetNoteDefinition(NoteName.C);
+        public Note C => GetNoteDefinition(NoteName.C);
 
         /// <summary>
-        /// Gets the definition of the C# note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the C# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition CSharp => GetNoteDefinition(NoteName.CSharp);
+        public Note CSharp => GetNoteDefinition(NoteName.CSharp);
 
         /// <summary>
-        /// Gets the definition of the D note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the D note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition D => GetNoteDefinition(NoteName.D);
+        public Note D => GetNoteDefinition(NoteName.D);
 
         /// <summary>
-        /// Gets the definition of the D# note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the D# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition DSharp => GetNoteDefinition(NoteName.DSharp);
+        public Note DSharp => GetNoteDefinition(NoteName.DSharp);
 
         /// <summary>
-        /// Gets the definition of the E note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the E note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition E => GetNoteDefinition(NoteName.E);
+        public Note E => GetNoteDefinition(NoteName.E);
 
         /// <summary>
-        /// Gets the definition of the F note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the F note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition F => GetNoteDefinition(NoteName.F);
+        public Note F => GetNoteDefinition(NoteName.F);
 
         /// <summary>
-        /// Gets the definition of the F# note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the F# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition FSharp => GetNoteDefinition(NoteName.FSharp);
+        public Note FSharp => GetNoteDefinition(NoteName.FSharp);
 
         /// <summary>
-        /// Gets the definition of the G note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the G note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition G => GetNoteDefinition(NoteName.G);
+        public Note G => GetNoteDefinition(NoteName.G);
 
         /// <summary>
-        /// Gets the definition of the G# note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the G# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition GSharp => GetNoteDefinition(NoteName.GSharp);
+        public Note GSharp => GetNoteDefinition(NoteName.GSharp);
 
         /// <summary>
-        /// Gets the definition of the A note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the A note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition A => GetNoteDefinition(NoteName.A);
+        public Note A => GetNoteDefinition(NoteName.A);
 
         /// <summary>
-        /// Gets the definition of the A# note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the A# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition ASharp => GetNoteDefinition(NoteName.ASharp);
+        public Note ASharp => GetNoteDefinition(NoteName.ASharp);
 
         /// <summary>
-        /// Gets the definition of the B note of an octave defined by the current <see cref="OctaveDefinition"/>.
+        /// Gets the definition of the B note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note definition.</exception>
-        public NoteDefinition B => GetNoteDefinition(NoteName.B);
+        public Note B => GetNoteDefinition(NoteName.B);
 
         #endregion
 
@@ -154,11 +155,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// current octave.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         /// <exception cref="InvalidOperationException">Unable to get a definition for the <paramref name="noteName"/>.</exception>
-        public NoteDefinition GetNoteDefinition(NoteName noteName)
+        public Note GetNoteDefinition(NoteName noteName)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
-            NoteDefinition noteDefinition;
+            Note noteDefinition;
             if (!_notesDefinitions.TryGetValue(noteName, out noteDefinition))
                 throw new InvalidOperationException($"Unable to get a definition for the {noteName} note.");
 
@@ -166,24 +167,24 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Gets an octave definition by the specified octave number.
+        /// Gets an octave by the specified octave number.
         /// </summary>
-        /// <param name="octave">The number of an octave.</param>
+        /// <param name="octaveNumber">The number of an octave.</param>
         /// <returns>A definition of the octave with the specified number.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
-        public static OctaveDefinition Get(int octave)
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="octaveNumber"/> is out of valid range.</exception>
+        public static Octave Get(int octaveNumber)
         {
-            ThrowIfArgument.IsOutOfRange(nameof(octave),
-                                         octave,
+            ThrowIfArgument.IsOutOfRange(nameof(octaveNumber),
+                                         octaveNumber,
                                          MinOctaveNumber,
                                          MaxOctaveNumber,
                                          $"Octave number is out of [{MinOctaveNumber}, {MaxOctaveNumber}] range.");
 
-            OctaveDefinition octaveDefinition;
-            if (!_cache.TryGetValue(octave, out octaveDefinition))
-                _cache.Add(octave, octaveDefinition = new OctaveDefinition(octave));
+            Octave octave;
+            if (!_cache.TryGetValue(octaveNumber, out octave))
+                _cache.Add(octaveNumber, octave = new Octave(octaveNumber));
 
-            return octaveDefinition;
+            return octave;
         }
 
         #endregion
@@ -191,12 +192,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Operators
 
         /// <summary>
-        /// Determines if two <see cref="OctaveDefinition"/> objects are equal.
+        /// Determines if two <see cref="Octave"/> objects are equal.
         /// </summary>
-        /// <param name="octaveDefinition1">The first <see cref="OctaveDefinition"/> to compare.</param>
-        /// <param name="octaveDefinition2">The second <see cref="OctaveDefinition"/> to compare.</param>
+        /// <param name="octaveDefinition1">The first <see cref="Octave"/> to compare.</param>
+        /// <param name="octaveDefinition2">The second <see cref="Octave"/> to compare.</param>
         /// <returns>true if the octave definitions are equal, false otherwise.</returns>
-        public static bool operator ==(OctaveDefinition octaveDefinition1, OctaveDefinition octaveDefinition2)
+        public static bool operator ==(Octave octaveDefinition1, Octave octaveDefinition2)
         {
             if (ReferenceEquals(octaveDefinition1, octaveDefinition2))
                 return true;
@@ -208,12 +209,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Determines if two <see cref="OctaveDefinition"/> objects are not equal.
+        /// Determines if two <see cref="Octave"/> objects are not equal.
         /// </summary>
-        /// <param name="octaveDefinition1">The first <see cref="OctaveDefinition"/> to compare.</param>
-        /// <param name="octaveDefinition2">The second <see cref="OctaveDefinition"/> to compare.</param>
+        /// <param name="octaveDefinition1">The first <see cref="Octave"/> to compare.</param>
+        /// <param name="octaveDefinition2">The second <see cref="Octave"/> to compare.</param>
         /// <returns>false if the octave definitions are equal, true otherwise.</returns>
-        public static bool operator !=(OctaveDefinition octaveDefinition1, OctaveDefinition octaveDefinition2)
+        public static bool operator !=(Octave octaveDefinition1, Octave octaveDefinition2)
         {
             return !(octaveDefinition1 == octaveDefinition2);
         }
@@ -238,7 +239,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as OctaveDefinition);
+            return this == (obj as Octave);
         }
 
         /// <summary>

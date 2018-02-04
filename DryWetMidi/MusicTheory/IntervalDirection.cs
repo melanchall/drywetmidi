@@ -1,7 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Smf.Interaction
+﻿namespace Melanchall.DryWetMidi.MusicTheory
 {
     /// <summary>
-    /// Direction of a musical interval represented by the <see cref="IntervalDefinition"/>.
+    /// Direction of a musical interval represented by the <see cref="Interval"/>.
     /// The default is <see cref="Up"/>.
     /// </summary>
     public enum IntervalDirection
