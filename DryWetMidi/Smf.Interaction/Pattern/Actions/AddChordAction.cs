@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.MusicTheory;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -9,9 +8,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
-        public AddChordAction(IEnumerable<MusicTheory.Note> noteDefinitions, SevenBitNumber velocity, ITimeSpan length)
+        public AddChordAction(IEnumerable<MusicTheory.Note> notes, SevenBitNumber velocity, ITimeSpan length)
         {
-            NoteDefinitions = noteDefinitions;
+            Notes = notes;
             Velocity = velocity;
             Length = length;
         }
@@ -20,7 +19,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public IEnumerable<MusicTheory.Note> NoteDefinitions { get; }
+        public IEnumerable<MusicTheory.Note> Notes { get; }
 
         public SevenBitNumber Velocity { get; }
 
@@ -37,7 +36,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var chordLength = LengthConverter.ConvertFrom(Length, time, context.TempoMap);
 
             return new PatternActionResult(time + chordLength,
-                                           NoteDefinitions.Select(d => new Note(d.NoteNumber, chordLength, time)
+                                           Notes.Select(d => new Note(d.NoteNumber, chordLength, time)
                                            {
                                                Channel = context.Channel,
                                                Velocity = Velocity

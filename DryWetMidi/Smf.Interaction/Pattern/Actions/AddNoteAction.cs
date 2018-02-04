@@ -6,9 +6,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constructor
 
-        public AddNoteAction(MusicTheory.Note noteDefinition, SevenBitNumber velocity, ITimeSpan length)
+        public AddNoteAction(MusicTheory.Note note, SevenBitNumber velocity, ITimeSpan length)
         {
-            NoteDefinition = noteDefinition;
+            Note = note;
             Velocity = velocity;
             Length = length;
         }
@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Properties
 
-        public MusicTheory.Note NoteDefinition { get; }
+        public MusicTheory.Note Note { get; }
 
         public SevenBitNumber Velocity { get; }
 
@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var noteLength = LengthConverter.ConvertFrom(Length, time, context.TempoMap);
 
-            var note = new Note(NoteDefinition.NoteNumber, noteLength, time)
+            var note = new Note(Note.NoteNumber, noteLength, time)
             {
                 Channel = context.Channel,
                 Velocity = Velocity

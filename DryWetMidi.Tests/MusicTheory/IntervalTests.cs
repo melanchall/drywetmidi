@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
     [TestClass]
-    public class IntervalDefinitionTests
+    public class IntervalTests
     {
         #region Test methods
 
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         }
 
         [TestMethod]
-        [Description("Check that interval definitions of the same steps number are equal by reference.")]
+        [Description("Check that interval of the same steps number are equal by reference.")]
         public void CheckReferences()
         {
             Assert.IsTrue(ReferenceEquals(Interval.FromHalfSteps(10), Interval.FromHalfSteps(10)));

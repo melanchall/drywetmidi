@@ -57,8 +57,8 @@
     <Compile Include="Smf.Interaction\ChordsManager\ChordTestUtilities.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesManagerTests.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NoteTestUtilities.cs" />
-    <Compile Include="MusicTheory\IntervalDefinitionTests.cs" />
-    <Compile Include="MusicTheory\NoteDefinitionTests.cs" />
+    <Compile Include="MusicTheory\IntervalTests.cs" />
+    <Compile Include="MusicTheory\NoteTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternTests.cs" />
     <Compile Include="Smf.Interaction\TempoMapManager\TempoMapManagerTests.cs" />
     <Compile Include="Smf.Interaction\TempoMapManager\TempoMapTests.cs" />

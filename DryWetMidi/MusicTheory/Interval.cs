@@ -148,22 +148,22 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Returns an <see cref="Interval"/> by the specified half steps number and
         /// interval's direction.
         /// </summary>
-        /// <param name="interval">The interval as a number of half steps away.</param>
+        /// <param name="intervalSize">The size of an interval as a number of half steps away.</param>
         /// <param name="direction">The direction of an interval (up or down).</param>
         /// <returns>An <see cref="Interval"/> with the specified interval and direction.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="direction"/> specified an
         /// invalid value.</exception>
-        public static Interval Get(SevenBitNumber interval, IntervalDirection direction)
+        public static Interval Get(SevenBitNumber intervalSize, IntervalDirection direction)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(direction), direction);
 
-            Dictionary<IntervalDirection, Interval> intervalDefinitions;
-            if (!_cache.TryGetValue(interval, out intervalDefinitions))
-                _cache.Add(interval, intervalDefinitions = new Dictionary<IntervalDirection, Interval>());
+            Dictionary<IntervalDirection, Interval> intervals;
+            if (!_cache.TryGetValue(intervalSize, out intervals))
+                _cache.Add(intervalSize, intervals = new Dictionary<IntervalDirection, Interval>());
 
             Interval cachedInterval;
-            if (!intervalDefinitions.TryGetValue(direction, out cachedInterval))
-                intervalDefinitions.Add(direction, cachedInterval = new Interval(interval, direction));
+            if (!intervals.TryGetValue(direction, out cachedInterval))
+                intervals.Add(direction, cachedInterval = new Interval(intervalSize, direction));
 
             return cachedInterval;
         }
@@ -171,21 +171,21 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <summary>
         /// Returns an upward <see cref="Interval"/> by the specified half steps number.
         /// </summary>
-        /// <param name="interval">The interval as a number of half steps away.</param>
+        /// <param name="intervalSize">The size of an interval as a number of half steps away.</param>
         /// <returns>An upward <see cref="Interval"/> with the specified interval.</returns>
-        public static Interval GetUp(SevenBitNumber interval)
+        public static Interval GetUp(SevenBitNumber intervalSize)
         {
-            return Get(interval, IntervalDirection.Up);
+            return Get(intervalSize, IntervalDirection.Up);
         }
 
         /// <summary>
         /// Returns a downward <see cref="Interval"/> by the specified half steps number.
         /// </summary>
-        /// <param name="interval">The interval as a number of half steps away.</param>
+        /// <param name="intervalSize">The size of an interval as a number of half steps away.</param>
         /// <returns>A downward <see cref="Interval"/> with the specified interval.</returns>
-        public static Interval GetDown(SevenBitNumber interval)
+        public static Interval GetDown(SevenBitNumber intervalSize)
         {
-            return Get(interval, IntervalDirection.Down);
+            return Get(intervalSize, IntervalDirection.Down);
         }
 
         /// <summary>
@@ -233,29 +233,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <summary>
         /// Determines if two <see cref="Interval"/> objects are equal.
         /// </summary>
-        /// <param name="intervalDefinition1">The first <see cref="Interval"/> to compare.</param>
-        /// <param name="intervalDefinition2">The second <see cref="Interval"/> to compare.</param>
-        /// <returns>true if the interval definitions are equal, false otherwise.</returns>
-        public static bool operator ==(Interval intervalDefinition1, Interval intervalDefinition2)
+        /// <param name="interval1">The first <see cref="Interval"/> to compare.</param>
+        /// <param name="interval2">The second <see cref="Interval"/> to compare.</param>
+        /// <returns>true if the intervals are equal, false otherwise.</returns>
+        public static bool operator ==(Interval interval1, Interval interval2)
         {
-            if (ReferenceEquals(intervalDefinition1, intervalDefinition2))
+            if (ReferenceEquals(interval1, interval2))
                 return true;
 
-            if (ReferenceEquals(null, intervalDefinition1) || ReferenceEquals(null, intervalDefinition2))
+            if (ReferenceEquals(null, interval1) || ReferenceEquals(null, interval2))
                 return false;
 
-            return intervalDefinition1.HalfSteps == intervalDefinition2.HalfSteps;
+            return interval1.HalfSteps == interval2.HalfSteps;
         }
 
         /// <summary>
         /// Determines if two <see cref="Interval"/> objects are not equal.
         /// </summary>
-        /// <param name="intervalDefinition1">The first <see cref="Interval"/> to compare.</param>
-        /// <param name="intervalDefinition2">The second <see cref="Interval"/> to compare.</param>
-        /// <returns>false if the interval definitions are equal, true otherwise.</returns>
-        public static bool operator !=(Interval intervalDefinition1, Interval intervalDefinition2)
+        /// <param name="interval1">The first <see cref="Interval"/> to compare.</param>
+        /// <param name="interval2">The second <see cref="Interval"/> to compare.</param>
+        /// <returns>false if the intervals are equal, true otherwise.</returns>
+        public static bool operator !=(Interval interval1, Interval interval2)
         {
-            return !(intervalDefinition1 == intervalDefinition2);
+            return !(interval1 == interval2);
         }
 
         /// <summary>
