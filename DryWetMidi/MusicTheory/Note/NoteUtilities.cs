@@ -57,17 +57,26 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
-            var noteNumber = (octave + OctaveOffset) * OctaveSize + (int)noteName;
-            if (noteNumber < SevenBitNumber.MinValue || noteNumber > SevenBitNumber.MaxValue)
+            var noteNumber = CalculateNoteNumber(noteName, octave);
+            if (!IsNoteNumberValid(noteNumber))
                 throw new ArgumentException("Note number is out of range for the specified note name and octave.", nameof(octave));
 
             return (SevenBitNumber)noteNumber;
         }
 
-        public static bool IsNoteValid(NoteName noteName, int octave)
+        internal static bool IsNoteValid(NoteName noteName, int octave)
         {
-            var noteNumber = (octave + OctaveOffset) * OctaveSize + (int)noteName;
+            return IsNoteNumberValid(CalculateNoteNumber(noteName, octave));
+        }
+
+        internal static bool IsNoteNumberValid(int noteNumber)
+        {
             return noteNumber >= SevenBitNumber.MinValue && noteNumber <= SevenBitNumber.MaxValue;
+        }
+
+        private static int CalculateNoteNumber(NoteName noteName, int octave)
+        {
+            return (octave + OctaveOffset) * OctaveSize + (int)noteName;
         }
 
         #endregion
