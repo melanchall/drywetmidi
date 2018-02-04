@@ -114,8 +114,8 @@
     <Compile Include="Smf\Collections\ChunksCollection.cs" />
     <Compile Include="Smf\Collections\EventsCollection.cs" />
     <Compile Include="Smf\Utilities\DataTypesUtilities.cs" />
-    <Compile Include="Smf\DataTypes\FourBitNumber.cs" />
-    <Compile Include="Smf\DataTypes\SevenBitNumber.cs" />
+    <Compile Include="Common\DataTypes\FourBitNumber.cs" />
+    <Compile Include="Common\DataTypes\SevenBitNumber.cs" />
     <Compile Include="Smf\Events\Channel\NoteEvent.cs" />
     <Compile Include="Smf\Events\Meta\BaseTextEvent.cs" />
     <Compile Include="Smf\Exceptions\InvalidChannelEventParameterValueException.cs" />

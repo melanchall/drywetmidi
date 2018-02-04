@@ -1,4 +1,4 @@
-﻿using Melanchall.DryWetMidi.Smf;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction

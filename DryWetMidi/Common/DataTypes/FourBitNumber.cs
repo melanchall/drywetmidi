@@ -1,53 +1,52 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
 
-namespace Melanchall.DryWetMidi.Smf
+namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
-    /// Type that is used to represent a seven-bit number (0-127).
+    /// Type that is used to represent a four-bit number (0-15).
     /// </summary>
     /// <remarks>
-    /// Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events.
+    /// Four-bit numbers widely used by MIDI protocol as parameters of MIDI events.
     /// So instead of manipulating built-in C# numeric types (like byte or int) and checking for
-    /// out-of-range errors all validation of numbers in the [0; 127] range happens on data type
-    /// level via casting C# integer values to the <see cref="SevenBitNumber"/>.
+    /// out-of-range errors all validation of numbers in the [0; 15] range happens on data type
+    /// level via casting C# integer values to the <see cref="FourBitNumber"/>.
     /// </remarks>
-    public struct SevenBitNumber : IComparable<SevenBitNumber>
+    public struct FourBitNumber : IComparable<FourBitNumber>
     {
         #region Constants
 
         /// <summary>
-        /// The smallest possible value of a <see cref="SevenBitNumber"/>.
+        /// The smallest possible value of a <see cref="FourBitNumber"/>.
         /// </summary>
-        public static readonly SevenBitNumber MinValue = new SevenBitNumber(Min);
+        public static readonly FourBitNumber MinValue = new FourBitNumber(Min);
 
         /// <summary>
-        /// The largest possible value of a <see cref="SevenBitNumber"/>.
+        /// The largest possible value of a <see cref="FourBitNumber"/>.
         /// </summary>
-        public static readonly SevenBitNumber MaxValue = new SevenBitNumber(Max);
+        public static readonly FourBitNumber MaxValue = new FourBitNumber(Max);
 
         private const byte Min = 0;
-        private const byte Max = 127; // 01111111
+        private const byte Max = 15; // 00001111
 
         #endregion
 
         #region Fields
 
-        private byte _value;
+        private readonly byte _value;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SevenBitNumber"/> with the specified value.
+        /// Initializes a new instance of the <see cref="FourBitNumber"/> with the specified value.
         /// </summary>
-        /// <param name="value">Value representing seven-bit number.</param>
+        /// <param name="value">Value representing four-bit number.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of
         /// [<see cref="MinValue"/>; <see cref="MaxValue"/>] range.</exception>
-        public SevenBitNumber(byte value)
+        public FourBitNumber(byte value)
         {
-            ThrowIfArgument.IsOutOfRange(nameof(value), value, Min, Max, "Value is out of range valid for seven-bit number.");
+            ThrowIfArgument.IsOutOfRange(nameof(value), value, Min, Max, "Value is out of range valid for four-bit number.");
 
             _value = value;
         }
@@ -57,26 +56,26 @@ namespace Melanchall.DryWetMidi.Smf
         #region Casting
 
         /// <summary>
-        /// Converts the value of a <see cref="SevenBitNumber"/> to a <see cref="byte"/>.
+        /// Converts the value of a <see cref="FourBitNumber"/> to a <see cref="byte"/>.
         /// </summary>
-        /// <param name="number"><see cref="SevenBitNumber"/> object to convert to a byte value.</param>
-        public static implicit operator byte(SevenBitNumber number)
+        /// <param name="number"><see cref="FourBitNumber"/> object to convert to a byte value.</param>
+        public static implicit operator byte(FourBitNumber number)
         {
             return number._value;
         }
 
         /// <summary>
-        /// Converts the value of a <see cref="byte"/> to a <see cref="SevenBitNumber"/>.
+        /// Converts the value of a <see cref="byte"/> to a <see cref="FourBitNumber"/>.
         /// </summary>
-        /// <param name="number">Byte value to convert to a <see cref="SevenBitNumber"/> object.</param>
-        public static explicit operator SevenBitNumber(byte number)
+        /// <param name="number">Byte value to convert to a <see cref="FourBitNumber"/> object.</param>
+        public static explicit operator FourBitNumber(byte number)
         {
-            return new SevenBitNumber(number);
+            return new FourBitNumber(number);
         }
 
         #endregion
 
-        #region IComparable<SevenBitNumber>
+        #region IComparable<FourBitNumber>
 
         /// <summary>
         /// Compares the current instance with another object of the same type and returns
@@ -89,7 +88,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// - Less than zero: This instance precedes other in the sort order.
         /// - Zero: This instance occurs in the same position in the sort order as other.
         /// - Greater than zero: This instance follows other in the sort order.</returns>
-        public int CompareTo(SevenBitNumber other)
+        public int CompareTo(FourBitNumber other)
         {
             return _value.CompareTo(other._value);
         }
@@ -114,11 +113,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is SevenBitNumber))
+            if (!(obj is FourBitNumber))
                 return false;
 
-            var sevenBitNumber = (SevenBitNumber)obj;
-            return sevenBitNumber._value == _value;
+            var fourBitNumber = (FourBitNumber)obj;
+            return fourBitNumber._value == _value;
         }
 
         /// <summary>
