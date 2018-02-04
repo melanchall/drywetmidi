@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {

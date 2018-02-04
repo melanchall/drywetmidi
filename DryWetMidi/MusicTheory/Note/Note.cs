@@ -1,8 +1,7 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {

@@ -1,10 +1,9 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
@@ -88,10 +87,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             private static Chord GetChord(Expression<Func<Note, TValue>> notePropertySelector, TValue value1, TValue value2)
             {
-                var firstNote = new Note(NoteName.A, 1);
+                var firstNote = new Note(DryWetMidi.MusicTheory.NoteName.A, 1);
                 SetPropertyValue(notePropertySelector, firstNote, value1);
 
-                var secondNote = new Note(NoteName.B, 1);
+                var secondNote = new Note(DryWetMidi.MusicTheory.NoteName.B, 1);
                 SetPropertyValue(notePropertySelector, secondNote, value2);
 
                 return new Chord(firstNote, secondNote);
