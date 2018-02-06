@@ -44,7 +44,6 @@
     <Compile Include="Common\Parsing\ParsingResult.cs" />
     <Compile Include="Common\Parsing\ParsingStatus.cs" />
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
-    <Compile Include="Common\ScaleName.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="MusicTheory\Note\NoteUtilities.cs" />
     <Compile Include="MusicTheory\Scale\Scale.cs" />
