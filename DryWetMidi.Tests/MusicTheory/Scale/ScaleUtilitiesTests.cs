@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.MusicTheory;
+﻿using System.Linq;
+using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
@@ -94,6 +95,102 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var expectedNote = Note.Get(NoteName.DSharp, 2);
 
             Assert.AreEqual(expectedNote, scale.GetPreviousNote(note));
+        }
+
+        [Test]
+        [Description("Get ascending notes starting from the scale's tonic.")]
+        public void GetAscendingNotes_FromTonic()
+        {
+            var scale = GetCMajorScale();
+            var actualNotes = scale.GetAscendingNotes(Octave.Get(2).C).Take(7);
+
+            CollectionAssert.AreEqual(new[]
+            {
+                Octave.Get(2).C,
+                Octave.Get(2).D,
+                Octave.Get(2).E,
+                Octave.Get(2).F,
+                Octave.Get(2).G,
+                Octave.Get(2).A,
+                Octave.Get(2).B,
+            },
+            actualNotes);
+        }
+
+        [Test]
+        [Description("Get ascending notes starting from the middle of scale.")]
+        public void GetAscendingNotes_NotFromTonic()
+        {
+            var scale = GetCMajorScale();
+            var actualNotes = scale.GetAscendingNotes(Octave.Get(2).E).Take(7);
+
+            CollectionAssert.AreEqual(new[]
+            {
+                Octave.Get(2).E,
+                Octave.Get(2).F,
+                Octave.Get(2).G,
+                Octave.Get(2).A,
+                Octave.Get(2).B,
+                Octave.Get(3).C,
+                Octave.Get(3).D,
+            },
+            actualNotes);
+        }
+
+        [Test]
+        [Description("Get descending notes starting from the tonic of scale.")]
+        public void GetDescendingNotes_FromTonic()
+        {
+            var scale = GetCMajorScale();
+            var actualNotes = scale.GetDescendingNotes(Octave.Get(3).C).Take(7);
+
+            CollectionAssert.AreEqual(new[]
+            {
+                Octave.Get(3).C,
+                Octave.Get(2).B,
+                Octave.Get(2).A,
+                Octave.Get(2).G,
+                Octave.Get(2).F,
+                Octave.Get(2).E,
+                Octave.Get(2).D,
+            },
+            actualNotes);
+        }
+
+        [Test]
+        [Description("Get descending notes starting from the middle of scale.")]
+        public void GetDescendingNotes_NotFromTonic()
+        {
+            var scale = GetCMajorScale();
+            var actualNotes = scale.GetDescendingNotes(Octave.Get(3).E).Take(7);
+
+            CollectionAssert.AreEqual(new[]
+            {
+                Octave.Get(3).E,
+                Octave.Get(3).D,
+                Octave.Get(3).C,
+                Octave.Get(2).B,
+                Octave.Get(2).A,
+                Octave.Get(2).G,
+                Octave.Get(2).F,
+            },
+            actualNotes);
+        }
+
+        [Test]
+        [Description("Get tonic of a scale.")]
+        public void GetDegree_Tonic()
+        {
+            var scale = GetEMajorScale();
+            Assert.AreEqual(NoteName.E, scale.GetDegree(ScaleDegree.Tonic));
+        }
+
+        [Test]
+        [Description("Get subdominant of a scale.")]
+        public void GetDegree_Subdominant()
+        {
+            var scale = GetCMajorScale();
+            Assert.AreEqual(NoteName.F, scale.GetDegree(ScaleDegree.Subdominant));
         }
 
         #endregion
