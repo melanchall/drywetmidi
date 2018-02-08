@@ -6,12 +6,12 @@ using BenchmarkDotNet.Running;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 {
-    [TestClass]
-    public class NotesManagingUtilitiesGetNotesBenchmarks
+    [TestFixture]
+    public class NotesManagingUtilitiesGetNotesBenchmarks : BenchmarkTest
     {
         #region Nested classes
 
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Benchmark NotesManagingUtilities.GetNotes method.")]
         public void GetNotes()
         {

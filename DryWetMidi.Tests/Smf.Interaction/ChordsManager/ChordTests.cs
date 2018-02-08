@@ -3,11 +3,11 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
-    [TestClass]
+    [TestFixture]
     public class ChordTests
     {
         #region Nested classes
@@ -43,16 +43,16 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             #region Test methods
 
-            [TestMethod]
+            [Test]
             [Description("Get property value of a chord without notes.")]
             public void Get_NoNotes()
             {
                 var chord = new Chord();
 
-                Assert.ThrowsException<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
+                Assert.Throws<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
             }
 
-            [TestMethod]
+            [Test]
             [Description("Get property value of a chord containing notes with the same value of the specified property.")]
             public void Get_SameValues()
             {
@@ -61,16 +61,16 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 Assert.AreEqual(_value1, GetPropertyValue(_chordPropertySelector, chord));
             }
 
-            [TestMethod]
+            [Test]
             [Description("Get property value of a chord containing notes with different values of the specified property.")]
             public void Get_DifferentValues()
             {
                 var chord = GetChord(_notePropertySelector, _value1, _value2);
 
-                Assert.ThrowsException<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
+                Assert.Throws<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
             }
 
-            [TestMethod]
+            [Test]
             [Description("Set a chord's property value.")]
             public void Set()
             {
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public sealed class ChannelTester : NotesPropertyTester<FourBitNumber>
         {
             public ChannelTester()
@@ -149,7 +149,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public sealed class VelocityTester : NotesPropertyTester<SevenBitNumber>
         {
             public VelocityTester()
@@ -162,7 +162,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public sealed class OffVelocityTester : NotesPropertyTester<SevenBitNumber>
         {
             public OffVelocityTester()
@@ -179,28 +179,28 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Get length of Chord without notes.")]
         public void Length_Get_NoNotes()
         {
             Assert.AreEqual(0, GetChord_NoNotes().Length);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get length of Chord with time of zero.")]
         public void Length_Get_ZeroTime()
         {
             Assert.AreEqual(200, GetChord_ZeroTime().Length);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get length of Chord with time of nonzero number.")]
         public void Length_Get_NonzeroTime()
         {
             Assert.AreEqual(200, GetChord_NonzeroTime().Length);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Set length of Chord without notes.")]
         public void Length_Set_NoNotes()
         {
@@ -210,7 +210,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreEqual(0, chord.Length);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Set length of Chord with time of zero.")]
         public void Length_Set_ZeroTime()
         {
@@ -220,7 +220,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreEqual(500, chord.Length);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Set length of Chord with time of nonzero number.")]
         public void Length_Set_NonzeroTime()
         {

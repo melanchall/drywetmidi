@@ -1,12 +1,12 @@
-﻿using Melanchall.DryWetMidi.Smf;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Melanchall.DryWetMidi.Smf;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf
 {
-    [TestClass]
+    [TestFixture]
     public sealed class MidiFileTests
     {
         #region Constants
@@ -31,9 +31,15 @@ namespace Melanchall.DryWetMidi.Tests.Smf
 
         #endregion
 
+        #region Properties
+
+        public TestContext TestContext { get; set; }
+
+        #endregion
+
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Read MIDI file with invalid channel event parameter value and treat that as error.")]
         public void Read_InvalidChannelEventParameterValue_Abort()
         {
@@ -45,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Read MIDI file with invalid channel event parameter value and read such values taking lower 7 bits.")]
         public void Read_InvalidChannelEventParameterValue_ReadValid()
         {
@@ -57,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Read MIDI file with invalid channel event parameter value and snap such values to valid limits (0-127).")]
         public void Read_InvalidChannelEventParameterValue_SnapToLimits()
         {
@@ -69,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidChunkSize_Abort()
         {
             ReadFilesWithException<InvalidChunkSizeException>(
@@ -80,7 +86,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidChunkSize_Ignore()
         {
             ReadFiles(
@@ -91,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidKeySignatureKey_Abort()
         {
             ReadFilesWithException<InvalidMetaEventParameterValueException>(
@@ -102,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidKeySignatureKey_SnapToLimits()
         {
             ReadFiles(
@@ -113,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidKeySignatureScale_Abort()
         {
             ReadFilesWithException<InvalidMetaEventParameterValueException>(
@@ -124,7 +130,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidKeySignatureScale_SnapToLimits()
         {
             ReadFiles(
@@ -135,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidMetaEventParameterValue_Abort()
         {
             ReadFilesWithException<InvalidMetaEventParameterValueException>(
@@ -146,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidMetaEventParameterValue_SnapToLimits()
         {
             ReadFiles(
@@ -157,7 +163,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidSmpteFrames_Abort()
         {
             ReadFilesWithException<InvalidMetaEventParameterValueException>(
@@ -168,7 +174,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_InvalidSmpteFrames_SnapToLimits()
         {
             ReadFiles(
@@ -179,7 +185,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_NoEndOfTrack_Abort()
         {
             ReadFilesWithException<MissedEndOfTrackEventException>(
@@ -190,7 +196,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_NoEndOfTrack_Ignore()
         {
             ReadFiles(
@@ -201,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_NoHeaderChunk_Abort()
         {
             ReadFilesWithException<NoHeaderChunkException>(
@@ -214,7 +220,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_NoHeaderChunk_Ignore()
         {
             ReadFiles(
@@ -227,7 +233,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_NotEnoughBytes_Abort()
         {
             ReadFilesWithException<NotEnoughBytesException>(
@@ -238,7 +244,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_NotEnoughBytes_Ignore()
         {
             ReadFiles(
@@ -251,7 +257,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_UnexpectedRunningStatus()
         {
             ReadFilesWithException<UnexpectedRunningStatusException>(
@@ -263,7 +269,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_UnknownChannelEvent()
         {
             ReadFilesWithException<UnknownChannelEventException>(
@@ -274,7 +280,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_UnknownFileFormat_Abort()
         {
             ReadFilesWithException<UnknownFileFormatException>(
@@ -285,7 +291,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        [TestMethod]
+        [Test]
         public void Read_UnknownFileFormat_Ignore()
         {
             ReadFiles(
@@ -302,32 +308,31 @@ namespace Melanchall.DryWetMidi.Tests.Smf
 
         #region Private methods
 
-        private static void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings)
+        private void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings)
             where TException : Exception
         {
             foreach (var filePath in GetFiles(directoryName))
             {
-                Assert.ThrowsException<TException>(() => MidiFile.Read(filePath, readingSettings),
-                                                   $"Exception is not thrown for {filePath}.");
+                Assert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception is not thrown for {filePath}.");
             }
         }
 
-        private static void ReadFiles(string directoryName, ReadingSettings readingSettings)
+        private void ReadFiles(string directoryName, ReadingSettings readingSettings)
         {
             foreach (var filePath in GetFiles(directoryName))
             {
-                MidiFile.Read(filePath, readingSettings);
+                Assert.DoesNotThrow(() => MidiFile.Read(filePath, readingSettings));
             }
         }
 
-        private static IEnumerable<string> GetFiles(string directoryName)
+        private IEnumerable<string> GetFiles(string directoryName)
         {
             return Directory.GetFiles(GetFilesDirectory(directoryName));
         }
 
-        private static string GetFilesDirectory(string directoryName)
+        private string GetFilesDirectory(string directoryName)
         {
-            return Path.Combine(FilesPath, directoryName);
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, FilesPath, directoryName);
         }
 
         #endregion

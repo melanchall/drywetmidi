@@ -1,15 +1,14 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.MusicTheory;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Melanchall.DryWetMidi.MusicTheory;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
-    [TestClass]
+    [TestFixture]
     public sealed class ScaleUtilitiesTests
     {
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Get degree of C major scale.")]
         public void GetDegree_C()
         {
@@ -19,7 +18,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(expectedDegree, scale.GetDegree(ScaleDegree.Mediant));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get degree of E major scale.")]
         public void GetDegree_E()
         {
@@ -29,7 +28,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(expectedDegree, scale.GetDegree(ScaleDegree.Submediant));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Check whether a note belongs a scale.")]
         public void IsNoteInScale_True()
         {
@@ -39,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.IsTrue(scale.IsNoteInScale(note));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Check whether a note doesn't belong a scale.")]
         public void IsNoteInScale_False()
         {
@@ -49,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.IsFalse(scale.IsNoteInScale(note));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get note of the C major scale next to B4.")]
         public void GetNextNote_C()
         {
@@ -61,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(expectedNote, scale.GetNextNote(note));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get note of the E major scale next to F#4.")]
         public void GetNextNote_E()
         {
@@ -73,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(expectedNote, scale.GetNextNote(note));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get note of the C major scale previous to A4.")]
         public void GetPreviousNote_C()
         {
@@ -85,7 +84,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(expectedNote, scale.GetPreviousNote(note));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get note of the E major scale previous to E2.")]
         public void GetPreviousNote_E()
         {

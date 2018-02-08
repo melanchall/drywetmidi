@@ -1,18 +1,18 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class QuantizeNotes
     {
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Quantize notes by quarter-step grid.")]
         public void Quantize_Musical_Quarter()
         {

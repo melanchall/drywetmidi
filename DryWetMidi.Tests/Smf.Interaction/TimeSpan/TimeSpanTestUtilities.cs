@@ -1,8 +1,8 @@
-﻿using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         public static void Add_TimeTime(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
         {
-            Assert.ThrowsException<ArgumentException>(() => timeSpan1.Add(timeSpan2, TimeSpanMode.TimeTime));
+            Assert.Throws<ArgumentException>(() => timeSpan1.Add(timeSpan2, TimeSpanMode.TimeTime));
         }
 
         public static void Add_TimeLength(ITimeSpan timeSpan1, ITimeSpan timeSpan2, TempoMap tempoMap)

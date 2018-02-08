@@ -7,11 +7,11 @@ using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Standards;
 using Melanchall.DryWetMidi.Tests.Utilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
-    [TestClass]
+    [TestFixture]
     public class PatternTests
     {
         private sealed class NoteInfo
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Add two notes where first one takes default length and velocity and the second takes specified ones.")]
         public void Note_MixedLengthAndVelocity()
         {
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add several notes with metric lengths.")]
         public void Note_Multiple_MetricLengths()
         {
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add several notes with metric lengths.")]
         public void Note_Multiple_MetricLengths_TempoChanged()
         {
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)).TotalMicroseconds);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add several notes by intervals.")]
         public void Note_Multiple_Interval()
         {
@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add chord with default velocity and octave.")]
         public void Chord_DefaultOctave()
         {
@@ -211,7 +211,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add several chords by interval.")]
         public void Chord_Interval()
         {
@@ -240,7 +240,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add unkeyed anchor after some time movings, jump to the anchor with MoveToFirstAnchor and add note.")]
         public void MoveToFirstAnchor_Unkeyed_OneUnkeyed()
         {
@@ -266,7 +266,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add unkeyed and keyed anchors after some time movings, jump to an anchor with MoveToFirstAnchor and add note.")]
         public void MoveToFirstAnchor_Unkeyed_OneUnkeyedAndOneKeyed()
         {
@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add unkeyed and keyed anchors after some time movings, jump to an anchor with MoveToFirstAnchor(key) and add note.")]
         public void MoveToFirstAnchor_Keyed_OneUnkeyedAndOneKeyed()
         {
@@ -318,42 +318,42 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         [Description("Add no anchors and try to jump to an anchor with MoveToFirstAnchor.")]
         public void MoveToFirstAnchor_Unkeyed_NoAnchors()
         {
-            var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTimeSpan(0, 0, 10))
-                .StepForward(new MetricTimeSpan(0, 0, 11))
-                .MoveToTime(new MetricTimeSpan(0, 0, 30))
-                .StepBack(new MetricTimeSpan(0, 0, 5))
-                .MoveToFirstAnchor()
+            Assert.Throws<InvalidOperationException>(() =>
+                new PatternBuilder()
+                    .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                    .StepForward(new MetricTimeSpan(0, 0, 11))
+                    .MoveToTime(new MetricTimeSpan(0, 0, 30))
+                    .StepBack(new MetricTimeSpan(0, 0, 5))
+                    .MoveToFirstAnchor()
 
-                .Note(Octave.Get(0).A)
+                    .Note(Octave.Get(0).A)
 
-                .Build();
+                    .Build());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         [Description("Add unkeyed anchor and try to jump to an anchor with MoveToFirstAnchor(key).")]
         public void MoveToFirstAnchor_Keyed_NoKeyedAnchors()
         {
-            var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTimeSpan(0, 0, 10))
-                .StepForward(new MetricTimeSpan(0, 0, 11))
-                .MoveToTime(new MetricTimeSpan(0, 0, 30))
-                .Anchor()
-                .StepBack(new MetricTimeSpan(0, 0, 5))
-                .MoveToFirstAnchor("Test")
+            Assert.Throws<ArgumentException>(() =>
+                new PatternBuilder()
+                    .MoveToTime(new MetricTimeSpan(0, 0, 10))
+                    .StepForward(new MetricTimeSpan(0, 0, 11))
+                    .MoveToTime(new MetricTimeSpan(0, 0, 30))
+                    .Anchor()
+                    .StepBack(new MetricTimeSpan(0, 0, 5))
+                    .MoveToFirstAnchor("Test")
 
-                .Note(Octave.Get(0).A)
+                    .Note(Octave.Get(0).A)
 
-                .Build();
+                    .Build());
         }
 
-        [TestMethod]
+        [Test]
         [Description("Step back by metric step and add note.")]
         public void StepBack_Metric()
         {
@@ -372,7 +372,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Step back by metric step beyond zero and add note.")]
         public void StepBack_Metric_BeyondZero()
         {
@@ -391,7 +391,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Step back by musical step and add note.")]
         public void StepBack_Musical()
         {
@@ -410,7 +410,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Step back by musical step beyond zero and add note.")]
         public void StepBack_Musical_BeyondZero()
         {
@@ -429,47 +429,43 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         [Description("Try to repeat last action one time in case of no actions exist at the moment.")]
         public void Repeat_Last_Single_NoActions()
         {
-            new PatternBuilder().Repeat();
+            Assert.Throws<InvalidOperationException>(() => new PatternBuilder().Repeat());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         [Description("Try to repeat last action several times in case of no actions exist at the moment.")]
         public void Repeat_Last_Multiple_Valid_NoActions()
         {
-            new PatternBuilder().Repeat(2);
+            Assert.Throws<InvalidOperationException>(() => new PatternBuilder().Repeat(2));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         [Description("Try to repeat last action invalid number of times in case of no actions exist at the moment.")]
         public void Repeat_Last_Multiple_Invalid_NoActions()
         {
-            new PatternBuilder().Repeat(-7);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PatternBuilder().Repeat(-7));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void Repeat_Previous_NoActions()
         {
-            new PatternBuilder().Repeat(2, 2);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PatternBuilder().Repeat(2, 2));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void Repeat_Previous_NotEnoughActions()
         {
-            new PatternBuilder()
-                .Anchor()
-                .Repeat(2, 2);
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new PatternBuilder()
+                    .Anchor()
+                    .Repeat(2, 2));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Repeat some actions and insert a note.")]
         public void Repeat_Previous()
         {
@@ -494,7 +490,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add single lyrics event.")]
         public void Lyrics_Single()
         {
@@ -511,7 +507,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add multiple lyrics events.")]
         public void Lyrics_Multiple()
         {
@@ -531,7 +527,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add lyrics events using repeat.")]
         public void Lyrics_Repeat()
         {
@@ -550,7 +546,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add single marker event.")]
         public void Marker_Single()
         {
@@ -567,7 +563,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add multiple marker events.")]
         public void Marker_Multiple()
         {
@@ -587,7 +583,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Add marker events using repeat.")]
         public void Marker_Repeat()
         {
@@ -608,7 +604,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Set program by number.")]
         public void SetProgram_Number()
         {
@@ -628,7 +624,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Set program by General MIDI Level 1 program.")]
         public void SetProgram_GeneralMidiProgram()
         {
@@ -648,7 +644,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
         }
 
-        [TestMethod]
+        [Test]
         [Description("Set program by General MIDI Level 2 program.")]
         public void SetProgram_GeneralMidi2Program()
         {

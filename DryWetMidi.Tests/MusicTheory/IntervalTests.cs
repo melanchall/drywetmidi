@@ -1,43 +1,43 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
-    [TestClass]
+    [TestFixture]
     public class IntervalTests
     {
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Get upward interval and check its direction.")]
         public void GetUp()
         {
             Assert.AreEqual(IntervalDirection.Up, Interval.GetUp(SevenBitNumber.MaxValue).Direction);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get downward interval and check its direction.")]
         public void GetDown()
         {
             Assert.AreEqual(IntervalDirection.Down, Interval.GetDown(SevenBitNumber.MaxValue).Direction);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get upward interval and get its downward version.")]
         public void GetUp_Down()
         {
             Assert.AreEqual(IntervalDirection.Down, Interval.GetUp(SevenBitNumber.MaxValue).Down().Direction);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Get downward interval and get its upward version.")]
         public void GetDown_Up()
         {
             Assert.AreEqual(IntervalDirection.Up, Interval.GetDown(SevenBitNumber.MaxValue).Up().Direction);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Check that interval of the same steps number are equal by reference.")]
         public void CheckReferences()
         {
