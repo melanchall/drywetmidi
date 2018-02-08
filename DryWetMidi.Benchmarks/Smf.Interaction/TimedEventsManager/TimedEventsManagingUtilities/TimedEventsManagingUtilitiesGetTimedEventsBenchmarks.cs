@@ -4,12 +4,12 @@ using BenchmarkDotNet.Attributes.Jobs;
 using BenchmarkDotNet.Running;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 {
-    [TestClass]
-    public class TimedEventsManagingUtilitiesGetTimedEventsBenchmarks
+    [TestFixture]
+    public class TimedEventsManagingUtilitiesGetTimedEventsBenchmarks : BenchmarkTest
     {
         #region Nested classes
 
@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Benchmark TimedEventsManagingUtilities.GetTimedEvents method.")]
         public void GetTimedEvents()
         {

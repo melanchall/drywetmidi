@@ -1,16 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Melanchall.DryWetMidi.Smf;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
-    [TestClass]
+    [TestFixture]
     public class TempoMapTests
     {
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Test default tempo map.")]
         public void Default()
         {
@@ -20,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                TimeSignature.Default);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Test tempo map created by tempo and time signature.")]
         public void Create_Tempo_TimeSignature()
         {
@@ -33,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                expectedTimeSignature);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Test tempo map created by tempo.")]
         public void Create_Tempo()
         {

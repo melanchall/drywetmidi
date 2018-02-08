@@ -1,10 +1,10 @@
-﻿using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
-    [TestClass]
+    [TestFixture]
     public sealed class MusicalTimeSpanTests
     {
         #region Constants
@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Default
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_1()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_2()
         {
             var timeSpan = ShortSpan;
@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_3()
         {
             var timeSpan = LongSpan;
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_4()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_5()
         {
             var timeSpan = ShortSpan;
@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_6()
         {
             var timeSpan = LongSpan;
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_7()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_8()
         {
             var timeSpan = ShortSpan;
@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Default_9()
         {
             var timeSpan = LongSpan;
@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Simple
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_1()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_2()
         {
             TimeSpanTestUtilities.TestConversion(ShortSpan,
@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_3()
         {
             TimeSpanTestUtilities.TestConversion(LongSpan,
@@ -149,7 +149,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_4()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -158,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_5()
         {
             TimeSpanTestUtilities.TestConversion(ShortSpan,
@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_6()
         {
             TimeSpanTestUtilities.TestConversion(LongSpan,
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_7()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -185,7 +185,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_8()
         {
             TimeSpanTestUtilities.TestConversion(ShortSpan,
@@ -194,7 +194,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Simple_9()
         {
             TimeSpanTestUtilities.TestConversion(LongSpan,
@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Complex
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_1()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -216,7 +216,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_2()
         {
             TimeSpanTestUtilities.TestConversion(ShortSpan,
@@ -225,7 +225,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_3()
         {
             TimeSpanTestUtilities.TestConversion(LongSpan,
@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_4()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -243,7 +243,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_5()
         {
             TimeSpanTestUtilities.TestConversion(ShortSpan,
@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_6()
         {
             TimeSpanTestUtilities.TestConversion(LongSpan,
@@ -261,7 +261,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_7()
         {
             TimeSpanTestUtilities.TestConversion(ZeroSpan,
@@ -270,7 +270,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_8()
         {
             TimeSpanTestUtilities.TestConversion(ShortSpan,
@@ -279,7 +279,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Convert_Complex_9()
         {
             TimeSpanTestUtilities.TestConversion(LongSpan,
@@ -294,49 +294,49 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Parse
 
-        [TestMethod]
+        [Test]
         [Description("Parse zero musical time span.")]
         public void Parse_1()
         {
             TimeSpanTestUtilities.Parse("0/1", new MusicalTimeSpan(0, 1));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Parse quarter musical time span.")]
         public void Parse_2()
         {
             TimeSpanTestUtilities.Parse("q", MusicalTimeSpan.Quarter);
         }
 
-        [TestMethod]
+        [Test]
         [Description("Parse single dotted quarter musical time span.")]
         public void Parse_3()
         {
             TimeSpanTestUtilities.Parse("1/4.", MusicalTimeSpan.Quarter.SingleDotted());
         }
 
-        [TestMethod]
+        [Test]
         [Description("Parse double dotted eight musical time span.")]
         public void Parse_4()
         {
             TimeSpanTestUtilities.Parse("/8..", MusicalTimeSpan.Eighth.DoubleDotted());
         }
 
-        [TestMethod]
+        [Test]
         [Description("Parse single dotted triplet whole musical time span.")]
         public void Parse_5()
         {
             TimeSpanTestUtilities.Parse("wt.", MusicalTimeSpan.Whole.Triplet().SingleDotted());
         }
 
-        [TestMethod]
+        [Test]
         [Description("Parse tuplet whole musical time span where tuplet is 3 notes in space of 10 ones.")]
         public void Parse_6()
         {
             TimeSpanTestUtilities.Parse("w[3:10]", MusicalTimeSpan.Whole.Tuplet(3, 10));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Parse triple dotted tuplet sixteenth musical time span where tuplet is 3 notes in space of 10 ones.")]
         public void Parse_7()
         {
@@ -347,7 +347,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Add
 
-        [TestMethod]
+        [Test]
         public void Add_SameType_1()
         {
             TimeSpanTestUtilities.Add_SameType(new MusicalTimeSpan(),
@@ -355,7 +355,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                new MusicalTimeSpan());
         }
 
-        [TestMethod]
+        [Test]
         public void Add_SameType_2()
         {
             TimeSpanTestUtilities.Add_SameType(new MusicalTimeSpan(5, 7),
@@ -363,7 +363,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                new MusicalTimeSpan(5, 7));
         }
 
-        [TestMethod]
+        [Test]
         public void Add_SameType_3()
         {
             TimeSpanTestUtilities.Add_SameType(MusicalTimeSpan.Quarter,
@@ -371,21 +371,21 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                MusicalTimeSpan.Quarter.SingleDotted());
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeTime_1()
         {
             TimeSpanTestUtilities.Add_TimeTime(ShortSpan,
                                                MetricSpan);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeTime_2()
         {
             TimeSpanTestUtilities.Add_TimeTime(LongSpan,
                                                MetricSpan);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeLength_Default_1()
         {
             TimeSpanTestUtilities.Add_TimeLength(ShortSpan,
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeLength_Default_2()
         {
             TimeSpanTestUtilities.Add_TimeLength(LongSpan,
@@ -401,7 +401,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeLength_Simple_1()
         {
             TimeSpanTestUtilities.Add_TimeLength(ShortSpan,
@@ -409,7 +409,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeLength_Simple_2()
         {
             TimeSpanTestUtilities.Add_TimeLength(LongSpan,
@@ -417,7 +417,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeLength_Complex_1()
         {
             TimeSpanTestUtilities.Add_TimeLength(ShortSpan,
@@ -425,7 +425,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_TimeLength_Complex_2()
         {
             TimeSpanTestUtilities.Add_TimeLength(LongSpan,
@@ -433,7 +433,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Default_1()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -442,7 +442,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Default_2()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -451,7 +451,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Default_3()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -460,7 +460,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    LargeTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Default_4()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -469,7 +469,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Default_5()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -478,7 +478,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Default_6()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -487,7 +487,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    LargeTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Simple_1()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -496,7 +496,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Simple_2()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -505,7 +505,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Simple_3()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -514,7 +514,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    LargeTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Simple_4()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -523,7 +523,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Simple_5()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -532,7 +532,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Simple_6()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -541,7 +541,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    LargeTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Complex_1()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -550,7 +550,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Complex_2()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -559,7 +559,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Complex_3()
         {
             TimeSpanTestUtilities.Add_LengthLength(ShortSpan,
@@ -568,7 +568,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    LargeTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Complex_4()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -577,7 +577,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Complex_5()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -586,7 +586,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                    ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Add_LengthLength_Complex_6()
         {
             TimeSpanTestUtilities.Add_LengthLength(LongSpan,
@@ -599,7 +599,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Subtract
 
-        [TestMethod]
+        [Test]
         public void Subtract_SameType_1()
         {
             TimeSpanTestUtilities.Subtract_SameType(new MusicalTimeSpan(),
@@ -607,7 +607,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                     new MusicalTimeSpan());
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_SameType_2()
         {
             TimeSpanTestUtilities.Subtract_SameType(new MusicalTimeSpan(11, 27),
@@ -615,7 +615,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                     new MusicalTimeSpan(11, 27));
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_SameType_3()
         {
             TimeSpanTestUtilities.Subtract_SameType(MusicalTimeSpan.Whole,
@@ -623,7 +623,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                     MusicalTimeSpan.Quarter.SingleDotted());
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_TimeTime_Default_1()
         {
             TimeSpanTestUtilities.Subtract_TimeTime(MetricSpan,
@@ -631,7 +631,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                     TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_TimeTime_Simple_1()
         {
             TimeSpanTestUtilities.Subtract_TimeTime(MetricSpan,
@@ -639,7 +639,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                     TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_TimeTime_Complex_1()
         {
             TimeSpanTestUtilities.Subtract_TimeTime(MetricSpan,
@@ -647,7 +647,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                     TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_TimeLength_Default_1()
         {
             TimeSpanTestUtilities.Subtract_TimeLength(MetricSpan,
@@ -655,7 +655,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                       TimeSpanTestUtilities.DefaultTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_TimeLength_Simple_1()
         {
             TimeSpanTestUtilities.Subtract_TimeLength(MetricSpan,
@@ -663,7 +663,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                       TimeSpanTestUtilities.SimpleTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_TimeLength_Complex_1()
         {
             TimeSpanTestUtilities.Subtract_TimeLength(MetricSpan,
@@ -671,7 +671,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                       TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Default_1()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -680,7 +680,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Default_2()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -689,7 +689,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Default_3()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -698,7 +698,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         LargeTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Simple_1()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -707,7 +707,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Simple_2()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -716,7 +716,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Simple_3()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -725,7 +725,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         LargeTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Complex_1()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -734,7 +734,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         ZeroTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Complex_2()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -743,7 +743,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                         ShortTime);
         }
 
-        [TestMethod]
+        [Test]
         public void Subtract_LengthLength_Complex_3()
         {
             TimeSpanTestUtilities.Subtract_LengthLength(MetricSpan,
@@ -756,7 +756,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Multiply
 
-        [TestMethod]
+        [Test]
         [Description("Multiply zero time span by zero.")]
         public void Multiply_1()
         {
@@ -764,7 +764,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             new MusicalTimeSpan().Multiply(0));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Multiply arbitrary time span by zero.")]
         public void Multiply_2()
         {
@@ -772,7 +772,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             new MusicalTimeSpan(3, 7).Multiply(0));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Multiply by integer number.")]
         public void Multiply_3()
         {
@@ -780,7 +780,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             MusicalTimeSpan.Half.Multiply(2));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Multiply by non-integer number.")]
         public void Multiply_4()
         {
@@ -788,18 +788,18 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             MusicalTimeSpan.Quarter.Multiply(1.5));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Multiply by negative number.")]
         public void Multiply_5()
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MusicalTimeSpan().Multiply(-5));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new MusicalTimeSpan().Multiply(-5));
         }
 
         #endregion
 
         #region Divide
 
-        [TestMethod]
+        [Test]
         [Description("Divide arbitrary time span by one.")]
         public void Divide_1()
         {
@@ -807,7 +807,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             new MusicalTimeSpan(1, 5).Divide(1));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Divide arbitrary time span by integer number.")]
         public void Divide_2()
         {
@@ -815,7 +815,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             MusicalTimeSpan.Whole.Divide(2));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Divide by non-integer number.")]
         public void Divide_3()
         {
@@ -823,21 +823,21 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                             MusicalTimeSpan.Eighth.Divide(1.5));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Divide by zero.")]
         public void Divide_4()
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MusicalTimeSpan().Divide(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new MusicalTimeSpan().Divide(0));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Divide by negative number.")]
         public void Divide_5()
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MusicalTimeSpan().Divide(-8));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new MusicalTimeSpan().Divide(-8));
         }
 
-        [TestMethod]
+        [Test]
         [Description("Divide zero time span by one.")]
         public void Divide_6()
         {
@@ -849,13 +849,13 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Clone
 
-        [TestMethod]
+        [Test]
         public void Clone_1()
         {
             TimeSpanTestUtilities.TestClone(new MusicalTimeSpan());
         }
 
-        [TestMethod]
+        [Test]
         public void Clone_2()
         {
             TimeSpanTestUtilities.TestClone(new MusicalTimeSpan(5, 8));

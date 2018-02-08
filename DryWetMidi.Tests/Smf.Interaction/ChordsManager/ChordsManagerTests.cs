@@ -1,15 +1,15 @@
 ﻿using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
-    [TestClass]
+    [TestFixture]
     public sealed class ChordsManagerTests
     {
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Check that ChordsCollection is sorted when enumerated.")]
         public void Enumeration_Sorted()
         {

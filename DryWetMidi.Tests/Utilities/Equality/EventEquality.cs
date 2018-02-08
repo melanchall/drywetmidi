@@ -1,14 +1,16 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     internal static class EventEquality
     {
+        #region Nested classes
+
         private static class ArrayUtilities
         {
             public static bool Equals<T>(T[] array1, T[] array2)
@@ -25,6 +27,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 return array1.SequenceEqual(array2);
             }
         }
+
+        #endregion
+
+        #region Constants
 
         private static readonly Dictionary<Type, Func<MidiEvent, MidiEvent, bool>> _comparers =
             new Dictionary<Type, Func<MidiEvent, MidiEvent, bool>>
@@ -81,6 +87,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 },
             };
 
+        #endregion
+
+        #region Methods
+
         public static bool Equals(MidiEvent e1, MidiEvent e2)
         {
             if (ReferenceEquals(e1, e2))
@@ -121,5 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
             return true;
         }
+
+        #endregion
     }
 }

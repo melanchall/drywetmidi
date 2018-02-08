@@ -1,14 +1,14 @@
-﻿using Melanchall.DryWetMidi.Smf;
+﻿using System.Linq;
+using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
-    [TestClass]
+    [TestFixture]
     public class TempoMapManagerTests
     {
-        [TestMethod]
+        [Test]
         [Description("Manage new tempo map without specified time division.")]
         public void Manage_New_WithoutTimeDivision()
         {
@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             }
         }
 
-        [TestMethod]
+        [Test]
         [Description("Manage new tempo map with the specified time division.")]
         public void Manage_New_WithTimeDivision()
         {
@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             }
         }
 
-        [TestMethod]
+        [Test]
         [Description("Replace a tempo map with the default one.")]
         public void ReplaceTempoMap_ByDefault()
         {

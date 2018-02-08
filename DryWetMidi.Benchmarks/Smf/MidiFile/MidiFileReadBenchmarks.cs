@@ -3,12 +3,12 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Jobs;
 using BenchmarkDotNet.Running;
 using Melanchall.DryWetMidi.Smf;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf
 {
-    [TestClass]
-    public class MidiFileReadBenchmarks
+    [TestFixture]
+    public class MidiFileReadBenchmarks : BenchmarkTest
     {
         #region Nested classes
 
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
 
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("Benchmark MidiFile.Read method.")]
         public void Read()
         {

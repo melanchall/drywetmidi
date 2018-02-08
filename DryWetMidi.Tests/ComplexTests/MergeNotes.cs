@@ -1,14 +1,14 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class MergeNotes
     {
         #region Nested classes
@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests
 
         #region Test methods
 
-        [TestMethod]
+        [Test]
         [Description("All notes have the same channel and note number, and overlap each other, thus should be merged into one.")]
         public void Merge_SingleChannel_SingleNoteNumber_AllOverlapped()
         {
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tests
                 });
         }
 
-        [TestMethod]
+        [Test]
         [Description("One note is placed inside another and thus greater note should be the result of merge.")]
         public void Merge_SingleChannel_SingleNoteNumber_NoteInsideAnother()
         {
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tests
                 });
         }
 
-        [TestMethod]
+        [Test]
         [Description("All notes have the same channel and note number, some of them overlap each other, some not.")]
         public void Merge_SingleChannel_SingleNoteNumber_SeparatedAndOverlapped()
         {
