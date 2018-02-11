@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark ChordsManagingUtilities.GetChords method.")]
         public void GetChords()
         {
-            BenchmarkRunner.Run<Benchmarks>();
+            RunBenchmarks<Benchmarks>();
         }
 
         #endregion

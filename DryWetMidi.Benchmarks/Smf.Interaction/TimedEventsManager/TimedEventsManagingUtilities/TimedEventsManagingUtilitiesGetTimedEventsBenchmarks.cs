@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark TimedEventsManagingUtilities.GetTimedEvents method.")]
         public void GetTimedEvents()
         {
-            BenchmarkRunner.Run<Benchmarks>();
+            RunBenchmarks<Benchmarks>();
         }
 
         #endregion
