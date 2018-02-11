@@ -95,6 +95,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
         #region Test methods
 
         [Test]
+        [Category(TestCategory)]
         [Description("Benchmark MidiFile.Read method.")]
         public void Read()
         {
