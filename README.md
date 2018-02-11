@@ -1,5 +1,7 @@
 ![DryWetMIDI Logo](https://github.com/melanchall/drywetmidi/blob/develop/Images/dwm-logo.png)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/719y6rdkg5526meo/branch/develop?svg=true)](https://ci.appveyor.com/project/melanchall/drywetmidi/branch/develop)
+
 DryWetMIDI is the .NET library to work with MIDI files. Visit [Wiki](https://github.com/melanchall/drymidi/wiki) to learn how to use the DryWetMIDI. You can get the latest version via NuGet:
 
 [![NuGet](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg?style=flat-square)](https://www.nuget.org/packages/Melanchall.DryWetMidi/)
