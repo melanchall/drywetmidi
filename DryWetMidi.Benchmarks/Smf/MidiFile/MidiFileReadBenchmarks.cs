@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
     {
         #region Nested classes
 
-        [ClrJob(isBaseline: true)]
+        [ClrJob]
         public class Benchmarks
         {
             private const string SmallFilesDirectoryName = "Small";
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
         [Description("Benchmark MidiFile.Read method.")]
         public void Read()
         {
-            BenchmarkRunner.Run<Benchmarks>();
+            RunBenchmarks<Benchmarks>();
         }
 
         #endregion

@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark NotesManagingUtilities.GetNotes method.")]
         public void GetNotes()
         {
-            BenchmarkRunner.Run<Benchmarks>();
+            RunBenchmarks<Benchmarks>();
         }
 
         #endregion
