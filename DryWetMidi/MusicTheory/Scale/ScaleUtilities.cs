@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsNull(nameof(scale), scale);
 
             var noteNumber = Enumerable.Range(SevenBitNumber.MinValue, SevenBitNumber.MaxValue - SevenBitNumber.MinValue + 1)
-                                       .SkipWhile(n => NoteUtilities.GetNoteName((SevenBitNumber)n) != scale.RootNoteName)
+                                       .SkipWhile(n => NoteUtilities.GetNoteName((SevenBitNumber)n) != scale.RootNote)
                                        .First();
 
             yield return Note.Get((SevenBitNumber)noteNumber);
