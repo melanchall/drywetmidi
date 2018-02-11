@@ -69,6 +69,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Test methods
 
         [Test]
+        [Category(TestCategory)]
         [Description("Benchmark ChordsManagingUtilities.GetChords method.")]
         public void GetChords()
         {

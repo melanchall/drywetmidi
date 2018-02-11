@@ -7,6 +7,12 @@ namespace Melanchall.DryWetMidi.Benchmarks
 {
     public abstract class BenchmarkTest
     {
+        #region Constants
+
+        internal const string TestCategory = "Benchmark";
+
+        #endregion
+
         #region Properties
 
         public TestContext TestContext { get; set; }
