@@ -18,4 +18,4 @@ notifications:
   on_build_status_changed: false
 skip_commits:
   files:
-    - **/*.md
+    - '**/*.md'
