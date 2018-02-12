@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Running;
 using NUnit.Framework;
 
@@ -7,12 +9,6 @@ namespace Melanchall.DryWetMidi.Benchmarks
 {
     public abstract class BenchmarkTest
     {
-        #region Constants
-
-        internal const string TestCategory = "Benchmark";
-
-        #endregion
-
         #region Properties
 
         public TestContext TestContext { get; set; }
@@ -29,7 +25,8 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
         protected void RunBenchmarks<TBenchmarks>()
         {
-            var summary = BenchmarkRunner.Run<TBenchmarks>();
+            var summary = BenchmarkRunner.Run<TBenchmarks>(ManualConfig.Create(DefaultConfig.Instance)
+                                                                       .With(JsonExporter.Brief));
 
             var validationErrorsStringBuilder = new StringBuilder();
 

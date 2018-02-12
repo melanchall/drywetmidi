@@ -63,7 +63,6 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Test methods
 
         [Test]
-        [Category(TestCategory)]
         [Description("Benchmark NotesManagingUtilities.GetNotes method.")]
         public void GetNotes()
         {
