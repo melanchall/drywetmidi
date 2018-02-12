@@ -6,16 +6,58 @@ before_build:
 - cmd: nuget restore
 build:
   verbosity: minimal
+before_test:
+- ps: >-
+    $apiUrl = 'https://ci.appveyor.com/api'
+
+    $token = 'tyccuxecdiu6rqg113y9'
+
+    $headers = @{
+      "Authorization" = "Bearer $token"
+      "Content-type" = "application/json"
+    }
+
+    $accountName = 'melanchall'
+
+    $projectSlug = 'drywetmidi'
+
+
+    $downloadLocation = 'C:\projects'
+
+
+    # get project with last build details
+
+    $project = Invoke-RestMethod -Method Get -Uri "$apiUrl/projects/$accountName/$projectSlug" -Headers $headers
+
+
+    # we assume here that build has a single job
+
+    # get this job id
+
+    $jobId = $project.build.jobs[0].jobId
+
+
+    # get job artifacts (just to see what we've got)
+
+    $artifacts = Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts" -Headers $headers
+
+
+    ForEach ($artifact in $artifacts)
+
+    {
+      $artifactFileName = $artifact.fileName
+
+      # artifact will be downloaded as
+      $localArtifactPath = "$downloadLocation\$artifactFileName"
+
+      # download artifact
+      # -OutFile - is local file name where artifact will be downloaded into
+      # the Headers in this call should only contain the bearer token, and no Content-type, otherwise it will fail!
+      Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName" -OutFile $localArtifactPath -Headers @{ "Authorization" = "Bearer $token" }
+    }
 artifacts:
 - path: DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results\*.json
   name: Benchmarks results
-notifications:
-- provider: Email
-  to:
-  - m.hall.muz@gmail.com
-  on_build_success: true
-  on_build_failure: true
-  on_build_status_changed: false
 skip_commits:
   files:
     - '**/*.md'
