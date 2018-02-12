@@ -62,7 +62,6 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Test methods
 
         [Test]
-        [Category(TestCategory)]
         [Description("Benchmark TimedEventsManagingUtilities.GetTimedEvents method.")]
         public void GetTimedEvents()
         {

@@ -1,0 +1,21 @@
+version: 3.0.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: minimal
+artifacts:
+- path: DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results\*.json
+  name: Benchmarks results
+notifications:
+- provider: Email
+  to:
+  - m.hall.muz@gmail.com
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: false
+skip_commits:
+  files:
+    - *.md
