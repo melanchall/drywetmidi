@@ -69,12 +69,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             // Fraction
 
             long numerator;
-            if (!ParsingUtilities.ParseLong(match, NumeratorGroupName, 1, out numerator))
-                return new ParsingResult(NumeratorIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeLong(match, NumeratorGroupName, 1, out numerator))
+                return ParsingResult.Error(NumeratorIsOutOfRange);
 
             long denominator;
-            if (!ParsingUtilities.ParseLong(match, DenominatorGroupName, 1, out denominator))
-                return new ParsingResult(DenominatorIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeLong(match, DenominatorGroupName, 1, out denominator))
+                return ParsingResult.Error(DenominatorIsOutOfRange);
 
             var fractionMnemonicGroup = match.Groups[FractionMnemonicGroupName];
             if (fractionMnemonicGroup.Success)
@@ -87,12 +87,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             // Tuplet
 
             int tupletNotesCount;
-            if (!ParsingUtilities.ParseInt(match, TupletNotesCountGroupName, 1, out tupletNotesCount))
-                return new ParsingResult(TupletNotesCountIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletNotesCountGroupName, 1, out tupletNotesCount))
+                return ParsingResult.Error(TupletNotesCountIsOutOfRange);
 
             int tupletSpaceSize;
-            if (!ParsingUtilities.ParseInt(match, TupletSpaceSizeGroupName, 1, out tupletSpaceSize))
-                return new ParsingResult(TupletSpaceSizeIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletSpaceSizeGroupName, 1, out tupletSpaceSize))
+                return ParsingResult.Error(TupletSpaceSizeIsOutOfRange);
 
             var tupletMnemonicGroup = match.Groups[TupletMnemonicGroupName];
             if (tupletMnemonicGroup.Success)

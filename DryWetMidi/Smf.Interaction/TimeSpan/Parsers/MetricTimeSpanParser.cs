@@ -12,10 +12,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string SecondsGroupName = "s";
         private const string MillisecondsGroupName = "ms";
 
-        private static readonly string HoursGroup = ParsingUtilities.GetNumberGroup(HoursGroupName);
-        private static readonly string MinutesGroup = ParsingUtilities.GetNumberGroup(MinutesGroupName);
-        private static readonly string SecondsGroup = ParsingUtilities.GetNumberGroup(SecondsGroupName);
-        private static readonly string MillisecondsGroup = ParsingUtilities.GetNumberGroup(MillisecondsGroupName);
+        private static readonly string HoursGroup = ParsingUtilities.GetNonnegativeNumberGroup(HoursGroupName);
+        private static readonly string MinutesGroup = ParsingUtilities.GetNonnegativeNumberGroup(MinutesGroupName);
+        private static readonly string SecondsGroup = ParsingUtilities.GetNonnegativeNumberGroup(SecondsGroupName);
+        private static readonly string MillisecondsGroup = ParsingUtilities.GetNonnegativeNumberGroup(MillisecondsGroupName);
 
         private static readonly string Divider = Regex.Escape(":");
 
@@ -52,20 +52,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return ParsingResult.NotMatched;
 
             int hours;
-            if (!ParsingUtilities.ParseInt(match, HoursGroupName, 0, out hours))
-                return new ParsingResult(HoursIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeInt(match, HoursGroupName, 0, out hours))
+                return ParsingResult.Error(HoursIsOutOfRange);
 
             int minutes;
-            if (!ParsingUtilities.ParseInt(match, MinutesGroupName, 0, out minutes))
-                return new ParsingResult(MinutesIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeInt(match, MinutesGroupName, 0, out minutes))
+                return ParsingResult.Error(MinutesIsOutOfRange);
 
             int seconds;
-            if (!ParsingUtilities.ParseInt(match, SecondsGroupName, 0, out seconds))
-                return new ParsingResult(SecondsIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeInt(match, SecondsGroupName, 0, out seconds))
+                return ParsingResult.Error(SecondsIsOutOfRange);
 
             int milliseconds;
-            if (!ParsingUtilities.ParseInt(match, MillisecondsGroupName, 0, out milliseconds))
-                return new ParsingResult(MillisecondsIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeInt(match, MillisecondsGroupName, 0, out milliseconds))
+                return ParsingResult.Error(MillisecondsIsOutOfRange);
 
             timeSpan = new MetricTimeSpan(hours, minutes, seconds, milliseconds);
             return ParsingResult.Parsed;

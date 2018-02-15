@@ -12,9 +12,15 @@ namespace Melanchall.DryWetMidi.Common
 
         #endregion
 
+        #region Fields
+
+        private readonly string _error;
+
+        #endregion
+
         #region Constructor
 
-        public ParsingResult(string error)
+        private ParsingResult(string error)
             : this(ParsingStatus.FormatError, error)
         {
         }
@@ -27,7 +33,7 @@ namespace Melanchall.DryWetMidi.Common
         private ParsingResult(ParsingStatus status, string error)
         {
             Status = status;
-            Error = error;
+            _error = error;
         }
 
         #endregion
@@ -35,8 +41,6 @@ namespace Melanchall.DryWetMidi.Common
         #region Properties
 
         public ParsingStatus Status { get; }
-
-        public string Error { get; }
 
         public Exception Exception
         {
@@ -49,11 +53,20 @@ namespace Melanchall.DryWetMidi.Common
                     case ParsingStatus.NotMatched:
                         return new FormatException("Input string has invalid format.");
                     case ParsingStatus.FormatError:
-                        return new FormatException(Error);
+                        return new FormatException(_error);
                 }
 
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Methods
+
+        public static ParsingResult Error(string error)
+        {
+            return new ParsingResult(error);
         }
 
         #endregion

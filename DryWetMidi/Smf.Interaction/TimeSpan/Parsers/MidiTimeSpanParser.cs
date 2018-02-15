@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private const string TimeSpanGroupName = "ts";
 
-        private static readonly string TimeSpanGroup = ParsingUtilities.GetNumberGroup(TimeSpanGroupName);
+        private static readonly string TimeSpanGroup = ParsingUtilities.GetNonnegativeNumberGroup(TimeSpanGroupName);
 
         private static readonly string[] Patterns = new[]
         {
@@ -33,8 +33,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return ParsingResult.NotMatched;
 
             long midiTimeSpan;
-            if (!ParsingUtilities.ParseLong(match, TimeSpanGroupName, 0, out midiTimeSpan))
-                return new ParsingResult(OutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeLong(match, TimeSpanGroupName, 0, out midiTimeSpan))
+                return ParsingResult.Error(OutOfRange);
 
             timeSpan = new MidiTimeSpan(midiTimeSpan);
             return ParsingResult.Parsed;
