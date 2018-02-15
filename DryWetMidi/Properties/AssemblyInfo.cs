@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DryWetMIDI")]
 [assembly: AssemblyDescription(".NET library to work with MIDI files")]
 [assembly: AssemblyProduct("DryWetMIDI")]
-[assembly: AssemblyCopyright("Copyright © Melanchall 2017")]
+[assembly: AssemblyCopyright("Copyright © Melanchall 2018")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -27,5 +27,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.1.0")]
-[assembly: AssemblyFileVersion("2.0.1.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.0.0")]

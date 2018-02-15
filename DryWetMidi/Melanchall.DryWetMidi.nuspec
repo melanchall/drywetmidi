@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Melanchall.DryWetMidi</id>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
     <title>DryWetMIDI</title>
     <authors>melanchall</authors>
     <owners>melanchall</owners>
@@ -21,7 +21,7 @@ DryWetMIDI is the .NET library to work with MIDI files. It allows:
 * Build musical compositions.
     </description>
     <summary>.NET library to work with MIDI files</summary>
-    <copyright>Copyright © Melanchall 2017</copyright>
+    <copyright>Copyright © Melanchall 2018</copyright>
     <tags>midi smf music</tags>
   </metadata>
 </package>
