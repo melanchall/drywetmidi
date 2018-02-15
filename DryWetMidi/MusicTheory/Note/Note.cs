@@ -10,6 +10,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
     /// </summary>
     public sealed class Note
     {
+        #region Constants
+
+        internal const string SharpLongString = "Sharp";
+        internal const string SharpShortString = "#";
+
+        #endregion
+
         #region Fields
 
         private static readonly Dictionary<SevenBitNumber, Note> _cache =
@@ -98,6 +105,21 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Get(NoteUtilities.GetNoteNumber(noteName, octave));
         }
 
+        public static bool TryParse(string input, out Note note)
+        {
+            return NoteParser.TryParse(input, out note).Status == ParsingStatus.Parsed;
+        }
+
+        public static Note Parse(string input)
+        {
+            Note note;
+            var parsingResult = NoteParser.TryParse(input, out note);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return note;
+
+            throw parsingResult.Exception;
+        }
+
         #endregion
 
         #region Operators
@@ -170,7 +192,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{NoteName.ToString().Replace("Sharp", "#")}{Octave}";
+            return $"{NoteName.ToString().Replace(SharpLongString, SharpShortString)}{Octave}";
         }
 
         /// <summary>

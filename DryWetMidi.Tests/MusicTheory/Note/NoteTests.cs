@@ -83,6 +83,67 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             });
         }
 
+        [Test]
+        [Description("Parse valid note.")]
+        public void Parse_Valid_ZeroOctave()
+        {
+            Parse("C#0", Octave.Get(0).CSharp);
+        }
+
+        [Test]
+        [Description("Parse valid note of negative octave.")]
+        public void Parse_Valid_NegativeOctave()
+        {
+            Parse("B-1", Octave.Get(-1).B);
+        }
+
+        [Test]
+        [Description("Parse valid note using 'sharp' word.")]
+        public void Parse_Valid_SharpWord()
+        {
+            Parse("F sharp 3", Octave.Get(3).FSharp);
+        }
+
+        [Test]
+        [Description("Parse arbitrary metric time span with all components.")]
+        public void Parse_Invalid_OctaveIsOutOfRange()
+        {
+            ParseInvalid("E10");
+        }
+
+        [Test]
+        [Description("Parse arbitrary metric time span without milliseconds.")]
+        public void Parse_Invalid_NoteNameIsInvalid()
+        {
+            ParseInvalid("ESharp4");
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static void Parse(string input, Note expectedNote)
+        {
+            Note.TryParse(input, out var actualNote);
+            Assert.AreEqual(expectedNote,
+                            actualNote,
+                            "TryParse: incorrect result.");
+
+            actualNote = Note.Parse(input);
+            Assert.AreEqual(expectedNote,
+                            actualNote,
+                            "Parse: incorrect result.");
+
+            Assert.AreEqual(expectedNote,
+                            Note.Parse(expectedNote.ToString()),
+                            "Parse: string representation was not parsed to the original note.");
+        }
+
+        private static void ParseInvalid(string input)
+        {
+            Assert.Throws<FormatException>(() => Note.Parse(input));
+        }
+
         #endregion
     }
 }

@@ -11,9 +11,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string BeatsGroupName = "beats";
         private const string TicksGroupName = "ticks";
 
-        private static readonly string BarsGroup = ParsingUtilities.GetNumberGroup(BarsGroupName);
-        private static readonly string BeatsGroup = ParsingUtilities.GetNumberGroup(BeatsGroupName);
-        private static readonly string TicksGroup = ParsingUtilities.GetNumberGroup(TicksGroupName);
+        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeNumberGroup(BarsGroupName);
+        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeNumberGroup(BeatsGroupName);
+        private static readonly string TicksGroup = ParsingUtilities.GetNonnegativeNumberGroup(TicksGroupName);
 
         private static readonly string Divider = Regex.Escape(".");
 
@@ -42,16 +42,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return ParsingResult.NotMatched;
 
             long bars;
-            if (!ParsingUtilities.ParseLong(match, BarsGroupName, 0, out bars))
-                return new ParsingResult(BarsIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeLong(match, BarsGroupName, 0, out bars))
+                return ParsingResult.Error(BarsIsOutOfRange);
 
             long beats;
-            if (!ParsingUtilities.ParseLong(match, BeatsGroupName, 0, out beats))
-                return new ParsingResult(BeatsIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeLong(match, BeatsGroupName, 0, out beats))
+                return ParsingResult.Error(BeatsIsOutOfRange);
 
             long ticks;
-            if (!ParsingUtilities.ParseLong(match, TicksGroupName, 0, out ticks))
-                return new ParsingResult(BeatsIsOutOfRange);
+            if (!ParsingUtilities.ParseNonnegativeLong(match, TicksGroupName, 0, out ticks))
+                return ParsingResult.Error(BeatsIsOutOfRange);
 
             timeSpan = new BarBeatTimeSpan(bars, beats, ticks);
             return ParsingResult.Parsed;

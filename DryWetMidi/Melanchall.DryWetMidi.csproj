@@ -47,6 +47,7 @@
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="MusicTheory\Chord\Chord.cs" />
     <Compile Include="MusicTheory\Chord\ChordUtilities.cs" />
+    <Compile Include="MusicTheory\Note\NoteParser.cs" />
     <Compile Include="MusicTheory\Note\NoteUtilities.cs" />
     <Compile Include="MusicTheory\Scale\Scale.cs" />
     <Compile Include="MusicTheory\Scale\ScaleDegree.cs" />
