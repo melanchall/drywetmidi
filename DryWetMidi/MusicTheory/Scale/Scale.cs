@@ -47,6 +47,25 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #endregion
 
+        #region Methods
+
+        public static bool TryParse(string input, out Scale scale)
+        {
+            return ScaleParser.TryParse(input, out scale).Status == ParsingStatus.Parsed;
+        }
+
+        public static Scale Parse(string input)
+        {
+            Scale scale;
+            var parsingResult = ScaleParser.TryParse(input, out scale);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return scale;
+
+            throw parsingResult.Exception;
+        }
+
+        #endregion
+
         #region Operators
 
         /// <summary>
@@ -88,7 +107,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{string.Join(" ", Intervals)} from {RootNote}";
+            return $"{RootNote} {string.Join(" ", Intervals)}";
         }
 
         /// <summary>
