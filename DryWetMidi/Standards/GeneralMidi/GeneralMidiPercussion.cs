@@ -8,236 +8,236 @@
         /// <summary>
         /// 'Acoustic Bass Drum' General MIDI percussion note.
         /// </summary>
-        AcousticBassDrum = 34,
+        AcousticBassDrum = 35,
 
         /// <summary>
         /// 'Bass Drum 1' General MIDI percussion note.
         /// </summary>
-        BassDrum1 = 35,
+        BassDrum1 = 36,
 
         /// <summary>
         /// 'Side Stick' General MIDI percussion note.
         /// </summary>
-        SideStick = 36,
+        SideStick = 37,
 
         /// <summary>
         /// 'Acoustic Snare' General MIDI percussion note.
         /// </summary>
-        AcousticSnare = 37,
+        AcousticSnare = 38,
 
         /// <summary>
         /// 'Hand Clap' General MIDI percussion note.
         /// </summary>
-        HandClap = 38,
+        HandClap = 39,
 
         /// <summary>
         /// 'Electric Snare' General MIDI percussion note.
         /// </summary>
-        ElectricSnare = 39,
+        ElectricSnare = 40,
 
         /// <summary>
         /// 'Low Floor Tom' General MIDI percussion note.
         /// </summary>
-        LowFloorTom = 40,
+        LowFloorTom = 41,
 
         /// <summary>
         /// 'Closed Hi-Hat' General MIDI percussion note.
         /// </summary>
-        ClosedHiHat = 41,
+        ClosedHiHat = 42,
 
         /// <summary>
         /// 'High Floor Tom' General MIDI percussion note.
         /// </summary>
-        HighFloorTom = 42,
+        HighFloorTom = 43,
 
         /// <summary>
         /// 'Pedal Hi-Hat' General MIDI percussion note.
         /// </summary>
-        PedalHiHat = 43,
+        PedalHiHat = 44,
 
         /// <summary>
         /// 'Low Tom' General MIDI percussion note.
         /// </summary>
-        LowTom = 44,
+        LowTom = 45,
 
         /// <summary>
         /// 'Open Hi-Hat' General MIDI percussion note.
         /// </summary>
-        OpenHiHat = 45,
+        OpenHiHat = 46,
 
         /// <summary>
         /// 'Low-Mid Tom' General MIDI percussion note.
         /// </summary>
-        LowMidTom = 46,
+        LowMidTom = 47,
 
         /// <summary>
         /// 'Hi-Mid Tom' General MIDI percussion note.
         /// </summary>
-        HiMidTom = 47,
+        HiMidTom = 48,
 
         /// <summary>
         /// 'Crash Cymbal 1' General MIDI percussion note.
         /// </summary>
-        CrashCymbal1 = 48,
+        CrashCymbal1 = 49,
 
         /// <summary>
         /// 'High Tom' General MIDI percussion note.
         /// </summary>
-        HighTom = 49,
+        HighTom = 50,
 
         /// <summary>
         /// 'Ride Cymbal 1' General MIDI percussion note.
         /// </summary>
-        RideCymbal1 = 50,
+        RideCymbal1 = 51,
 
         /// <summary>
         /// 'Chinese Cymbal' General MIDI percussion note.
         /// </summary>
-        ChineseCymbal = 51,
+        ChineseCymbal = 52,
 
         /// <summary>
         /// 'Ride Bell' General MIDI percussion note.
         /// </summary>
-        RideBell = 52,
+        RideBell = 53,
 
         /// <summary>
         /// 'Tambourine' General MIDI percussion note.
         /// </summary>
-        Tambourine = 53,
+        Tambourine = 54,
 
         /// <summary>
         /// 'Splash Cymbal' General MIDI percussion note.
         /// </summary>
-        SplashCymbal = 54,
+        SplashCymbal = 55,
 
         /// <summary>
         /// 'Cowbell' General MIDI percussion note.
         /// </summary>
-        Cowbell = 55,
+        Cowbell = 56,
 
         /// <summary>
         /// 'Crash Cymbal 2' General MIDI percussion note.
         /// </summary>
-        CrashCymbal2 = 56,
+        CrashCymbal2 = 57,
 
         /// <summary>
         /// 'Vibraslap' General MIDI percussion note.
         /// </summary>
-        Vibraslap = 57,
+        Vibraslap = 58,
 
         /// <summary>
         /// 'Ride Cymbal 2' General MIDI percussion note.
         /// </summary>
-        RideCymbal2 = 58,
+        RideCymbal2 = 59,
 
         /// <summary>
         /// 'Hi Bongo' General MIDI percussion note.
         /// </summary>
-        HiBongo = 59,
+        HiBongo = 60,
 
         /// <summary>
         /// 'Low Bongo' General MIDI percussion note.
         /// </summary>
-        LowBongo = 60,
+        LowBongo = 61,
 
         /// <summary>
         /// 'Mute Hi Conga' General MIDI percussion note.
         /// </summary>
-        MuteHiConga = 61,
+        MuteHiConga = 62,
 
         /// <summary>
         /// 'Open Hi Conga' General MIDI percussion note.
         /// </summary>
-        OpenHiConga = 62,
+        OpenHiConga = 63,
 
         /// <summary>
         /// 'Low Conga' General MIDI percussion note.
         /// </summary>
-        LowConga = 63,
+        LowConga = 64,
 
         /// <summary>
         /// 'High Timbale' General MIDI percussion note.
         /// </summary>
-        HighTimbale = 64,
+        HighTimbale = 65,
 
         /// <summary>
         /// 'Low Timbale' General MIDI percussion note.
         /// </summary>
-        LowTimbale = 65,
+        LowTimbale = 66,
 
         /// <summary>
         /// 'High Agogo' General MIDI percussion note.
         /// </summary>
-        HighAgogo = 66,
+        HighAgogo = 67,
 
         /// <summary>
         /// 'Low Agogo' General MIDI percussion note.
         /// </summary>
-        LowAgogo = 67,
+        LowAgogo = 68,
 
         /// <summary>
         /// 'Cabasa' General MIDI percussion note.
         /// </summary>
-        Cabasa = 68,
+        Cabasa = 69,
 
         /// <summary>
         /// 'Maracas' General MIDI percussion note.
         /// </summary>
-        Maracas = 69,
+        Maracas = 70,
 
         /// <summary>
         /// 'Short Whistle' General MIDI percussion note.
         /// </summary>
-        ShortWhistle = 70,
+        ShortWhistle = 71,
 
         /// <summary>
         /// 'Long Whistle' General MIDI percussion note.
         /// </summary>
-        LongWhistle = 71,
+        LongWhistle = 72,
 
         /// <summary>
         /// 'Short Guiro' General MIDI percussion note.
         /// </summary>
-        ShortGuiro = 72,
+        ShortGuiro = 73,
 
         /// <summary>
         /// 'Long Guiro' General MIDI percussion note.
         /// </summary>
-        LongGuiro = 73,
+        LongGuiro = 74,
 
         /// <summary>
         /// 'Claves' General MIDI percussion note.
         /// </summary>
-        Claves = 74,
+        Claves = 75,
 
         /// <summary>
         /// 'Hi Wood Block' General MIDI percussion note.
         /// </summary>
-        HiWoodBlock = 75,
+        HiWoodBlock = 76,
 
         /// <summary>
         /// 'Low Wood Block' General MIDI percussion note.
         /// </summary>
-        LowWoodBlock = 76,
+        LowWoodBlock = 77,
 
         /// <summary>
         /// 'Mute Cuica' General MIDI percussion note.
         /// </summary>
-        MuteCuica = 77,
+        MuteCuica = 78,
 
         /// <summary>
         /// 'Open Cuica' General MIDI percussion note.
         /// </summary>
-        OpenCuica = 78,
+        OpenCuica = 79,
 
         /// <summary>
         /// 'Mute Triangle' General MIDI percussion note.
         /// </summary>
-        MuteTriangle = 79,
+        MuteTriangle = 80,
 
         /// <summary>
         /// 'Open Triangle' General MIDI percussion note.
         /// </summary>
-        OpenTriangle = 80
+        OpenTriangle = 81
     }
 }
