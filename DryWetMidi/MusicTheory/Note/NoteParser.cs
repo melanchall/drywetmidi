@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -9,21 +8,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
         #region Constants
 
         private const string NoteNameGroupName = "n";
-        private const string AccidentalGroupName = "a";
         private const string OctaveGroupName = "o";
 
-        private static readonly string NoteNameGroup = $"(?<{NoteNameGroupName}>C|D|E|F|G|A|B)";
-        private static readonly string AccidentalGroup = $"(?<{AccidentalGroupName}>{Regex.Escape(Note.SharpShortString)}|{Note.SharpLongString})";
         private static readonly string OctaveGroup = ParsingUtilities.GetNumberGroup(OctaveGroupName);
 
-        private static readonly string[] Patterns = new[]
-        {
-            $@"{NoteNameGroup}\s*{AccidentalGroup}\s*{OctaveGroup}",
-            $@"{NoteNameGroup}\s*{OctaveGroup}",
-        };
+        private static readonly string[] Patterns = NoteNameParser.GetPatterns()
+                                                                  .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}")
+                                                                  .ToArray();
 
         private const string OctaveIsOutOfRange = "Octave number is out of range.";
-        private const string NoteNameIsInvalid = "Note's name is invalid.";
         private const string NoteIsOutOfRange = "Note is out of range.";
 
         #endregion
@@ -42,24 +35,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 return ParsingResult.NotMatched;
 
             var noteNameGroup = match.Groups[NoteNameGroupName];
-            var noteNameString = noteNameGroup.Value;
 
-            var accidentalGroup = match.Groups[AccidentalGroupName];
-            if (accidentalGroup.Success)
-            {
-                var accidental = accidentalGroup.Value;
-                accidental = accidental.Replace(Note.SharpShortString, Note.SharpLongString);
-                accidental = char.ToUpper(accidental[0]) + accidental.Substring(1);
-                noteNameString += accidental;
-            }
+            NoteName noteName;
+            var noteNameParsingResult = NoteNameParser.TryParse(noteNameGroup.Value, out noteName);
+            if (noteNameParsingResult.Status != ParsingStatus.Parsed)
+                return noteNameParsingResult;
 
             int octaveNumber;
             if (!ParsingUtilities.ParseInt(match, OctaveGroupName, Octave.Middle.Number, out octaveNumber))
                 return ParsingResult.Error(OctaveIsOutOfRange);
-
-            NoteName noteName;
-            if (!Enum.TryParse(noteNameString, out noteName))
-                return ParsingResult.Error(NoteNameIsInvalid);
 
             if (!NoteUtilities.IsNoteValid(noteName, octaveNumber))
                 return ParsingResult.Error(NoteIsOutOfRange);
