@@ -40,6 +40,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DisplayNameAttribute.cs" />
     <Compile Include="Common\MathUtilities.cs" />
     <Compile Include="Common\Parsing\ParsingResult.cs" />
     <Compile Include="Common\Parsing\ParsingStatus.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="MusicTheory\Scale\Scale.cs" />
     <Compile Include="MusicTheory\Scale\ScaleDegree.cs" />
     <Compile Include="MusicTheory\Scale\ScaleIntervals.cs" />
+    <Compile Include="MusicTheory\Scale\ScaleParser.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilities.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidi2ProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidiProgramAction.cs" />

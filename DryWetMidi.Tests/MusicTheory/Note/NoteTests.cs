@@ -105,14 +105,14 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         }
 
         [Test]
-        [Description("Parse arbitrary metric time span with all components.")]
+        [Description("Parse invalid note where octave number is out of range.")]
         public void Parse_Invalid_OctaveIsOutOfRange()
         {
             ParseInvalid("E10");
         }
 
         [Test]
-        [Description("Parse arbitrary metric time span without milliseconds.")]
+        [Description("Parse invalid note where note name is invalid.")]
         public void Parse_Invalid_NoteNameIsInvalid()
         {
             ParseInvalid("ESharp4");
