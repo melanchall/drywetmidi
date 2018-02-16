@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,24 +10,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private const string RootNoteNameGroupName = "n";
-        private const string AccidentalGroupName = "a";
+        private const string NoteNameGroupName = "n";
         private const string IntervalsGroupName = "is";
         private const string IntervalsMnemonicGroupName = "im";
         private const string IntervalGroupName = "i";
 
-        private static readonly string RootNoteNameGroup = $"(?<{RootNoteNameGroupName}>C|D|E|F|G|A|B)";
-        private static readonly string AccidentalGroup = $"(?<{AccidentalGroupName}>{Regex.Escape(Note.SharpShortString)}|{Note.SharpLongString})";
         private static readonly string IntervalsGroup = $"(?<{IntervalsGroupName}>({ParsingUtilities.GetNumberGroup(IntervalGroupName)}\\s*)+)";
         private static readonly string IntervalsMnemonicGroup = $"(?<{IntervalsMnemonicGroupName}>.+?)";
 
-        private static readonly string[] Patterns = new[]
-        {
-            $@"{RootNoteNameGroup}\s*{AccidentalGroup}\s*({IntervalsGroup}|{IntervalsMnemonicGroup})",
-            $@"{RootNoteNameGroup}\s*({IntervalsGroup}|{IntervalsMnemonicGroup})",
-        };
+        private static readonly string[] Patterns = NoteNameParser.GetPatterns()
+                                                                  .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*({IntervalsGroup}|{IntervalsMnemonicGroup})")
+                                                                  .ToArray();
 
-        private const string RootNoteNameIsInvalid = "Root note's name is invalid.";
         private const string ScaleIsUnknown = "Scale is unknown.";
 
         #endregion
@@ -46,21 +39,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
-            var rootNoteNameString = rootNoteNameGroup.Value;
+            var noteNameGroup = match.Groups[NoteNameGroupName];
 
-            var accidentalGroup = match.Groups[AccidentalGroupName];
-            if (accidentalGroup.Success)
-            {
-                var accidental = accidentalGroup.Value;
-                accidental = accidental.Replace(Note.SharpShortString, Note.SharpLongString);
-                accidental = char.ToUpper(accidental[0]) + accidental.Substring(1);
-                rootNoteNameString += accidental;
-            }
-
-            NoteName rootNoteName;
-            if (!Enum.TryParse(rootNoteNameString, out rootNoteName))
-                return ParsingResult.Error(RootNoteNameIsInvalid);
+            NoteName noteName;
+            var noteNameParsingResult = NoteNameParser.TryParse(noteNameGroup.Value, out noteName);
+            if (noteNameParsingResult.Status != ParsingStatus.Parsed)
+                return noteNameParsingResult;
 
             //
 
@@ -91,7 +75,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             //
 
-            scale = new Scale(intervals, rootNoteName);
+            scale = new Scale(intervals, noteName);
             return ParsingResult.Parsed;
         }
 
