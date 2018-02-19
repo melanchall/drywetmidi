@@ -34,14 +34,35 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Description("Parse invalid scale where scale is unknown.")]
         public void Parse_Invalid_ScaleIsUnknown()
         {
-            ParseInvalid("F yy bebop");
+            ParseInvalid<FormatException>("F yy bebop");
         }
 
         [Test]
         [Description("Parse invalid scale where root note's name is invalid.")]
         public void Parse_Invalid_RootNoteNameIsInvalid()
         {
-            ParseInvalid("E# major");
+            ParseInvalid<FormatException>("E# major");
+        }
+
+        [Test]
+        [Description("Parse invalid scale where a negative interval is out of range.")]
+        public void Parse_Invalid_IntervalIsOutOfRange_Negative()
+        {
+            ParseInvalid<FormatException>("E -300");
+        }
+
+        [Test]
+        [Description("Parse invalid scale where a positive interval is out of range.")]
+        public void Parse_Invalid_IntervalIsOutOfRange_Positive()
+        {
+            ParseInvalid<FormatException>("F 500");
+        }
+
+        [Test]
+        [Description("Parse invalid scale where an input string is empty.")]
+        public void Parse_Invalid_EmptyInputString()
+        {
+            ParseInvalid<ArgumentException>(string.Empty);
         }
 
         #endregion
@@ -65,9 +86,10 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                             "Parse: string representation was not parsed to the original scale.");
         }
 
-        private static void ParseInvalid(string input)
+        private static void ParseInvalid<TException>(string input)
+            where TException : Exception
         {
-            Assert.Throws<FormatException>(() => Scale.Parse(input));
+            Assert.Throws<TException>(() => Scale.Parse(input));
         }
 
         #endregion
