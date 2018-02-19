@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
@@ -10,16 +9,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private const string NoteNameGroupName = "n";
-        private const string IntervalsGroupName = "is";
+        private const string RootNoteNameGroupName = "rn";
         private const string IntervalsMnemonicGroupName = "im";
         private const string IntervalGroupName = "i";
 
-        private static readonly string IntervalsGroup = $"(?<{IntervalsGroupName}>({ParsingUtilities.GetNumberGroup(IntervalGroupName)}\\s*)+)";
+        private static readonly string IntervalGroup = $"(?<{IntervalGroupName}>({string.Join("|", IntervalParser.GetPatterns())})\\s*)+";
         private static readonly string IntervalsMnemonicGroup = $"(?<{IntervalsMnemonicGroupName}>.+?)";
 
         private static readonly string[] Patterns = NoteNameParser.GetPatterns()
-                                                                  .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*({IntervalsGroup}|{IntervalsMnemonicGroup})")
+                                                                  .Select(p => $@"(?<{RootNoteNameGroupName}>{p})\s*({IntervalGroup}|{IntervalsMnemonicGroup})")
                                                                   .ToArray();
 
         private const string ScaleIsUnknown = "Scale is unknown.";
@@ -39,12 +37,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            var noteNameGroup = match.Groups[NoteNameGroupName];
+            var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
 
-            NoteName noteName;
-            var noteNameParsingResult = NoteNameParser.TryParse(noteNameGroup.Value, out noteName);
-            if (noteNameParsingResult.Status != ParsingStatus.Parsed)
-                return noteNameParsingResult;
+            NoteName rootNoteName;
+            var rootNoteNameParsingResult = NoteNameParser.TryParse(rootNoteNameGroup.Value, out rootNoteName);
+            if (rootNoteNameParsingResult.Status != ParsingStatus.Parsed)
+                return rootNoteNameParsingResult;
 
             //
 
@@ -53,14 +51,27 @@ namespace Melanchall.DryWetMidi.MusicTheory
             var intervalGroup = match.Groups[IntervalGroupName];
             if (intervalGroup.Success)
             {
-                intervals = intervalGroup.Captures
-                                         .OfType<Capture>()
-                                         .Select(c =>
-                                         {
-                                             var halfSteps = int.Parse(c.Value, NumberStyles.AllowLeadingSign | NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite);
-                                             return Interval.FromHalfSteps(halfSteps);
-                                         })
-                                         .ToArray();
+                var intervalsParsingResults = intervalGroup
+                    .Captures
+                    .OfType<Capture>()
+                    .Select(c =>
+                    {
+                        Interval interval;
+                        var parsingResult = IntervalParser.TryParse(c.Value, out interval);
+
+                        return new
+                        {
+                            Interval = interval,
+                            ParsingResult = parsingResult
+                        };
+                    })
+                    .ToArray();
+
+                var notParsedResult = intervalsParsingResults.FirstOrDefault(r => r.ParsingResult.Status != ParsingStatus.Parsed);
+                if (notParsedResult != null)
+                    return notParsedResult.ParsingResult;
+
+                intervals = intervalsParsingResults.Select(r => r.Interval).ToArray();
             }
             else
             {
@@ -75,7 +86,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             //
 
-            scale = new Scale(intervals, noteName);
+            scale = new Scale(intervals, rootNoteName);
             return ParsingResult.Parsed;
         }
 

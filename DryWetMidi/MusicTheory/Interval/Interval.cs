@@ -208,6 +208,21 @@ namespace Melanchall.DryWetMidi.MusicTheory
                        Math.Sign(halfSteps) < 0 ? IntervalDirection.Down : IntervalDirection.Up);
         }
 
+        public static bool TryParse(string input, out Interval interval)
+        {
+            return IntervalParser.TryParse(input, out interval).Status == ParsingStatus.Parsed;
+        }
+
+        public static Interval Parse(string input)
+        {
+            Interval interval;
+            var parsingResult = IntervalParser.TryParse(input, out interval);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return interval;
+
+            throw parsingResult.Exception;
+        }
+
         #endregion
 
         #region Operators

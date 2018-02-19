@@ -108,14 +108,21 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Description("Parse invalid note where octave number is out of range.")]
         public void Parse_Invalid_OctaveIsOutOfRange()
         {
-            ParseInvalid("E10");
+            ParseInvalid<FormatException>("E10");
         }
 
         [Test]
         [Description("Parse invalid note where note name is invalid.")]
         public void Parse_Invalid_NoteNameIsInvalid()
         {
-            ParseInvalid("ESharp4");
+            ParseInvalid<FormatException>("ESharp4");
+        }
+
+        [Test]
+        [Description("Parse invalid note where an input string is empty.")]
+        public void Parse_Invalid_EmptyInputString()
+        {
+            ParseInvalid<ArgumentException>(string.Empty);
         }
 
         #endregion
@@ -139,9 +146,10 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                             "Parse: string representation was not parsed to the original note.");
         }
 
-        private static void ParseInvalid(string input)
+        private static void ParseInvalid<TException>(string input)
+            where TException : Exception
         {
-            Assert.Throws<FormatException>(() => Note.Parse(input));
+            Assert.Throws<TException>(() => Note.Parse(input));
         }
 
         #endregion
