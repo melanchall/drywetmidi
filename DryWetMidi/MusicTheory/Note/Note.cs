@@ -105,11 +105,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Get(NoteUtilities.GetNoteNumber(noteName, octave));
         }
 
+        /// <summary>
+        /// Converts the string representation of a musical note to its <see cref="Note"/> equivalent.
+        /// A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="input">A string containing a note to convert.</param>
+        /// <param name="note">When this method returns, contains the <see cref="Note"/>
+        /// equivalent of the musical note contained in <paramref name="input"/>, if the conversion succeeded,
+        /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
+        /// any value originally supplied in result will be overwritten.</param>
+        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out Note note)
         {
             return NoteParser.TryParse(input, out note).Status == ParsingStatus.Parsed;
         }
 
+        /// <summary>
+        /// Converts the string representation of a musical note to its <see cref="Scale"/> equivalent.
+        /// </summary>
+        /// <param name="input">A string containing a note to convert.</param>
+        /// <returns>A <see cref="Scale"/> equivalent to the musical note contained in <paramref name="input"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Note Parse(string input)
         {
             Note note;
