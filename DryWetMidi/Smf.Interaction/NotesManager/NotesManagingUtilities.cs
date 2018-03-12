@@ -236,6 +236,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             file.GetTrackChunks().RemoveNotes(match);
         }
 
+        /// <summary>
+        /// Adds collection of notes to the specified <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to add notes to.</param>
+        /// <param name="notes">Notes to add to the <paramref name="eventsCollection"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
+        /// <paramref name="notes"/> is null.</exception>
         public static void AddNotes(this EventsCollection eventsCollection, IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -247,6 +254,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Adds collection of notes to the specified <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to add notes to.</param>
+        /// <param name="notes">Notes to add to the <paramref name="trackChunk"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="notes"/> is null.</exception>
         public static void AddNotes(this TrackChunk trackChunk, IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -255,6 +269,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             trackChunk.Events.AddNotes(notes);
         }
 
+        /// <summary>
+        /// Creates a track chunk with the specified notes.
+        /// </summary>
+        /// <param name="notes">Collection of notes to create a track chunk.</param>
+        /// <returns><see cref="TrackChunk"/> containing the specified notes.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public static TrackChunk ToTrackChunk(this IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -265,6 +285,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk;
         }
 
+        /// <summary>
+        /// Creates a MIDI file with the specified notes.
+        /// </summary>
+        /// <param name="notes">Collection of notes to create a MIDI file.</param>
+        /// <returns><see cref="MidiFile"/> containing the specified notes.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public static MidiFile ToFile(this IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);

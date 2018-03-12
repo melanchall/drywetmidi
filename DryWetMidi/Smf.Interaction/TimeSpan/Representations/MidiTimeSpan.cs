@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="timeSpan">When this method returns, contains the <see cref="MidiTimeSpan"/>
         /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
         /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
-        /// <see cref="String.Empty"/>, is not of the correct format. This parameter is passed uninitialized;
+        /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out MidiTimeSpan timeSpan)
@@ -67,6 +67,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="input">A string containing a time span to convert.</param>
         /// <returns>A <see cref="MidiTimeSpan"/> equivalent to the time span contained in
         /// <paramref name="input"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static MidiTimeSpan Parse(string input)
         {
             MidiTimeSpan timeSpan;

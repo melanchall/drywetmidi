@@ -7,7 +7,7 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.MusicTheory
 {
     /// <summary>
-    /// Represents musical scale.
+    /// Represents a musical scale.
     /// </summary>
     public sealed class Scale
     {
@@ -49,11 +49,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        /// <summary>
+        /// Converts the string representation of a musical scale to its <see cref="Scale"/>
+        /// equivalent. A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="input">A string containing a scale to convert.</param>
+        /// <param name="scale">When this method returns, contains the <see cref="Scale"/>
+        /// equivalent of the musical scale contained in <paramref name="input"/>, if the conversion succeeded,
+        /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
+        /// any value originally supplied in result will be overwritten.</param>
+        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out Scale scale)
         {
             return ScaleParser.TryParse(input, out scale).Status == ParsingStatus.Parsed;
         }
 
+        /// <summary>
+        /// Converts the string representation of a musical scale to its <see cref="Scale"/> equivalent.
+        /// </summary>
+        /// <param name="input">A string containing a scale to convert.</param>
+        /// <returns>A <see cref="Scale"/> equivalent to the musical scale contained in <paramref name="input"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Scale Parse(string input)
         {
             Scale scale;

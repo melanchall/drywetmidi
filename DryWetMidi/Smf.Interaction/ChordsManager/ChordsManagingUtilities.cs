@@ -292,6 +292,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             file.GetTrackChunks().RemoveChords(match, notesTolerance);
         }
 
+        /// <summary>
+        /// Adds collection of chords to the specified <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to add chords to.</param>
+        /// <param name="chords">Chords to add to the <paramref name="eventsCollection"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
+        /// <paramref name="chords"/> is null.</exception>
         public static void AddChords(this EventsCollection eventsCollection, IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -303,6 +310,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Adds collection of chords to the specified <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to add chords to.</param>
+        /// <param name="chords">Chords to add to the <paramref name="trackChunk"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="chords"/> is null.</exception>
         public static void AddChords(this TrackChunk trackChunk, IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -311,6 +325,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             trackChunk.Events.AddChords(chords);
         }
 
+        /// <summary>
+        /// Creates a track chunk with the specified chords.
+        /// </summary>
+        /// <param name="chords">Collection of chords to create a track chunk.</param>
+        /// <returns><see cref="TrackChunk"/> containing the specified chords.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
         public static TrackChunk ToTrackChunk(this IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
@@ -321,6 +341,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk;
         }
 
+        /// <summary>
+        /// Creates a MIDI file with the specified chords.
+        /// </summary>
+        /// <param name="chords">Collection of chords to create a MIDI file.</param>
+        /// <returns><see cref="MidiFile"/> containing the specified chords.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
         public static MidiFile ToFile(this IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
