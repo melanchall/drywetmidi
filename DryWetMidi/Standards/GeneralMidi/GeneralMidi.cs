@@ -9,6 +9,9 @@ namespace Melanchall.DryWetMidi.Standards
     {
         #region Constants
 
+        /// <summary>
+        /// Channel reserved for percussion according to the General MIDI Level 1 standard.
+        /// </summary>
         public static readonly FourBitNumber PercussionChannel = (FourBitNumber)10;
 
         #endregion

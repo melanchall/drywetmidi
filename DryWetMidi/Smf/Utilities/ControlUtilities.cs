@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -23,6 +24,12 @@ namespace Melanchall.DryWetMidi.Smf
             return GetControlName(controlChangeEvent.ControlNumber);
         }
 
+        /// <summary>
+        /// Converts <see cref="ControlName"/> to the corresponding value of the <see cref="SevenBitNumber"/> type.
+        /// </summary>
+        /// <param name="controlName"><see cref="ControlName"/> to convert to <see cref="SevenBitNumber"/>.</param>
+        /// <returns><see cref="SevenBitNumber"/> representing the <paramref name="controlName"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="controlName"/> specified an invalid value.</exception>
         public static SevenBitNumber AsSevenBitNumber(this ControlName controlName)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(controlName), controlName);
@@ -30,6 +37,13 @@ namespace Melanchall.DryWetMidi.Smf
             return (SevenBitNumber)(byte)controlName;
         }
 
+        /// <summary>
+        /// Gets an instance of the <see cref="ControlChangeEvent"/> corresponding to the specified controller.
+        /// </summary>
+        /// <param name="controlName"><see cref="ControlName"/> to get an event for.</param>
+        /// <param name="controlValue">Controller value to set to event.</param>
+        /// <returns>An instance of the <see cref="ControlChangeEvent"/> corresponding to the <paramref name="controlName"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="controlName"/> specified an invalid value.</exception>
         public static ControlChangeEvent GetControlChangeEvent(this ControlName controlName, SevenBitNumber controlValue)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(controlName), controlName);
