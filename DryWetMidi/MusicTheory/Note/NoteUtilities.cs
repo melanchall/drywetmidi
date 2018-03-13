@@ -4,6 +4,9 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
+    /// <summary>
+    /// Provides utilities for working with the <see cref="Note"/>.
+    /// </summary>
     public static class NoteUtilities
     {
         #region Constants

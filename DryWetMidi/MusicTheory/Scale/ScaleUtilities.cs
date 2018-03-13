@@ -65,6 +65,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
         }
 
+        /// <summary>
+        /// Gets notes that belong to a musical scale in ascending order starting with the specified
+        /// root note.
+        /// </summary>
+        /// <param name="scale"><see cref="Scale"/> to get notes of.</param>
+        /// <param name="rootNote"><see cref="Note"/> to start a sequence of scale's notes with.</param>
+        /// <returns>Notes that belong to the <paramref name="scale"/> in ascending order starting with
+        /// the <paramref name="rootNote"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null. -or-
+        /// <paramref name="rootNote"/> is null.</exception>
         public static IEnumerable<Note> GetAscendingNotes(this Scale scale, Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
@@ -74,6 +84,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .SkipWhile(n => n != rootNote);
         }
 
+        /// <summary>
+        /// Gets notes that belong to a musical scale in descending order starting with the specified
+        /// root note.
+        /// </summary>
+        /// <param name="scale"><see cref="Scale"/> to get notes of.</param>
+        /// <param name="rootNote"><see cref="Note"/> to start a sequence of scale's notes with.</param>
+        /// <returns>Notes that belong to the <paramref name="scale"/> in descending order starting with
+        /// the <paramref name="rootNote"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null. -or-
+        /// <paramref name="rootNote"/> is null.</exception>
         public static IEnumerable<Note> GetDescendingNotes(this Scale scale, Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
@@ -84,6 +104,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
                                                   .Reverse());
         }
 
+        /// <summary>
+        /// Checks if the specified note belongs to a scale or not.
+        /// </summary>
+        /// <param name="scale"><see cref="Scale"/> to check the note.</param>
+        /// <param name="note"><see cref="Note"/> to check if it belongs to the <paramref name="scale"/>
+        /// or not.</param>
+        /// <returns>true if <paramref name="note"/> belongs to the <paramref name="scale"/>;
+        /// otherwise, false.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null. -or-
+        /// <paramref name="note"/> is null.</exception>
         public static bool IsNoteInScale(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
@@ -93,6 +123,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .Contains(note);
         }
 
+        /// <summary>
+        /// Gets a note that belongs to a musical scale next to the specified note.
+        /// </summary>
+        /// <param name="scale"><see cref="Scale"/> to get the next note of.</param>
+        /// <param name="note"><see cref="Note"/> to get a note next to.</param>
+        /// <returns>A note next to the <paramref name="note"/> that belongs to the
+        /// <paramref name="scale"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null. -or-
+        /// <paramref name="note"/> is null.</exception>
         public static Note GetNextNote(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
@@ -103,6 +142,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets a note that belongs to a musical scale previous to the specified note.
+        /// </summary>
+        /// <param name="scale"><see cref="Scale"/> to get the previous note of.</param>
+        /// <param name="note"><see cref="Note"/> to get a note previous to.</param>
+        /// <returns>A note previous to the <paramref name="note"/> that belongs to the
+        /// <paramref name="scale"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null. -or-
+        /// <paramref name="note"/> is null.</exception>
         public static Note GetPreviousNote(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);

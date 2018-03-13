@@ -997,18 +997,39 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return this;
         }
 
+        /// <summary>
+        /// Sets MIDI program to specify an instrument that will be used by all following notes.
+        /// </summary>
+        /// <param name="programNumber">The number of a MIDI program.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         public PatternBuilder SetProgram(SevenBitNumber programNumber)
         {
             return AddAction(new SetProgramNumberAction(programNumber));
         }
 
+        /// <summary>
+        /// Sets General MIDI Level 1 program to specify an instrument that will be used by all following notes.
+        /// </summary>
+        /// <param name="program">The General MIDI Level 1 program.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
         public PatternBuilder SetProgram(GeneralMidiProgram program)
         {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
+
             return AddAction(new SetGeneralMidiProgramAction(program));
         }
 
+        /// <summary>
+        /// Sets General MIDI Level 2 program to specify an instrument that will be used by all following notes.
+        /// </summary>
+        /// <param name="program">The General MIDI Level 2 program.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
         public PatternBuilder SetProgram(GeneralMidi2Program program)
         {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
+
             return AddAction(new SetGeneralMidi2ProgramAction(program));
         }
 
