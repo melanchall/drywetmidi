@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="ComplexTests\MergeNotes.cs" />
     <Compile Include="ComplexTests\QuantizeNotes.cs" />
-    <Compile Include="MusicTheory\Chord\ChordUtilitiesTests.cs" />
     <Compile Include="MusicTheory\Scale\ScaleTests.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilitiesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
