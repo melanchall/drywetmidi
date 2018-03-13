@@ -46,8 +46,6 @@
     <Compile Include="Common\Parsing\ParsingStatus.cs" />
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
-    <Compile Include="MusicTheory\Chord\Chord.cs" />
-    <Compile Include="MusicTheory\Chord\ChordUtilities.cs" />
     <Compile Include="MusicTheory\Interval\IntervalParser.cs" />
     <Compile Include="MusicTheory\Interval\IntervalUtilities.cs" />
     <Compile Include="MusicTheory\Note\NoteNameParser.cs" />
