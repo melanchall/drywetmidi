@@ -66,6 +66,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
+        #region Methods
+
+        public TimedEvent Clone()
+        {
+            return new TimedEvent(Event.Clone(), Time);
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

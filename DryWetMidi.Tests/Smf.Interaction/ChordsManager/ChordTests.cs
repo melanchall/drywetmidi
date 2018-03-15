@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
@@ -228,6 +229,26 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             chord.Length = 500;
 
             Assert.AreEqual(500, chord.Length);
+        }
+
+        [Test]
+        [Description("Check that clone of an empty chord equals to the original one.")]
+        public void Clone_1()
+        {
+            var chord = GetChord_NoNotes();
+
+            Assert.IsTrue(ChordEquality.Equals(chord, chord.Clone()),
+                          "Clone of a chord doesn't equal to the original one.");
+        }
+
+        [Test]
+        [Description("Check that clone of a chord equals to the original one.")]
+        public void Clone_2()
+        {
+            var chord = GetChord_NonzeroTime();
+
+            Assert.IsTrue(ChordEquality.Equals(chord, chord.Clone()),
+                          "Clone of a chord doesn't equal to the original one.");
         }
 
         #endregion

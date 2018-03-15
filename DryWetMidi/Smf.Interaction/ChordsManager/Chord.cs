@@ -182,6 +182,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        public Chord Clone()
+        {
+            return new Chord(Notes.Select(note => note.Clone()));
+        }
+
         private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)
         {
             NotesCollectionChanged?.Invoke(collection, args);
