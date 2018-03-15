@@ -54,6 +54,7 @@
     <Compile Include="Smf.Interaction\ChordsManager\ChordTests.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordTestUtilities.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesManagerTests.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\NoteTests.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NoteTestUtilities.cs" />
     <Compile Include="MusicTheory\Interval\IntervalTests.cs" />
     <Compile Include="MusicTheory\Note\NoteTests.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Smf.Interaction\TempoMapManager\TempoMapManagerTests.cs" />
     <Compile Include="Smf.Interaction\TempoMapManager\TempoMapTests.cs" />
     <Compile Include="Smf.Interaction\TimedEventsManager\TimedEventsManagerTests.cs" />
+    <Compile Include="Smf.Interaction\TimedEventsManager\TimedEventTests.cs" />
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollectionTestUtilities.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\BarBeatTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MetricTimeSpanTests.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Smf.Interaction\TimeSpan\MusicalTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanTestUtilities.cs" />
     <Compile Include="Smf\MidiFileTests.cs" />
+    <Compile Include="Utilities\Equality\ChordEquality.cs" />
     <Compile Include="Utilities\Equality\EventEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
     <Compile Include="Utilities\Equality\TimedEventEquality.cs" />

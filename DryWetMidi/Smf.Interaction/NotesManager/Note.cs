@@ -254,6 +254,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _note = MusicTheory.Note.Get(noteName, octave);
         }
 
+        public Note Clone()
+        {
+            return new Note(NoteNumber, Length, Time)
+            {
+                Channel = Channel,
+                Velocity = Velocity,
+                OffVelocity = OffVelocity
+            };
+        }
+
         #endregion
 
         #region Overrides
