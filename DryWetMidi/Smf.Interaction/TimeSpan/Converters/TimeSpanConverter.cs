@@ -7,6 +7,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constants
 
+        private static readonly Dictionary<TimeSpanType, Type> TimeSpansTypes = new Dictionary<TimeSpanType, Type>
+        {
+            [TimeSpanType.Midi] = typeof(MidiTimeSpan),
+            [TimeSpanType.Metric] = typeof(MetricTimeSpan),
+            [TimeSpanType.Musical] = typeof(MusicalTimeSpan),
+            [TimeSpanType.BarBeat] = typeof(BarBeatTimeSpan)
+        };
+
         private static readonly Dictionary<Type, ITimeSpanConverter> Converters = new Dictionary<Type, ITimeSpanConverter>
         {
             [typeof(MidiTimeSpan)] = new MidiTimeSpanConverter(),
@@ -26,6 +34,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return (TTimeSpan)GetConverter<TTimeSpan>().ConvertTo(timeSpan, time, tempoMap);
         }
 
+        public static ITimeSpan ConvertTo(long timeSpan, TimeSpanType timeSpanType, long time, TempoMap tempoMap)
+        {
+            return GetConverter(timeSpanType).ConvertTo(timeSpan, time, tempoMap);
+        }
+
         public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan timeSpan, long time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
@@ -33,6 +46,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return (TTimeSpan)timeSpan.Clone();
 
             return ConvertTo<TTimeSpan>(ConvertFrom(timeSpan, time, tempoMap), time, tempoMap);
+        }
+
+        public static ITimeSpan ConvertTo(ITimeSpan timeSpan, TimeSpanType timeSpanType, long time, TempoMap tempoMap)
+        {
+            return ConvertTo(ConvertFrom(timeSpan, time, tempoMap), timeSpanType, time, tempoMap);
         }
 
         public static ITimeSpan ConvertTo(ITimeSpan timeSpan, Type timeSpanType, long time, TempoMap tempoMap)
@@ -52,6 +70,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             where TTimeSpan : ITimeSpan
         {
             return GetConverter(typeof(TTimeSpan));
+        }
+
+        private static ITimeSpanConverter GetConverter(TimeSpanType timeSpanType)
+        {
+            Type type;
+            if (!TimeSpansTypes.TryGetValue(timeSpanType, out type))
+                throw new NotSupportedException($"Converter for {timeSpanType} is not supported.");
+
+            return GetConverter(type);
         }
 
         private static ITimeSpanConverter GetConverter(Type timeSpanType)

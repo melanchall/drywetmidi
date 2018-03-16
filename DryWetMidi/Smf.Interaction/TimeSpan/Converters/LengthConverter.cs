@@ -32,6 +32,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, time, tempoMap);
         }
 
+        public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, long time, TempoMap tempoMap)
+        {
+            ThrowIfLengthArgument.IsNegative(nameof(length), length);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeSpanConverter.ConvertTo(length, lengthType, time, tempoMap);
+        }
+
         /// <summary>
         /// Converts length from <see cref="long"/> to the specified length type.
         /// </summary>
@@ -52,6 +62,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
+        }
+
+        public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, ITimeSpan time, TempoMap tempoMap)
+        {
+            ThrowIfLengthArgument.IsNegative(nameof(length), length);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeSpanConverter.ConvertTo(length, lengthType, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         /// <summary>
@@ -76,6 +96,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, time, tempoMap);
         }
 
+        public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, long time, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeSpanConverter.ConvertTo(length, lengthType, time, tempoMap);
+        }
+
         /// <summary>
         /// Converts length from one length type to another one.
         /// </summary>
@@ -95,6 +125,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
+        }
+
+        public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, ITimeSpan time, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeSpanConverter.ConvertTo(length, lengthType, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
         /// <summary>
