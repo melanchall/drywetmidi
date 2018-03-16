@@ -29,6 +29,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(time, 0, tempoMap);
         }
 
+        public static ITimeSpan ConvertTo(long time, TimeSpanType timeType, TempoMap tempoMap)
+        {
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeSpanConverter.ConvertTo(time, timeType, 0, tempoMap);
+        }
+
         /// <summary>
         /// Converts time from one time type to another one.
         /// </summary>
@@ -46,6 +55,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return ConvertTo<TTimeSpan>(ConvertFrom(time, tempoMap), tempoMap);
+        }
+
+        public static ITimeSpan ConvertTo(ITimeSpan time, TimeSpanType timeType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return ConvertTo(ConvertFrom(time, tempoMap), timeType, tempoMap);
         }
 
         /// <summary>

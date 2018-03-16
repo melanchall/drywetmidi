@@ -100,6 +100,7 @@
     <Compile Include="Smf.Interaction\TimeSpan\Representations\MetricTimeSpan.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Representations\MidiTimeSpan.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Representations\MusicalTimeSpan.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\TimeSpanType.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanUtilities.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MathOperation.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfLengthArgument.cs" />
