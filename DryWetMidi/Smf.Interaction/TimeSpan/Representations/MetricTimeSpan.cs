@@ -99,6 +99,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in microseconds.
         /// </summary>
         public long TotalMicroseconds => _timeSpan.Ticks / TicksInMicrosecond;
+        
+        /// <summary>
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in milliseconds.
+        /// </summary>
+        public long TotalMilliseconds => _timeSpan.Ticks / TimeSpan.TicksPerMillisecond;
 
         /// <summary>
         /// Gets the hours component of the time represented by the current <see cref="MetricTimeSpan"/>.
