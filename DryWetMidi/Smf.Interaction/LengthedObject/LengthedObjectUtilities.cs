@@ -33,6 +33,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return LengthConverter.ConvertTo<TLength>(obj.Length, obj.Time, tempoMap);
         }
 
+        public static ITimeSpan LengthAs(this ILengthedObject obj, TimeSpanType lengthType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return LengthConverter.ConvertTo(obj.Length, lengthType, obj.Time, tempoMap);
+        }
+
         /// <summary>
         /// Filters collection of <see cref="ILengthedObject"/> to return objects that start at the specified time.
         /// </summary>

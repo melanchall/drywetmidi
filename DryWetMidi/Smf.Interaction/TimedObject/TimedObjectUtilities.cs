@@ -32,6 +32,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeConverter.ConvertTo<TTime>(obj.Time, tempoMap);
         }
 
+        public static ITimeSpan TimeAs(this ITimedObject obj, TimeSpanType timeType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeConverter.ConvertTo(obj.Time, timeType, tempoMap);
+        }
+
         /// <summary>
         /// Filters collection of <see cref="ITimedObject"/> to return objects at the specified time.
         /// </summary>
