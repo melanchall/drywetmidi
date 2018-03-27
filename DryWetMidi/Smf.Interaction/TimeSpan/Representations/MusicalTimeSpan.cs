@@ -551,7 +551,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new MusicalTimeSpan((long)Math.Round(Numerator * Math.Round(multiplier, NumberOfDigitsAfterDecimalPoint) * FractionPartMultiplier),
+            return new MusicalTimeSpan((long)Math.Round(Numerator * Math.Round(multiplier, NumberOfDigitsAfterDecimalPoint, MidpointRounding.AwayFromZero) * FractionPartMultiplier, MidpointRounding.AwayFromZero),
                                        Denominator * FractionPartMultiplier);
         }
 
@@ -565,7 +565,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
             return new MusicalTimeSpan(Numerator * FractionPartMultiplier,
-                                       (long)Math.Round(Denominator * Math.Round(divisor, NumberOfDigitsAfterDecimalPoint) * FractionPartMultiplier));
+                                       (long)Math.Round(Denominator * Math.Round(divisor, NumberOfDigitsAfterDecimalPoint, MidpointRounding.AwayFromZero) * FractionPartMultiplier, MidpointRounding.AwayFromZero));
         }
 
         /// <summary>

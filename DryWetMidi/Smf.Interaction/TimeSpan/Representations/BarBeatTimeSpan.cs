@@ -364,9 +364,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new BarBeatTimeSpan((long)Math.Round(Bars * multiplier),
-                                       (long)Math.Round(Beats * multiplier),
-                                       (long)Math.Round(Ticks * multiplier));
+            return new BarBeatTimeSpan((long)Math.Round(Bars * multiplier, MidpointRounding.AwayFromZero),
+                                       (long)Math.Round(Beats * multiplier, MidpointRounding.AwayFromZero),
+                                       (long)Math.Round(Ticks * multiplier, MidpointRounding.AwayFromZero));
         }
 
         /// <summary>
@@ -378,9 +378,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new BarBeatTimeSpan((long)Math.Round(Bars / divisor),
-                                       (long)Math.Round(Beats / divisor),
-                                       (long)Math.Round(Ticks / divisor));
+            return new BarBeatTimeSpan((long)Math.Round(Bars / divisor, MidpointRounding.AwayFromZero),
+                                       (long)Math.Round(Beats / divisor, MidpointRounding.AwayFromZero),
+                                       (long)Math.Round(Ticks / divisor, MidpointRounding.AwayFromZero));
         }
 
         /// <summary>

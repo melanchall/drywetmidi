@@ -56,6 +56,8 @@
     <Compile Include="MusicTheory\Scale\ScaleIntervals.cs" />
     <Compile Include="MusicTheory\Scale\ScaleParser.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilities.cs" />
+    <Compile Include="Smf.Interaction\ChordsManager\ChordsProcessingUtilities.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\NotesProcessingUtilities.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidi2ProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidiProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetProgramNumberAction.cs" />
@@ -250,6 +252,9 @@
     <Compile Include="Standards\GeneralMidi\GeneralMidiPercussion.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidiProgram.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidiUtilities.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitter.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\LengthedObjectsSplitter.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\ChannelEventsClassDiagram.cd" />

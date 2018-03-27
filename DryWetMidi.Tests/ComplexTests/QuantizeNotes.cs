@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests
             midiFile.ProcessNotes(n =>
             {
                 var time = n.Time;
-                n.Time = (long)Math.Round(time / (double)stepTicks) * stepTicks;
+                n.Time = (long)Math.Round(time / (double)stepTicks, MidpointRounding.AwayFromZero) * stepTicks;
             });
         }
 
