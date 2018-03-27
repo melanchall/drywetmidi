@@ -327,7 +327,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new MidiTimeSpan((long)Math.Round(TimeSpan * multiplier));
+            return new MidiTimeSpan((long)Math.Round(TimeSpan * multiplier, MidpointRounding.AwayFromZero));
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new MidiTimeSpan((long)Math.Round(TimeSpan / divisor));
+            return new MidiTimeSpan((long)Math.Round(TimeSpan / divisor, MidpointRounding.AwayFromZero));
         }
 
         /// <summary>

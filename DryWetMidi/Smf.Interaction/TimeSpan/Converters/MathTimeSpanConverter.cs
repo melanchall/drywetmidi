@@ -57,13 +57,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             {
                 case MathOperation.Add:
                     return convertedTimeSpan1 + LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
-                                                                             endTime1,
-                                                                             tempoMap);
+                                                                            endTime1,
+                                                                            tempoMap);
 
                 case MathOperation.Subtract:
                     return convertedTimeSpan1 - LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
-                                                                             endTime1,
-                                                                             tempoMap.Flip(endTime1));
+                                                                            endTime1,
+                                                                            tempoMap.Flip(endTime1));
 
                 default:
                     throw new ArgumentException($"{mathTimeSpan.Operation} is not supported by the converter.", nameof(mathTimeSpan));
@@ -78,13 +78,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             {
                 case MathOperation.Add:
                     return convertedTimeSpan1 + LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
-                                                                             convertedTimeSpan1,
-                                                                             tempoMap);
+                                                                            convertedTimeSpan1,
+                                                                            tempoMap);
 
                 case MathOperation.Subtract:
                     return convertedTimeSpan1 - LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan2,
-                                                                             convertedTimeSpan1,
-                                                                             tempoMap.Flip(convertedTimeSpan1));
+                                                                            convertedTimeSpan1,
+                                                                            tempoMap.Flip(convertedTimeSpan1));
 
                 default:
                     throw new ArgumentException($"{mathTimeSpan.Operation} is not supported by the converter.", nameof(mathTimeSpan));

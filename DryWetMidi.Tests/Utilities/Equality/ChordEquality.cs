@@ -25,9 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
             public int GetHashCode(Chord chord)
             {
-                return chord.Notes
-                            .Select(n => n.GetHashCode())
-                            .Aggregate((x, y) => x ^ y);
+                return chord.GetHashCode();
             }
 
             #endregion

@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long RoundMicroseconds(double microseconds)
         {
-            return (long)Math.Round(microseconds);
+            return (long)Math.Round(microseconds, MidpointRounding.AwayFromZero);
         }
 
         private static bool IsGreaterOrEqual(double value, long reference)
