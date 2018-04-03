@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
@@ -35,12 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         protected override LengthedObjectsSplitter<Note> Splitter { get; } = new NotesSplitter();
 
-        protected override IComparer Comparer { get; } = new NoteComparer();
-
-        protected override Note CloneObject(Note obj)
-        {
-            return obj.Clone();
-        }
+        protected override LengthedObjectMethods<Note> Methods { get; } = new NoteMethods();
 
         protected override IEnumerable<Note> CreateInputObjects(long length)
         {
@@ -51,20 +47,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
         }
 
-        protected override Note CreateObject(long time, long length)
-        {
-            return new Note((SevenBitNumber)34, length, time);
-        }
-
         protected override Tuple<Note, Note> SplitObject(Note obj, long time)
         {
             return obj.Split(time);
-        }
-
-        protected override void SetObjectTimeAndLength(Note obj, long time, long length)
-        {
-            obj.Time = time;
-            obj.Length = length;
         }
 
         #endregion

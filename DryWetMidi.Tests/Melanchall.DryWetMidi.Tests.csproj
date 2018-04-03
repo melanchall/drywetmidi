@@ -45,6 +45,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ChordMethods.cs" />
+    <Compile Include="Common\LengthedObjectMethods.cs" />
+    <Compile Include="Common\TimedObjectMethods.cs" />
+    <Compile Include="Common\NoteMethods.cs" />
     <Compile Include="ComplexTests\MergeNotes.cs" />
     <Compile Include="ComplexTests\QuantizeNotes.cs" />
     <Compile Include="MusicTheory\Scale\ScaleTests.cs" />
@@ -74,7 +78,12 @@
     <Compile Include="Smf\MidiFileTests.cs" />
     <Compile Include="Tools\ChordsSplitterTests.cs" />
     <Compile Include="Tools\LengthedObjectsSplitterTests.cs" />
+    <Compile Include="Tools\LengthedObjectsToolTests.cs" />
     <Compile Include="Tools\NotesSplitterTests.cs" />
+    <Compile Include="Tools\Quantizer\ChordsQuantizerTests.cs" />
+    <Compile Include="Tools\Quantizer\LengthedObjectsQuantizerTests.cs" />
+    <Compile Include="Tools\Quantizer\NotesQuantizerTests.cs" />
+    <Compile Include="Tools\TimeAndLength.cs" />
     <Compile Include="Utilities\Equality\ChordEquality.cs" />
     <Compile Include="Utilities\Equality\EventEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
