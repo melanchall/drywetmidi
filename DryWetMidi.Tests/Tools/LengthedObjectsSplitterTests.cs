@@ -755,7 +755,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     LengthConverter.ConvertFrom(tl.Length, tl.Time, tempoMap))))
                 .ToArray();
 
-            var actualObjects = Splitter.SplitByGrid(inputObjects, gridStart, gridSteps, tempoMap).ToArray();
+            var actualObjects = Splitter.SplitByGrid(inputObjects, new SteppedGrid(gridStart, gridSteps), tempoMap).ToArray();
 
             CompareCollections(expectedObjects, actualObjects);
         }
@@ -789,7 +789,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         private SplitData SplitByGrid_ClonesExpected(IEnumerable<TObject> inputObjects, ITimeSpan gridStart, IEnumerable<ITimeSpan> gridSteps, TempoMap tempoMap)
         {
             var expectedObjects = inputObjects.Select(o => o == null ? default(TObject) : CloneObject(o)).ToArray();
-            var actualObjects = Splitter.SplitByGrid(inputObjects, gridStart, gridSteps, tempoMap).ToArray();
+            var actualObjects = Splitter.SplitByGrid(inputObjects, new SteppedGrid(gridStart, gridSteps), tempoMap).ToArray();
 
             CompareCollections(expectedObjects, actualObjects);
 

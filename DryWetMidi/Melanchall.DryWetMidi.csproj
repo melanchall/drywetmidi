@@ -252,6 +252,9 @@
     <Compile Include="Standards\GeneralMidi\GeneralMidiPercussion.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidiProgram.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidiUtilities.cs" />
+    <Compile Include="Tools\Common\Grid\ArbitraryGrid.cs" />
+    <Compile Include="Tools\Common\Grid\IGrid.cs" />
+    <Compile Include="Tools\Common\Grid\SteppedGrid.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\LengthedObjectsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
