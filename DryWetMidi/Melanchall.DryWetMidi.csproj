@@ -258,6 +258,18 @@
     <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\LengthedObjectsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
+    <Compile Include="Tools\Quantizer\Base\QuantizingCorrectionResult.cs" />
+    <Compile Include="Tools\Quantizer\Base\QuantizingInstruction.cs" />
+    <Compile Include="Tools\Quantizer\Base\QuantizingSettings.cs" />
+    <Compile Include="Tools\Quantizer\ChordsQuantizer.cs" />
+    <Compile Include="Tools\Quantizer\EventsQuantizer.cs" />
+    <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\LengthedObjectQuantizingTarget.cs" />
+    <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\LengthedObjectsQuantizer.cs" />
+    <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\LengthedObjectsQuantizingSettings.cs" />
+    <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\QuantizingBeyondFixedEndPolicy.cs" />
+    <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\QuantizingBeyondZeroPolicy.cs" />
+    <Compile Include="Tools\Quantizer\NotesQuantizer.cs" />
+    <Compile Include="Tools\Quantizer\Base\Quantizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\ChannelEventsClassDiagram.cd" />
