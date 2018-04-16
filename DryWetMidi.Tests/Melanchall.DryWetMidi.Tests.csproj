@@ -76,10 +76,10 @@
     <Compile Include="Smf.Interaction\TimeSpan\MusicalTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanTestUtilities.cs" />
     <Compile Include="Smf\MidiFileTests.cs" />
-    <Compile Include="Tools\ChordsSplitterTests.cs" />
-    <Compile Include="Tools\LengthedObjectsSplitterTests.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitterTests.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\LengthedObjectsSplitterTests.cs" />
     <Compile Include="Tools\LengthedObjectsToolTests.cs" />
-    <Compile Include="Tools\NotesSplitterTests.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitterTests.cs" />
     <Compile Include="Tools\Quantizer\ChordsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\NotesQuantizerTests.cs" />
