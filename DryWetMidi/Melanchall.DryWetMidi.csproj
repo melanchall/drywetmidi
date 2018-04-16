@@ -256,7 +256,9 @@
     <Compile Include="Tools\Common\Grid\IGrid.cs" />
     <Compile Include="Tools\Common\Grid\SteppedGrid.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitter.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitterUtilities.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\LengthedObjectsSplitter.cs" />
+    <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitterUtilities.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
     <Compile Include="Tools\Quantizer\Base\QuantizingCorrectionResult.cs" />
     <Compile Include="Tools\Quantizer\Base\QuantizingInstruction.cs" />
