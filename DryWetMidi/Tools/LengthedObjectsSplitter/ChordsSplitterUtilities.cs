@@ -15,6 +15,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             SplitTrackChunkChords(trackChunk, (splitter, notes) => splitter.SplitByStep(notes, step, tempoMap), notesTolerance);
         }
@@ -24,6 +25,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -35,6 +37,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(step), step);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
 
@@ -47,6 +50,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             SplitTrackChunkChords(trackChunk, (splitter, notes) => splitter.SplitByPartsNumber(notes, partsNumber, lengthType, tempoMap), notesTolerance);
         }
@@ -57,6 +61,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -69,6 +74,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
 
@@ -80,6 +86,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             SplitTrackChunkChords(trackChunk, (splitter, notes) => splitter.SplitByGrid(notes, grid, tempoMap), notesTolerance);
         }
@@ -89,6 +96,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
@@ -100,6 +108,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
 
