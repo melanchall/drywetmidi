@@ -264,7 +264,8 @@
     <Compile Include="Tools\Quantizer\Base\QuantizingInstruction.cs" />
     <Compile Include="Tools\Quantizer\Base\QuantizingSettings.cs" />
     <Compile Include="Tools\Quantizer\ChordsQuantizer.cs" />
-    <Compile Include="Tools\Quantizer\EventsQuantizer.cs" />
+    <Compile Include="Tools\Quantizer\ChordsQuantizerUtilities.cs" />
+    <Compile Include="Tools\Quantizer\TimedEventsQuantizer.cs" />
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\LengthedObjectQuantizingTarget.cs" />
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\LengthedObjectsQuantizer.cs" />
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\LengthedObjectsQuantizingSettings.cs" />
@@ -272,6 +273,8 @@
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizer\QuantizingBeyondZeroPolicy.cs" />
     <Compile Include="Tools\Quantizer\NotesQuantizer.cs" />
     <Compile Include="Tools\Quantizer\Base\Quantizer.cs" />
+    <Compile Include="Tools\Quantizer\NotesQuantizerUtilities.cs" />
+    <Compile Include="Tools\Quantizer\TimedEventsQuantizerUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\ChannelEventsClassDiagram.cd" />

@@ -11,12 +11,11 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        public void Quantize(IEnumerable<TObject> objects, IGrid grid, TempoMap tempoMap, TSettings settings)
+        public void Quantize(IEnumerable<TObject> objects, IGrid grid, TempoMap tempoMap, TSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(settings), settings);
 
             QuantizeInternal(objects, grid, tempoMap, settings);
         }

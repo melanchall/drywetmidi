@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        protected void QuantizeInternal(IEnumerable<TObject> objects, IGrid grid, TempoMap tempoMap, TSettings settings = null)
+        protected void QuantizeInternal(IEnumerable<TObject> objects, IGrid grid, TempoMap tempoMap, TSettings settings)
         {
             settings = settings ?? new TSettings();
 

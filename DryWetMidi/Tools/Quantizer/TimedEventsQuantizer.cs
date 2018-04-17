@@ -4,20 +4,19 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    public sealed class EventsQuantizingSettings : QuantizingSettings
+    public sealed class TimedEventsQuantizingSettings : QuantizingSettings
     {
     }
 
-    public sealed class EventsQuantizer : Quantizer<TimedEvent, EventsQuantizingSettings>
+    public sealed class TimedEventsQuantizer : Quantizer<TimedEvent, TimedEventsQuantizingSettings>
     {
         #region Methods
 
-        protected void Quantize(IEnumerable<TimedEvent> objects, IGrid grid, TempoMap tempoMap, EventsQuantizingSettings settings)
+        public void Quantize(IEnumerable<TimedEvent> objects, IGrid grid, TempoMap tempoMap, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(settings), settings);
 
             QuantizeInternal(objects, grid, tempoMap, settings);
         }
@@ -26,17 +25,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Overrides
 
-        protected override long GetOldTime(TimedEvent obj, EventsQuantizingSettings settings)
+        protected override long GetOldTime(TimedEvent obj, TimedEventsQuantizingSettings settings)
         {
             return obj.Time;
         }
 
-        protected override void SetNewTime(TimedEvent obj, long time, EventsQuantizingSettings settings)
+        protected override void SetNewTime(TimedEvent obj, long time, TimedEventsQuantizingSettings settings)
         {
             obj.Time = time;
         }
 
-        protected override QuantizingCorrectionResult CorrectObject(TimedEvent obj, long time, EventsQuantizingSettings settings)
+        protected override QuantizingCorrectionResult CorrectObject(TimedEvent obj, long time, TimedEventsQuantizingSettings settings)
         {
             return new QuantizingCorrectionResult(QuantizingInstruction.Apply, time);
         }
