@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Tools.aa
+namespace Melanchall.DryWetMidi.Tools
 {
     public static class ChordsSplitterUtilities
     {
