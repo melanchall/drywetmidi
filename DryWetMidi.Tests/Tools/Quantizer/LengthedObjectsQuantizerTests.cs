@@ -792,7 +792,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var settings = new TSettings
             {
-                QuantizingTarget = LengthedObjectQuantizingTarget.Start,
+                QuantizingTarget = LengthedObjectTarget.Start,
                 FixOppositeEnd = fixEnd,
                 QuantizingBeyondFixedEndPolicy = policy
             };
@@ -814,7 +814,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var settings = new TSettings
             {
-                QuantizingTarget = LengthedObjectQuantizingTarget.End,
+                QuantizingTarget = LengthedObjectTarget.End,
                 FixOppositeEnd = fixStart,
                 QuantizingBeyondZeroPolicy = quantizingBeyondZeroPolicy,
                 QuantizingBeyondFixedEndPolicy = quantizingBeyondFixedEndPolicy
