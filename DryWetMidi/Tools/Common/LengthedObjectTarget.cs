@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Tools
 {
-    public enum LengthedObjectQuantizingTarget
+    public enum LengthedObjectTarget
     {
         Start,
         End

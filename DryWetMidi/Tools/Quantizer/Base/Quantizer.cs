@@ -75,6 +75,7 @@ namespace Melanchall.DryWetMidi.Tools
             yield return enumerator.Current;
         }
 
+        // TODO: specify LengthType to calculate deltas instead of MIDI only
         private static int FindNearestTime(IReadOnlyList<long> grid, long time, int startIndex)
         {
             var difference = long.MaxValue;

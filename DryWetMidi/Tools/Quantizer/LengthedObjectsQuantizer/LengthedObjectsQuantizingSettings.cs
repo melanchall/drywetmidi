@@ -4,7 +4,7 @@
     {
         #region Properties
 
-        public LengthedObjectQuantizingTarget QuantizingTarget { get; set; }
+        public LengthedObjectTarget QuantizingTarget { get; set; }
 
         public QuantizingBeyondZeroPolicy QuantizingBeyondZeroPolicy { get; set; }
 

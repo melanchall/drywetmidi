@@ -33,9 +33,9 @@ namespace Melanchall.DryWetMidi.Tools
             var target = settings.QuantizingTarget;
             switch (target)
             {
-                case LengthedObjectQuantizingTarget.Start:
+                case LengthedObjectTarget.Start:
                     return obj.Time;
-                case LengthedObjectQuantizingTarget.End:
+                case LengthedObjectTarget.End:
                     return obj.Time + obj.Length;
                 default:
                     throw new NotSupportedException($"{target} quantization target is not supported to get time.");
@@ -47,10 +47,10 @@ namespace Melanchall.DryWetMidi.Tools
             var target = settings.QuantizingTarget;
             switch (target)
             {
-                case LengthedObjectQuantizingTarget.Start:
+                case LengthedObjectTarget.Start:
                     SetObjectTime(obj, time);
                     break;
-                case LengthedObjectQuantizingTarget.End:
+                case LengthedObjectTarget.End:
                     SetObjectTime(obj, time - obj.Length);
                     break;
                 default:
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             switch (target)
             {
-                case LengthedObjectQuantizingTarget.Start:
+                case LengthedObjectTarget.Start:
                     if (settings.FixOppositeEnd)
                     {
                         var endTime = obj.Time + obj.Length;
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Tools
                         SetObjectLength(obj, endTime - time);
                     }
                     break;
-                case LengthedObjectQuantizingTarget.End:
+                case LengthedObjectTarget.End:
                     if (settings.FixOppositeEnd)
                     {
                         var startTime = obj.Time;
