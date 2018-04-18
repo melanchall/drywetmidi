@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
@@ -6,6 +7,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     public abstract class LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
     {
+        #region Properties
+
+        protected abstract LengthedObjectMethods<TObject> Methods { get; }
+
+        #endregion
+
+        #region Methods
+
         [OneTimeSetUp]
         public void SetUp()
         {
@@ -15,5 +24,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 return $"{tObj} (T = {tObj.Time}, L = {tObj.Length})";
             });
         }
+
+        #endregion
     }
 }

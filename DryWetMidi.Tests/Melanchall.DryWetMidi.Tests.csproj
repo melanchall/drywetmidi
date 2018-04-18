@@ -83,6 +83,9 @@
     <Compile Include="Tools\Quantizer\ChordsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\NotesQuantizerTests.cs" />
+    <Compile Include="Tools\Randomizer\ChordsRandomizerTests.cs" />
+    <Compile Include="Tools\Randomizer\LengthedObjectsRandomizerTests.cs" />
+    <Compile Include="Tools\Randomizer\NotesRandomizerTests.cs" />
     <Compile Include="Tools\TimeAndLength.cs" />
     <Compile Include="Utilities\Equality\ChordEquality.cs" />
     <Compile Include="Utilities\Equality\EventEquality.cs" />
