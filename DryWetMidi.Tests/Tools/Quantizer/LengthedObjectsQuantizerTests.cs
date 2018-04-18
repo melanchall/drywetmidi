@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 
@@ -17,21 +16,17 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         protected abstract LengthedObjectsQuantizer<TObject, TSettings> Quantizer { get; }
 
-        protected abstract LengthedObjectMethods<TObject> Methods { get; }
-
         #endregion
 
         #region Test methods
 
-        #region QuantizeStart
-
         [Test]
         [Description("Quantize start times of empty collection.")]
-        public void QuantizeStart_EmptyCollection()
+        public void Quantize_Start_EmptyCollection()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_DontKeepEnd(
+            Quantize_Start_DontKeepEnd(
                 Enumerable.Empty<TObject>(),
                 new SteppedGrid(MusicalTimeSpan.Eighth),
                 Enumerable.Empty<ITimeSpan>(),
@@ -40,11 +35,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times of nulls.")]
-        public void QuantizeStart_Nulls()
+        public void Quantize_Start_Nulls()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_DontKeepEnd(
+            Quantize_Start_DontKeepEnd(
                 new[] { default(TObject), default(TObject) },
                 new SteppedGrid(MusicalTimeSpan.Eighth),
                 new ITimeSpan[] { null, null },
@@ -53,11 +48,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times by grid of one step starting from zero.")]
-        public void QuantizeStart_OneStep_FromZero()
+        public void Quantize_Start_OneStep_FromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_DontKeepEnd(
+            Quantize_Start_DontKeepEnd(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
@@ -76,11 +71,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times by grid of one step starting away from zero.")]
-        public void QuantizeStart_OneStep_AwayFromZero()
+        public void Quantize_Start_OneStep_AwayFromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_DontKeepEnd(
+            Quantize_Start_DontKeepEnd(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
@@ -99,11 +94,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times by grid of one step keeping end times untouched.")]
-        public void QuantizeStart_OneStep_FixEnd()
+        public void Quantize_Start_OneStep_FixEnd()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_FixEnd(
+            Quantize_Start_FixEnd(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
@@ -124,11 +119,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times by grid of multiple steps starting from zero.")]
-        public void QuantizeStart_MultipleSteps_FromZero()
+        public void Quantize_Start_MultipleSteps_FromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_DontKeepEnd(
+            Quantize_Start_DontKeepEnd(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
@@ -147,11 +142,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times by grid of multiple steps starting away from zero.")]
-        public void QuantizeStart_MultipleSteps_AwayFromZero()
+        public void Quantize_Start_MultipleSteps_AwayFromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_DontKeepEnd(
+            Quantize_Start_DontKeepEnd(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
@@ -172,11 +167,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times by grid of multiple steps keeping end times untouched.")]
-        public void QuantizeStart_MultipleSteps_FixEnd()
+        public void Quantize_Start_MultipleSteps_FixEnd()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_FixEnd(
+            Quantize_Start_FixEnd(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
@@ -197,11 +192,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times that go beyond fixed ends: skip object.")]
-        public void QuantizeStart_QuantizingBeyondFixedEnd_Skip()
+        public void Quantize_Start_QuantizingBeyondFixedEnd_Skip()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_QuantizingBeyondFixedEnd(
+            Quantize_Start_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -224,11 +219,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times that go beyond fixed ends: abort quantizing.")]
-        public void QuantizeStart_QuantizingBeyondFixedEnd_Abort()
+        public void Quantize_Start_QuantizingBeyondFixedEnd_Abort()
         {
             var tempoMap = TempoMap.Default;
 
-            Assert.Throws<InvalidOperationException>(() => QuantizeStart_QuantizingBeyondFixedEnd(
+            Assert.Throws<InvalidOperationException>(() => Quantize_Start_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap)
@@ -244,11 +239,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times that go beyond fixed ends: reverse ends.")]
-        public void QuantizeStart_QuantizingBeyondFixedEnd_ReverseEnds()
+        public void Quantize_Start_QuantizingBeyondFixedEnd_ReverseEnds()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_QuantizingBeyondFixedEnd(
+            Quantize_Start_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -271,11 +266,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times that go beyond fixed ends: collapse object and fix at end.")]
-        public void QuantizeStart_QuantizingBeyondFixedEnd_CollapseAndFix()
+        public void Quantize_Start_QuantizingBeyondFixedEnd_CollapseAndFix()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_QuantizingBeyondFixedEnd(
+            Quantize_Start_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -298,11 +293,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize start times that go beyond fixed ends: collapse object and move to grid point.")]
-        public void QuantizeStart_QuantizingBeyondFixedEnd_CollapseAndMove()
+        public void Quantize_Start_QuantizingBeyondFixedEnd_CollapseAndMove()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeStart_QuantizingBeyondFixedEnd(
+            Quantize_Start_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -323,17 +318,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 QuantizingBeyondFixedEndPolicy.CollapseAndMove);
         }
 
-        #endregion
-
-        #region QuantizeEnd
-
         [Test]
         [Description("Quantize end times of empty collection.")]
-        public void QuantizeEnd_EmptyCollection()
+        public void Quantize_End_EmptyCollection()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_DontKeepStart(
+            Quantize_End_DontKeepStart(
                 Enumerable.Empty<TObject>(),
                 new SteppedGrid(MusicalTimeSpan.Eighth),
                 Enumerable.Empty<ITimeSpan>(),
@@ -342,11 +333,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times of nulls.")]
-        public void QuantizeEnd_Nulls()
+        public void Quantize_End_Nulls()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_DontKeepStart(
+            Quantize_End_DontKeepStart(
                 new[] { default(TObject), default(TObject) },
                 new SteppedGrid(MusicalTimeSpan.Eighth),
                 new ITimeSpan[] { null, null },
@@ -355,11 +346,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times by grid of one step starting from zero.")]
-        public void QuantizeEnd_OneStep_FromZero()
+        public void Quantize_End_OneStep_FromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_DontKeepStart(
+            Quantize_End_DontKeepStart(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
@@ -378,11 +369,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times by grid of one step starting away from zero.")]
-        public void QuantizeEnd_OneStep_AwayFromZero()
+        public void Quantize_End_OneStep_AwayFromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_DontKeepStart(
+            Quantize_End_DontKeepStart(
                 new[]
                 {
                     Methods.Create(MusicalTimeSpan.Quarter, MusicalTimeSpan.Half.SingleDotted() + MusicalTimeSpan.ThirtySecond, tempoMap),
@@ -401,11 +392,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times by grid of one step keeping start times untouched.")]
-        public void QuantizeEnd_OneStep_FixStart()
+        public void Quantize_End_OneStep_FixStart()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_FixStart(
+            Quantize_End_FixStart(
                 new[]
                 {
                     // Increase length
@@ -427,11 +418,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times by grid of multiple steps starting from zero.")]
-        public void QuantizeEnd_MultipleSteps_FromZero()
+        public void Quantize_End_MultipleSteps_FromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_DontKeepStart(
+            Quantize_End_DontKeepStart(
                 new[]
                 {
                     // Already quantized
@@ -453,11 +444,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times by grid of multiple steps starting away from zero.")]
-        public void QuantizeEnd_MultipleSteps_AwayFromZero()
+        public void Quantize_End_MultipleSteps_AwayFromZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_DontKeepStart(
+            Quantize_End_DontKeepStart(
                 new[]
                 {
                     // Already quantized
@@ -479,11 +470,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times by grid of multiple steps keeping start times untouched.")]
-        public void QuantizeEnd_MultipleSteps_FixStart()
+        public void Quantize_End_MultipleSteps_FixStart()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_FixStart(
+            Quantize_End_FixStart(
                 new[]
                 {
                     // Already quantized
@@ -505,11 +496,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that leads to object goes beyond zero: skip object.")]
-        public void QuantizeEnd_QuantizingBeyondZero_Skip()
+        public void Quantize_End_QuantizingBeyondZero_Skip()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_QuantizingBeyondZero(
+            Quantize_End_QuantizingBeyondZero(
                 new[]
                 {
                     // The case
@@ -535,11 +526,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that leads to object goes beyond zero: abort quantizing.")]
-        public void QuantizeEnd_QuantizingBeyondZero_Abort()
+        public void Quantize_End_QuantizingBeyondZero_Abort()
         {
             var tempoMap = TempoMap.Default;
 
-            Assert.Throws<InvalidOperationException>(() => QuantizeEnd_QuantizingBeyondZero(
+            Assert.Throws<InvalidOperationException>(() => Quantize_End_QuantizingBeyondZero(
                 new[]
                 {
                     Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, tempoMap)
@@ -555,11 +546,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that leads to object goes beyond zero: fix start time at zero and shrink object.")]
-        public void QuantizeEnd_QuantizingBeyondZero_FixAtZero()
+        public void Quantize_End_QuantizingBeyondZero_FixAtZero()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_QuantizingBeyondZero(
+            Quantize_End_QuantizingBeyondZero(
                 new[]
                 {
                     // The case
@@ -585,11 +576,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that leads to object goes beyond zero: use next grid point.")]
-        public void QuantizeEnd_QuantizingBeyondZero_UseNextGridPoint()
+        public void Quantize_End_QuantizingBeyondZero_UseNextGridPoint()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_QuantizingBeyondZero(
+            Quantize_End_QuantizingBeyondZero(
                 new[]
                 {
                     // The case
@@ -615,11 +606,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that go beyond fixed starts: skip object.")]
-        public void QuantizeEnd_QuantizingBeyondFixedEnd_Skip()
+        public void Quantize_End_QuantizingBeyondFixedEnd_Skip()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_QuantizingBeyondFixedEnd(
+            Quantize_End_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -642,11 +633,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that go beyond fixed starts: abort quantizing.")]
-        public void QuantizeEnd_QuantizingBeyondFixedEnd_Abort()
+        public void Quantize_End_QuantizingBeyondFixedEnd_Abort()
         {
             var tempoMap = TempoMap.Default;
 
-            Assert.Throws<InvalidOperationException>(() => QuantizeEnd_QuantizingBeyondFixedEnd(
+            Assert.Throws<InvalidOperationException>(() => Quantize_End_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     Methods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap)
@@ -662,11 +653,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that go beyond fixed starts: reverse ends.")]
-        public void QuantizeEnd_QuantizingBeyondFixedEnd_ReverseEnds()
+        public void Quantize_End_QuantizingBeyondFixedEnd_ReverseEnds()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_QuantizingBeyondFixedEnd(
+            Quantize_End_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -689,11 +680,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that go beyond fixed starts: collapse object and fix at start.")]
-        public void QuantizeEnd_QuantizingBeyondFixedEnd_CollapseAndFix()
+        public void Quantize_End_QuantizingBeyondFixedEnd_CollapseAndFix()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_QuantizingBeyondFixedEnd(
+            Quantize_End_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -716,11 +707,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Description("Quantize end times that go beyond fixed starts: collapse object and move to grid point.")]
-        public void QuantizeEnd_QuantizingBeyondFixedEnd_CollapseAndMove()
+        public void Quantize_End_QuantizingBeyondFixedEnd_CollapseAndMove()
         {
             var tempoMap = TempoMap.Default;
 
-            QuantizeEnd_QuantizingBeyondFixedEnd(
+            Quantize_End_QuantizingBeyondFixedEnd(
                 new[]
                 {
                     // The case
@@ -743,50 +734,48 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #endregion
 
-        #endregion
-
         #region Private methods
 
-        private void QuantizeStart_DontKeepEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
+        private void Quantize_Start_DontKeepEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
         {
             var expectedTimesAndLengths = actualObjects.Zip(expectedTimes, (obj, time) => new { Object = obj, Time = time })
                                                        .Select(ot => ot.Object != null ? new TimeAndLength(ot.Time, (MidiTimeSpan)ot.Object.Length) : null);
-            QuantizeStart(actualObjects, grid, expectedTimesAndLengths, false, tempoMap);
+            Quantize_Start(actualObjects, grid, expectedTimesAndLengths, false, tempoMap);
         }
 
-        private void QuantizeStart_FixEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap)
+        private void Quantize_Start_FixEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap)
         {
-            QuantizeStart(actualObjects, grid, expectedTimes, true, tempoMap);
+            Quantize_Start(actualObjects, grid, expectedTimes, true, tempoMap);
         }
 
-        private void QuantizeStart_QuantizingBeyondFixedEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy)
+        private void Quantize_Start_QuantizingBeyondFixedEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy)
         {
-            QuantizeStart(actualObjects, grid, expectedTimes, true, tempoMap, policy);
+            Quantize_Start(actualObjects, grid, expectedTimes, true, tempoMap, policy);
         }
 
-        private void QuantizeEnd_DontKeepStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
+        private void Quantize_End_DontKeepStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
         {
             var expectedTimesAndLengths = actualObjects.Zip(expectedTimes, (obj, time) => new { Object = obj, Time = time })
                                                        .Select(ot => ot.Object != null ? new TimeAndLength(ot.Time, (MidiTimeSpan)ot.Object.Length) : null);
-            QuantizeEnd(actualObjects, grid, expectedTimesAndLengths, false, tempoMap);
+            Quantize_End(actualObjects, grid, expectedTimesAndLengths, false, tempoMap);
         }
 
-        private void QuantizeEnd_FixStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap)
+        private void Quantize_End_FixStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap)
         {
-            QuantizeEnd(actualObjects, grid, expectedTimes, true, tempoMap);
+            Quantize_End(actualObjects, grid, expectedTimes, true, tempoMap);
         }
 
-        private void QuantizeEnd_QuantizingBeyondZero(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, QuantizingBeyondZeroPolicy policy)
+        private void Quantize_End_QuantizingBeyondZero(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, QuantizingBeyondZeroPolicy policy)
         {
-            QuantizeEnd(actualObjects, grid, expectedTimes, false, tempoMap, policy);
+            Quantize_End(actualObjects, grid, expectedTimes, false, tempoMap, policy);
         }
 
-        private void QuantizeEnd_QuantizingBeyondFixedEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy)
+        private void Quantize_End_QuantizingBeyondFixedEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy)
         {
-            QuantizeEnd(actualObjects, grid, expectedTimes, true, tempoMap, default(QuantizingBeyondZeroPolicy), policy);
+            Quantize_End(actualObjects, grid, expectedTimes, true, tempoMap, default(QuantizingBeyondZeroPolicy), policy);
         }
 
-        private void QuantizeStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimesAndLengths, bool fixEnd, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy = default(QuantizingBeyondFixedEndPolicy))
+        private void Quantize_Start(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimesAndLengths, bool fixEnd, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy = default(QuantizingBeyondFixedEndPolicy))
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
@@ -802,13 +791,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
-        private void QuantizeEnd(IEnumerable<TObject> actualObjects,
-                                 IGrid grid,
-                                 IEnumerable<TimeAndLength> expectedTimesAndLengths,
-                                 bool fixStart,
-                                 TempoMap tempoMap,
-                                 QuantizingBeyondZeroPolicy quantizingBeyondZeroPolicy = default(QuantizingBeyondZeroPolicy),
-                                 QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy = default(QuantizingBeyondFixedEndPolicy))
+        private void Quantize_End(IEnumerable<TObject> actualObjects,
+                                  IGrid grid,
+                                  IEnumerable<TimeAndLength> expectedTimesAndLengths,
+                                  bool fixStart,
+                                  TempoMap tempoMap,
+                                  QuantizingBeyondZeroPolicy quantizingBeyondZeroPolicy = default(QuantizingBeyondZeroPolicy),
+                                  QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy = default(QuantizingBeyondFixedEndPolicy))
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 

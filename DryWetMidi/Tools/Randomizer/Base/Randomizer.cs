@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -16,11 +17,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             var random = new Random();
 
-            foreach (var obj in objects)
+            foreach (var obj in objects.Where(o => o != null))
             {
-                if (obj == null)
-                    continue;
-
                 var time = GetOldTime(obj, settings);
                 time = RandomizeTime(time, leftTolerance, rightTolerance, random, tempoMap);
 
