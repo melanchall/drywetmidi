@@ -108,7 +108,6 @@
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfLengthArgument.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfNotesTolerance.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfTimeArgument.cs" />
-    <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfTimeDivision.cs" />
     <Compile Include="Smf\ChunksConverters\ChunksConverterFactory.cs" />
     <Compile Include="Smf\ChunksConverters\IChunksConverter.cs" />
     <Compile Include="Smf\ChunksConverters\MultiSequenceChunksConverter.cs" />
