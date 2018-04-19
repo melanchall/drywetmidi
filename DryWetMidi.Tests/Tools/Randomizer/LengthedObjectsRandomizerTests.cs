@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var actualObjects = Enumerable.Empty<TObject>();
             var expectedObjects = Enumerable.Empty<TObject>();
 
-            Randomizer.Randomize(actualObjects, (MidiTimeSpan)123, tempoMap, new TSettings { RandomizingTarget = LengthedObjectTarget.Start });
+            Randomizer.Randomize(actualObjects, new ConstantBounds((MidiTimeSpan)123), tempoMap, new TSettings { RandomizingTarget = LengthedObjectTarget.Start });
 
             Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var actualObjects = new[] { default(TObject), default(TObject) };
             var expectedObjects = new[] { default(TObject), default(TObject) };
 
-            Randomizer.Randomize(actualObjects, (MidiTimeSpan)123, tempoMap, new TSettings { RandomizingTarget = LengthedObjectTarget.Start });
+            Randomizer.Randomize(actualObjects, new ConstantBounds((MidiTimeSpan)123), tempoMap, new TSettings { RandomizingTarget = LengthedObjectTarget.Start });
 
             Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
