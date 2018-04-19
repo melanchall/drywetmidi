@@ -6,11 +6,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public sealed class NotesRandomizerTests : LengthedObjectsRandomizerTests<Note, NotesRandomizingSettings>
     {
-        #region Properties
+        #region Constructor
 
-        protected override LengthedObjectsRandomizer<Note, NotesRandomizingSettings> Randomizer { get; } = new NotesRandomizer();
-
-        protected override LengthedObjectMethods<Note> Methods { get; } = new NoteMethods();
+        public NotesRandomizerTests()
+            : base(new NoteMethods(), new NotesRandomizer())
+        {
+        }
 
         #endregion
     }

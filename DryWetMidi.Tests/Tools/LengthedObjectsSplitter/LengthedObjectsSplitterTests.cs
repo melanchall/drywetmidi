@@ -51,9 +51,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #endregion
 
+        #region Constructor
+
+        public LengthedObjectsSplitterTests(LengthedObjectMethods<TObject> methods, LengthedObjectsSplitter<TObject> splitter)
+            : base(methods)
+        {
+            Splitter = splitter;
+        }
+
+        #endregion
+
         #region Properties
 
-        protected abstract LengthedObjectsSplitter<TObject> Splitter { get; }
+        protected LengthedObjectsSplitter<TObject> Splitter { get; }
 
         #endregion
 

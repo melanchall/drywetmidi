@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 
@@ -9,9 +10,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         where TObject : ILengthedObject
         where TSettings : LengthedObjectsRandomizingSettings, new()
     {
+        #region Constructor
+
+        public LengthedObjectsRandomizerTests(LengthedObjectMethods<TObject> methods, LengthedObjectsRandomizer<TObject, TSettings> randomizer)
+            : base(methods)
+        {
+            Randomizer = randomizer;
+        }
+
+        #endregion
+
         #region Properties
 
-        protected abstract LengthedObjectsRandomizer<TObject, TSettings> Randomizer { get; }
+        protected LengthedObjectsRandomizer<TObject, TSettings> Randomizer { get; }
 
         #endregion
 
@@ -39,6 +50,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = new[] { default(TObject), default(TObject) };
 
             Randomizer.Randomize(actualObjects, new ConstantBounds((MidiTimeSpan)123), tempoMap, new TSettings { RandomizingTarget = LengthedObjectTarget.Start });
+
+            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [Test]
+        public void Randomize_Start_Constant_Zero()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var actualObjects = new[]
+            {
+                Methods.Create(1000, 1000),
+                Methods.Create(0, 10000),
+            };
+            var expectedObjects = actualObjects.Select(o => Methods.Clone(o)).ToList();
+
+            Randomizer.Randomize(actualObjects, new ConstantBounds((MidiTimeSpan)0), tempoMap, new TSettings { RandomizingTarget = LengthedObjectTarget.Start });
 
             Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }

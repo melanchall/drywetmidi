@@ -7,9 +7,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     public abstract class LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
     {
+        #region Constructor
+
+        public LengthedObjectsToolTests(LengthedObjectMethods<TObject> methods)
+        {
+            Methods = methods;
+        }
+
+        #endregion
+
         #region Properties
 
-        protected abstract LengthedObjectMethods<TObject> Methods { get; }
+        protected LengthedObjectMethods<TObject> Methods { get; }
 
         #endregion
 

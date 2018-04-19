@@ -2,19 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    // TODO: tolerances tests
     public abstract class LengthedObjectsQuantizerTests<TObject, TSettings> : LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
         where TSettings : LengthedObjectsQuantizingSettings, new()
     {
+        #region Constructor
+
+        public LengthedObjectsQuantizerTests(LengthedObjectMethods<TObject> methods, LengthedObjectsQuantizer<TObject, TSettings> quantizer)
+            : base(methods)
+        {
+            Quantizer = quantizer;
+        }
+
+        #endregion
+
         #region Properties
 
-        protected abstract LengthedObjectsQuantizer<TObject, TSettings> Quantizer { get; }
+        protected LengthedObjectsQuantizer<TObject, TSettings> Quantizer { get; }
 
         #endregion
 

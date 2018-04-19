@@ -32,11 +32,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #endregion
 
+        #region Constructor
+
+        public NotesSplitterTests()
+            : base(new NoteMethods(), new NotesSplitter())
+        {
+        }
+
+        #endregion
+
         #region Overrides
-
-        protected override LengthedObjectsSplitter<Note> Splitter { get; } = new NotesSplitter();
-
-        protected override LengthedObjectMethods<Note> Methods { get; } = new NoteMethods();
 
         protected override IEnumerable<Note> CreateInputObjects(long length)
         {

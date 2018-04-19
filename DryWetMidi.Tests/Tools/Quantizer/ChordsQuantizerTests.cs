@@ -6,11 +6,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public sealed class ChordsQuantizerTests : LengthedObjectsQuantizerTests<Chord, ChordsQuantizingSettings>
     {
-        #region Properties
+        #region Constructor
 
-        protected override LengthedObjectsQuantizer<Chord, ChordsQuantizingSettings> Quantizer { get; } = new ChordsQuantizer();
-
-        protected override LengthedObjectMethods<Chord> Methods { get; } = new ChordMethods();
+        public ChordsQuantizerTests()
+            : base(new ChordMethods(), new ChordsQuantizer())
+        {
+        }
 
         #endregion
     }
