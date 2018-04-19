@@ -11,23 +11,13 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        public void Randomize(IEnumerable<TObject> objects, ITimeSpan tolerance, TempoMap tempoMap, TSettings settings = null)
+        public void Randomize(IEnumerable<TObject> objects, IBounds bounds, TempoMap tempoMap, TSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
-            ThrowIfArgument.IsNull(nameof(tolerance), tolerance);
+            ThrowIfArgument.IsNull(nameof(bounds), bounds);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            RandomizeInternal(objects, tolerance, tolerance, tempoMap, settings);
-        }
-
-        public void Randomize(IEnumerable<TObject> objects, ITimeSpan leftTolerance, ITimeSpan rightTolerance, TempoMap tempoMap, TSettings settings = null)
-        {
-            ThrowIfArgument.IsNull(nameof(objects), objects);
-            ThrowIfArgument.IsNull(nameof(leftTolerance), leftTolerance);
-            ThrowIfArgument.IsNull(nameof(rightTolerance), rightTolerance);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            RandomizeInternal(objects, leftTolerance, rightTolerance, tempoMap, settings);
+            RandomizeInternal(objects, bounds, tempoMap, settings);
         }
 
         // TODO: unify with quantizer

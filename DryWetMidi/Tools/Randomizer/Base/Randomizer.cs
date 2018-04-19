@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         // TODO: think about better names than tolerance
-        protected void RandomizeInternal(IEnumerable<TObject> objects, ITimeSpan leftTolerance, ITimeSpan rightTolerance, TempoMap tempoMap, TSettings settings)
+        protected void RandomizeInternal(IEnumerable<TObject> objects, IBounds bounds, TempoMap tempoMap, TSettings settings)
         {
             settings = settings ?? new TSettings();
 
@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects.Where(o => o != null))
             {
                 var time = GetOldTime(obj, settings);
-                time = RandomizeTime(time, leftTolerance, rightTolerance, random, tempoMap);
+                time = RandomizeTime(time, bounds, random, tempoMap);
 
                 SetNewTime(obj, time, settings);
             }
@@ -30,35 +30,15 @@ namespace Melanchall.DryWetMidi.Tools
 
         protected abstract void SetNewTime(TObject obj, long time, TSettings settings);
 
-        private static long RandomizeTime(long time, ITimeSpan leftTolerance, ITimeSpan rightTolerance, Random random, TempoMap tempoMap)
+        private static long RandomizeTime(long time, IBounds bounds, Random random, TempoMap tempoMap)
         {
-            var minTime = CalculateBoundaryTime(time, leftTolerance, MathOperation.Subtract, tempoMap);
-            var maxTime = CalculateBoundaryTime(time, rightTolerance, MathOperation.Add, tempoMap);
+            var timeBounds = bounds.GetBounds(time, tempoMap);
 
-            // Max time is always nonnegative since grid cannot start below zero
-            // so result of randomizing is guaranteed to be nonnegative
+            var minTime = Math.Max(0, timeBounds.Item1) - 1;
+            var maxTime = timeBounds.Item2;
 
-            return minTime < 0 && maxTime >= 0
-                ? GetRandomTime(-1, maxTime, random) + 1
-                : GetRandomTime(minTime - 1, maxTime, random) + 1;
-        }
-
-        private static long CalculateBoundaryTime(long time, ITimeSpan tolerance, MathOperation operation, TempoMap tempoMap)
-        {
-            ITimeSpan boundaryTime = (MidiTimeSpan)time;
-
-            switch (operation)
-            {
-                case MathOperation.Add:
-                    boundaryTime = boundaryTime.Add(tolerance, TimeSpanMode.TimeLength);
-                    break;
-
-                case MathOperation.Subtract:
-                    boundaryTime = boundaryTime.Subtract(tolerance, TimeSpanMode.TimeLength);
-                    break;
-            }
-
-            return TimeConverter.ConvertFrom(boundaryTime, tempoMap);
+            var difference = (int)Math.Abs(maxTime - minTime);
+            return minTime + random.Next(difference) + 1;
         }
 
         private static long GetRandomTime(long minTime, long maxTime, Random random)

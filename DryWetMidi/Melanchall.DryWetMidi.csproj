@@ -277,7 +277,9 @@
     <Compile Include="Tools\Quantizer\Utilities\TimedEventsQuantizerUtilities.cs" />
     <Compile Include="Tools\Randomizer\Base\Randomizer.cs" />
     <Compile Include="Tools\Randomizer\Base\RandomizingSettings.cs" />
+    <Compile Include="Tools\Randomizer\Bounds\ConstantBounds.cs" />
     <Compile Include="Tools\Randomizer\ChordsRandomizer.cs" />
+    <Compile Include="Tools\Randomizer\Bounds\IBounds.cs" />
     <Compile Include="Tools\Randomizer\LengthedObjectsRandomizer\LengthedObjectsRandomizer.cs" />
     <Compile Include="Tools\Randomizer\LengthedObjectsRandomizer\LengthedObjectsRandomizingSettings.cs" />
     <Compile Include="Tools\Randomizer\NotesRandomizer.cs" />
