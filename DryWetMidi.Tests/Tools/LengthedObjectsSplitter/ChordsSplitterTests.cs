@@ -11,11 +11,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     [TestFixture]
     public sealed class ChordsSplitterTests : LengthedObjectsSplitterTests<Chord>
     {
+        #region Constructor
+
+        public ChordsSplitterTests()
+            : base(new ChordMethods(), new ChordsSplitter())
+        {
+        }
+
+        #endregion
+
         #region Overrides
-
-        protected override LengthedObjectsSplitter<Chord> Splitter { get; } = new ChordsSplitter();
-
-        protected override LengthedObjectMethods<Chord> Methods { get; } = new ChordMethods();
 
         protected override IEnumerable<Chord> CreateInputObjects(long length)
         {

@@ -34,18 +34,19 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        private static long CalculateBoundaryTime(long time, ITimeSpan tolerance, MathOperation operation, TempoMap tempoMap)
+        // TODO: deal with time is less than size
+        private static long CalculateBoundaryTime(long time, ITimeSpan size, MathOperation operation, TempoMap tempoMap)
         {
             ITimeSpan boundaryTime = (MidiTimeSpan)time;
 
             switch (operation)
             {
                 case MathOperation.Add:
-                    boundaryTime = boundaryTime.Add(tolerance, TimeSpanMode.TimeLength);
+                    boundaryTime = boundaryTime.Add(size, TimeSpanMode.TimeLength);
                     break;
 
                 case MathOperation.Subtract:
-                    boundaryTime = boundaryTime.Subtract(tolerance, TimeSpanMode.TimeLength);
+                    boundaryTime = boundaryTime.Subtract(size, TimeSpanMode.TimeLength);
                     break;
             }
 

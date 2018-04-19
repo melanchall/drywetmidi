@@ -8,11 +8,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     [TestFixture]
     public sealed class NotesQuantizerTests : LengthedObjectsQuantizerTests<Note, NotesQuantizingSettings>
     {
-        #region Properties
+        #region Constructor
 
-        protected override LengthedObjectsQuantizer<Note, NotesQuantizingSettings> Quantizer { get; } = new NotesQuantizer();
-
-        protected override LengthedObjectMethods<Note> Methods { get; } = new NoteMethods();
+        public NotesQuantizerTests()
+            : base(new NoteMethods(), new NotesQuantizer())
+        {
+        }
 
         #endregion
     }

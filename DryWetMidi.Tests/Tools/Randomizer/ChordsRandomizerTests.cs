@@ -6,11 +6,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public sealed class ChordsRandomizerTests : LengthedObjectsRandomizerTests<Chord, ChordsRandomizingSettings>
     {
-        #region Properties
+        #region Constructor
 
-        protected override LengthedObjectsRandomizer<Chord, ChordsRandomizingSettings> Randomizer { get; } = new ChordsRandomizer();
-
-        protected override LengthedObjectMethods<Chord> Methods { get; } = new ChordMethods();
+        public ChordsRandomizerTests()
+            : base(new ChordMethods(), new ChordsRandomizer())
+        {
+        }
 
         #endregion
     }
