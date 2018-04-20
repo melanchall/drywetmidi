@@ -10,7 +10,6 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        // TODO: think about better names than tolerance
         protected void RandomizeInternal(IEnumerable<TObject> objects, IBounds bounds, TempoMap tempoMap, TSettings settings)
         {
             settings = settings ?? new TSettings();
@@ -20,15 +19,28 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects.Where(o => o != null))
             {
                 var time = GetOldTime(obj, settings);
+
                 time = RandomizeTime(time, bounds, random, tempoMap);
 
-                SetNewTime(obj, time, settings);
+                var correctionResult = CorrectObject(obj, time, settings);
+                var instruction = correctionResult.RandomizingInstruction;
+
+                if (instruction == RandomizingInstruction.Apply)
+                {
+                    SetNewTime(obj, correctionResult.Time, settings);
+                    break;
+                }
+
+                if (instruction == RandomizingInstruction.Skip)
+                    break;
             }
         }
 
         protected abstract long GetOldTime(TObject obj, TSettings settings);
 
         protected abstract void SetNewTime(TObject obj, long time, TSettings settings);
+
+        protected abstract RandomizingCorrectionResult CorrectObject(TObject obj, long time, TSettings settings);
 
         private static long RandomizeTime(long time, IBounds bounds, Random random, TempoMap tempoMap)
         {
@@ -39,12 +51,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             var difference = (int)Math.Abs(maxTime - minTime);
             return minTime + random.Next(difference) + 1;
-        }
-
-        private static long GetRandomTime(long minTime, long maxTime, Random random)
-        {
-            var difference = (int)Math.Abs(maxTime - minTime);
-            return minTime + random.Next(difference);
         }
 
         #endregion
