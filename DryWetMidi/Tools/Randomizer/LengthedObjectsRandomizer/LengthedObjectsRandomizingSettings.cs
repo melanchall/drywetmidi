@@ -6,6 +6,8 @@
 
         public LengthedObjectTarget RandomizingTarget { get; set; }
 
+        public bool FixOppositeEnd { get; set; }
+
         #endregion
     }
 }

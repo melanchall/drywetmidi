@@ -35,6 +35,11 @@ namespace Melanchall.DryWetMidi.Tools
             obj.Time = time;
         }
 
+        protected override RandomizingCorrectionResult CorrectObject(TimedEvent obj, long time, TimedEventsRandomizingSettings settings)
+        {
+            return new RandomizingCorrectionResult(RandomizingInstruction.Apply, time);
+        }
+
         #endregion
     }
 }

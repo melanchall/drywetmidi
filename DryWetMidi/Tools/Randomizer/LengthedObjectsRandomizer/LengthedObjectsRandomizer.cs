@@ -60,6 +60,25 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        protected sealed override RandomizingCorrectionResult CorrectObject(TObject obj, long time, TSettings settings)
+        {
+            var target = settings.RandomizingTarget;
+
+            switch (target)
+            {
+                case LengthedObjectTarget.Start:
+                    if (settings.FixOppositeEnd)
+                        SetObjectLength(obj, obj.Time + obj.Length - time);
+                    break;
+                case LengthedObjectTarget.End:
+                    if (settings.FixOppositeEnd)
+                        SetObjectLength(obj, time - obj.Time);
+                    break;
+            }
+
+            return new RandomizingCorrectionResult(RandomizingInstruction.Apply, time);
+        }
+
         #endregion
     }
 }
