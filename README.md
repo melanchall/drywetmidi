@@ -17,6 +17,11 @@ With the DryWetMIDI you can:
 
 ## Getting Started
 
+There are several articles that can help you dive into API provided by DryWetMIDI:
+
+* [DryWetMIDI: High-level processing of MIDI files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
+* [DryWetMIDI: Notes Quantization](https://www.codeproject.com/Articles/1204629/DryWetMIDI-Notes-Quantization)
+
 Let's see some examples of what you can do with DryWetMIDI.
 
 To [read a MIDI file](https://github.com/melanchall/drymidi/wiki/Reading-a-MIDI-file) you have to use ```Read``` static method of the ```MidiFile```:
