@@ -840,8 +840,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         private TObject CloneAndChangeTimeAndLength(TObject obj, long time, long length)
         {
             var result = Methods.Clone(obj);
-            Methods.SetTime(result, time);
-            Methods.SetLength(result, length);
+            result.Time = time;
+            result.Length = length;
             return result;
         }
 

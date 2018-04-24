@@ -20,12 +20,6 @@ namespace Melanchall.DryWetMidi.Tools
             RandomizeInternal(objects, bounds, tempoMap, settings);
         }
 
-        // TODO: unify with quantizer
-        // maybe add set for ILengthedObject.Time/Length
-        protected abstract void SetObjectTime(TObject obj, long time);
-
-        protected abstract void SetObjectLength(TObject obj, long length);
-
         #endregion
 
         #region Overrides
@@ -50,10 +44,10 @@ namespace Melanchall.DryWetMidi.Tools
             switch (target)
             {
                 case LengthedObjectTarget.Start:
-                    SetObjectTime(obj, time);
+                    obj.Time = time;
                     break;
                 case LengthedObjectTarget.End:
-                    SetObjectTime(obj, time - obj.Length);
+                    obj.Time = time - obj.Length;
                     break;
                 default:
                     throw new NotSupportedException($"{target} randomization target is not supported to set time.");
@@ -68,11 +62,11 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 case LengthedObjectTarget.Start:
                     if (settings.FixOppositeEnd)
-                        SetObjectLength(obj, obj.Time + obj.Length - time);
+                        obj.Length = obj.Time + obj.Length - time;
                     break;
                 case LengthedObjectTarget.End:
                     if (settings.FixOppositeEnd)
-                        SetObjectLength(obj, time - obj.Time);
+                        obj.Length = time - obj.Time;
                     break;
             }
 

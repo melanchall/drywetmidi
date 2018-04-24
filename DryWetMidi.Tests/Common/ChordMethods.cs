@@ -52,16 +52,6 @@ namespace Melanchall.DryWetMidi.Tests.Common
             return obj.Clone();
         }
 
-        public override void SetTime(Chord obj, long time)
-        {
-            obj.Time = time;
-        }
-
-        public override void SetLength(Chord obj, long length)
-        {
-            obj.Length = length;
-        }
-
         #endregion
     }
 }
