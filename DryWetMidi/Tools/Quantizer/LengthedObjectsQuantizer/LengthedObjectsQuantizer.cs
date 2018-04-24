@@ -20,10 +20,6 @@ namespace Melanchall.DryWetMidi.Tools
             QuantizeInternal(objects, grid, tempoMap, settings);
         }
 
-        protected abstract void SetObjectTime(TObject obj, long time);
-
-        protected abstract void SetObjectLength(TObject obj, long length);
-
         #endregion
 
         #region Overrides
@@ -48,10 +44,10 @@ namespace Melanchall.DryWetMidi.Tools
             switch (target)
             {
                 case LengthedObjectTarget.Start:
-                    SetObjectTime(obj, time);
+                    obj.Time = time;
                     break;
                 case LengthedObjectTarget.End:
-                    SetObjectTime(obj, time - obj.Length);
+                    obj.Time = time - obj.Length;
                     break;
                 default:
                     throw new NotSupportedException($"{target} quantization target is not supported to set time.");
@@ -91,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tools
                             }
                         }
 
-                        SetObjectLength(obj, endTime - time);
+                        obj.Length = endTime - time;
                     }
                     break;
                 case LengthedObjectTarget.End:
@@ -121,7 +117,7 @@ namespace Melanchall.DryWetMidi.Tools
                             }
                         }
 
-                        SetObjectLength(obj, time - startTime);
+                        obj.Length = time - startTime;
                     }
                     else
                     {
@@ -137,7 +133,7 @@ namespace Melanchall.DryWetMidi.Tools
                                 case QuantizingBeyondZeroPolicy.Abort:
                                     throw new InvalidOperationException("Quantized object is going below zero.");
                                 case QuantizingBeyondZeroPolicy.FixAtZero:
-                                    SetObjectLength(obj, time);
+                                    obj.Length = time;
                                     break;
                             }
                         }
