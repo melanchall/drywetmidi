@@ -216,6 +216,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MathTimeSpan(TimeSpan1.Clone(), TimeSpan2.Clone(), Operation, Mode);
         }
 
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes obj
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as obj.
+        /// Greater than zero This instance follows obj in the sort order.</returns>
+        /// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
+        public int CompareTo(object obj)
+        {
+            throw new InvalidOperationException("Cannot compare MathTimeSpan.");
+        }
+
         #endregion
     }
 }

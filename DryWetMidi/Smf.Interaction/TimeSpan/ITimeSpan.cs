@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Time span that represents time or length.
     /// </summary>
-    public interface ITimeSpan
+    public interface ITimeSpan : IComparable
     {
         /// <summary>
         /// Adds a time span to the current one.

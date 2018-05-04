@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents bar/beat time span which represents bars, beats and ticks.
     /// </summary>
-    public sealed class BarBeatTimeSpan : ITimeSpan
+    public sealed class BarBeatTimeSpan : ITimeSpan, IComparable<BarBeatTimeSpan>
     {
         #region Constructor
 
@@ -109,17 +109,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw parsingResult.Exception;
         }
 
-        private static void CalculateDifferencies(BarBeatTimeSpan timeSpan1,
-                                                  BarBeatTimeSpan timeSpan2,
-                                                  out long barsDifference,
-                                                  out long beatsDifference,
-                                                  out long ticksDifference)
-        {
-            barsDifference = timeSpan1.Bars - timeSpan2.Bars;
-            beatsDifference = timeSpan1.Beats - timeSpan2.Beats;
-            ticksDifference = timeSpan1.Ticks - timeSpan2.Ticks;
-        }
-
         #endregion
 
         #region Operators
@@ -210,9 +199,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long barsDelta, beatsDelta, ticksDelta;
-            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
-            return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta < 0)));
+            return timeSpan1.CompareTo(timeSpan2) < 0;
         }
 
         /// <summary>
@@ -229,9 +216,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long barsDelta, beatsDelta, ticksDelta;
-            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
-            return barsDelta > 0 || (barsDelta == 0 && (beatsDelta > 0 || (beatsDelta == 0 && ticksDelta > 0)));
+            return timeSpan1.CompareTo(timeSpan2) > 0;
         }
 
         /// <summary>
@@ -249,9 +234,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long barsDelta, beatsDelta, ticksDelta;
-            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
-            return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta <= 0)));
+            return timeSpan1.CompareTo(timeSpan2) <= 0;
         }
 
         /// <summary>
@@ -269,9 +252,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long barsDelta, beatsDelta, ticksDelta;
-            CalculateDifferencies(timeSpan1, timeSpan2, out barsDelta, out beatsDelta, out ticksDelta);
-            return barsDelta < 0 || (barsDelta == 0 && (beatsDelta < 0 || (beatsDelta == 0 && ticksDelta >= 0)));
+            return timeSpan1.CompareTo(timeSpan2) >= 0;
         }
 
         #endregion
@@ -390,6 +371,55 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public ITimeSpan Clone()
         {
             return new BarBeatTimeSpan(Bars, Beats, Ticks);
+        }
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes obj
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as obj.
+        /// Greater than zero This instance follows obj in the sort order.</returns>
+        /// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
+        public int CompareTo(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+                return 1;
+
+            var barBeatTimeSpan = obj as BarBeatTimeSpan;
+            if (ReferenceEquals(barBeatTimeSpan, null))
+                throw new ArgumentException("Time span is of different type.", nameof(obj));
+
+            return CompareTo(barBeatTimeSpan);
+        }
+
+        #endregion
+
+        #region IComparable<BarBeatTimeSpan>
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes other
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as other.
+        /// Greater than zero This instance follows other in the sort order.</returns>
+        public int CompareTo(BarBeatTimeSpan other)
+        {
+            if (ReferenceEquals(other, null))
+                return 1;
+
+            var barsDelta = Bars - other.Bars;
+            var beatsDelta = Beats - other.Beats;
+            var ticksDelta = Ticks - other.Ticks;
+
+            return Math.Sign(barsDelta != 0 ? barsDelta : (beatsDelta != 0 ? beatsDelta : ticksDelta));
         }
 
         #endregion
