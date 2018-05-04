@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using NUnit.Framework;
 
@@ -20,6 +21,20 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         private const long ZeroTime = 0;
         private const long ShortTime = 1000;
         private const long LargeTime = 100000;
+
+        private static readonly Tuple<MidiTimeSpan, MidiTimeSpan>[] TimeSpansForComparison_Less = new[]
+        {
+            Tuple.Create(new MidiTimeSpan(), new MidiTimeSpan(1)),
+            Tuple.Create(new MidiTimeSpan(), new MidiTimeSpan(1000)),
+            Tuple.Create(new MidiTimeSpan(100), new MidiTimeSpan(1000))
+        };
+
+        private static readonly Tuple<MidiTimeSpan, MidiTimeSpan>[] TimeSpansForComparison_Equal = new[]
+        {
+            Tuple.Create(new MidiTimeSpan(), new MidiTimeSpan()),
+            Tuple.Create(new MidiTimeSpan(), new MidiTimeSpan(0)),
+            Tuple.Create(new MidiTimeSpan(12345), new MidiTimeSpan(12345))
+        };
 
         #endregion
 
@@ -718,6 +733,102 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void Clone_2()
         {
             TimeSpanTestUtilities.TestClone(new MidiTimeSpan(123));
+        }
+
+        #endregion
+
+        #region Compare
+
+        [Test]
+        [Description("Compare two time spans where first one is less than second one.")]
+        public void Compare_Less()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            {
+                var timeSpan1 = timeSpansPair.Item1;
+                var timeSpan2 = timeSpansPair.Item2;
+
+                Assert.IsTrue(timeSpan1 < timeSpan2,
+                              $"{timeSpan1} isn't less than {timeSpan2} using <.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) < 0,
+                              $"{timeSpan1} isn't less than {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) < 0,
+                              $"{timeSpan1} isn't less than {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans where first one is greater than second one.")]
+        public void Compare_Greater()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsTrue(timeSpan1 > timeSpan2,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using >.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) > 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) > 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans where first one is less than or equal to second one.")]
+        public void Compare_LessOrEqual()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
+            {
+                var timeSpan1 = timeSpansPair.Item1;
+                var timeSpan2 = timeSpansPair.Item2;
+
+                Assert.IsTrue(timeSpan1 <= timeSpan2,
+                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using <=.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) <= 0,
+                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) <= 0,
+                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans where first one is greater than or equal to second one.")]
+        public void Compare_GreaterOrEqual()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsTrue(timeSpan1 >= timeSpan2,
+                              $"{timeSpan1} isn't greater than or equal to {timeSpan2} using >=.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) >= 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) >= 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans using CompareTo where second time span is of different type.")]
+        public void Compare_TypesMismatch()
+        {
+            var timeSpansPairs = new[]
+            {
+                Tuple.Create<MidiTimeSpan, ITimeSpan>(new MidiTimeSpan(), new MetricTimeSpan(100)),
+                Tuple.Create<MidiTimeSpan, ITimeSpan>(new MidiTimeSpan(), new MusicalTimeSpan(1, 1000)),
+                Tuple.Create<MidiTimeSpan, ITimeSpan>(new MidiTimeSpan(), new BarBeatTimeSpan(1, 2, 3))
+            };
+
+            foreach (var timeSpansPair in timeSpansPairs)
+            {
+                var timeSpan1 = timeSpansPair.Item1;
+                var timeSpan2 = timeSpansPair.Item2;
+
+                Assert.Throws<ArgumentException>(() => timeSpan1.CompareTo(timeSpan2));
+            }
         }
 
         #endregion

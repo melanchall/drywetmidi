@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using NUnit.Framework;
 
@@ -22,6 +23,35 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         private static readonly MetricTimeSpan ZeroSpan = new MetricTimeSpan();
         private static readonly MetricTimeSpan ShortSpan = new MetricTimeSpan(0, 0, 5);
         private static readonly MetricTimeSpan LongSpan = new MetricTimeSpan(0, 5, 5);
+
+        private static readonly Tuple<MetricTimeSpan, MetricTimeSpan>[] TimeSpansForComparison_Less = new[]
+        {
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1)),
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 1, 0)),
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(1, 0, 0)),
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1)),
+            Tuple.Create(new MetricTimeSpan(2, 0, 0), new MetricTimeSpan(10, 0, 1)),
+            Tuple.Create(new MetricTimeSpan(0, 10, 0), new MetricTimeSpan(0, 10, 1)),
+            Tuple.Create(new MetricTimeSpan(10, 10, 0), new MetricTimeSpan(10, 10, 1)),
+            Tuple.Create(new MetricTimeSpan(10000, 899, 0), new MetricTimeSpan(10000, 10000, 0)),
+            Tuple.Create(new MetricTimeSpan(0, 100, 0), new MetricTimeSpan(0, 110, 1)),
+            Tuple.Create(new MetricTimeSpan(199, 0, 1000), new MetricTimeSpan(200, 0, 800)),
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(10, 110, 891)),
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(10)),
+            Tuple.Create(new MetricTimeSpan(10), new MetricTimeSpan(1000))
+        };
+
+        private static readonly Tuple<MetricTimeSpan, MetricTimeSpan>[] TimeSpansForComparison_Equal = new[]
+        {
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan()),
+            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 0)),
+            Tuple.Create(new MetricTimeSpan(10, 0, 0), new MetricTimeSpan(10, 0, 0)),
+            Tuple.Create(new MetricTimeSpan(100, 100, 100), new MetricTimeSpan(100, 100, 100)),
+            Tuple.Create(new MetricTimeSpan(0, 345, 0), new MetricTimeSpan(0, 345, 0)),
+            Tuple.Create(new MetricTimeSpan(0, 0, 1234), new MetricTimeSpan(0, 0, 1234)),
+            Tuple.Create(new MetricTimeSpan(0), new MetricTimeSpan()),
+            Tuple.Create(new MetricTimeSpan(10000), new MetricTimeSpan(10000)),
+        };
 
         #endregion
 
@@ -852,6 +882,102 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void Clone_2()
         {
             TimeSpanTestUtilities.TestClone(new MetricTimeSpan(5, 4, 6, 8));
+        }
+
+        #endregion
+
+        #region Compare
+
+        [Test]
+        [Description("Compare two time spans where first one is less than second one.")]
+        public void Compare_Less()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            {
+                var timeSpan1 = timeSpansPair.Item1;
+                var timeSpan2 = timeSpansPair.Item2;
+
+                Assert.IsTrue(timeSpan1 < timeSpan2,
+                              $"{timeSpan1} isn't less than {timeSpan2} using <.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) < 0,
+                              $"{timeSpan1} isn't less than {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) < 0,
+                              $"{timeSpan1} isn't less than {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans where first one is greater than second one.")]
+        public void Compare_Greater()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsTrue(timeSpan1 > timeSpan2,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using >.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) > 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) > 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans where first one is less than or equal to second one.")]
+        public void Compare_LessOrEqual()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
+            {
+                var timeSpan1 = timeSpansPair.Item1;
+                var timeSpan2 = timeSpansPair.Item2;
+
+                Assert.IsTrue(timeSpan1 <= timeSpan2,
+                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using <=.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) <= 0,
+                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) <= 0,
+                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans where first one is greater than or equal to second one.")]
+        public void Compare_GreaterOrEqual()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsTrue(timeSpan1 >= timeSpan2,
+                              $"{timeSpan1} isn't greater than or equal to {timeSpan2} using >=.");
+                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) >= 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using typed CompareTo.");
+                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) >= 0,
+                              $"{timeSpan1} isn't greater than {timeSpan2} using CompareTo(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans using CompareTo where second time span is of different type.")]
+        public void Compare_TypesMismatch()
+        {
+            var timeSpansPairs = new[]
+            {
+                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new MidiTimeSpan(100)),
+                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new MusicalTimeSpan(1, 1000)),
+                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new BarBeatTimeSpan(1, 2, 3))
+            };
+
+            foreach (var timeSpansPair in timeSpansPairs)
+            {
+                var timeSpan1 = timeSpansPair.Item1;
+                var timeSpan2 = timeSpansPair.Item2;
+
+                Assert.Throws<ArgumentException>(() => timeSpan1.CompareTo(timeSpan2));
+            }
         }
 
         #endregion

@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents metric time span which represents hours, minutes and seconds.
     /// </summary>
-    public sealed class MetricTimeSpan : ITimeSpan
+    public sealed class MetricTimeSpan : ITimeSpan, IComparable<MetricTimeSpan>
     {
         #region Constants
 
@@ -261,7 +261,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.TotalMicroseconds < timeSpan2.TotalMicroseconds;
+            return timeSpan1.CompareTo(timeSpan2) < 0;
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.TotalMicroseconds > timeSpan2.TotalMicroseconds;
+            return timeSpan1.CompareTo(timeSpan2) > 0;
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.TotalMicroseconds <= timeSpan2.TotalMicroseconds;
+            return timeSpan1.CompareTo(timeSpan2) <= 0;
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return timeSpan1.TotalMicroseconds >= timeSpan2.TotalMicroseconds;
+            return timeSpan1.CompareTo(timeSpan2) >= 0;
         }
 
         #endregion
@@ -429,6 +429,51 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public ITimeSpan Clone()
         {
             return new MetricTimeSpan(TotalMicroseconds);
+        }
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes obj
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as obj.
+        /// Greater than zero This instance follows obj in the sort order.</returns>
+        /// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
+        public int CompareTo(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+                return 1;
+
+            var metricTimeSpan = obj as MetricTimeSpan;
+            if (ReferenceEquals(metricTimeSpan, null))
+                throw new ArgumentException("Time span is of different type.", nameof(obj));
+
+            return CompareTo(metricTimeSpan);
+        }
+
+        #endregion
+
+        #region IComparable<MetricTimeSpan>
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes other
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as other.
+        /// Greater than zero This instance follows other in the sort order.</returns>
+        public int CompareTo(MetricTimeSpan other)
+        {
+            if (ReferenceEquals(other, null))
+                return 1;
+
+            return _timeSpan.CompareTo(other._timeSpan);
         }
 
         #endregion

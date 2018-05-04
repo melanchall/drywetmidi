@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// Represents a time span as an amount of time measured in units of the time division
     /// of a MIDI file.
     /// </summary>
-    public sealed class MidiTimeSpan : ITimeSpan
+    public sealed class MidiTimeSpan : ITimeSpan, IComparable<MidiTimeSpan>
     {
         #region Constructor
 
@@ -349,6 +349,51 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public ITimeSpan Clone()
         {
             return new MidiTimeSpan(TimeSpan);
+        }
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes obj
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as obj.
+        /// Greater than zero This instance follows obj in the sort order.</returns>
+        /// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
+        public int CompareTo(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+                return 1;
+
+            var midiTimeSpan = obj as MidiTimeSpan;
+            if (ReferenceEquals(midiTimeSpan, null))
+                throw new ArgumentException("Time span is of different type.", nameof(obj));
+
+            return CompareTo(midiTimeSpan);
+        }
+
+        #endregion
+
+        #region IComparable<MidiTimeSpan>
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes other
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as other.
+        /// Greater than zero This instance follows other in the sort order.</returns>
+        public int CompareTo(MidiTimeSpan other)
+        {
+            if (ReferenceEquals(other, null))
+                return 1;
+
+            return Math.Sign(TimeSpan - other.TimeSpan);
         }
 
         #endregion

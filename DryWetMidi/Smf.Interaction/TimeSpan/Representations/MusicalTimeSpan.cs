@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents a time span as a fraction of the whole note's length.
     /// </summary>
-    public sealed class MusicalTimeSpan : ITimeSpan
+    public sealed class MusicalTimeSpan : ITimeSpan, IComparable<MusicalTimeSpan>
     {
         #region Constants
 
@@ -397,9 +397,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
-            return numerator1 < numerator2;
+            return timeSpan1.CompareTo(timeSpan2) < 0;
         }
 
         /// <summary>
@@ -416,9 +414,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
-            return numerator1 > numerator2;
+            return timeSpan1.CompareTo(timeSpan2) > 0;
         }
 
         /// <summary>
@@ -436,9 +432,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
-            return numerator1 <= numerator2;
+            return timeSpan1.CompareTo(timeSpan2) <= 0;
         }
 
         /// <summary>
@@ -456,9 +450,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
-            return numerator1 >= numerator2;
+            return timeSpan1.CompareTo(timeSpan2) >= 0;
         }
 
         #endregion
@@ -575,6 +567,53 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public ITimeSpan Clone()
         {
             return new MusicalTimeSpan(Numerator, Denominator);
+        }
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes obj
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as obj.
+        /// Greater than zero This instance follows obj in the sort order.</returns>
+        /// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
+        public int CompareTo(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+                return 1;
+
+            var musicalTimeSpan = obj as MusicalTimeSpan;
+            if (ReferenceEquals(musicalTimeSpan, null))
+                throw new ArgumentException("Time span is of different type.", nameof(obj));
+
+            return CompareTo(musicalTimeSpan);
+        }
+
+        #endregion
+
+        #region IComparable<MusicalTimeSpan>
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer
+        /// that indicates whether the current instance precedes, follows, or occurs in the same
+        /// position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings: Value Meaning Less than zero This instance precedes other
+        /// in the sort order. Zero This instance occurs in the same position in the sort order as other.
+        /// Greater than zero This instance follows other in the sort order.</returns>
+        public int CompareTo(MusicalTimeSpan other)
+        {
+            if (ReferenceEquals(other, null))
+                return 1;
+
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(this, other, out numerator1, out numerator2, out denominator);
+            return Math.Sign(numerator1 - numerator2);
         }
 
         #endregion
