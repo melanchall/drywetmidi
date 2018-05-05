@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents metric time span which represents hours, minutes and seconds.
     /// </summary>
-    public sealed class MetricTimeSpan : ITimeSpan, IComparable<MetricTimeSpan>
+    public sealed class MetricTimeSpan : ITimeSpan, IComparable<MetricTimeSpan>, IEquatable<MetricTimeSpan>
     {
         #region Constants
 
@@ -189,13 +189,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if time spans are equal, false otherwise.</returns>
         public static bool operator ==(MetricTimeSpan timeSpan1, MetricTimeSpan timeSpan2)
         {
-            if (ReferenceEquals(timeSpan1, timeSpan2))
-                return true;
+            if (ReferenceEquals(timeSpan1, null))
+                return ReferenceEquals(timeSpan2, null);
 
-            if (ReferenceEquals(null, timeSpan1) || ReferenceEquals(null, timeSpan2))
-                return false;
-
-            return timeSpan1.TotalMicroseconds == timeSpan2.TotalMicroseconds;
+            return timeSpan1.Equals(timeSpan2);
         }
 
         /// <summary>
@@ -328,7 +325,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as MetricTimeSpan);
+            return Equals(obj as MetricTimeSpan);
         }
 
         /// <summary>
@@ -474,6 +471,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return 1;
 
             return _timeSpan.CompareTo(other._timeSpan);
+        }
+
+        #endregion
+
+        #region IEquatable<MetricTimeSpan>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(MetricTimeSpan other)
+        {
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (ReferenceEquals(null, other))
+                return false;
+
+            return _timeSpan == other._timeSpan;
         }
 
         #endregion

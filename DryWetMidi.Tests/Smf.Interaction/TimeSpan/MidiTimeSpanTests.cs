@@ -831,6 +831,78 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             }
         }
 
+        [Test]
+        [Description("Compare two time spans for equality: true expected.")]
+        public void Compare_Equal_True()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Equal)
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsTrue(timeSpan1 == timeSpan2,
+                              $"{timeSpan1} isn't equal to {timeSpan2} using ==.");
+                Assert.IsTrue(timeSpan1.Equals(timeSpan2),
+                              $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
+                Assert.IsTrue(timeSpan1.Equals((object)timeSpan2),
+                              $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans for equality: false expected.")]
+        public void Compare_Equal_False()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsFalse(timeSpan1 == timeSpan2,
+                               $"{timeSpan1} equal to {timeSpan2} using ==.");
+                Assert.IsFalse(timeSpan1.Equals(timeSpan2),
+                               $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
+                Assert.IsFalse(timeSpan1.Equals((object)timeSpan2),
+                               $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans for inequality: true expected.")]
+        public void Compare_DoesNotEqual_True()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsTrue(timeSpan1 != timeSpan2,
+                              $"{timeSpan1} equal to {timeSpan2} using !=.");
+                Assert.IsTrue(!timeSpan1.Equals(timeSpan2),
+                              $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
+                Assert.IsTrue(!timeSpan1.Equals((object)timeSpan2),
+                              $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
+            }
+        }
+
+        [Test]
+        [Description("Compare two time spans for inequality: false expected.")]
+        public void Compare_DoesNotEqual_False()
+        {
+            foreach (var timeSpansPair in TimeSpansForComparison_Equal)
+            {
+                var timeSpan1 = timeSpansPair.Item2;
+                var timeSpan2 = timeSpansPair.Item1;
+
+                Assert.IsFalse(timeSpan1 != timeSpan2,
+                               $"{timeSpan1} isn't equal to {timeSpan2} using !=.");
+                Assert.IsFalse(!timeSpan1.Equals(timeSpan2),
+                               $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
+                Assert.IsFalse(!timeSpan1.Equals((object)timeSpan2),
+                               $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
+            }
+        }
+
         #endregion
 
         #endregion

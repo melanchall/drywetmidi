@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents bar/beat time span which represents bars, beats and ticks.
     /// </summary>
-    public sealed class BarBeatTimeSpan : ITimeSpan, IComparable<BarBeatTimeSpan>
+    public sealed class BarBeatTimeSpan : ITimeSpan, IComparable<BarBeatTimeSpan>, IEquatable<BarBeatTimeSpan>
     {
         #region Constructor
 
@@ -121,15 +121,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if time spans are equal, false otherwise.</returns>
         public static bool operator ==(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
         {
-            if (ReferenceEquals(timeSpan1, timeSpan2))
-                return true;
+            if (ReferenceEquals(timeSpan1, null))
+                return ReferenceEquals(timeSpan2, null);
 
-            if (ReferenceEquals(null, timeSpan1) || ReferenceEquals(null, timeSpan2))
-                return false;
-
-            return timeSpan1.Bars == timeSpan2.Bars &&
-                   timeSpan1.Beats == timeSpan2.Beats &&
-                   timeSpan1.Ticks == timeSpan2.Ticks;
+            return timeSpan1.Equals(timeSpan2);
         }
 
         /// <summary>
@@ -266,7 +261,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as BarBeatTimeSpan);
+            return Equals(obj as BarBeatTimeSpan);
         }
 
         /// <summary>
@@ -420,6 +415,28 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var ticksDelta = Ticks - other.Ticks;
 
             return Math.Sign(barsDelta != 0 ? barsDelta : (beatsDelta != 0 ? beatsDelta : ticksDelta));
+        }
+
+        #endregion
+
+        #region IEquatable<BarBeatTimeSpan>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(BarBeatTimeSpan other)
+        {
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (ReferenceEquals(null, other))
+                return false;
+
+            return Bars == other.Bars &&
+                   Beats == other.Beats &&
+                   Ticks == other.Ticks;
         }
 
         #endregion
