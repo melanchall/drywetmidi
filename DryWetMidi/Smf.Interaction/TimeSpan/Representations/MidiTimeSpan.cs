@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// Represents a time span as an amount of time measured in units of the time division
     /// of a MIDI file.
     /// </summary>
-    public sealed class MidiTimeSpan : ITimeSpan, IComparable<MidiTimeSpan>
+    public sealed class MidiTimeSpan : ITimeSpan, IComparable<MidiTimeSpan>, IEquatable<MidiTimeSpan>
     {
         #region Constructor
 
@@ -109,13 +109,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if time spans are equal, false otherwise.</returns>
         public static bool operator ==(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
         {
-            if (ReferenceEquals(timeSpan1, timeSpan2))
-                return true;
+            if (ReferenceEquals(timeSpan1, null))
+                return ReferenceEquals(timeSpan2, null);
 
-            if (ReferenceEquals(null, timeSpan1) || ReferenceEquals(null, timeSpan2))
-                return false;
-
-            return timeSpan1.TimeSpan == timeSpan2.TimeSpan;
+            return timeSpan1.Equals(timeSpan2);
         }
 
         /// <summary>
@@ -257,7 +254,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as MidiTimeSpan);
+            return Equals(obj as MidiTimeSpan);
         }
 
         /// <summary>
@@ -394,6 +391,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return 1;
 
             return Math.Sign(TimeSpan - other.TimeSpan);
+        }
+
+        #endregion
+
+        #region IEquatable<MidiTimeSpan>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(MidiTimeSpan other)
+        {
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (ReferenceEquals(null, other))
+                return false;
+
+            return TimeSpan == other.TimeSpan;
         }
 
         #endregion

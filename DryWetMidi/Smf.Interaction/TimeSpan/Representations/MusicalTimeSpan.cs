@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents a time span as a fraction of the whole note's length.
     /// </summary>
-    public sealed class MusicalTimeSpan : ITimeSpan, IComparable<MusicalTimeSpan>
+    public sealed class MusicalTimeSpan : ITimeSpan, IComparable<MusicalTimeSpan>, IEquatable<MusicalTimeSpan>
     {
         #region Constants
 
@@ -269,15 +269,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if time spans are equal, false otherwise.</returns>
         public static bool operator ==(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
-            if (ReferenceEquals(timeSpan1, timeSpan2))
-                return true;
+            if (ReferenceEquals(timeSpan1, null))
+                return ReferenceEquals(timeSpan2, null);
 
-            if (ReferenceEquals(null, timeSpan1) || ReferenceEquals(null, timeSpan2))
-                return false;
-
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
-            return numerator1 == numerator2;
+            return timeSpan1.Equals(timeSpan2);
         }
 
         /// <summary>
@@ -464,7 +459,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as MusicalTimeSpan);
+            return Equals(obj as MusicalTimeSpan);
         }
 
         /// <summary>
@@ -614,6 +609,28 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             long numerator1, numerator2, denominator;
             ReduceToCommonDenominator(this, other, out numerator1, out numerator2, out denominator);
             return Math.Sign(numerator1 - numerator2);
+        }
+
+        #endregion
+
+        #region IEquatable<MusicalTimeSpan>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        public bool Equals(MusicalTimeSpan other)
+        {
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (ReferenceEquals(null, other))
+                return false;
+
+            long numerator1, numerator2, denominator;
+            ReduceToCommonDenominator(this, other, out numerator1, out numerator2, out denominator);
+            return numerator1 == numerator2;
         }
 
         #endregion
