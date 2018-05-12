@@ -1,0 +1,162 @@
+﻿using System;
+using System.Collections;
+using System.Linq;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
+using NUnit.Framework;
+
+namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
+{
+    [TestFixture]
+    public sealed class NotesManagingUtilitiesTests
+    {
+        #region Nested classes
+
+        private sealed class TimedObjectComparer : IComparer
+        {
+            #region IComparer
+
+            public int Compare(object x, object y)
+            {
+                var timedObject1 = x as ITimedObject;
+                var timedObject2 = y as ITimedObject;
+
+                if (ReferenceEquals(timedObject1, timedObject2))
+                    return 1;
+
+                if (ReferenceEquals(timedObject1, null))
+                    return -1;
+
+                if (ReferenceEquals(timedObject2, null))
+                    return 1;
+
+                var timesDifference = timedObject1.Time - timedObject2.Time;
+                if (timesDifference != 0)
+                    return Math.Sign(timesDifference);
+
+                return TimedObjectEquality.AreEqual(timedObject1, timedObject2, false) ? 0 : -1;
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Test methods
+
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            TestContext.AddFormatter<ITimedObject>((object obj) =>
+            {
+                var timedObject = (ITimedObject)obj;
+                var lengthedObject = obj as ILengthedObject;
+                return lengthedObject != null
+                    ? $"{obj} (T = {lengthedObject.Time}, L = {lengthedObject.Length})"
+                    : $"{obj} (T = {timedObject.Time})";
+            });
+        }
+
+        [Test]
+        [Description("Extract notes from empty collection of timed events.")]
+        public void ExtractNotes_EmptyCollections()
+        {
+            var timedEvents = Enumerable.Empty<TimedEvent>();
+            var actualObjects = timedEvents.ExtractNotes().ToList();
+            var expectedObjects = Enumerable.Empty<TimedEvent>();
+
+            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+        }
+
+        [Test]
+        [Description("Extract notes where they are all completed.")]
+        public void ExtractNotes_AllProcessed()
+        {
+            var events = new MidiEvent[]
+            {
+                new SetTempoEvent(1234),
+                new NoteOnEvent((SevenBitNumber)1, (SevenBitNumber)100) { DeltaTime = 10, Channel = (FourBitNumber)1 },
+                new NoteOnEvent((SevenBitNumber)2, (SevenBitNumber)70) { DeltaTime = 10, Channel = (FourBitNumber)1 },
+                new PitchBendEvent(123) { DeltaTime = 10 },
+                new MarkerEvent("Marker") { DeltaTime = 10 },
+                new NoteOnEvent((SevenBitNumber)3, (SevenBitNumber)1) { Channel = (FourBitNumber)1 },
+                new MarkerEvent("Marker 2") { DeltaTime = 10 },
+                new TextEvent("Text") { DeltaTime = 10 },
+                new TextEvent("Text 2") { DeltaTime = 10 },
+                new NoteOnEvent((SevenBitNumber)2, (SevenBitNumber)1) { Channel = (FourBitNumber)10 },
+                new CuePointEvent("Point") { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)3, (SevenBitNumber)1) { Channel = (FourBitNumber)1 },
+                new NoteOffEvent((SevenBitNumber)1, (SevenBitNumber)0) { DeltaTime = 10, Channel = (FourBitNumber)1 },
+                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { Channel = (FourBitNumber)10 },
+                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { DeltaTime = 10, Channel = (FourBitNumber)1 }
+            };
+
+            var timedEvents = new TrackChunk(events).GetTimedEvents();
+            var actualObjects = timedEvents.ExtractNotes().ToList();
+
+            var expectedObjects = new ITimedObject[]
+            {
+                new TimedEvent(new SetTempoEvent(1234), 0),
+                new Note((SevenBitNumber)1, 80, 10) { Channel = (FourBitNumber)1, Velocity = (SevenBitNumber)100 },
+                new Note((SevenBitNumber)2, 80, 20) { Channel = (FourBitNumber)1, Velocity = (SevenBitNumber)70 },
+                new TimedEvent(new PitchBendEvent(123), 30),
+                new TimedEvent(new MarkerEvent("Marker"), 40),
+                new Note((SevenBitNumber)3, 40, 40) { Channel = (FourBitNumber)1, Velocity = (SevenBitNumber)1, OffVelocity = (SevenBitNumber)1 },
+                new TimedEvent(new MarkerEvent("Marker 2"), 50),
+                new TimedEvent(new TextEvent("Text"), 60),
+                new TimedEvent(new TextEvent("Text 2"), 70),
+                new Note((SevenBitNumber)2, 20, 70) { Channel = (FourBitNumber)10, Velocity = (SevenBitNumber)1 },
+                new TimedEvent(new CuePointEvent("Point"), 80)
+            };
+
+            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+        }
+
+        [Test]
+        [Description("Extract notes where some notes aren't completed.")]
+        public void ExtractNotes_NotAllProcessed()
+        {
+            var events = new MidiEvent[]
+            {
+                new SetTempoEvent(1234),
+                new NoteOnEvent((SevenBitNumber)1, (SevenBitNumber)100) { DeltaTime = 10, Channel = (FourBitNumber)1 },
+                new NoteOnEvent((SevenBitNumber)2, (SevenBitNumber)70) { DeltaTime = 10, Channel = (FourBitNumber)1 },
+                new PitchBendEvent(123) { DeltaTime = 10 },
+                new MarkerEvent("Marker") { DeltaTime = 10 },
+                new NoteOnEvent((SevenBitNumber)3, (SevenBitNumber)1) { Channel = (FourBitNumber)1 },
+                new MarkerEvent("Marker 2") { DeltaTime = 10 },
+                new TextEvent("Text") { DeltaTime = 10 },
+                new TextEvent("Text 2") { DeltaTime = 10 },
+                new NoteOnEvent((SevenBitNumber)2, (SevenBitNumber)1) { Channel = (FourBitNumber)10 },
+                new CuePointEvent("Point") { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)3, (SevenBitNumber)1) { Channel = (FourBitNumber)1 },
+                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { Channel = (FourBitNumber)10 },
+                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { DeltaTime = 10, Channel = (FourBitNumber)1 }
+            };
+
+            var timedEvents = new TrackChunk(events).GetTimedEvents();
+            var actualObjects = timedEvents.ExtractNotes().ToList();
+
+            var expectedObjects = new ITimedObject[]
+            {
+                new TimedEvent(new SetTempoEvent(1234), 0),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)1, (SevenBitNumber)100) { Channel = (FourBitNumber)1 }, 10),
+                new Note((SevenBitNumber)2, 70, 20) { Channel = (FourBitNumber)1, Velocity = (SevenBitNumber)70 },
+                new TimedEvent(new PitchBendEvent(123), 30),
+                new TimedEvent(new MarkerEvent("Marker"), 40),
+                new Note((SevenBitNumber)3, 40, 40) { Channel = (FourBitNumber)1, Velocity = (SevenBitNumber)1, OffVelocity = (SevenBitNumber)1 },
+                new TimedEvent(new MarkerEvent("Marker 2"), 50),
+                new TimedEvent(new TextEvent("Text"), 60),
+                new TimedEvent(new TextEvent("Text 2"), 70),
+                new Note((SevenBitNumber)2, 10, 70) { Channel = (FourBitNumber)10, Velocity = (SevenBitNumber)1 },
+                new TimedEvent(new CuePointEvent("Point"), 80)
+            };
+
+            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+        }
+
+        #endregion
+    }
+}
