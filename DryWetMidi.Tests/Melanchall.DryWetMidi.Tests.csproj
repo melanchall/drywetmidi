@@ -59,6 +59,7 @@
     <Compile Include="Smf.Interaction\ChordsManager\ChordTests.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordTestUtilities.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesManagerTests.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\NotesManagingUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesProcessingUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NoteTests.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NoteTestUtilities.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Utilities\Equality\EventEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
     <Compile Include="Utilities\Equality\TimedEventEquality.cs" />
+    <Compile Include="Utilities\Equality\TimedObjectEquality.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj">

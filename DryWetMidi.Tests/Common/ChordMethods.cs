@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
                 var xChord = (Chord)x;
                 var yChord = (Chord)y;
 
-                return ChordEquality.Equals(xChord, yChord) ? 0 : -1;
+                return ChordEquality.AreEqual(xChord, yChord) ? 0 : -1;
             }
 
             #endregion

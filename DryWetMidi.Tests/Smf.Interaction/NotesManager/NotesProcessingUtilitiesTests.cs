@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreNotSame(parts.Item2,
                               note,
                               "Right part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.Equals(noteCreator(), parts.Item2),
+            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.Item2),
                           "Right part doesn't equal to the original note.");
         }
 
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreNotSame(parts.Item2,
                               note,
                               "Right part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.Equals(noteCreator(), parts.Item2),
+            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.Item2),
                           "Right part doesn't equal to the original note.");
         }
 
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreNotSame(parts.Item1,
                               note,
                               "Left part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.Equals(noteCreator(), parts.Item1),
+            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.Item1),
                           "Left part doesn't equal to the original note.");
         }
 
@@ -86,9 +86,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var time = 120;
 
             var parts = note.Split(time);
-            Assert.IsTrue(NoteEquality.Equals(new Note((SevenBitNumber)100, 20, 100), parts.Item1),
+            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 20, 100), parts.Item1),
                           "Left part is invalid.");
-            Assert.IsTrue(NoteEquality.Equals(new Note((SevenBitNumber)100, 180, 120), parts.Item2),
+            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 180, 120), parts.Item2),
                           "Right part is invalid.");
         }
 

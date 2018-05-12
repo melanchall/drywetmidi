@@ -45,12 +45,12 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
         #region Methods
 
-        public static bool Equals(Note note1, Note note2)
+        public static bool AreEqual(Note note1, Note note2)
         {
             return new NoteComparer().Equals(note1, note2);
         }
 
-        public static bool Equals(IEnumerable<Note> notes1, IEnumerable<Note> notes2)
+        public static bool AreEqual(IEnumerable<Note> notes1, IEnumerable<Note> notes2)
         {
             if (ReferenceEquals(notes1, notes2))
                 return true;

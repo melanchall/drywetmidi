@@ -707,7 +707,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 };
             });
 
-            Assert.IsTrue(NoteEquality.Equals(expectedNotes, midiFile.GetNotes()));
+            Assert.IsTrue(NoteEquality.AreEqual(expectedNotes, midiFile.GetNotes()));
 
             return midiFile;
         }
@@ -737,7 +737,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             foreach (var expectedEvent in expectedTimedEvents)
             {
-                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.Equals(expectedEvent, actual)),
+                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.AreEqual(expectedEvent, actual, true)),
                               $"There are no event: {expectedEvent}");
             }
 

@@ -64,6 +64,15 @@ namespace Melanchall.DryWetMidi.Smf
             noteEvent.NoteNumber = NoteUtilities.GetNoteNumber(noteName, octave);
         }
 
+        public static bool IsNoteOnCorrespondToNoteOff(NoteOnEvent noteOnEvent, NoteOffEvent noteOffEvent)
+        {
+            ThrowIfArgument.IsNull(nameof(noteOnEvent), noteOnEvent);
+            ThrowIfArgument.IsNull(nameof(noteOffEvent), noteOffEvent);
+
+            return noteOnEvent.Channel == noteOffEvent.Channel &&
+                   noteOnEvent.NoteNumber == noteOffEvent.NoteNumber;
+        }
+
         #endregion
     }
 }

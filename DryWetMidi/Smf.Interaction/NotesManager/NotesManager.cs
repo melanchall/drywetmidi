@@ -118,10 +118,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 var noteOffEvent = midiEvent as NoteOffEvent;
                 if (noteOffEvent != null)
                 {
-                    var channel = noteOffEvent.Channel;
-                    var noteNumber = noteOffEvent.NoteNumber;
-
-                    var noteOnTimedEvent = noteOnTimedEvents.FirstOrDefault(e => IsAppropriateNoteOnTimedEvent(e, channel, noteNumber));
+                    var noteOnTimedEvent = noteOnTimedEvents.FirstOrDefault(e => NoteEventUtilities.IsNoteOnCorrespondToNoteOff((NoteOnEvent)e.Event, noteOffEvent));
                     if (noteOnTimedEvent == null)
                         continue;
 
@@ -129,14 +126,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                     yield return new Note(noteOnTimedEvent, timedEvent);
                 }
             }
-        }
-
-        private static bool IsAppropriateNoteOnTimedEvent(TimedEvent timedEvent, FourBitNumber channel, SevenBitNumber noteNumber)
-        {
-            var noteOnEvent = timedEvent.Event as NoteOnEvent;
-            return noteOnEvent != null &&
-                   noteOnEvent.Channel == channel &&
-                   noteOnEvent.NoteNumber == noteNumber;
         }
 
         private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)
