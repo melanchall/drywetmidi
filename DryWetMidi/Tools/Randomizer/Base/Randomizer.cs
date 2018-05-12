@@ -5,7 +5,6 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    // TODO: remove this comment
     public abstract class Randomizer<TObject, TSettings>
         where TSettings : RandomizingSettings, new()
     {

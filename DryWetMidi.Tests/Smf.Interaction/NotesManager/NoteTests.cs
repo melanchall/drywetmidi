@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 OffVelocity = (SevenBitNumber)54
             };
 
-            Assert.IsTrue(NoteEquality.Equals(note, note.Clone()),
+            Assert.IsTrue(NoteEquality.AreEqual(note, note.Clone()),
                           "Clone of a note doesn't equal to the original one.");
         }
 

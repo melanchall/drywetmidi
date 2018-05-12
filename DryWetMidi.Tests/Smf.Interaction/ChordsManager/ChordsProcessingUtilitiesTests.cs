@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreNotSame(parts.Item1,
                               chord,
                               "Left part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.Equals(chordCreator(), parts.Item1),
+            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.Item1),
                           "Left part doesn't equal to the original chord.");
         }
 
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreNotSame(parts.Item2,
                               chord,
                               "Right part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.Equals(chordCreator(), parts.Item2),
+            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.Item2),
                           "Right part doesn't equal to the original chord.");
         }
 
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreNotSame(parts.Item2,
                               chord,
                               "Right part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.Equals(chordCreator(), parts.Item2),
+            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.Item2),
                           "Right part doesn't equal to the original chord.");
         }
 
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.AreNotSame(parts.Item1,
                               chord,
                               "Left part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.Equals(chordCreator(), parts.Item1),
+            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.Item1),
                           "Left part doesn't equal to the original chord.");
         }
 
@@ -119,9 +119,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var expectedRightChord = new Chord(new Note((SevenBitNumber)100, 150, 150),
                                                new Note((SevenBitNumber)110, 280, 150));
 
-            Assert.IsTrue(ChordEquality.Equals(expectedLeftChord, parts.Item1),
+            Assert.IsTrue(ChordEquality.AreEqual(expectedLeftChord, parts.Item1),
                           "Left part is invalid.");
-            Assert.IsTrue(ChordEquality.Equals(expectedRightChord, parts.Item2),
+            Assert.IsTrue(ChordEquality.AreEqual(expectedRightChord, parts.Item2),
                           "Right part is invalid.");
         }
 
@@ -139,9 +139,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var expectedRightChord = new Chord(new Note((SevenBitNumber)100, 180, 120),
                                                new Note((SevenBitNumber)110, 300, 130));
 
-            Assert.IsTrue(ChordEquality.Equals(expectedLeftChord, parts.Item1),
+            Assert.IsTrue(ChordEquality.AreEqual(expectedLeftChord, parts.Item1),
                           "Left part is invalid.");
-            Assert.IsTrue(ChordEquality.Equals(expectedRightChord, parts.Item2),
+            Assert.IsTrue(ChordEquality.AreEqual(expectedRightChord, parts.Item2),
                           "Right part is invalid.");
         }
 

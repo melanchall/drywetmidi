@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 var xNote = (Note)x;
                 var yNote = (Note)y;
 
-                return NoteEquality.Equals(xNote, yNote) ? 0 : -1;
+                return NoteEquality.AreEqual(xNote, yNote) ? 0 : -1;
             }
 
             #endregion

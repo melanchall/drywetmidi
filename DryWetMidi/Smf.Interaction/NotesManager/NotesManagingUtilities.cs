@@ -10,6 +10,45 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public static class NotesManagingUtilities
     {
+        #region Nested classes
+
+        private sealed class NoteEventsDescriptor
+        {
+            #region Constructor
+
+            public NoteEventsDescriptor(TimedEvent noteOnTimedEvent, IEnumerable<TimedEvent> eventsTail)
+            {
+                NoteOnTimedEvent = noteOnTimedEvent;
+                EventsTail = eventsTail;
+            }
+
+            #endregion
+
+            #region Properties
+
+            public TimedEvent NoteOnTimedEvent { get; }
+
+            public TimedEvent NoteOffTimedEvent { get; private set; }
+
+            public IEnumerable<TimedEvent> EventsTail { get; }
+
+            public bool IsNoteCompleted { get; private set; }
+
+            #endregion
+
+            #region Methods
+
+            public void CompleteNote(TimedEvent noteOffTimedEvent)
+            {
+                NoteOffTimedEvent = noteOffTimedEvent;
+                IsNoteCompleted = true;
+            }
+
+            #endregion
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -296,6 +335,81 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
             return new MidiFile(notes.ToTrackChunk());
+        }
+
+        public static IEnumerable<ITimedObject> ExtractNotes(this IEnumerable<TimedEvent> timedEvents)
+        {
+            ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
+
+            var noteEventsDescriptors = new List<NoteEventsDescriptor>();
+            List<TimedEvent> eventsTail = null;
+
+            foreach (var timedEvent in timedEvents)
+            {
+                var midiEvent = timedEvent.Event;
+
+                var noteOnEvent = midiEvent as NoteOnEvent;
+                if (noteOnEvent != null)
+                {
+                    noteEventsDescriptors.Add(new NoteEventsDescriptor(timedEvent, eventsTail = new List<TimedEvent>()));
+                    continue;
+                }
+
+                var noteOffEvent = midiEvent as NoteOffEvent;
+                if (noteOffEvent != null)
+                {
+                    var noteEventsDescriptor = noteEventsDescriptors
+                        .FirstOrDefault(d => NoteEventUtilities.IsNoteOnCorrespondToNoteOff(
+                            (NoteOnEvent)d.NoteOnTimedEvent.Event,
+                            noteOffEvent));
+                    if (noteEventsDescriptor == null)
+                        continue;
+
+                    noteEventsDescriptor.CompleteNote(timedEvent);
+                    if (noteEventsDescriptors.First() != noteEventsDescriptor)
+                        continue;
+
+                    for (int i = 0; i < noteEventsDescriptors.Count; i++)
+                    {
+                        var descriptor = noteEventsDescriptors[i];
+                        if (!descriptor.IsNoteCompleted)
+                            break;
+
+                        yield return new Note(descriptor.NoteOnTimedEvent, descriptor.NoteOffTimedEvent);
+
+                        foreach (var eventFromTail in descriptor.EventsTail)
+                        {
+                            yield return eventFromTail;
+                        }
+
+                        noteEventsDescriptors.RemoveAt(i);
+                        i--;
+                    }
+
+                    if (!noteEventsDescriptors.Any())
+                        eventsTail = null;
+
+                    continue;
+                }
+
+                if (eventsTail != null)
+                    eventsTail.Add(timedEvent);
+                else
+                    yield return timedEvent;
+            }
+
+            foreach (var descriptor in noteEventsDescriptors)
+            {
+                if (descriptor.IsNoteCompleted)
+                    yield return new Note(descriptor.NoteOnTimedEvent, descriptor.NoteOffTimedEvent);
+                else
+                    yield return descriptor.NoteOnTimedEvent;
+
+                foreach (var eventFromTail in descriptor.EventsTail)
+                {
+                    yield return eventFromTail;
+                }
+            }
         }
 
         #endregion

@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void Clone()
         {
             var timedEvent = new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)50));
-            Assert.IsTrue(TimedEventEquality.Equals(timedEvent, timedEvent.Clone()),
+            Assert.IsTrue(TimedEventEquality.AreEqual(timedEvent, timedEvent.Clone(), true),
                           "Clone of a timed event doesn't equal to the original one.");
         }
 

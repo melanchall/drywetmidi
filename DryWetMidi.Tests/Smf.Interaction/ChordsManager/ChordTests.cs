@@ -237,7 +237,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var chord = GetChord_NoNotes();
 
-            Assert.IsTrue(ChordEquality.Equals(chord, chord.Clone()),
+            Assert.IsTrue(ChordEquality.AreEqual(chord, chord.Clone()),
                           "Clone of a chord doesn't equal to the original one.");
         }
 
@@ -247,7 +247,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var chord = GetChord_NonzeroTime();
 
-            Assert.IsTrue(ChordEquality.Equals(chord, chord.Clone()),
+            Assert.IsTrue(ChordEquality.AreEqual(chord, chord.Clone()),
                           "Clone of a chord doesn't equal to the original one.");
         }
 

@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
         #region Methods
 
-        public static bool Equals(MidiEvent e1, MidiEvent e2)
+        public static bool AreEqual(MidiEvent e1, MidiEvent e2, bool compareDeltaTimes)
         {
             if (ReferenceEquals(e1, e2))
                 return true;
@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             if (ReferenceEquals(null, e1) || ReferenceEquals(null, e2))
                 return false;
 
-            if (e1.DeltaTime != e2.DeltaTime)
+            if (compareDeltaTimes && e1.DeltaTime != e2.DeltaTime)
                 return false;
 
             if (e1.GetType() != e2.GetType())
