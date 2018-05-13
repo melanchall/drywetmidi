@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 while (startGridIndex < times.Count)
                 {
-                    var newTimeIndex = FindNearestTime(times, oldTime, startGridIndex);
+                    var newTimeIndex = FindNearestTime(times, oldTime, startGridIndex, settings.DistanceType, tempoMap);
                     var newTime = times[newTimeIndex];
 
                     var correctionResult = CorrectObject(obj, newTime, settings);
@@ -66,10 +66,9 @@ namespace Melanchall.DryWetMidi.Tools
             yield return enumerator.Current;
         }
 
-        // TODO: specify LengthType to calculate deltas instead of MIDI only
-        private static int FindNearestTime(IReadOnlyList<long> grid, long time, int startIndex)
+        private static int FindNearestTime(IReadOnlyList<long> grid, long time, int startIndex, TimeSpanType distanceType, TempoMap tempoMap)
         {
-            var difference = long.MaxValue;
+            var difference = TimeSpanUtilities.GetMaxTimeSpan(distanceType);
             var nearestTimeIndex = -1;
 
             for (int i = startIndex; i < grid.Count; i++)
@@ -77,10 +76,11 @@ namespace Melanchall.DryWetMidi.Tools
                 var gridTime = grid[i];
 
                 var timeDelta = Math.Abs(time - gridTime);
-                if (timeDelta >= difference)
+                var convertedTimeDelta = LengthConverter.ConvertTo(timeDelta, distanceType, Math.Min(time, gridTime), tempoMap);
+                if (convertedTimeDelta.CompareTo(difference) >= 0)
                     break;
 
-                difference = timeDelta;
+                difference = convertedTimeDelta;
                 nearestTimeIndex = i;
             }
 

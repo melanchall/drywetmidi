@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -32,6 +33,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 MusicalTimeSpan timeSpan;
                 return Tuple.Create(MusicalTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
             },
+        };
+
+        private static readonly Dictionary<TimeSpanType, ITimeSpan> MaximumTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
+        {
+            [TimeSpanType.Midi] = new MidiTimeSpan(long.MaxValue),
+            [TimeSpanType.Metric] = new MetricTimeSpan(TimeSpan.MaxValue),
+            [TimeSpanType.Musical] = new MusicalTimeSpan(long.MaxValue, 1),
+            [TimeSpanType.BarBeat] = new BarBeatTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue)
         };
 
         #endregion
@@ -91,6 +100,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             throw new FormatException("Time span has unknown format.");
+        }
+
+        public static ITimeSpan GetMaxTimeSpan(TimeSpanType timeSpanType)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);
+
+            return MaximumTimeSpans[timeSpanType];
         }
 
         internal static ITimeSpan Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2, TimeSpanMode mode)
