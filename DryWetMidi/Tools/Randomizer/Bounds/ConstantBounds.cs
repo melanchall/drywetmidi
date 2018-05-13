@@ -34,7 +34,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        // TODO: deal with time is less than size
         private static long CalculateBoundaryTime(long time, ITimeSpan size, MathOperation operation, TempoMap tempoMap)
         {
             ITimeSpan boundaryTime = (MidiTimeSpan)time;
@@ -46,7 +45,10 @@ namespace Melanchall.DryWetMidi.Tools
                     break;
 
                 case MathOperation.Subtract:
-                    boundaryTime = boundaryTime.Subtract(size, TimeSpanMode.TimeLength);
+                    var convertedSize = TimeConverter.ConvertFrom(size, tempoMap);
+                    boundaryTime = convertedSize > time
+                        ? (MidiTimeSpan)0
+                        : boundaryTime.Subtract(size, TimeSpanMode.TimeLength);
                     break;
             }
 
