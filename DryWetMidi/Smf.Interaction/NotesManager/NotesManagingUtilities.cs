@@ -337,6 +337,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MidiFile(notes.ToTrackChunk());
         }
 
+        // TODO: refactor code
         public static IEnumerable<ITimedObject> ExtractNotes(this IEnumerable<TimedEvent> timedEvents)
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
@@ -359,11 +360,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 if (noteOffEvent != null)
                 {
                     var noteEventsDescriptor = noteEventsDescriptors
-                        .FirstOrDefault(d => NoteEventUtilities.IsNoteOnCorrespondToNoteOff(
-                            (NoteOnEvent)d.NoteOnTimedEvent.Event,
-                            noteOffEvent));
+                        .FirstOrDefault(d =>
+                            NoteEventUtilities.IsNoteOnCorrespondToNoteOff(
+                                (NoteOnEvent)d.NoteOnTimedEvent.Event,
+                                noteOffEvent) &&
+                            !d.IsNoteCompleted);
                     if (noteEventsDescriptor == null)
+                    {
+                        if (eventsTail != null)
+                            eventsTail.Add(timedEvent);
+                        else
+                            yield return timedEvent;
+
                         continue;
+                    }
 
                     noteEventsDescriptor.CompleteNote(timedEvent);
                     if (noteEventsDescriptors.First() != noteEventsDescriptor)
