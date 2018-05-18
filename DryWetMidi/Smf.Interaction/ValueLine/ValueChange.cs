@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// Represents a change of a parameter's value at some time.
     /// </summary>
     /// <typeparam name="TValue">Type of value.</typeparam>
-    public sealed class ValueChange<TValue> : ITimedObject
+    public sealed class ValueChange<TValue> : ITimedObject, IComparable
     {
         #region Fields
 
@@ -115,6 +115,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public override int GetHashCode()
         {
             return Time.GetHashCode() ^ Value.GetHashCode();
+        }
+
+        public int CompareTo(Object other)
+        {
+            return (int)(Time - (other as ITimedObject).Time);
         }
 
         #endregion

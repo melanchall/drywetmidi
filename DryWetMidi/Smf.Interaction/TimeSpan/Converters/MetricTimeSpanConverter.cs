@@ -41,9 +41,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 return new MetricTimeSpan();
 
             var tempoLine = tempoMap.Tempo;
-            var tempoChanges = tempoLine.Values.Where(v => v.Time < time);
-            if (!tempoChanges.Any())
+            var tempoValuesSortedArray = tempoLine.Values.ToArray();
+            var nextTempoChangeIndex = Array.BinarySearch(tempoValuesSortedArray, new ValueChange<Tempo>(time, new Tempo(1)));
+            nextTempoChangeIndex = (nextTempoChangeIndex < 0) ? ~nextTempoChangeIndex : nextTempoChangeIndex;
+            if (nextTempoChangeIndex == 0)
                 return new MetricTimeSpan(RoundMicroseconds(GetMicroseconds(time, Tempo.Default, ticksPerQuarterNote)));
+            var tempoChanges = new ArraySegment<ValueChange<Tempo>>(tempoValuesSortedArray, 0, nextTempoChangeIndex);
 
             //
 
