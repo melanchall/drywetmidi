@@ -8,10 +8,14 @@ platform: Any CPU
 before_build:
 - cmd: nuget restore
 build:
-  verbosity: minimal
-artifacts:
-- path: DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results\*.json
-  name: Benchmarks results
+  verbosity: normal
+test:
+  assemblies:
+    except:
+    - '*.Benchmarks'
+#artifacts:
+#- path: DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results\*.json
+#  name: Benchmarks results
 skip_commits:
   files:
     - '**/*.md'
