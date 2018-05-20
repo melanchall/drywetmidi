@@ -157,6 +157,11 @@
     <Compile Include="Smf.Interaction\ChordsManager\ChordsManagingUtilities\ChordsManagingUtilitiesGetChordsBenchmarks.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesManagingUtilities\NotesManagingUtilitiesGetNotesBenchmarks.cs" />
     <Compile Include="Smf.Interaction\TimedEventsManager\TimedEventsManagingUtilities\TimedEventsManagingUtilitiesGetTimedEventsBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\BarBeatTimeSpanBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\MidiTimeSpanBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\MusicalTimeSpanBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\MetricTimeSpanBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\TimeSpanBenchmarks.cs" />
     <Compile Include="Smf\MidiFile\MidiFileReadBenchmarks.cs" />
   </ItemGroup>
   <ItemGroup>

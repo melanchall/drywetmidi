@@ -28,6 +28,8 @@ namespace Melanchall.DryWetMidi.Benchmarks
             var summary = BenchmarkRunner.Run<TBenchmarks>(ManualConfig.Create(DefaultConfig.Instance)
                                                                        .With(JsonExporter.Brief));
 
+            // Assert validation errors
+
             var validationErrorsStringBuilder = new StringBuilder();
 
             foreach (var error in summary.ValidationErrors)
