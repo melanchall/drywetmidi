@@ -11,6 +11,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <typeparam name="TValue">Type of values.</typeparam>
     public sealed class ValueLine<TValue> where TValue : class
     {
+        #region Events
+
+        public event EventHandler ValuesChanged;
+
+        #endregion
+
         #region Fields
 
         private readonly List<ValueChange<TValue>> _values = new List<ValueChange<TValue>>();
@@ -78,6 +84,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             _values.RemoveAll(v => v.Time == time);
             _values.Add(new ValueChange<TValue>(time, value));
+
+            OnValuesChanged();
         }
 
         /// <summary>
@@ -103,17 +111,23 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
             _values.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
+
+            OnValuesChanged();
         }
 
         internal void Clear()
         {
             _values.Clear();
+
+            OnValuesChanged();
         }
 
         internal void ReplaceValues(ValueLine<TValue> valueLine)
         {
             _values.Clear();
             _values.AddRange(valueLine._values);
+
+            OnValuesChanged();
         }
 
         internal ValueLine<TValue> Reverse(long centerTime)
@@ -128,6 +142,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             result._values.AddRange(values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)));
 
             return result;
+        }
+
+        private void OnValuesChanged()
+        {
+            ValuesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

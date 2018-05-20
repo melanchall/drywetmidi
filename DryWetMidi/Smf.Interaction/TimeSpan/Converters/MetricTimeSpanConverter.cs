@@ -35,63 +35,40 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        private static MetricTimeSpan TicksToMetricTimeSpan(long time, short ticksPerQuarterNote, TempoMap tempoMap)
+        private static MetricTimeSpan TicksToMetricTimeSpan(long timeSpan, short ticksPerQuarterNote, TempoMap tempoMap)
         {
-            if (time == 0)
+            if (timeSpan == 0)
                 return new MetricTimeSpan();
 
-            var tempoLine = tempoMap.Tempo;
-            var tempoChanges = tempoLine.Values.Where(v => v.Time < time);
-            if (!tempoChanges.Any())
-                return new MetricTimeSpan(RoundMicroseconds(GetMicroseconds(time, Tempo.Default, ticksPerQuarterNote)));
+            var valuesCache = tempoMap.GetValuesCache<MetricTempoMapValuesCache>();
+            var accumulatedMicroseconds = valuesCache.Microseconds.TakeWhile(m => m.Time < timeSpan).LastOrDefault();
 
-            //
+            var lastAccumulatedMicroseconds = accumulatedMicroseconds?.Microseconds ?? 0;
+            var lastTime = accumulatedMicroseconds?.Time ?? 0;
+            var lastMicrosecondsPerTick = accumulatedMicroseconds?.MicrosecondsPerTick ?? valuesCache.DefaultMicrosecondsPerTick;
 
-            var accumulatedMicroseconds = 0d;
-            var lastTime = 0L;
-            var lastTempo = Tempo.Default;
-
-            foreach (var tempoChange in tempoChanges.Concat(new[] { new ValueChange<Tempo>(time, tempoLine.AtTime(time)) }))
-            {
-                var tempoChangeTime = tempoChange.Time;
-
-                accumulatedMicroseconds += GetMicroseconds(tempoChangeTime - lastTime, lastTempo, ticksPerQuarterNote);
-                lastTempo = tempoChange.Value;
-                lastTime = tempoChangeTime;
-            }
-
-            return new MetricTimeSpan(RoundMicroseconds(accumulatedMicroseconds));
+            return new MetricTimeSpan(RoundMicroseconds(lastAccumulatedMicroseconds + GetMicroseconds(timeSpan - lastTime, lastMicrosecondsPerTick)));
         }
 
-        private static long MetricTimeSpanToTicks(MetricTimeSpan time, short ticksPerQuarterNote, TempoMap tempoMap)
+        private static long MetricTimeSpanToTicks(MetricTimeSpan timeSpan, short ticksPerQuarterNote, TempoMap tempoMap)
         {
-            var timeMicroseconds = time.TotalMicroseconds;
+            var timeMicroseconds = timeSpan.TotalMicroseconds;
             if (timeMicroseconds == 0)
                 return 0;
 
-            var accumulatedMicroseconds = 0d;
-            var lastTime = 0L;
-            var lastTempo = Tempo.Default;
+            var valuesCache = tempoMap.GetValuesCache<MetricTempoMapValuesCache>();
+            var accumulatedMicroseconds = valuesCache.Microseconds.TakeWhile(m => m.Microseconds < timeMicroseconds).LastOrDefault();
 
-            foreach (var tempoChange in tempoMap.Tempo.Values)
-            {
-                var tempoChangeTime = tempoChange.Time;
+            var lastAccumulatedMicroseconds = accumulatedMicroseconds?.Microseconds ?? 0;
+            var lastTime = accumulatedMicroseconds?.Time ?? 0;
+            var lastTicksPerMicrosecond = accumulatedMicroseconds?.TicksPerMicrosecond ?? valuesCache.DefaultTicksPerMicrosecond;
 
-                var microseconds = GetMicroseconds(tempoChangeTime - lastTime, lastTempo, ticksPerQuarterNote);
-                if (IsGreaterOrEqual(accumulatedMicroseconds + microseconds, timeMicroseconds))
-                    break;
-
-                accumulatedMicroseconds += microseconds;
-                lastTempo = tempoChange.Value;
-                lastTime = tempoChangeTime;
-            }
-
-            return RoundMicroseconds(lastTime + (timeMicroseconds - accumulatedMicroseconds) * ticksPerQuarterNote / lastTempo.MicrosecondsPerQuarterNote);
+            return RoundMicroseconds(lastTime + (timeMicroseconds - lastAccumulatedMicroseconds) * lastTicksPerMicrosecond);
         }
 
-        private static double GetMicroseconds(long time, Tempo tempo, short ticksPerQuarterNote)
+        private static double GetMicroseconds(long time, double microsecondsPerTick)
         {
-            return time * tempo.MicrosecondsPerQuarterNote / (double)ticksPerQuarterNote;
+            return time * microsecondsPerTick;
         }
 
         private static long RoundMicroseconds(double microseconds)
