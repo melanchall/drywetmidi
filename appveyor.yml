@@ -12,7 +12,7 @@ build:
 test:
   assemblies:
     except:
-    - '*.Benchmarks'
+    - '**\*.Benchmarks.dll'
 #artifacts:
 #- path: DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results\*.json
 #  name: Benchmarks results
