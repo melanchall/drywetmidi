@@ -22,6 +22,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private readonly List<ValueChange<TValue>> _values = new List<ValueChange<TValue>>();
         private readonly TValue _defaultValue;
 
+        private bool _valuesChanged = true;
+
         #endregion
 
         #region Constructor
@@ -43,7 +45,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets collection of all changes of a parameter's value.
         /// </summary>
-        public IEnumerable<ValueChange<TValue>> Values => _values.OrderBy(v => v.Time);
+        public IEnumerable<ValueChange<TValue>> Values
+        {
+            get
+            {
+                if (_valuesChanged)
+                {
+                    _values.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
+                    OnValuesSortingCompleted();
+                }
+
+                return _values;
+            }
+        }
 
         #endregion
 
@@ -59,10 +73,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
-            return _values.Where(p => p.Time <= time)
-                          .OrderBy(p => p.Time)
-                          .LastOrDefault()
-                          ?.Value
+            return Values.TakeWhile(p => p.Time <= time)
+                         .LastOrDefault()
+                         ?.Value
                    ?? _defaultValue;
         }
 
@@ -133,7 +146,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         internal ValueLine<TValue> Reverse(long centerTime)
         {
             var maxTime = 2 * centerTime;
-            var changes = Values.Where(c => c.Time <= maxTime);
+            var changes = Values.TakeWhile(c => c.Time <= maxTime);
 
             var values = new[] { _defaultValue }.Concat(changes.Select(c => c.Value)).Reverse();
             var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());
@@ -146,7 +159,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private void OnValuesChanged()
         {
+            OnValuesNeedSorting();
             ValuesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnValuesNeedSorting()
+        {
+            _valuesChanged = true;
+        }
+
+        private void OnValuesSortingCompleted()
+        {
+            _valuesChanged = false;
         }
 
         #endregion
