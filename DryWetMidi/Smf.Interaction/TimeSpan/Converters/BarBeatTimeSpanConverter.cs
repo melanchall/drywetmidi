@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            return new BarBeatTimeSpan((int)bars, (int)beats, (int)ticks);
+            return new BarBeatTimeSpan(bars, beats, ticks);
         }
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
