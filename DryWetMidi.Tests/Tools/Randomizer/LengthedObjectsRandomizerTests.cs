@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
@@ -9,6 +8,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
     // TODO: more tests
+    // TODO: descriptions
     public abstract class LengthedObjectsRandomizerTests<TObject, TSettings> : LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
         where TSettings : LengthedObjectsRandomizingSettings, new()
@@ -34,7 +34,22 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             public ITimeSpan MaxTime { get; }
 
             #endregion
+
+            #region Overrides
+
+            public override string ToString()
+            {
+                return $"[{MinTime}; {MaxTime}]";
+            }
+
+            #endregion
         }
+
+        #endregion
+
+        #region Constants
+
+        private const int RepeatRandomizationCount = 10000;
 
         #endregion
 
@@ -150,7 +165,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void Randomize_Start(IEnumerable<TObject> actualObjects, IBounds bounds, IEnumerable<TimeBounds> expectedBounds, TempoMap tempoMap)
         {
-            Randomize(LengthedObjectTarget.Start, actualObjects, bounds, expectedBounds, tempoMap);
+            for (int i = 0; i < RepeatRandomizationCount; i++)
+            {
+                var clonedActualObjects = actualObjects.Select(o => Methods.Clone(o)).ToList();
+                Randomize(LengthedObjectTarget.Start, clonedActualObjects, bounds, expectedBounds, tempoMap);
+            }
         }
 
         private void Randomize(LengthedObjectTarget target, IEnumerable<TObject> actualObjects, IBounds bounds, IEnumerable<TimeBounds> expectedBounds, TempoMap tempoMap)
@@ -181,7 +200,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 var maxTime = TimeConverter.ConvertFrom(timeBounds.MaxTime, tempoMap);
 
                 Assert.IsTrue(time >= minTime && time <= maxTime,
-                              $"Object's time {time} is not in {timeBounds} range.");
+                              $"Object's time {time} is not in {timeBounds}/[{minTime}; {maxTime}] range.");
             }
         }
 

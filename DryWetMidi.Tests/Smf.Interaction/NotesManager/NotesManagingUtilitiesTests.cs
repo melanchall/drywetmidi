@@ -60,19 +60,19 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [Test]
-        [Description("Extract notes from empty collection of timed events.")]
-        public void ExtractNotes_EmptyCollections()
+        [Description("Make notes from empty collection of timed events.")]
+        public void MakeNotes_EmptyCollections()
         {
             var timedEvents = Enumerable.Empty<TimedEvent>();
-            var actualObjects = timedEvents.ExtractNotes().ToList();
+            var actualObjects = timedEvents.MakeNotes().ToList();
             var expectedObjects = Enumerable.Empty<TimedEvent>();
 
             CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
         }
 
         [Test]
-        [Description("Extract notes where they are all completed.")]
-        public void ExtractNotes_AllProcessed()
+        [Description("Make notes where they are all completed.")]
+        public void MakeNotes_AllProcessed()
         {
             var events = new MidiEvent[]
             {
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             };
 
             var timedEvents = new TrackChunk(events).GetTimedEvents();
-            var actualObjects = timedEvents.ExtractNotes().ToList();
+            var actualObjects = timedEvents.MakeNotes().ToList();
 
             var expectedObjects = new ITimedObject[]
             {
@@ -115,8 +115,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [Test]
-        [Description("Extract notes where some notes aren't completed.")]
-        public void ExtractNotes_NotAllProcessed()
+        [Description("Make notes where some notes aren't completed.")]
+        public void MakeNotes_NotAllProcessed()
         {
             var events = new MidiEvent[]
             {
@@ -133,11 +133,12 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new CuePointEvent("Point") { DeltaTime = 10 },
                 new NoteOffEvent((SevenBitNumber)3, (SevenBitNumber)1) { Channel = (FourBitNumber)1 },
                 new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { Channel = (FourBitNumber)10 },
-                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { DeltaTime = 10, Channel = (FourBitNumber)1 }
+                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { DeltaTime = 10, Channel = (FourBitNumber)1 },
+                new NoteOffEvent((SevenBitNumber)78, (SevenBitNumber)0) { DeltaTime = 10, Channel = (FourBitNumber)11 }
             };
 
             var timedEvents = new TrackChunk(events).GetTimedEvents();
-            var actualObjects = timedEvents.ExtractNotes().ToList();
+            var actualObjects = timedEvents.MakeNotes().ToList();
 
             var expectedObjects = new ITimedObject[]
             {
@@ -151,7 +152,36 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new TimedEvent(new TextEvent("Text"), 60),
                 new TimedEvent(new TextEvent("Text 2"), 70),
                 new Note((SevenBitNumber)2, 10, 70) { Channel = (FourBitNumber)10, Velocity = (SevenBitNumber)1 },
-                new TimedEvent(new CuePointEvent("Point"), 80)
+                new TimedEvent(new CuePointEvent("Point"), 80),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)78, (SevenBitNumber)0) { Channel = (FourBitNumber)11 }, 100)
+            };
+
+            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+        }
+
+        [Test]
+        [Description("Make notes where there are same notes in tail of previous object.")]
+        public void MakeNotes_SameNotesInTail()
+        {
+            var events = new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)1, (SevenBitNumber)100) { DeltaTime = 10 },
+                new NoteOnEvent((SevenBitNumber)2, (SevenBitNumber)70) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)1),
+                new NoteOnEvent((SevenBitNumber)2, (SevenBitNumber)0),
+                new NoteOffEvent((SevenBitNumber)2, (SevenBitNumber)0) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)1, (SevenBitNumber)0) { DeltaTime = 10 }
+            };
+
+            var timedEvents = new TrackChunk(events).GetTimedEvents().Concat(new[] { default(TimedEvent) });
+            var actualObjects = timedEvents.MakeNotes().ToList();
+
+            var expectedObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)1, 30, 10) { Velocity = (SevenBitNumber)100 },
+                new Note((SevenBitNumber)2, 0, 20) { Velocity = (SevenBitNumber)70, OffVelocity = (SevenBitNumber)1 },
+                new Note((SevenBitNumber)2, 10, 20) { Velocity = (SevenBitNumber)0 },
+                null
             };
 
             CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());

@@ -44,6 +44,26 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 IsNoteCompleted = true;
             }
 
+            public bool IsCorrespondingNoteOffEvent(NoteOffEvent noteOffEvent)
+            {
+                return NoteEventUtilities.IsNoteOnCorrespondToNoteOff((NoteOnEvent)NoteOnTimedEvent.Event,
+                                                                      noteOffEvent) &&
+                       !IsNoteCompleted;
+            }
+
+            public IEnumerable<ITimedObject> GetTimedObjects()
+            {
+                if (IsNoteCompleted)
+                    yield return new Note(NoteOnTimedEvent, NoteOffTimedEvent);
+                else
+                    yield return NoteOnTimedEvent;
+
+                foreach (var eventFromTail in EventsTail)
+                {
+                    yield return eventFromTail;
+                }
+            }
+
             #endregion
         }
 
@@ -337,8 +357,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MidiFile(notes.ToTrackChunk());
         }
 
-        // TODO: refactor code
-        public static IEnumerable<ITimedObject> ExtractNotes(this IEnumerable<TimedEvent> timedEvents)
+        public static IEnumerable<ITimedObject> MakeNotes(this IEnumerable<TimedEvent> timedEvents)
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
 
@@ -347,7 +366,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             foreach (var timedEvent in timedEvents)
             {
-                var midiEvent = timedEvent.Event;
+                var midiEvent = timedEvent?.Event;
 
                 var noteOnEvent = midiEvent as NoteOnEvent;
                 if (noteOnEvent != null)
@@ -359,47 +378,33 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 var noteOffEvent = midiEvent as NoteOffEvent;
                 if (noteOffEvent != null)
                 {
-                    var noteEventsDescriptor = noteEventsDescriptors
-                        .FirstOrDefault(d =>
-                            NoteEventUtilities.IsNoteOnCorrespondToNoteOff(
-                                (NoteOnEvent)d.NoteOnTimedEvent.Event,
-                                noteOffEvent) &&
-                            !d.IsNoteCompleted);
-                    if (noteEventsDescriptor == null)
+                    var noteEventsDescriptor = noteEventsDescriptors.FirstOrDefault(d => d.IsCorrespondingNoteOffEvent(noteOffEvent));
+                    if (noteEventsDescriptor != null)
                     {
-                        if (eventsTail != null)
-                            eventsTail.Add(timedEvent);
-                        else
-                            yield return timedEvent;
+                        noteEventsDescriptor.CompleteNote(timedEvent);
+                        if (noteEventsDescriptors.First() != noteEventsDescriptor)
+                            continue;
 
-                        continue;
-                    }
-
-                    noteEventsDescriptor.CompleteNote(timedEvent);
-                    if (noteEventsDescriptors.First() != noteEventsDescriptor)
-                        continue;
-
-                    for (int i = 0; i < noteEventsDescriptors.Count; i++)
-                    {
-                        var descriptor = noteEventsDescriptors[i];
-                        if (!descriptor.IsNoteCompleted)
-                            break;
-
-                        yield return new Note(descriptor.NoteOnTimedEvent, descriptor.NoteOffTimedEvent);
-
-                        foreach (var eventFromTail in descriptor.EventsTail)
+                        for (int i = 0; i < noteEventsDescriptors.Count; i++)
                         {
-                            yield return eventFromTail;
+                            var descriptor = noteEventsDescriptors[i];
+                            if (!descriptor.IsNoteCompleted)
+                                break;
+
+                            foreach (var timedObject in descriptor.GetTimedObjects())
+                            {
+                                yield return timedObject;
+                            }
+
+                            noteEventsDescriptors.RemoveAt(i);
+                            i--;
                         }
 
-                        noteEventsDescriptors.RemoveAt(i);
-                        i--;
+                        if (!noteEventsDescriptors.Any())
+                            eventsTail = null;
+
+                        continue;
                     }
-
-                    if (!noteEventsDescriptors.Any())
-                        eventsTail = null;
-
-                    continue;
                 }
 
                 if (eventsTail != null)
@@ -408,17 +413,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                     yield return timedEvent;
             }
 
-            foreach (var descriptor in noteEventsDescriptors)
+            foreach (var timedObject in noteEventsDescriptors.SelectMany(d => d.GetTimedObjects()))
             {
-                if (descriptor.IsNoteCompleted)
-                    yield return new Note(descriptor.NoteOnTimedEvent, descriptor.NoteOffTimedEvent);
-                else
-                    yield return descriptor.NoteOnTimedEvent;
-
-                foreach (var eventFromTail in descriptor.EventsTail)
-                {
-                    yield return eventFromTail;
-                }
+                yield return timedObject;
             }
         }
 

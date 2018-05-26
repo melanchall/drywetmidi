@@ -147,6 +147,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             OnCollectionNeedSorting();
         }
 
+        // TODO: what if Time changed???
         private void OnCollectionNeedSorting()
         {
             _collectionChanged = true;
