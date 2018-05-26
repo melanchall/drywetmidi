@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             for (int i = 0; i < RepeatRandomizationCount; i++)
             {
-                var clonedActualObjects = actualObjects.Select(o => Methods.Clone(o)).ToList();
+                var clonedActualObjects = actualObjects.Select(o => o != null ? Methods.Clone(o) : default(TObject)).ToList();
                 Randomize(LengthedObjectTarget.Start, clonedActualObjects, bounds, expectedBounds, tempoMap);
             }
         }
