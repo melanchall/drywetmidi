@@ -23,12 +23,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="degree"/> specified an
         /// invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="degree"/> is out of
+        /// range for the <paramref name="scale"/>.</exception>
         public static NoteName GetDegree(this Scale scale, ScaleDegree degree)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsInvalidEnumValue(nameof(degree), degree);
 
-            // TODO: check for invalid degree
+            var degreeNumber = (int)degree;
+            if (degreeNumber >= scale.Intervals.Count())
+                throw new ArgumentOutOfRangeException(nameof(degree),
+                                                      degree,
+                                                      "Degree is out of range for the scale.");
 
             return scale.GetNotes()
                         .Skip((int)degree)

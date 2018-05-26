@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tools
                                 case QuantizingBeyondFixedEndPolicy.CollapseAndMove:
                                     endTime = time;
                                     break;
-                                case QuantizingBeyondFixedEndPolicy.ReverseEnds:
+                                case QuantizingBeyondFixedEndPolicy.SwapEnds:
                                     var tmp = time;
                                     time = endTime;
                                     endTime = tmp;
@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tools
                                 case QuantizingBeyondFixedEndPolicy.CollapseAndMove:
                                     startTime = time;
                                     break;
-                                case QuantizingBeyondFixedEndPolicy.ReverseEnds:
+                                case QuantizingBeyondFixedEndPolicy.SwapEnds:
                                     var tmp = time;
                                     time = startTime;
                                     startTime = tmp;

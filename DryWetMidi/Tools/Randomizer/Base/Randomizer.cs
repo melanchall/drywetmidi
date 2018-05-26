@@ -8,19 +8,23 @@ namespace Melanchall.DryWetMidi.Tools
     public abstract class Randomizer<TObject, TSettings>
         where TSettings : RandomizingSettings, new()
     {
+        #region Fields
+
+        private readonly Random _random = new Random();
+
+        #endregion
+
         #region Methods
 
         protected void RandomizeInternal(IEnumerable<TObject> objects, IBounds bounds, TempoMap tempoMap, TSettings settings)
         {
             settings = settings ?? new TSettings();
 
-            var random = new Random();
-
             foreach (var obj in objects.Where(o => o != null))
             {
                 var time = GetOldTime(obj, settings);
 
-                time = RandomizeTime(time, bounds, random, tempoMap);
+                time = RandomizeTime(time, bounds, _random, tempoMap);
 
                 var correctionResult = CorrectObject(obj, time, settings);
                 var instruction = correctionResult.RandomizingInstruction;

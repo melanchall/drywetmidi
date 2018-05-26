@@ -5,8 +5,7 @@
     {
         CollapseAndFix = 0,
         CollapseAndMove,
-        // TODO: better name
-        ReverseEnds,
+        SwapEnds,
         Skip,
         Abort
     }

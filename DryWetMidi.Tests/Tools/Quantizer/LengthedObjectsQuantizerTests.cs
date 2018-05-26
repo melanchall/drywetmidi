@@ -248,8 +248,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Quantize start times that go beyond fixed ends: reverse ends.")]
-        public void Quantize_Start_QuantizingBeyondFixedEnd_ReverseEnds()
+        [Description("Quantize start times that go beyond fixed ends: swap ends.")]
+        public void Quantize_Start_QuantizingBeyondFixedEnd_SwapEnds()
         {
             var tempoMap = TempoMap.Default;
 
@@ -271,7 +271,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimeAndLength(MusicalTimeSpan.Half, MusicalTimeSpan.Eighth)
                 },
                 tempoMap,
-                QuantizingBeyondFixedEndPolicy.ReverseEnds);
+                QuantizingBeyondFixedEndPolicy.SwapEnds);
         }
 
         [Test]
@@ -695,8 +695,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Quantize end times that go beyond fixed starts: reverse ends.")]
-        public void Quantize_End_QuantizingBeyondFixedEnd_ReverseEnds()
+        [Description("Quantize end times that go beyond fixed starts: swap ends.")]
+        public void Quantize_End_QuantizingBeyondFixedEnd_SwapEnds()
         {
             var tempoMap = TempoMap.Default;
 
@@ -718,7 +718,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimeAndLength(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole - MusicalTimeSpan.ThirtySecond)
                 },
                 tempoMap,
-                QuantizingBeyondFixedEndPolicy.ReverseEnds);
+                QuantizingBeyondFixedEndPolicy.SwapEnds);
         }
 
         [Test]
