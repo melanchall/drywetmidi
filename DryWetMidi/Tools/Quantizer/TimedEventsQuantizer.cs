@@ -25,17 +25,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Overrides
 
-        protected override long GetOldTime(TimedEvent obj, TimedEventsQuantizingSettings settings)
+        protected override long GetObjectTime(TimedEvent obj, TimedEventsQuantizingSettings settings)
         {
             return obj.Time;
         }
 
-        protected override void SetNewTime(TimedEvent obj, long time, TimedEventsQuantizingSettings settings)
+        protected override void SetObjectTime(TimedEvent obj, long time, TimedEventsQuantizingSettings settings)
         {
             obj.Time = time;
         }
 
-        protected override QuantizingCorrectionResult CorrectObject(TimedEvent obj, long time, TimedEventsQuantizingSettings settings)
+        protected override QuantizingCorrectionResult CorrectObject(TimedEvent obj, long time, TempoMap tempoMap, TimedEventsQuantizingSettings settings)
         {
             return new QuantizingCorrectionResult(QuantizingInstruction.Apply, time);
         }

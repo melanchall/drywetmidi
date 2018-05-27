@@ -362,6 +362,42 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        [Description("Quantize start times using metric length hint.")]
+        public void Quantize_Start_MetricLength()
+        {
+            TempoMap tempoMap = null;
+
+            using (var tempoMapManager = new TempoMapManager())
+            {
+                tempoMapManager.SetTempo(0, new Tempo(100000));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 2, 100),
+                                         new Tempo(40000));
+
+                tempoMap = tempoMapManager.TempoMap;
+            }
+
+            Quantize_Start_DontFixEnd_CustomLengthType(
+                new[]
+                {
+                    // The case
+                    Methods.Create(new MetricTimeSpan(0, 0, 1, 600), new MetricTimeSpan(0, 0, 2), tempoMap),
+                    // The case in presence of no tempo change
+                    Methods.Create(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 1), tempoMap),
+                    // Already quantized
+                    Methods.Create(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 2), tempoMap)
+                },
+                new SteppedGrid(new MetricTimeSpan(0, 0, 1)),
+                new[]
+                {
+                    new TimeAndLength(new MetricTimeSpan(0, 0, 2), new MetricTimeSpan(0, 0, 2)),
+                    new TimeAndLength(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1)),
+                    new TimeAndLength(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 2))
+                },
+                tempoMap,
+                TimeSpanType.Metric);
+        }
+
+        [Test]
         [Description("Quantize end times of empty collection.")]
         public void Quantize_End_EmptyCollection()
         {
@@ -781,16 +817,17 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void Quantize_Start_DontFixEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
         {
-            var expectedTimesAndLengths = actualObjects.Zip(expectedTimes, (obj, time) => new { Object = obj, Time = time })
-                                                       .Select(ot => ot.Object != null ? new TimeAndLength(ot.Time, (MidiTimeSpan)ot.Object.Length) : null);
-            Quantize_Start(actualObjects, grid, expectedTimesAndLengths, false, tempoMap);
+            Quantize_Start(actualObjects, grid, GetExpectedTimesAndLengths(actualObjects, expectedTimes), false, tempoMap);
         }
 
         private void Quantize_Start_DontFixEnd_CustomDistanceType(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap, TimeSpanType distanceType)
         {
-            var expectedTimesAndLengths = actualObjects.Zip(expectedTimes, (obj, time) => new { Object = obj, Time = time })
-                                                       .Select(ot => ot.Object != null ? new TimeAndLength(ot.Time, (MidiTimeSpan)ot.Object.Length) : null);
-            Quantize_Start(actualObjects, grid, expectedTimesAndLengths, false, tempoMap, distanceType: distanceType);
+            Quantize_Start(actualObjects, grid, GetExpectedTimesAndLengths(actualObjects, expectedTimes), false, tempoMap, distanceType: distanceType);
+        }
+
+        private void Quantize_Start_DontFixEnd_CustomLengthType(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, TimeSpanType lengthType)
+        {
+            Quantize_Start(actualObjects, grid, expectedTimes, false, tempoMap, lengthType: lengthType);
         }
 
         private void Quantize_Start_FixEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap)
@@ -805,9 +842,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void Quantize_End_DontFixStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
         {
-            var expectedTimesAndLengths = actualObjects.Zip(expectedTimes, (obj, time) => new { Object = obj, Time = time })
-                                                       .Select(ot => ot.Object != null ? new TimeAndLength(ot.Time, (MidiTimeSpan)ot.Object.Length) : null);
-            Quantize_End(actualObjects, grid, expectedTimesAndLengths, false, tempoMap);
+            Quantize_End(actualObjects, grid, GetExpectedTimesAndLengths(actualObjects, expectedTimes), false, tempoMap);
         }
 
         private void Quantize_End_FixStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap)
@@ -825,7 +860,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_End(actualObjects, grid, expectedTimes, true, tempoMap, default(QuantizingBeyondZeroPolicy), policy);
         }
 
-        private void Quantize_Start(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimesAndLengths, bool fixEnd, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy = default(QuantizingBeyondFixedEndPolicy), TimeSpanType distanceType = TimeSpanType.Midi)
+        private void Quantize_Start(IEnumerable<TObject> actualObjects,
+                                    IGrid grid,
+                                    IEnumerable<TimeAndLength> expectedTimesAndLengths,
+                                    bool fixEnd,
+                                    TempoMap tempoMap,
+                                    QuantizingBeyondFixedEndPolicy policy = default(QuantizingBeyondFixedEndPolicy),
+                                    TimeSpanType distanceType = TimeSpanType.Midi,
+                                    TimeSpanType lengthType = TimeSpanType.Midi)
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
@@ -834,7 +876,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 QuantizingTarget = LengthedObjectTarget.Start,
                 FixOppositeEnd = fixEnd,
                 QuantizingBeyondFixedEndPolicy = policy,
-                DistanceType = distanceType
+                DistanceType = distanceType,
+                LengthType = lengthType
             };
 
             Quantizer.Quantize(actualObjects, grid, tempoMap, settings);
@@ -848,7 +891,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                   bool fixStart,
                                   TempoMap tempoMap,
                                   QuantizingBeyondZeroPolicy quantizingBeyondZeroPolicy = default(QuantizingBeyondZeroPolicy),
-                                  QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy = default(QuantizingBeyondFixedEndPolicy))
+                                  QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy = default(QuantizingBeyondFixedEndPolicy),
+                                  TimeSpanType distanceType = TimeSpanType.Midi,
+                                  TimeSpanType lengthType = TimeSpanType.Midi)
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
@@ -857,12 +902,20 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 QuantizingTarget = LengthedObjectTarget.End,
                 FixOppositeEnd = fixStart,
                 QuantizingBeyondZeroPolicy = quantizingBeyondZeroPolicy,
-                QuantizingBeyondFixedEndPolicy = quantizingBeyondFixedEndPolicy
+                QuantizingBeyondFixedEndPolicy = quantizingBeyondFixedEndPolicy,
+                DistanceType = distanceType,
+                LengthType = lengthType
             };
 
             Quantizer.Quantize(actualObjects, grid, tempoMap, settings);
 
             Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        private IEnumerable<TimeAndLength> GetExpectedTimesAndLengths(IEnumerable<TObject> actualObjects, IEnumerable<ITimeSpan> expectedTimes)
+        {
+            return actualObjects.Zip(expectedTimes, (obj, time) => new { Object = obj, Time = time })
+                                .Select(ot => ot.Object != null ? new TimeAndLength(ot.Time, (MidiTimeSpan)ot.Object.Length) : null);
         }
 
         private IEnumerable<TObject> GetExpectedObjects(IEnumerable<TObject> actualObjects, IEnumerable<TimeAndLength> expectedTimesAndLengths, TempoMap tempoMap)
