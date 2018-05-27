@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                                                       "Degree is out of range for the scale.");
 
             return scale.GetNotes()
-                        .Skip((int)degree)
+                        .Skip(degreeNumber)
                         .First()
                         .NoteName;
         }

@@ -20,13 +20,118 @@ namespace Melanchall.DryWetMidi.Tools
             QuantizeInternal(objects, grid, tempoMap, settings);
         }
 
+        private static QuantizingCorrectionResult CorrectObjectOnStartQuantizing(TObject obj, long time, TempoMap tempoMap, TSettings settings)
+        {
+            if (settings.FixOppositeEnd)
+            {
+                var endTime = obj.Time + obj.Length;
+
+                if (time > endTime)
+                {
+                    var result = ProcessQuantizingBeyondFixedEnd(ref time,
+                                                                 ref endTime,
+                                                                 settings.QuantizingBeyondFixedEndPolicy,
+                                                                 "Quantized start time is going beyond end one.");
+                    if (result != null)
+                        return result;
+                }
+
+                obj.Length = endTime - time;
+            }
+            else
+            {
+                var length = obj.LengthAs(settings.LengthType, tempoMap);
+                obj.Length = LengthConverter.ConvertFrom(length, time, tempoMap);
+            }
+
+            return new QuantizingCorrectionResult(QuantizingInstruction.Apply, time);
+        }
+
+        private static QuantizingCorrectionResult CorrectObjectOnEndQuantizing(TObject obj, long time, TempoMap tempoMap, TSettings settings)
+        {
+            if (settings.FixOppositeEnd)
+            {
+                var startTime = obj.Time;
+
+                if (time < startTime)
+                {
+                    var result = ProcessQuantizingBeyondFixedEnd(ref time,
+                                                                 ref startTime,
+                                                                 settings.QuantizingBeyondFixedEndPolicy,
+                                                                 "Quantized end time is going beyond start one.");
+                    if (result != null)
+                        return result;
+                }
+
+                obj.Length = time - startTime;
+            }
+            else
+            {
+                var length = obj.LengthAs(settings.LengthType, tempoMap);
+
+                var newStartTime = settings.LengthType == TimeSpanType.Midi
+                    ? time - obj.Length
+                    : TimeConverter.ConvertFrom(((MidiTimeSpan)time).Subtract(length, TimeSpanMode.TimeLength), tempoMap);
+                if (newStartTime < 0)
+                {
+                    switch (settings.QuantizingBeyondZeroPolicy)
+                    {
+                        case QuantizingBeyondZeroPolicy.Skip:
+                            return QuantizingCorrectionResult.Skip;
+                        case QuantizingBeyondZeroPolicy.UseNextGridPoint:
+                            return QuantizingCorrectionResult.UseNextGridPoint;
+                        case QuantizingBeyondZeroPolicy.Abort:
+                            throw new InvalidOperationException("Quantized object is going below zero.");
+                        case QuantizingBeyondZeroPolicy.FixAtZero:
+                            obj.Length = time;
+                            break;
+                    }
+                }
+                else
+                {
+                    obj.Length = LengthConverter.ConvertFrom(length, newStartTime, tempoMap);
+                }
+            }
+
+            return new QuantizingCorrectionResult(QuantizingInstruction.Apply, time);
+        }
+
+        private static QuantizingCorrectionResult ProcessQuantizingBeyondFixedEnd(
+            ref long newTime,
+            ref long oldTime,
+            QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy,
+            string errorMessage)
+        {
+            switch (quantizingBeyondFixedEndPolicy)
+            {
+                case QuantizingBeyondFixedEndPolicy.Skip:
+                    return QuantizingCorrectionResult.Skip;
+                case QuantizingBeyondFixedEndPolicy.Abort:
+                    throw new InvalidOperationException(errorMessage);
+                case QuantizingBeyondFixedEndPolicy.CollapseAndFix:
+                    newTime = oldTime;
+                    break;
+                case QuantizingBeyondFixedEndPolicy.CollapseAndMove:
+                    oldTime = newTime;
+                    break;
+                case QuantizingBeyondFixedEndPolicy.SwapEnds:
+                    var tmp = newTime;
+                    newTime = oldTime;
+                    oldTime = tmp;
+                    break;
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region Overrides
 
-        protected sealed override long GetOldTime(TObject obj, TSettings settings)
+        protected sealed override long GetObjectTime(TObject obj, TSettings settings)
         {
             var target = settings.QuantizingTarget;
+
             switch (target)
             {
                 case LengthedObjectTarget.Start:
@@ -38,9 +143,10 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        protected sealed override void SetNewTime(TObject obj, long time, TSettings settings)
+        protected sealed override void SetObjectTime(TObject obj, long time, TSettings settings)
         {
             var target = settings.QuantizingTarget;
+
             switch (target)
             {
                 case LengthedObjectTarget.Start:
@@ -54,91 +160,14 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        protected sealed override QuantizingCorrectionResult CorrectObject(TObject obj, long time, TSettings settings)
+        protected sealed override QuantizingCorrectionResult CorrectObject(TObject obj, long time, TempoMap tempoMap, TSettings settings)
         {
-            var target = settings.QuantizingTarget;
-
-            switch (target)
+            switch (settings.QuantizingTarget)
             {
                 case LengthedObjectTarget.Start:
-                    if (settings.FixOppositeEnd)
-                    {
-                        var endTime = obj.Time + obj.Length;
-
-                        if (time > endTime)
-                        {
-                            switch (settings.QuantizingBeyondFixedEndPolicy)
-                            {
-                                case QuantizingBeyondFixedEndPolicy.Skip:
-                                    return QuantizingCorrectionResult.Skip;
-                                case QuantizingBeyondFixedEndPolicy.Abort:
-                                    throw new InvalidOperationException("Quantized start time is going beyong end one.");
-                                case QuantizingBeyondFixedEndPolicy.CollapseAndFix:
-                                    time = endTime;
-                                    break;
-                                case QuantizingBeyondFixedEndPolicy.CollapseAndMove:
-                                    endTime = time;
-                                    break;
-                                case QuantizingBeyondFixedEndPolicy.SwapEnds:
-                                    var tmp = time;
-                                    time = endTime;
-                                    endTime = tmp;
-                                    break;
-                            }
-                        }
-
-                        obj.Length = endTime - time;
-                    }
-                    break;
+                    return CorrectObjectOnStartQuantizing(obj, time, tempoMap, settings);
                 case LengthedObjectTarget.End:
-                    if (settings.FixOppositeEnd)
-                    {
-                        var startTime = obj.Time;
-
-                        if (time < startTime)
-                        {
-                            switch (settings.QuantizingBeyondFixedEndPolicy)
-                            {
-                                case QuantizingBeyondFixedEndPolicy.Skip:
-                                    return QuantizingCorrectionResult.Skip;
-                                case QuantizingBeyondFixedEndPolicy.Abort:
-                                    throw new InvalidOperationException("Quantized end time is going beyond start one.");
-                                case QuantizingBeyondFixedEndPolicy.CollapseAndFix:
-                                    time = startTime;
-                                    break;
-                                case QuantizingBeyondFixedEndPolicy.CollapseAndMove:
-                                    startTime = time;
-                                    break;
-                                case QuantizingBeyondFixedEndPolicy.SwapEnds:
-                                    var tmp = time;
-                                    time = startTime;
-                                    startTime = tmp;
-                                    break;
-                            }
-                        }
-
-                        obj.Length = time - startTime;
-                    }
-                    else
-                    {
-                        var newStartTime = time - obj.Length;
-                        if (newStartTime < 0)
-                        {
-                            switch (settings.QuantizingBeyondZeroPolicy)
-                            {
-                                case QuantizingBeyondZeroPolicy.Skip:
-                                    return QuantizingCorrectionResult.Skip;
-                                case QuantizingBeyondZeroPolicy.UseNextGridPoint:
-                                    return QuantizingCorrectionResult.UseNextGridPoint;
-                                case QuantizingBeyondZeroPolicy.Abort:
-                                    throw new InvalidOperationException("Quantized object is going below zero.");
-                                case QuantizingBeyondZeroPolicy.FixAtZero:
-                                    obj.Length = time;
-                                    break;
-                            }
-                        }
-                    }
-                    break;
+                    return CorrectObjectOnEndQuantizing(obj, time, tempoMap, settings);
             }
 
             return new QuantizingCorrectionResult(QuantizingInstruction.Apply, time);

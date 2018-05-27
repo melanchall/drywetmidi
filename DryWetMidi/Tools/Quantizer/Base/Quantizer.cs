@@ -15,14 +15,14 @@ namespace Melanchall.DryWetMidi.Tools
             settings = settings ?? new TSettings();
 
             var lastTime = objects.Where(o => o != null)
-                                  .Select(o => GetOldTime(o, settings))
+                                  .Select(o => GetObjectTime(o, settings))
                                   .DefaultIfEmpty()
                                   .Max();
             var times = GetGridTimes(grid, lastTime, tempoMap).ToList();
 
             foreach (var obj in objects.Where(o => o != null))
             {
-                var oldTime = GetOldTime(obj, settings);
+                var oldTime = GetObjectTime(obj, settings);
 
                 var startGridIndex = 0;
 
@@ -31,12 +31,12 @@ namespace Melanchall.DryWetMidi.Tools
                     var newTimeIndex = FindNearestTime(times, oldTime, startGridIndex, settings.DistanceType, tempoMap);
                     var newTime = times[newTimeIndex];
 
-                    var correctionResult = CorrectObject(obj, newTime, settings);
+                    var correctionResult = CorrectObject(obj, newTime, tempoMap, settings);
                     var instruction = correctionResult.QuantizingInstruction;
 
                     if (instruction == QuantizingInstruction.Apply)
                     {
-                        SetNewTime(obj, correctionResult.Time, settings);
+                        SetObjectTime(obj, correctionResult.Time, settings);
                         break;
                     }
 
@@ -49,11 +49,11 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        protected abstract long GetOldTime(TObject obj, TSettings settings);
+        protected abstract long GetObjectTime(TObject obj, TSettings settings);
 
-        protected abstract void SetNewTime(TObject obj, long time, TSettings settings);
+        protected abstract void SetObjectTime(TObject obj, long time, TSettings settings);
 
-        protected abstract QuantizingCorrectionResult CorrectObject(TObject obj, long time, TSettings settings);
+        protected abstract QuantizingCorrectionResult CorrectObject(TObject obj, long time, TempoMap tempoMap, TSettings settings);
 
         private static IEnumerable<long> GetGridTimes(IGrid grid, long lastTime, TempoMap tempoMap)
         {
