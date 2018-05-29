@@ -2,11 +2,11 @@
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    public sealed class ChordsQuantizingSettings : LengthedObjectsQuantizingSettings
+    public class ChordsQuantizingSettings : LengthedObjectsQuantizingSettings
     {
     }
 
-    public sealed class ChordsQuantizer : LengthedObjectsQuantizer<Chord, ChordsQuantizingSettings>
+    public class ChordsQuantizer : LengthedObjectsQuantizer<Chord, ChordsQuantizingSettings>
     {
     }
 }

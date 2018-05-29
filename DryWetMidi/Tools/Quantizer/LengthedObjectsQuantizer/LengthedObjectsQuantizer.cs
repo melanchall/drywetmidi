@@ -78,8 +78,6 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         case QuantizingBeyondZeroPolicy.Skip:
                             return QuantizingCorrectionResult.Skip;
-                        case QuantizingBeyondZeroPolicy.UseNextGridPoint:
-                            return QuantizingCorrectionResult.UseNextGridPoint;
                         case QuantizingBeyondZeroPolicy.Abort:
                             throw new InvalidOperationException("Quantized object is going below zero.");
                         case QuantizingBeyondZeroPolicy.FixAtZero:
@@ -160,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        protected sealed override QuantizingCorrectionResult CorrectObject(TObject obj, long time, TempoMap tempoMap, TSettings settings)
+        protected override QuantizingCorrectionResult CorrectObject(TObject obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, TSettings settings)
         {
             switch (settings.QuantizingTarget)
             {

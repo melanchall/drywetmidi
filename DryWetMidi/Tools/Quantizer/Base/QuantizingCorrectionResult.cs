@@ -5,7 +5,6 @@
         #region Constants
 
         public static readonly QuantizingCorrectionResult Skip = new QuantizingCorrectionResult(QuantizingInstruction.Skip, InvalidTime);
-        public static readonly QuantizingCorrectionResult UseNextGridPoint = new QuantizingCorrectionResult(QuantizingInstruction.UseNextGridPoint, InvalidTime);
 
         private const long InvalidTime = -1;
 

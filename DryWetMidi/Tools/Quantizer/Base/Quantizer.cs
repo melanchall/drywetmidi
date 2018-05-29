@@ -24,27 +24,19 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var oldTime = GetObjectTime(obj, settings);
 
-                var startGridIndex = 0;
+                var newTimeIndex = FindNearestTime(times, oldTime, settings.DistanceType, tempoMap);
+                var newTime = times[newTimeIndex];
 
-                while (startGridIndex < times.Count)
+                var correctionResult = CorrectObject(obj, newTime, grid, times, tempoMap, settings);
+                var instruction = correctionResult.QuantizingInstruction;
+
+                switch (instruction)
                 {
-                    var newTimeIndex = FindNearestTime(times, oldTime, startGridIndex, settings.DistanceType, tempoMap);
-                    var newTime = times[newTimeIndex];
-
-                    var correctionResult = CorrectObject(obj, newTime, tempoMap, settings);
-                    var instruction = correctionResult.QuantizingInstruction;
-
-                    if (instruction == QuantizingInstruction.Apply)
-                    {
+                    case QuantizingInstruction.Apply:
                         SetObjectTime(obj, correctionResult.Time, settings);
                         break;
-                    }
-
-                    if (instruction == QuantizingInstruction.Skip)
+                    case QuantizingInstruction.Skip:
                         break;
-
-                    if (instruction == QuantizingInstruction.UseNextGridPoint)
-                        startGridIndex = newTimeIndex + 1;
                 }
             }
         }
@@ -53,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         protected abstract void SetObjectTime(TObject obj, long time, TSettings settings);
 
-        protected abstract QuantizingCorrectionResult CorrectObject(TObject obj, long time, TempoMap tempoMap, TSettings settings);
+        protected abstract QuantizingCorrectionResult CorrectObject(TObject obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, TSettings settings);
 
         private static IEnumerable<long> GetGridTimes(IGrid grid, long lastTime, TempoMap tempoMap)
         {
@@ -66,12 +58,12 @@ namespace Melanchall.DryWetMidi.Tools
             yield return enumerator.Current;
         }
 
-        private static int FindNearestTime(IReadOnlyList<long> grid, long time, int startIndex, TimeSpanType distanceType, TempoMap tempoMap)
+        private static int FindNearestTime(IReadOnlyList<long> grid, long time, TimeSpanType distanceType, TempoMap tempoMap)
         {
             var difference = TimeSpanUtilities.GetMaxTimeSpan(distanceType);
             var nearestTimeIndex = -1;
 
-            for (int i = startIndex; i < grid.Count; i++)
+            for (int i = 0; i < grid.Count; i++)
             {
                 var gridTime = grid[i];
 
