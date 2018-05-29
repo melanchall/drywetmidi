@@ -4,7 +4,6 @@
     {
         Skip,
         Abort,
-        UseNextGridPoint,
         FixAtZero
     }
 }

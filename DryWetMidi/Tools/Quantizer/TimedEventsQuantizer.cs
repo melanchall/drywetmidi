@@ -4,11 +4,11 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    public sealed class TimedEventsQuantizingSettings : QuantizingSettings
+    public class TimedEventsQuantizingSettings : QuantizingSettings
     {
     }
 
-    public sealed class TimedEventsQuantizer : Quantizer<TimedEvent, TimedEventsQuantizingSettings>
+    public class TimedEventsQuantizer : Quantizer<TimedEvent, TimedEventsQuantizingSettings>
     {
         #region Methods
 
@@ -25,17 +25,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Overrides
 
-        protected override long GetObjectTime(TimedEvent obj, TimedEventsQuantizingSettings settings)
+        protected sealed override long GetObjectTime(TimedEvent obj, TimedEventsQuantizingSettings settings)
         {
             return obj.Time;
         }
 
-        protected override void SetObjectTime(TimedEvent obj, long time, TimedEventsQuantizingSettings settings)
+        protected sealed override void SetObjectTime(TimedEvent obj, long time, TimedEventsQuantizingSettings settings)
         {
             obj.Time = time;
         }
 
-        protected override QuantizingCorrectionResult CorrectObject(TimedEvent obj, long time, TempoMap tempoMap, TimedEventsQuantizingSettings settings)
+        protected override QuantizingCorrectionResult CorrectObject(TimedEvent obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, TimedEventsQuantizingSettings settings)
         {
             return new QuantizingCorrectionResult(QuantizingInstruction.Apply, time);
         }
