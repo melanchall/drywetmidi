@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection.ManageNotes().Notes;
+            return eventsCollection.ManageNotes().Notes.ToList();
         }
 
         /// <summary>

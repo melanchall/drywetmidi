@@ -21,8 +21,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         protected readonly List<TObject> _objects = new List<TObject>();
 
-        private bool _collectionChanged = true;
-
         #endregion
 
         #region Constructor
@@ -135,7 +133,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="addedObjects">Collection of added objects.</param>
         protected virtual void OnObjectsAdded(IEnumerable<TObject> addedObjects)
         {
-            OnCollectionNeedSorting();
         }
 
         /// <summary>
@@ -144,18 +141,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="removedObjects">Collection of removed objects.</param>
         protected virtual void OnObjectsRemoved(IEnumerable<TObject> removedObjects)
         {
-            OnCollectionNeedSorting();
-        }
-
-        // TODO: what if Time changed???
-        private void OnCollectionNeedSorting()
-        {
-            _collectionChanged = true;
-        }
-
-        private void OnCollectionSortingCompleted()
-        {
-            _collectionChanged = false;
         }
 
         #endregion
@@ -168,13 +153,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<TObject> GetEnumerator()
         {
-            if (_collectionChanged)
-            {
-                _objects.Sort(new TimedObjectsComparer<TObject>());
-                OnCollectionSortingCompleted();
-            }
-
-            return _objects.GetEnumerator();
+            return _objects.OrderBy(o => o.Time).GetEnumerator();
         }
 
         /// <summary>
