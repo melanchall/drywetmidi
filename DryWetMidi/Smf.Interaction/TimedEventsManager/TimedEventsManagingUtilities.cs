@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection.ManageTimedEvents().Events;
+            return eventsCollection.ManageTimedEvents().Events.ToList();
         }
 
         /// <summary>

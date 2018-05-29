@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            return eventsCollection.ManageChords(notesTolerance).Chords;
+            return eventsCollection.ManageChords(notesTolerance).Chords.ToList();
         }
 
         /// <summary>
