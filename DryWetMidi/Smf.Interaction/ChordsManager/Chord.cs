@@ -182,9 +182,50 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Clones chord by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the chord.</returns>
         public Chord Clone()
         {
             return new Chord(Notes.Select(note => note.Clone()));
+        }
+
+        /// <summary>
+        /// Splits the current <see cref="Chord"/> by the specified time.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="time"/> is less than time of the chord, the left part will be null.
+        /// If <paramref name="time"/> is greater than end time of the chord, the right part
+        /// will be null.
+        /// </remarks>
+        /// <param name="time">Time to split the chord by.</param>
+        /// <returns>An object containing left and right parts of the splitted <see cref="Chord"/>.
+        /// Both parts are instances of <see cref="Chord"/> too.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        public SplittedLengthedObject<Chord> Split(long time)
+        {
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+
+            //
+
+            var startTime = Time;
+            var endTime = startTime + Length;
+
+            if (time <= startTime)
+                return new SplittedLengthedObject<Chord>(null, Clone());
+
+            if (time >= endTime)
+                return new SplittedLengthedObject<Chord>(Clone(), null);
+
+            //
+
+            var parts = Notes.Select(n => n.Split(time)).ToArray();
+
+            var leftPart = new Chord(parts.Select(p => p.LeftPart).Where(p => p != null));
+            var rightPart = new Chord(parts.Select(p => p.RightPart).Where(p => p != null));
+
+            return new SplittedLengthedObject<Chord>(leftPart, rightPart);
         }
 
         private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)

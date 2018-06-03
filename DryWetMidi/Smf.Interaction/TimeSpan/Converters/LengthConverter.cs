@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -32,6 +33,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, time, tempoMap);
         }
 
+        /// <summary>
+        /// Converts length from <see cref="long"/> to the specified length type.
+        /// </summary>
+        /// <param name="length">Length to convert.</param>
+        /// <param name="lengthType">Type that will represent the length of an object.</param>
+        /// <param name="time">Start time of an object to convert length of.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
+        /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="length"/> is negative. -or-
+        /// <paramref name="time"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, long time, TempoMap tempoMap)
         {
             ThrowIfLengthArgument.IsNegative(nameof(length), length);
@@ -64,6 +77,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
+        /// <summary>
+        /// Converts length from <see cref="long"/> to the specified length type.
+        /// </summary>
+        /// <param name="length">Length to convert.</param>
+        /// <param name="lengthType">Type that will represent the length of an object.</param>
+        /// <param name="time">Start time of an object to convert length of.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
+        /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="length"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfLengthArgument.IsNegative(nameof(length), length);
@@ -96,6 +121,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, time, tempoMap);
         }
 
+        /// <summary>
+        /// Converts length from one length type to another one.
+        /// </summary>
+        /// <param name="length">Length to convert.</param>
+        /// <param name="lengthType">Type that will represent the length of an object.</param>
+        /// <param name="time">Start time of an object to convert length of.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
+        /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, long time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -127,6 +164,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(length, TimeConverter.ConvertFrom(time, tempoMap), tempoMap);
         }
 
+        /// <summary>
+        /// Converts length from one length type to another one.
+        /// </summary>
+        /// <param name="length">Length to convert.</param>
+        /// <param name="lengthType">Type that will represent the length of an object.</param>
+        /// <param name="time">Start time of an object to convert length of.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
+        /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is null. -or-
+        /// <paramref name="time"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);

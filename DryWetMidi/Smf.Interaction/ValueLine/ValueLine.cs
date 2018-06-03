@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Events
 
-        public event EventHandler ValuesChanged;
+        internal event EventHandler ValuesChanged;
 
         #endregion
 

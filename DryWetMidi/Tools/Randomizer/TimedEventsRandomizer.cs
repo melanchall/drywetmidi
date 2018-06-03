@@ -1,17 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Settings according to which timed events should be randomized.
+    /// </summary>
     public sealed class TimedEventsRandomizingSettings : RandomizingSettings
     {
     }
 
+    /// <summary>
+    /// Provides methods to randomize timed events time.
+    /// </summary>
     public sealed class TimedEventsRandomizer : Randomizer<TimedEvent, TimedEventsRandomizingSettings>
     {
         #region Methods
 
+        /// <summary>
+        /// Randomizes objects time using the specified bounds and settings.
+        /// </summary>
+        /// <param name="objects">Objects to randomize.</param>
+        /// <param name="bounds">Bounds to randomize time within.</param>
+        /// <param name="tempoMap">Tempo map used to calculate time bounds to randomize within.</param>
+        /// <param name="settings">Settings according to which objects should be randomized.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="bounds"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
         public void Randomize(IEnumerable<TimedEvent> objects, IBounds bounds, TempoMap tempoMap, TimedEventsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -25,19 +41,43 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Overrides
 
-        protected override long GetOldTime(TimedEvent obj, TimedEventsRandomizingSettings settings)
+        /// <summary>
+        /// Gets the time of an object that should be randomized.
+        /// </summary>
+        /// <param name="obj">Object to get time of.</param>
+        /// <param name="settings">Settings according to which the object's time should be gotten.</param>
+        /// <returns>The time of <paramref name="obj"/> that should be randomized.</returns>
+        protected override long GetObjectTime(TimedEvent obj, TimedEventsRandomizingSettings settings)
         {
             return obj.Time;
         }
 
-        protected override void SetNewTime(TimedEvent obj, long time, TimedEventsRandomizingSettings settings)
+        /// <summary>
+        /// Sets the new time of an object.
+        /// </summary>
+        /// <param name="obj">Object to set time for.</param>
+        /// <param name="time">New time after randomizing.</param>
+        /// <param name="settings">Settings according to which the object's time should be set.</param>
+        protected override void SetObjectTime(TimedEvent obj, long time, TimedEventsRandomizingSettings settings)
         {
             obj.Time = time;
         }
 
-        protected override RandomizingCorrectionResult CorrectObject(TimedEvent obj, long time, TimedEventsRandomizingSettings settings)
+        /// <summary>
+        /// Performs additional actions before the new time will be set to an object.
+        /// </summary>
+        /// <remarks>
+        /// Inside this method the new time can be changed or randomizing of an object can be cancelled.
+        /// </remarks>
+        /// <param name="obj">Object to randomize.</param>
+        /// <param name="time">The new time that is going to be set to the object. Can be changed
+        /// inside this method.</param>
+        /// <param name="settings">Settings according to which object should be randomized.</param>
+        /// <returns>An object indicating whether the new time should be set to the object
+        /// or not. Also returned object contains that new time.</returns>
+        protected override TimeProcessingInstruction OnObjectRandomizing(TimedEvent obj, long time, TimedEventsRandomizingSettings settings)
         {
-            return new RandomizingCorrectionResult(RandomizingInstruction.Apply, time);
+            return new TimeProcessingInstruction(time);
         }
 
         #endregion

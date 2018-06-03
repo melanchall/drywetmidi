@@ -1,16 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides methods for splitting lengthed objects.
+    /// </summary>
+    /// <typeparam name="TObject">The type of objects to split.</typeparam>
     public abstract class LengthedObjectsSplitter<TObject>
         where TObject : ILengthedObject
     {
         #region Methods
 
+        /// <summary>
+        /// Splits objects by the specified step so every object will be splitted at points
+        /// equally distanced from each other starting from the object's start time.
+        /// </summary>
+        /// <remarks>
+        /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
+        /// will not be splitted and will be returned as clones of the input objects.
+        /// </remarks>
+        /// <param name="objects">Objects to split.</param>
+        /// <param name="step">Step to split objects by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
+        /// order as elements of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="step"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
         public IEnumerable<TObject> SplitByStep(IEnumerable<TObject> objects, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -46,13 +66,30 @@ namespace Melanchall.DryWetMidi.Tools
                     time += convertedStep;
 
                     var parts = SplitObject(tail, time);
-                    yield return parts.Item1;
+                    yield return parts.LeftPart;
 
-                    tail = parts.Item2;
+                    tail = parts.RightPart;
                 }
             }
         }
 
+        /// <summary>
+        /// Splits objects into the specified number of parts of the equal length.
+        /// </summary>
+        /// <remarks>
+        /// Nulls will not be splitted and will be returned as nulls. If an object has zero length,
+        /// it will be splitted into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="objects">Objects to split.</param>
+        /// <param name="partsNumber">The number of parts to split objects into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
+        /// order as elements of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public IEnumerable<TObject> SplitByPartsNumber(IEnumerable<TObject> objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -95,9 +132,9 @@ namespace Melanchall.DryWetMidi.Tools
                     time += LengthConverter.ConvertFrom(partLength, time, tempoMap);
 
                     var parts = SplitObject(tail, time);
-                    yield return parts.Item1;
+                    yield return parts.LeftPart;
 
-                    tail = parts.Item2;
+                    tail = parts.RightPart;
                 }
 
                 if (tail != null)
@@ -105,6 +142,19 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits objects by the specified grid.
+        /// </summary>
+        /// <remarks>
+        /// Nulls will not be splitted and will be returned as nulls.
+        /// </remarks>
+        /// <param name="objects">Objects to split.</param>
+        /// <param name="grid">Grid to split objects by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
+        /// order as elements of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
         public IEnumerable<TObject> SplitByGrid(IEnumerable<TObject> objects, IGrid grid, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -138,18 +188,29 @@ namespace Melanchall.DryWetMidi.Tools
                 foreach (var time in intersectedTimes)
                 {
                     var parts = SplitObject(tail, time);
-                    yield return parts.Item1;
+                    yield return parts.LeftPart;
 
-                    tail = parts.Item2;
+                    tail = parts.RightPart;
                 }
 
                 yield return tail;
             }
         }
 
+        /// <summary>
+        /// Clones an object by creating a copy of it.
+        /// </summary>
+        /// <param name="obj">Object to clone.</param>
+        /// <returns>Copy of the <paramref name="obj"/>.</returns>
         protected abstract TObject CloneObject(TObject obj);
 
-        protected abstract Tuple<TObject, TObject> SplitObject(TObject obj, long time);
+        /// <summary>
+        /// Splits an object by the specified time.
+        /// </summary>
+        /// <param name="obj">Object to split.</param>
+        /// <param name="time">Time to split <paramref name="obj"/> by.</param>
+        /// <returns>An object containing left and right parts of the splitted object.</returns>
+        protected abstract SplittedLengthedObject<TObject> SplitObject(TObject obj, long time);
 
         #endregion
     }

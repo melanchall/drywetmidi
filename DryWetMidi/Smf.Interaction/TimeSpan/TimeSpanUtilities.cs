@@ -102,6 +102,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             throw new FormatException("Time span has unknown format.");
         }
 
+        /// <summary>
+        /// Gets an object that represents maximum value of time span defined by the specified
+        /// time span type.
+        /// </summary>
+        /// <param name="timeSpanType">The type of time span to get maximumvalue.</param>
+        /// <returns>An object that represents maximum value of time span defined by <paramref name="timeSpanType"/>.</returns>
         public static ITimeSpan GetMaxTimeSpan(TimeSpanType timeSpanType)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);

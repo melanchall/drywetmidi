@@ -15,9 +15,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             #region Overrides
 
-            protected override QuantizingCorrectionResult CorrectObject(Note obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, NotesQuantizingSettings settings)
+            protected override TimeProcessingInstruction OnObjectQuantizing(Note obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, NotesQuantizingSettings settings)
             {
-                return QuantizingCorrectionResult.Skip;
+                return TimeProcessingInstruction.Skip;
             }
 
             #endregion
@@ -42,9 +42,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             #region Overrides
 
-            protected override QuantizingCorrectionResult CorrectObject(Note obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, NotesQuantizingSettings settings)
+            protected override TimeProcessingInstruction OnObjectQuantizing(Note obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, NotesQuantizingSettings settings)
             {
-                return new QuantizingCorrectionResult(QuantizingInstruction.Apply, _time);
+                return new TimeProcessingInstruction(_time);
             }
 
             #endregion

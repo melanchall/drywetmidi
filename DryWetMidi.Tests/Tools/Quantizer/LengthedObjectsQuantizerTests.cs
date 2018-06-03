@@ -976,7 +976,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 QuantizingTarget = LengthedObjectTarget.Start,
                 FixOppositeEnd = fixEnd,
                 QuantizingBeyondFixedEndPolicy = policy,
-                DistanceType = distanceType,
+                DistanceCalculationType = distanceType,
                 LengthType = lengthType
             };
 
@@ -1026,7 +1026,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 FixOppositeEnd = fixStart,
                 QuantizingBeyondZeroPolicy = quantizingBeyondZeroPolicy,
                 QuantizingBeyondFixedEndPolicy = quantizingBeyondFixedEndPolicy,
-                DistanceType = distanceType,
+                DistanceCalculationType = distanceType,
                 LengthType = lengthType
             };
 

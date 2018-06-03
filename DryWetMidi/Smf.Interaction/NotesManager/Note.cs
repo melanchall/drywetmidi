@@ -254,6 +254,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _note = MusicTheory.Note.Get(noteName, octave);
         }
 
+        /// <summary>
+        /// Clones note by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the note.</returns>
         public Note Clone()
         {
             return new Note(NoteNumber, Length, Time)
@@ -262,6 +266,45 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 Velocity = Velocity,
                 OffVelocity = OffVelocity
             };
+        }
+
+        /// <summary>
+        /// Splits the current <see cref="Note"/> by the specified time.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="time"/> is less than time of the note, the left part will be null.
+        /// If <paramref name="time"/> is greater than end time of the note, the right part
+        /// will be null.
+        /// </remarks>
+        /// <param name="time">Time to split the note by.</param>
+        /// <returns>An object containing left and right parts of the splitted <see cref="Note"/>.
+        /// Both parts are instances of <see cref="Note"/> too.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        public SplittedLengthedObject<Note> Split(long time)
+        {
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+
+            //
+
+            var startTime = Time;
+            var endTime = startTime + Length;
+
+            if (time <= startTime)
+                return new SplittedLengthedObject<Note>(null, Clone());
+
+            if (time >= endTime)
+                return new SplittedLengthedObject<Note>(Clone(), null);
+
+            //
+
+            var leftPart = Clone();
+            leftPart.Length = time - startTime;
+
+            var rightPart = Clone();
+            rightPart.Time = time;
+            rightPart.Length = endTime - time;
+
+            return new SplittedLengthedObject<Note>(leftPart, rightPart);
         }
 
         #endregion

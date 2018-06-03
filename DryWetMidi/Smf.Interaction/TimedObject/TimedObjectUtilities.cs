@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
@@ -32,6 +33,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeConverter.ConvertTo<TTime>(obj.Time, tempoMap);
         }
 
+        /// <summary>
+        /// Gets time of an <see cref="ITimedObject"/> as an instance of time span defined by the
+        /// specified time span type.
+        /// </summary>
+        /// <param name="obj">Object to get time of.</param>
+        /// <param name="timeType">The type of time span to convert the time of <paramref name="obj"/> to.</param>
+        /// <param name="tempoMap">Tempo map to calculate time of the <paramref name="obj"/>.</param>
+        /// <returns>Time of the specified object as an instance of time span defined by the
+        /// <paramref name="timeType"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         public static ITimeSpan TimeAs(this ITimedObject obj, TimeSpanType timeType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(obj), obj);
