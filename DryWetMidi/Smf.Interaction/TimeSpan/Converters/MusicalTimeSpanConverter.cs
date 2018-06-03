@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var musicalTimeSpan = (MusicalTimeSpan)timeSpan;
 
-            return (long)Math.Round(4.0 * musicalTimeSpan.Numerator * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote / musicalTimeSpan.Denominator, MidpointRounding.AwayFromZero);
+            return MathUtilities.RoundToLong(4.0 * musicalTimeSpan.Numerator * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote / musicalTimeSpan.Denominator);
         }
 
         #endregion

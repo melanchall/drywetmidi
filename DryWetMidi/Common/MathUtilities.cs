@@ -71,6 +71,21 @@ namespace Melanchall.DryWetMidi.Common
             return Tuple.Create(b / greatestCommonDivisor, -a / greatestCommonDivisor);
         }
 
+        internal static double Round(double value)
+        {
+            return Math.Round(value, MidpointRounding.AwayFromZero);
+        }
+
+        internal static double Round(double value, int digits)
+        {
+            return Math.Round(value, digits, MidpointRounding.AwayFromZero);
+        }
+
+        internal static long RoundToLong(double value)
+        {
+            return (long)Round(value);
+        }
+
         #endregion
     }
 }

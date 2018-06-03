@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -73,8 +74,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long RoundMicroseconds(double microseconds)
         {
-            // TODO: rounding to math utils
-            return (long)Math.Round(microseconds, MidpointRounding.AwayFromZero);
+            return MathUtilities.RoundToLong(microseconds);
         }
 
         private static bool IsGreaterOrEqual(double value, long reference)
