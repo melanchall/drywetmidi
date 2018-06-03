@@ -40,7 +40,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public ChordsManager(EventsCollection eventsCollection, long notesTolerance = 0, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
-            // TODO: tolerance to ITimeSpan
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 

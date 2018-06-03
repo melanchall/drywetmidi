@@ -50,7 +50,6 @@
     <Compile Include="Common\TimedObjectMethods.cs" />
     <Compile Include="Common\NoteMethods.cs" />
     <Compile Include="ComplexTests\MergeNotes.cs" />
-    <Compile Include="ComplexTests\QuantizeNotes.cs" />
     <Compile Include="MusicTheory\Scale\ScaleTests.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilitiesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

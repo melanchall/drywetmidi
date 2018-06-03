@@ -91,7 +91,6 @@ namespace Melanchall.DryWetMidi.Tools
             var minTime = Math.Max(0, timeBounds.Item1) - 1;
             var maxTime = timeBounds.Item2;
 
-            // TODO: eliminate cast to int
             var difference = (int)Math.Abs(maxTime - minTime);
             return minTime + random.Next(difference) + 1;
         }
