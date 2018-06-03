@@ -22,6 +22,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentNullException(parameterName);
         }
 
+        internal static void ContainsNull<T>(string parameterName, IEnumerable<T> argument)
+        {
+            if (argument.Any(e => e == null))
+                throw new ArgumentException("Collection contains null.", parameterName);
+        }
+
         internal static void IsInvalidEnumValue<TEnum>(string parameterName, TEnum argument)
             where TEnum : struct
         {

@@ -33,6 +33,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return LengthConverter.ConvertTo<TLength>(obj.Length, obj.Time, tempoMap);
         }
 
+        /// <summary>
+        /// Gets length of an <see cref="ILengthedObject"/> as an instance of type defined by the
+        /// specified time span type.
+        /// </summary>
+        /// <param name="obj">Object to get length of.</param>
+        /// <param name="lengthType">The type of time span to convert the length of <paramref name="obj"/> to.</param>
+        /// <param name="tempoMap">Tempo map to calculate length of the <paramref name="obj"/>.</param>
+        /// <returns>Time of the specified object as an instance of time span defined by the
+        /// <paramref name="lengthType"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static ITimeSpan LengthAs(this ILengthedObject obj, TimeSpanType lengthType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(obj), obj);

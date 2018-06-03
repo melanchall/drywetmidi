@@ -1,15 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides methods for splitting notes.
+    /// </summary>
     public static class NotesSplitterUtilities
     {
         #region Methods
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="TrackChunk"/> by the specified step so
+        /// every note will be splitted at points equally distanced from each other starting from
+        /// the note's start time.
+        /// </summary>
+        /// <remarks>
+        /// Notes with zero length and notes with length smaller than <paramref name="step"/>
+        /// will not be splitted.
+        /// </remarks>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="step">Step to split notes by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="step"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
         public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -19,6 +37,20 @@ namespace Melanchall.DryWetMidi.Tools
             SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitByStep(notes, step, tempoMap));
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified collection of <see cref="TrackChunk"/> by the
+        /// specified step so every note will be splitted at points equally distanced from each
+        /// other starting from the note's start time.
+        /// </summary>
+        /// <remarks>
+        /// Notes with zero length and notes with length smaller than <paramref name="step"/>
+        /// will not be splitted.
+        /// </remarks>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="step">Step to split notes by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="step"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
         public static void SplitNotesByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -31,6 +63,19 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="MidiFile"/> by the specified
+        /// step so every note will be splitted at points equally distanced from each other
+        /// starting from the note's start time.
+        /// </summary>
+        /// <remarks>
+        /// Notes with zero length and notes with length smaller than <paramref name="step"/>
+        /// will not be splitted.
+        /// </remarks>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
+        /// <param name="step">Step to split notes by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="step"/> is null.</exception>
         public static void SplitNotesByStep(this MidiFile midiFile, ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -41,6 +86,21 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitNotesByStep(step, tempoMap);
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="TrackChunk"/> into the specified number
+        /// of parts of the equal length.
+        /// </summary>
+        /// <remarks>
+        /// If a note has zero length, it will be splitted into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="partsNumber">The number of parts to split notes into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -51,6 +111,21 @@ namespace Melanchall.DryWetMidi.Tools
             SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitByPartsNumber(notes, partsNumber, lengthType, tempoMap));
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified collection of <see cref="TrackChunk"/> into the
+        /// specified number of parts of the equal length.
+        /// </summary>
+        /// <remarks>
+        /// If a note has zero length, it will be splitted into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="partsNumber">The number of parts to split notes into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitNotesByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -64,6 +139,19 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="MidiFile"/> into the specified number of
+        /// parts of the equal length.
+        /// </summary>
+        /// <remarks>
+        /// If a note has zero length, it will be splitted into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
+        /// <param name="partsNumber">The number of parts to split notes into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitNotesByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -75,6 +163,14 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitNotesByPartsNumber(partsNumber, lengthType, tempoMap);
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="TrackChunk"/> by the specified grid.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="grid">Grid to split notes by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
         public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -84,6 +180,15 @@ namespace Melanchall.DryWetMidi.Tools
             SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitByGrid(notes, grid, tempoMap));
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified collection of <see cref="TrackChunk"/> by the
+        /// specified grid.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="grid">Grid to split notes by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
         public static void SplitNotesByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -96,6 +201,12 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="MidiFile"/> by the specified grid.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
+        /// <param name="grid">Grid to split notes by.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="grid"/> is null.</exception>
         public static void SplitNotesByGrid(this MidiFile midiFile, IGrid grid)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

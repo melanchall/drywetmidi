@@ -357,6 +357,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MidiFile(notes.ToTrackChunk());
         }
 
+        /// <summary>
+        /// Iterates through the specified collection of <see cref="TimedEvent"/> returning
+        /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
+        /// for all other events.
+        /// </summary>
+        /// <remarks>
+        /// If there is no corresponding Note Off event for Note On (or if there is no correspinding
+        /// Note On event for Note Off) the event will be returned as is.
+        /// </remarks>
+        /// <param name="timedEvents">Collection of <see cref="TimedEvent"/> to make notes.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
+        /// or <see cref="Note"/>.</returns>
         public static IEnumerable<ITimedObject> MakeNotes(this IEnumerable<TimedEvent> timedEvents)
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);

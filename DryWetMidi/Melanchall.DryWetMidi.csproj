@@ -56,8 +56,7 @@
     <Compile Include="MusicTheory\Scale\ScaleIntervals.cs" />
     <Compile Include="MusicTheory\Scale\ScaleParser.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilities.cs" />
-    <Compile Include="Smf.Interaction\ChordsManager\ChordsProcessingUtilities.cs" />
-    <Compile Include="Smf.Interaction\NotesManager\NotesProcessingUtilities.cs" />
+    <Compile Include="Smf.Interaction\LengthedObject\SplittedLengthedObject.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidi2ProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidiProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetProgramNumberAction.cs" />
@@ -258,13 +257,13 @@
     <Compile Include="Tools\Common\Grid\IGrid.cs" />
     <Compile Include="Tools\Common\Grid\SteppedGrid.cs" />
     <Compile Include="Tools\Common\LengthedObjectTarget.cs" />
+    <Compile Include="Tools\Common\TimeProcessing\TimeProcessingInstruction.cs" />
+    <Compile Include="Tools\Common\TimeProcessing\TimeProcessingAction.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\Utilities\ChordsSplitterUtilities.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\Base\LengthedObjectsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\Utilities\NotesSplitterUtilities.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
-    <Compile Include="Tools\Quantizer\Base\QuantizingCorrectionResult.cs" />
-    <Compile Include="Tools\Quantizer\Base\QuantizingInstruction.cs" />
     <Compile Include="Tools\Quantizer\Base\QuantizingSettings.cs" />
     <Compile Include="Tools\Quantizer\ChordsQuantizer.cs" />
     <Compile Include="Tools\Quantizer\Utilities\ChordsQuantizerUtilities.cs" />
@@ -278,8 +277,6 @@
     <Compile Include="Tools\Quantizer\Utilities\NotesQuantizerUtilities.cs" />
     <Compile Include="Tools\Quantizer\Utilities\TimedEventsQuantizerUtilities.cs" />
     <Compile Include="Tools\Randomizer\Base\Randomizer.cs" />
-    <Compile Include="Tools\Randomizer\Base\RandomizingCorrectionResult.cs" />
-    <Compile Include="Tools\Randomizer\Base\RandomizingInstruction.cs" />
     <Compile Include="Tools\Randomizer\Base\RandomizingSettings.cs" />
     <Compile Include="Tools\Randomizer\Bounds\ConstantBounds.cs" />
     <Compile Include="Tools\Randomizer\ChordsRandomizer.cs" />

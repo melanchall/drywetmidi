@@ -708,7 +708,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         protected abstract IEnumerable<TObject> CreateInputObjects(long length);
 
-        protected abstract Tuple<TObject, TObject> SplitObject(TObject obj, long time);
+        protected abstract SplittedLengthedObject<TObject> SplitObject(TObject obj, long time);
 
         #endregion
 
@@ -829,9 +829,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             foreach (var time in times.OrderBy(t => t))
             {
                 var parts = SplitObject(tail, time);
-                yield return parts.Item1;
+                yield return parts.LeftPart;
 
-                tail = parts.Item2;
+                tail = parts.RightPart;
             }
 
             yield return tail;

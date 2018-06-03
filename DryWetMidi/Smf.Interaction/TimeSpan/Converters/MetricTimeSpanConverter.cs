@@ -73,6 +73,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static long RoundMicroseconds(double microseconds)
         {
+            // TODO: rounding to math utils
             return (long)Math.Round(microseconds, MidpointRounding.AwayFromZero);
         }
 

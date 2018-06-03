@@ -68,6 +68,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Clones timed event by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the timed event.</returns>
         public TimedEvent Clone()
         {
             return new TimedEvent(Event.Clone(), Time);

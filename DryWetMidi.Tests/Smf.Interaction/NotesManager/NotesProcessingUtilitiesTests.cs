@@ -12,16 +12,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         #region Test methods
 
         [Test]
-        [Description("Split null note.")]
-        public void Split_Null()
-        {
-            var note = default(Note);
-            var time = 100;
-
-            Assert.Throws<ArgumentNullException>(() => note.Split(time));
-        }
-
-        [Test]
         [Description("Split a note of zero length.")]
         public void Split_ZeroLength()
         {
@@ -31,12 +21,12 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var time = 0;
 
             var parts = note.Split(time);
-            Assert.IsNull(parts.Item1,
+            Assert.IsNull(parts.LeftPart,
                           "Left part is not null.");
-            Assert.AreNotSame(parts.Item2,
+            Assert.AreNotSame(parts.RightPart,
                               note,
                               "Right part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.Item2),
+            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.RightPart),
                           "Right part doesn't equal to the original note.");
         }
 
@@ -50,12 +40,12 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var time = 50;
 
             var parts = note.Split(time);
-            Assert.IsNull(parts.Item1,
+            Assert.IsNull(parts.LeftPart,
                           "Left part is not null.");
-            Assert.AreNotSame(parts.Item2,
+            Assert.AreNotSame(parts.RightPart,
                               note,
                               "Right part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.Item2),
+            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.RightPart),
                           "Right part doesn't equal to the original note.");
         }
 
@@ -69,12 +59,12 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var time = 500;
 
             var parts = note.Split(time);
-            Assert.IsNull(parts.Item2,
+            Assert.IsNull(parts.RightPart,
                           "Right part is not null.");
-            Assert.AreNotSame(parts.Item1,
+            Assert.AreNotSame(parts.LeftPart,
                               note,
                               "Left part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.Item1),
+            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.LeftPart),
                           "Left part doesn't equal to the original note.");
         }
 
@@ -86,9 +76,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var time = 120;
 
             var parts = note.Split(time);
-            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 20, 100), parts.Item1),
+            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 20, 100), parts.LeftPart),
                           "Left part is invalid.");
-            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 180, 120), parts.Item2),
+            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 180, 120), parts.RightPart),
                           "Right part is invalid.");
         }
 

@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -29,6 +30,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return TimeSpanConverter.ConvertTo<TTimeSpan>(time, 0, tempoMap);
         }
 
+        /// <summary>
+        /// Converts time from <see cref="long"/> to the specified time type.
+        /// </summary>
+        /// <param name="time">Time to convert.</param>
+        /// <param name="timeType">Type that will represent the time of an object.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
+        /// <returns>Time as an instance of time span defined by <paramref name="timeType"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(long time, TimeSpanType timeType, TempoMap tempoMap)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
@@ -57,6 +68,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return ConvertTo<TTimeSpan>(ConvertFrom(time, tempoMap), tempoMap);
         }
 
+        /// <summary>
+        /// Converts time from one time type to another one.
+        /// </summary>
+        /// <param name="time">Time to convert.</param>
+        /// <param name="timeType">Type that will represent the time of an object.</param>
+        /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
+        /// <returns>Time as an instance of time span defined by <paramref name="timeType"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(ITimeSpan time, TimeSpanType timeType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(time), time);

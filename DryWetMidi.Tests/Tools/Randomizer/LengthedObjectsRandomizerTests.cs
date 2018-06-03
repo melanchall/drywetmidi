@@ -7,8 +7,6 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    // TODO: more tests
-    // TODO: descriptions
     public abstract class LengthedObjectsRandomizerTests<TObject, TSettings> : LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
         where TSettings : LengthedObjectsRandomizingSettings, new()
