@@ -1,7 +1,4 @@
 version: 3.0.0.{build}
-branches:
-  only:
-  - develop
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
@@ -13,9 +10,6 @@ test:
   assemblies:
     except:
     - '**\*.Benchmarks.dll'
-#artifacts:
-#- path: DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results\*.json
-#  name: Benchmarks results
 skip_commits:
   files:
     - '**/*.md'
