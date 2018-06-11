@@ -6,7 +6,7 @@
     public enum TimeSpanType
     {
         /// <summary>
-        /// Metric time span which represents hours, minutes and seconds..
+        /// Metric time span which represents hours, minutes and seconds.
         /// </summary>
         Metric,
 
