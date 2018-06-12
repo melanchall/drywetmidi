@@ -15,7 +15,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             #region Overrides
 
-            protected override TimeProcessingInstruction OnObjectQuantizing(Chord obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, ChordsQuantizingSettings settings)
+            protected override TimeProcessingInstruction OnObjectQuantizing(
+                Chord obj,
+                QuantizedTime quantizedTime,
+                IGrid grid,
+                TempoMap tempoMap,
+                ChordsQuantizingSettings settings)
             {
                 return TimeProcessingInstruction.Skip;
             }
@@ -42,7 +47,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             #region Overrides
 
-            protected override TimeProcessingInstruction OnObjectQuantizing(Chord obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, ChordsQuantizingSettings settings)
+            protected override TimeProcessingInstruction OnObjectQuantizing(
+                Chord obj,
+                QuantizedTime quantizedTime,
+                IGrid grid,
+                TempoMap tempoMap,
+                ChordsQuantizingSettings settings)
             {
                 return new TimeProcessingInstruction(_time);
             }
