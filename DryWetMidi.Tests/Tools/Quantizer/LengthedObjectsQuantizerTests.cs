@@ -66,6 +66,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        [Description("Quantize start times of objects near grid's last time.")]
+        public void Quantize_Start_LastTime()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_Start_DontFixEnd(
+                new[]
+                {
+                    Methods.Create(MusicalTimeSpan.Sixteenth.SingleDotted(), MusicalTimeSpan.Whole, tempoMap),
+                    Methods.Create(MusicalTimeSpan.Sixteenth.SingleDotted(), MusicalTimeSpan.SixtyFourth, tempoMap)
+                },
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                new ITimeSpan[]
+                {
+                    MusicalTimeSpan.Eighth,
+                    MusicalTimeSpan.Eighth
+                },
+                tempoMap);
+        }
+
+        [Test]
         [Description("Quantize start times by grid of one step starting from zero.")]
         public void Quantize_Start_OneStep_FromZero()
         {
@@ -479,6 +500,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[] { default(TObject), default(TObject) },
                 new SteppedGrid(MusicalTimeSpan.Eighth),
                 new ITimeSpan[] { null, null },
+                tempoMap);
+        }
+
+        [Test]
+        [Description("Quantize end times of objects near grid's last time.")]
+        public void Quantize_End_LastTime()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_End_DontFixStart(
+                new[]
+                {
+                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Eighth, tempoMap),
+                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Sixteenth.SingleDotted(), tempoMap)
+                },
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.ThirtySecond
+                },
                 tempoMap);
         }
 

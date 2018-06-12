@@ -70,17 +70,19 @@ namespace Melanchall.DryWetMidi.Tools
         /// Inside this method the new time can be changed or quantizing of an object can be cancelled.
         /// </remarks>
         /// <param name="obj">Object to quantize.</param>
-        /// <param name="time">The new time that is going to be set to the object. Can be changed
-        /// inside this method.</param>
         /// <param name="grid">Grid to quantize object by.</param>
-        /// <param name="gridTimes">Calculated grid's times object will be quantized by.</param>
         /// <param name="tempoMap">Tempo map used to quantize object.</param>
         /// <param name="settings">Settings according to which object should be quantized.</param>
         /// <returns>An object indicating whether the new time should be set to the object
         /// or not. Also returned object contains that new time.</returns>
-        protected override TimeProcessingInstruction OnObjectQuantizing(TimedEvent obj, long time, IGrid grid, IReadOnlyCollection<long> gridTimes, TempoMap tempoMap, TimedEventsQuantizingSettings settings)
+        protected override TimeProcessingInstruction OnObjectQuantizing(
+            TimedEvent obj,
+            QuantizedTime quantizedTime,
+            IGrid grid,
+            TempoMap tempoMap,
+            TimedEventsQuantizingSettings settings)
         {
-            return new TimeProcessingInstruction(time);
+            return new TimeProcessingInstruction(quantizedTime.Time);
         }
 
         #endregion

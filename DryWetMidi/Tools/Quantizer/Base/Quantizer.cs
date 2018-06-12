@@ -35,11 +35,9 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects.Where(o => o != null))
             {
                 var oldTime = GetObjectTime(obj, settings);
+                var quantizedTime = FindNearestTime(times, oldTime, settings.DistanceCalculationType, tempoMap);
 
-                var newTimeIndex = FindNearestTime(times, oldTime, settings.DistanceCalculationType, tempoMap);
-                var newTime = times[newTimeIndex];
-
-                var instruction = OnObjectQuantizing(obj, newTime, grid, times, tempoMap, settings);
+                var instruction = OnObjectQuantizing(obj, quantizedTime, grid, tempoMap, settings);
 
                 switch (instruction.Action)
                 {
@@ -75,19 +73,15 @@ namespace Melanchall.DryWetMidi.Tools
         /// Inside this method the new time can be changed or quantizing of an object can be cancelled.
         /// </remarks>
         /// <param name="obj">Object to quantize.</param>
-        /// <param name="time">The new time that is going to be set to the object. Can be changed
-        /// inside this method.</param>
         /// <param name="grid">Grid to quantize object by.</param>
-        /// <param name="gridTimes">Calculated grid's times object will be quantized by.</param>
         /// <param name="tempoMap">Tempo map used to quantize object.</param>
         /// <param name="settings">Settings according to which object should be quantized.</param>
         /// <returns>An object indicating whether the new time should be set to the object
         /// or not. Also returned object contains that new time.</returns>
         protected abstract TimeProcessingInstruction OnObjectQuantizing(
             TObject obj,
-            long time,
+            QuantizedTime quantizedTime,
             IGrid grid,
-            IReadOnlyCollection<long> gridTimes,
             TempoMap tempoMap,
             TSettings settings);
 
@@ -102,28 +96,30 @@ namespace Melanchall.DryWetMidi.Tools
             yield return enumerator.Current;
         }
 
-        private static int FindNearestTime(IReadOnlyList<long> grid,
-                                           long time,
-                                           TimeSpanType distanceCalculationType,
-                                           TempoMap tempoMap)
+        private static QuantizedTime FindNearestTime(IReadOnlyList<long> grid,
+                                                     long time,
+                                                     TimeSpanType distanceCalculationType,
+                                                     TempoMap tempoMap)
         {
-            var difference = TimeSpanUtilities.GetMaxTimeSpan(distanceCalculationType);
-            var nearestTimeIndex = -1;
+            var nearestConvertedDistance = TimeSpanUtilities.GetMaxTimeSpan(distanceCalculationType);
+            var nearestTime = -1L;
+            var nearestDistance = -1L;
 
             for (int i = 0; i < grid.Count; i++)
             {
                 var gridTime = grid[i];
 
-                var timeDelta = Math.Abs(time - gridTime);
-                var convertedTimeDelta = LengthConverter.ConvertTo(timeDelta, distanceCalculationType, Math.Min(time, gridTime), tempoMap);
-                if (convertedTimeDelta.CompareTo(difference) >= 0)
+                var distance = Math.Abs(time - gridTime);
+                var convertedDistance = LengthConverter.ConvertTo(distance, distanceCalculationType, Math.Min(time, gridTime), tempoMap);
+                if (convertedDistance.CompareTo(nearestConvertedDistance) >= 0)
                     break;
 
-                difference = convertedTimeDelta;
-                nearestTimeIndex = i;
+                nearestConvertedDistance = convertedDistance;
+                nearestTime = gridTime;
+                nearestDistance = distance;
             }
 
-            return nearestTimeIndex;
+            return new QuantizedTime(nearestTime, nearestDistance, nearestConvertedDistance);
         }
 
         #endregion

@@ -264,6 +264,7 @@
     <Compile Include="Tools\LengthedObjectsSplitter\Base\LengthedObjectsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\Utilities\NotesSplitterUtilities.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
+    <Compile Include="Tools\Quantizer\Base\QuantizedTime.cs" />
     <Compile Include="Tools\Quantizer\Base\QuantizingSettings.cs" />
     <Compile Include="Tools\Quantizer\ChordsQuantizer.cs" />
     <Compile Include="Tools\Quantizer\Utilities\ChordsQuantizerUtilities.cs" />
