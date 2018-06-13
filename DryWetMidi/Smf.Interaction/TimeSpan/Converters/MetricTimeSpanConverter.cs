@@ -14,6 +14,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
+            if (timeSpan == 0)
+                return new MetricTimeSpan();
+
             var startTimeSpan = TicksToMetricTimeSpan(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
             var endTimeSpan = TicksToMetricTimeSpan(time + timeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
 
@@ -26,8 +29,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
+            var metricTimeSpan = (MetricTimeSpan)timeSpan;
+            if ((TimeSpan)metricTimeSpan == TimeSpan.Zero)
+                return 0;
+
             var startTimeSpan = TicksToMetricTimeSpan(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
-            var endTimeSpan = startTimeSpan + (MetricTimeSpan)timeSpan;
+            var endTimeSpan = startTimeSpan + metricTimeSpan;
 
             return MetricTimeSpanToTicks(endTimeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap) - time;
         }

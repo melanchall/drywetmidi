@@ -13,6 +13,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
+            if (timeSpan == 0)
+                return new BarBeatTimeSpan();
+
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var endTime = time + timeSpan;
 
@@ -100,6 +103,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             var barBeatTimeSpan = (BarBeatTimeSpan)timeSpan;
+            if (barBeatTimeSpan.Bars == 0 && barBeatTimeSpan.Beats == 0 && barBeatTimeSpan.Ticks == 0)
+                return 0;
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var timeSignatureLine = tempoMap.TimeSignature;
