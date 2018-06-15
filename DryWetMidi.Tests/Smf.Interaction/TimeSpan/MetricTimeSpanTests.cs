@@ -1054,6 +1054,21 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region Divide
+
+        [Test]
+        [Description("Divide metric time span by another one.")]
+        public void Divide()
+        {
+            Assert.AreEqual(1, new MetricTimeSpan(0, 0, 2).Divide(new MetricTimeSpan(0, 0, 2)));
+            Assert.AreEqual(1.5, new MetricTimeSpan(0, 0, 3).Divide(new MetricTimeSpan(0, 0, 2)));
+            Assert.AreEqual(0.5, new MetricTimeSpan(0, 0, 2).Divide(new MetricTimeSpan(0, 0, 4)));
+
+            Assert.Throws<DivideByZeroException>(() => new MetricTimeSpan().Divide(new MetricTimeSpan()));
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods

@@ -1055,6 +1055,21 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region Divide
+
+        [Test]
+        [Description("Divide musical time span by another one.")]
+        public void Divide()
+        {
+            Assert.AreEqual(1, MusicalTimeSpan.Half.Divide(MusicalTimeSpan.Half));
+            Assert.AreEqual(1.5, MusicalTimeSpan.Half.SingleDotted().Divide(MusicalTimeSpan.Half));
+            Assert.AreEqual(0.5, MusicalTimeSpan.Half.Divide(MusicalTimeSpan.Whole));
+
+            Assert.Throws<DivideByZeroException>(() => new MusicalTimeSpan().Divide(new MusicalTimeSpan()));
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods

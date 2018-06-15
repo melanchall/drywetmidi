@@ -44,6 +44,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        public double Divide(MidiTimeSpan timeSpan)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+
+            if (timeSpan == 0)
+                throw new DivideByZeroException("Dividing by zero time span.");
+
+            return (double)TimeSpan / timeSpan;
+        }
+
         /// <summary>
         /// Converts the string representation of a MIDI time span to its <see cref="MidiTimeSpan"/>
         /// equivalent. A return value indicates whether the conversion succeeded.
