@@ -115,6 +115,23 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return MaximumTimeSpans[timeSpanType];
         }
 
+        internal static double Divide(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
+        {
+            var metricTimeSpan = timeSpan1 as MetricTimeSpan;
+            if (metricTimeSpan != null)
+                return metricTimeSpan.Divide(timeSpan2 as MetricTimeSpan);
+
+            var midiTimeSpan = timeSpan1 as MidiTimeSpan;
+            if (midiTimeSpan != null)
+                return midiTimeSpan.Divide(timeSpan2 as MidiTimeSpan);
+
+            var musicalTimeSpan = timeSpan1 as MusicalTimeSpan;
+            if (musicalTimeSpan != null)
+                return musicalTimeSpan.Divide(timeSpan2 as MusicalTimeSpan);
+
+            throw new NotSupportedException($"Dividing of time span of the '{timeSpan1.GetType()}' type is not supported.");
+        }
+
         internal static ITimeSpan Add(ITimeSpan timeSpan1, ITimeSpan timeSpan2, TimeSpanMode mode)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);

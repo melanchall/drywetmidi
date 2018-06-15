@@ -905,6 +905,21 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region Divide
+
+        [Test]
+        [Description("Divide MIDI time span by another one.")]
+        public void Divide()
+        {
+            Assert.AreEqual(1, new MidiTimeSpan(2).Divide(new MidiTimeSpan(2)));
+            Assert.AreEqual(1.5, new MidiTimeSpan(3).Divide(new MidiTimeSpan(2)));
+            Assert.AreEqual(0.5, new MidiTimeSpan(2).Divide(new MidiTimeSpan(4)));
+
+            Assert.Throws<DivideByZeroException>(() => new MidiTimeSpan().Divide(new MidiTimeSpan()));
+        }
+
+        #endregion
+
         #endregion
     }
 }

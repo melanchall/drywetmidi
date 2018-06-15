@@ -202,6 +202,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return Tuplet(DupletNotesCount, DupletSpaceSize);
         }
 
+        public double Divide(MusicalTimeSpan timeSpan)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+
+            if (timeSpan.Numerator == 0)
+                throw new DivideByZeroException("Dividing by zero time span.");
+
+            return (double)Numerator * timeSpan.Denominator / (Denominator * timeSpan.Numerator);
+        }
+
         /// <summary>
         /// Converts the string representation of a whole note's fraction to its <see cref="MusicalTimeSpan"/>
         /// equivalent. A return value indicates whether the conversion succeeded.
