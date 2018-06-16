@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestFixture]
-    public sealed class NotesManagingUtilitiesTests
+    public sealed class MakeNotesUtilitiesTests
     {
         #region Nested classes
 
