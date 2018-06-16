@@ -90,6 +90,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public static readonly TempoMap SimpleTempoMap = GenerateSimpleTempoMap();
         public static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
 
+        // TODO: find a way to decrease this constant
         private const long MetricTimeSpanEqualityTolerance = 500; // μs
         private const long MidiTimeSpanEqualityTolerance = 1; // ticks
 
@@ -232,15 +233,16 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                      $"({timeSpan1} - {timeSpan2}) + {timeSpan2} != {timeSpan1}.");
         }
 
-        private static void AreEqual(ITimeSpan expectedTimeSpan, ITimeSpan actualTimeSpan, string message)
+        public static void AreEqual(ITimeSpan expectedTimeSpan, ITimeSpan actualTimeSpan, string message)
         {
             var expectedTimeSpanType = expectedTimeSpan.GetType();
             var actualTimeSpanType = actualTimeSpan.GetType();
 
             //
 
-            Assert.IsTrue(expectedTimeSpanType == actualTimeSpanType,
-                          $"Type of {expectedTimeSpan} isn't equal to the type of {actualTimeSpan}.");
+            Assert.AreEqual(expectedTimeSpanType,
+                            actualTimeSpanType,
+                            $"Type of {expectedTimeSpan} isn't equal to the type of {actualTimeSpan}.");
 
             //
 
