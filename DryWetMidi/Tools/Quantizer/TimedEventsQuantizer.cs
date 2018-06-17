@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tools
             TempoMap tempoMap,
             TimedEventsQuantizingSettings settings)
         {
-            return new TimeProcessingInstruction(quantizedTime.Time);
+            return new TimeProcessingInstruction(quantizedTime.NewTime);
         }
 
         #endregion

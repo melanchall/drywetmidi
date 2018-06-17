@@ -21,6 +21,22 @@ namespace Melanchall.DryWetMidi.Tests.Common
             return Create(convertedTime, LengthConverter.ConvertFrom(length, convertedTime, tempoMap));
         }
 
+        public IEnumerable<TObject> CreateCollection(TempoMap tempoMap, params string[] timeAndLengthStrings)
+        {
+            var result = new List<TObject>();
+
+            foreach (var timeAndLengthString in timeAndLengthStrings)
+            {
+                var parts = timeAndLengthString.Split(';');
+                var time = TimeSpanUtilities.Parse(parts[0]);
+                var length = TimeSpanUtilities.Parse(parts[1]);
+
+                result.Add(Create(time, length, tempoMap));
+            }
+
+            return result;
+        }
+
         public void AssertCollectionsAreEqual(IEnumerable<TObject> expected, IEnumerable<TObject> actual)
         {
             CollectionAssert.AreEqual(expected, actual, Comparer);

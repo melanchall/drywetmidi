@@ -6,22 +6,32 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Constructor
 
-        internal QuantizedTime(long time, long distance, ITimeSpan convertedDistance)
+        internal QuantizedTime(long newTime,
+                               long gridTime,
+                               ITimeSpan shift,
+                               long distanceToGridTime,
+                               ITimeSpan convertedDistanceToGridTime)
         {
-            Time = time;
-            Distance = distance;
-            ConvertedDistance = convertedDistance;
+            NewTime = newTime;
+            GridTime = gridTime;
+            Shift = shift;
+            DistanceToGridTime = distanceToGridTime;
+            ConvertedDistanceToGridTime = convertedDistanceToGridTime;
         }
 
         #endregion
 
         #region Properties
 
-        public long Time { get; }
+        public long NewTime { get; }
 
-        public long Distance { get; }
+        public long GridTime { get; }
 
-        public ITimeSpan ConvertedDistance { get; }
+        public ITimeSpan Shift { get; }
+
+        public long DistanceToGridTime { get; }
+
+        public ITimeSpan ConvertedDistanceToGridTime { get; }
 
         #endregion
     }
