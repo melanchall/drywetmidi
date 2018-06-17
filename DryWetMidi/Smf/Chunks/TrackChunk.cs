@@ -83,6 +83,11 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Overrides
 
+        public override MidiChunk Clone()
+        {
+            return new TrackChunk(Events.Select(e => e.Clone()));
+        }
+
         /// <summary>
         /// Reads content of a <see cref="TrackChunk"/>.
         /// </summary>

@@ -79,6 +79,11 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Overrides
 
+        public override MidiChunk Clone()
+        {
+            throw new NotSupportedException("Cloning of a header chunk isnot supported.");
+        }
+
         /// <summary>
         /// Reads content of a <see cref="HeaderChunk"/>.
         /// </summary>

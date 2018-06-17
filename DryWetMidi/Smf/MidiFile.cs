@@ -405,6 +405,17 @@ namespace Melanchall.DryWetMidi.Smf
             }
         }
 
+        public MidiFile Clone()
+        {
+            var result = new MidiFile(Chunks.Select(c => c.Clone()))
+            {
+                TimeDivision = TimeDivision.Clone()
+            };
+            result._originalFormat = _originalFormat;
+
+            return result;
+        }
+
         /// <summary>
         /// Reads a chunk from a MIDI-file.
         /// </summary>
