@@ -203,7 +203,7 @@ namespace Melanchall.DryWetMidi.Tools
             TempoMap tempoMap,
             TSettings settings)
         {
-            var newTime = quantizedTime.Time;
+            var newTime = quantizedTime.NewTime;
 
             switch (settings.QuantizingTarget)
             {

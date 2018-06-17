@@ -9,16 +9,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     {
         #region Constructor
 
-        public LengthedObjectsToolTests(LengthedObjectMethods<TObject> methods)
+        public LengthedObjectsToolTests(LengthedObjectMethods<TObject> objectMethods)
         {
-            Methods = methods;
+            ObjectMethods = objectMethods;
         }
 
         #endregion
 
         #region Properties
 
-        protected LengthedObjectMethods<TObject> Methods { get; }
+        protected LengthedObjectMethods<TObject> ObjectMethods { get; }
 
         #endregion
 

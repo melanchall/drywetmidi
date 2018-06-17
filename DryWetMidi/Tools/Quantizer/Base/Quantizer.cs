@@ -35,7 +35,11 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects.Where(o => o != null))
             {
                 var oldTime = GetObjectTime(obj, settings);
-                var quantizedTime = FindNearestTime(times, oldTime, settings.DistanceCalculationType, tempoMap);
+                var quantizedTime = FindNearestTime(times,
+                                                    oldTime,
+                                                    settings.DistanceCalculationType,
+                                                    settings.QuantizingLevel,
+                                                    tempoMap);
 
                 var instruction = OnObjectQuantizing(obj, quantizedTime, grid, tempoMap, settings);
 
@@ -99,27 +103,45 @@ namespace Melanchall.DryWetMidi.Tools
         private static QuantizedTime FindNearestTime(IReadOnlyList<long> grid,
                                                      long time,
                                                      TimeSpanType distanceCalculationType,
+                                                     double quantizingLevel,
                                                      TempoMap tempoMap)
         {
-            var nearestConvertedDistance = TimeSpanUtilities.GetMaxTimeSpan(distanceCalculationType);
-            var nearestTime = -1L;
-            var nearestDistance = -1L;
+            var distanceToGridTime = -1L;
+            var convertedDistanceToGridTime = TimeSpanUtilities.GetMaxTimeSpan(distanceCalculationType);
+            var gridTime = -1L;
 
             for (int i = 0; i < grid.Count; i++)
             {
-                var gridTime = grid[i];
+                var currentGridTime = grid[i];
 
-                var distance = Math.Abs(time - gridTime);
-                var convertedDistance = LengthConverter.ConvertTo(distance, distanceCalculationType, Math.Min(time, gridTime), tempoMap);
-                if (convertedDistance.CompareTo(nearestConvertedDistance) >= 0)
+                var distance = Math.Abs(time - currentGridTime);
+                var convertedDistance = LengthConverter.ConvertTo(distance, distanceCalculationType, Math.Min(time, currentGridTime), tempoMap);
+                if (convertedDistance.CompareTo(convertedDistanceToGridTime) >= 0)
                     break;
 
-                nearestConvertedDistance = convertedDistance;
-                nearestTime = gridTime;
-                nearestDistance = distance;
+                distanceToGridTime = distance;
+                convertedDistanceToGridTime = convertedDistance;
+                gridTime = currentGridTime;
             }
 
-            return new QuantizedTime(nearestTime, nearestDistance, nearestConvertedDistance);
+            //
+
+            var shift = convertedDistanceToGridTime.Multiply(quantizingLevel);
+            var convertedTime = TimeConverter.ConvertTo(time, distanceCalculationType, tempoMap);
+
+            var newTime = TimeConverter.ConvertFrom(
+                gridTime > time
+                    ? convertedTime.Add(shift, TimeSpanMode.TimeLength)
+                    : convertedTime.Subtract(shift, TimeSpanMode.TimeLength),
+                tempoMap);
+
+            //
+
+            return new QuantizedTime(newTime,
+                                     gridTime,
+                                     shift,
+                                     distanceToGridTime,
+                                     convertedDistanceToGridTime);
         }
 
         #endregion
