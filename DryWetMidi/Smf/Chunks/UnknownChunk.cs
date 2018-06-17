@@ -36,6 +36,14 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Overrides
 
+        public override MidiChunk Clone()
+        {
+            return new UnknownChunk(ChunkId)
+            {
+                Data = (byte[])Data.Clone()
+            };
+        }
+
         /// <summary>
         /// Reads content of a <see cref="UnknownChunk"/>.
         /// </summary>

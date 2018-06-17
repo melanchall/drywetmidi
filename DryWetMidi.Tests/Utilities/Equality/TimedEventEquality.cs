@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     return false;
 
                 return timedEvent1.Time == timedEvent2.Time &&
-                       EventEquality.AreEqual(timedEvent1.Event, timedEvent2.Event, _compareDeltaTimes);
+                       MidiEventEquality.AreEqual(timedEvent1.Event, timedEvent2.Event, _compareDeltaTimes);
             }
 
             public int GetHashCode(TimedEvent timedEvent)
