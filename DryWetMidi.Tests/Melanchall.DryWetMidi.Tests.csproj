@@ -79,6 +79,7 @@
     <Compile Include="Tools\LengthedObjectsSplitter\LengthedObjectsSplitterTests.cs" />
     <Compile Include="Tools\LengthedObjectsToolTests.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitterTests.cs" />
+    <Compile Include="Tools\MidiFileSplitter\MidiFileSplitterTests.cs" />
     <Compile Include="Tools\Quantizer\ChordsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\NotesQuantizerTests.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
     <Compile Include="Utilities\Equality\TimedEventEquality.cs" />
     <Compile Include="Utilities\Equality\TimedObjectEquality.cs" />
+    <Compile Include="Utilities\TestFilesProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj">

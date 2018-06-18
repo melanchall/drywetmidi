@@ -29,7 +29,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf
         }
 
         private const string InvalidFilesPath = @"..\..\..\Resources\MIDI files\Invalid";
-        private const string ValidFilesPath = @"..\..\..\Resources\MIDI files\Valid";
 
         #endregion
 
@@ -336,7 +335,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
         [Description("Check whether a clone of a MIDI file equals to the original file.")]
         public void Clone_Read()
         {
-            foreach (var filePath in GetValidFiles())
+            foreach (var filePath in TestFilesProvider.GetValidFiles())
             {
                 var midiFile = MidiFile.Read(filePath);
                 var clonedMidiFile = midiFile.Clone();
@@ -374,19 +373,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             return Directory.GetFiles(GetInvalidFilesDirectory(directoryName));
         }
 
-        private IEnumerable<string> GetValidFiles()
-        {
-            return Directory.GetFiles(GetValidFilesDirectory(), "*.*", SearchOption.AllDirectories);
-        }
-
         private string GetInvalidFilesDirectory(string directoryName)
         {
             return Path.Combine(TestContext.CurrentContext.TestDirectory, InvalidFilesPath, directoryName);
-        }
-
-        private string GetValidFilesDirectory()
-        {
-            return Path.Combine(TestContext.CurrentContext.TestDirectory, ValidFilesPath);
         }
 
         #endregion
