@@ -29,7 +29,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="UnexpectedTrackChunksCountException"/>.
         /// </summary>
         public UnexpectedTrackChunksCountException()
-            : base()
         {
         }
 

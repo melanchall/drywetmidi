@@ -196,21 +196,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             return notes;
         }
 
-        private IEnumerable<Note> CreateNotes(IEnumerable<TimeAndLength> timesAndLengths,
-                                              SevenBitNumber noteNumber,
-                                              FourBitNumber channel,
-                                              TempoMap tempoMap)
-        {
-            return timesAndLengths.Select(tl =>
-            {
-                var note = ObjectMethods.Create(tl.Time, tl.Length, tempoMap);
-                note.NoteNumber = noteNumber;
-                note.Channel = channel;
-                return note;
-            })
-            .ToList();
-        }
-
         #endregion
     }
 }

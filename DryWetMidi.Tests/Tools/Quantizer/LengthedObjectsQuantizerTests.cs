@@ -362,7 +362,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Description("Quantize start times using metric distance calculation.")]
         public void Quantize_Start_MetricDistance()
         {
-            TempoMap tempoMap = null;
+            TempoMap tempoMap;
 
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -395,7 +395,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Description("Quantize start times using metric length hint.")]
         public void Quantize_Start_MetricLength()
         {
-            TempoMap tempoMap = null;
+            TempoMap tempoMap;
 
             using (var tempoMapManager = new TempoMapManager())
             {

@@ -17,8 +17,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (timeSpan == 0)
                 return new MetricTimeSpan();
 
-            var startTimeSpan = TicksToMetricTimeSpan(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
-            var endTimeSpan = TicksToMetricTimeSpan(time + timeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
+            var startTimeSpan = TicksToMetricTimeSpan(time, tempoMap);
+            var endTimeSpan = TicksToMetricTimeSpan(time + timeSpan, tempoMap);
 
             return endTimeSpan - startTimeSpan;
         }
@@ -33,17 +33,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if ((TimeSpan)metricTimeSpan == TimeSpan.Zero)
                 return 0;
 
-            var startTimeSpan = TicksToMetricTimeSpan(time, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap);
+            var startTimeSpan = TicksToMetricTimeSpan(time, tempoMap);
             var endTimeSpan = startTimeSpan + metricTimeSpan;
 
-            return MetricTimeSpanToTicks(endTimeSpan, ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, tempoMap) - time;
+            return MetricTimeSpanToTicks(endTimeSpan, tempoMap) - time;
         }
 
         #endregion
 
         #region Methods
 
-        private static MetricTimeSpan TicksToMetricTimeSpan(long timeSpan, short ticksPerQuarterNote, TempoMap tempoMap)
+        private static MetricTimeSpan TicksToMetricTimeSpan(long timeSpan, TempoMap tempoMap)
         {
             if (timeSpan == 0)
                 return new MetricTimeSpan();
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MetricTimeSpan(RoundMicroseconds(lastAccumulatedMicroseconds + GetMicroseconds(timeSpan - lastTime, lastMicrosecondsPerTick)));
         }
 
-        private static long MetricTimeSpanToTicks(MetricTimeSpan timeSpan, short ticksPerQuarterNote, TempoMap tempoMap)
+        private static long MetricTimeSpanToTicks(MetricTimeSpan timeSpan, TempoMap tempoMap)
         {
             var timeMicroseconds = timeSpan.TotalMicroseconds;
             if (timeMicroseconds == 0)
@@ -82,12 +82,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private static long RoundMicroseconds(double microseconds)
         {
             return MathUtilities.RoundToLong(microseconds);
-        }
-
-        private static bool IsGreaterOrEqual(double value, long reference)
-        {
-            const double epsilon = 0.001;
-            return value > reference || Math.Abs(value - reference) <= epsilon;
         }
 
         #endregion

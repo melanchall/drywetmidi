@@ -64,10 +64,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const int DupletNotesCount = 2;
         private const int DupletSpaceSize = 3;
 
-        private const int NoTupletNotesCount = 1;
-        private const int NoTupletSpaceSize = 1;
-
-        private const int NoDotsCount = 0;
         private const int SingleDotCount = 1;
         private const int DoubleDotCount = 2;
 
@@ -123,12 +119,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets the numerator of the current <see cref="MusicalTimeSpan"/>.
         /// </summary>
-        public long Numerator { get; } = ZeroTimeSpanNumerator;
+        public long Numerator { get; }
 
         /// <summary>
         /// Gets the denominator of the current <see cref="MusicalTimeSpan"/>.
         /// </summary>
-        public long Denominator { get; } = ZeroTimeSpanDenominator;
+        public long Denominator { get; }
 
         #endregion
 

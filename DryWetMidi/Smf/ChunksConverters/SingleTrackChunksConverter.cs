@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Smf
             {
                 var absoluteTimeDifference = x.AbsoluteTime - y.AbsoluteTime;
                 if (absoluteTimeDifference != 0)
-                    return (int)(absoluteTimeDifference / Math.Abs(absoluteTimeDifference));
+                    return Math.Sign(absoluteTimeDifference);
 
                 //
 
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Smf
                     return -1;
                 else if (xMetaEvent == null && yMetaEvent != null)
                     return 1;
-                else if (xMetaEvent == null && yMetaEvent == null)
+                else if (xMetaEvent == null)
                     return 0;
 
                 //

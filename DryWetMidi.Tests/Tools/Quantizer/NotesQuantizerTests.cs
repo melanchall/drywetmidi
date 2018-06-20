@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;

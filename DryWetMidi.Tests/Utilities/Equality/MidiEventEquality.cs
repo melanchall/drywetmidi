@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     return timeSignatureEvent1.Numerator == timeSignatureEvent2.Numerator &&
                            timeSignatureEvent1.Denominator == timeSignatureEvent2.Denominator &&
                            timeSignatureEvent1.ClocksPerClick == timeSignatureEvent2.ClocksPerClick &&
-                           timeSignatureEvent1.NumberOf32ndNotesPerBeat == timeSignatureEvent2.NumberOf32ndNotesPerBeat;
+                           timeSignatureEvent1.ThirtySecondNotesPerBeat == timeSignatureEvent2.ThirtySecondNotesPerBeat;
                 },
                 [typeof(UnknownMetaEvent)] = (e1, e2) =>
                 {

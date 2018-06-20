@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [OneTimeSetUp]
         public void SetUp()
         {
-            TestContext.AddFormatter<TObject>((object obj) =>
+            TestContext.AddFormatter<TObject>(obj =>
             {
                 var tObj = (TObject)obj;
                 return $"{tObj} (T = {tObj.Time}, L = {tObj.Length})";
