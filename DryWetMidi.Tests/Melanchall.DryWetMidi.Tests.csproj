@@ -49,7 +49,6 @@
     <Compile Include="Common\LengthedObjectMethods.cs" />
     <Compile Include="Common\TimedObjectMethods.cs" />
     <Compile Include="Common\NoteMethods.cs" />
-    <Compile Include="ComplexTests\MergeNotes.cs" />
     <Compile Include="MusicTheory\Scale\ScaleTests.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilitiesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +79,7 @@
     <Compile Include="Tools\LengthedObjectsToolTests.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitterTests.cs" />
     <Compile Include="Tools\MidiFileSplitter\MidiFileSplitterTests.cs" />
+    <Compile Include="Tools\NotesMerger\NotesMergerTests.cs" />
     <Compile Include="Tools\Quantizer\ChordsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\LengthedObjectsQuantizerTests.cs" />
     <Compile Include="Tools\Quantizer\NotesQuantizerTests.cs" />
