@@ -28,7 +28,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="InvalidChannelEventParameterValueException"/>.
         /// </summary>
         public InvalidChannelEventParameterValueException()
-            : base()
         {
         }
 

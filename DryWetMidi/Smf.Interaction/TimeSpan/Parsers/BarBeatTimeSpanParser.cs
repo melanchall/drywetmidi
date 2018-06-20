@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             long ticks;
             if (!ParsingUtilities.ParseNonnegativeLong(match, TicksGroupName, 0, out ticks))
-                return ParsingResult.Error(BeatsIsOutOfRange);
+                return ParsingResult.Error(TicksIsOutOfRange);
 
             timeSpan = new BarBeatTimeSpan(bars, beats, ticks);
             return ParsingResult.Parsed;

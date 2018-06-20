@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [OneTimeSetUp]
         public void SetUp()
         {
-            TestContext.AddFormatter<ITimedObject>((object obj) =>
+            TestContext.AddFormatter<ITimedObject>(obj =>
             {
                 var timedObject = (ITimedObject)obj;
                 var lengthedObject = obj as ILengthedObject;

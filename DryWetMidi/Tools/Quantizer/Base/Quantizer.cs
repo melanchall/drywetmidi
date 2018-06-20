@@ -92,12 +92,13 @@ namespace Melanchall.DryWetMidi.Tools
         private static IEnumerable<long> GetGridTimes(IGrid grid, long lastTime, TempoMap tempoMap)
         {
             var times = grid.GetTimes(tempoMap);
-            var enumerator = times.GetEnumerator();
+            using (var enumerator = times.GetEnumerator())
+            {
+                while (enumerator.MoveNext() && enumerator.Current < lastTime)
+                    yield return enumerator.Current;
 
-            while (enumerator.MoveNext() && enumerator.Current < lastTime)
                 yield return enumerator.Current;
-
-            yield return enumerator.Current;
+            }
         }
 
         private static QuantizedTime FindNearestTime(IReadOnlyList<long> grid,

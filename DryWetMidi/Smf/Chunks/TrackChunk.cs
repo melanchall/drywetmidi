@@ -243,7 +243,6 @@ namespace Melanchall.DryWetMidi.Smf
         private void ProcessEvents(WritingSettings settings, Action<IEventWriter, MidiEvent, bool> eventHandler)
         {
             byte? runningStatus = null;
-            var writeStatusByte = true;
 
             var skipSetTempo = true;
             var skipKeySignature = true;
@@ -287,6 +286,7 @@ namespace Melanchall.DryWetMidi.Smf
 
                 IEventWriter eventWriter = EventWriterFactory.GetWriter(eventToWrite);
 
+                var writeStatusByte = true;
                 if (eventToWrite is ChannelEvent)
                 {
                     var statusByte = eventWriter.GetStatusByte(eventToWrite);
@@ -294,10 +294,7 @@ namespace Melanchall.DryWetMidi.Smf
                     runningStatus = statusByte;
                 }
                 else
-                {
                     runningStatus = null;
-                    writeStatusByte = true;
-                }
 
                 //
 
@@ -349,7 +346,7 @@ namespace Melanchall.DryWetMidi.Smf
                     if (timeSignatureEvent.Numerator == TimeSignatureEvent.DefaultNumerator &&
                         timeSignatureEvent.Denominator == TimeSignatureEvent.DefaultDenominator &&
                         timeSignatureEvent.ClocksPerClick == TimeSignatureEvent.DefaultClocksPerClick &&
-                        timeSignatureEvent.NumberOf32ndNotesPerBeat == TimeSignatureEvent.Default32ndNotesPerBeat)
+                        timeSignatureEvent.ThirtySecondNotesPerBeat == TimeSignatureEvent.DefaultThirtySecondNotesPerBeat)
                         return true;
 
                     skip = false;

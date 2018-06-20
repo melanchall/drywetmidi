@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Smf.Interaction
+﻿namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     internal sealed class AddPatternAction : IPatternAction
     {

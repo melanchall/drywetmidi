@@ -28,7 +28,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="InvalidMetaEventParameterValueException"/>.
         /// </summary>
         public InvalidMetaEventParameterValueException()
-            : base()
         {
         }
 
