@@ -40,7 +40,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new[] { "0; 0:2:1" },
                     noteNumber,
                     channel,
-                    tempoMap));
+                    tempoMap),
+                tempoMap);
         }
 
         [Test]
@@ -76,7 +77,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 channel,
                 tempoMap);
 
-            Merge(inputNotes1.Concat(inputNotes2), expectedNotes1.Concat(expectedNotes2));
+            Merge(inputNotes1.Concat(inputNotes2),
+                  expectedNotes1.Concat(expectedNotes2),
+                  tempoMap);
         }
 
         [Test]
@@ -113,7 +116,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 channel2,
                 tempoMap);
 
-            Merge(inputNotes1.Concat(inputNotes2), expectedNotes1.Concat(expectedNotes2));
+            Merge(inputNotes1.Concat(inputNotes2),
+                  expectedNotes1.Concat(expectedNotes2),
+                  tempoMap);
         }
 
         [Test]
@@ -165,7 +170,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 tempoMap);
 
             Merge(inputNotes1.Concat(inputNotes2).Concat(inputNotes3),
-                  expectedNotes1.Concat(expectedNotes2).Concat(expectedNotes3));
+                  expectedNotes1.Concat(expectedNotes2).Concat(expectedNotes3),
+                  tempoMap);
         }
 
         [Test]
@@ -238,6 +244,111 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Merge_VelocityMergingPolicy(VelocityMergingPolicy.Average, (SevenBitNumber)75);
         }
 
+        [Test]
+        [Description("Merge notes using metric tolerance.")]
+        public void Merge_Tolerance_Metric()
+        {
+            var noteNumber = (SevenBitNumber)100;
+            var channel = (FourBitNumber)10;
+            var tempoMap = TempoMap.Default;
+
+            var inputNotes = CreateNotes(
+                new[] { "0; 0:0:2", "0:0:8; 0:1:0" },
+                noteNumber,
+                channel,
+                tempoMap);
+
+            Merge(
+                inputNotes,
+                CreateNotes(
+                    new[] { "0; 0:1:8" },
+                    noteNumber,
+                    channel,
+                    tempoMap),
+                tempoMap,
+                tolerance: new MetricTimeSpan(0, 0, 10));
+
+            Merge(
+                inputNotes,
+                CreateNotes(
+                    new[] { "0; 0:0:2", "0:0:8; 0:1:0" },
+                    noteNumber,
+                    channel,
+                    tempoMap),
+                tempoMap,
+                tolerance: new MetricTimeSpan(0, 0, 2));
+        }
+
+        [Test]
+        [Description("Merge notes using MIDI tolerance.")]
+        public void Merge_Tolerance_Midi()
+        {
+            var noteNumber = (SevenBitNumber)100;
+            var channel = (FourBitNumber)10;
+            var tempoMap = TempoMap.Default;
+
+            var inputNotes = CreateNotes(
+                new[] { "0; 200", "800; 1000" },
+                noteNumber,
+                channel,
+                tempoMap);
+
+            Merge(
+                inputNotes,
+                CreateNotes(
+                    new[] { "0; 1800" },
+                    noteNumber,
+                    channel,
+                    tempoMap),
+                tempoMap,
+                tolerance: new MidiTimeSpan(1000));
+
+            Merge(
+                inputNotes,
+                CreateNotes(
+                    new[] { "0; 200", "800; 1000" },
+                    noteNumber,
+                    channel,
+                    tempoMap),
+                tempoMap,
+                tolerance: new MidiTimeSpan(200));
+        }
+
+        [Test]
+        [Description("Merge notes using musical tolerance.")]
+        public void Merge_Tolerance_Musical()
+        {
+            var noteNumber = (SevenBitNumber)100;
+            var channel = (FourBitNumber)10;
+            var tempoMap = TempoMap.Default;
+
+            var inputNotes = CreateNotes(
+                new[] { "0; 1/8", "1/2; 1/1" },
+                noteNumber,
+                channel,
+                tempoMap);
+
+            Merge(
+                inputNotes,
+                CreateNotes(
+                    new[] { "0; 3/2" },
+                    noteNumber,
+                    channel,
+                    tempoMap),
+                tempoMap,
+                tolerance: MusicalTimeSpan.Whole);
+
+            Merge(
+                inputNotes,
+                CreateNotes(
+                    new[] { "0; 1/8", "1/2; 1/1" },
+                    noteNumber,
+                    channel,
+                    tempoMap),
+                tempoMap,
+                tolerance: MusicalTimeSpan.Eighth);
+        }
+
         #endregion
 
         #region Private methods
@@ -266,6 +377,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Merge(
                 inputNotes,
                 expectedNotes,
+                tempoMap,
                 velocityMergingPolicy);
         }
 
@@ -293,20 +405,25 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Merge(
                 inputNotes,
                 expectedNotes,
+                tempoMap,
                 offVelocityMergingPolicy: offVelocityMergingPolicy);
         }
 
         private void Merge(IEnumerable<Note> inputNotes,
                            IEnumerable<Note> expectedNotes,
+                           TempoMap tempoMap,
                            VelocityMergingPolicy velocityMergingPolicy = VelocityMergingPolicy.First,
-                           VelocityMergingPolicy offVelocityMergingPolicy = VelocityMergingPolicy.Last)
+                           VelocityMergingPolicy offVelocityMergingPolicy = VelocityMergingPolicy.Last,
+                           ITimeSpan tolerance = null)
         {
             var actualNotes = new NotesMerger().Merge(
                 inputNotes,
+                tempoMap,
                 new NotesMergingSettings
                 {
                     VelocityMergingPolicy = velocityMergingPolicy,
-                    OffVelocityMergingPolicy = offVelocityMergingPolicy
+                    OffVelocityMergingPolicy = offVelocityMergingPolicy,
+                    Tolerance = tolerance ?? new MidiTimeSpan()
                 });
 
             ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),

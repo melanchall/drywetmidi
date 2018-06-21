@@ -84,13 +84,14 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public IEnumerable<Note> Merge(IEnumerable<Note> notes, NotesMergingSettings settings = null)
+        public IEnumerable<Note> Merge(IEnumerable<Note> notes, TempoMap tempoMap, NotesMergingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
             settings = settings ?? new NotesMergingSettings();
 
             var currentNotes = new Dictionary<FourBitNumber, Dictionary<SevenBitNumber, NoteHolder>>();
+            var toleranceType = settings.Tolerance.GetType();
 
             foreach (var note in notes.Where(n => n != null).OrderBy(n => n.Time))
             {
@@ -109,7 +110,13 @@ namespace Melanchall.DryWetMidi.Tools
                 }
 
                 var currentEndTime = currentNoteHolder.EndTime;
-                if (note.Time <= currentEndTime)
+                var distance = Math.Max(0, note.Time - currentEndTime);
+                var convertedDistance = LengthConverter.ConvertTo((MidiTimeSpan)distance,
+                                                                  toleranceType,
+                                                                  currentEndTime,
+                                                                  tempoMap);
+
+                if (convertedDistance.CompareTo(settings.Tolerance) <= 0)
                 {
                     var endTime = Math.Max(note.Time + note.Length, currentEndTime);
                     currentNoteHolder.EndTime = endTime;
@@ -130,7 +137,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static NoteHolder CreateNoteHolder(Note note, NotesMergingSettings settings)
         {
-            return new NoteHolder(note,
+            return new NoteHolder(note.Clone(),
                                   VelocityMergers[settings.VelocityMergingPolicy](),
                                   VelocityMergers[settings.OffVelocityMergingPolicy]());
         }
