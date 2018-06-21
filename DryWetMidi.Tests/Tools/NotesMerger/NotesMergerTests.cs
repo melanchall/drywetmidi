@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    // TODO: test velocities merging
     [TestFixture]
     public sealed class NotesMergerTests : LengthedObjectsToolTests<Note>
     {
@@ -169,13 +168,147 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                   expectedNotes1.Concat(expectedNotes2).Concat(expectedNotes3));
         }
 
+        [Test]
+        [Description("Merge notes using First velocity merging policy.")]
+        public void Merge_VelocityMergingPolicy_First()
+        {
+            Merge_VelocityMergingPolicy(VelocityMergingPolicy.First, (SevenBitNumber)100);
+        }
+
+        [Test]
+        [Description("Merge notes using Last velocity merging policy.")]
+        public void Merge_VelocityMergingPolicy_Last()
+        {
+            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Last, (SevenBitNumber)50);
+        }
+
+        [Test]
+        [Description("Merge notes using Min velocity merging policy.")]
+        public void Merge_VelocityMergingPolicy_Min()
+        {
+            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Min, (SevenBitNumber)50);
+        }
+
+        [Test]
+        [Description("Merge notes using Max velocity merging policy.")]
+        public void Merge_VelocityMergingPolicy_Max()
+        {
+            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Max, (SevenBitNumber)100);
+        }
+
+        [Test]
+        [Description("Merge notes using Average velocity merging policy.")]
+        public void Merge_VelocityMergingPolicy_Average()
+        {
+            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Average, (SevenBitNumber)75);
+        }
+
+        [Test]
+        [Description("Merge notes using First off velocity merging policy.")]
+        public void Merge_OffVelocityMergingPolicy_First()
+        {
+            Merge_OffVelocityMergingPolicy(VelocityMergingPolicy.First, (SevenBitNumber)100);
+        }
+
+        [Test]
+        [Description("Merge notes using Last off velocity merging policy.")]
+        public void Merge_OffVelocityMergingPolicy_Last()
+        {
+            Merge_OffVelocityMergingPolicy(VelocityMergingPolicy.Last, (SevenBitNumber)50);
+        }
+
+        [Test]
+        [Description("Merge notes using Min off velocity merging policy.")]
+        public void Merge_OffVelocityMergingPolicy_Min()
+        {
+            Merge_OffVelocityMergingPolicy(VelocityMergingPolicy.Min, (SevenBitNumber)50);
+        }
+
+        [Test]
+        [Description("Merge notes using Max off velocity merging policy.")]
+        public void Merge_OffVelocityMergingPolicy_Max()
+        {
+            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Max, (SevenBitNumber)100);
+        }
+
+        [Test]
+        [Description("Merge notes using Average off velocity merging policy.")]
+        public void Merge_OffVelocityMergingPolicy_Average()
+        {
+            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Average, (SevenBitNumber)75);
+        }
+
         #endregion
 
         #region Private methods
 
-        private void Merge(IEnumerable<Note> inputNotes, IEnumerable<Note> expectedNotes)
+        private void Merge_VelocityMergingPolicy(VelocityMergingPolicy velocityMergingPolicy, SevenBitNumber expectedVelocity)
         {
-            var actualNotes = inputNotes.Merge();
+            var noteNumber = (SevenBitNumber)100;
+            var channel = (FourBitNumber)10;
+            var tempoMap = TempoMap.Default;
+
+            var inputNotes = CreateNotes(
+                new[] { "0; 0:0:2", "0:0:1; 0:2:0" },
+                noteNumber,
+                channel,
+                tempoMap).ToArray();
+            inputNotes[0].Velocity = (SevenBitNumber)100;
+            inputNotes[1].Velocity = (SevenBitNumber)50;
+
+            var expectedNotes = CreateNotes(
+                new[] { "0; 0:2:1" },
+                noteNumber,
+                channel,
+                tempoMap).ToArray();
+            expectedNotes[0].Velocity = expectedVelocity;
+
+            Merge(
+                inputNotes,
+                expectedNotes,
+                velocityMergingPolicy);
+        }
+
+        private void Merge_OffVelocityMergingPolicy(VelocityMergingPolicy offVelocityMergingPolicy, SevenBitNumber expectedVelocity)
+        {
+            var noteNumber = (SevenBitNumber)100;
+            var channel = (FourBitNumber)10;
+            var tempoMap = TempoMap.Default;
+
+            var inputNotes = CreateNotes(
+                new[] { "0; 0:0:2", "0:0:1; 0:2:0" },
+                noteNumber,
+                channel,
+                tempoMap).ToArray();
+            inputNotes[0].OffVelocity = (SevenBitNumber)100;
+            inputNotes[1].OffVelocity = (SevenBitNumber)50;
+
+            var expectedNotes = CreateNotes(
+                new[] { "0; 0:2:1" },
+                noteNumber,
+                channel,
+                tempoMap).ToArray();
+            expectedNotes[0].OffVelocity = expectedVelocity;
+
+            Merge(
+                inputNotes,
+                expectedNotes,
+                offVelocityMergingPolicy: offVelocityMergingPolicy);
+        }
+
+        private void Merge(IEnumerable<Note> inputNotes,
+                           IEnumerable<Note> expectedNotes,
+                           VelocityMergingPolicy velocityMergingPolicy = VelocityMergingPolicy.First,
+                           VelocityMergingPolicy offVelocityMergingPolicy = VelocityMergingPolicy.Last)
+        {
+            var actualNotes = new NotesMerger().Merge(
+                inputNotes,
+                new NotesMergingSettings
+                {
+                    VelocityMergingPolicy = velocityMergingPolicy,
+                    OffVelocityMergingPolicy = offVelocityMergingPolicy
+                });
+
             ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),
                                                     actualNotes.OrderBy(n => n.Time));
         }
