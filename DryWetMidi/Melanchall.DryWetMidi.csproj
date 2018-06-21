@@ -268,6 +268,14 @@
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
     <Compile Include="Tools\MidiFileSplitter\MidiFileSplitter.cs" />
     <Compile Include="Tools\NotesMerger\NotesMerger.cs" />
+    <Compile Include="Tools\NotesMerger\NotesMergingSettings.cs" />
+    <Compile Include="Tools\NotesMerger\VelocityMergers\AverageVelocityMerger.cs" />
+    <Compile Include="Tools\NotesMerger\VelocityMergers\FirstVelocityMerger.cs" />
+    <Compile Include="Tools\NotesMerger\VelocityMergers\LastVelocityMerger.cs" />
+    <Compile Include="Tools\NotesMerger\VelocityMergers\MaxVelocityMerger.cs" />
+    <Compile Include="Tools\NotesMerger\VelocityMergers\MinVelocityMerger.cs" />
+    <Compile Include="Tools\NotesMerger\VelocityMergers\VelocityMerger.cs" />
+    <Compile Include="Tools\NotesMerger\VelocityMergingPolicy.cs" />
     <Compile Include="Tools\Quantizer\Base\QuantizedTime.cs" />
     <Compile Include="Tools\Quantizer\Base\QuantizingSettings.cs" />
     <Compile Include="Tools\Quantizer\ChordsQuantizer.cs" />
