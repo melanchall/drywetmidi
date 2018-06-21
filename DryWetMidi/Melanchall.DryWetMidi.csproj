@@ -268,6 +268,7 @@
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
     <Compile Include="Tools\MidiFileSplitter\MidiFileSplitter.cs" />
     <Compile Include="Tools\NotesMerger\NotesMerger.cs" />
+    <Compile Include="Tools\NotesMerger\NotesMergerUtilities.cs" />
     <Compile Include="Tools\NotesMerger\NotesMergingSettings.cs" />
     <Compile Include="Tools\NotesMerger\VelocityMergers\AverageVelocityMerger.cs" />
     <Compile Include="Tools\NotesMerger\VelocityMergers\FirstVelocityMerger.cs" />
