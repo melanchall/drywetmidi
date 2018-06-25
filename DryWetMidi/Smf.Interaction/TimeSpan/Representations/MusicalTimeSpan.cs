@@ -101,12 +101,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="denominator">The denominator of fraction of the whole note's length.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="numerator"/> is negative. -or-
         /// <paramref name="denominator"/> is zero or negative.</exception>
-        public MusicalTimeSpan(long numerator, long denominator)
+        public MusicalTimeSpan(long numerator, long denominator, bool simplify = true)
         {
             ThrowIfArgument.IsNegative(nameof(numerator), numerator, "Numerator is negative.");
             ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is zero or negative.");
 
-            var greatestCommonDivisor = MathUtilities.GreatestCommonDivisor(numerator, denominator);
+            var greatestCommonDivisor = simplify
+                ? MathUtilities.GreatestCommonDivisor(numerator, denominator)
+                : 1;
 
             Numerator = numerator / greatestCommonDivisor;
             Denominator = denominator / greatestCommonDivisor;
@@ -206,6 +208,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new DivideByZeroException("Dividing by zero time span.");
 
             return (double)Numerator * timeSpan.Denominator / (Denominator * timeSpan.Numerator);
+        }
+
+        public MusicalTimeSpan ChangeDenominator(long denominator)
+        {
+            ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is zero or negative.");
+
+            var numerator = MathUtilities.RoundToLong((double)denominator / Denominator * Numerator);
+            return new MusicalTimeSpan(numerator, denominator, false);
         }
 
         /// <summary>
