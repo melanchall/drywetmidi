@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public void SetLength(TObject obj, ITimeSpan length, ITimeSpan time, TempoMap tempoMap)
         {
             var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
-            obj.Length = LengthConverter.ConvertFrom(length, convertedTime, tempoMap);
+            SetLength(obj, LengthConverter.ConvertFrom(length, convertedTime, tempoMap));
         }
 
         public TObject Create(ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
@@ -41,6 +41,8 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             CollectionAssert.AreEqual(expected, actual, Comparer);
         }
+
+        public abstract void SetLength(TObject obj, long length);
 
         #endregion
     }

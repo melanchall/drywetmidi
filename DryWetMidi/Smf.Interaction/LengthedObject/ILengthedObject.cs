@@ -6,8 +6,8 @@
     public interface ILengthedObject : ITimedObject
     {
         /// <summary>
-        /// Gets or sets length of an object.
+        /// Gets length of an object.
         /// </summary>
-        long Length { get; set; }
+        long Length { get; }
     }
 }
