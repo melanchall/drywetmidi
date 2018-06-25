@@ -6,8 +6,8 @@
     public interface ITimedObject
     {
         /// <summary>
-        /// Gets or sets start time of an object.
+        /// Gets start time of an object.
         /// </summary>
-        long Time { get; set; }
+        long Time { get; }
     }
 }
