@@ -90,22 +90,17 @@ namespace Melanchall.DryWetMidi.Tools
 
             settings = settings ?? new NotesMergingSettings();
 
-            var currentNotes = new Dictionary<FourBitNumber, Dictionary<SevenBitNumber, NoteHolder>>();
+            var currentNotes = new Dictionary<ChannelAndNoteNumber, NoteHolder>();
             var toleranceType = settings.Tolerance.GetType();
 
             foreach (var note in notes.Where(n => n != null).OrderBy(n => n.Time))
             {
-                var channel = note.Channel;
-                var noteNumber = note.NoteNumber;
-
-                Dictionary<SevenBitNumber, NoteHolder> currentNotesByNoteNumber;
-                if (!currentNotes.TryGetValue(channel, out currentNotesByNoteNumber))
-                    currentNotes.Add(channel, currentNotesByNoteNumber = new Dictionary<SevenBitNumber, NoteHolder>());
+                var channelAndNoteNumber = new ChannelAndNoteNumber(note.Channel, note.NoteNumber);
 
                 NoteHolder currentNoteHolder;
-                if (!currentNotesByNoteNumber.TryGetValue(noteNumber, out currentNoteHolder))
+                if (!currentNotes.TryGetValue(channelAndNoteNumber, out currentNoteHolder))
                 {
-                    currentNotesByNoteNumber.Add(noteNumber, currentNoteHolder = CreateNoteHolder(note, settings));
+                    currentNotes.Add(channelAndNoteNumber, currentNoteHolder = CreateNoteHolder(note, settings));
                     continue;
                 }
 
@@ -124,12 +119,12 @@ namespace Melanchall.DryWetMidi.Tools
                 }
                 else
                 {
-                    yield return currentNotesByNoteNumber[noteNumber].GetResultNote();
-                    currentNotesByNoteNumber[noteNumber] = CreateNoteHolder(note, settings);
+                    yield return currentNotes[channelAndNoteNumber].GetResultNote();
+                    currentNotes[channelAndNoteNumber] = CreateNoteHolder(note, settings);
                 }
             }
 
-            foreach (var note in currentNotes.SelectMany(kv => kv.Value.Values))
+            foreach (var note in currentNotes.Values)
             {
                 yield return note.GetResultNote();
             }

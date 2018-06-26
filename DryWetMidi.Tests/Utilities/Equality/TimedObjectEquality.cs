@@ -48,6 +48,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 if (chord != null)
                     return ChordEquality.AreEqual(chord, timedObject2 as Chord);
 
+                var rest = timedObject1 as Rest;
+                if (rest != null)
+                    return RestEquality.AreEqual(rest, timedObject2 as Rest);
+
                 throw new NotImplementedException($"Comparing of {timedObject1} and {timedObject2} is not implemented.");
             }
 
