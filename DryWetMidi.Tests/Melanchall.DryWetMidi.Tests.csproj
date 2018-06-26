@@ -60,6 +60,7 @@
     <Compile Include="Smf.Interaction\NotesManager\NoteTestUtilities.cs" />
     <Compile Include="MusicTheory\Interval\IntervalTests.cs" />
     <Compile Include="MusicTheory\Note\NoteTests.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\Utilities\GetNotesAndRestsUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\NotesManager\Utilities\MakeNotesUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\NotesManager\Utilities\ResizeNotesUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\Pattern\PatternTests.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Utilities\Equality\MidiChunkEquality.cs" />
     <Compile Include="Utilities\Equality\MidiFileEquality.cs" />
     <Compile Include="Utilities\Equality\NoteEquality.cs" />
+    <Compile Include="Utilities\Equality\RestEquality.cs" />
     <Compile Include="Utilities\Equality\TimedEventEquality.cs" />
     <Compile Include="Utilities\Equality\TimedObjectEquality.cs" />
     <Compile Include="Utilities\TestFilesProvider.cs" />

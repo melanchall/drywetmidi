@@ -57,6 +57,9 @@
     <Compile Include="MusicTheory\Scale\ScaleParser.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilities.cs" />
     <Compile Include="Smf.Interaction\LengthedObject\SplittedLengthedObject.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\Utilities\GetNotesAndRests\GetNotesAndRestsUtilities.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\Utilities\GetNotesAndRests\Rest.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\Utilities\GetNotesAndRests\RestSeparationPolicy.cs" />
     <Compile Include="Smf.Interaction\NotesManager\Utilities\MakeNotesUtilities.cs" />
     <Compile Include="Smf.Interaction\NotesManager\Utilities\ResizeNotesUtilities.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidi2ProgramAction.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanType.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanUtilities.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MathOperation.cs" />
+    <Compile Include="Smf.Interaction\Utilities\ChannelAndNoteNumber.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfLengthArgument.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfNotesTolerance.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfTimeArgument.cs" />
