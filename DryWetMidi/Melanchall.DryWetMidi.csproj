@@ -267,11 +267,15 @@
     <Compile Include="Tools\Common\TimeProcessing\TimeProcessingInstruction.cs" />
     <Compile Include="Tools\Common\TimeProcessing\TimeProcessingAction.cs" />
     <Compile Include="Tools\Common\TimeSetter.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFileCsv\MidiFileCsvLayout.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFileCsv\MidiFileToCsvConverter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\Utilities\ChordsSplitterUtilities.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\Base\LengthedObjectsSplitter.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\Utilities\NotesSplitterUtilities.cs" />
     <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitter.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFileCsv\MidiFileCsvConversionSettings.cs" />
+    <Compile Include="Tools\CsvConverter\CsvConverter.cs" />
     <Compile Include="Tools\MidiFileSplitter\MidiFileSplitter.cs" />
     <Compile Include="Tools\NotesMerger\NotesMerger.cs" />
     <Compile Include="Tools\NotesMerger\NotesMergerUtilities.cs" />
