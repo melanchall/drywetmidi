@@ -90,17 +90,17 @@ namespace Melanchall.DryWetMidi.Tools
 
             settings = settings ?? new NotesMergingSettings();
 
-            var currentNotes = new Dictionary<ChannelAndNoteNumber, NoteHolder>();
+            var currentNotes = new Dictionary<NoteId, NoteHolder>();
             var toleranceType = settings.Tolerance.GetType();
 
             foreach (var note in notes.Where(n => n != null).OrderBy(n => n.Time))
             {
-                var channelAndNoteNumber = new ChannelAndNoteNumber(note.Channel, note.NoteNumber);
+                var noteId = note.GetId();
 
                 NoteHolder currentNoteHolder;
-                if (!currentNotes.TryGetValue(channelAndNoteNumber, out currentNoteHolder))
+                if (!currentNotes.TryGetValue(noteId, out currentNoteHolder))
                 {
-                    currentNotes.Add(channelAndNoteNumber, currentNoteHolder = CreateNoteHolder(note, settings));
+                    currentNotes.Add(noteId, currentNoteHolder = CreateNoteHolder(note, settings));
                     continue;
                 }
 
@@ -119,8 +119,8 @@ namespace Melanchall.DryWetMidi.Tools
                 }
                 else
                 {
-                    yield return currentNotes[channelAndNoteNumber].GetResultNote();
-                    currentNotes[channelAndNoteNumber] = CreateNoteHolder(note, settings);
+                    yield return currentNotes[noteId].GetResultNote();
+                    currentNotes[noteId] = CreateNoteHolder(note, settings);
                 }
             }
 

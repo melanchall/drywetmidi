@@ -2,11 +2,11 @@
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    internal sealed class ChannelAndNoteNumber
+    internal sealed class NoteId
     {
         #region Constructor
 
-        public ChannelAndNoteNumber(FourBitNumber channel, SevenBitNumber noteNumber)
+        public NoteId(FourBitNumber channel, SevenBitNumber noteNumber)
         {
             Channel = channel;
             NoteNumber = noteNumber;
@@ -29,12 +29,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(obj, this))
                 return true;
 
-            var channelAndNoteNumber = obj as ChannelAndNoteNumber;
+            var noteId = obj as NoteId;
             if (ReferenceEquals(obj, null))
                 return false;
 
-            return Channel == channelAndNoteNumber.Channel &&
-                   NoteNumber == channelAndNoteNumber.NoteNumber;
+            return Channel == noteId.Channel &&
+                   NoteNumber == noteId.NoteNumber;
         }
 
         public override int GetHashCode()
