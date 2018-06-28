@@ -43,6 +43,40 @@ namespace Melanchall.DryWetMidi.Tools
                 });
         }
 
+        public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            var notesIds = new HashSet<NoteId>(midiFile.GetTimedEvents()
+                                                       .Select(e => e.Event)
+                                                       .OfType<NoteEvent>()
+                                                       .Select(e => e.GetId()));
+            var timedEventsMap = notesIds.ToDictionary(cn => cn,
+                                                       cn => new List<TimedEvent>());
+
+            foreach (var timedEvent in midiFile.GetTimedEvents())
+            {
+                var noteEvent = timedEvent.Event as NoteEvent;
+                if (noteEvent != null)
+                {
+                    timedEventsMap[noteEvent.GetId()].Add(timedEvent);
+                    continue;
+                }
+
+                foreach (var timedObjects in timedEventsMap.Values)
+                {
+                    timedObjects.Add(timedEvent);
+                }
+            }
+
+            foreach (var timedObjects in timedEventsMap.Values)
+            {
+                var file = timedObjects.ToFile();
+                file.TimeDivision = midiFile.TimeDivision.Clone();
+                yield return file;
+            }
+        }
+
         #endregion
     }
 }

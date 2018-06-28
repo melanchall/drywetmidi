@@ -112,7 +112,8 @@
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanType.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanUtilities.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MathOperation.cs" />
-    <Compile Include="Smf.Interaction\Utilities\ChannelAndNoteNumber.cs" />
+    <Compile Include="Smf.Interaction\Utilities\NoteId\NoteId.cs" />
+    <Compile Include="Smf.Interaction\Utilities\NoteId\NoteIdUtilities.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfLengthArgument.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfNotesTolerance.cs" />
     <Compile Include="Smf.Interaction\Utilities\ThrowIf\ThrowIfTimeArgument.cs" />
