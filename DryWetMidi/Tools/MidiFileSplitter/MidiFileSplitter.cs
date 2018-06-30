@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tools
             var notesIds = new HashSet<NoteId>(midiFile.GetTimedEvents()
                                                        .Select(e => e.Event)
                                                        .OfType<NoteEvent>()
-                                                       .Select(e => e.GetId()));
+                                                       .Select(e => e.GetNoteId()));
             var timedEventsMap = notesIds.ToDictionary(cn => cn,
                                                        cn => new List<TimedEvent>());
 
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var noteEvent = timedEvent.Event as NoteEvent;
                 if (noteEvent != null)
                 {
-                    timedEventsMap[noteEvent.GetId()].Add(timedEvent);
+                    timedEventsMap[noteEvent.GetNoteId()].Add(timedEvent);
                     continue;
                 }
 
@@ -74,6 +74,55 @@ namespace Melanchall.DryWetMidi.Tools
                 var file = timedObjects.ToFile();
                 file.TimeDivision = midiFile.TimeDivision.Clone();
                 yield return file;
+            }
+        }
+
+        public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SplittingMidiFileByGridSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsNull(nameof(grid), grid);
+
+            if (!midiFile.GetEvents().Any())
+                yield break;
+
+            settings = settings ?? new SplittingMidiFileByGridSettings();
+
+            if (settings.SplitNotes)
+            {
+                midiFile = midiFile.Clone();
+                midiFile.SplitNotesByGrid(grid);
+            }
+
+            var startTime = 0L;
+            var tempoMap = midiFile.GetTempoMap();
+
+            using (var operation = SplitMidiFileByGridOperation.Create(midiFile))
+            {
+                foreach (var time in grid.GetTimes(tempoMap))
+                {
+                    if (time == 0)
+                        continue;
+
+                    var timedEvents = operation.GetTimedEvents(startTime, time, settings.PreserveTimes);
+                    var trackChunks = timedEvents.Select(e => e.ToTrackChunk())
+                                                 .Where(c => settings.PreserveTrackChunks || c.Events.Any())
+                                                 .ToList();
+
+                    if (trackChunks.Any() || !settings.RemoveEmptyFiles)
+                    {
+                        var file = new MidiFile(trackChunks)
+                        {
+                            TimeDivision = midiFile.TimeDivision.Clone()
+                        };
+
+                        yield return file;
+                    }
+
+                    if (operation.AllEventsProcessed)
+                        break;
+
+                    startTime = time;
+                }
             }
         }
 

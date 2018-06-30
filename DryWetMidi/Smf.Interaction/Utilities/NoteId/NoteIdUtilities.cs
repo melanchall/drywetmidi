@@ -4,12 +4,12 @@
     {
         #region Methods
 
-        public static NoteId GetId(this Note note)
+        public static NoteId GetNoteId(this Note note)
         {
             return new NoteId(note.Channel, note.NoteNumber);
         }
 
-        public static NoteId GetId(this NoteEvent noteEvent)
+        public static NoteId GetNoteId(this NoteEvent noteEvent)
         {
             return new NoteId(noteEvent.Channel, noteEvent.NoteNumber);
         }

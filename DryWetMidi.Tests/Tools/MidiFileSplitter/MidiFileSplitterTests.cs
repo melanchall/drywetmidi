@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var midiFile = new MidiFile();
 
-            Assert.IsTrue(!midiFile.SplitByNotes().Any(), "Empty file splitting produced non-empty result.");
+            Assert.IsFalse(midiFile.SplitByNotes().Any(), "Empty file splitting produced non-empty result.");
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new SetTempoEvent(100000),
                     new TextEvent()));
 
-            Assert.IsTrue(!midiFile.SplitByNotes().Any(), "Empty file splitting produced non-empty result.");
+            Assert.IsFalse(midiFile.SplitByNotes().Any(), "Empty file splitting produced non-empty result.");
         }
 
         [Test]
@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                                 .SelectMany(c => c.Events)
                                                 .OfType<NoteEvent>()
                                                 .ToList();
-                    var notesIds = new HashSet<NoteId>(noteEvents.Select(n => n.GetId()));
+                    var notesIds = new HashSet<NoteId>(noteEvents.Select(n => n.GetNoteId()));
 
                     allNoteEventsCount += noteEvents.Count;
                     foreach (var noteId in notesIds)
@@ -197,7 +197,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                                  .OfType<NoteEvent>()
                                                  .ToList();
                 var originalNoteEventsCount = originalNoteEvents.Count();
-                var originalNotesIds = new HashSet<NoteId>(originalNoteEvents.Select(e => e.GetId()));
+                var originalNotesIds = new HashSet<NoteId>(originalNoteEvents.Select(e => e.GetNoteId()));
 
                 Assert.AreEqual(originalNoteEventsCount,
                                 allNoteEventsCount,
@@ -209,6 +209,323 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         #endregion
+
+        #region SplitByGrid
+
+        [Test]
+        [Description("Split empty MIDI file by grid.")]
+        public void SplitByGrid_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            var grid = new SteppedGrid(MusicalTimeSpan.Eighth);
+
+            Assert.IsFalse(midiFile.SplitByGrid(grid).Any(),
+                           "Empty file splitting produced non-empty result.");
+        }
+
+        [Test]
+        [Description("Split MIDI file by grid: don't split notes, don't preserve times.")]
+        public void SplitByGrid_DontSplitNotes_DontPreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var grid = new SteppedGrid((MidiTimeSpan)100);
+            var settings = new SplittingMidiFileByGridSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+
+            CompareTimedEvents(
+                newFiles[0].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90)
+                },
+                "First file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[1].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),
+                },
+                "Second file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[2].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new TextEvent("Test"), 0)
+                },
+                "Third file contains invalid events.");
+        }
+
+        [Test]
+        [Description("Split MIDI file by grid: don't split notes, preserve times.")]
+        public void SplitByGrid_DontSplitNotes_PreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new PitchBendEvent(1000), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var grid = new SteppedGrid((MidiTimeSpan)100);
+            var settings = new SplittingMidiFileByGridSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            };
+
+            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+
+            CompareTimedEvents(
+                newFiles[0].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90)
+                },
+                "First file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[1].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200)
+                },
+                "Second file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[2].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90),
+                    new TimedEvent(new PitchBendEvent(1000), 200),
+                    new TimedEvent(new TextEvent("Test"), 200)
+                },
+                "Third file contains invalid events.");
+        }
+
+        [Test]
+        [Description("Split MIDI file by grid: split notes.")]
+        public void SplitByGrid_SplitNotes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var grid = new SteppedGrid((MidiTimeSpan)100);
+            var settings = new SplittingMidiFileByGridSettings
+            {
+                SplitNotes = true,
+                PreserveTimes = false
+            };
+
+            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            Assert.AreEqual(2, newFiles.Count, "New files count is invalid.");
+
+            CompareTimedEvents(
+                newFiles[0].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 100)
+                },
+                "First file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[1].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100)
+                },
+                "Second file contains invalid events.");
+        }
+
+        [TestCase(true, Description = "Split MIDI file by grid removing empty files.")]
+        [TestCase(false, Description = "Split MIDI file by grid keeping empty files.")]
+        public void SplitByGrid_RemoveEmptyFiles(bool removeEmptyFiles)
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 300),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 400)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var grid = new SteppedGrid((MidiTimeSpan)100);
+            var settings = new SplittingMidiFileByGridSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false,
+                RemoveEmptyFiles = removeEmptyFiles
+            };
+
+            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            Assert.AreEqual(removeEmptyFiles ? 2 : 4, newFiles.Count, "New files count is invalid.");
+
+            CompareTimedEvents(
+                newFiles[0].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95),
+                },
+                "First file contains invalid events.");
+
+            if (!removeEmptyFiles)
+            {
+                CompareTimedEvents(
+                    newFiles[1].GetTimedEvents(),
+                    Enumerable.Empty<TimedEvent>(),
+                    "Second file contains invalid events.");
+                CompareTimedEvents(
+                    newFiles[2].GetTimedEvents(),
+                    Enumerable.Empty<TimedEvent>(),
+                    "Third file contains invalid events.");
+            }
+
+            CompareTimedEvents(
+                newFiles[removeEmptyFiles ? 1 : 3].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 0),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100)
+                },
+                "Last file contains invalid events.");
+        }
+
+        [TestCase(true, Description = "Split MIDI file by grid preserving track chunks.")]
+        [TestCase(false, Description = "Split MIDI file by grid without preserving track chunks.")]
+        public void SplitByGrid_PreserveTrackChunks(bool preserveTrackChunks)
+        {
+            var timedEvents1 = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200)
+            };
+
+            var timedEvents2 = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)21, (SevenBitNumber)100), 100),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)21, (SevenBitNumber)100), 200)
+            };
+
+            var midiFile = new MidiFile(
+                timedEvents1.ToTrackChunk(),
+                timedEvents2.ToTrackChunk());
+            var grid = new SteppedGrid((MidiTimeSpan)100);
+            var settings = new SplittingMidiFileByGridSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false,
+                PreserveTrackChunks = preserveTrackChunks
+            };
+
+            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            Assert.AreEqual(2, newFiles.Count, "New files count is invalid.");
+
+            Assert.AreEqual(preserveTrackChunks ? 2 : 1, newFiles[0].GetTrackChunks().Count(), "Track chunks count of the first file is invalid.");
+            CompareTimedEvents(
+                newFiles[0].GetTrackChunks().First().GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95),
+                },
+                "First track chunk of first file contains invalid events.");
+            if (preserveTrackChunks)
+                CompareTimedEvents(
+                    newFiles[0].GetTrackChunks().Last().GetTimedEvents(),
+                    Enumerable.Empty<TimedEvent>(),
+                    "Second track chunk of first file contains invalid events.");
+
+            Assert.AreEqual(2, newFiles[1].GetTrackChunks().Count(), "Track chunks count of the second file is invalid.");
+            CompareTimedEvents(
+                newFiles[1].GetTrackChunks().First().GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 0),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100)
+                },
+                "First track chunk of second file contains invalid events.");
+            CompareTimedEvents(
+                newFiles[1].GetTrackChunks().Last().GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)21, (SevenBitNumber)100), 0),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)21, (SevenBitNumber)100), 100)
+                },
+                "Second track chunk of second file contains invalid events.");
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Private methods
+
+        private static void CompareTimedEvents(
+            IEnumerable<TimedEvent> actualTimedEvents,
+            IEnumerable<TimedEvent> expectedTimedEvents,
+            string message)
+        {
+            Assert.IsTrue(TimedEventEquality.AreEqual(
+                actualTimedEvents,
+                expectedTimedEvents,
+                false),
+                message);
+        }
 
         #endregion
     }
