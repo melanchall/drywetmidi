@@ -249,6 +249,7 @@
     <Compile Include="Smf\Utilities\ControlUtilities.cs" />
     <Compile Include="MusicTheory\Note\NoteName.cs" />
     <Compile Include="Smf\Utilities\IOUtilities.cs" />
+    <Compile Include="Smf\Utilities\MidiFileUtilities.cs" />
     <Compile Include="Smf\Utilities\NoteEventUtilities.cs" />
     <Compile Include="Smf\Utilities\SmfUtilities.cs" />
     <Compile Include="Smf\Utilities\TrackChunkUtilities.cs" />
@@ -278,6 +279,8 @@
     <Compile Include="Tools\CsvConverter\MidiFileCsv\MidiFileCsvConversionSettings.cs" />
     <Compile Include="Tools\CsvConverter\CsvConverter.cs" />
     <Compile Include="Tools\MidiFileSplitter\MidiFileSplitter.cs" />
+    <Compile Include="Tools\MidiFileSplitter\SplittingMidiFileByGridSettings.cs" />
+    <Compile Include="Tools\MidiFileSplitter\SplitMidiFileByGridOperation.cs" />
     <Compile Include="Tools\NotesMerger\NotesMerger.cs" />
     <Compile Include="Tools\NotesMerger\NotesMergerUtilities.cs" />
     <Compile Include="Tools\NotesMerger\NotesMergingSettings.cs" />

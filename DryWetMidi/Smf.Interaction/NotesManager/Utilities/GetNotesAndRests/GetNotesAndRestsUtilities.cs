@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                             true);
                 case RestSeparationPolicy.SeparateByChannelAndNoteNumber:
                     return GetNotesAndRests(notes,
-                                            n => n.GetId(),
+                                            n => n.GetNoteId(),
                                             true,
                                             true);
             }
