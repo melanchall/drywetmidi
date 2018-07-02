@@ -23,7 +23,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var timeSignatureLine = tempoMap.TimeSignature;
             var timeSignatureChanges = timeSignatureLine
-                .Values
                 .Where(v => v.Time > time && v.Time < endTime)
                 .ToList();
 
@@ -120,9 +119,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var startBeatLength = GetBeatLength(startTimeSignature, ticksPerQuarterNote);
 
             var totalTicks = bars * startBarLength + beats * startBeatLength + ticks;
-            var timeSignatureChanges = timeSignatureLine.Values
-                                                        .Where(v => v.Time > time && v.Time < time + totalTicks)
-                                                        .ToList();
+            var timeSignatureChanges = timeSignatureLine.Where(v => v.Time > time && v.Time < time + totalTicks).ToList();
 
             var lastBarLength = 0L;
             var lastBeatLength = 0L;
@@ -143,7 +140,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             // Balance bars
 
-            foreach (var timeSignatureChange in timeSignatureLine.Values.Where(v => v.Time > lastTime).ToList())
+            foreach (var timeSignatureChange in timeSignatureLine.Where(v => v.Time > lastTime).ToList())
             {
                 var deltaTime = timeSignatureChange.Time - lastTime;
 
