@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <paramref name="index"/> is less than 0; or <paramref name="index"/> is equal to or greater than
         /// <see cref="Count"/>.
         /// </exception>
-        /// <exception cref="ArgumentNullException">value is null</exception>
+        /// <exception cref="ArgumentNullException">value is null.</exception>
         public MidiChunk this[int index]
         {
             get

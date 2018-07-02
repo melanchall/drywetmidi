@@ -89,6 +89,7 @@
     <Compile Include="Tools\Randomizer\LengthedObjectsRandomizerTests.cs" />
     <Compile Include="Tools\Randomizer\NotesRandomizerTests.cs" />
     <Compile Include="Tools\TimeAndLength.cs" />
+    <Compile Include="Tools\TimeAndMidiEvent.cs" />
     <Compile Include="Utilities\Equality\ArrayEquality.cs" />
     <Compile Include="Utilities\Equality\ChordEquality.cs" />
     <Compile Include="Utilities\Equality\MidiEventEquality.cs" />

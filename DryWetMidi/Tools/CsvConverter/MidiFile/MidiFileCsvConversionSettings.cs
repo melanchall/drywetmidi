@@ -36,6 +36,8 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        public char CsvDelimiter { get; set; } = ',';
+
         #endregion
     }
 }

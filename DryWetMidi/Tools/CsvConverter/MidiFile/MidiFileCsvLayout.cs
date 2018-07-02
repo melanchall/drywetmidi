@@ -3,6 +3,6 @@
     public enum MidiFileCsvLayout
     {
         DryWetMidi = 0,
-        UbuntuMidiCsv
+        MidiCsv
     }
 }
