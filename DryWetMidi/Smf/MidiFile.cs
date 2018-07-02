@@ -110,6 +110,10 @@ namespace Melanchall.DryWetMidi.Smf
 
                 return (MidiFileFormat)formatValue;
             }
+            internal set
+            {
+                _originalFormat = (ushort)value;
+            }
         }
 
         #endregion

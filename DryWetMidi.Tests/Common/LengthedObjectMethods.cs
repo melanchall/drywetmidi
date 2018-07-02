@@ -42,6 +42,8 @@ namespace Melanchall.DryWetMidi.Tests.Common
             CollectionAssert.AreEqual(expected, actual, Comparer);
         }
 
+        public abstract TObject Create(long time, long length);
+
         public abstract void SetLength(TObject obj, long length);
 
         #endregion

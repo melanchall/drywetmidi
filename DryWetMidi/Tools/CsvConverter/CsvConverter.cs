@@ -19,6 +19,15 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        public MidiFile ConvertCsvToMidiFile(string filePath, MidiFileCsvConversionSettings settings = null)
+        {
+            using (var fileStream = FileUtilities.OpenFileForRead(filePath))
+            {
+                return CsvToMidiFileConverter.ConvertToMidiFile(fileStream,
+                                                                settings ?? new MidiFileCsvConversionSettings());
+            }
+        }
+
         #endregion
     }
 }

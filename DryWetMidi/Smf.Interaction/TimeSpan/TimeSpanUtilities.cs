@@ -9,31 +9,62 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public static class TimeSpanUtilities
     {
+        #region Nested classes
+
+        public sealed class Comparer : IComparer<ITimeSpan>
+        {
+            #region IComparer<ITimeSpan>
+
+            public int Compare(ITimeSpan x, ITimeSpan y)
+            {
+                if (ReferenceEquals(x, y))
+                    return 0;
+
+                if (ReferenceEquals(x, null))
+                    return -1;
+
+                if (ReferenceEquals(y, null))
+                    return 1;
+
+                return x.CompareTo(y);
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Delegates
+
+        private delegate Tuple<ParsingResult, ITimeSpan> Parser(string input);
+
+        #endregion
+
         #region Constants
 
-        private static readonly Func<string, Tuple<ParsingResult, ITimeSpan>>[] Parsers = new Func<string, Tuple<ParsingResult, ITimeSpan>>[]
-        {
-            input =>
+        private static readonly Dictionary<TimeSpanType, Parser> Parsers = new Dictionary<TimeSpanType, Parser>
             {
-                MidiTimeSpan timeSpan;
-                return Tuple.Create(MidiTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-            },
-            input =>
-            {
-                BarBeatTimeSpan timeSpan;
-                return Tuple.Create(BarBeatTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-            },
-            input =>
-            {
-                MetricTimeSpan timeSpan;
-                return Tuple.Create(MetricTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-            },
-            input =>
-            {
-                MusicalTimeSpan timeSpan;
-                return Tuple.Create(MusicalTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-            },
-        };
+                [TimeSpanType.Midi] = input =>
+                {
+                    MidiTimeSpan timeSpan;
+                    return Tuple.Create(MidiTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+                },
+                [TimeSpanType.BarBeat] = input =>
+                {
+                    BarBeatTimeSpan timeSpan;
+                    return Tuple.Create(BarBeatTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+                },
+                [TimeSpanType.Metric] = input =>
+                {
+                    MetricTimeSpan timeSpan;
+                    return Tuple.Create(MetricTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+                },
+                [TimeSpanType.Musical] = input =>
+                {
+                    MusicalTimeSpan timeSpan;
+                    return Tuple.Create(MusicalTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+                }
+            };
 
         private static readonly Dictionary<TimeSpanType, ITimeSpan> MaximumTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
         {
@@ -62,17 +93,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             timeSpan = null;
 
-            foreach (var parser in Parsers)
+            foreach (var parser in Parsers.Values)
             {
-                var parsingResult = parser(input);
-                if (parsingResult.Item1.Status == ParsingStatus.Parsed)
-                {
-                    timeSpan = parsingResult.Item2;
+                if (TryParse(input, parser, out timeSpan))
                     return true;
-                }
             }
 
-            return timeSpan != null;
+            return false;
+        }
+
+        public static bool TryParse(string input, TimeSpanType timeSpanType, out ITimeSpan timeSpan)
+        {
+            return TryParse(input, Parsers[timeSpanType], out timeSpan);
         }
 
         /// <summary>
@@ -86,7 +118,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input string");
 
-            foreach (var parser in Parsers)
+            foreach (var parser in Parsers.Values)
             {
                 var parsingResult = parser(input);
 
@@ -147,6 +179,20 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
             return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, mode);
+        }
+
+        private static bool TryParse(string input, Parser parser, out ITimeSpan timeSpan)
+        {
+            timeSpan = null;
+
+            var parsingResult = parser(input);
+            if (parsingResult.Item1.Status == ParsingStatus.Parsed)
+            {
+                timeSpan = parsingResult.Item2;
+                return true;
+            }
+
+            return false;
         }
 
         #endregion

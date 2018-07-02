@@ -21,8 +21,6 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         public abstract void SetTime(TObject obj, long time);
 
-        public abstract TObject Create(long time, long length);
-
         public abstract TObject Clone(TObject obj);
 
         #endregion

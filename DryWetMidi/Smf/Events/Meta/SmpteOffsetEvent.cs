@@ -225,7 +225,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="formatAndHours">Byte containing format and number of hours.</param>
         /// <returns>SMPTE format in terms of frame rate.</returns>
-        private static SmpteFormat GetFormat(byte formatAndHours)
+        internal static SmpteFormat GetFormat(byte formatAndHours)
         {
             return Formats[(formatAndHours & FormatMask) >> FormatOffset];
         }
@@ -235,7 +235,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="formatAndHours">Byte containing format and number of hours.</param>
         /// <returns>Number of hours.</returns>
-        private static byte GetHours(byte formatAndHours)
+        internal static byte GetHours(byte formatAndHours)
         {
             return (byte)(formatAndHours & HoursMask);
         }
@@ -244,7 +244,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Gets byte containing SMPTE format and number of hours.
         /// </summary>
         /// <returns>Byte containing SMPTE format and number of hours.</returns>
-        private byte GetFormatAndHours()
+        internal byte GetFormatAndHours()
         {
             var format = Formats.First(f => f.Value == Format).Key << FormatOffset;
             return (byte)(format & Hours);
