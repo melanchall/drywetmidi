@@ -9,9 +9,9 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        public static void ConvertToCsv(MidiFile midiFile, Stream fileStream, MidiFileCsvConversionSettings settings)
+        public static void ConvertToCsv(MidiFile midiFile, Stream stream, MidiFileCsvConversionSettings settings)
         {
-            using (var streamWriter = new StreamWriter(fileStream))
+            using (var streamWriter = new StreamWriter(stream))
             {
                 var trackNumber = 0;
                 var tempoMap = midiFile.GetTempoMap();
@@ -67,6 +67,8 @@ namespace Melanchall.DryWetMidi.Tools
             }
             catch { }
 
+            var trackChunksCount = midiFile.GetTrackChunks().Count();
+
             switch (settings.CsvLayout)
             {
                 case MidiFileCsvLayout.DryWetMidi:
@@ -86,8 +88,8 @@ namespace Melanchall.DryWetMidi.Tools
                                 MidiCsvRecordTypes.File.Header,
                                 settings,
                                 tempoMap,
-                                format != null ? (ushort)format.Value : (ushort?)null,
-                                midiFile.GetTrackChunks().Count(),
+                                format != null ? (ushort)format.Value : (trackChunksCount > 1 ? 1 : 0),
+                                trackChunksCount,
                                 midiFile.TimeDivision.ToInt16());
                     break;
             }
@@ -102,7 +104,6 @@ namespace Melanchall.DryWetMidi.Tools
             switch (settings.CsvLayout)
             {
                 case MidiFileCsvLayout.DryWetMidi:
-                    streamWriter.WriteLine();
                     break;
                 case MidiFileCsvLayout.MidiCsv:
                     WriteRecord(streamWriter, trackNumber, 0, MidiCsvRecordTypes.File.TrackChunkStart, settings, tempoMap);

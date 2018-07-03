@@ -225,7 +225,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             " text with new line and",
             " new \"\"line again\""
         })]
-        public void ConvertCsvToMidiFile_DryWetMidi_NewLines(MidiFileCsvLayout layout, string[] csvLines)
+        public void ConvertCsvToMidiFile_NewLines(MidiFileCsvLayout layout, string[] csvLines)
         {
             var midiFile = ConvertCsvToMidiFile(layout, TimeSpanType.Midi, csvLines);
 
@@ -238,6 +238,110 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             Assert.IsTrue(TimedEventEquality.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false),
                           "Invalid events.");
+        }
+
+        #endregion
+
+        #region MidiFileToCsv
+
+        [TestCase(MidiFileCsvLayout.DryWetMidi, new[] { ",,header,,96" })]
+        [TestCase(MidiFileCsvLayout.MidiCsv, new[]
+        {
+            "0,0,header,0,0,96",
+            "0,0,end_of_file"
+        })]
+        public void ConvertMidiFileToCsv_EmptyFile(MidiFileCsvLayout layout, string[] expectedCsvLines)
+        {
+            var midiFile = new MidiFile();
+            ConvertMidiFileToCsv(midiFile, layout, TimeSpanType.Midi, expectedCsvLines);
+        }
+
+        [TestCase(MidiFileCsvLayout.DryWetMidi, new[]
+        {
+            ",,header,,96",
+            "0,0,time signature,2,8,24,8",
+            "0,345,text,\"Test text\"",
+            "0,350,note on,0,23,78",
+            "0,450,note off,0,23,90",
+            "0,800,sequencer specific,3,1,2,3"
+        })]
+        [TestCase(MidiFileCsvLayout.MidiCsv, new[]
+        {
+            "0,0,header,0,1,96",
+            "0,0,start_track",
+            "0,0,time_signature,2,3,24,8",
+            "0,345,text_t,\"Test text\"",
+            "0,350,note_on_c,0,23,78",
+            "0,450,note_off_c,0,23,90",
+            "0,800,sequencer_specific,3,1,2,3",
+            "0,800,end_track",
+            "0,0,end_of_file",
+        })]
+        public void ConvertMidiFileToCsv_SingleTrack(MidiFileCsvLayout layout, string[] expectedCsvLines)
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new TimeSignatureEvent(2, 8), 0),
+                new TimedEvent(new TextEvent("Test text"), 345),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)23, (SevenBitNumber)78), 350),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)23, (SevenBitNumber)90), 450),
+                new TimedEvent(new SequencerSpecificEvent(new byte[] { 1, 2, 3 }), 800)
+            };
+
+            var midiFile = timedEvents.ToFile();
+
+            ConvertMidiFileToCsv(midiFile, layout, TimeSpanType.Midi, expectedCsvLines);
+        }
+
+        [TestCase(MidiFileCsvLayout.DryWetMidi, new[]
+        {
+            ",,header,,96",
+            "0,0,time signature,2,8,24,8",
+            "0,345,text,\"Test text\"",
+            "0,350,note on,0,23,78",
+            "0,450,note off,0,23,90",
+            "0,800,sequencer specific,3,1,2,3",
+            "1,10,note on,0,30,78",
+            "1,20,note off,0,30,90",
+        })]
+        [TestCase(MidiFileCsvLayout.MidiCsv, new[]
+        {
+            "0,0,header,1,2,96",
+            "0,0,start_track",
+            "0,0,time_signature,2,3,24,8",
+            "0,345,text_t,\"Test text\"",
+            "0,350,note_on_c,0,23,78",
+            "0,450,note_off_c,0,23,90",
+            "0,800,sequencer_specific,3,1,2,3",
+            "0,800,end_track",
+            "1,0,start_track",
+            "1,10,note_on_c,0,30,78",
+            "1,20,note_off_c,0,30,90",
+            "1,20,end_track",
+            "0,0,end_of_file",
+        })]
+        public void ConvertMidiFileToCsv_MultipleTrack(MidiFileCsvLayout layout, string[] expectedCsvLines)
+        {
+            var timedEvents1 = new[]
+            {
+                new TimedEvent(new TimeSignatureEvent(2, 8), 0),
+                new TimedEvent(new TextEvent("Test text"), 345),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)23, (SevenBitNumber)78), 350),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)23, (SevenBitNumber)90), 450),
+                new TimedEvent(new SequencerSpecificEvent(new byte[] { 1, 2, 3 }), 800)
+            };
+
+            var timedEvents2 = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)78), 10),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)90), 20)
+            };
+
+            var midiFile = new MidiFile(
+                timedEvents1.ToTrackChunk(),
+                timedEvents2.ToTrackChunk());
+
+            ConvertMidiFileToCsv(midiFile, layout, TimeSpanType.Midi, expectedCsvLines);
         }
 
         #endregion
@@ -293,6 +397,28 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 var midiFile = new CsvConverter().ConvertCsvToMidiFile(filePath, settings);
                 ConvertMidiFileToFromCsv(midiFile, filePath, settings);
                 return midiFile;
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        private static void ConvertMidiFileToCsv(MidiFile midiFile, MidiFileCsvLayout layout, TimeSpanType timeType, string[] expectedCsvLines)
+        {
+            var filePath = Path.GetTempFileName();
+
+            var settings = new MidiFileCsvConversionSettings
+            {
+                CsvLayout = layout,
+                TimeType = timeType
+            };
+
+            try
+            {
+                new CsvConverter().ConvertMidiFileToCsv(midiFile, filePath, true, settings);
+                var actualCsvLines = File.ReadAllLines(filePath);
+                CollectionAssert.AreEqual(expectedCsvLines, actualCsvLines, StringComparer.OrdinalIgnoreCase);
             }
             finally
             {

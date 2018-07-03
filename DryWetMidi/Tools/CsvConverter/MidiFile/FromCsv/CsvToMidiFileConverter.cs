@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
@@ -10,23 +9,6 @@ namespace Melanchall.DryWetMidi.Tools
 {
     internal static class CsvToMidiFileConverter
     {
-        #region Nested classes
-
-        private static class TypeParsers
-        {
-            public static readonly Func<string, object> Byte = p => byte.Parse(p);
-            public static readonly Func<string, object> SByte = p => sbyte.Parse(p);
-            public static readonly Func<string, object> Long = p => long.Parse(p);
-            public static readonly Func<string, object> UShort = p => ushort.Parse(p);
-            public static readonly Func<string, object> String = p => p.Trim('"');
-            public static readonly Func<string, object> Int = p => int.Parse(p);
-            public static readonly Func<string, object> ByteArray = p => SmfUtilities.DefaultEncoding.GetBytes(p.Trim('"'));
-            public static readonly Func<string, object> FourBitNumber = p => (FourBitNumber)byte.Parse(p);
-            public static readonly Func<string, object> SevenBitNumber = p => (SevenBitNumber)byte.Parse(p);
-        }
-
-        #endregion
-
         #region Constants
 
         private static readonly Dictionary<string, RecordType> RecordTypes_DryWetMidi =
@@ -48,13 +30,13 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public static MidiFile ConvertToMidiFile(Stream fileStream, MidiFileCsvConversionSettings settings)
+        public static MidiFile ConvertToMidiFile(Stream stream, MidiFileCsvConversionSettings settings)
         {
             var midiFile = new MidiFile();
 
             var events = new Dictionary<int, List<TimedMidiEvent>>();
 
-            using (var streamReader = new StreamReader(fileStream))
+            using (var streamReader = new StreamReader(stream))
             {
                 var lineNumber = 0;
                 Record record;
