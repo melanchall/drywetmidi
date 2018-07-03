@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public static class MakeNotesUtilities
+    public static class GetTimedEventsAndNotesUtilities
     {
         #region Nested classes
 
@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="timedEvents">Collection of <see cref="TimedEvent"/> to make notes.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
-        public static IEnumerable<ITimedObject> MakeNotes(this IEnumerable<TimedEvent> timedEvents)
+        public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TimedEvent> timedEvents)
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
 

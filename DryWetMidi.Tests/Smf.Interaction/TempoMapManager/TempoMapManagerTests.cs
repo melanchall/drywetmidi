@@ -45,10 +45,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             {
                 tempoMapManager.SetTempo(100, new Tempo(10));
                 tempoMapManager.SetTempo(300, new Tempo(100));
-
-                tempoMapManager.ReplaceTempoMap(TempoMap.Default);
+                tempoMapManager.SetTimeSignature(1100, new TimeSignature(2, 4));
 
                 var tempoMap = tempoMapManager.TempoMap;
+
+                Assert.IsTrue(tempoMap.Tempo.Any());
+                Assert.IsTrue(tempoMap.TimeSignature.Any());
+
+                tempoMapManager.ReplaceTempoMap(TempoMap.Default);
 
                 Assert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
                                 ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
