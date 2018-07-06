@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Provides methods for getting single collection of notes and rests by the specified
+    /// collection of notes.
+    /// </summary>
     public static class GetNotesAndRestsUtilities
     {
         #region Constants
@@ -15,6 +20,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Iterates through the specified collection of <see cref="Note"/> returning instances of <see cref="Note"/>
+        /// and <see cref="Rest"/> wher rests calculated using the specified policy.
+        /// </summary>
+        /// <param name="notes">Collection of <see cref="Note"/> to iterate over.</param>
+        /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
+        /// or <see cref="Rest"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
+        /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(
             this IEnumerable<Note> notes,
             RestSeparationPolicy restSeparationPolicy)

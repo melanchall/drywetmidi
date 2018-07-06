@@ -158,6 +158,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region IEnumerable<ValueChange<TValue>>
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<ValueChange<TValue>> GetEnumerator()
         {
             if (_valuesChanged)
@@ -169,6 +173,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return _values.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerator"/> object that can be used to iterate through
+        /// the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

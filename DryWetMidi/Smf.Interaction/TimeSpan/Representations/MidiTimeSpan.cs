@@ -44,6 +44,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Divides the current time span by the specified <see cref="MidiTimeSpan"/> returning ration
+        /// between them.
+        /// </summary>
+        /// <param name="timeSpan"><see cref="MidiTimeSpan"/> to divide the current time span by.</param>
+        /// <returns>Rayion between the current <see cref="MidiTimeSpan"/> and <paramref name="timeSpan"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is null.</exception>
+        /// <exception cref="DivideByZeroException"><paramref name="timeSpan"/> represents a time span of zero length.</exception>
         public double Divide(MidiTimeSpan timeSpan)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);

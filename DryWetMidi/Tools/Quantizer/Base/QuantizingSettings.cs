@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -39,6 +40,15 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Gets or sets the level of quantizing from 0.0 (no quantizing) to 1.0 (full quantizng).
+        /// </summary>
+        /// <remarks>
+        /// This setting specifies how close an object should be moved to nearest grid time. For example,
+        /// 0.5 will lead to an object will be moved hald the distance between its time and the nearest
+        /// grid time.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of valid range.</exception>
         public double QuantizingLevel
         {
             get { return _quantizingLevel; }
@@ -46,8 +56,8 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 ThrowIfArgument.IsOutOfRange(nameof(value),
                                              value,
-                                             0.0,
-                                             1.0,
+                                             NoQuantizingLevel,
+                                             FullQuantizingLevel,
                                              $"Value is out of [{NoQuantizingLevel}; {FullQuantizingLevel}] range.");
 
                 _quantizingLevel = value;

@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanType lengthType,
                                                  TempoMap tempoMap)
         {
-            ResizeNotes(notes, expectedLengths, length, lengthType, ResizeMode.Absolute, tempoMap);
+            ResizeNotes(notes, expectedLengths, length, lengthType, ResizingMode.Absolute, tempoMap);
         }
 
         private static void ResizeNotes_Relative(IEnumerable<Note> notes,
@@ -170,14 +170,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                                  TimeSpanType lengthType,
                                                  TempoMap tempoMap)
         {
-            ResizeNotes(notes, expectedLengths, length, lengthType, ResizeMode.Relative, tempoMap);
+            ResizeNotes(notes, expectedLengths, length, lengthType, ResizingMode.Relative, tempoMap);
         }
 
         private static void ResizeNotes(IEnumerable<Note> notes,
                                         IEnumerable<ITimeSpan> expectedLengths,
                                         ITimeSpan length,
                                         TimeSpanType lengthType,
-                                        ResizeMode mode,
+                                        ResizingMode mode,
                                         TempoMap tempoMap)
         {
             notes.ResizeNotes(length, lengthType, mode, tempoMap);

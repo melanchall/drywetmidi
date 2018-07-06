@@ -1,8 +1,13 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using System.ComponentModel;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Settings according to which nearby notes should be merged.
+    /// </summary>
     public sealed class NotesMergingSettings
     {
         #region Fields
@@ -16,6 +21,11 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a policy which determines how <see cref="Note.Velocity"/> of notes should be merged.
+        /// The default value is <see cref="VelocityMergingPolicy.First"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public VelocityMergingPolicy VelocityMergingPolicy
         {
             get { return _velocityMergingPolicy; }
@@ -27,6 +37,11 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Gets or sets a policy which determines how <see cref="Note.OffVelocity"/> of notes should be merged.
+        /// The default value is <see cref="VelocityMergingPolicy.Last"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public VelocityMergingPolicy OffVelocityMergingPolicy
         {
             get { return _offVelocityMergingPolicy; }
@@ -38,6 +53,10 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Gets or sets maximum distance between notes that can be merged. The default value is time span of zero length.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         public ITimeSpan Tolerance
         {
             get { return _tolerance; }

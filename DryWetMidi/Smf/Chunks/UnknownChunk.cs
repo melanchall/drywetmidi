@@ -36,6 +36,10 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Overrides
 
+        /// <summary>
+        /// Clones chunk by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the chunk.</returns>
         public override MidiChunk Clone()
         {
             return new UnknownChunk(ChunkId)

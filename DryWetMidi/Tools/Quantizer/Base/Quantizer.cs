@@ -77,6 +77,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Inside this method the new time can be changed or quantizing of an object can be cancelled.
         /// </remarks>
         /// <param name="obj">Object to quantize.</param>
+        /// <param name="quantizedTime">Holds information about new time for an object.</param>
         /// <param name="grid">Grid to quantize object by.</param>
         /// <param name="tempoMap">Tempo map used to quantize object.</param>
         /// <param name="settings">Settings according to which object should be quantized.</param>
