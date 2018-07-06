@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Tools
             using (var tempoMapManager = new TempoMapManager(timeDivision))
             {
                 var setTempoEvents = timedMidiEvents.Where(e => e.Event is SetTempoEvent)
-                                                    .OrderBy(e => e.Time, new TimeSpanUtilities.Comparer());
+                                                    .OrderBy(e => e.Time, new TimeSpanComparer());
                 foreach (var timedMidiEvent in setTempoEvents)
                 {
                     var setTempoEvent = (SetTempoEvent)timedMidiEvent.Event;
@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tools
                 }
 
                 var timeSignatureEvents = timedMidiEvents.Where(e => e.Event is TimeSignatureEvent)
-                                                         .OrderBy(e => e.Time, new TimeSpanUtilities.Comparer());
+                                                         .OrderBy(e => e.Time, new TimeSpanComparer());
                 foreach (var timedMidiEvent in timeSignatureEvents)
                 {
                     var timeSignatureEvent = (TimeSignatureEvent)timedMidiEvent.Event;

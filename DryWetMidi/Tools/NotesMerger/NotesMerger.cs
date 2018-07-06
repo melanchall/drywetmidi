@@ -6,7 +6,9 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    // TODO: settings (tolerance...)
+    /// <summary>
+    /// Provides methods to merge nearby notes.
+    /// </summary>
     public sealed class NotesMerger
     {
         #region Nested classes
@@ -84,6 +86,14 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
+        /// <summary>
+        /// Merges nearby notes in the specified collection of notes.
+        /// </summary>
+        /// <param name="notes">Collection of notes to merge notes in.</param>
+        /// <param name="tempoMap">Tempo map used to calculate distances between notes.</param>
+        /// <param name="settings">Settings according to which notes should be merged.</param>
+        /// <returns>Collection of notes which produced from the input one by merging nearby notes.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public IEnumerable<Note> Merge(IEnumerable<Note> notes, TempoMap tempoMap, NotesMergingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);

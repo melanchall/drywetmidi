@@ -1,24 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public enum ResizeMode
-    {
-        Absolute,
-        Relative
-    }
-
+    /// <summary>
+    /// Provides ways to resize collection of notes.
+    /// </summary>
     public static class ResizeNotesUtilities
     {
         #region Methods
 
+        /// <summary>
+        /// Resizes collection of notes to the specified length using absolute or relative
+        /// length calculation.
+        /// </summary>
+        /// <remarks>
+        /// Absolute resizing means 
+        /// </remarks>
+        /// <param name="notes">Notes to resize.</param>
+        /// <param name="length">New length of the notes collection.</param>
+        /// <param name="lengthType">Type of length calculations.</param>
+        /// <param name="mode">Resizing mode which determines whether length calculation should be
+        /// absolute or relative (by ratio).</param>
+        /// <param name="tempoMap"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
+        /// <paramref name="length"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> used for <paramref name="lengthType"/>
+        /// with relative resizing.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an
+        /// invalid value. -or- <paramref name="mode"/> specified an invalid value.</exception>
         public static void ResizeNotes(this IEnumerable<Note> notes,
                                        ITimeSpan length,
                                        TimeSpanType lengthType,
-                                       ResizeMode mode,
+                                       ResizingMode mode,
                                        TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -55,10 +72,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             switch (mode)
             {
-                case ResizeMode.Absolute:
+                case ResizingMode.Absolute:
                     ResizeNotesAbsolute(notes, lengthType, tempoMap, oldLength, newLength);
                     break;
-                case ResizeMode.Relative:
+                case ResizingMode.Relative:
                     ResizeNotesRelative(notes, lengthType, tempoMap, oldLength, newLength);
                     break;
             }

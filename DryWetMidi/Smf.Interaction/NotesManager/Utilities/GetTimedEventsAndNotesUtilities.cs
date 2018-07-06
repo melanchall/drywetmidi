@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
+    /// <summary>
+    /// Provides a way to iterate through a collection of <see cref="TimedEvent"/> returning
+    /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
+    /// for all other events.
+    /// </summary>
     public static class GetTimedEventsAndNotesUtilities
     {
         #region Nested classes
@@ -79,6 +85,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="timedEvents">Collection of <see cref="TimedEvent"/> to make notes.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timedEvents"/> is null.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TimedEvent> timedEvents)
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);

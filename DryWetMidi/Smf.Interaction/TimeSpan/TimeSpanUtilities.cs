@@ -9,31 +9,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public static class TimeSpanUtilities
     {
-        #region Nested classes
-
-        public sealed class Comparer : IComparer<ITimeSpan>
-        {
-            #region IComparer<ITimeSpan>
-
-            public int Compare(ITimeSpan x, ITimeSpan y)
-            {
-                if (ReferenceEquals(x, y))
-                    return 0;
-
-                if (ReferenceEquals(x, null))
-                    return -1;
-
-                if (ReferenceEquals(y, null))
-                    return 1;
-
-                return x.CompareTo(y);
-            }
-
-            #endregion
-        }
-
-        #endregion
-
         #region Delegates
 
         private delegate Tuple<ParsingResult, ITimeSpan> Parser(string input);
@@ -102,6 +77,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return false;
         }
 
+        /// <summary>
+        /// Converts the string representation of a time span to its <see cref="ITimeSpan"/> equivalent using
+        /// the specified type of time span. A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="input">A string containing a time span to convert.</param>
+        /// <param name="timeSpanType">the type of time span to convert <paramref name="input"/> to.</param>
+        /// <param name="timeSpan">When this method returns, contains the <see cref="ITimeSpan"/>
+        /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
+        /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
+        /// any value originally supplied in result will be overwritten.</param>
+        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, TimeSpanType timeSpanType, out ITimeSpan timeSpan)
         {
             return TryParse(input, Parsers[timeSpanType], out timeSpan);
