@@ -12,139 +12,128 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         #region Constants
 
         private static readonly TempoMap TempoMap = GetTempoMap();
+        private static readonly NoteMethods NoteMethods = new NoteMethods();
 
         #endregion
 
         #region Test methods
 
         [Test]
-        [Description("Resize empty notes collection using absolute mode.")]
-        public void ResizeNotes_Absolute_EmptyCollection()
+        public void ResizeNotes_EmptyCollection()
         {
-            ResizeNotes_Absolute(
+            ResizeNotes(
                 Enumerable.Empty<Note>(),
-                Enumerable.Empty<ITimeSpan>(),
+                Enumerable.Empty<TimeAndLength>(),
                 new MetricTimeSpan(0, 2, 0),
                 TimeSpanType.Metric,
                 TempoMap);
         }
 
         [Test]
-        [Description("Resize zero-length notes group using absolute mode.")]
-        public void ResizeNotes_Absolute_ZeroLength()
+        public void ResizeNotes_ZeroLength()
         {
-            ResizeNotes_Absolute(
-                GetZeroLengthNotes(),
+            ResizeNotes(
                 new[]
                 {
-                    new MetricTimeSpan(0, 2, 0),
-                    new MetricTimeSpan(0, 2, 0),
-                    new MetricTimeSpan(0, 2, 0)
+                    NoteMethods.Create(0, 0),
+                    null,
+                    null,
+                    NoteMethods.Create(10, 0),
+                    NoteMethods.Create(100, 0)
                 },
-                new MetricTimeSpan(0, 2, 0),
-                TimeSpanType.Metric,
-                TempoMap);
-        }
-
-        [Test]
-        [Description("Stretch notes using absolute mode.")]
-        public void ResizeNotes_Absolute_Stretch()
-        {
-            ResizeNotes_Absolute(
-                GetNotes(),
                 new[]
                 {
-                    new MetricTimeSpan(0, 1, 2),
-                    new MetricTimeSpan(0, 1, 2),
-                    new MetricTimeSpan(0, 1, 0),
-                    new MetricTimeSpan(0, 2, 0),
-                    new MetricTimeSpan(0, 1, 20)
+                    new TimeAndLength((MidiTimeSpan)0, (MidiTimeSpan)0),
+                    new TimeAndLength((MidiTimeSpan)100, (MidiTimeSpan)0),
+                    new TimeAndLength((MidiTimeSpan)1000, (MidiTimeSpan)0)
                 },
-                new MetricTimeSpan(0, 2, 0),
-                TimeSpanType.Metric,
+                (MidiTimeSpan)1000,
+                TimeSpanType.Midi,
                 TempoMap);
         }
 
         [Test]
-        [Description("Shrink notes using absolute mode.")]
-        public void ResizeNotes_Absolute_Shrink()
+        public void ResizeNotes_Stretch_Midi()
         {
-            ResizeNotes_Absolute(
-                GetNotes(),
+            ResizeNotes(
                 new[]
                 {
-                    new MetricTimeSpan(0, 0, 0),
-                    new MetricTimeSpan(0, 0, 0),
-                    new MetricTimeSpan(0, 0, 0),
-                    new MetricTimeSpan(0, 0, 50),
-                    new MetricTimeSpan(0, 0, 10)
+                    NoteMethods.Create(0, 10),
+                    NoteMethods.Create(10, 20),
+                    NoteMethods.Create(100, 400)
                 },
-                new MetricTimeSpan(0, 0, 50),
-                TimeSpanType.Metric,
-                TempoMap);
-        }
-
-        [Test]
-        [Description("Resize empty notes collection using relative mode.")]
-        public void ResizeNotes_Relative_EmptyCollection()
-        {
-            ResizeNotes_Relative(
-                Enumerable.Empty<Note>(),
-                Enumerable.Empty<ITimeSpan>(),
-                new MetricTimeSpan(0, 2, 0),
-                TimeSpanType.Metric,
-                TempoMap);
-        }
-
-        [Test]
-        [Description("Resize zero-length notes group using relative mode.")]
-        public void ResizeNotes_Relative_ZeroLength()
-        {
-            ResizeNotes_Relative(
-                GetZeroLengthNotes(),
                 new[]
                 {
-                    new MetricTimeSpan(0, 2, 0),
-                    new MetricTimeSpan(0, 2, 0),
-                    new MetricTimeSpan(0, 2, 0)
+                    new TimeAndLength((MidiTimeSpan)0, (MidiTimeSpan)40),
+                    new TimeAndLength((MidiTimeSpan)40, (MidiTimeSpan)80),
+                    new TimeAndLength((MidiTimeSpan)400, (MidiTimeSpan)1600)
                 },
-                new MetricTimeSpan(0, 2, 0),
-                TimeSpanType.Metric,
+                (MidiTimeSpan)2000,
+                TimeSpanType.Midi,
                 TempoMap);
         }
 
         [Test]
-        [Description("Stretch notes using relative mode.")]
-        public void ResizeNotes_Relative_Stretch()
+        public void ResizeNotes_Stretch_Metric()
         {
-            ResizeNotes_Relative(
-                GetNotes(),
+            var tempoMap = TempoMap;
+
+            ResizeNotes(
                 new[]
                 {
-                    new MetricTimeSpan(0, 0, 4),
-                    new MetricTimeSpan(0, 0, 4),
-                    new MetricTimeSpan(),
-                    new MetricTimeSpan(0, 2, 0),
-                    new MetricTimeSpan(0, 0, 40)
+                    NoteMethods.Create(new MetricTimeSpan(0, 0, 0), new MetricTimeSpan(0, 0, 15), tempoMap),
+                    NoteMethods.Create(new MetricTimeSpan(0, 0, 10), new MetricTimeSpan(0, 0, 1), tempoMap),
+                    NoteMethods.Create(new MetricTimeSpan(0, 1, 0), new MetricTimeSpan(0, 2, 0), tempoMap)
                 },
-                new MetricTimeSpan(0, 2, 0),
+                new[]
+                {
+                    new TimeAndLength(new MetricTimeSpan(0, 0, 0), new MetricTimeSpan(0, 0, 22, 500)),
+                    new TimeAndLength(new MetricTimeSpan(0, 0, 15), new MetricTimeSpan(0, 0, 1, 500)),
+                    new TimeAndLength(new MetricTimeSpan(0, 1, 30), new MetricTimeSpan(0, 3, 0))
+                },
+                new MetricTimeSpan(0, 4, 30),
                 TimeSpanType.Metric,
                 TempoMap);
         }
 
         [Test]
-        [Description("Shrink notes using absolute mode.")]
-        public void ResizeNotes_Relative_Shrink()
+        public void ResizeNotes_Shrink_Midi()
         {
-            ResizeNotes_Relative(
-                GetNotes(),
+            ResizeNotes(
                 new[]
                 {
-                    new MetricTimeSpan(0, 0, 1),
-                    new MetricTimeSpan(0, 0, 1),
-                    new MetricTimeSpan(),
-                    new MetricTimeSpan(0, 0, 30),
-                    new MetricTimeSpan(0, 0, 10)
+                    NoteMethods.Create(0, 10),
+                    NoteMethods.Create(10, 20),
+                    NoteMethods.Create(100, 400)
+                },
+                new[]
+                {
+                    new TimeAndLength((MidiTimeSpan)0, (MidiTimeSpan)2),
+                    new TimeAndLength((MidiTimeSpan)2, (MidiTimeSpan)4),
+                    new TimeAndLength((MidiTimeSpan)20, (MidiTimeSpan)80)
+                },
+                (MidiTimeSpan)100,
+                TimeSpanType.Midi,
+                TempoMap);
+        }
+
+        [Test]
+        public void ResizeNotes_Shrink_Metric()
+        {
+            var tempoMap = TempoMap;
+
+            ResizeNotes(
+                new[]
+                {
+                    NoteMethods.Create(new MetricTimeSpan(0, 0, 0), new MetricTimeSpan(0, 0, 15), tempoMap),
+                    NoteMethods.Create(new MetricTimeSpan(0, 0, 10), new MetricTimeSpan(0, 0, 1), tempoMap),
+                    NoteMethods.Create(new MetricTimeSpan(0, 1, 0), new MetricTimeSpan(0, 1, 0), tempoMap)
+                },
+                new[]
+                {
+                    new TimeAndLength(new MetricTimeSpan(0, 0, 0), new MetricTimeSpan(0, 0, 3, 750)),
+                    new TimeAndLength(new MetricTimeSpan(0, 0, 2, 500), new MetricTimeSpan(0, 0, 0, 250)),
+                    new TimeAndLength(new MetricTimeSpan(0, 0, 15), new MetricTimeSpan(0, 0, 15))
                 },
                 new MetricTimeSpan(0, 0, 30),
                 TimeSpanType.Metric,
@@ -155,79 +144,47 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Private methods
 
-        private static void ResizeNotes_Absolute(IEnumerable<Note> notes,
-                                                 IEnumerable<ITimeSpan> expectedLengths,
-                                                 ITimeSpan length,
-                                                 TimeSpanType lengthType,
-                                                 TempoMap tempoMap)
-        {
-            ResizeNotes(notes, expectedLengths, length, lengthType, ResizingMode.Absolute, tempoMap);
-        }
-
-        private static void ResizeNotes_Relative(IEnumerable<Note> notes,
-                                                 IEnumerable<ITimeSpan> expectedLengths,
-                                                 ITimeSpan length,
-                                                 TimeSpanType lengthType,
-                                                 TempoMap tempoMap)
-        {
-            ResizeNotes(notes, expectedLengths, length, lengthType, ResizingMode.Relative, tempoMap);
-        }
-
         private static void ResizeNotes(IEnumerable<Note> notes,
-                                        IEnumerable<ITimeSpan> expectedLengths,
+                                        IEnumerable<TimeAndLength> expectedTimesAndLengths,
                                         ITimeSpan length,
                                         TimeSpanType lengthType,
-                                        ResizingMode mode,
                                         TempoMap tempoMap)
         {
-            notes.ResizeNotes(length, lengthType, mode, tempoMap);
+            notes.ResizeNotes(length, lengthType, tempoMap);
 
-            foreach (var noteLength in notes.Zip(expectedLengths, (n, l) => new { Note = n, Length = l }))
+            var notesTimesAndLengths = notes.Where(n => n != null)
+                                            .Zip(expectedTimesAndLengths, (n, tl) => new
+                                            {
+                                                Note = n,
+                                                TimeAndLength = tl
+                                            });
+
+            foreach (var noteTimeAndLength in notesTimesAndLengths)
             {
-                var note = noteLength.Note;
-                var expectedLength = noteLength.Length;
+                var note = noteTimeAndLength.Note;
+                var expectedTime = noteTimeAndLength.TimeAndLength.Time;
+                var expectedLength = noteTimeAndLength.TimeAndLength.Length;
 
                 var convertedLength = LengthConverter.ConvertTo((MidiTimeSpan)note.Length,
                                                                 expectedLength.GetType(),
                                                                 note.Time,
                                                                 tempoMap);
-                TimeSpanTestUtilities.AreEqual(expectedLength, convertedLength, "Length is invalid.");
+                Assert.AreEqual(expectedLength, convertedLength, "Length is invalid.");
+
+                var convertedTime = TimeConverter.ConvertTo((MidiTimeSpan)note.Time,
+                                                            expectedTime.GetType(),
+                                                            tempoMap);
+                Assert.AreEqual(expectedTime, convertedTime, "Time is invalid.");
             }
-        }
-
-        private static IEnumerable<Note> GetNotes()
-        {
-            var noteMethods = new NoteMethods();
-
-            return new[]
-            {
-                noteMethods.Create(new MetricTimeSpan(0, 0, 2), new MetricTimeSpan(0, 0, 2), TempoMap),
-                noteMethods.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 2), TempoMap),
-                noteMethods.Create(new MetricTimeSpan(0, 0, 2), new MetricTimeSpan(), TempoMap),
-                noteMethods.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 1, 0), TempoMap),
-                noteMethods.Create(new MetricTimeSpan(0, 0, 10), new MetricTimeSpan(0, 0, 20), TempoMap),
-            };
-        }
-
-        private static IEnumerable<Note> GetZeroLengthNotes()
-        {
-            var noteMethods = new NoteMethods();
-
-            return new[]
-            {
-                noteMethods.Create(new MetricTimeSpan(0, 0, 2), new MetricTimeSpan(), TempoMap),
-                noteMethods.Create(new MetricTimeSpan(0, 0, 2), new MetricTimeSpan(), TempoMap),
-                noteMethods.Create(new MetricTimeSpan(0, 0, 2), new MetricTimeSpan(), TempoMap)
-            };
         }
 
         private static TempoMap GetTempoMap()
         {
             using (var tempoMapManager = new TempoMapManager())
             {
-                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 1), Tempo.FromBeatsPerMinute(70));
-                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromBeatsPerMinute(110));
-                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 50), Tempo.FromBeatsPerMinute(90));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 1), Tempo.FromBeatsPerMinute(60));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromBeatsPerMinute(150));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 50), Tempo.FromBeatsPerMinute(100));
 
                 return tempoMapManager.TempoMap;
             }

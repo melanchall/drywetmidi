@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <remarks>
         /// This setting specifies how close an object should be moved to nearest grid time. For example,
-        /// 0.5 will lead to an object will be moved hald the distance between its time and the nearest
+        /// 0.5 will lead to an object will be moved half the distance between its time and the nearest
         /// grid time.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of valid range.</exception>
