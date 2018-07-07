@@ -61,8 +61,7 @@
     <Compile Include="Smf.Interaction\NotesManager\Utilities\GetNotesAndRests\Rest.cs" />
     <Compile Include="Smf.Interaction\NotesManager\Utilities\GetNotesAndRests\RestSeparationPolicy.cs" />
     <Compile Include="Smf.Interaction\NotesManager\Utilities\GetTimedEventsAndNotesUtilities.cs" />
-    <Compile Include="Smf.Interaction\NotesManager\Utilities\ResizeNotes\ResizeNotesUtilities.cs" />
-    <Compile Include="Smf.Interaction\NotesManager\Utilities\ResizeNotes\ResizingMode.cs" />
+    <Compile Include="Smf.Interaction\NotesManager\Utilities\ResizeNotesUtilities.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidi2ProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetGeneralMidiProgramAction.cs" />
     <Compile Include="Smf.Interaction\Pattern\Actions\SetProgram\SetProgramNumberAction.cs" />

@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tools
         public long GridTime { get; }
 
         /// <summary>
-        /// Gets the distance an object is going to be moved on to the new time.
+        /// Gets the distance an object is going to be moved toward the new time.
         /// </summary>
         public ITimeSpan Shift { get; }
 
