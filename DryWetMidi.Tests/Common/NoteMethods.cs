@@ -37,6 +37,16 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         protected override IComparer Comparer { get; } = new NoteComparer();
 
+        public override void SetTime(Note obj, long time)
+        {
+            obj.Time = time;
+        }
+
+        public override void SetLength(Note obj, long length)
+        {
+            obj.Length = length;
+        }
+
         public override Note Create(long time, long length)
         {
             return new Note((SevenBitNumber)_random.Next(SevenBitNumber.MaxValue), length, time);

@@ -27,7 +27,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="UnknownFileFormatException"/>.
         /// </summary>
         public UnknownFileFormatException()
-            : base()
         {
         }
 
@@ -50,6 +49,7 @@ namespace Melanchall.DryWetMidi.Smf
         public UnknownFileFormatException(string message, ushort fileFormat)
             : this(message)
         {
+            FileFormat = fileFormat;
         }
 
         /// <summary>

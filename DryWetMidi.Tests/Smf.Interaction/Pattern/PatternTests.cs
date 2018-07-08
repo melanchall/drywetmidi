@@ -682,7 +682,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var channel = (FourBitNumber)2;
 
-            TempoMap tempoMap = null;
+            TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
                 foreach (var tempoChange in tempoChanges)
@@ -712,11 +712,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             return midiFile;
         }
 
-        private static MidiFile TestTimedEvents(Pattern pattern, ICollection<TimedEventInfo> expectedTimedEventsInfos, params Tuple<long, Tempo>[] tempoChanges)
+        private static void TestTimedEvents(
+            Pattern pattern,
+            ICollection<TimedEventInfo> expectedTimedEventsInfos,
+            params Tuple<long, Tempo>[] tempoChanges)
         {
             var channel = (FourBitNumber)2;
 
-            TempoMap tempoMap = null;
+            TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
                 foreach (var tempoChange in tempoChanges)
@@ -740,8 +743,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.AreEqual(expectedEvent, actual, true)),
                               $"There are no event: {expectedEvent}");
             }
-
-            return midiFile;
         }
 
         #endregion

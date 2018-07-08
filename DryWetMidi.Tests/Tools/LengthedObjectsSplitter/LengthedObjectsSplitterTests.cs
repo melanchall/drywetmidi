@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = Enumerable.Empty<TObject>();
             var actualObjects = Splitter.SplitByStep(inputObjects, step, tempoMap);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = new[] { default(TObject), default(TObject) };
             var actualObjects = Splitter.SplitByStep(inputObjects, step, tempoMap);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -119,10 +119,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var inputObjects = CreateInputObjects(100);
             var step = 1000L;
-            var expectedObjects = inputObjects.Select(o => Methods.Clone(o));
+            var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitByStep(inputObjects, (MidiTimeSpan)step, tempoMap);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -133,10 +133,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var step = 1000L;
             var inputObjects = CreateInputObjects(step);
-            var expectedObjects = inputObjects.Select(o => Methods.Clone(o));
+            var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitByStep(inputObjects, (MidiTimeSpan)step, tempoMap);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                             "Parts count is invalid.");
             Assert.IsTrue(actualObjects.All(o => o.Length == step),
                           "Length of some objects doesn't equal to the step.");
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -185,7 +185,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                                            .Last()
                                                            .Length < step),
                           "Last object's length is not less than the step.");
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         #endregion
@@ -203,7 +203,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = Enumerable.Empty<TObject>();
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = new[] { default(TObject), default(TObject) };
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -228,10 +228,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var inputObjects = CreateInputObjects(100);
             var partsNumber = 1;
-            var expectedObjects = inputObjects.Select(o => Methods.Clone(o));
+            var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -242,10 +242,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var inputObjects = CreateInputObjects(0);
             var partsNumber = 10;
-            var expectedObjects = inputObjects.SelectMany(o => Enumerable.Range(0, partsNumber).Select(i => Methods.Clone(o)));
+            var expectedObjects = inputObjects.SelectMany(o => Enumerable.Range(0, partsNumber).Select(i => ObjectMethods.Clone(o)));
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap).ToArray();
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         [Test]
@@ -422,8 +422,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             // |       |    |       |    |       |
             // 0      100  167     267  334     434
 
-            var obj1 = Methods.Create(0, 200);
-            var obj2 = Methods.Create(100, 240);
+            var obj1 = ObjectMethods.Create(0, 200);
+            var obj2 = ObjectMethods.Create(100, 240);
 
             SplitByGrid_MultipleSteps(
                 new[] { obj1, obj2 },
@@ -464,8 +464,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             // |    |       |    |       |    |
             // 0   50      150  217     317  384
 
-            var obj1 = Methods.Create(0, 200);
-            var obj2 = Methods.Create(100, 240);
+            var obj1 = ObjectMethods.Create(0, 200);
+            var obj2 = ObjectMethods.Create(100, 240);
 
             SplitByGrid_MultipleSteps(
                 inputObjects: new[] { obj1, obj2 },
@@ -508,8 +508,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var tempoMap = TempoMap.Default;
 
-            var obj1 = Methods.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1, 500), tempoMap);
-            var obj2 = Methods.Create(new MetricTimeSpan(0, 0, 1, 200), new MetricTimeSpan(0, 0, 2, 200), tempoMap);
+            var obj1 = ObjectMethods.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1, 500), tempoMap);
+            var obj2 = ObjectMethods.Create(new MetricTimeSpan(0, 0, 1, 200), new MetricTimeSpan(0, 0, 2, 200), tempoMap);
 
             SplitByGrid_MultipleSteps(
                 inputObjects: new[] { obj1, obj2 },
@@ -556,10 +556,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var tempoMap = TempoMap.Default;
 
-            var obj1 = Methods.Create(new MetricTimeSpan(),
+            var obj1 = ObjectMethods.Create(new MetricTimeSpan(),
                                       new MetricTimeSpan(0, 0, 1, 500),
                                       tempoMap);
-            var obj2 = Methods.Create(new MetricTimeSpan(0, 0, 1, 150),
+            var obj2 = ObjectMethods.Create(new MetricTimeSpan(0, 0, 1, 150),
                                       new MetricTimeSpan(0, 0, 2, 250),
                                       tempoMap);
 
@@ -597,8 +597,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var tempoMap = TempoMap.Default;
 
-            var obj1 = Methods.Create(new MusicalTimeSpan(), MusicalTimeSpan.Whole, tempoMap);
-            var obj2 = Methods.Create(new MusicalTimeSpan(5, 8), 10 * MusicalTimeSpan.Eighth, tempoMap);
+            var obj1 = ObjectMethods.Create(new MusicalTimeSpan(), MusicalTimeSpan.Whole, tempoMap);
+            var obj2 = ObjectMethods.Create(new MusicalTimeSpan(5, 8), 10 * MusicalTimeSpan.Eighth, tempoMap);
 
             SplitByGrid_MultipleSteps(
                 inputObjects: new[] { obj1, obj2 },
@@ -631,8 +631,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var tempoMap = TempoMap.Default;
 
-            var obj1 = Methods.Create(new MusicalTimeSpan(), MusicalTimeSpan.Whole, tempoMap);
-            var obj2 = Methods.Create(new MusicalTimeSpan(5, 8), 10 * MusicalTimeSpan.Eighth, tempoMap);
+            var obj1 = ObjectMethods.Create(new MusicalTimeSpan(), MusicalTimeSpan.Whole, tempoMap);
+            var obj2 = ObjectMethods.Create(new MusicalTimeSpan(5, 8), 10 * MusicalTimeSpan.Eighth, tempoMap);
 
             SplitByGrid_MultipleSteps(
                 inputObjects: new[] { obj1, obj2 },
@@ -666,8 +666,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var tempoMap = TempoMap.Default;
 
-            var obj1 = Methods.Create(new MidiTimeSpan(), MusicalTimeSpan.Whole, tempoMap);
-            var obj2 = Methods.Create(new MetricTimeSpan(0, 0, 0, 210), new BarBeatTimeSpan(1, 1), tempoMap);
+            var obj1 = ObjectMethods.Create(new MidiTimeSpan(), MusicalTimeSpan.Whole, tempoMap);
+            var obj2 = ObjectMethods.Create(new MetricTimeSpan(0, 0, 0, 210), new BarBeatTimeSpan(1, 1), tempoMap);
 
             var step1 = MusicalTimeSpan.ThirtySecond;
             var step2 = new MetricTimeSpan(0, 0, 1);
@@ -729,7 +729,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var actualObjects = Splitter.SplitByGrid(inputObjects, new SteppedGrid(gridStart, gridSteps), tempoMap).ToArray();
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         private void SplitByGrid_OneStep_SinglePart(ITimeSpan gridStart, ITimeSpan step, TempoMap tempoMap)
@@ -746,8 +746,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var inputObjects = new[]
             {
-                Methods.Create(firstTime, LengthConverter.ConvertFrom(step, firstTime, tempoMap)),
-                Methods.Create(secondTime, LengthConverter.ConvertFrom(step, secondTime, tempoMap))
+                ObjectMethods.Create(firstTime, LengthConverter.ConvertFrom(step, firstTime, tempoMap)),
+                ObjectMethods.Create(secondTime, LengthConverter.ConvertFrom(step, secondTime, tempoMap))
             };
 
             var data = SplitByGrid_ClonesExpected(inputObjects, gridStart, gridSteps, tempoMap);
@@ -760,10 +760,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private SplitData SplitByGrid_ClonesExpected(IEnumerable<TObject> inputObjects, ITimeSpan gridStart, IEnumerable<ITimeSpan> gridSteps, TempoMap tempoMap)
         {
-            var expectedObjects = inputObjects.Select(o => o == null ? default(TObject) : Methods.Clone(o)).ToArray();
+            var expectedObjects = inputObjects.Select(o => o == null ? default(TObject) : ObjectMethods.Clone(o)).ToArray();
             var actualObjects = Splitter.SplitByGrid(inputObjects, new SteppedGrid(gridStart, gridSteps), tempoMap).ToArray();
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
 
             return new SplitData(inputObjects, expectedObjects, actualObjects);
         }
@@ -793,7 +793,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.AreEqual(inputObjects.Length * partsNumber,
                             actualObjects.Length,
                             "Parts count is invalid.");
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
 
             return new SplitData(inputObjects, expectedObjects, actualObjects);
         }
@@ -824,7 +824,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private IEnumerable<TObject> Split(TObject obj, IEnumerable<long> times)
         {
-            var tail = Methods.Clone(obj);
+            var tail = ObjectMethods.Clone(obj);
 
             foreach (var time in times.OrderBy(t => t))
             {
@@ -839,9 +839,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private TObject CloneAndChangeTimeAndLength(TObject obj, long time, long length)
         {
-            var result = Methods.Clone(obj);
-            result.Time = time;
-            result.Length = length;
+            var result = ObjectMethods.Clone(obj);
+            ObjectMethods.SetTime(result, time);
+            ObjectMethods.SetLength(result, length);
             return result;
         }
 

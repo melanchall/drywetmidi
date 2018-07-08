@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestFixture]
-    public sealed class NotesManagingUtilitiesTests
+    public sealed class GetTimedEventsAndNotesUtilitiesTests
     {
         #region Nested classes
 
@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [OneTimeSetUp]
         public void SetUp()
         {
-            TestContext.AddFormatter<ITimedObject>((object obj) =>
+            TestContext.AddFormatter<ITimedObject>(obj =>
             {
                 var timedObject = (ITimedObject)obj;
                 var lengthedObject = obj as ILengthedObject;
@@ -61,10 +61,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         [Test]
         [Description("Make notes from empty collection of timed events.")]
-        public void MakeNotes_EmptyCollections()
+        public void GetTimedEventsAndNotes_EmptyCollections()
         {
             var timedEvents = Enumerable.Empty<TimedEvent>();
-            var actualObjects = timedEvents.MakeNotes().ToList();
+            var actualObjects = timedEvents.GetTimedEventsAndNotes().ToList();
             var expectedObjects = Enumerable.Empty<TimedEvent>();
 
             CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         [Test]
         [Description("Make notes where they are all completed.")]
-        public void MakeNotes_AllProcessed()
+        public void GetTimedEventsAndNotes_AllProcessed()
         {
             var events = new MidiEvent[]
             {
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             };
 
             var timedEvents = new TrackChunk(events).GetTimedEvents();
-            var actualObjects = timedEvents.MakeNotes().ToList();
+            var actualObjects = timedEvents.GetTimedEventsAndNotes().ToList();
 
             var expectedObjects = new ITimedObject[]
             {
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         [Test]
         [Description("Make notes where some notes aren't completed.")]
-        public void MakeNotes_NotAllProcessed()
+        public void GetTimedEventsAndNotes_NotAllProcessed()
         {
             var events = new MidiEvent[]
             {
@@ -138,7 +138,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             };
 
             var timedEvents = new TrackChunk(events).GetTimedEvents();
-            var actualObjects = timedEvents.MakeNotes().ToList();
+            var actualObjects = timedEvents.GetTimedEventsAndNotes().ToList();
 
             var expectedObjects = new ITimedObject[]
             {
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         [Test]
         [Description("Make notes where there are same notes in tail of previous object.")]
-        public void MakeNotes_SameNotesInTail()
+        public void GetTimedEventsAndNotes_SameNotesInTail()
         {
             var events = new MidiEvent[]
             {
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             };
 
             var timedEvents = new TrackChunk(events).GetTimedEvents().Concat(new[] { default(TimedEvent) });
-            var actualObjects = timedEvents.MakeNotes().ToList();
+            var actualObjects = timedEvents.GetTimedEventsAndNotes().ToList();
 
             var expectedObjects = new ITimedObject[]
             {

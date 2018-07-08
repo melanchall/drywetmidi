@@ -1055,9 +1055,48 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region Divide
+
+        [Test]
+        [Description("Divide musical time span by another one.")]
+        public void Divide()
+        {
+            Assert.AreEqual(1, MusicalTimeSpan.Half.Divide(MusicalTimeSpan.Half));
+            Assert.AreEqual(1.5, MusicalTimeSpan.Half.SingleDotted().Divide(MusicalTimeSpan.Half));
+            Assert.AreEqual(0.5, MusicalTimeSpan.Half.Divide(MusicalTimeSpan.Whole));
+
+            Assert.Throws<DivideByZeroException>(() => new MusicalTimeSpan().Divide(new MusicalTimeSpan()));
+        }
+
+        #endregion
+
+        #region ChangeDenominator
+
+        [Test]
+        public void ChangeDenominator()
+        {
+            CheckChangeDenominator(new MusicalTimeSpan(5), 16, 3);
+            CheckChangeDenominator(new MusicalTimeSpan(1, 2), 4, 2);
+            CheckChangeDenominator(MusicalTimeSpan.Eighth, 16, 2);
+            CheckChangeDenominator(MusicalTimeSpan.Whole.SingleDotted(), 5, 8);
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
+
+        private static void CheckChangeDenominator(MusicalTimeSpan timeSpan, long denominator, long numerator)
+        {
+            CheckTimeSpan(timeSpan.ChangeDenominator(denominator), numerator, denominator);
+        }
+
+        private static void CheckTimeSpan(MusicalTimeSpan timeSpan, long numerator, long denominator)
+        {
+            Assert.AreEqual(numerator, timeSpan.Numerator, "Numerator is invalid.");
+            Assert.AreEqual(denominator, timeSpan.Denominator, "Denominator is invalid.");
+        }
 
         private static MidiTimeSpan GetDefaultMidiTimeSpan(MusicalTimeSpan timeSpan)
         {

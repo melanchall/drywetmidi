@@ -37,6 +37,16 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         protected override IComparer Comparer { get; } = new ChordComparer();
 
+        public override void SetTime(Chord obj, long time)
+        {
+            obj.Time = time;
+        }
+
+        public override void SetLength(Chord obj, long length)
+        {
+            obj.Length = length;
+        }
+
         public override Chord Create(long time, long length)
         {
             var chord = new Chord(new Note((SevenBitNumber)_random.Next(SevenBitNumber.MaxValue)),

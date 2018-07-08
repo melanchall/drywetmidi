@@ -50,12 +50,12 @@ namespace Melanchall.DryWetMidi.Tools
                         return result;
                 }
 
-                obj.Length = endTime - time;
+                LengthSetter.SetObjectLength(obj, endTime - time);
             }
             else
             {
                 var length = obj.LengthAs(settings.LengthType, tempoMap);
-                obj.Length = LengthConverter.ConvertFrom(length, time, tempoMap);
+                LengthSetter.SetObjectLength(obj, LengthConverter.ConvertFrom(length, time, tempoMap));
             }
 
             return new TimeProcessingInstruction(time);
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Tools
                         return result;
                 }
 
-                obj.Length = time - startTime;
+                LengthSetter.SetObjectLength(obj, time - startTime);
             }
             else
             {
@@ -95,13 +95,13 @@ namespace Melanchall.DryWetMidi.Tools
                         case QuantizingBeyondZeroPolicy.Abort:
                             throw new InvalidOperationException("Object is going to be moved beyond zero.");
                         case QuantizingBeyondZeroPolicy.FixAtZero:
-                            obj.Length = time;
+                            LengthSetter.SetObjectLength(obj, time);
                             break;
                     }
                 }
                 else
                 {
-                    obj.Length = LengthConverter.ConvertFrom(length, newStartTime, tempoMap);
+                    LengthSetter.SetObjectLength(obj, LengthConverter.ConvertFrom(length, newStartTime, tempoMap));
                 }
             }
 
@@ -174,10 +174,10 @@ namespace Melanchall.DryWetMidi.Tools
             switch (target)
             {
                 case LengthedObjectTarget.Start:
-                    obj.Time = time;
+                    TimeSetter.SetObjectTime(obj, time);
                     break;
                 case LengthedObjectTarget.End:
-                    obj.Time = time - obj.Length;
+                    TimeSetter.SetObjectTime(obj, time - obj.Length);
                     break;
                 default:
                     throw new NotSupportedException($"{target} quantization target is not supported to set time.");
@@ -191,29 +191,30 @@ namespace Melanchall.DryWetMidi.Tools
         /// Inside this method the new time can be changed or quantizing of an object can be cancelled.
         /// </remarks>
         /// <param name="obj">Object to quantize.</param>
-        /// <param name="time"></param>
+        /// <param name="quantizedTime">Holds information about new time for an object.</param>
         /// <param name="grid">Grid to quantize object by.</param>
-        /// <param name="gridTimes">Calculated grid's times object will be quantized by.</param>
         /// <param name="tempoMap">Tempo map used to quantize object.</param>
         /// <param name="settings">Settings according to which object should be quantized.</param>
         /// <returns>An object indicating whether the new time should be set to the object
         /// or not. Also returned object contains that new time.</returns>
-        protected override TimeProcessingInstruction OnObjectQuantizing(TObject obj,
-                                                                        long time,
-                                                                        IGrid grid,
-                                                                        IReadOnlyCollection<long> gridTimes,
-                                                                        TempoMap tempoMap,
-                                                                        TSettings settings)
+        protected override TimeProcessingInstruction OnObjectQuantizing(
+            TObject obj,
+            QuantizedTime quantizedTime,
+            IGrid grid,
+            TempoMap tempoMap,
+            TSettings settings)
         {
+            var newTime = quantizedTime.NewTime;
+
             switch (settings.QuantizingTarget)
             {
                 case LengthedObjectTarget.Start:
-                    return CorrectObjectOnStartQuantizing(obj, time, tempoMap, settings);
+                    return CorrectObjectOnStartQuantizing(obj, newTime, tempoMap, settings);
                 case LengthedObjectTarget.End:
-                    return CorrectObjectOnEndQuantizing(obj, time, tempoMap, settings);
+                    return CorrectObjectOnEndQuantizing(obj, newTime, tempoMap, settings);
             }
 
-            return new TimeProcessingInstruction(time);
+            return new TimeProcessingInstruction(newTime);
         }
 
         #endregion

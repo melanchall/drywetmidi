@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>The event at the specified index.</returns>
         /// <exception cref="ArgumentOutOfRangeException"> <paramref name="index"/> is less than 0;
         /// or <paramref name="index"/> is equal to or greater than <see cref="Count"/>.</exception>
-        /// <exception cref="ArgumentNullException">value is null</exception>
+        /// <exception cref="ArgumentNullException">value is null.</exception>
         public MidiEvent this[int index]
         {
             get

@@ -64,10 +64,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const int DupletNotesCount = 2;
         private const int DupletSpaceSize = 3;
 
-        private const int NoTupletNotesCount = 1;
-        private const int NoTupletSpaceSize = 1;
-
-        private const int NoDotsCount = 0;
         private const int SingleDotCount = 1;
         private const int DoubleDotCount = 2;
 
@@ -103,14 +99,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="numerator">The numerator of fraction of the whole note's length.</param>
         /// <param name="denominator">The denominator of fraction of the whole note's length.</param>
+        /// <param name="simplify">true if the time span should be simplified, false otherwise.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="numerator"/> is negative. -or-
         /// <paramref name="denominator"/> is zero or negative.</exception>
-        public MusicalTimeSpan(long numerator, long denominator)
+        public MusicalTimeSpan(long numerator, long denominator, bool simplify = true)
         {
             ThrowIfArgument.IsNegative(nameof(numerator), numerator, "Numerator is negative.");
             ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is zero or negative.");
 
-            var greatestCommonDivisor = MathUtilities.GreatestCommonDivisor(numerator, denominator);
+            var greatestCommonDivisor = simplify
+                ? MathUtilities.GreatestCommonDivisor(numerator, denominator)
+                : 1;
 
             Numerator = numerator / greatestCommonDivisor;
             Denominator = denominator / greatestCommonDivisor;
@@ -123,12 +122,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <summary>
         /// Gets the numerator of the current <see cref="MusicalTimeSpan"/>.
         /// </summary>
-        public long Numerator { get; } = ZeroTimeSpanNumerator;
+        public long Numerator { get; }
 
         /// <summary>
         /// Gets the denominator of the current <see cref="MusicalTimeSpan"/>.
         /// </summary>
-        public long Denominator { get; } = ZeroTimeSpanDenominator;
+        public long Denominator { get; }
 
         #endregion
 
@@ -200,6 +199,39 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public MusicalTimeSpan Duplet()
         {
             return Tuplet(DupletNotesCount, DupletSpaceSize);
+        }
+
+        /// <summary>
+        /// Divides the current time span by the specified <see cref="MusicalTimeSpan"/> returning ration
+        /// between them.
+        /// </summary>
+        /// <param name="timeSpan"><see cref="MusicalTimeSpan"/> to divide the current time span by.</param>
+        /// <returns>Rayion between the current <see cref="MusicalTimeSpan"/> and <paramref name="timeSpan"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is null.</exception>
+        /// <exception cref="DivideByZeroException"><paramref name="timeSpan"/> represents a time span of zero length.</exception>
+        public double Divide(MusicalTimeSpan timeSpan)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+
+            if (timeSpan.Numerator == 0)
+                throw new DivideByZeroException("Dividing by zero time span.");
+
+            return (double)Numerator * timeSpan.Denominator / (Denominator * timeSpan.Numerator);
+        }
+
+        /// <summary>
+        /// Changes denominator of the current <see cref="MusicalTimeSpan"/>.
+        /// </summary>
+        /// <param name="denominator">New denominator.</param>
+        /// <returns>An instance of the <see cref="MusicalTimeSpan"/> which represents the same time span as
+        /// the original one but with the specified denominator.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="denominator"/> is zero or negative.</exception>
+        public MusicalTimeSpan ChangeDenominator(long denominator)
+        {
+            ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is zero or negative.");
+
+            var numerator = MathUtilities.RoundToLong((double)denominator / Denominator * Numerator);
+            return new MusicalTimeSpan(numerator, denominator, false);
         }
 
         /// <summary>

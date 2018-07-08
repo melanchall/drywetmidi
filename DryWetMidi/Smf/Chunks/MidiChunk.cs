@@ -65,6 +65,12 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
+        /// Clones chunk by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the chunk.</returns>
+        public abstract MidiChunk Clone();
+
+        /// <summary>
         /// Reads chunk from the <see cref="MidiReader"/>'s underlying stream according to
         /// specified <see cref="ReadingSettings"/>.
         /// </summary>

@@ -50,6 +50,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static ITimeSpan ConvertTo(ITimeSpan timeSpan, TimeSpanType timeSpanType, long time, TempoMap tempoMap)
         {
+            if (timeSpan.GetType() == TimeSpansTypes[timeSpanType])
+                return timeSpan.Clone();
+
             return ConvertTo(ConvertFrom(timeSpan, time, tempoMap), timeSpanType, time, tempoMap);
         }
 

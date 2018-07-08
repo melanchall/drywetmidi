@@ -125,6 +125,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
+        /// Divides the current time span by the specified <see cref="MetricTimeSpan"/> returning ration
+        /// between them.
+        /// </summary>
+        /// <param name="timeSpan"><see cref="MetricTimeSpan"/> to divide the current time span by.</param>
+        /// <returns>Rayion between the current <see cref="MetricTimeSpan"/> and <paramref name="timeSpan"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is null.</exception>
+        /// <exception cref="DivideByZeroException"><paramref name="timeSpan"/> represents a time span of zero length.</exception>
+        public double Divide(MetricTimeSpan timeSpan)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+
+            var ticks = timeSpan._timeSpan.Ticks;
+            if (ticks == 0)
+                throw new DivideByZeroException("Dividing by zero time span.");
+
+            return (double)_timeSpan.Ticks / timeSpan._timeSpan.Ticks;
+        }
+
+        /// <summary>
         /// Converts the string representation of a metric time span to its <see cref="MetricTimeSpan"/>
         /// equivalent. A return value indicates whether the conversion succeeded.
         /// </summary>

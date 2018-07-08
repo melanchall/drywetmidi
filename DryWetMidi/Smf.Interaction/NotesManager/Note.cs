@@ -159,7 +159,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Properties
 
         /// <summary>
-        /// Gets or sets absolute time of the note in units defined by the time division of a MIDI file.
+        /// Gets absolute time of the note in units defined by the time division of a MIDI file.
         /// </summary>
         public long Time
         {
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Gets or sets length of the note in units defined by the time division of a MIDI file.
+        /// Gets length of the note in units defined by the time division of a MIDI file.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">Value is negative.</exception>
         public long Length

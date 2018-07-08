@@ -16,7 +16,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="NoteOffEvent"/>.
         /// </summary>
         public NoteOffEvent()
-            : base()
         {
         }
 

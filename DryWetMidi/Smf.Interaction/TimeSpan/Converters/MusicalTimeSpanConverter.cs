@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
-            //
+            if (timeSpan == 0)
+                return new MusicalTimeSpan();
 
             var xy = MathUtilities.SolveDiophantineEquation(4 * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, -timeSpan);
             return new MusicalTimeSpan(Math.Abs(xy.Item1), Math.Abs(xy.Item2));
@@ -26,6 +27,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             var musicalTimeSpan = (MusicalTimeSpan)timeSpan;
+            if (musicalTimeSpan.Numerator == 0)
+                return 0;
 
             return MathUtilities.RoundToLong(4.0 * musicalTimeSpan.Numerator * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote / musicalTimeSpan.Denominator);
         }

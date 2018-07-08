@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         public MidiEvent Event { get; }
 
         /// <summary>
-        /// Gets or sets absolute time of the event in units defined by the time division of a MIDI file.
+        /// Gets absolute time of the event in units defined by the time division of a MIDI file.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">Value is negative.</exception>
         public long Time

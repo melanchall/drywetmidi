@@ -1,10 +1,10 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Tests.Tools
+namespace Melanchall.DryWetMidi.Tests.Common
 {
     internal sealed class TimeAndLength
     {
-        #region Constrcutor
+        #region Constructor
 
         public TimeAndLength(ITimeSpan time, ITimeSpan length)
         {

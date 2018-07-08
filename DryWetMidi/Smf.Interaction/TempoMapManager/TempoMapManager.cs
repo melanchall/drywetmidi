@@ -320,8 +320,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             var firstEventsCollection = _timedEventsManagers.First().Events;
-            firstEventsCollection.Add(TempoMap.Tempo.Values.Select(GetSetTempoTimedEvent));
-            firstEventsCollection.Add(TempoMap.TimeSignature.Values.Select(GetTimeSignatureTimedEvent));
+            firstEventsCollection.Add(TempoMap.Tempo.Select(GetSetTempoTimedEvent));
+            firstEventsCollection.Add(TempoMap.TimeSignature.Select(GetTimeSignatureTimedEvent));
 
             foreach (var timedEventsManager in _timedEventsManagers)
             {
