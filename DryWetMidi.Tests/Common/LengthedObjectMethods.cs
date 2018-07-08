@@ -37,9 +37,9 @@ namespace Melanchall.DryWetMidi.Tests.Common
             return result;
         }
 
-        public void AssertCollectionsAreEqual(IEnumerable<TObject> expected, IEnumerable<TObject> actual)
+        public void AssertCollectionsAreEqual(IEnumerable<TObject> expected, IEnumerable<TObject> actual, string message = null)
         {
-            CollectionAssert.AreEqual(expected, actual, Comparer);
+            CollectionAssert.AreEqual(expected, actual, Comparer, message);
         }
 
         public abstract TObject Create(long time, long length);

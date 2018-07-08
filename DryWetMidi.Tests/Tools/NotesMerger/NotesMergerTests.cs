@@ -174,74 +174,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                   tempoMap);
         }
 
-        [Test]
-        [Description("Merge notes using First velocity merging policy.")]
-        public void Merge_VelocityMergingPolicy_First()
+        [TestCase(VelocityMergingPolicy.First, 100)]
+        [TestCase(VelocityMergingPolicy.Last, 50)]
+        [TestCase(VelocityMergingPolicy.Min, 50)]
+        [TestCase(VelocityMergingPolicy.Max, 100)]
+        [TestCase(VelocityMergingPolicy.Average, 75)]
+        public void Merge_VelocityMergingPolicy_First(VelocityMergingPolicy policy, byte expectedVelocity)
         {
-            Merge_VelocityMergingPolicy(VelocityMergingPolicy.First, (SevenBitNumber)100);
+            Merge_VelocityMergingPolicy(policy, (SevenBitNumber)expectedVelocity);
         }
 
-        [Test]
-        [Description("Merge notes using Last velocity merging policy.")]
-        public void Merge_VelocityMergingPolicy_Last()
+        [TestCase(VelocityMergingPolicy.First, 100)]
+        [TestCase(VelocityMergingPolicy.Last, 50)]
+        [TestCase(VelocityMergingPolicy.Min, 50)]
+        [TestCase(VelocityMergingPolicy.Max, 100)]
+        [TestCase(VelocityMergingPolicy.Average, 75)]
+        public void Merge_OffVelocityMergingPolicy_First(VelocityMergingPolicy policy, byte expectedVelocity)
         {
-            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Last, (SevenBitNumber)50);
-        }
-
-        [Test]
-        [Description("Merge notes using Min velocity merging policy.")]
-        public void Merge_VelocityMergingPolicy_Min()
-        {
-            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Min, (SevenBitNumber)50);
-        }
-
-        [Test]
-        [Description("Merge notes using Max velocity merging policy.")]
-        public void Merge_VelocityMergingPolicy_Max()
-        {
-            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Max, (SevenBitNumber)100);
-        }
-
-        [Test]
-        [Description("Merge notes using Average velocity merging policy.")]
-        public void Merge_VelocityMergingPolicy_Average()
-        {
-            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Average, (SevenBitNumber)75);
-        }
-
-        [Test]
-        [Description("Merge notes using First off velocity merging policy.")]
-        public void Merge_OffVelocityMergingPolicy_First()
-        {
-            Merge_OffVelocityMergingPolicy(VelocityMergingPolicy.First, (SevenBitNumber)100);
-        }
-
-        [Test]
-        [Description("Merge notes using Last off velocity merging policy.")]
-        public void Merge_OffVelocityMergingPolicy_Last()
-        {
-            Merge_OffVelocityMergingPolicy(VelocityMergingPolicy.Last, (SevenBitNumber)50);
-        }
-
-        [Test]
-        [Description("Merge notes using Min off velocity merging policy.")]
-        public void Merge_OffVelocityMergingPolicy_Min()
-        {
-            Merge_OffVelocityMergingPolicy(VelocityMergingPolicy.Min, (SevenBitNumber)50);
-        }
-
-        [Test]
-        [Description("Merge notes using Max off velocity merging policy.")]
-        public void Merge_OffVelocityMergingPolicy_Max()
-        {
-            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Max, (SevenBitNumber)100);
-        }
-
-        [Test]
-        [Description("Merge notes using Average off velocity merging policy.")]
-        public void Merge_OffVelocityMergingPolicy_Average()
-        {
-            Merge_VelocityMergingPolicy(VelocityMergingPolicy.Average, (SevenBitNumber)75);
+            Merge_OffVelocityMergingPolicy(policy, (SevenBitNumber)expectedVelocity);
         }
 
         [Test]
@@ -416,18 +366,36 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                            VelocityMergingPolicy offVelocityMergingPolicy = VelocityMergingPolicy.Last,
                            ITimeSpan tolerance = null)
         {
-            var actualNotes = new NotesMerger().Merge(
-                inputNotes,
-                tempoMap,
-                new NotesMergingSettings
-                {
-                    VelocityMergingPolicy = velocityMergingPolicy,
-                    OffVelocityMergingPolicy = offVelocityMergingPolicy,
-                    Tolerance = tolerance ?? new MidiTimeSpan()
-                });
+            var settings = new NotesMergingSettings
+            {
+                VelocityMergingPolicy = velocityMergingPolicy,
+                OffVelocityMergingPolicy = offVelocityMergingPolicy,
+                Tolerance = tolerance ?? new MidiTimeSpan()
+            };
+
+            var actualNotes = new NotesMerger().Merge(inputNotes, tempoMap, settings);
 
             ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),
-                                                    actualNotes.OrderBy(n => n.Time));
+                                                    actualNotes.OrderBy(n => n.Time),
+                                                    "Merging detached notes failed.");
+
+            //
+
+            var trackChunk = inputNotes.ToTrackChunk();
+            trackChunk.MergeNotes(tempoMap, settings);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),
+                                                    trackChunk.GetNotes(),
+                                                    "Merging notes inside a track chunk failed.");
+
+            //
+
+            var midiFile = inputNotes.ToFile();
+            midiFile.MergeNotes(settings);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),
+                                                    midiFile.GetNotes(),
+                                                    "Merging notes inside a file failed.");
         }
 
         private IEnumerable<Note> CreateNotes(string[] timesAndLengths,
