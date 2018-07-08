@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         /// <summary>
         /// Iterates through the specified collection of <see cref="Note"/> returning instances of <see cref="Note"/>
-        /// and <see cref="Rest"/> wher rests calculated using the specified policy.
+        /// and <see cref="Rest"/> where rests calculated using the specified policy.
         /// </summary>
         /// <param name="notes">Collection of <see cref="Note"/> to iterate over.</param>
         /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>

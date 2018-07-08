@@ -15,7 +15,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <remarks>
         /// False means notes treated as just Note On / Note Off events rather than note objects
-        /// for true. Splitting notes produces new events at points of grid intersecting notes.
+        /// for true. Splitting notes produces new Note On / Note Off events at points of grid
+        /// intersecting notes.
         /// </remarks>
         public bool SplitNotes { get; set; } = true;
 

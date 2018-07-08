@@ -11,12 +11,12 @@
         NoSeparation = 0,
 
         /// <summary>
-        /// Rests should be constructed individually for each channel despite of note number.
+        /// Rests should be constructed individually for each channel ignoring note number.
         /// </summary>
         SeparateByChannel,
 
         /// <summary>
-        /// Rests should be constructed individually for each note number despite of channel.
+        /// Rests should be constructed individually for each note number ignoring channel.
         /// </summary>
         SeparateByNoteNumber,
 
