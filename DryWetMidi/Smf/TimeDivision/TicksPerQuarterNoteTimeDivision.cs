@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Gets or sets number of ticks which make up a quarter-note.
         /// </summary>
-        public short TicksPerQuarterNote { get; set; } = DefaultTicksPerQuarterNote;
+        public short TicksPerQuarterNote { get; } = DefaultTicksPerQuarterNote;
 
         #endregion
 

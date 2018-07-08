@@ -105,8 +105,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Randomize_Start(
                 new[]
                 {
-                    Methods.Create(1000, 1000),
-                    Methods.Create(0, 10000),
+                    ObjectMethods.Create(1000, 1000),
+                    ObjectMethods.Create(0, 10000),
                 },
                 new ConstantBounds((MidiTimeSpan)0),
                 new[]
@@ -125,8 +125,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Randomize_Start(
                 new[]
                 {
-                    Methods.Create(1000, 1000),
-                    Methods.Create(0, 10000),
+                    ObjectMethods.Create(1000, 1000),
+                    ObjectMethods.Create(0, 10000),
                 },
                 new ConstantBounds((MidiTimeSpan)10000),
                 new[]
@@ -145,8 +145,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Randomize_Start(
                 new[]
                 {
-                    Methods.Create(new MetricTimeSpan(0, 1, 23), (MidiTimeSpan)1000, tempoMap),
-                    Methods.Create(0, 10000),
+                    ObjectMethods.Create(new MetricTimeSpan(0, 1, 23), (MidiTimeSpan)1000, tempoMap),
+                    ObjectMethods.Create(0, 10000),
                 },
                 new ConstantBounds(new MetricTimeSpan(0, 2, 0)),
                 new[]
@@ -165,7 +165,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             for (int i = 0; i < RepeatRandomizationCount; i++)
             {
-                var clonedActualObjects = actualObjects.Select(o => o != null ? Methods.Clone(o) : default(TObject)).ToList();
+                var clonedActualObjects = actualObjects.Select(o => o != null ? ObjectMethods.Clone(o) : default(TObject)).ToList();
                 Randomize(LengthedObjectTarget.Start, clonedActualObjects, bounds, expectedBounds, tempoMap);
             }
         }

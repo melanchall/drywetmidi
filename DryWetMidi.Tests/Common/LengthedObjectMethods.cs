@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public void SetLength(TObject obj, ITimeSpan length, ITimeSpan time, TempoMap tempoMap)
         {
             var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
-            obj.Length = LengthConverter.ConvertFrom(length, convertedTime, tempoMap);
+            SetLength(obj, LengthConverter.ConvertFrom(length, convertedTime, tempoMap));
         }
 
         public TObject Create(ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
@@ -21,10 +21,30 @@ namespace Melanchall.DryWetMidi.Tests.Common
             return Create(convertedTime, LengthConverter.ConvertFrom(length, convertedTime, tempoMap));
         }
 
-        public void AssertCollectionsAreEqual(IEnumerable<TObject> expected, IEnumerable<TObject> actual)
+        public IEnumerable<TObject> CreateCollection(TempoMap tempoMap, params string[] timeAndLengthStrings)
         {
-            CollectionAssert.AreEqual(expected, actual, Comparer);
+            var result = new List<TObject>();
+
+            foreach (var timeAndLengthString in timeAndLengthStrings)
+            {
+                var parts = timeAndLengthString.Split(';');
+                var time = TimeSpanUtilities.Parse(parts[0]);
+                var length = TimeSpanUtilities.Parse(parts[1]);
+
+                result.Add(Create(time, length, tempoMap));
+            }
+
+            return result;
         }
+
+        public void AssertCollectionsAreEqual(IEnumerable<TObject> expected, IEnumerable<TObject> actual, string message = null)
+        {
+            CollectionAssert.AreEqual(expected, actual, Comparer, message);
+        }
+
+        public abstract TObject Create(long time, long length);
+
+        public abstract void SetLength(TObject obj, long length);
 
         #endregion
     }

@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             //
 
-            IEnumerable<Interval> intervals = null;
+            IEnumerable<Interval> intervals;
 
             var intervalGroup = match.Groups[IntervalGroupName];
             if (intervalGroup.Success)

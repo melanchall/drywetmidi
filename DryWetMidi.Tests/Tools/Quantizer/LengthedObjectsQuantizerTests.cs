@@ -66,6 +66,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        [Description("Quantize start times of objects near grid's last time.")]
+        public void Quantize_Start_LastTime()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_Start_DontFixEnd(
+                new[]
+                {
+                    ObjectMethods.Create(MusicalTimeSpan.Sixteenth.SingleDotted(), MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Sixteenth.SingleDotted(), MusicalTimeSpan.SixtyFourth, tempoMap)
+                },
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                new ITimeSpan[]
+                {
+                    MusicalTimeSpan.Eighth,
+                    MusicalTimeSpan.Eighth
+                },
+                tempoMap);
+        }
+
+        [Test]
         [Description("Quantize start times by grid of one step starting from zero.")]
         public void Quantize_Start_OneStep_FromZero()
         {
@@ -74,9 +95,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_Start_DontFixEnd(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Eighth, (MidiTimeSpan)123, tempoMap)
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, (MidiTimeSpan)123, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Eighth),
                 new ITimeSpan[]
@@ -97,9 +118,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_Start_DontFixEnd(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole.SingleDotted(), (MidiTimeSpan)123, tempoMap)
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole.SingleDotted(), (MidiTimeSpan)123, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Whole, MusicalTimeSpan.Eighth),
                 new[]
@@ -120,10 +141,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_Start_FixEnd(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.ThirtySecond, 3 * MusicalTimeSpan.ThirtySecond, tempoMap),
-                    Methods.Create(2 * MusicalTimeSpan.Eighth + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole.SingleDotted(), MusicalTimeSpan.Whole, tempoMap)
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.ThirtySecond, 3 * MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(2 * MusicalTimeSpan.Eighth + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole.SingleDotted(), MusicalTimeSpan.Whole, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Eighth, MusicalTimeSpan.Eighth),
                 new[]
@@ -145,9 +166,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_Start_DontFixEnd(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.ThirtySecond, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half, tempoMap),
                 },
                 new SteppedGrid(new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter }),
                 new ITimeSpan[]
@@ -168,10 +189,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_Start_DontFixEnd(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.ThirtySecond, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter, MusicalTimeSpan.Half, tempoMap),
                 },
                 new SteppedGrid(MusicalTimeSpan.ThirtySecond, new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter }),
                 new ITimeSpan[]
@@ -193,10 +214,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_Start_FixEnd(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.ThirtySecond, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter, MusicalTimeSpan.Half, tempoMap),
                 },
                 new SteppedGrid(MusicalTimeSpan.ThirtySecond, new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter }),
                 new[]
@@ -219,11 +240,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -245,7 +266,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.Throws<InvalidOperationException>(() => Quantize_Start_QuantizingBeyondFixedEnd(
                 new[]
                 {
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -266,11 +287,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -293,11 +314,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -320,11 +341,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter.SingleDotted(), MusicalTimeSpan.Quarter, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -341,7 +362,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Description("Quantize start times using metric distance calculation.")]
         public void Quantize_Start_MetricDistance()
         {
-            TempoMap tempoMap = null;
+            TempoMap tempoMap;
 
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -356,9 +377,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(new MetricTimeSpan(0, 0, 1, 600), new MetricTimeSpan(0, 0, 2), tempoMap),
+                    ObjectMethods.Create(new MetricTimeSpan(0, 0, 1, 600), new MetricTimeSpan(0, 0, 2), tempoMap),
                     // Already quantized
-                    Methods.Create(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 2), tempoMap)
+                    ObjectMethods.Create(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 2), tempoMap)
                 },
                 new SteppedGrid(new MetricTimeSpan(0, 0, 1)),
                 new[]
@@ -374,7 +395,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Description("Quantize start times using metric length hint.")]
         public void Quantize_Start_MetricLength()
         {
-            TempoMap tempoMap = null;
+            TempoMap tempoMap;
 
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -389,11 +410,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(new MetricTimeSpan(0, 0, 1, 600), new MetricTimeSpan(0, 0, 2), tempoMap),
+                    ObjectMethods.Create(new MetricTimeSpan(0, 0, 1, 600), new MetricTimeSpan(0, 0, 2), tempoMap),
                     // The case in presence of no tempo change
-                    Methods.Create(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 1), tempoMap),
+                    ObjectMethods.Create(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 1), tempoMap),
                     // Already quantized
-                    Methods.Create(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 2), tempoMap)
+                    ObjectMethods.Create(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 2), tempoMap)
                 },
                 new SteppedGrid(new MetricTimeSpan(0, 0, 1)),
                 new[]
@@ -416,9 +437,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 SkipQuantizer,
                 new[]
                 {
-                    Methods.Create(160, 200),
-                    Methods.Create(10, 300),
-                    Methods.Create(100, 250)
+                    ObjectMethods.Create(160, 200),
+                    ObjectMethods.Create(10, 300),
+                    ObjectMethods.Create(100, 250)
                 },
                 new SteppedGrid((MidiTimeSpan)100),
                 new[]
@@ -441,9 +462,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 FixedTimeQuantizerGetter(1000),
                 new[]
                 {
-                    Methods.Create(160, 200),
-                    Methods.Create(10, 300),
-                    Methods.Create(100, 250)
+                    ObjectMethods.Create(160, 200),
+                    ObjectMethods.Create(10, 300),
+                    ObjectMethods.Create(100, 250)
                 },
                 new SteppedGrid((MidiTimeSpan)100),
                 new[]
@@ -453,6 +474,63 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimeAndLength((MidiTimeSpan)1000, (MidiTimeSpan)250)
                 },
                 false,
+                tempoMap);
+        }
+
+        [Test]
+        [Description("Quantize start times using quantizing level of zero.")]
+        public void Quantize_Start_CustomQuantizingLevel_NoQuantizing()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_Start_CustomQuantizingLevel(
+                ObjectMethods.CreateCollection(tempoMap, "0; 1/1", "1/16.; 1/2", "33/32; 1/2"),
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                0.0,
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Sixteenth.SingleDotted(),
+                    MusicalTimeSpan.Whole + MusicalTimeSpan.ThirtySecond,
+                },
+                tempoMap);
+        }
+
+        [Test]
+        [Description("Quantize start times using full quantizing level.")]
+        public void Quantize_Start_CustomQuantizingLevel_FullQuantizing()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_Start_CustomQuantizingLevel(
+                ObjectMethods.CreateCollection(tempoMap, "0; 1/1", "1/16.; 1/2", "33/32; 1/2"),
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                1.0,
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Eighth,
+                    MusicalTimeSpan.Whole
+                },
+                tempoMap);
+        }
+
+        [Test]
+        [Description("Quantize start times using half quantizing level.")]
+        public void Quantize_Start_CustomQuantizingLevel_HalfQuantizing()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_Start_CustomQuantizingLevel(
+                ObjectMethods.CreateCollection(tempoMap, "0; 1/1", "1/16.; 1/2", "33/32; 1/2"),
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                0.5,
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Sixteenth.SingleDotted() + MusicalTimeSpan.SixtyFourth,
+                    MusicalTimeSpan.Whole + MusicalTimeSpan.SixtyFourth
+                },
                 tempoMap);
         }
 
@@ -483,6 +561,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        [Description("Quantize end times of objects near grid's last time.")]
+        public void Quantize_End_LastTime()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_End_DontFixStart(
+                new[]
+                {
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Eighth, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Sixteenth.SingleDotted(), tempoMap)
+                },
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.ThirtySecond
+                },
+                tempoMap);
+        }
+
+        [Test]
         [Description("Quantize end times by grid of one step starting from zero.")]
         public void Quantize_End_OneStep_FromZero()
         {
@@ -491,9 +590,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_End_DontFixStart(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.Whole, tempoMap)
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.Whole, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Eighth),
                 new ITimeSpan[]
@@ -514,9 +613,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Quantize_End_DontFixStart(
                 new[]
                 {
-                    Methods.Create(MusicalTimeSpan.Quarter, MusicalTimeSpan.Half.SingleDotted() + MusicalTimeSpan.ThirtySecond, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
-                    Methods.Create(MusicalTimeSpan.Whole.SingleDotted(), MusicalTimeSpan.Half, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter, MusicalTimeSpan.Half.SingleDotted() + MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Whole.SingleDotted(), MusicalTimeSpan.Half, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Whole, MusicalTimeSpan.Eighth),
                 new ITimeSpan[]
@@ -538,11 +637,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // Increase length
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Decrease length
-                    Methods.Create(MusicalTimeSpan.Sixteenth + MusicalTimeSpan.Quarter, MusicalTimeSpan.Half, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Sixteenth + MusicalTimeSpan.Quarter, MusicalTimeSpan.Half, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Eighth, MusicalTimeSpan.Half),
                 new[]
@@ -564,11 +663,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // Already quantized
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
                     // Move forward
-                    Methods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole, tempoMap),
                     // Move back
-                    Methods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.Whole + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth + MusicalTimeSpan.Whole + MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half, tempoMap),
                 },
                 new SteppedGrid(new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter }),
                 new ITimeSpan[]
@@ -590,11 +689,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
                     // Move forward
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Move back
-                    Methods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
                 },
                 new SteppedGrid(MusicalTimeSpan.ThirtySecond, new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter }),
                 new ITimeSpan[]
@@ -616,11 +715,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
                     // Move forward
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Move back
-                    Methods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, MusicalTimeSpan.Whole - MusicalTimeSpan.Eighth, tempoMap),
                 },
                 new SteppedGrid(MusicalTimeSpan.ThirtySecond, new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter }),
                 new[]
@@ -642,13 +741,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, tempoMap),
                     // Quantized exactly at zero
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter - MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter - MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter.SingleDotted(), tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter.SingleDotted(), tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Quarter),
                 new[]
@@ -671,7 +770,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.Throws<InvalidOperationException>(() => Quantize_End_QuantizingBeyondZero(
                 new[]
                 {
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, tempoMap)
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Quarter),
                 new[]
@@ -692,13 +791,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create((MidiTimeSpan)0, MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, tempoMap),
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, tempoMap),
                     // Quantized exactly at zero
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter - MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter - MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter.SingleDotted(), tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Quarter.SingleDotted(), tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Quarter),
                 new[]
@@ -722,11 +821,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -748,7 +847,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.Throws<InvalidOperationException>(() => Quantize_End_QuantizingBeyondFixedEnd(
                 new[]
                 {
-                    Methods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -769,11 +868,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -796,11 +895,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -823,11 +922,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new[]
                 {
                     // The case
-                    Methods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.ThirtySecond, tempoMap),
                     // Already quantized
-                    Methods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Half, MusicalTimeSpan.Whole, tempoMap),
                     // Regular case
-                    Methods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
+                    ObjectMethods.Create(MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.Half.SingleDotted(), tempoMap)
                 },
                 new SteppedGrid(MusicalTimeSpan.Half),
                 new[]
@@ -850,9 +949,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 SkipQuantizer,
                 new[]
                 {
-                    Methods.Create(160, 200),
-                    Methods.Create(10, 300),
-                    Methods.Create(100, 250)
+                    ObjectMethods.Create(160, 200),
+                    ObjectMethods.Create(10, 300),
+                    ObjectMethods.Create(100, 250)
                 },
                 new SteppedGrid((MidiTimeSpan)100),
                 new[]
@@ -875,9 +974,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 FixedTimeQuantizerGetter(1000),
                 new[]
                 {
-                    Methods.Create(160, 200),
-                    Methods.Create(10, 300),
-                    Methods.Create(100, 250)
+                    ObjectMethods.Create(160, 200),
+                    ObjectMethods.Create(10, 300),
+                    ObjectMethods.Create(100, 250)
                 },
                 new SteppedGrid((MidiTimeSpan)100),
                 new[]
@@ -890,9 +989,80 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 tempoMap);
         }
 
+        [Test]
+        [Description("Quantize end times using quantizing level of zero.")]
+        public void Quantize_End_CustomQuantizingLevel_NoQuantizing()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_End_CustomQuantizingLevel(
+                ObjectMethods.CreateCollection(tempoMap, "0; 1/1", "1/16.; 1/2", "17/32; 1/2"),
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                0.0,
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Sixteenth.SingleDotted(),
+                    MusicalTimeSpan.Half + MusicalTimeSpan.ThirtySecond
+                },
+                tempoMap);
+        }
+
+        [Test]
+        [Description("Quantize end times using full quantizing level.")]
+        public void Quantize_End_CustomQuantizingLevel_FullQuantizing()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_End_CustomQuantizingLevel(
+                ObjectMethods.CreateCollection(tempoMap, "0; 1/1", "1/16.; 1/2", "17/32; 1/2"),
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                1.0,
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Eighth,
+                    MusicalTimeSpan.Half
+                },
+                tempoMap);
+        }
+
+        [Test]
+        [Description("Quantize end times using half quantizing level.")]
+        public void Quantize_End_CustomQuantizingLevel_HalfQuantizing()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_End_CustomQuantizingLevel(
+                ObjectMethods.CreateCollection(tempoMap, "0; 1/1", "1/16.; 1/2", "17/32; 1/2"),
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                0.5,
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Sixteenth.SingleDotted() + MusicalTimeSpan.SixtyFourth,
+                    MusicalTimeSpan.Half + MusicalTimeSpan.SixtyFourth
+                },
+                tempoMap);
+        }
+
         #endregion
 
         #region Private methods
+
+        private void Quantize_Start_CustomQuantizingLevel(IEnumerable<TObject> actualObjects,
+                                                          IGrid grid,
+                                                          double quantizingLevel,
+                                                          IEnumerable<ITimeSpan> expectedTimes,
+                                                          TempoMap tempoMap)
+        {
+            Quantize_Start(actualObjects,
+                           grid,
+                           GetExpectedTimesAndLengths(actualObjects, expectedTimes),
+                           false,
+                           tempoMap,
+                           quantizingLevel: quantizingLevel);
+        }
 
         private void Quantize_Start_DontFixEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
         {
@@ -917,6 +1087,20 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         private void Quantize_Start_QuantizingBeyondFixedEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<TimeAndLength> expectedTimes, TempoMap tempoMap, QuantizingBeyondFixedEndPolicy policy)
         {
             Quantize_Start(actualObjects, grid, expectedTimes, true, tempoMap, policy);
+        }
+
+        private void Quantize_End_CustomQuantizingLevel(IEnumerable<TObject> actualObjects,
+                                                        IGrid grid,
+                                                        double quantizingLevel,
+                                                        IEnumerable<ITimeSpan> expectedTimes,
+                                                        TempoMap tempoMap)
+        {
+            Quantize_End(actualObjects,
+                         grid,
+                         GetExpectedTimesAndLengths(actualObjects, expectedTimes),
+                         false,
+                         tempoMap,
+                         quantizingLevel: quantizingLevel);
         }
 
         private void Quantize_End_DontFixStart(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
@@ -946,7 +1130,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                     TempoMap tempoMap,
                                     QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy = default(QuantizingBeyondFixedEndPolicy),
                                     TimeSpanType distanceType = TimeSpanType.Midi,
-                                    TimeSpanType lengthType = TimeSpanType.Midi)
+                                    TimeSpanType lengthType = TimeSpanType.Midi,
+                                    double quantizingLevel = 1.0)
         {
             Quantize_Start(Quantizer,
                            actualObjects,
@@ -956,7 +1141,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                            tempoMap,
                            quantizingBeyondFixedEndPolicy,
                            distanceType,
-                           lengthType);
+                           lengthType,
+                           quantizingLevel);
         }
 
         private void Quantize_Start(LengthedObjectsQuantizer<TObject, TSettings> quantizer,
@@ -967,7 +1153,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                     TempoMap tempoMap,
                                     QuantizingBeyondFixedEndPolicy policy = default(QuantizingBeyondFixedEndPolicy),
                                     TimeSpanType distanceType = TimeSpanType.Midi,
-                                    TimeSpanType lengthType = TimeSpanType.Midi)
+                                    TimeSpanType lengthType = TimeSpanType.Midi,
+                                    double quantizingLevel = 1.0)
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
@@ -977,12 +1164,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 FixOppositeEnd = fixEnd,
                 QuantizingBeyondFixedEndPolicy = policy,
                 DistanceCalculationType = distanceType,
-                LengthType = lengthType
+                LengthType = lengthType,
+                QuantizingLevel = quantizingLevel
             };
 
             quantizer.Quantize(actualObjects, grid, tempoMap, settings);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         private void Quantize_End(IEnumerable<TObject> actualObjects,
@@ -993,7 +1181,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                   QuantizingBeyondZeroPolicy quantizingBeyondZeroPolicy = default(QuantizingBeyondZeroPolicy),
                                   QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy = default(QuantizingBeyondFixedEndPolicy),
                                   TimeSpanType distanceType = TimeSpanType.Midi,
-                                  TimeSpanType lengthType = TimeSpanType.Midi)
+                                  TimeSpanType lengthType = TimeSpanType.Midi,
+                                  double quantizingLevel = 1.0)
         {
             Quantize_End(Quantizer,
                          actualObjects,
@@ -1004,7 +1193,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                          quantizingBeyondZeroPolicy,
                          quantizingBeyondFixedEndPolicy,
                          distanceType,
-                         lengthType);
+                         lengthType,
+                         quantizingLevel);
         }
 
         private void Quantize_End(LengthedObjectsQuantizer<TObject, TSettings> quantizer,
@@ -1016,7 +1206,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                   QuantizingBeyondZeroPolicy quantizingBeyondZeroPolicy = default(QuantizingBeyondZeroPolicy),
                                   QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy = default(QuantizingBeyondFixedEndPolicy),
                                   TimeSpanType distanceType = TimeSpanType.Midi,
-                                  TimeSpanType lengthType = TimeSpanType.Midi)
+                                  TimeSpanType lengthType = TimeSpanType.Midi,
+                                  double quantizingLevel = 1.0)
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
@@ -1027,12 +1218,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 QuantizingBeyondZeroPolicy = quantizingBeyondZeroPolicy,
                 QuantizingBeyondFixedEndPolicy = quantizingBeyondFixedEndPolicy,
                 DistanceCalculationType = distanceType,
-                LengthType = lengthType
+                LengthType = lengthType,
+                QuantizingLevel = quantizingLevel
             };
 
             quantizer.Quantize(actualObjects, grid, tempoMap, settings);
 
-            Methods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
         }
 
         private IEnumerable<TimeAndLength> GetExpectedTimesAndLengths(IEnumerable<TObject> actualObjects, IEnumerable<ITimeSpan> expectedTimes)
@@ -1043,7 +1235,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private IEnumerable<TObject> GetExpectedObjects(IEnumerable<TObject> actualObjects, IEnumerable<TimeAndLength> expectedTimesAndLengths, TempoMap tempoMap)
         {
-            var descriptors = actualObjects.Zip(expectedTimesAndLengths, (obj, timeAndLength) => new { Object = obj != null ? Methods.Clone(obj) : default(TObject), TimeAndLength = timeAndLength }).ToList();
+            var descriptors = actualObjects.Zip(expectedTimesAndLengths, (obj, timeAndLength) => new { Object = obj != null ? ObjectMethods.Clone(obj) : default(TObject), TimeAndLength = timeAndLength }).ToList();
 
             foreach (var descriptor in descriptors)
             {
@@ -1052,8 +1244,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 if (obj == null || timeAndLength == null)
                     continue;
 
-                Methods.SetTime(obj, timeAndLength.Time, tempoMap);
-                Methods.SetLength(obj, timeAndLength.Length, timeAndLength.Time, tempoMap);
+                ObjectMethods.SetTime(obj, timeAndLength.Time, tempoMap);
+                ObjectMethods.SetLength(obj, timeAndLength.Length, timeAndLength.Time, tempoMap);
             }
 
             return descriptors.Select(d => d.Object).ToList();

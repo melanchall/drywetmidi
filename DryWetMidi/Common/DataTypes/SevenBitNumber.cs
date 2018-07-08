@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Fields
 
-        private byte _value;
+        private readonly byte _value;
 
         #endregion
 

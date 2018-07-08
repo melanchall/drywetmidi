@@ -120,6 +120,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentException($"{stringDescription} is null or contains white-spaces only.", parameterName);
         }
 
+        internal static void IsNullOrEmptyString(string parameterName, string value, string stringDescription)
+        {
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException($"{stringDescription} is null or empty.", parameterName);
+        }
+
         internal static void IsInvalidIndex(string parameterName, int index, int collectionSize)
         {
             IsOutOfRange(parameterName, index, MinNonnegativeValue, collectionSize, "Index is out of range.");

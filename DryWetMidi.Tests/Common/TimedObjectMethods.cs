@@ -16,10 +16,10 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         public void SetTime(TObject obj, ITimeSpan time, TempoMap tempoMap)
         {
-            obj.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            SetTime(obj, TimeConverter.ConvertFrom(time, tempoMap));
         }
 
-        public abstract TObject Create(long time, long length);
+        public abstract void SetTime(TObject obj, long time);
 
         public abstract TObject Clone(TObject obj);
 

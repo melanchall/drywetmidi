@@ -7,15 +7,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Constants
 
-        private static readonly Dictionary<Tuple<MathOperation, MathOperation>, MathOperation> OperationTransformations =
-            new Dictionary<Tuple<MathOperation, MathOperation>, MathOperation>
-            {
-                [Tuple.Create(MathOperation.Add, MathOperation.Add)] = MathOperation.Add,
-                [Tuple.Create(MathOperation.Add, MathOperation.Subtract)] = MathOperation.Subtract,
-                [Tuple.Create(MathOperation.Subtract, MathOperation.Add)] = MathOperation.Subtract,
-                [Tuple.Create(MathOperation.Subtract, MathOperation.Subtract)] = MathOperation.Add
-            };
-
         private static readonly Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>> Converters =
             new Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>>
             {

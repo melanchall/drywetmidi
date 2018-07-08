@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// Represents timeline of a parameter's value.
     /// </summary>
     /// <typeparam name="TValue">Type of values.</typeparam>
-    public sealed class ValueLine<TValue> where TValue : class
+    public sealed class ValueLine<TValue> : IEnumerable<ValueChange<TValue>>
+        where TValue : class
     {
         #region Events
 
@@ -40,27 +42,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// Gets collection of all changes of a parameter's value.
-        /// </summary>
-        public IEnumerable<ValueChange<TValue>> Values
-        {
-            get
-            {
-                if (_valuesChanged)
-                {
-                    _values.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
-                    OnValuesSortingCompleted();
-                }
-
-                return _values;
-            }
-        }
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -73,9 +54,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
-            return Values.TakeWhile(p => p.Time <= time)
-                         .LastOrDefault()
-                         ?.Value
+            return this.TakeWhile(p => p.Time <= time)
+                       .LastOrDefault()
+                       ?.Value
                    ?? _defaultValue;
         }
 
@@ -146,7 +127,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         internal ValueLine<TValue> Reverse(long centerTime)
         {
             var maxTime = 2 * centerTime;
-            var changes = Values.TakeWhile(c => c.Time <= maxTime);
+            var changes = this.TakeWhile(c => c.Time <= maxTime);
 
             var values = new[] { _defaultValue }.Concat(changes.Select(c => c.Value)).Reverse();
             var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());
@@ -171,6 +152,35 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private void OnValuesSortingCompleted()
         {
             _valuesChanged = false;
+        }
+
+        #endregion
+
+        #region IEnumerable<ValueChange<TValue>>
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
+        public IEnumerator<ValueChange<TValue>> GetEnumerator()
+        {
+            if (_valuesChanged)
+            {
+                _values.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
+                OnValuesSortingCompleted();
+            }
+
+            return _values.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerator"/> object that can be used to iterate through
+        /// the collection.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion

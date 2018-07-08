@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                           beatsPerMinute,
                                           "Number of beats per minute is zero or negative.");
 
-            return new Tempo(MicrosecondsInMinute / beatsPerMinute);
+            return new Tempo(MathUtilities.RoundToLong((double)MicrosecondsInMinute / beatsPerMinute));
         }
 
         #endregion

@@ -110,6 +110,10 @@ namespace Melanchall.DryWetMidi.Smf
 
                 return (MidiFileFormat)formatValue;
             }
+            internal set
+            {
+                _originalFormat = (ushort)value;
+            }
         }
 
         #endregion
@@ -133,8 +137,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// it is on an unmapped drive).</exception>
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
-        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
-        /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
+        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform. -or-
+        /// <paramref name="filePath"/> specified a directory. -or- The caller does not have the required permission.</exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
         /// in its header and that should be treated as error according to the <paramref name="settings"/>.</exception>
@@ -403,6 +407,21 @@ namespace Melanchall.DryWetMidi.Smf
                     chunk.Write(writer, settings);
                 }
             }
+        }
+
+        /// <summary>
+        /// Clones MIDI file by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the MIDI file.</returns>
+        public MidiFile Clone()
+        {
+            var result = new MidiFile(Chunks.Select(c => c.Clone()))
+            {
+                TimeDivision = TimeDivision.Clone()
+            };
+            result._originalFormat = _originalFormat;
+
+            return result;
         }
 
         /// <summary>

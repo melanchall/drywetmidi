@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
@@ -224,7 +225,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var notes = notesManager.Notes;
 
                 var notesSplitter = new NotesSplitter();
-                var newNotes = splitOperation(notesSplitter, notes);
+                var newNotes = splitOperation(notesSplitter, notes).ToList();
 
                 notes.Clear();
                 notes.Add(newNotes);

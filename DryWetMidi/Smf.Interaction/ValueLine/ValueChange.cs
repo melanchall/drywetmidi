@@ -9,12 +9,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <typeparam name="TValue">Type of value.</typeparam>
     public sealed class ValueChange<TValue> : ITimedObject
     {
-        #region Fields
-
-        private long _time;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -30,7 +24,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(value), value);
 
-            _time = time;
+            Time = time;
             Value = value;
         }
 
@@ -39,13 +33,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Properties
 
         /// <summary>
-        /// Gets or sets the MIDI time when value is changed.
+        /// Gets the MIDI time when value is changed.
         /// </summary>
-        public long Time
-        {
-            get { return _time; }
-            set { throw new InvalidOperationException("Time cannot be set."); }
-        }
+        public long Time { get; }
 
         /// <summary>
         /// Gets the new value that will last until next value change.

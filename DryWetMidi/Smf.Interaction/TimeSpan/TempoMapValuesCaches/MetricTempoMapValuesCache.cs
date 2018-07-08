@@ -62,14 +62,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             var microseconds = new List<AccumulatedMicroseconds>();
 
-            var tempoChanges = tempoMap.Tempo.Values;
             var ticksPerQuarterNote = ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote;
 
             var accumulatedMicroseconds = 0d;
             var lastTime = 0L;
             var lastTempo = Tempo.Default;
 
-            foreach (var tempoChange in tempoChanges)
+            foreach (var tempoChange in tempoMap.Tempo)
             {
                 var tempoChangeTime = tempoChange.Time;
 

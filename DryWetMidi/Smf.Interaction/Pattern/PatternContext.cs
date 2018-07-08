@@ -11,7 +11,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private readonly Stack<long> _timeHistory = new Stack<long>();
         private readonly Dictionary<object, List<long>> _anchors = new Dictionary<object, List<long>>();
         private readonly List<long> _anchorsList = new List<long>();
-        private readonly List<Note> _notes = new List<Note>();
 
         #endregion
 

@@ -13,6 +13,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
+            if (timeSpan == 0)
+                return new BarBeatTimeSpan();
+
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var endTime = time + timeSpan;
 
@@ -20,7 +23,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var timeSignatureLine = tempoMap.TimeSignature;
             var timeSignatureChanges = timeSignatureLine
-                .Values
                 .Where(v => v.Time > time && v.Time < endTime)
                 .ToList();
 
@@ -100,6 +102,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             var barBeatTimeSpan = (BarBeatTimeSpan)timeSpan;
+            if (barBeatTimeSpan.Bars == 0 && barBeatTimeSpan.Beats == 0 && barBeatTimeSpan.Ticks == 0)
+                return 0;
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var timeSignatureLine = tempoMap.TimeSignature;
@@ -115,9 +119,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var startBeatLength = GetBeatLength(startTimeSignature, ticksPerQuarterNote);
 
             var totalTicks = bars * startBarLength + beats * startBeatLength + ticks;
-            var timeSignatureChanges = timeSignatureLine.Values
-                                                        .Where(v => v.Time > time && v.Time < time + totalTicks)
-                                                        .ToList();
+            var timeSignatureChanges = timeSignatureLine.Where(v => v.Time > time && v.Time < time + totalTicks).ToList();
 
             var lastBarLength = 0L;
             var lastBeatLength = 0L;
@@ -138,7 +140,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             // Balance bars
 
-            foreach (var timeSignatureChange in timeSignatureLine.Values.Where(v => v.Time > lastTime).ToList())
+            foreach (var timeSignatureChange in timeSignatureLine.Where(v => v.Time > lastTime).ToList())
             {
                 var deltaTime = timeSignatureChange.Time - lastTime;
 

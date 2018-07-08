@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Default number of 32nd notes per beat.
         /// </summary>
-        public const byte Default32ndNotesPerBeat = 8;
+        public const byte DefaultThirtySecondNotesPerBeat = 8;
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="numerator">Numerator of the time signature.</param>
         /// <param name="denominator">Denominator of the time signature.</param>
         public TimeSignatureEvent(byte numerator, byte denominator)
-            : this(numerator, denominator, DefaultClocksPerClick, Default32ndNotesPerBeat)
+            : this(numerator, denominator, DefaultClocksPerClick, DefaultThirtySecondNotesPerBeat)
         {
         }
 
@@ -69,14 +69,14 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="numerator">Numerator of the time signature.</param>
         /// <param name="denominator">Denominator of the time signature.</param>
         /// <param name="clocksPerClick">Number of MIDI clocks per metronome click.</param>
-        /// <param name="numberOf32ndNotesPerBeat">Number of 32nd notes per beat.</param>
-        public TimeSignatureEvent(byte numerator, byte denominator, byte clocksPerClick, byte numberOf32ndNotesPerBeat)
+        /// <param name="thirtySecondNotesPerBeat">Number of 32nd notes per beat.</param>
+        public TimeSignatureEvent(byte numerator, byte denominator, byte clocksPerClick, byte thirtySecondNotesPerBeat)
             : this()
         {
             Numerator = numerator;
             Denominator = denominator;
             ClocksPerClick = clocksPerClick;
-            NumberOf32ndNotesPerBeat = numberOf32ndNotesPerBeat;
+            ThirtySecondNotesPerBeat = thirtySecondNotesPerBeat;
         }
 
         #endregion
@@ -115,7 +115,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Gets or sets number of 32nd notes per beat.
         /// </summary>
-        public byte NumberOf32ndNotesPerBeat { get; set; } = Default32ndNotesPerBeat;
+        public byte ThirtySecondNotesPerBeat { get; set; } = DefaultThirtySecondNotesPerBeat;
 
         #endregion
 
@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Smf
             if (size >= 4)
             {
                 ClocksPerClick = reader.ReadByte();
-                NumberOf32ndNotesPerBeat = reader.ReadByte();
+                ThirtySecondNotesPerBeat = reader.ReadByte();
             }
         }
 
@@ -149,7 +149,7 @@ namespace Melanchall.DryWetMidi.Smf
             writer.WriteByte(Numerator);
             writer.WriteByte((byte)Math.Log(Denominator, 2));
             writer.WriteByte(ClocksPerClick);
-            writer.WriteByte(NumberOf32ndNotesPerBeat);
+            writer.WriteByte(ThirtySecondNotesPerBeat);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new TimeSignatureEvent(Numerator, Denominator, ClocksPerClick, NumberOf32ndNotesPerBeat);
+            return new TimeSignatureEvent(Numerator, Denominator, ClocksPerClick, ThirtySecondNotesPerBeat);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Time Signature ({Numerator}/{Denominator}, {ClocksPerClick} clock/click, {NumberOf32ndNotesPerBeat} 32nd/beat)";
+            return $"Time Signature ({Numerator}/{Denominator}, {ClocksPerClick} clock/click, {ThirtySecondNotesPerBeat} 32nd/beat)";
         }
 
         #endregion

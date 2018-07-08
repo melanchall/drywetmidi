@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
@@ -260,7 +261,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var chords = chordsManager.Chords;
 
                 var chordsSplitter = new ChordsSplitter();
-                var newChords = splitOperation(chordsSplitter, chords);
+                var newChords = splitOperation(chordsSplitter, chords).ToList();
 
                 chords.Clear();
                 chords.Add(newChords);
