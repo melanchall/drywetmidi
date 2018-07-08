@@ -104,18 +104,31 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 .SetOctave(2)
 
                 .Note(NoteName.A)
+
+                .SetProgram((SevenBitNumber)20)
                 .Note(NoteName.C)
 
                 .Build()
                 .ToFile(tempoMap);
 
-            var notes = midiFile.GetNotes().ToList();
-
             var filesByNotes = midiFile.SplitByNotes().ToList();
             Assert.AreEqual(2, filesByNotes.Count, "New files count is invalid.");
 
+            var notes = midiFile.GetNotes().ToList();
+
             Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[0].GetNotes(), new[] { notes[0] }));
             Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[1].GetNotes(), new[] { notes[1] }));
+
+            var timedEvents = midiFile.GetTimedEvents().Where(e => !(e.Event is NoteEvent)).ToList();
+
+            Assert.IsTrue(TimedEventEquality.AreEqual(filesByNotes[0].GetTimedEvents()
+                                                                     .Where(e => !(e.Event is NoteEvent)),
+                                                      timedEvents,
+                                                      false));
+            Assert.IsTrue(TimedEventEquality.AreEqual(filesByNotes[1].GetTimedEvents()
+                                                                     .Where(e => !(e.Event is NoteEvent)),
+                                                      timedEvents,
+                                                      false));
         }
 
         [Test]

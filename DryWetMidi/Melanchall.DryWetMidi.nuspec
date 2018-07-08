@@ -19,9 +19,10 @@ DryWetMIDI is the .NET library to work with MIDI files. It allows:
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
 * Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note.
 * Build musical compositions.
+* Perform complex musical tasks like quantizing, notes splitting or converting MIDI files to CSV.
     </description>
     <summary>.NET library to work with MIDI files</summary>
     <copyright>Copyright © Melanchall 2018</copyright>
-    <tags>midi smf music</tags>
+    <tags>midi smf music composing notes chords</tags>
   </metadata>
 </package>

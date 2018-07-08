@@ -62,9 +62,9 @@ namespace Melanchall.DryWetMidi.Tools
         /// Splits <see cref="MidiFile"/> by notes.
         /// </summary>
         /// <remarks>
-        /// Note events will be separated by note number and copied to corresponding new files. All
-        /// meta and system exclusive events will be copied to all the new files. Non-track chunks
-        /// will not be copied to any of the new files.
+        /// Note events will be separated by note number and copied to corresponding new files. All other
+        /// channel events, meta and system exclusive events will be copied to all the new files. Non-track
+        /// chunks will not be copied to any of the new files.
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note number.</returns>

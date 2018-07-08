@@ -13,7 +13,8 @@ With the DryWetMIDI you can:
 * Implement [custom meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks) that can be written to and read from MIDI files.
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
 * Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the **High-level data managing** section of the Wiki).
-* Build musical compositions (See [Pattern](https://github.com/melanchall/drywetmidi/wiki/Pattern) page of the library Wiki).
+* Build musical compositions (see [Pattern](https://github.com/melanchall/drywetmidi/wiki/Pattern) page of the library Wiki).
+* Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://github.com/melanchall/drywetmidi/wiki/Tools) page of the Wiki).
 
 ## Getting Started
 
@@ -181,7 +182,7 @@ Pattern pattern = new PatternBuilder()
     .StepForward(new MetricTimeSpan(0, 0, 5))
 
     // Insert an eighth C# note of the 4th octave
-    .Note(OctaveDefinition.Get(4).CSharp, MusicalTimeSpan.Eighth)
+    .Note(Octave.Get(4).CSharp, MusicalTimeSpan.Eighth)
 
     // Set default note length to triplet eighth and default octave to 5
     .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
