@@ -54,7 +54,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Gets or sets maximum distance between notes that can be merged. The default value is time span of zero length.
+        /// Gets or sets maximum distance between two notes to consider them as nearby. The default value
+        /// is time span of zero length.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         public ITimeSpan Tolerance
