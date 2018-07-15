@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -234,7 +233,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line"), 0),
                 new TimedEvent(new MarkerEvent("Marker"), 100),
-                new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line and{Environment.NewLine} new \"\"line again"), 200),
+                new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line and{Environment.NewLine} new \"line again"), 200),
             };
 
             Assert.IsTrue(TimedEventEquality.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false),
@@ -282,13 +281,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [TestCase(NoteNumberFormat.NoteNumber, new[]
         {
             "0, 0, Note, 10, 50, 0:0:10, 120, 70",
-            "0, 0, Text, \"Test\"",
+            "0, 0, Text, \"Te\"\"s\"\"\"\"t\"",
             "0, 100, Note, 7, 70, 0:0:0:500, 110, 80"
         })]
         [TestCase(NoteNumberFormat.Letter, new[]
         {
             "0, 0, Note, 10, D3, 0:0:10, 120, 70",
-            "0, 0, Text, \"Test\"",
+            "0, 0, Text, \"Te\"\"s\"\"\"\"t\"",
             "0, 100, Note, 7, A#4, 0:0:0:500, 110, 80"
         })]
         public void ConvertCsvToMidiFile_NoteLength_Metric(NoteNumberFormat noteNumberFormat, string[] csvLines)
@@ -310,7 +309,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     Velocity = (SevenBitNumber)120,
                     OffVelocity = (SevenBitNumber)70
                 },
-                new TimedEvent(new TextEvent("Test"), 0),
+                new TimedEvent(new TextEvent("Te\"s\"\"t"), 0),
                 new Note((SevenBitNumber)70, LengthConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, 500), 100, tempoMap), 100)
                 {
                     Channel = (FourBitNumber)7,
