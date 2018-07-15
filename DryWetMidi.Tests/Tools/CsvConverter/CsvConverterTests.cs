@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -16,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region Test methods
 
         #region Convert to/from CSV
-        
+
         [TestCase(MidiFileCsvLayout.DryWetMidi)]
         [TestCase(MidiFileCsvLayout.MidiCsv)]
         public void ConvertMidiFileToFromCsv(MidiFileCsvLayout layout)
@@ -240,6 +241,89 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                           "Invalid events.");
         }
 
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "0, 0, Note, 10, 50, 250, 120, 70",
+            "0, 0, Text, \"Test\"",
+            "0, 100, Note, 7, 50, 900, 110, 80"
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "0, 0, Note, 10, D3, 250, 120, 70",
+            "0, 0, Text, \"Test\"",
+            "0, 100, Note, 7, D3, 900, 110, 80"
+        })]
+        public void ConvertCsvToMidiFile_NoteNumberFormat(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            var midiFile = ConvertCsvToMidiFile(MidiFileCsvLayout.DryWetMidi, TimeSpanType.Midi, csvLines, NoteFormat.Note, noteNumberFormat);
+
+            var expectedObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)50, 250, 0)
+                {
+                    Channel = (FourBitNumber)10,
+                    Velocity = (SevenBitNumber)120,
+                    OffVelocity = (SevenBitNumber)70
+                },
+                new TimedEvent(new TextEvent("Test"), 0),
+                new Note((SevenBitNumber)50, 900, 100)
+                {
+                    Channel = (FourBitNumber)7,
+                    Velocity = (SevenBitNumber)110,
+                    OffVelocity = (SevenBitNumber)80
+                }
+            };
+
+            Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
+            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.GetTimedEvents().GetTimedEventsAndNotes(), false),
+                          "Invalid objects.");
+        }
+
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "0, 0, Note, 10, 50, 0:0:10, 120, 70",
+            "0, 0, Text, \"Test\"",
+            "0, 100, Note, 7, 70, 0:0:0:500, 110, 80"
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "0, 0, Note, 10, D3, 0:0:10, 120, 70",
+            "0, 0, Text, \"Test\"",
+            "0, 100, Note, 7, A#4, 0:0:0:500, 110, 80"
+        })]
+        public void ConvertCsvToMidiFile_NoteLength_Metric(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            var midiFile = ConvertCsvToMidiFile(MidiFileCsvLayout.DryWetMidi,
+                                                TimeSpanType.Midi,
+                                                csvLines,
+                                                NoteFormat.Note,
+                                                noteNumberFormat,
+                                                TimeSpanType.Metric);
+
+            var tempoMap = TempoMap.Default;
+
+            var expectedObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)50, LengthConverter.ConvertFrom(new MetricTimeSpan(0, 0, 10), 0, tempoMap), 0)
+                {
+                    Channel = (FourBitNumber)10,
+                    Velocity = (SevenBitNumber)120,
+                    OffVelocity = (SevenBitNumber)70
+                },
+                new TimedEvent(new TextEvent("Test"), 0),
+                new Note((SevenBitNumber)70, LengthConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, 500), 100, tempoMap), 100)
+                {
+                    Channel = (FourBitNumber)7,
+                    Velocity = (SevenBitNumber)110,
+                    OffVelocity = (SevenBitNumber)80
+                }
+            };
+
+            Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
+            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.GetTimedEvents().GetTimedEventsAndNotes(), false),
+                          "Invalid objects.");
+        }
+
         #endregion
 
         #region MidiFileToCsv
@@ -293,7 +377,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ConvertMidiFileToCsv(midiFile, layout, TimeSpanType.Midi, expectedCsvLines);
         }
 
-        [TestCase(MidiFileCsvLayout.DryWetMidi, new[]
+        [TestCase(MidiFileCsvLayout.DryWetMidi, NoteFormat.Events, NoteNumberFormat.NoteNumber, new[]
         {
             ",,header,,96",
             "0,0,time signature,2,8,24,8",
@@ -304,7 +388,36 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             "1,10,note on,0,30,78",
             "1,20,note off,0,30,90",
         })]
-        [TestCase(MidiFileCsvLayout.MidiCsv, new[]
+        [TestCase(MidiFileCsvLayout.DryWetMidi, NoteFormat.Note, NoteNumberFormat.NoteNumber, new[]
+        {
+            ",,header,,96",
+            "0,0,time signature,2,8,24,8",
+            "0,345,text,\"Test text\"",
+            "0,350,note,0,23,100,78,90",
+            "0,800,sequencer specific,3,1,2,3",
+            "1,10,note,0,30,10,78,90",
+        })]
+        [TestCase(MidiFileCsvLayout.DryWetMidi, NoteFormat.Events, NoteNumberFormat.Letter, new[]
+        {
+            ",,header,,96",
+            "0,0,time signature,2,8,24,8",
+            "0,345,text,\"Test text\"",
+            "0,350,note on,0,B0,78",
+            "0,450,note off,0,B0,90",
+            "0,800,sequencer specific,3,1,2,3",
+            "1,10,note on,0,F#1,78",
+            "1,20,note off,0,F#1,90",
+        })]
+        [TestCase(MidiFileCsvLayout.DryWetMidi, NoteFormat.Note, NoteNumberFormat.Letter, new[]
+        {
+            ",,header,,96",
+            "0,0,time signature,2,8,24,8",
+            "0,345,text,\"Test text\"",
+            "0,350,note,0,B0,100,78,90",
+            "0,800,sequencer specific,3,1,2,3",
+            "1,10,note,0,F#1,10,78,90",
+        })]
+        [TestCase(MidiFileCsvLayout.MidiCsv, NoteFormat.Events, NoteNumberFormat.NoteNumber, new[]
         {
             "0,0,header,1,2,96",
             "0,0,start_track",
@@ -320,7 +433,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             "1,20,end_track",
             "0,0,end_of_file",
         })]
-        public void ConvertMidiFileToCsv_MultipleTrack(MidiFileCsvLayout layout, string[] expectedCsvLines)
+        [TestCase(MidiFileCsvLayout.MidiCsv, NoteFormat.Note, NoteNumberFormat.Letter, new[]
+        {
+            "0,0,header,1,2,96",
+            "0,0,start_track",
+            "0,0,time_signature,2,3,24,8",
+            "0,345,text_t,\"Test text\"",
+            "0,350,note_on_c,0,23,78",
+            "0,450,note_off_c,0,23,90",
+            "0,800,sequencer_specific,3,1,2,3",
+            "0,800,end_track",
+            "1,0,start_track",
+            "1,10,note_on_c,0,30,78",
+            "1,20,note_off_c,0,30,90",
+            "1,20,end_track",
+            "0,0,end_of_file",
+        })]
+        public void ConvertMidiFileToCsv_MultipleTrack(MidiFileCsvLayout layout, NoteFormat noteFormat, NoteNumberFormat noteNumberFormat, string[] expectedCsvLines)
         {
             var timedEvents1 = new[]
             {
@@ -341,7 +470,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedEvents1.ToTrackChunk(),
                 timedEvents2.ToTrackChunk());
 
-            ConvertMidiFileToCsv(midiFile, layout, TimeSpanType.Midi, expectedCsvLines);
+            ConvertMidiFileToCsv(midiFile, layout, TimeSpanType.Midi, expectedCsvLines, noteFormat, noteNumberFormat);
         }
 
         #endregion
@@ -381,7 +510,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             csvConverter.ConvertCsvToMidiFile(outputFilePath, settings);
         }
 
-        private static MidiFile ConvertCsvToMidiFile(MidiFileCsvLayout layout, TimeSpanType timeType, string[] csvLines)
+        private static MidiFile ConvertCsvToMidiFile(
+            MidiFileCsvLayout layout,
+            TimeSpanType timeType,
+            string[] csvLines,
+            NoteFormat noteFormat = NoteFormat.Events,
+            NoteNumberFormat noteNumberFormat = NoteNumberFormat.NoteNumber,
+            TimeSpanType noteLengthType = TimeSpanType.Midi)
         {
             var filePath = Path.GetTempFileName();
             File.WriteAllLines(filePath, csvLines);
@@ -389,7 +524,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var settings = new MidiFileCsvConversionSettings
             {
                 CsvLayout = layout,
-                TimeType = timeType
+                TimeType = timeType,
+                NoteSettings = new NoteCsvConversionSettings
+                {
+                    NoteFormat = noteFormat,
+                    NoteNumberFormat = noteNumberFormat,
+                    LengthType = noteLengthType
+                }
             };
 
             try
@@ -404,14 +545,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
         }
 
-        private static void ConvertMidiFileToCsv(MidiFile midiFile, MidiFileCsvLayout layout, TimeSpanType timeType, string[] expectedCsvLines)
+        private static void ConvertMidiFileToCsv(
+            MidiFile midiFile,
+            MidiFileCsvLayout layout,
+            TimeSpanType timeType,
+            string[] expectedCsvLines,
+            NoteFormat noteFormat = NoteFormat.Events,
+            NoteNumberFormat noteNumberFormat = NoteNumberFormat.NoteNumber,
+            TimeSpanType noteLengthType = TimeSpanType.Midi)
         {
             var filePath = Path.GetTempFileName();
 
             var settings = new MidiFileCsvConversionSettings
             {
                 CsvLayout = layout,
-                TimeType = timeType
+                TimeType = timeType,
+                NoteSettings = new NoteCsvConversionSettings
+                {
+                    NoteFormat = noteFormat,
+                    NoteNumberFormat = noteNumberFormat,
+                    LengthType = noteLengthType
+                }
             };
 
             try

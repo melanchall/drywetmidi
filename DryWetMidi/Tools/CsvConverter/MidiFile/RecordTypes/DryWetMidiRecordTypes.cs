@@ -35,5 +35,7 @@
             public const string SysExCompleted = "System Exclusive";
             public const string SysExIncompleted = "System Exclusive Packet";
         }
+
+        public const string Note = "Note";
     }
 }

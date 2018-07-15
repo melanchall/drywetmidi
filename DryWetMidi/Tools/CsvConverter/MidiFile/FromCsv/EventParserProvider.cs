@@ -11,18 +11,6 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Constants
 
-        private static class TypeParsers
-        {
-            public static readonly Func<string, object> Byte = p => byte.Parse(p);
-            public static readonly Func<string, object> SByte = p => sbyte.Parse(p);
-            public static readonly Func<string, object> Long = p => long.Parse(p);
-            public static readonly Func<string, object> UShort = p => ushort.Parse(p);
-            public static readonly Func<string, object> String = p => p.Trim('"');
-            public static readonly Func<string, object> Int = p => int.Parse(p);
-            public static readonly Func<string, object> FourBitNumber = p => (FourBitNumber)byte.Parse(p);
-            public static readonly Func<string, object> SevenBitNumber = p => (SevenBitNumber)byte.Parse(p);
-        }
-
         private static readonly Dictionary<string, EventParser> EventsParsers_MidiCsv =
             new Dictionary<string, EventParser>(StringComparer.OrdinalIgnoreCase)
             {
@@ -35,26 +23,26 @@ namespace Melanchall.DryWetMidi.Tools
                 [MidiCsvRecordTypes.Events.Text] = GetTextEventParser<TextEvent>(),
                 [MidiCsvRecordTypes.Events.SequenceNumber] = GetEventParser(
                     x => new SequenceNumberEvent((ushort)x[0]),
-                    TypeParsers.UShort),
+                    TypeParser.UShort),
                 [MidiCsvRecordTypes.Events.PortPrefix] = GetEventParser(
                     x => new PortPrefixEvent((byte)x[0]),
-                    TypeParsers.Byte),
+                    TypeParser.Byte),
                 [MidiCsvRecordTypes.Events.ChannelPrefix] = GetEventParser(
                     x => new ChannelPrefixEvent((byte)x[0]),
-                    TypeParsers.Byte),
+                    TypeParser.Byte),
                 [MidiCsvRecordTypes.Events.TimeSignature] = GetEventParser(
                     x => new TimeSignatureEvent((byte)x[0], (byte)Math.Pow(2, (byte)x[1]), (byte)x[2], (byte)x[3]),
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte),
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte),
                 [MidiCsvRecordTypes.Events.KeySignature] = GetEventParser(
                     x => new KeySignatureEvent((sbyte)x[0], (byte)x[1]),
-                    TypeParsers.SByte,
-                    TypeParsers.Byte),
+                    TypeParser.SByte,
+                    TypeParser.Byte),
                 [MidiCsvRecordTypes.Events.SetTempo] = GetEventParser(
                     x => new SetTempoEvent((long)x[0]),
-                    TypeParsers.Long),
+                    TypeParser.Long),
                 [MidiCsvRecordTypes.Events.SmpteOffset] = GetEventParser(
                     x => new SmpteOffsetEvent(SmpteOffsetEvent.GetFormat((byte)x[0]),
                                               SmpteOffsetEvent.GetHours((byte)x[0]),
@@ -62,26 +50,26 @@ namespace Melanchall.DryWetMidi.Tools
                                               (byte)x[2],
                                               (byte)x[3],
                                               (byte)x[4]),
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte),
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte),
                 [MidiCsvRecordTypes.Events.SequencerSpecific] = GetBytesBasedEventParser(
                     x => new SequencerSpecificEvent((byte[])x[1])),
                 [MidiCsvRecordTypes.Events.UnknownMeta] = GetBytesBasedEventParser(
                     x => new UnknownMetaEvent((byte)x[0], (byte[])x[2]),
-                    TypeParsers.Byte),
-                [MidiCsvRecordTypes.Events.NoteOn] = GetChannelEventParser<NoteOnEvent>(2),
-                [MidiCsvRecordTypes.Events.NoteOff] = GetChannelEventParser<NoteOffEvent>(2),
+                    TypeParser.Byte),
+                [MidiCsvRecordTypes.Events.NoteOn] = GetNoteEventParser<NoteOnEvent>(2),
+                [MidiCsvRecordTypes.Events.NoteOff] = GetNoteEventParser<NoteOffEvent>(2),
                 [MidiCsvRecordTypes.Events.PitchBend] = GetEventParser(
                     x => new PitchBendEvent((ushort)x[1]) { Channel = (FourBitNumber)x[0] },
-                    TypeParsers.FourBitNumber,
-                    TypeParsers.UShort),
+                    TypeParser.FourBitNumber,
+                    TypeParser.UShort),
                 [MidiCsvRecordTypes.Events.ControlChange] = GetChannelEventParser<ControlChangeEvent>(2),
                 [MidiCsvRecordTypes.Events.ProgramChange] = GetChannelEventParser<ProgramChangeEvent>(1),
                 [MidiCsvRecordTypes.Events.ChannelAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(1),
-                [MidiCsvRecordTypes.Events.NoteAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(2),
+                [MidiCsvRecordTypes.Events.NoteAftertouch] = GetNoteEventParser<ChannelAftertouchEvent>(2),
                 [MidiCsvRecordTypes.Events.SysExCompleted] = GetBytesBasedEventParser(
                     x => new NormalSysExEvent((byte[])x[1])),
                 [MidiCsvRecordTypes.Events.SysExIncompleted] = GetBytesBasedEventParser(
@@ -100,26 +88,26 @@ namespace Melanchall.DryWetMidi.Tools
                 [DryWetMidiRecordTypes.Events.Text] = GetTextEventParser<TextEvent>(),
                 [DryWetMidiRecordTypes.Events.SequenceNumber] = GetEventParser(
                     x => new SequenceNumberEvent((ushort)x[0]),
-                    TypeParsers.UShort),
+                    TypeParser.UShort),
                 [DryWetMidiRecordTypes.Events.PortPrefix] = GetEventParser(
                     x => new PortPrefixEvent((byte)x[0]),
-                    TypeParsers.Byte),
+                    TypeParser.Byte),
                 [DryWetMidiRecordTypes.Events.ChannelPrefix] = GetEventParser(
                     x => new ChannelPrefixEvent((byte)x[0]),
-                    TypeParsers.Byte),
+                    TypeParser.Byte),
                 [DryWetMidiRecordTypes.Events.TimeSignature] = GetEventParser(
                     x => new TimeSignatureEvent((byte)x[0], (byte)x[1], (byte)x[2], (byte)x[3]),
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte),
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte),
                 [DryWetMidiRecordTypes.Events.KeySignature] = GetEventParser(
                     x => new KeySignatureEvent((sbyte)x[0], (byte)x[1]),
-                    TypeParsers.SByte,
-                    TypeParsers.Byte),
+                    TypeParser.SByte,
+                    TypeParser.Byte),
                 [DryWetMidiRecordTypes.Events.SetTempo] = GetEventParser(
                     x => new SetTempoEvent((long)x[0]),
-                    TypeParsers.Long),
+                    TypeParser.Long),
                 [DryWetMidiRecordTypes.Events.SmpteOffset] = GetEventParser(
                     x => new SmpteOffsetEvent(SmpteOffsetEvent.GetFormat((byte)x[0]),
                                               SmpteOffsetEvent.GetHours((byte)x[0]),
@@ -127,26 +115,26 @@ namespace Melanchall.DryWetMidi.Tools
                                               (byte)x[2],
                                               (byte)x[3],
                                               (byte)x[4]),
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte,
-                    TypeParsers.Byte),
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte,
+                    TypeParser.Byte),
                 [DryWetMidiRecordTypes.Events.SequencerSpecific] = GetBytesBasedEventParser(
                     x => new SequencerSpecificEvent((byte[])x[1])),
                 [DryWetMidiRecordTypes.Events.UnknownMeta] = GetBytesBasedEventParser(
                     x => new UnknownMetaEvent((byte)x[0], (byte[])x[2]),
-                    TypeParsers.Byte),
-                [DryWetMidiRecordTypes.Events.NoteOn] = GetChannelEventParser<NoteOnEvent>(2),
-                [DryWetMidiRecordTypes.Events.NoteOff] = GetChannelEventParser<NoteOffEvent>(2),
+                    TypeParser.Byte),
+                [DryWetMidiRecordTypes.Events.NoteOn] = GetNoteEventParser<NoteOnEvent>(2),
+                [DryWetMidiRecordTypes.Events.NoteOff] = GetNoteEventParser<NoteOffEvent>(2),
                 [DryWetMidiRecordTypes.Events.PitchBend] = GetEventParser(
                     x => new PitchBendEvent((ushort)x[1]) { Channel = (FourBitNumber)x[0] },
-                    TypeParsers.FourBitNumber,
-                    TypeParsers.UShort),
+                    TypeParser.FourBitNumber,
+                    TypeParser.UShort),
                 [DryWetMidiRecordTypes.Events.ControlChange] = GetChannelEventParser<ControlChangeEvent>(2),
                 [DryWetMidiRecordTypes.Events.ProgramChange] = GetChannelEventParser<ProgramChangeEvent>(1),
                 [DryWetMidiRecordTypes.Events.ChannelAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(1),
-                [DryWetMidiRecordTypes.Events.NoteAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(2),
+                [DryWetMidiRecordTypes.Events.NoteAftertouch] = GetNoteEventParser<ChannelAftertouchEvent>(2),
                 [DryWetMidiRecordTypes.Events.SysExCompleted] = GetBytesBasedEventParser(
                     x => new NormalSysExEvent((byte[])x[1])),
                 [DryWetMidiRecordTypes.Events.SysExIncompleted] = GetBytesBasedEventParser(
@@ -170,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tools
             return null;
         }
 
-        private static EventParser GetBytesBasedEventParser(Func<object[], MidiEvent> eventCreator, params Func<string, object>[] parametersParsers)
+        private static EventParser GetBytesBasedEventParser(Func<object[], MidiEvent> eventCreator, params ParameterParser[] parametersParsers)
         {
             return (p, s) =>
             {
@@ -186,7 +174,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                     try
                     {
-                        var parameter = parameterParser(p[i]);
+                        var parameter = parameterParser(p[i], s);
                         parameters.Add(parameter);
                     }
                     catch
@@ -219,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tools
                     var bytes = p.Skip(i)
                                  .Select(x =>
                                  {
-                                     var b = byte.Parse(x);
+                                     var b = (byte)TypeParser.Byte(x, s);
                                      i++;
                                      return b;
                                  })
@@ -245,10 +233,27 @@ namespace Melanchall.DryWetMidi.Tools
                     textEvent.Text = (string)x[0];
                     return textEvent;
                 },
-                TypeParsers.String);
+                TypeParser.String);
+        }
+
+        private static EventParser GetNoteEventParser<TEvent>(int parametersNumber)
+            where TEvent : ChannelEvent
+        {
+            return GetChannelEventParser<TEvent>(
+                new[] { TypeParser.NoteNumber }
+                .Concat(Enumerable.Range(0, parametersNumber - 1).Select(i => TypeParser.SevenBitNumber))
+                .ToArray());
         }
 
         private static EventParser GetChannelEventParser<TEvent>(int parametersNumber)
+            where TEvent : ChannelEvent
+        {
+            return GetChannelEventParser<TEvent>(Enumerable.Range(0, parametersNumber)
+                                                           .Select(i => TypeParser.SevenBitNumber)
+                                                           .ToArray());
+        }
+
+        private static EventParser GetChannelEventParser<TEvent>(ParameterParser[] parametersParsers)
             where TEvent : ChannelEvent
         {
             return GetEventParser(
@@ -260,19 +265,19 @@ namespace Melanchall.DryWetMidi.Tools
                     var parametersField = typeof(ChannelEvent).GetField("_parameters", BindingFlags.Instance | BindingFlags.NonPublic);
                     var parameters = (SevenBitNumber[])parametersField.GetValue(channelEvent);
 
-                    for (int i = 0; i < parametersNumber; i++)
+                    for (int i = 0; i < parametersParsers.Length; i++)
                     {
                         parameters[i] = (SevenBitNumber)x[i + 1];
                     }
 
                     return channelEvent;
                 },
-                new[] { TypeParsers.FourBitNumber }
-                    .Concat(Enumerable.Range(0, parametersNumber).Select(i => TypeParsers.SevenBitNumber))
+                new[] { TypeParser.FourBitNumber }
+                    .Concat(parametersParsers)
                     .ToArray());
         }
 
-        private static EventParser GetEventParser(Func<object[], MidiEvent> eventCreator, params Func<string, object>[] parametersParsers)
+        private static EventParser GetEventParser(Func<object[], MidiEvent> eventCreator, params ParameterParser[] parametersParsers)
         {
             return (p, s) =>
             {
@@ -287,7 +292,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                     try
                     {
-                        var parameter = parameterParser(p[i]);
+                        var parameter = parameterParser(p[i], s);
                         parameters.Add(parameter);
                     }
                     catch

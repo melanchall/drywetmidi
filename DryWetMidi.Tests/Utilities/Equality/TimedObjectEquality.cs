@@ -72,15 +72,15 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return new TimedObjectComparer(compareDeltaTimes).Equals(timedObject1, timedObject2);
         }
 
-        public static bool AreEqual(IEnumerable<ITimedObject> timedObject1, IEnumerable<ITimedObject> timedObject2, bool compareDeltaTimes)
+        public static bool AreEqual(IEnumerable<ITimedObject> timedObjects1, IEnumerable<ITimedObject> timedObjects2, bool compareDeltaTimes)
         {
-            if (ReferenceEquals(timedObject1, timedObject2))
+            if (ReferenceEquals(timedObjects1, timedObjects2))
                 return true;
 
-            if (ReferenceEquals(null, timedObject1) || ReferenceEquals(null, timedObject2))
+            if (ReferenceEquals(null, timedObjects1) || ReferenceEquals(null, timedObjects2))
                 return false;
 
-            return timedObject1.SequenceEqual(timedObject2, new TimedObjectComparer(compareDeltaTimes));
+            return timedObjects1.SequenceEqual(timedObjects2, new TimedObjectComparer(compareDeltaTimes));
         }
 
         #endregion
