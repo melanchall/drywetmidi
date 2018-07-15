@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -51,10 +52,10 @@ namespace Melanchall.DryWetMidi.Tools
                                                                              (e, s) => e.Data.Length,
                                                                              (e, s) => e.Data),
                 [typeof(NoteOnEvent)] = GetParameters<NoteOnEvent>((e, s) => e.Channel,
-                                                                   (e, s) => e.NoteNumber,
+                                                                   (e, s) => FormatNoteNumber(e.NoteNumber, s),
                                                                    (e, s) => e.Velocity),
                 [typeof(NoteOffEvent)] = GetParameters<NoteOffEvent>((e, s) => e.Channel,
-                                                                     (e, s) => e.NoteNumber,
+                                                                     (e, s) => FormatNoteNumber(e.NoteNumber, s),
                                                                      (e, s) => e.Velocity),
                 [typeof(PitchBendEvent)] = GetParameters<PitchBendEvent>((e, s) => e.Channel,
                                                                          (e, s) => e.PitchValue),
@@ -66,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tools
                 [typeof(ChannelAftertouchEvent)] = GetParameters<ChannelAftertouchEvent>((e, s) => e.Channel,
                                                                                          (e, s) => e.AftertouchValue),
                 [typeof(NoteAftertouchEvent)] = GetParameters<NoteAftertouchEvent>((e, s) => e.Channel,
-                                                                                   (e, s) => e.NoteNumber,
+                                                                                   (e, s) => FormatNoteNumber(e.NoteNumber, s),
                                                                                    (e, s) => e.AftertouchValue),
                 [typeof(NormalSysExEvent)] = GetParameters<NormalSysExEvent>((e, s) => e.Data.Length,
                                                                              (e, s) => e.Data),
@@ -87,6 +88,22 @@ namespace Melanchall.DryWetMidi.Tools
             where T : MidiEvent
         {
             return (e, s) => parametersGetters.Select(g => g((T)e, s)).ToArray();
+        }
+
+        private static object FormatNoteNumber(SevenBitNumber noteNumber, MidiFileCsvConversionSettings settings)
+        {
+            if (settings.CsvLayout == MidiFileCsvLayout.MidiCsv)
+                return noteNumber;
+
+            switch (settings.NoteSettings.NoteNumberFormat)
+            {
+                case NoteNumberFormat.NoteNumber:
+                    return noteNumber;
+                case NoteNumberFormat.Letter:
+                    return MusicTheory.Note.Get(noteNumber);
+            }
+
+            return null;
         }
 
         #endregion

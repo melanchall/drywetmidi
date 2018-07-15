@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
@@ -14,7 +15,8 @@ namespace Melanchall.DryWetMidi.Tools
         private static readonly Dictionary<string, RecordType> RecordTypes_DryWetMidi =
             new Dictionary<string, RecordType>(StringComparer.OrdinalIgnoreCase)
             {
-                [DryWetMidiRecordTypes.File.Header] = RecordType.Header
+                [DryWetMidiRecordTypes.File.Header] = RecordType.Header,
+                [DryWetMidiRecordTypes.Note] = RecordType.Note
             };
 
         private static readonly Dictionary<string, RecordType> RecordTypes_MidiCsv =
@@ -33,7 +35,6 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiFile ConvertToMidiFile(Stream stream, MidiFileCsvConversionSettings settings)
         {
             var midiFile = new MidiFile();
-
             var events = new Dictionary<int, List<TimedMidiEvent>>();
 
             using (var streamReader = new StreamReader(stream))
@@ -65,11 +66,15 @@ namespace Melanchall.DryWetMidi.Tools
                                 var midiEvent = ParseEvent(record, settings);
                                 var trackChunkNumber = record.TrackNumber.Value;
 
-                                List<TimedMidiEvent> timedMidiEvents;
-                                if (!events.TryGetValue(trackChunkNumber, out timedMidiEvents))
-                                    events.Add(trackChunkNumber, timedMidiEvents = new List<TimedMidiEvent>());
+                                AddTimedEvents(events, trackChunkNumber, new TimedMidiEvent(record.Time, midiEvent));
+                            }
+                            break;
+                        case RecordType.Note:
+                            {
+                                var noteEvents = ParseNote(record, settings);
+                                var trackChunkNumber = record.TrackNumber.Value;
 
-                                timedMidiEvents.Add(new TimedMidiEvent(record.Time, midiEvent));
+                                AddTimedEvents(events, trackChunkNumber, noteEvents);
                             }
                             break;
                     }
@@ -95,6 +100,17 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.Chunks.AddRange(trackChunks);
 
             return midiFile;
+        }
+
+        private static void AddTimedEvents(Dictionary<int, List<TimedMidiEvent>> eventsMap,
+                                           int trackChunkNumber,
+                                           params TimedMidiEvent[] events)
+        {
+            List<TimedMidiEvent> timedMidiEvents;
+            if (!eventsMap.TryGetValue(trackChunkNumber, out timedMidiEvents))
+                eventsMap.Add(trackChunkNumber, timedMidiEvents = new List<TimedMidiEvent>());
+
+            timedMidiEvents.AddRange(events);
         }
 
         private static TempoMap GetTempoMap(IEnumerable<TimedMidiEvent> timedMidiEvents, TimeDivision timeDivision)
@@ -205,6 +221,45 @@ namespace Melanchall.DryWetMidi.Tools
                 ThrowBadFormat(record.LineNumber, "Invalid format of event record.", ex);
                 return null;
             }
+        }
+
+        private static TimedMidiEvent[] ParseNote(Record record, MidiFileCsvConversionSettings settings)
+        {
+            if (record.TrackNumber == null)
+                ThrowBadFormat(record.LineNumber, "Invalid track number.");
+
+            if (record.Time == null)
+                ThrowBadFormat(record.LineNumber, "Invalid time.");
+
+            var parameters = record.Parameters;
+            if (parameters.Length < 5)
+                ThrowBadFormat(record.LineNumber, "Invalid number of parameters provided.");
+
+            var i = -1;
+
+            try
+            {
+                var channel = (FourBitNumber)TypeParser.FourBitNumber(parameters[++i], settings);
+                var noteNumber = (SevenBitNumber)TypeParser.NoteNumber(parameters[++i], settings);
+
+                ITimeSpan length = null;
+                TimeSpanUtilities.TryParse(parameters[++i], settings.NoteSettings.LengthType, out length);
+
+                var velocity = (SevenBitNumber)TypeParser.SevenBitNumber(parameters[++i], settings);
+                var offVelocity = (SevenBitNumber)TypeParser.SevenBitNumber(parameters[++i], settings);
+
+                return new[]
+                {
+                    new TimedMidiEvent(record.Time, new NoteOnEvent(noteNumber, velocity) { Channel = channel }),
+                    new TimedMidiEvent(record.Time.Add(length, TimeSpanMode.TimeLength), new NoteOffEvent(noteNumber, offVelocity) { Channel = channel }),
+                };
+            }
+            catch
+            {
+                ThrowBadFormat(record.LineNumber, $"Parameter ({i}) is invalid.");
+            }
+
+            return null;
         }
 
         private static Record ReadRecord(

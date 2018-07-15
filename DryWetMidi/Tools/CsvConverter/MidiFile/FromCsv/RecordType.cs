@@ -6,6 +6,7 @@
         TrackChunkStart,
         TrackChunkEnd,
         FileEnd,
-        Event
+        Event,
+        Note
     }
 }

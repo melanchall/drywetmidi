@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
@@ -66,6 +67,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets delimiter used to separate values in CSV representation. The default value is comma.
         /// </summary>
         public char CsvDelimiter { get; set; } = ',';
+
+        public NoteCsvConversionSettings NoteSettings { get; set; } = new NoteCsvConversionSettings();
 
         #endregion
     }

@@ -275,10 +275,15 @@
     <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\EventParser.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\EventParserProvider.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\EventsNamesProvider.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\ParameterParser.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\Record.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\RecordType.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\TimedMidiEvent.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFile\FromCsv\TypeParser.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\MidiFileCsvLayout.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFile\NoteCsvConversionSettings.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFile\NoteFormat.cs" />
+    <Compile Include="Tools\CsvConverter\MidiFile\NoteNumberFormat.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\ToCsv\EventNameGetter.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\ToCsv\EventNameGetterProvider.cs" />
     <Compile Include="Tools\CsvConverter\MidiFile\ToCsv\EventParametersGetter.cs" />

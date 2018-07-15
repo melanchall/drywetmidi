@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (!stream.CanWrite)
                 throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
-            MidiFileToCsvConverter.ConvertToCsv(midiFile, stream, settings ?? new MidiFileCsvConversionSettings());
+            MidiFileToCsvConverter.ConvertToCsv(midiFile, stream, GetSettings(settings));
         }
 
         /// <summary>
@@ -122,7 +122,18 @@ namespace Melanchall.DryWetMidi.Tools
             if (!stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            return CsvToMidiFileConverter.ConvertToMidiFile(stream, settings ?? new MidiFileCsvConversionSettings());
+            return CsvToMidiFileConverter.ConvertToMidiFile(stream, GetSettings(settings));
+        }
+
+        private static MidiFileCsvConversionSettings GetSettings(MidiFileCsvConversionSettings settings)
+        {
+            if (settings == null)
+                settings = new MidiFileCsvConversionSettings();
+
+            if (settings.NoteSettings == null)
+                settings.NoteSettings = new NoteCsvConversionSettings();
+
+            return settings;
         }
 
         #endregion

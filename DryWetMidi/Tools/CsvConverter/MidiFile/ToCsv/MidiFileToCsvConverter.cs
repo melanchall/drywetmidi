@@ -23,26 +23,24 @@ namespace Melanchall.DryWetMidi.Tools
                     WriteTrackChunkStart(streamWriter, trackNumber, settings, tempoMap);
 
                     var time = 0L;
+                    var timedEvents = trackChunk.GetTimedEvents();
+                    var timedObjects = settings.CsvLayout == MidiFileCsvLayout.MidiCsv || settings.NoteSettings.NoteFormat == NoteFormat.Events
+                        ? timedEvents
+                        : timedEvents.GetTimedEventsAndNotes();
 
-                    foreach (var timedEvent in trackChunk.GetTimedEvents())
+                    foreach (var timedObject in timedObjects)
                     {
-                        time = timedEvent.Time;
-                        var midiEvent = timedEvent.Event;
-                        var eventType = midiEvent.GetType();
+                        time = timedObject.Time;
 
-                        var eventNameGetter = EventNameGetterProvider.Get(eventType, settings.CsvLayout);
-                        var recordType = eventNameGetter(midiEvent);
-
-                        var eventParametersGetter = EventParametersGetterProvider.Get(eventType);
-                        var recordParameters = eventParametersGetter(midiEvent, settings);
-
-                        WriteRecord(streamWriter,
-                                    trackNumber,
-                                    time,
-                                    recordType,
-                                    settings,
-                                    tempoMap,
-                                    recordParameters);
+                        var timedEvent = timedObject as TimedEvent;
+                        if (timedEvent != null)
+                            WriteTimedEvent(timedEvent, streamWriter, trackNumber, time, settings, tempoMap);
+                        else
+                        {
+                            var note = timedObject as Note;
+                            if (note != null)
+                                WriteNote(note, streamWriter, trackNumber, time, settings, tempoMap);
+                        }
                     }
 
                     WriteTrackChunkEnd(streamWriter, trackNumber, time, settings, tempoMap);
@@ -54,11 +52,61 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteHeader(
-            StreamWriter streamWriter,
-            MidiFile midiFile,
-            MidiFileCsvConversionSettings settings,
-            TempoMap tempoMap)
+        private static void WriteNote(Note note,
+                                      StreamWriter streamWriter,
+                                      int trackNumber,
+                                      long time,
+                                      MidiFileCsvConversionSettings settings,
+                                      TempoMap tempoMap)
+        {
+            var formattedNote = settings.NoteSettings.NoteNumberFormat == NoteNumberFormat.NoteNumber
+                ? (object)note.NoteNumber
+                : note;
+
+            var formattedLength = TimeConverter.ConvertTo(note.Length, settings.NoteSettings.LengthType, tempoMap);
+
+            WriteRecord(streamWriter,
+                        trackNumber,
+                        time,
+                        DryWetMidiRecordTypes.Note,
+                        settings,
+                        tempoMap,
+                        note.Channel,
+                        formattedNote,
+                        formattedLength,
+                        note.Velocity,
+                        note.OffVelocity);
+        }
+
+        private static void WriteTimedEvent(TimedEvent timedEvent,
+                                            StreamWriter streamWriter,
+                                            int trackNumber,
+                                            long time,
+                                            MidiFileCsvConversionSettings settings,
+                                            TempoMap tempoMap)
+        {
+            var midiEvent = timedEvent.Event;
+            var eventType = midiEvent.GetType();
+
+            var eventNameGetter = EventNameGetterProvider.Get(eventType, settings.CsvLayout);
+            var recordType = eventNameGetter(midiEvent);
+
+            var eventParametersGetter = EventParametersGetterProvider.Get(eventType);
+            var recordParameters = eventParametersGetter(midiEvent, settings);
+
+            WriteRecord(streamWriter,
+                        trackNumber,
+                        time,
+                        recordType,
+                        settings,
+                        tempoMap,
+                        recordParameters);
+        }
+
+        private static void WriteHeader(StreamWriter streamWriter,
+                                        MidiFile midiFile,
+                                        MidiFileCsvConversionSettings settings,
+                                        TempoMap tempoMap)
         {
             MidiFileFormat? format = null;
             try
@@ -95,11 +143,10 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteTrackChunkStart(
-            StreamWriter streamWriter,
-            int trackNumber,
-            MidiFileCsvConversionSettings settings,
-            TempoMap tempoMap)
+        private static void WriteTrackChunkStart(StreamWriter streamWriter,
+                                                 int trackNumber,
+                                                 MidiFileCsvConversionSettings settings,
+                                                 TempoMap tempoMap)
         {
             switch (settings.CsvLayout)
             {
@@ -111,12 +158,11 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteTrackChunkEnd(
-            StreamWriter streamWriter,
-            int trackNumber,
-            long time,
-            MidiFileCsvConversionSettings settings,
-            TempoMap tempoMap)
+        private static void WriteTrackChunkEnd(StreamWriter streamWriter,
+                                               int trackNumber,
+                                               long time,
+                                               MidiFileCsvConversionSettings settings,
+                                               TempoMap tempoMap)
         {
             switch (settings.CsvLayout)
             {
@@ -128,10 +174,9 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteFileEnd(
-            StreamWriter streamWriter,
-            MidiFileCsvConversionSettings settings,
-            TempoMap tempoMap)
+        private static void WriteFileEnd(StreamWriter streamWriter,
+                                         MidiFileCsvConversionSettings settings,
+                                         TempoMap tempoMap)
         {
             switch (settings.CsvLayout)
             {
@@ -143,14 +188,13 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteRecord(
-            StreamWriter streamWriter,
-            int? trackNumber,
-            long? time,
-            string type,
-            MidiFileCsvConversionSettings settings,
-            TempoMap tempoMap,
-            params object[] parameters)
+        private static void WriteRecord(StreamWriter streamWriter,
+                                        int? trackNumber,
+                                        long? time,
+                                        string type,
+                                        MidiFileCsvConversionSettings settings,
+                                        TempoMap tempoMap,
+                                        params object[] parameters)
         {
             var convertedTime = time == null
                 ? null
