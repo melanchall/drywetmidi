@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static readonly ParameterParser SByte = (p, s) => sbyte.Parse(p);
         public static readonly ParameterParser Long = (p, s) => long.Parse(p);
         public static readonly ParameterParser UShort = (p, s) => ushort.Parse(p);
-        public static readonly ParameterParser String = (p, s) => p.Trim('"');
+        public static readonly ParameterParser String = (p, s) => CsvUtilities.UnescapeString(p);
         public static readonly ParameterParser Int = (p, s) => int.Parse(p);
         public static readonly ParameterParser FourBitNumber = (p, s) => (FourBitNumber)byte.Parse(p);
         public static readonly ParameterParser SevenBitNumber = (p, s) => (SevenBitNumber)byte.Parse(p);

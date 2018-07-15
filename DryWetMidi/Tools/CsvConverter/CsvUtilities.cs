@@ -22,6 +22,11 @@ namespace Melanchall.DryWetMidi.Tools
             return $"{Quote}{input.Replace(QuoteString, DoubleQuote)}{Quote}";
         }
 
+        public static string UnescapeString(string input)
+        {
+            return input.Replace(DoubleQuote, QuoteString).Trim(Quote);
+        }
+
         public static string MergeCsvValues(char delimiter, IEnumerable<object> values)
         {
             return string.Join(delimiter.ToString(), values);
