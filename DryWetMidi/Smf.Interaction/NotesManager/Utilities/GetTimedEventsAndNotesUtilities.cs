@@ -148,6 +148,27 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this TrackChunk trackChunk)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+
+            return trackChunk.GetTimedEvents().GetTimedEventsAndNotes();
+        }
+
+        public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TrackChunk> trackChunks)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            return trackChunks.GetTimedEvents().GetTimedEventsAndNotes();
+        }
+
+        public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this MidiFile midiFile)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            return midiFile.GetTimedEvents().GetTimedEventsAndNotes();
+        }
+
         #endregion
     }
 }

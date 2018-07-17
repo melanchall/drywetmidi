@@ -31,9 +31,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
         /// invalid value.</exception>
-        public static IEnumerable<ILengthedObject> GetNotesAndRests(
-            this IEnumerable<Note> notes,
-            RestSeparationPolicy restSeparationPolicy)
+        public static IEnumerable<ILengthedObject> GetNotesAndRests(this IEnumerable<Note> notes, RestSeparationPolicy restSeparationPolicy)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsInvalidEnumValue(nameof(restSeparationPolicy), restSeparationPolicy);
@@ -63,6 +61,27 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             throw new NotSupportedException($"Rest separation policy {restSeparationPolicy} is not supported.");
+        }
+
+        public static IEnumerable<ILengthedObject> GetNotesAndRests(this TrackChunk trackChunk, RestSeparationPolicy restSeparationPolicy)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+
+            return trackChunk.GetNotes().GetNotesAndRests(restSeparationPolicy);
+        }
+
+        public static IEnumerable<ILengthedObject> GetNotesAndRests(this IEnumerable<TrackChunk> trackChunks, RestSeparationPolicy restSeparationPolicy)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            return trackChunks.GetNotes().GetNotesAndRests(restSeparationPolicy);
+        }
+
+        public static IEnumerable<ILengthedObject> GetNotesAndRests(this MidiFile midiFile, RestSeparationPolicy restSeparationPolicy)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            return midiFile.GetNotes().GetNotesAndRests(restSeparationPolicy);
         }
 
         private static IEnumerable<ILengthedObject> GetNotesAndRests<TDescriptor>(
