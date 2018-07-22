@@ -1,6 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     internal sealed class TimeAndLength
     {

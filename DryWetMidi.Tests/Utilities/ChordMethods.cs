@@ -2,9 +2,8 @@
 using System.Collections;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Melanchall.DryWetMidi.Tests.Utilities;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     public sealed class ChordMethods : LengthedObjectMethods<Chord>
     {

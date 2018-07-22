@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     public abstract class TimedObjectMethods<TObject>
         where TObject : ITimedObject

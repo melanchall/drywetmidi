@@ -1,5 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
-using Melanchall.DryWetMidi.Tests.Common;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools

@@ -2,7 +2,7 @@
 using Melanchall.DryWetMidi.Smf.Interaction;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     public abstract class LengthedObjectMethods<TObject> : TimedObjectMethods<TObject>
         where TObject : ILengthedObject
