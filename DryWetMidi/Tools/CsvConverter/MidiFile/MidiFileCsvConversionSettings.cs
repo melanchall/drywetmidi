@@ -16,6 +16,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         private MidiFileCsvLayout _csvLayout = MidiFileCsvLayout.DryWetMidi;
         private TimeSpanType _timeType = TimeSpanType.Midi;
+        private TimeSpanType _noteLengthType = TimeSpanType.Midi;
+        private NoteFormat _noteFormat = NoteFormat.Events;
+        private NoteNumberFormat _noteNumberFormat = NoteNumberFormat.NoteNumber;
 
         #endregion
 
@@ -68,7 +71,38 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public char CsvDelimiter { get; set; } = ',';
 
-        public NoteCsvConversionSettings NoteSettings { get; set; } = new NoteCsvConversionSettings();
+        public TimeSpanType NoteLengthType
+        {
+            get { return _noteLengthType; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _noteLengthType = value;
+            }
+        }
+
+        public NoteFormat NoteFormat
+        {
+            get { return _noteFormat; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _noteFormat = value;
+            }
+        }
+
+        public NoteNumberFormat NoteNumberFormat
+        {
+            get { return _noteNumberFormat; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _noteNumberFormat = value;
+            }
+        }
 
         #endregion
     }

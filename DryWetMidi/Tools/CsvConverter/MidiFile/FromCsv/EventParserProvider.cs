@@ -163,7 +163,7 @@ namespace Melanchall.DryWetMidi.Tools
             return (p, s) =>
             {
                 if (p.Length < parametersParsers.Length)
-                    ThrowBadFormat("Invalid number of parameters provided.");
+                    CsvError.ThrowBadFormat("Invalid number of parameters provided.");
 
                 var parameters = new List<object>(parametersParsers.Length);
                 var i = 0;
@@ -179,12 +179,12 @@ namespace Melanchall.DryWetMidi.Tools
                     }
                     catch
                     {
-                        ThrowBadFormat($"Parameter ({i}) is invalid.");
+                        CsvError.ThrowBadFormat($"Parameter ({i}) is invalid.");
                     }
                 }
 
                 if (p.Length < i)
-                    ThrowBadFormat("Invalid number of parameters provided.");
+                    CsvError.ThrowBadFormat("Invalid number of parameters provided.");
 
                 int bytesNumber = 0;
 
@@ -195,12 +195,12 @@ namespace Melanchall.DryWetMidi.Tools
                 }
                 catch
                 {
-                    ThrowBadFormat($"Parameter ({i}) is invalid.");
+                    CsvError.ThrowBadFormat($"Parameter ({i}) is invalid.");
                 }
 
                 i++;
                 if (p.Length < i + bytesNumber)
-                    ThrowBadFormat("Invalid number of parameters provided.");
+                    CsvError.ThrowBadFormat("Invalid number of parameters provided.");
 
                 try
                 {
@@ -216,7 +216,7 @@ namespace Melanchall.DryWetMidi.Tools
                 }
                 catch
                 {
-                    ThrowBadFormat($"Parameter ({i}) is invalid.");
+                    CsvError.ThrowBadFormat($"Parameter ({i}) is invalid.");
                 }
 
                 return eventCreator(parameters.ToArray());
@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tools
             return (p, s) =>
             {
                 if (p.Length < parametersParsers.Length)
-                    ThrowBadFormat("Invalid number of parameters provided.");
+                    CsvError.ThrowBadFormat("Invalid number of parameters provided.");
 
                 var parameters = new List<object>(parametersParsers.Length);
 
@@ -297,17 +297,12 @@ namespace Melanchall.DryWetMidi.Tools
                     }
                     catch
                     {
-                        ThrowBadFormat($"Parameter ({i}) is invalid.");
+                        CsvError.ThrowBadFormat($"Parameter ({i}) is invalid.");
                     }
                 }
 
                 return eventCreator(parameters.ToArray());
             };
-        }
-
-        private static void ThrowBadFormat(string message)
-        {
-            throw new FormatException(message);
         }
 
         #endregion

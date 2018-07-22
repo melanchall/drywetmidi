@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
@@ -13,9 +15,73 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     [TestFixture]
     public sealed class CsvConverterTests
     {
+        #region Nested classes
+
+        private sealed class NoteWithCustomTimeAndLength
+        {
+            #region Constructor
+
+            public NoteWithCustomTimeAndLength(byte noteNumber,
+                                               byte channel,
+                                               byte velocity,
+                                               byte offVelocity,
+                                               ITimeSpan time,
+                                               ITimeSpan length)
+            {
+                NoteNumber = (SevenBitNumber)noteNumber;
+                Channel = (FourBitNumber)channel;
+                Velocity = (SevenBitNumber)velocity;
+                OffVelocity = (SevenBitNumber)offVelocity;
+                Time = time;
+                Length = length;
+            }
+
+            #endregion
+
+            #region Properties
+
+            public SevenBitNumber NoteNumber { get; }
+
+            public FourBitNumber Channel { get; }
+
+            public SevenBitNumber Velocity { get; }
+
+            public SevenBitNumber OffVelocity { get; }
+
+            public ITimeSpan Time { get; }
+
+            public ITimeSpan Length { get; }
+
+            #endregion
+
+            #region Methods
+
+            public Note GetNote(TempoMap tempoMap)
+            {
+                return new Note(NoteNumber)
+                {
+                    Channel = Channel,
+                    Velocity = Velocity,
+                    OffVelocity = OffVelocity,
+                    Time = TimeConverter.ConvertFrom(Time, tempoMap),
+                    Length = LengthConverter.ConvertFrom(Length, Time, tempoMap)
+                };
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Constants
+
+        private static readonly NoteMethods _noteMethods = new NoteMethods();
+
+        #endregion
+
         #region Test methods
 
-        #region Convert to/from CSV
+        #region Convert MIDI files to/from CSV
 
         [TestCase(MidiFileCsvLayout.DryWetMidi)]
         [TestCase(MidiFileCsvLayout.MidiCsv)]
@@ -474,6 +540,265 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #endregion
 
+        #region CsvToNotes
+
+        [Test]
+        public void CsvToNotes_NoCsv()
+        {
+            ConvertCsvToNotes(
+                Enumerable.Empty<NoteWithCustomTimeAndLength>(),
+                TempoMap.Default,
+                TimeSpanType.Midi,
+                new string[0]);
+        }
+
+        [Test]
+        public void CsvToNotes_EmptyCsvLines()
+        {
+            ConvertCsvToNotes(
+                Enumerable.Empty<NoteWithCustomTimeAndLength>(),
+                TempoMap.Default,
+                TimeSpanType.Midi,
+                new[]
+                {
+                    string.Empty,
+                    string.Empty,
+                    string.Empty
+                });
+        }
+
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "",
+            "100, 2, 90, 100, 80, 56",
+            "0, 0, 92, 10, 70, 0",
+            "",
+            "10, 0, 92, 0, 72, 30",
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "",
+            "100, 2, F#6, 100, 80, 56",
+            "0, 0, G#6, 10, 70, 0",
+            "",
+            "",
+            "",
+            "10, 0, G#6, 0, 72, 30",
+        })]
+        public void CsvToNotes_MidiTime(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            ConvertCsvToNotes(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, (MidiTimeSpan)100, (MidiTimeSpan)100),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, (MidiTimeSpan)0, (MidiTimeSpan)10),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, (MidiTimeSpan)10, (MidiTimeSpan)0)
+                },
+                TempoMap.Default,
+                TimeSpanType.Midi,
+                csvLines,
+                noteNumberFormat);
+        }
+
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "0:0:0:500, 2, 90, 100, 80, 56",
+            "0:0:0, 0, 92, 10, 70, 0",
+            "0:0:1, 0, 92, 0, 72, 30",
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "0:0:0:500, 2, F#6, 100, 80, 56",
+            "0:0:0, 0, G#6, 10, 70, 0",
+            "0:0:1, 0, G#6, 0, 72, 30",
+        })]
+        public void CsvToNotes_MetricTime(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            ConvertCsvToNotes(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, new MetricTimeSpan(0, 0, 0, 500), (MidiTimeSpan)100),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, new MetricTimeSpan(), (MidiTimeSpan)10),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, new MetricTimeSpan(0, 0, 1), (MidiTimeSpan)0)
+                },
+                TempoMap.Default,
+                TimeSpanType.Metric,
+                csvLines,
+                noteNumberFormat);
+        }
+
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "100, 2, 90, 0:0:0:500, 80, 56",
+            "0, 0, 92, 0:1:0:500, 70, 0",
+            "10, 0, 92, 0:0:0, 72, 30",
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "100, 2, F#6, 0:0:0:500, 80, 56",
+            "0, 0, G#6, 0:1:0:500, 70, 0",
+            "10, 0, G#6, 0:0:0, 72, 30",
+        })]
+        public void CsvToNotes_MetricLength(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            ConvertCsvToNotes(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, (MidiTimeSpan)100, new MetricTimeSpan(0, 0, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, (MidiTimeSpan)0, new MetricTimeSpan(0, 1, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, (MidiTimeSpan)10, new MetricTimeSpan(0, 0, 0))
+                },
+                TempoMap.Default,
+                TimeSpanType.Midi,
+                csvLines,
+                noteNumberFormat,
+                TimeSpanType.Metric);
+        }
+
+        [Test]
+        public void CsvToNotes_CustomDelimiter()
+        {
+            ConvertCsvToNotes(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, MusicalTimeSpan.Whole.SingleDotted(), new MetricTimeSpan(0, 0, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, (MidiTimeSpan)0, new MetricTimeSpan(0, 1, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, MusicalTimeSpan.Eighth, new MetricTimeSpan(0, 0, 0))
+                },
+                TempoMap.Default,
+                TimeSpanType.Musical,
+                new[]
+                {
+                    "1/1.;2;F#6;0:0:0:500;80;56",
+                    "0/1;0;G#6;0:1:0:500;70;0",
+                    "1/8;0;G#6;0:0:0;72;30",
+                },
+                NoteNumberFormat.Letter,
+                TimeSpanType.Metric,
+                ';');
+        }
+
+        #endregion
+
+        #region NotesToCsv
+
+        [Test]
+        public void NotesToCsv_NoNotes()
+        {
+            ConvertNotesToCsv(
+                Enumerable.Empty<NoteWithCustomTimeAndLength>(),
+                TempoMap.Default,
+                TimeSpanType.Midi,
+                new string[0]);
+        }
+
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "100,2,90,100,80,56",
+            "0,0,92,10,70,0",
+            "10,0,92,0,72,30",
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "100,2,F#6,100,80,56",
+            "0,0,G#6,10,70,0",
+            "10,0,G#6,0,72,30",
+        })]
+        public void NotesToCsv_MidiTime(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            ConvertNotesToCsv(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, (MidiTimeSpan)100, (MidiTimeSpan)100),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, (MidiTimeSpan)0, (MidiTimeSpan)10),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, (MidiTimeSpan)10, (MidiTimeSpan)0)
+                },
+                TempoMap.Default,
+                TimeSpanType.Midi,
+                csvLines,
+                noteNumberFormat);
+        }
+
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "0:0:0:500,2,90,100,80,56",
+            "0:0:0:0,0,92,10,70,0",
+            "0:0:1:0,0,92,0,72,30",
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "0:0:0:500,2,F#6,100,80,56",
+            "0:0:0:0,0,G#6,10,70,0",
+            "0:0:1:0,0,G#6,0,72,30",
+        })]
+        public void NotesToCsv_MetricTime(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            ConvertNotesToCsv(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, new MetricTimeSpan(0, 0, 0, 500), (MidiTimeSpan)100),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, new MetricTimeSpan(), (MidiTimeSpan)10),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, new MetricTimeSpan(0, 0, 1), (MidiTimeSpan)0)
+                },
+                TempoMap.Default,
+                TimeSpanType.Metric,
+                csvLines,
+                noteNumberFormat);
+        }
+
+        [TestCase(NoteNumberFormat.NoteNumber, new[]
+        {
+            "100,2,90,0:0:0:500,80,56",
+            "0,0,92,0:1:0:500,70,0",
+            "10,0,92,0:0:0:0,72,30",
+        })]
+        [TestCase(NoteNumberFormat.Letter, new[]
+        {
+            "100,2,F#6,0:0:0:500,80,56",
+            "0,0,G#6,0:1:0:500,70,0",
+            "10,0,G#6,0:0:0:0,72,30",
+        })]
+        public void NotesToCsv_MetricLength(NoteNumberFormat noteNumberFormat, string[] csvLines)
+        {
+            ConvertNotesToCsv(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, (MidiTimeSpan)100, new MetricTimeSpan(0, 0, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, (MidiTimeSpan)0, new MetricTimeSpan(0, 1, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, (MidiTimeSpan)10, new MetricTimeSpan(0, 0, 0))
+                },
+                TempoMap.Default,
+                TimeSpanType.Midi,
+                csvLines,
+                noteNumberFormat,
+                TimeSpanType.Metric);
+        }
+
+        [Test]
+        public void NotesToCsv_CustomDelimiter()
+        {
+            ConvertNotesToCsv(
+                new[]
+                {
+                    new NoteWithCustomTimeAndLength(90, 2, 80, 56, MusicalTimeSpan.Whole.SingleDotted(), new MetricTimeSpan(0, 0, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 70, 0, (MidiTimeSpan)0, new MetricTimeSpan(0, 1, 0, 500)),
+                    new NoteWithCustomTimeAndLength(92, 0, 72, 30, MusicalTimeSpan.Eighth, new MetricTimeSpan(0, 0, 0))
+                },
+                TempoMap.Default,
+                TimeSpanType.Musical,
+                new[]
+                {
+                    "3/2;2;F#6;0:0:0:500;80;56",
+                    "0/1;0;G#6;0:1:0:500;70;0",
+                    "1/8;0;G#6;0:0:0:0;72;30",
+                },
+                NoteNumberFormat.Letter,
+                TimeSpanType.Metric,
+                ';');
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
@@ -524,12 +849,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 CsvLayout = layout,
                 TimeType = timeType,
-                NoteSettings = new NoteCsvConversionSettings
-                {
-                    NoteFormat = noteFormat,
-                    NoteNumberFormat = noteNumberFormat,
-                    LengthType = noteLengthType
-                }
+                NoteFormat = noteFormat,
+                NoteNumberFormat = noteNumberFormat,
+                NoteLengthType = noteLengthType
             };
 
             try
@@ -559,17 +881,85 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 CsvLayout = layout,
                 TimeType = timeType,
-                NoteSettings = new NoteCsvConversionSettings
-                {
-                    NoteFormat = noteFormat,
-                    NoteNumberFormat = noteNumberFormat,
-                    LengthType = noteLengthType
-                }
+                NoteFormat = noteFormat,
+                NoteNumberFormat = noteNumberFormat,
+                NoteLengthType = noteLengthType
             };
 
             try
             {
                 new CsvConverter().ConvertMidiFileToCsv(midiFile, filePath, true, settings);
+                var actualCsvLines = File.ReadAllLines(filePath);
+                CollectionAssert.AreEqual(expectedCsvLines, actualCsvLines, StringComparer.OrdinalIgnoreCase);
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        private static void ConvertNotesToFromCsv(IEnumerable<Note> notes, TempoMap tempoMap, string outputFilePath, NoteCsvConversionSettings settings)
+        {
+            var csvConverter = new CsvConverter();
+            csvConverter.ConvertNotesToCsv(notes, outputFilePath, tempoMap, true, settings);
+            csvConverter.ConvertCsvToNotes(outputFilePath, tempoMap, settings);
+        }
+
+        private static void ConvertCsvToNotes(
+            IEnumerable<NoteWithCustomTimeAndLength> expectedNotes,
+            TempoMap tempoMap,
+            TimeSpanType timeType,
+            string[] csvLines,
+            NoteNumberFormat noteNumberFormat = NoteNumberFormat.NoteNumber,
+            TimeSpanType noteLengthType = TimeSpanType.Midi,
+            char delimiter = ',')
+        {
+            var filePath = Path.GetTempFileName();
+            File.WriteAllLines(filePath, csvLines);
+
+            var settings = new NoteCsvConversionSettings
+            {
+                TimeType = timeType,
+                NoteNumberFormat = noteNumberFormat,
+                NoteLengthType = noteLengthType,
+                CsvDelimiter = delimiter
+            };
+
+            try
+            {
+                var actualNotes = new CsvConverter().ConvertCsvToNotes(filePath, tempoMap, settings).ToList();
+                _noteMethods.AssertCollectionsAreEqual(expectedNotes.Select(n => n.GetNote(tempoMap)), actualNotes);
+
+                ConvertNotesToFromCsv(actualNotes, tempoMap, filePath, settings);
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        private static void ConvertNotesToCsv(
+            IEnumerable<NoteWithCustomTimeAndLength> expectedNotes,
+            TempoMap tempoMap,
+            TimeSpanType timeType,
+            string[] expectedCsvLines,
+            NoteNumberFormat noteNumberFormat = NoteNumberFormat.NoteNumber,
+            TimeSpanType noteLengthType = TimeSpanType.Midi,
+            char delimiter = ',')
+        {
+            var filePath = Path.GetTempFileName();
+
+            var settings = new NoteCsvConversionSettings
+            {
+                TimeType = timeType,
+                NoteNumberFormat = noteNumberFormat,
+                NoteLengthType = noteLengthType,
+                CsvDelimiter = delimiter
+            };
+
+            try
+            {
+                new CsvConverter().ConvertNotesToCsv(expectedNotes.Select(n => n.GetNote(tempoMap)), filePath, tempoMap, true, settings);
                 var actualCsvLines = File.ReadAllLines(filePath);
                 CollectionAssert.AreEqual(expectedCsvLines, actualCsvLines, StringComparer.OrdinalIgnoreCase);
             }

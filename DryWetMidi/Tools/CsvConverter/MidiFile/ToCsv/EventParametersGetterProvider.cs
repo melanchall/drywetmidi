@@ -95,15 +95,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (settings.CsvLayout == MidiFileCsvLayout.MidiCsv)
                 return noteNumber;
 
-            switch (settings.NoteSettings.NoteNumberFormat)
-            {
-                case NoteNumberFormat.NoteNumber:
-                    return noteNumber;
-                case NoteNumberFormat.Letter:
-                    return MusicTheory.Note.Get(noteNumber);
-            }
-
-            return null;
+            return NoteCsvConversionUtilities.FormatNoteNumber(noteNumber, settings.NoteNumberFormat);
         }
 
         #endregion
