@@ -7,33 +7,38 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Fields
 
-        private TimeSpanType _lengthType = TimeSpanType.Midi;
-        private NoteFormat _noteFormat = NoteFormat.Events;
+        private TimeSpanType _timeType = TimeSpanType.Midi;
+        private TimeSpanType _noteLengthType = TimeSpanType.Midi;
         private NoteNumberFormat _noteNumberFormat = NoteNumberFormat.NoteNumber;
 
         #endregion
 
         #region Properties
 
-        public TimeSpanType LengthType
+        /// <summary>
+        /// Gets or sets delimiter used to separate values in CSV representation. The default value is comma.
+        /// </summary>
+        public char CsvDelimiter { get; set; } = ',';
+
+        public TimeSpanType TimeType
         {
-            get { return _lengthType; }
+            get { return _timeType; }
             set
             {
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
-                _lengthType = value;
+                _timeType = value;
             }
         }
 
-        public NoteFormat NoteFormat
+        public TimeSpanType NoteLengthType
         {
-            get { return _noteFormat; }
+            get { return _noteLengthType; }
             set
             {
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
-                _noteFormat = value;
+                _noteLengthType = value;
             }
         }
 

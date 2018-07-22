@@ -37,16 +37,16 @@ namespace Melanchall.DryWetMidi.Tools
             var midiFile = new MidiFile();
             var events = new Dictionary<int, List<TimedMidiEvent>>();
 
-            using (var streamReader = new StreamReader(stream))
+            using (var csvReader = new CsvReader(stream, settings.CsvDelimiter))
             {
                 var lineNumber = 0;
                 Record record;
 
-                while ((record = ReadRecord(streamReader, lineNumber, settings)) != null)
+                while ((record = ReadRecord(csvReader, lineNumber, settings)) != null)
                 {
                     var recordType = GetRecordType(record.RecordType, settings);
                     if (recordType == null)
-                        ThrowBadFormat(lineNumber, "Unknown record.");
+                        CsvError.ThrowBadFormat(lineNumber, "Unknown record.");
 
                     switch (recordType)
                     {
@@ -170,27 +170,27 @@ namespace Melanchall.DryWetMidi.Tools
                 case MidiFileCsvLayout.DryWetMidi:
                     {
                         if (parameters.Length < 2)
-                            ThrowBadFormat(record.LineNumber, "Parameters count is invalid.");
+                            CsvError.ThrowBadFormat(record.LineNumber, "Parameters count is invalid.");
 
                         MidiFileFormat formatValue;
                         if (Enum.TryParse(parameters[0], true, out formatValue))
                             format = formatValue;
 
                         if (!short.TryParse(parameters[1], out timeDivision))
-                            ThrowBadFormat(record.LineNumber, "Invalid time division.");
+                            CsvError.ThrowBadFormat(record.LineNumber, "Invalid time division.");
                     }
                     break;
                 case MidiFileCsvLayout.MidiCsv:
                     {
                         if (parameters.Length < 3)
-                            ThrowBadFormat(record.LineNumber, "Parameters count is invalid.");
+                            CsvError.ThrowBadFormat(record.LineNumber, "Parameters count is invalid.");
 
                         ushort formatValue;
                         if (ushort.TryParse(parameters[0], out formatValue) && Enum.IsDefined(typeof(MidiFileFormat), formatValue))
                             format = (MidiFileFormat)formatValue;
 
                         if (!short.TryParse(parameters[2], out timeDivision))
-                            ThrowBadFormat(record.LineNumber, "Invalid time division.");
+                            CsvError.ThrowBadFormat(record.LineNumber, "Invalid time division.");
                     }
                     break;
             }
@@ -205,10 +205,10 @@ namespace Melanchall.DryWetMidi.Tools
         private static MidiEvent ParseEvent(Record record, MidiFileCsvConversionSettings settings)
         {
             if (record.TrackNumber == null)
-                ThrowBadFormat(record.LineNumber, "Invalid track number.");
+                CsvError.ThrowBadFormat(record.LineNumber, "Invalid track number.");
 
             if (record.Time == null)
-                ThrowBadFormat(record.LineNumber, "Invalid time.");
+                CsvError.ThrowBadFormat(record.LineNumber, "Invalid time.");
 
             var eventParser = EventParserProvider.Get(record.RecordType, settings.CsvLayout);
 
@@ -218,7 +218,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
             catch (FormatException ex)
             {
-                ThrowBadFormat(record.LineNumber, "Invalid format of event record.", ex);
+                CsvError.ThrowBadFormat(record.LineNumber, "Invalid format of event record.", ex);
                 return null;
             }
         }
@@ -226,14 +226,14 @@ namespace Melanchall.DryWetMidi.Tools
         private static TimedMidiEvent[] ParseNote(Record record, MidiFileCsvConversionSettings settings)
         {
             if (record.TrackNumber == null)
-                ThrowBadFormat(record.LineNumber, "Invalid track number.");
+                CsvError.ThrowBadFormat(record.LineNumber, "Invalid track number.");
 
             if (record.Time == null)
-                ThrowBadFormat(record.LineNumber, "Invalid time.");
+                CsvError.ThrowBadFormat(record.LineNumber, "Invalid time.");
 
             var parameters = record.Parameters;
             if (parameters.Length < 5)
-                ThrowBadFormat(record.LineNumber, "Invalid number of parameters provided.");
+                CsvError.ThrowBadFormat(record.LineNumber, "Invalid number of parameters provided.");
 
             var i = -1;
 
@@ -243,7 +243,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var noteNumber = (SevenBitNumber)TypeParser.NoteNumber(parameters[++i], settings);
 
                 ITimeSpan length = null;
-                TimeSpanUtilities.TryParse(parameters[++i], settings.NoteSettings.LengthType, out length);
+                TimeSpanUtilities.TryParse(parameters[++i], settings.NoteLengthType, out length);
 
                 var velocity = (SevenBitNumber)TypeParser.SevenBitNumber(parameters[++i], settings);
                 var offVelocity = (SevenBitNumber)TypeParser.SevenBitNumber(parameters[++i], settings);
@@ -256,67 +256,37 @@ namespace Melanchall.DryWetMidi.Tools
             }
             catch
             {
-                ThrowBadFormat(record.LineNumber, $"Parameter ({i}) is invalid.");
+                CsvError.ThrowBadFormat(record.LineNumber, $"Parameter ({i}) is invalid.");
             }
 
             return null;
         }
 
-        private static Record ReadRecord(
-            StreamReader streamReader,
-            int lineNumber,
-            MidiFileCsvConversionSettings settings)
+        private static Record ReadRecord(CsvReader csvReader, int lineNumber, MidiFileCsvConversionSettings settings)
         {
-            var line = Enumerable.Range(0, int.MaxValue)
-                                 .Select(i => new
-                                 {
-                                     LineNumber = lineNumber + i,
-                                     Line = streamReader.ReadLine()?.Trim()
-                                 })
-                                 .FirstOrDefault(l => l.Line != string.Empty);
-
-            if (string.IsNullOrEmpty(line.Line))
+            var record = csvReader.ReadRecord();
+            if (record == null)
                 return null;
 
-            var lineNumberOffset = 0;
-            var parts = CsvUtilities.SplitCsvValues(line.Line, settings.CsvDelimiter, () =>
-            {
-                var nextLine = streamReader.ReadLine();
-                if (nextLine != null)
-                    lineNumberOffset++;
-
-                return nextLine;
-            });
-            if (parts.Length < 3)
-                ThrowBadFormat(line.LineNumber, "Missing required parameters.");
+            var values = record.Values;
+            if (values.Length < 3)
+                CsvError.ThrowBadFormat(record.LineNumber, "Missing required parameters.");
 
             int parsedTrackNumber;
-            var trackNumber = int.TryParse(parts[0], out parsedTrackNumber)
+            var trackNumber = int.TryParse(values[0], out parsedTrackNumber)
                 ? (int?)parsedTrackNumber
                 : null;
 
             ITimeSpan time = null;
-            TimeSpanUtilities.TryParse(parts[1], settings.TimeType, out time);
+            TimeSpanUtilities.TryParse(values[1], settings.TimeType, out time);
 
-            var recordType = parts[2];
+            var recordType = values[2];
             if (string.IsNullOrEmpty(recordType))
-                ThrowBadFormat(line.LineNumber, "Record type isn't specified.");
+                CsvError.ThrowBadFormat(record.LineNumber, "Record type isn't specified.");
 
-            var parameters = parts.Skip(3).ToArray();
+            var parameters = values.Skip(3).ToArray();
 
-            lineNumber = line.LineNumber + lineNumberOffset;
-
-            return new Record(line.LineNumber, trackNumber, time, recordType, parameters);
-        }
-
-        private static void ThrowBadFormat(int lineNumber, string message, Exception innerException = null)
-        {
-            ThrowBadFormat($"Line {lineNumber}: {message}", innerException);
-        }
-
-        private static void ThrowBadFormat(string message, Exception innerException = null)
-        {
-            throw new FormatException(message, innerException);
+            return new Record(record.LineNumber, trackNumber, time, recordType, parameters);
         }
 
         #endregion

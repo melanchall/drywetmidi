@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -71,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (!stream.CanWrite)
                 throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
-            MidiFileToCsvConverter.ConvertToCsv(midiFile, stream, GetSettings(settings));
+            MidiFileToCsvConverter.ConvertToCsv(midiFile, stream, settings ?? new MidiFileCsvConversionSettings());
         }
 
         /// <summary>
@@ -122,18 +125,51 @@ namespace Melanchall.DryWetMidi.Tools
             if (!stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            return CsvToMidiFileConverter.ConvertToMidiFile(stream, GetSettings(settings));
+            return CsvToMidiFileConverter.ConvertToMidiFile(stream, settings ?? new MidiFileCsvConversionSettings());
         }
 
-        private static MidiFileCsvConversionSettings GetSettings(MidiFileCsvConversionSettings settings)
+        public void ConvertNotesToCsv(IEnumerable<Note> notes, string filePath, TempoMap tempoMap, bool overwriteFile = false, NoteCsvConversionSettings settings = null)
         {
-            if (settings == null)
-                settings = new MidiFileCsvConversionSettings();
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            if (settings.NoteSettings == null)
-                settings.NoteSettings = new NoteCsvConversionSettings();
+            using (var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile))
+            {
+                ConvertNotesToCsv(notes, fileStream, tempoMap, settings);
+            }
+        }
 
-            return settings;
+        public void ConvertNotesToCsv(IEnumerable<Note> notes, Stream stream, TempoMap tempoMap, NoteCsvConversionSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            if (!stream.CanWrite)
+                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+
+            NotesToCsvConverter.ConvertToCsv(notes, stream, tempoMap, settings ?? new NoteCsvConversionSettings());
+        }
+
+        public IEnumerable<Note> ConvertCsvToNotes(string filePath, TempoMap tempoMap, NoteCsvConversionSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            using (var fileStream = FileUtilities.OpenFileForRead(filePath))
+            {
+                return ConvertCsvToNotes(fileStream, tempoMap, settings).ToList();
+            }
+        }
+
+        public IEnumerable<Note> ConvertCsvToNotes(Stream stream, TempoMap tempoMap, NoteCsvConversionSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            if (!stream.CanRead)
+                throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+
+            return CsvToNotesConverter.ConvertToNotes(stream, tempoMap, settings ?? new NoteCsvConversionSettings());
         }
 
         #endregion
