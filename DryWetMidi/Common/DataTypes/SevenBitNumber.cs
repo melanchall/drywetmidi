@@ -53,6 +53,32 @@ namespace Melanchall.DryWetMidi.Common
 
         #endregion
 
+        #region Methods
+
+        public static bool TryParse(string input, out SevenBitNumber result)
+        {
+            result = default(SevenBitNumber);
+
+            byte byteValue;
+            var parsed = ShortByteParser.TryParse(input, Min, Max, out byteValue).Status == ParsingStatus.Parsed;
+            if (parsed)
+                result = (SevenBitNumber)byteValue;
+
+            return parsed;
+        }
+
+        public static SevenBitNumber Parse(string input)
+        {
+            byte byteValue;
+            var parsingResult = ShortByteParser.TryParse(input, Min, Max, out byteValue);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return (SevenBitNumber)byteValue;
+
+            throw parsingResult.Exception;
+        }
+
+        #endregion
+
         #region Casting
 
         /// <summary>

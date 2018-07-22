@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Melanchall.DryWetMidi.Tests.Common;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 

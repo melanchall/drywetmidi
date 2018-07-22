@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Tools
                         CsvError.ThrowBadFormat(record.LineNumber, "Invalid time.");
 
                     FourBitNumber channel;
-                    if (!TryParseFourBitNumber(values[1], out channel))
+                    if (!FourBitNumber.TryParse(values[1], out channel))
                         CsvError.ThrowBadFormat(record.LineNumber, "Invalid channel.");
 
                     SevenBitNumber noteNumber;
@@ -38,11 +38,11 @@ namespace Melanchall.DryWetMidi.Tools
                         CsvError.ThrowBadFormat(record.LineNumber, "Invalid length.");
 
                     SevenBitNumber velocity;
-                    if (!TryParseSevenBitNumber(values[4], out velocity))
+                    if (!SevenBitNumber.TryParse(values[4], out velocity))
                         CsvError.ThrowBadFormat(record.LineNumber, "Invalid velocity.");
 
                     SevenBitNumber offVelocity;
-                    if (!TryParseSevenBitNumber(values[5], out offVelocity))
+                    if (!SevenBitNumber.TryParse(values[5], out offVelocity))
                         CsvError.ThrowBadFormat(record.LineNumber, "Invalid off velocity.");
 
                     var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tools
             switch (noteNumberFormat)
             {
                 case NoteNumberFormat.NoteNumber:
-                    return TryParseSevenBitNumber(input, out result);
+                    return SevenBitNumber.TryParse(input, out result);
                 case NoteNumberFormat.Letter:
                     {
                         MusicTheory.Note note;
@@ -78,30 +78,6 @@ namespace Melanchall.DryWetMidi.Tools
             }
 
             return false;
-        }
-
-        private static bool TryParseFourBitNumber(string input, out FourBitNumber result)
-        {
-            result = default(FourBitNumber);
-
-            byte value;
-            if (!byte.TryParse(input, out value) || value < FourBitNumber.MinValue || value > FourBitNumber.MaxValue)
-                return false;
-
-            result = (FourBitNumber)value;
-            return true;
-        }
-
-        private static bool TryParseSevenBitNumber(string input, out SevenBitNumber result)
-        {
-            result = default(SevenBitNumber);
-
-            byte value;
-            if (!byte.TryParse(input, out value) || value < SevenBitNumber.MinValue || value > SevenBitNumber.MaxValue)
-                return false;
-
-            result = (SevenBitNumber)value;
-            return true;
         }
 
         #endregion

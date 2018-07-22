@@ -40,6 +40,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DataTypes\ShortByteParser.cs" />
     <Compile Include="Common\DisplayNameAttribute.cs" />
     <Compile Include="Common\MathUtilities.cs" />
     <Compile Include="Common\Parsing\ParsingResult.cs" />
