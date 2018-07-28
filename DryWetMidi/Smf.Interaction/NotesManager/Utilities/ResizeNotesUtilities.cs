@@ -39,7 +39,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (distanceCalculationType == TimeSpanType.BarBeat)
                 throw new ArgumentException("BarBeat length type is not supported for relative resizing.", nameof(distanceCalculationType));
 
-            if (!notes.Any())
+            var notNullNotes = notes.Where(n => n != null);
+            if (!notNullNotes.Any())
                 return;
 
             //
@@ -47,7 +48,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var minStartTime = long.MaxValue;
             var maxEndTime = 0L;
 
-            foreach (var note in notes.Where(n => n != null))
+            foreach (var note in notNullNotes)
             {
                 var noteStartTime = note.Time;
                 var noteEndTime = noteStartTime + note.Length;
@@ -66,7 +67,41 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var startTime = TimeConverter.ConvertTo(minStartTime, distanceCalculationType, tempoMap);
 
-            foreach (var note in notes.Where(n => n != null))
+            ResizeNotesByRatio(notNullNotes, ratio, distanceCalculationType, tempoMap, startTime);
+        }
+
+        public static void ResizeNotes(this IEnumerable<Note> notes,
+                                       double ratio,
+                                       TimeSpanType distanceCalculationType,
+                                       TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative");
+            ThrowIfArgument.IsInvalidEnumValue(nameof(distanceCalculationType), distanceCalculationType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            if (distanceCalculationType == TimeSpanType.BarBeat)
+                throw new ArgumentException("BarBeat length type is not supported for relative resizing.", nameof(distanceCalculationType));
+
+            var notNullNotes = notes.Where(n => n != null);
+            if (!notNullNotes.Any())
+                return;
+
+            //
+
+            var minStartTime = notNullNotes.Select(n => n.Time).Min();
+            var startTime = TimeConverter.ConvertTo(minStartTime, distanceCalculationType, tempoMap);
+
+            ResizeNotesByRatio(notNullNotes, ratio, distanceCalculationType, tempoMap, startTime);
+        }
+
+        private static void ResizeNotesByRatio(IEnumerable<Note> notes,
+                                               double ratio,
+                                               TimeSpanType distanceCalculationType,
+                                               TempoMap tempoMap,
+                                               ITimeSpan startTime)
+        {
+            foreach (var note in notes)
             {
                 var noteLength = note.LengthAs(distanceCalculationType, tempoMap);
                 var noteTime = note.TimeAs(distanceCalculationType, tempoMap);
