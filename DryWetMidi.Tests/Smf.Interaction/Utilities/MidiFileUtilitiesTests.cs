@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -11,14 +12,15 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
     {
         #region Test methods
 
+        #region ShiftEvents
+
         [Test]
         public void ShiftEvents_ValidFiles_Midi()
         {
             var distance = 10000;
 
-            foreach (var filePath in TestFilesProvider.GetValidFiles())
+            foreach (var midiFile in TestFilesProvider.GetValidFiles())
             {
-                var midiFile = MidiFile.Read(filePath);
                 var originalTimes = midiFile.GetTimedEvents().Select(e => e.Time).ToList();
 
                 midiFile.ShiftEvents((MidiTimeSpan)distance);
@@ -34,9 +36,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var distance = new MetricTimeSpan(0, 1, 0);
 
-            foreach (var filePath in TestFilesProvider.GetValidFiles())
+            foreach (var midiFile in TestFilesProvider.GetValidFiles())
             {
-                var midiFile = MidiFile.Read(filePath);
                 midiFile.ShiftEvents(distance);
 
                 var tempoMap = midiFile.GetTempoMap();
@@ -47,6 +48,85 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                               "Some events are not shifted.");
             }
         }
+
+        #endregion
+
+        #region Resize
+
+        [Test]
+        public void Resize_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            midiFile.Resize(new MetricTimeSpan(1, 0, 0));
+            Assert.IsTrue(TimedEventEquality.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false));
+        }
+
+        // TODO: more tests
+        [Test]
+        public void Resize_Midi()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(200000), 0),
+                new TimedEvent(new TextEvent("Text"), 100),
+                new TimedEvent(new TextEvent("Text 2"), 150),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), 50),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)50), 80)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            midiFile.Resize((ITimeSpan)(MidiTimeSpan)15000);
+
+            Assert.IsTrue(TimedEventEquality.AreEqual(
+                midiFile.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), 5000),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)50), 8000),
+                    new TimedEvent(new TextEvent("Text"), 10000),
+                    new TimedEvent(new TextEvent("Text 2"), 15000),
+                },
+                false));
+        }
+
+        [Test]
+        public void ResizeByRatio_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            midiFile.Resize(2.0);
+            Assert.IsTrue(TimedEventEquality.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false));
+        }
+
+        [Test]
+        public void ResizeByRatio_Midi()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(200000), 0),
+                new TimedEvent(new TextEvent("Text"), 100),
+                new TimedEvent(new TextEvent("Text 2"), 150),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), 50),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)50), 80)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            midiFile.Resize(2.0);
+
+            Assert.IsTrue(TimedEventEquality.AreEqual(
+                midiFile.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), 100),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)50), 160),
+                    new TimedEvent(new TextEvent("Text"), 200),
+                    new TimedEvent(new TextEvent("Text 2"), 300),
+                },
+                false));
+        }
+
+        #endregion
 
         #endregion
     }

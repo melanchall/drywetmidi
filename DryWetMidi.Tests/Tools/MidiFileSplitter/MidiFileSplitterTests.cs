@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Description("Split valid MIDI files by channel.")]
         public void SplitByChannel_ValidFiles()
         {
-            foreach (var filePath in TestFilesProvider.GetValidFiles())
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
                 var midiFile = MidiFile.Read(filePath);
                 var originalChannels = midiFile.GetTrackChunks()
@@ -175,7 +175,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Description("Split valid MIDI files by notes.")]
         public void SplitByNotes_ValidFiles()
         {
-            foreach (var filePath in TestFilesProvider.GetValidFiles())
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
                 var midiFile = MidiFile.Read(filePath);
 

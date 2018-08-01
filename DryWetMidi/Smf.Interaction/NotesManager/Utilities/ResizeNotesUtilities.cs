@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             if (distanceCalculationType == TimeSpanType.BarBeat)
-                throw new ArgumentException("BarBeat length type is not supported for relative resizing.", nameof(distanceCalculationType));
+                throw new ArgumentException("BarBeat distance calculation type is not supported.", nameof(distanceCalculationType));
 
             var notNullNotes = notes.Where(n => n != null);
             if (!notNullNotes.Any())
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             if (distanceCalculationType == TimeSpanType.BarBeat)
-                throw new ArgumentException("BarBeat length type is not supported for relative resizing.", nameof(distanceCalculationType));
+                throw new ArgumentException("BarBeat distance calculation type is not supported.", nameof(distanceCalculationType));
 
             var notNullNotes = notes.Where(n => n != null);
             if (!notNullNotes.Any())
