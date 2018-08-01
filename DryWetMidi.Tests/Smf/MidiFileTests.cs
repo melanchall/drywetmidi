@@ -335,7 +335,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
         [Description("Check whether a clone of a MIDI file equals to the original file.")]
         public void Clone_Read()
         {
-            foreach (var filePath in TestFilesProvider.GetValidFiles())
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
                 var midiFile = MidiFile.Read(filePath);
                 var clonedMidiFile = midiFile.Clone();

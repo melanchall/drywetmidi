@@ -810,7 +810,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             try
             {
-                foreach (var filePath in TestFilesProvider.GetValidFiles())
+                foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
                 {
                     var midiFile = MidiFile.Read(filePath);
                     var outputFilePath = Path.Combine(outputDirectory, Path.GetFileName(Path.ChangeExtension(filePath, "csv")));
