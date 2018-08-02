@@ -120,8 +120,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
 
             var tempoMap = Default.Clone();
-            tempoMap.Tempo.SetValue(0, tempo);
-            tempoMap.TimeSignature.SetValue(0, timeSignature);
+            SetGlobalTempo(tempoMap, tempo);
+            SetGlobalTimeSignature(tempoMap, timeSignature);
 
             return tempoMap;
         }
@@ -138,7 +138,59 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempo), tempo);
 
             var tempoMap = Default.Clone();
-            tempoMap.Tempo.SetValue(0, tempo);
+            SetGlobalTempo(tempoMap, tempo);
+
+            return tempoMap;
+        }
+
+        public static TempoMap Create(TimeSignature timeSignature)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
+
+            var tempoMap = Default.Clone();
+            SetGlobalTimeSignature(tempoMap, timeSignature);
+
+            return tempoMap;
+        }
+
+        public static TempoMap Create(TimeDivision timeDivision)
+        {
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+
+            return new TempoMap(timeDivision);
+        }
+
+        public static TempoMap Create(TimeDivision timeDivision, Tempo tempo)
+        {
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(tempo), tempo);
+
+            var tempoMap = new TempoMap(timeDivision);
+            SetGlobalTempo(tempoMap, tempo);
+
+            return tempoMap;
+        }
+
+        public static TempoMap Create(TimeDivision timeDivision, TimeSignature timeSignature)
+        {
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
+
+            var tempoMap = new TempoMap(timeDivision);
+            SetGlobalTimeSignature(tempoMap, timeSignature);
+
+            return tempoMap;
+        }
+
+        public static TempoMap Create(TimeDivision timeDivision, Tempo tempo, TimeSignature timeSignature)
+        {
+            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+            ThrowIfArgument.IsNull(nameof(tempo), tempo);
+            ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
+
+            var tempoMap = new TempoMap(timeDivision);
+            SetGlobalTempo(tempoMap, tempo);
+            SetGlobalTimeSignature(tempoMap, timeSignature);
 
             return tempoMap;
         }
@@ -167,6 +219,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
 
             return result;
+        }
+
+        private static void SetGlobalTempo(TempoMap tempoMap, Tempo tempo)
+        {
+            tempoMap.Tempo.SetValue(0, tempo);
+        }
+
+        private static void SetGlobalTimeSignature(TempoMap tempoMap, TimeSignature timeSignature)
+        {
+            tempoMap.TimeSignature.SetValue(0, timeSignature);
         }
 
         private void InvalidateCaches(TempoMapLine tempoMapLine)
