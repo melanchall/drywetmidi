@@ -14,6 +14,13 @@ namespace Melanchall.DryWetMidi.Tools
     public abstract class LengthedObjectsSplitter<TObject>
         where TObject : ILengthedObject
     {
+        #region Constants
+
+        internal const double ZeroRatio = 0.0;
+        internal const double FullLengthRatio = 1.0;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -197,6 +204,62 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        public IEnumerable<TObject> SplitAtDistance(IEnumerable<TObject> objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfArgument.IsNull(nameof(distance), distance);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            foreach (var obj in objects)
+            {
+                if (obj == null)
+                {
+                    yield return default(TObject);
+                    continue;
+                }
+
+                var parts = SplitObjectAtDistance(obj, distance, from, tempoMap);
+
+                if (parts.LeftPart != null)
+                    yield return parts.LeftPart;
+
+                if (parts.RightPart != null)
+                    yield return parts.RightPart;
+            }
+        }
+
+        public IEnumerable<TObject> SplitAtDistance(IEnumerable<TObject> objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfArgument.IsOutOfRange(nameof(ratio),
+                                         ratio,
+                                         ZeroRatio,
+                                         FullLengthRatio,
+                                         $"Ratio is out of [{ZeroRatio}; {FullLengthRatio}] range.");
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            foreach (var obj in objects)
+            {
+                if (obj == null)
+                {
+                    yield return default(TObject);
+                    continue;
+                }
+
+                var distance = obj.LengthAs(lengthType, tempoMap).Multiply(ratio);
+                var parts = SplitObjectAtDistance(obj, distance, from, tempoMap);
+
+                if (parts.LeftPart != null)
+                    yield return parts.LeftPart;
+
+                if (parts.RightPart != null)
+                    yield return parts.RightPart;
+            }
+        }
+
         /// <summary>
         /// Clones an object by creating a copy of it.
         /// </summary>
@@ -211,6 +274,15 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="time">Time to split <paramref name="obj"/> by.</param>
         /// <returns>An object containing left and right parts of the splitted object.</returns>
         protected abstract SplittedLengthedObject<TObject> SplitObject(TObject obj, long time);
+
+        private SplittedLengthedObject<TObject> SplitObjectAtDistance(TObject obj, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
+        {
+            var time = from == LengthedObjectTarget.Start
+                ? ((MidiTimeSpan)obj.Time).Add(distance, TimeSpanMode.TimeLength)
+                : ((MidiTimeSpan)(obj.Time + obj.Length)).Subtract(distance, TimeSpanMode.TimeLength);
+
+            return SplitObject(obj, TimeConverter.ConvertFrom(time, tempoMap));
+        }
 
         #endregion
     }

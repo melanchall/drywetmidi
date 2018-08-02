@@ -702,6 +702,174 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #endregion
 
+        #region SplitAtDistance
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_EmptyCollection(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = Enumerable.Empty<TObject>();
+            var distance = (MidiTimeSpan)100;
+            var expectedObjects = Enumerable.Empty<TObject>();
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_Nulls(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = new[] { default(TObject), default(TObject) };
+            var distance = (MidiTimeSpan)100;
+            var expectedObjects = new[] { default(TObject), default(TObject) };
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_ZeroDistance(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var distance = (MidiTimeSpan)0;
+            var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_BigDistance(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var distance = (MidiTimeSpan)1000;
+            var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [Test]
+        public void SplitAtDistance_Start()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var distance = (MidiTimeSpan)10;
+            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + distance }));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, LengthedObjectTarget.Start, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [Test]
+        public void SplitAtDistance_End()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var distance = (MidiTimeSpan)10;
+            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + o.Length - distance }));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, LengthedObjectTarget.End, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_ByRatio_EmptyCollection(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = Enumerable.Empty<TObject>();
+            var ratio = 0.5;
+            var expectedObjects = Enumerable.Empty<TObject>();
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_ByRatio_Nulls(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = new[] { default(TObject), default(TObject) };
+            var ratio = 0.5;
+            var expectedObjects = new[] { default(TObject), default(TObject) };
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_ByRatio_ZeroRatio(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var ratio = 0.0;
+            var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [TestCase(LengthedObjectTarget.Start)]
+        [TestCase(LengthedObjectTarget.End)]
+        public void SplitAtDistance_FullLengthRatio(LengthedObjectTarget from)
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var ratio = 1.0;
+            var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [Test]
+        public void SplitAtDistance_ByRatio_Start()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var ratio = 0.1;
+            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + 100 }));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, LengthedObjectTarget.Start, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        [Test]
+        public void SplitAtDistance_ByRatio_End()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var inputObjects = CreateInputObjects(1000);
+            var ratio = 0.1;
+            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + o.Length - 100 }));
+            var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, LengthedObjectTarget.End, tempoMap);
+
+            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+        }
+
+        #endregion
+
         #endregion
 
         #region Protected methods
