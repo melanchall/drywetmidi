@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, notes) => splitter.SplitByStep(notes, step, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByStep(chords, step, tempoMap), notesTolerance);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, notes) => splitter.SplitByPartsNumber(notes, partsNumber, lengthType, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByPartsNumber(chords, partsNumber, lengthType, tempoMap), notesTolerance);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, notes) => splitter.SplitByGrid(notes, grid, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByGrid(chords, grid, tempoMap), notesTolerance);
         }
 
         /// <summary>
@@ -252,6 +252,95 @@ namespace Melanchall.DryWetMidi.Tools
             var tempoMap = midiFile.GetTempoMap();
 
             midiFile.GetTrackChunks().SplitChordsByGrid(grid, tempoMap, notesTolerance);
+        }
+
+        public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(distance), distance);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, distance, from, tempoMap), notesTolerance);
+        }
+
+        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(distance), distance);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk.SplitChordsAtDistance(distance, from, tempoMap, notesTolerance);
+            }
+        }
+
+        public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsNull(nameof(distance), distance);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            var tempoMap = midiFile.GetTempoMap();
+
+            midiFile.GetTrackChunks().SplitChordsAtDistance(distance, from, tempoMap, notesTolerance);
+        }
+
+        public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsOutOfRange(nameof(ratio),
+                                         ratio,
+                                         LengthedObjectsSplitter<Chord>.ZeroRatio,
+                                         LengthedObjectsSplitter<Chord>.FullLengthRatio,
+                                         $"Ratio is out of [{LengthedObjectsSplitter<Chord>.ZeroRatio}; {LengthedObjectsSplitter<Chord>.FullLengthRatio}] range.");
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, ratio, lengthType, from, tempoMap), notesTolerance);
+        }
+
+        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsOutOfRange(nameof(ratio),
+                                         ratio,
+                                         LengthedObjectsSplitter<Chord>.ZeroRatio,
+                                         LengthedObjectsSplitter<Chord>.FullLengthRatio,
+                                         $"Ratio is out of [{LengthedObjectsSplitter<Chord>.ZeroRatio}; {LengthedObjectsSplitter<Chord>.FullLengthRatio}] range.");
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            foreach (var trackChunk in trackChunks)
+            {
+                trackChunk.SplitChordsAtDistance(ratio, lengthType, from, tempoMap, notesTolerance);
+            }
+        }
+
+        public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsOutOfRange(nameof(ratio),
+                                         ratio,
+                                         LengthedObjectsSplitter<Chord>.ZeroRatio,
+                                         LengthedObjectsSplitter<Chord>.FullLengthRatio,
+                                         $"Ratio is out of [{LengthedObjectsSplitter<Chord>.ZeroRatio}; {LengthedObjectsSplitter<Chord>.FullLengthRatio}] range.");
+            ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            var tempoMap = midiFile.GetTempoMap();
+
+            midiFile.GetTrackChunks().SplitChordsAtDistance(ratio, lengthType, from, tempoMap, notesTolerance);
         }
 
         private static void SplitTrackChunkChords(TrackChunk trackChunk, Func<ChordsSplitter, IEnumerable<Chord>, IEnumerable<Chord>> splitOperation, long notesTolerance)
