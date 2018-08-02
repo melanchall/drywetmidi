@@ -10,7 +10,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         #region Test methods
 
         [Test]
-        [Description("Test default tempo map.")]
         public void Default()
         {
             TestSimpleTempoMap(TempoMap.Default,
@@ -20,7 +19,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [Test]
-        [Description("Test tempo map created by tempo and time signature.")]
         public void Create_Tempo_TimeSignature()
         {
             var expectedTempo = Tempo.FromBeatsPerMinute(123);
@@ -33,7 +31,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         }
 
         [Test]
-        [Description("Test tempo map created by tempo.")]
         public void Create_Tempo()
         {
             var expectedTempo = new Tempo(123456);
@@ -42,6 +39,54 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                                new TicksPerQuarterNoteTimeDivision(),
                                expectedTempo,
                                TimeSignature.Default);
+        }
+
+        [Test]
+        public void Create_TimeSignature()
+        {
+            var expectedTimeSignature = new TimeSignature(3, 8);
+
+            TestSimpleTempoMap(TempoMap.Create(expectedTimeSignature),
+                               new TicksPerQuarterNoteTimeDivision(),
+                               Tempo.Default,
+                               expectedTimeSignature);
+        }
+
+        [Test]
+        public void Create_TimeDivision_Tempo_TimeSignature()
+        {
+            var expectedTimeDivision = new TicksPerQuarterNoteTimeDivision(10000);
+            var expectedTempo = Tempo.FromBeatsPerMinute(123);
+            var expectedTimeSignature = new TimeSignature(3, 8);
+
+            TestSimpleTempoMap(TempoMap.Create(expectedTimeDivision, expectedTempo, expectedTimeSignature),
+                               expectedTimeDivision,
+                               expectedTempo,
+                               expectedTimeSignature);
+        }
+
+        [Test]
+        public void Create_TimeDivision_Tempo()
+        {
+            var expectedTimeDivision = new TicksPerQuarterNoteTimeDivision(10000);
+            var expectedTempo = new Tempo(123456);
+
+            TestSimpleTempoMap(TempoMap.Create(expectedTimeDivision, expectedTempo),
+                               expectedTimeDivision,
+                               expectedTempo,
+                               TimeSignature.Default);
+        }
+
+        [Test]
+        public void Create_TimeDivision_TimeSignature()
+        {
+            var expectedTimeDivision = new TicksPerQuarterNoteTimeDivision(10000);
+            var expectedTimeSignature = new TimeSignature(3, 8);
+
+            TestSimpleTempoMap(TempoMap.Create(expectedTimeDivision, expectedTimeSignature),
+                               expectedTimeDivision,
+                               Tempo.Default,
+                               expectedTimeSignature);
         }
 
         #endregion

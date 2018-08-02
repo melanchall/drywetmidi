@@ -14,10 +14,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
-            // TODO: rework on public API
-            var tempoMapForDistanceConversion = new TempoMap(timeDivision);
-
-            var convertedDistance = TimeConverter.ConvertFrom(distance, tempoMapForDistanceConversion);
+            var convertedDistance = TimeConverter.ConvertFrom(distance, TempoMap.Create(timeDivision));
 
             var firstEvent = trackChunk.Events.FirstOrDefault();
             if (firstEvent == null)
