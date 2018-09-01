@@ -40,15 +40,15 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return new ChordComparer().Equals(chord1, chord2);
         }
 
-        public static bool AreEqual(IEnumerable<Chord> chord1, IEnumerable<Chord> chord2)
+        public static bool AreEqual(IEnumerable<Chord> chords1, IEnumerable<Chord> chords2)
         {
-            if (ReferenceEquals(chord1, chord2))
+            if (ReferenceEquals(chords1, chords2))
                 return true;
 
-            if (ReferenceEquals(null, chord1) || ReferenceEquals(null, chord2))
+            if (ReferenceEquals(null, chords1) || ReferenceEquals(null, chords2))
                 return false;
 
-            return chord1.SequenceEqual(chord2, new ChordComparer());
+            return chords1.SequenceEqual(chords2, new ChordComparer());
         }
 
         #endregion

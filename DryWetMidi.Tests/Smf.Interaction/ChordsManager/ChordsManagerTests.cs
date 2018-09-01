@@ -1,5 +1,8 @@
-﻿using Melanchall.DryWetMidi.Smf;
+﻿using System.Linq;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
@@ -7,6 +10,12 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
     [TestFixture]
     public sealed class ChordsManagerTests
     {
+        #region Constants
+
+        private static readonly ChordMethods ChordMethods = new ChordMethods();
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -24,6 +33,73 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
                 TimedObjectsCollectionTestUtilities.CheckTimedObjectsCollectionTimes(chords, 1, 10, 45, 123);
             }
+        }
+
+        [Test]
+        public void ChordsByNotes_EmptyCollection()
+        {
+            var notes = Enumerable.Empty<Note>();
+            // TODO: get chords by notes
+            var trackChunk = notes.ToTrackChunk();
+            var chords = trackChunk.GetChords();
+            ChordMethods.AssertCollectionsAreEqual(Enumerable.Empty<Chord>(), chords);
+        }
+
+        [Test]
+        public void ChordsByNotes_SingleChannel()
+        {
+            var notes = new[]
+            {
+                new Note((SevenBitNumber)100, 100, 0),
+                new Note((SevenBitNumber)120, 100, 0),
+                new Note((SevenBitNumber)100, 100, 10),
+                new Note((SevenBitNumber)30, 100, 10)
+            };
+            // TODO: get chords by notes
+            var trackChunk = notes.ToTrackChunk();
+            var chords = trackChunk.GetChords();
+            ChordMethods.AssertCollectionsAreEqual(
+                new[]
+                {
+                    new Chord(
+                        new Note((SevenBitNumber)100, 100, 0),
+                        new Note((SevenBitNumber)120, 100, 0)),
+                    new Chord(
+                        new Note((SevenBitNumber)100, 100, 10),
+                        new Note((SevenBitNumber)30, 100, 10))
+                },
+                chords);
+        }
+
+        [Test]
+        public void ChordsByNotes_MultipleChannels()
+        {
+            var notes = new[]
+            {
+                new Note((SevenBitNumber)1, 100, 0) { Channel = (FourBitNumber)10 },
+                new Note((SevenBitNumber)2, 100, 0) { Channel = (FourBitNumber)10 },
+                new Note((SevenBitNumber)3, 100, 100) { Channel = (FourBitNumber)10 },
+                new Note((SevenBitNumber)4, 100, 100) { Channel = (FourBitNumber)10 },
+                new Note((SevenBitNumber)5, 100, 1000),
+                new Note((SevenBitNumber)6, 100, 1000)
+            };
+            // TODO: get chords by notes
+            var trackChunk = notes.ToTrackChunk();
+            var chords = trackChunk.GetChords();
+            ChordMethods.AssertCollectionsAreEqual(
+                new[]
+                {
+                    new Chord(
+                        new Note((SevenBitNumber)1, 100, 0) { Channel = (FourBitNumber)10 },
+                        new Note((SevenBitNumber)2, 100, 0) { Channel = (FourBitNumber)10 }),
+                    new Chord(
+                        new Note((SevenBitNumber)3, 100, 100) { Channel = (FourBitNumber)10 },
+                        new Note((SevenBitNumber)4, 100, 100) { Channel = (FourBitNumber)10 }),
+                    new Chord(
+                        new Note((SevenBitNumber)5, 100, 1000),
+                        new Note((SevenBitNumber)6, 100, 1000))
+                },
+                chords);
         }
 
         #endregion

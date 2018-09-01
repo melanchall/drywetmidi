@@ -167,6 +167,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
                 lastNoteEndTimes[channel] = noteTime + note.Length;
             }
+
+            foreach (var chord in chords.Where(c => c != null && c.Notes.Any()))
+            {
+                yield return chord;
+            }
         }
 
         #endregion
