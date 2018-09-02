@@ -39,9 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         public void ChordsByNotes_EmptyCollection()
         {
             var notes = Enumerable.Empty<Note>();
-            // TODO: get chords by notes
-            var trackChunk = notes.ToTrackChunk();
-            var chords = trackChunk.GetChords();
+            var chords = notes.GetChords();
             ChordMethods.AssertCollectionsAreEqual(Enumerable.Empty<Chord>(), chords);
         }
 
@@ -55,9 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new Note((SevenBitNumber)100, 100, 10),
                 new Note((SevenBitNumber)30, 100, 10)
             };
-            // TODO: get chords by notes
-            var trackChunk = notes.ToTrackChunk();
-            var chords = trackChunk.GetChords();
+            var chords = notes.GetChords();
             ChordMethods.AssertCollectionsAreEqual(
                 new[]
                 {
@@ -83,9 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new Note((SevenBitNumber)5, 100, 1000),
                 new Note((SevenBitNumber)6, 100, 1000)
             };
-            // TODO: get chords by notes
-            var trackChunk = notes.ToTrackChunk();
-            var chords = trackChunk.GetChords();
+            var chords = notes.GetChords();
             ChordMethods.AssertCollectionsAreEqual(
                 new[]
                 {

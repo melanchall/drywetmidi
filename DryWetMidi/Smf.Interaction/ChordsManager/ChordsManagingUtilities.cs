@@ -124,6 +124,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return file.GetTrackChunks().GetChords(notesTolerance);
         }
 
+        public static IEnumerable<Chord> GetChords(this IEnumerable<Note> notes, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return ChordsManager.CreateChords(notes, notesTolerance)
+                                .OrderBy(c => c.Time)
+                                .ToList();
+        }
+
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="EventsCollection"/>.
         /// </summary>
