@@ -139,7 +139,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             _notesManager.Notes.Remove(notes);
         }
 
-        private static IEnumerable<Chord> CreateChords(IEnumerable<Note> notes, long notesTolerance)
+        internal static IEnumerable<Chord> CreateChords(IEnumerable<Note> notes, long notesTolerance)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
