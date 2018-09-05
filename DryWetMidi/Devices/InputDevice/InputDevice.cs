@@ -98,6 +98,13 @@ namespace Melanchall.DryWetMidi.Devices
             return GetAll().FirstOrDefault(d => d.Name == name);
         }
 
+        public static InputDevice GetById(int id)
+        {
+            ThrowIfArgument.IsNegative(nameof(id), id, "Device ID is negative.");
+
+            return new InputDevice((uint)id);
+        }
+
         protected void OnEventReceived(MidiEvent midiEvent, int milliseconds)
         {
             EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, _startTime.AddMilliseconds(milliseconds)));
@@ -179,6 +186,12 @@ namespace Melanchall.DryWetMidi.Devices
         internal override MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText)
         {
             return MidiInWinApi.midiInGetErrorText(mmrError, pszText, cchText);
+        }
+
+        internal override IntPtr GetHandle()
+        {
+            EnsureHandleIsCreated();
+            return _handle;
         }
 
         #endregion
