@@ -101,9 +101,11 @@ namespace Melanchall.DryWetMidi.Devices
             return GetAll().FirstOrDefault(d => d.Name == name);
         }
 
-        public static OutputDevice GetDefault()
+        public static OutputDevice GetById(int id)
         {
-            return new OutputDevice(unchecked((uint)-1));
+            ThrowIfArgument.IsNegative(nameof(id), id, "Device ID is negative.");
+
+            return new OutputDevice((uint)id);
         }
 
         internal void PrepareForEventsSending()
@@ -197,6 +199,12 @@ namespace Melanchall.DryWetMidi.Devices
         internal override MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText)
         {
             return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
+        }
+
+        internal override IntPtr GetHandle()
+        {
+            EnsureHandleIsCreated();
+            return _handle;
         }
 
         #endregion

@@ -92,6 +92,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         internal abstract MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText);
 
+        internal abstract IntPtr GetHandle();
+
         #endregion
 
         #region Overrides
