@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -22,6 +23,8 @@ namespace Melanchall.DryWetMidi.Devices
         private uint _resolution;
         private MidiTimerWinApi.TimeProc _tickCallback;
         private uint _timerId;
+
+        private double _speed = 1.0;
 
         #endregion
 
@@ -45,11 +48,32 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        public MidiClockState State { get; private set; }
+        public bool IsRunning { get; private set; }
 
         public TimeSpan StartTime { get; set; } = TimeSpan.Zero;
 
         public TimeSpan CurrentTime { get; private set; } = TimeSpan.Zero;
+
+        public double Speed
+        {
+            get { return _speed; }
+            set
+            {
+                var start = IsRunning;
+
+                IsRunning = false;
+                _stopwatch.Stop();
+
+                StartTime = _stopwatch.Elapsed;
+                _speed = value;
+
+                if (start)
+                {
+                    IsRunning = true;
+                    _stopwatch.Start();
+                }
+            }
+        }
 
         #endregion
 
@@ -57,69 +81,57 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void Start()
         {
-            switch (State)
-            {
-                case MidiClockState.Running:
-                    return;
-
-                case MidiClockState.Stopped:
-                    {
-                        var timeCaps = default(MidiTimerWinApi.TIMECAPS);
-                        MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps));
-
-                        _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
-                        _tickCallback = OnTick;
-
-                        _stopwatch.Restart();
-                    }
-                    break;
-
-                case MidiClockState.Paused:
-                    _stopwatch.Start();
-                    break;
-            }
+            if (IsRunning)
+                return;
 
             // TODO: process errors
+
+            var timeCaps = default(MidiTimerWinApi.TIMECAPS);
+            MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps));
+
+            _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
+            _tickCallback = OnTick;
+
+            _stopwatch.Start();
 
             MidiTimerWinApi.timeBeginPeriod(_resolution);
             _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
 
-            State = MidiClockState.Running;
+            IsRunning = true;
         }
 
         public void Stop()
         {
-            State = MidiClockState.Stopped;
-            StopTimer();
-            StartTime = TimeSpan.Zero;
-            CurrentTime = TimeSpan.Zero;
-        }
+            IsRunning = false;
 
-        public void Pause()
-        {
-            State = MidiClockState.Paused;
-            StopTimer();
-        }
-
-        public void Restart()
-        {
-            Stop();
-            Start();
-        }
-
-        private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
-        {
-            CurrentTime = _stopwatch.Elapsed + StartTime;
-            Tick?.Invoke(this, new TickEventArgs(CurrentTime));
-        }
-
-        private void StopTimer()
-        {
             // TODO: process errors
 
             _stopwatch.Stop();
             MidiTimerWinApi.timeEndPeriod(_resolution);
             MidiTimerWinApi.timeKillEvent(_timerId);
+        }
+
+        public void Restart()
+        {
+            Stop();
+            Reset();
+            Start();
+        }
+
+        public void Reset()
+        {
+            _stopwatch.Reset();
+            StartTime = TimeSpan.Zero;
+            CurrentTime = TimeSpan.Zero;
+        }
+
+        private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        {
+            if (!IsRunning)
+                return;
+
+            CurrentTime = StartTime + new TimeSpan(MathUtilities.RoundToLong((_stopwatch.Elapsed - StartTime).Ticks * Speed));
+            Tick?.Invoke(this, new TickEventArgs(CurrentTime));
         }
 
         #endregion

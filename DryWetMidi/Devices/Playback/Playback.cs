@@ -66,21 +66,45 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        public PlaybackState State { get; private set; }
+        public bool IsRunning { get; private set; }
 
         public bool Loop { get; set; }
 
-        public NotePausePolicy NotePausePolicy { get; set; }
+        public NoteStopPolicy NoteStopPolicy { get; set; }
+
+        public double Speed
+        {
+            get { return _clock.Speed; }
+            set
+            {
+                ThrowIfArgument.IsNonpositive(nameof(value), value, "Speed is zero or negative.");
+
+                _clock.Speed = value;
+            }
+        }
 
         #endregion
 
         #region Methods
 
+        public ITimeSpan GetCurrentTime(TimeSpanType timeType)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
+
+            return TimeConverter.ConvertTo((MetricTimeSpan)_clock.CurrentTime, timeType, _tempoMap);
+        }
+
+        public TTimeSpan GetCurrentTime<TTimeSpan>()
+            where TTimeSpan : ITimeSpan
+        {
+            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan)_clock.CurrentTime, _tempoMap);
+        }
+
         public void Start()
         {
             EnsureIsNotDisposed();
 
-            if (_clock.State == MidiClockState.Running)
+            if (_clock.IsRunning)
                 return;
 
             _outputDevice.PrepareForEventsSending();
@@ -92,41 +116,35 @@ namespace Melanchall.DryWetMidi.Devices
             _noteOnEvents.Clear();
 
             _clock.Start();
-            State = PlaybackState.Running;
+            IsRunning = true;
         }
 
         public void Stop()
         {
             EnsureIsNotDisposed();
 
-            if (_clock.State == MidiClockState.Stopped)
+            if (!_clock.IsRunning)
                 return;
 
             _clock.Stop();
-            InterruptNotes();
-            State = PlaybackState.Stopped;
+            StopNotes();
+            IsRunning = false;
         }
 
-        public void Pause()
+        public void MoveToStart()
         {
-            EnsureIsNotDisposed();
-
-            if (_clock.State == MidiClockState.Paused)
-                return;
-
-            _clock.Pause();
-            PauseNotes();
-            State = PlaybackState.Paused;
+            MoveToTime(new MetricTimeSpan());
         }
 
         public void MoveToTime(ITimeSpan time)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
 
-            var needStart = State == PlaybackState.Running;
+            var needStart = IsRunning;
 
             Stop();
             SetStartTime(time);
+
             if (needStart)
                 Start();
         }
@@ -162,7 +180,7 @@ namespace Melanchall.DryWetMidi.Devices
 
                 var midiEvent = timedEvent.Event;
 
-                if (_clock.State != MidiClockState.Running)
+                if (!_clock.IsRunning)
                     return;
 
                 _outputDevice.SendEvent(midiEvent);
@@ -194,31 +212,21 @@ namespace Melanchall.DryWetMidi.Devices
                 throw new ObjectDisposedException("Playback is disposed.");
         }
 
-        private void PauseNotes()
+        private void StopNotes()
         {
-            switch (NotePausePolicy)
+            switch (NoteStopPolicy)
             {
-                case NotePausePolicy.Interrupt:
-                    InterruptNotes();
-                    break;
-                case NotePausePolicy.Hold:
+                case NoteStopPolicy.Interrupt:
+                    FinishCurrentNotes();
                     _noteOnEvents.Clear();
                     break;
-                case NotePausePolicy.Split:
-                    SplitNotes();
+                case NoteStopPolicy.Hold:
+                    _noteOnEvents.Clear();
+                    break;
+                case NoteStopPolicy.Split:
+                    FinishCurrentNotes();
                     break;
             }
-        }
-
-        private void InterruptNotes()
-        {
-            FinishCurrentNotes();
-            _noteOnEvents.Clear();
-        }
-
-        private void SplitNotes()
-        {
-            FinishCurrentNotes();
         }
 
         private void FinishCurrentNotes()

@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Devices
 {
-    public enum NotePausePolicy
+    public enum NoteStopPolicy
     {
         Interrupt = 0,
         Hold,

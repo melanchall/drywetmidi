@@ -60,6 +60,11 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
+        public void PrepareForEventsSending()
+        {
+            EnsureHandleIsCreated();
+        }
+
         public void SendEvent(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -98,7 +103,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsNullOrEmptyString(nameof(name), name, "Device name");
 
-            return GetAll().FirstOrDefault(d => d.Name == name);
+            return GetAll().FirstOrDefault(d => string.Equals(d.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
         public static OutputDevice GetById(int id)
@@ -106,11 +111,6 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNegative(nameof(id), id, "Device ID is negative.");
 
             return new OutputDevice((uint)id);
-        }
-
-        internal void PrepareForEventsSending()
-        {
-            EnsureHandleIsCreated();
         }
 
         private void EnsureHandleIsCreated()
