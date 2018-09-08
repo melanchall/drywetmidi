@@ -48,7 +48,6 @@
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="Devices\Clock\MidiClock.cs" />
-    <Compile Include="Devices\Clock\MidiClockState.cs" />
     <Compile Include="Devices\Clock\MidiTimerWinApi.cs" />
     <Compile Include="Devices\Clock\TickEventArgs.cs" />
     <Compile Include="Devices\DevicesConnector\DevicesConnector.cs" />
@@ -61,11 +60,10 @@
     <Compile Include="Devices\OutputDevice\MidiEventSentEventArgs.cs" />
     <Compile Include="Devices\OutputDevice\OutputDevice.cs" />
     <Compile Include="Devices\OutputDevice\OutputDeviceType.cs" />
-    <Compile Include="Devices\Playback\NotePausePolicy.cs" />
+    <Compile Include="Devices\Playback\NoteStopPolicy.cs" />
     <Compile Include="Devices\Playback\Playback.cs" />
     <Compile Include="Devices\Playback\PlaybackEvent.cs" />
     <Compile Include="Devices\Playback\PlaybackEventsComparer.cs" />
-    <Compile Include="Devices\Playback\PlaybackState.cs" />
     <Compile Include="Devices\Playback\PlaybackUtilities.cs" />
     <Compile Include="Devices\WinApi\MidiMessage.cs" />
     <Compile Include="Devices\InputDevice\MidiInWinApi.cs" />

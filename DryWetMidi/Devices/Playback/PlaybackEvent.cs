@@ -11,6 +11,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             Event = midiEvent;
             Time = time;
+            ScaledTime = time;
             RawTime = rawTime;
         }
 
@@ -21,6 +22,8 @@ namespace Melanchall.DryWetMidi.Devices
         public MidiEvent Event { get; }
 
         public TimeSpan Time { get; }
+
+        public TimeSpan ScaledTime { get; set; }
 
         public long RawTime { get; }
 

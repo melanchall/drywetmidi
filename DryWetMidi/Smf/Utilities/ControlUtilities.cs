@@ -58,8 +58,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>Name of the controller presented by <paramref name="controlNumber"/>.</returns>
         private static ControlName GetControlName(SevenBitNumber controlNumber)
         {
-            return Enum.IsDefined(typeof(ControlName), controlNumber)
-                ? (ControlName)(byte)controlNumber
+            byte controlNumberAsByte = controlNumber;
+            return Enum.IsDefined(typeof(ControlName), controlNumberAsByte)
+                ? (ControlName)controlNumberAsByte
                 : ControlName.Undefined;
         }
 

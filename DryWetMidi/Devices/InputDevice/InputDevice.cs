@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsNullOrEmptyString(nameof(name), name, "Device name");
 
-            return GetAll().FirstOrDefault(d => d.Name == name);
+            return GetAll().FirstOrDefault(d => string.Equals(d.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
         public static InputDevice GetById(int id)
