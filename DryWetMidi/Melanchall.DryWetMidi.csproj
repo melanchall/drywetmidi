@@ -65,6 +65,8 @@
     <Compile Include="Devices\Playback\PlaybackEvent.cs" />
     <Compile Include="Devices\Playback\PlaybackEventsComparer.cs" />
     <Compile Include="Devices\Playback\PlaybackUtilities.cs" />
+    <Compile Include="Devices\Recording\Recording.cs" />
+    <Compile Include="Devices\Recording\RecordingEvent.cs" />
     <Compile Include="Devices\WinApi\MidiMessage.cs" />
     <Compile Include="Devices\InputDevice\MidiInWinApi.cs" />
     <Compile Include="Devices\WinApi\MidiWinApi.cs" />
