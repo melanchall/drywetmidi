@@ -3,15 +3,14 @@ using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal sealed class PlaybackEvent
+    internal sealed class RecordingEvent
     {
         #region Constructor
 
-        public PlaybackEvent(MidiEvent midiEvent, TimeSpan time, long rawTime)
+        public RecordingEvent(MidiEvent midiEvent, TimeSpan time)
         {
             Event = midiEvent;
             Time = time;
-            RawTime = rawTime;
         }
 
         #endregion
@@ -21,8 +20,6 @@ namespace Melanchall.DryWetMidi.Devices
         public MidiEvent Event { get; }
 
         public TimeSpan Time { get; }
-
-        public long RawTime { get; }
 
         #endregion
     }
