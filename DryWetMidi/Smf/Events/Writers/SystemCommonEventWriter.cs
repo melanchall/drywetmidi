@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf
 {
-    internal sealed class ChannelEventWriter : IEventWriter
+    internal sealed class SystemCommonEventWriter : IEventWriter
     {
         #region IEventWriter
 
@@ -14,16 +13,11 @@ namespace Melanchall.DryWetMidi.Smf
                 var eventType = midiEvent.GetType();
 
                 byte statusByte;
-                if (!StandardEventTypes.Channel.TryGetStatusByte(eventType, out statusByte))
+                if (!StandardEventTypes.SystemCommon.TryGetStatusByte(eventType, out statusByte))
                     Debug.Fail($"Unable to write the {eventType} event.");
 
-                var channel = ((ChannelEvent)midiEvent).Channel;
-
-                var totalStatusByte = DataTypesUtilities.Combine((FourBitNumber)statusByte, channel);
-                writer.WriteByte(totalStatusByte);
+                writer.WriteByte(statusByte);
             }
-
-            //
 
             midiEvent.Write(writer, settings);
         }
@@ -38,11 +32,10 @@ namespace Melanchall.DryWetMidi.Smf
             var eventType = midiEvent.GetType();
 
             byte statusByte;
-            if (!StandardEventTypes.Channel.TryGetStatusByte(eventType, out statusByte))
+            if (!StandardEventTypes.SystemCommon.TryGetStatusByte(eventType, out statusByte))
                 Debug.Fail($"No status byte defined for {eventType}.");
 
-            return DataTypesUtilities.Combine((FourBitNumber)statusByte,
-                                              ((ChannelEvent)midiEvent).Channel);
+            return statusByte;
         }
 
         #endregion
