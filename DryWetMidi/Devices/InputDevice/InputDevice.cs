@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        private const int ParameterBufferSize = 2;
+        private const int SysExBufferLength = 256;
+        private const int ChannelParametersBufferSize = 2;
         private static readonly ReadingSettings ReadingSettings = new ReadingSettings();
 
         #endregion
@@ -22,9 +23,16 @@ namespace Melanchall.DryWetMidi.Devices
 
         private DateTime _startTime;
 
-        private readonly MemoryStream _memoryStream = new MemoryStream(ParameterBufferSize);
-        private readonly MidiReader _midiReader;
+        private readonly MemoryStream _channelMessageMemoryStream = new MemoryStream(ChannelParametersBufferSize);
+        private readonly MidiReader _channelEventReader;
+
+        private readonly MemoryStream _sysExMessageMemoryStream = new MemoryStream(SysExBufferLength);
+        private readonly MidiReader _sysExEventReader;
+
         private MidiWinApi.MidiMessageCallback _callback;
+
+        private MidiWinApi.MIDIHDR _sysExHeader;
+        private IntPtr _sysExBufferPointer;
 
         #endregion
 
@@ -39,7 +47,8 @@ namespace Melanchall.DryWetMidi.Devices
         internal InputDevice(uint id)
             : base(id)
         {
-            _midiReader = new MidiReader(_memoryStream);
+            _channelEventReader = new MidiReader(_channelMessageMemoryStream);
+            _sysExEventReader = new MidiReader(_sysExMessageMemoryStream);
 
             SetDeviceInformation();
         }
@@ -53,6 +62,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureDeviceIsNotDisposed();
             EnsureHandleIsCreated();
 
+            PrepareSysExBuffer();
             ProcessMmResult(() => MidiInWinApi.midiInStart(_handle));
             _startTime = DateTime.UtcNow;
         }
@@ -105,9 +115,29 @@ namespace Melanchall.DryWetMidi.Devices
             return new InputDevice((uint)id);
         }
 
-        protected void OnEventReceived(MidiEvent midiEvent, int milliseconds)
+        private void OnEventReceived(MidiEvent midiEvent, int milliseconds)
         {
             EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, _startTime.AddMilliseconds(milliseconds)));
+        }
+
+        private void PrepareSysExBuffer()
+        {
+            var buffer = new byte[SysExBufferLength];
+            _sysExBufferPointer = Marshal.AllocHGlobal(buffer.Length);
+            Marshal.Copy(buffer, 0, _sysExBufferPointer, buffer.Length);
+
+            _sysExHeader = new MidiWinApi.MIDIHDR();
+            _sysExHeader.lpData = _sysExBufferPointer;
+            _sysExHeader.dwBufferLength = _sysExHeader.dwBytesRecorded = (uint)buffer.Length;
+
+            ProcessMmResult(() => MidiInWinApi.midiInPrepareHeader(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)));
+            ProcessMmResult(() => MidiInWinApi.midiInAddBuffer(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)));
+        }
+
+        private void UnprepareSysExBuffer()
+        {
+            ProcessMmResult(() => MidiInWinApi.midiInUnprepareHeader(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)));
+            Marshal.FreeHGlobal(_sysExBufferPointer);
         }
 
         private void EnsureHandleIsCreated()
@@ -134,13 +164,14 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
-            var parameter1 = dwParam1.ToInt32();
-            var parameter2 = dwParam2.ToInt32();
-
             switch (wMsg)
             {
                 case MidiMessage.MIM_DATA:
-                    OnMessage(parameter1, parameter2);
+                    OnShortMessage(dwParam1.ToInt32(), dwParam2.ToInt32());
+                    break;
+
+                case MidiMessage.MIM_LONGDATA:
+                    OnSysExMessage(dwParam1, dwParam2.ToInt32());
                     break;
 
                 case MidiMessage.MIM_ERROR:
@@ -148,16 +179,23 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        private void OnMessage(int message, int milliseconds)
+        private void OnShortMessage(int message, int milliseconds)
         {
             // TODO: move bit operations to DataTypesUtilities
-            WriteBytesToStream(_memoryStream, (byte)((message & 0xFF00) >> 8), (byte)(message >> 16));
+            WriteBytesToStream(_channelMessageMemoryStream, (byte)((message & 0xFF00) >> 8), (byte)(message >> 16));
 
             var statusByte = (byte)(message & 0xFF);
-            var eventReader = EventReaderFactory.GetReader(statusByte);
-            var midiEvent = eventReader.Read(_midiReader, ReadingSettings, statusByte);
+            var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
+            var midiEvent = eventReader.Read(_channelEventReader, ReadingSettings, statusByte);
 
             OnEventReceived(midiEvent, milliseconds);
+        }
+
+        private void OnSysExMessage(IntPtr sysExHeader, int milliseconds)
+        {
+            var buffer = (MidiWinApi.MIDIHDR)Marshal.PtrToStructure(sysExHeader, typeof(MidiWinApi.MIDIHDR));
+            var bytes = new byte[buffer.dwBufferLength];
+            Marshal.Copy(buffer.lpData, bytes, 0, bytes.Length);
         }
 
         #endregion
@@ -174,11 +212,12 @@ namespace Melanchall.DryWetMidi.Devices
                 if (_handle == IntPtr.Zero)
                     return;
 
-                DestroyHandle();
-
-                _memoryStream.Dispose();
-                _midiReader.Dispose();
+                _channelMessageMemoryStream.Dispose();
+                _channelEventReader.Dispose();
             }
+
+            UnprepareSysExBuffer();
+            DestroyHandle();
 
             _disposed = true;
         }

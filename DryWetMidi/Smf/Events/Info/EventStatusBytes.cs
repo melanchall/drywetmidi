@@ -41,5 +41,23 @@
             public const byte ChannelAftertouch = 0xD;
             public const byte PitchBend         = 0xE;
         }
+
+        internal static class SystemRealTime
+        {
+            public const byte TimingClock   = 0xF8;
+            public const byte Start         = 0xFA;
+            public const byte Continue      = 0xFB;
+            public const byte Stop          = 0xFC;
+            public const byte ActiveSensing = 0xFE;
+            public const byte Reset         = 0xFF;	
+        }
+
+        internal static class SystemCommon
+        {
+            public const byte MtcQuarterFrame     = 0xF1;
+            public const byte SongPositionPointer = 0xF2;
+            public const byte SongSelect          = 0xF3;
+            public const byte TuneRequest         = 0xF6;
+        }
     }
 }

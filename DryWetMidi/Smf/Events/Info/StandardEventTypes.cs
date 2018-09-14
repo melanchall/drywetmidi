@@ -43,6 +43,24 @@
             { typeof(NormalSysExEvent), EventStatusBytes.Global.NormalSysEx }
         };
 
+        internal static readonly EventTypesCollection SystemRealTime = new EventTypesCollection
+        {
+            { typeof(ActiveSensingEvent), EventStatusBytes.SystemRealTime.ActiveSensing },
+            { typeof(ContinueEvent), EventStatusBytes.SystemRealTime.Continue },
+            { typeof(ResetEvent), EventStatusBytes.SystemRealTime.Reset },
+            { typeof(StartEvent), EventStatusBytes.SystemRealTime.Start },
+            { typeof(StopEvent), EventStatusBytes.SystemRealTime.Stop },
+            { typeof(TimingClockEvent), EventStatusBytes.SystemRealTime.TimingClock }
+        };
+
+        internal static readonly EventTypesCollection SystemCommon = new EventTypesCollection
+        {
+            { typeof(MidiTimeCodeEvent), EventStatusBytes.SystemCommon.MtcQuarterFrame },
+            { typeof(SongSelectEvent), EventStatusBytes.SystemCommon.SongSelect },
+            { typeof(SongPositionPointerEvent), EventStatusBytes.SystemCommon.SongPositionPointer },
+            { typeof(TuneRequestEvent), EventStatusBytes.SystemCommon.TuneRequest }
+        };
+
         #endregion
     }
 }

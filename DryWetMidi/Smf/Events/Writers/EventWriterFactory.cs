@@ -12,6 +12,8 @@ namespace Melanchall.DryWetMidi.Smf
         private static readonly IEventWriter _metaEventWriter = new MetaEventWriter();
         private static readonly IEventWriter _channelEventWriter = new ChannelEventWriter();
         private static readonly IEventWriter _sysExEventWriter = new SysExEventWriter();
+        private static readonly IEventWriter _systemRealTimeEventWriter = new SystemRealTimeEventWriter();
+        private static readonly IEventWriter _systemCommonEventWriter = new SystemCommonEventWriter();
 
         #endregion
 
@@ -33,6 +35,12 @@ namespace Melanchall.DryWetMidi.Smf
 
             if (midiEvent is ChannelEvent)
                 return _channelEventWriter;
+
+            if (midiEvent is SystemRealTimeEvent)
+                return _systemRealTimeEventWriter;
+
+            if (midiEvent is SystemCommonEvent)
+                return _systemCommonEventWriter;
 
             return _sysExEventWriter;
         }
