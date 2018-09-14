@@ -56,6 +56,33 @@ namespace Melanchall.DryWetMidi.Devices
 
         public bool SupportsVolumeControl { get; private set; }
 
+        public Volume Volume
+        {
+            get
+            {
+                var volume = default(uint);
+                ProcessMmResult(() => MidiOutWinApi.midiOutGetVolume(_handle, ref volume));
+
+                var leftVolume = volume.GetTail();
+                var rightVolume = volume.GetHead();
+
+                return SupportsLeftRightVolumeControl
+                    ? new Volume(leftVolume, rightVolume)
+                    : new Volume(leftVolume, leftVolume);
+            }
+            set
+            {
+                var leftVolume = value.LeftVolume;
+                var rightVolume = value.RightVolume;
+
+                if (!SupportsLeftRightVolumeControl && leftVolume != rightVolume)
+                    throw new ArgumentException("Device doesn't support separate volume control for each channel.", nameof(value));
+
+                var volume = DataTypesUtilities.Combine(rightVolume, leftVolume);
+                ProcessMmResult(() => MidiOutWinApi.midiOutSetVolume(_handle, volume));
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -72,10 +99,9 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureDeviceIsNotDisposed();
             EnsureHandleIsCreated();
 
-            var channelEvent = midiEvent as ChannelEvent;
-            if (channelEvent != null)
+            if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
             {
-                SendChannelEvent(channelEvent);
+                SendShortEvent(midiEvent);
                 return;
             }
 
@@ -149,20 +175,20 @@ namespace Melanchall.DryWetMidi.Devices
             SupportsLeftRightVolumeControl = support.HasFlag(MidiOutWinApi.MIDICAPS.MIDICAPS_LRVOLUME);
         }
 
-        private void SendChannelEvent(ChannelEvent channelEvent)
+        private void SendShortEvent(MidiEvent midiEvent)
         {
-            var message = PackChannelEvent(channelEvent);
+            var message = PackShortEvent(midiEvent);
             ProcessMmResult(() => MidiOutWinApi.midiOutShortMsg(_handle, (uint)message));
         }
 
-        private int PackChannelEvent(ChannelEvent channelEvent)
+        private int PackShortEvent(MidiEvent midiEvent)
         {
-            var eventWriter = EventWriterFactory.GetWriter(channelEvent);
+            var eventWriter = EventWriterFactory.GetWriter(midiEvent);
 
-            var statusByte = eventWriter.GetStatusByte(channelEvent);
+            var statusByte = eventWriter.GetStatusByte(midiEvent);
 
             WriteBytesToStream(_memoryStream, ZeroBuffer);
-            eventWriter.Write(channelEvent, _midiWriter, _writingSettings, true);
+            eventWriter.Write(midiEvent, _midiWriter, _writingSettings, true);
 
             var bytes = _memoryStream.GetBuffer();
             return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);

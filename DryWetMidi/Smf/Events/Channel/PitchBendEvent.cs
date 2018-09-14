@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a Pitch Bend Change message.

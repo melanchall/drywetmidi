@@ -60,6 +60,7 @@
     <Compile Include="Devices\OutputDevice\MidiEventSentEventArgs.cs" />
     <Compile Include="Devices\OutputDevice\OutputDevice.cs" />
     <Compile Include="Devices\OutputDevice\OutputDeviceType.cs" />
+    <Compile Include="Devices\OutputDevice\Volume.cs" />
     <Compile Include="Devices\Playback\NoteStopPolicy.cs" />
     <Compile Include="Devices\Playback\Playback.cs" />
     <Compile Include="Devices\Playback\PlaybackEvent.cs" />
@@ -176,7 +177,7 @@
     <Compile Include="Smf\Events\SystemRealTime\TimingClockEvent.cs" />
     <Compile Include="Smf\Events\Writers\SystemCommonEventWriter.cs" />
     <Compile Include="Smf\Events\Writers\SystemRealTimeEventWriter.cs" />
-    <Compile Include="Smf\Utilities\DataTypesUtilities.cs" />
+    <Compile Include="Common\DataTypes\DataTypesUtilities.cs" />
     <Compile Include="Common\DataTypes\FourBitNumber.cs" />
     <Compile Include="Common\DataTypes\SevenBitNumber.cs" />
     <Compile Include="Smf\Events\Channel\NoteEvent.cs" />
