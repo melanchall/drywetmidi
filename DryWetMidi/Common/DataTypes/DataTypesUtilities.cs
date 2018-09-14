@@ -1,7 +1,6 @@
 ﻿using System;
-using Melanchall.DryWetMidi.Common;
 
-namespace Melanchall.DryWetMidi.Smf
+namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
     /// Internal utilities to manipulate MIDI data types.
@@ -43,6 +42,11 @@ namespace Melanchall.DryWetMidi.Smf
             return (short)((head << 8) | tail);
         }
 
+        public static uint Combine(ushort head, ushort tail)
+        {
+            return (uint)((head << 16) | tail);
+        }
+
         /// <summary>
         /// Extracts right four-bit part of a byte.
         /// </summary>
@@ -73,6 +77,11 @@ namespace Melanchall.DryWetMidi.Smf
             return (byte)(number & byte.MaxValue);
         }
 
+        public static ushort GetTail(this uint number)
+        {
+            return (ushort)(number & ushort.MaxValue);
+        }
+
         /// <summary>
         /// Extracts left four-bit part of a byte.
         /// </summary>
@@ -101,6 +110,11 @@ namespace Melanchall.DryWetMidi.Smf
         public static byte GetHead(this short number)
         {
             return (byte)(number >> 8);
+        }
+
+        public static ushort GetHead(this uint number)
+        {
+            return (ushort)(number >> 16);
         }
 
         /// <summary>
