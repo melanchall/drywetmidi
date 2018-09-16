@@ -54,6 +54,7 @@
     <Compile Include="Devices\DevicesConnector\MidiConnectWinApi.cs" />
     <Compile Include="Devices\InputDevice\MidiEventReceivedEventArgs.cs" />
     <Compile Include="Devices\InputDevice\InputDevice.cs" />
+    <Compile Include="Devices\InputDevice\MidiTimeCodeReceivedEventArgs.cs" />
     <Compile Include="Devices\Manufacturer.cs" />
     <Compile Include="Devices\MidiDevice.cs" />
     <Compile Include="Devices\MidiDeviceException.cs" />
@@ -164,10 +165,11 @@
     <Compile Include="Smf\Events\Readers\SystemCommonEventReader.cs" />
     <Compile Include="Smf\Events\Readers\SystemRealTimeEventReader.cs" />
     <Compile Include="Smf\Events\SystemCommon\MidiTimeCodeEvent.cs" />
-    <Compile Include="Smf\Events\SystemCommon\MidiTimeCodeEventComponent.cs" />
+    <Compile Include="Smf\Events\SystemCommon\MidiTimeCodeComponent.cs" />
     <Compile Include="Smf\Events\SystemCommon\SongSelectEvent.cs" />
     <Compile Include="Smf\Events\SystemCommon\SongPositionPointerEvent.cs" />
     <Compile Include="Smf\Events\Base\SystemCommonEvent.cs" />
+    <Compile Include="Smf\Events\SystemCommon\MidiTimeCodeType.cs" />
     <Compile Include="Smf\Events\SystemCommon\TuneRequestEvent.cs" />
     <Compile Include="Smf\Events\SystemRealTime\ActiveSensingEvent.cs" />
     <Compile Include="Smf\Events\SystemRealTime\ContinueEvent.cs" />

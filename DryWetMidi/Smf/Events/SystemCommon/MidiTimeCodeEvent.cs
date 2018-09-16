@@ -8,16 +8,16 @@ namespace Melanchall.DryWetMidi.Smf
     {
         #region Constants
 
-        private static readonly Dictionary<MidiTimeCodeEventComponent, byte> ComponentValueMasks = new Dictionary<MidiTimeCodeEventComponent, byte>
+        private static readonly Dictionary<MidiTimeCodeComponent, byte> ComponentValueMasks = new Dictionary<MidiTimeCodeComponent, byte>
         {
-            [MidiTimeCodeEventComponent.FramesLsb] = 0xF,
-            [MidiTimeCodeEventComponent.FramesMsb] = 0x1,
-            [MidiTimeCodeEventComponent.SecondsLsb] = 0xF,
-            [MidiTimeCodeEventComponent.SecondsMsb] = 0x3,
-            [MidiTimeCodeEventComponent.MinutesLsb] = 0xF,
-            [MidiTimeCodeEventComponent.MinutesMsb] = 0x3,
-            [MidiTimeCodeEventComponent.HoursLsb] = 0xF,
-            [MidiTimeCodeEventComponent.HoursMsbAndTimeCodeType] = 0x7
+            [MidiTimeCodeComponent.FramesLsb] = 0xF,
+            [MidiTimeCodeComponent.FramesMsb] = 0x1,
+            [MidiTimeCodeComponent.SecondsLsb] = 0xF,
+            [MidiTimeCodeComponent.SecondsMsb] = 0x3,
+            [MidiTimeCodeComponent.MinutesLsb] = 0xF,
+            [MidiTimeCodeComponent.MinutesMsb] = 0x3,
+            [MidiTimeCodeComponent.HoursLsb] = 0xF,
+            [MidiTimeCodeComponent.HoursMsbAndTimeCodeType] = 0x7
         };
 
         #endregion
@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Smf
         {
         }
 
-        public MidiTimeCodeEvent(MidiTimeCodeEventComponent component, FourBitNumber componentValue)
+        public MidiTimeCodeEvent(MidiTimeCodeComponent component, FourBitNumber componentValue)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(component), component);
 
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
-        public MidiTimeCodeEventComponent Component { get; set; }
+        public MidiTimeCodeComponent Component { get; set; }
 
         public FourBitNumber ComponentValue { get; set; }
 
@@ -54,10 +54,10 @@ namespace Melanchall.DryWetMidi.Smf
 
             var messageType = data.GetHead();
             // TODO: proper exception
-            if (!Enum.IsDefined(typeof(MidiTimeCodeEventComponent), (byte)messageType))
+            if (!Enum.IsDefined(typeof(MidiTimeCodeComponent), (byte)messageType))
                 throw new Exception();
 
-            Component = (MidiTimeCodeEventComponent)(byte)messageType;
+            Component = (MidiTimeCodeComponent)(byte)messageType;
             // TODO: check value and apply policy
             ComponentValue = data.GetTail();
         }

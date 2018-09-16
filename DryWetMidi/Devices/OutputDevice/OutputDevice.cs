@@ -24,7 +24,6 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly MidiWriter _midiWriter;
         private readonly WritingSettings _writingSettings = new WritingSettings();
         private MidiWinApi.MidiMessageCallback _callback;
-        private IntPtr _streamHandle;
 
         #endregion
 

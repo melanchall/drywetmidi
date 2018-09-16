@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
-    public enum MidiTimeCodeEventComponent : byte
+    public enum MidiTimeCodeComponent : byte
     {
         FramesLsb = 0,
         FramesMsb = 1,
