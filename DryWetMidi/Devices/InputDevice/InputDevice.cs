@@ -16,6 +16,15 @@ namespace Melanchall.DryWetMidi.Devices
         private const int SysExBufferLength = 256;
         private const int ChannelParametersBufferSize = 2;
         private static readonly ReadingSettings ReadingSettings = new ReadingSettings();
+        private static readonly int MidiTimeCodeComponentsCount = Enum.GetValues(typeof(MidiTimeCodeComponent)).Length;
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<MidiEventReceivedEventArgs> EventReceived;
+
+        public event EventHandler<MidiTimeCodeReceivedEventArgs> MidiTimeCodeReceived;
 
         #endregion
 
@@ -34,11 +43,7 @@ namespace Melanchall.DryWetMidi.Devices
         private MidiWinApi.MIDIHDR _sysExHeader;
         private IntPtr _sysExBufferPointer;
 
-        #endregion
-
-        #region Events
-
-        public event EventHandler<MidiEventReceivedEventArgs> EventReceived;
+        private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
 
         #endregion
 
@@ -52,6 +57,12 @@ namespace Melanchall.DryWetMidi.Devices
 
             SetDeviceInformation();
         }
+
+        #endregion
+
+        #region Properties
+
+        public bool RaiseMidiTimeCodeReceived { get; set; } = true;
 
         #endregion
 
@@ -120,6 +131,11 @@ namespace Melanchall.DryWetMidi.Devices
             EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, _startTime.AddMilliseconds(milliseconds)));
         }
 
+        private void OnMidiTimeCodeReceived(MidiTimeCodeType timeCodeType, int hours, int minutes, int seconds, int frames)
+        {
+            MidiTimeCodeReceived?.Invoke(this, new MidiTimeCodeReceivedEventArgs(timeCodeType, hours, minutes, seconds, frames));
+        }
+
         private void PrepareSysExBuffer()
         {
             var buffer = new byte[SysExBufferLength];
@@ -181,14 +197,20 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnShortMessage(int message, int milliseconds)
         {
-            // TODO: move bit operations to DataTypesUtilities
-            WriteBytesToStream(_channelMessageMemoryStream, (byte)((message & 0xFF00) >> 8), (byte)(message >> 16));
+            WriteBytesToStream(_channelMessageMemoryStream, message.GetThirdByte(), message.GetSecondByte());
 
-            var statusByte = (byte)(message & 0xFF);
+            var statusByte = message.GetFourthByte();
             var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
             var midiEvent = eventReader.Read(_channelEventReader, ReadingSettings, statusByte);
 
             OnEventReceived(midiEvent, milliseconds);
+
+            if (RaiseMidiTimeCodeReceived)
+            {
+                var midiTimeCodeEvent = midiEvent as MidiTimeCodeEvent;
+                if (midiTimeCodeEvent != null)
+                    TryRaiseMidiTimeCodeReceived(midiTimeCodeEvent);
+            }
         }
 
         private void OnSysExMessage(IntPtr sysExHeader, int milliseconds)
@@ -196,6 +218,33 @@ namespace Melanchall.DryWetMidi.Devices
             var buffer = (MidiWinApi.MIDIHDR)Marshal.PtrToStructure(sysExHeader, typeof(MidiWinApi.MIDIHDR));
             var bytes = new byte[buffer.dwBufferLength];
             Marshal.Copy(buffer.lpData, bytes, 0, bytes.Length);
+        }
+
+        private void TryRaiseMidiTimeCodeReceived(MidiTimeCodeEvent midiTimeCodeEvent)
+        {
+            var component = midiTimeCodeEvent.Component;
+            var componentValue = midiTimeCodeEvent.ComponentValue;
+
+            _midiTimeCodeComponents[component] = componentValue;
+            if (_midiTimeCodeComponents.Count != MidiTimeCodeComponentsCount)
+                return;
+
+            var frames = DataTypesUtilities.Combine(_midiTimeCodeComponents[MidiTimeCodeComponent.FramesMsb],
+                                                    _midiTimeCodeComponents[MidiTimeCodeComponent.FramesLsb]);
+
+            var minutes = DataTypesUtilities.Combine(_midiTimeCodeComponents[MidiTimeCodeComponent.MinutesMsb],
+                                                     _midiTimeCodeComponents[MidiTimeCodeComponent.MinutesLsb]);
+
+            var seconds = DataTypesUtilities.Combine(_midiTimeCodeComponents[MidiTimeCodeComponent.SecondsMsb],
+                                                     _midiTimeCodeComponents[MidiTimeCodeComponent.SecondsLsb]);
+
+            var hoursAndTimeCodeType = DataTypesUtilities.Combine(_midiTimeCodeComponents[MidiTimeCodeComponent.HoursMsbAndTimeCodeType],
+                                                                  _midiTimeCodeComponents[MidiTimeCodeComponent.HoursLsb]);
+            var hours = hoursAndTimeCodeType & 0x1F;
+            var timeCodeType = (MidiTimeCodeType)((hoursAndTimeCodeType >> 5) & 0x3);
+
+            OnMidiTimeCodeReceived(timeCodeType, hours, minutes, seconds, frames);
+            _midiTimeCodeComponents.Clear();
         }
 
         #endregion

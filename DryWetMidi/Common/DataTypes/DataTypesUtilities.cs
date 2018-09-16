@@ -206,6 +206,26 @@ namespace Melanchall.DryWetMidi.Common
             return result;
         }
 
+        public static byte GetFisrtByte(this int number)
+        {
+            return (byte)((number >> 24) & 0xFF);
+        }
+
+        public static byte GetSecondByte(this int number)
+        {
+            return (byte)((number >> 16) & 0xFF);
+        }
+
+        public static byte GetThirdByte(this int number)
+        {
+            return (byte)((number >> 8) & 0xFF);
+        }
+
+        public static byte GetFourthByte(this int number)
+        {
+            return (byte)(number & 0xFF);
+        }
+
         #endregion
     }
 }
