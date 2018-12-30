@@ -42,8 +42,8 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport("winmm.dll")]
         public static extern MMRESULT midiOutGetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText);
 
-        [DllImport("winmm.dll", SetLastError = true)]
-        public static extern int midiOutGetNumDevs();
+        [DllImport("winmm.dll")]
+        public static extern uint midiOutGetNumDevs();
 
         [DllImport("winmm.dll")]
         public static extern MMRESULT midiOutOpen(out IntPtr lphmo, uint uDeviceID, MidiWinApi.MidiMessageCallback dwCallback, IntPtr dwInstance, uint dwFlags);

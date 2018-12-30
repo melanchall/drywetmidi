@@ -46,6 +46,7 @@
     <Compile Include="Common\Parsing\ParsingResult.cs" />
     <Compile Include="Common\Parsing\ParsingStatus.cs" />
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
+    <Compile Include="Common\ReflectionUtilities.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="Devices\Clock\MidiClock.cs" />
     <Compile Include="Devices\Clock\MidiTimerWinApi.cs" />

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     internal static class EventStatusBytes
     {
@@ -49,7 +51,9 @@
             public const byte Continue      = 0xFB;
             public const byte Stop          = 0xFC;
             public const byte ActiveSensing = 0xFE;
-            public const byte Reset         = 0xFF;	
+            public const byte Reset         = 0xFF;
+
+            public static byte[] StatusBytes = ReflectionUtilities.GetConstantsValues<byte>(typeof(SystemRealTime));
         }
 
         internal static class SystemCommon
@@ -58,6 +62,8 @@
             public const byte SongPositionPointer = 0xF2;
             public const byte SongSelect          = 0xF3;
             public const byte TuneRequest         = 0xF6;
+
+            public static byte[] StatusBytes = ReflectionUtilities.GetConstantsValues<byte>(typeof(SystemCommon));
         }
     }
 }
