@@ -116,7 +116,11 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsNullOrEmptyString(nameof(name), name, "Device name");
 
-            return GetAll().FirstOrDefault(d => string.Equals(d.Name, name, StringComparison.OrdinalIgnoreCase));
+            var device = GetAll().FirstOrDefault(d => d.Name == name);
+            if (device == null)
+                throw new MidiDeviceException($"There is no input device named '{name}'.");
+
+            return device;
         }
 
         public static InputDevice GetById(int id)
