@@ -48,7 +48,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             string[] values;
 
-            // TODO: put condition
             while (true)
             {
                 values = SplitValues(line, _delimiter).ToArray();

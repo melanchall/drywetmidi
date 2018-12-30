@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -26,13 +27,32 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
+        #region Methods
+
+        private static SevenBitNumber ProcessValue(byte value, string property, InvalidSystemCommonEventParameterValuePolicy policy)
+        {
+            if (value > SevenBitNumber.MaxValue)
+            {
+                switch (policy)
+                {
+                    case InvalidSystemCommonEventParameterValuePolicy.Abort:
+                        throw new InvalidSystemCommonEventParameterValueException($"{value} is invalid value for the {property} of a Song Position Pointer event.", value);
+                    case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
+                        return SevenBitNumber.MaxValue;
+                }
+            }
+
+            return (SevenBitNumber)value;
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void Read(MidiReader reader, ReadingSettings settings, int size)
         {
-            // TODO: apply policy
-            Lsb = (SevenBitNumber)reader.ReadByte();
-            Msb = (SevenBitNumber)reader.ReadByte();
+            Lsb = ProcessValue(reader.ReadByte(), nameof(Lsb), settings.InvalidSystemCommonEventParameterValuePolicy);
+            Msb = ProcessValue(reader.ReadByte(), nameof(Msb), settings.InvalidSystemCommonEventParameterValuePolicy);
         }
 
         internal override void Write(MidiWriter writer, WritingSettings settings)

@@ -58,8 +58,21 @@ namespace Melanchall.DryWetMidi.Smf
                 throw new Exception();
 
             Component = (MidiTimeCodeComponent)(byte)messageType;
-            // TODO: check value and apply policy
-            ComponentValue = data.GetTail();
+
+            var componentValue = data.GetTail();
+            if (componentValue > ComponentValueMasks[Component])
+            {
+                switch (settings.InvalidSystemCommonEventParameterValuePolicy)
+                {
+                    case InvalidSystemCommonEventParameterValuePolicy.Abort:
+                        throw new InvalidSystemCommonEventParameterValueException($"{componentValue} is invalid value for the {nameof(ComponentValue)} of {Component} of a MIDI Time Code event.", componentValue);
+                    case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
+                        componentValue = (FourBitNumber)ComponentValueMasks[Component];
+                        break;
+                }
+            }
+
+            ComponentValue = componentValue;
         }
 
         internal override void Write(MidiWriter writer, WritingSettings settings)
