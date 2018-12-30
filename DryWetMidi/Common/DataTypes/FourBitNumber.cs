@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -24,6 +25,10 @@ namespace Melanchall.DryWetMidi.Common
         /// The largest possible value of a <see cref="FourBitNumber"/>.
         /// </summary>
         public static readonly FourBitNumber MaxValue = new FourBitNumber(Max);
+
+        public static readonly FourBitNumber[] Values = Enumerable.Range(MinValue, MaxValue - MinValue + 1)
+                                                                  .Select(value => (FourBitNumber)value)
+                                                                  .ToArray();
 
         private const byte Min = 0;
         private const byte Max = 15; // 00001111

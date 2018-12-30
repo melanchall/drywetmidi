@@ -108,10 +108,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void TurnAllNotesOff()
         {
-            // TODO: put all values collection to data types
-            var allChannels = Enumerable.Range(FourBitNumber.MinValue, FourBitNumber.MaxValue - FourBitNumber.MinValue + 1).Select(channel => (FourBitNumber)channel);
-            var allNoteNumbers = Enumerable.Range(SevenBitNumber.MinValue, SevenBitNumber.MaxValue - SevenBitNumber.MinValue + 1).Select(noteNumber => (SevenBitNumber)noteNumber);
-            var allNotesOffEvents = allChannels.SelectMany(channel => allNoteNumbers.Select(noteNumber => new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = channel }));
+            var allNotesOffEvents = from channel in FourBitNumber.Values
+                                    from noteNumber in SevenBitNumber.Values
+                                    select new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = channel };
 
             foreach (var noteOffEvent in allNotesOffEvents)
             {
@@ -179,9 +178,8 @@ namespace Melanchall.DryWetMidi.Devices
             DeviceType = (OutputDeviceType)caps.wTechnology;
             VoicesNumber = caps.wVoices;
             NotesNumber = caps.wNotes;
-            Channels = (from i in Enumerable.Range(0, FourBitNumber.MaxValue + 1)
-                        let channel = (FourBitNumber)i
-                        let isChannelSupported = (caps.wChannelMask >> i) & 1
+            Channels = (from channel in FourBitNumber.Values
+                        let isChannelSupported = (caps.wChannelMask >> channel) & 1
                         where isChannelSupported == 1
                         select channel).ToArray();
 
