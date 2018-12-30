@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -24,6 +25,10 @@ namespace Melanchall.DryWetMidi.Common
         /// The largest possible value of a <see cref="SevenBitNumber"/>.
         /// </summary>
         public static readonly SevenBitNumber MaxValue = new SevenBitNumber(Max);
+
+        public static readonly SevenBitNumber[] Values = Enumerable.Range(MinValue, MaxValue - MinValue + 1)
+                                                                   .Select(value => (SevenBitNumber)value)
+                                                                   .ToArray();
 
         private const byte Min = 0;
         private const byte Max = 127; // 01111111

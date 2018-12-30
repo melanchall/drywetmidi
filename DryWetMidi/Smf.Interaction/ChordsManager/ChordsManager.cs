@@ -143,7 +143,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            var channelsCount = FourBitNumber.MaxValue - FourBitNumber.MinValue + 1;
+            var channelsCount = FourBitNumber.Values.Length;
             var lastNoteEndTimes = Enumerable.Range(0, channelsCount).Select(i => long.MinValue).ToArray();
             var chords = new Chord[channelsCount];
 

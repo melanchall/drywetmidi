@@ -29,9 +29,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            var timedEvents = Enumerable.Range(0, FourBitNumber.MaxValue + 1)
-                                        .Select(i => new List<TimedEvent>())
-                                        .ToArray();
+            var timedEvents = FourBitNumber.Values.Select(channel => new List<TimedEvent>()).ToArray();
 
             foreach (var timedEvent in midiFile.GetTimedEvents())
             {

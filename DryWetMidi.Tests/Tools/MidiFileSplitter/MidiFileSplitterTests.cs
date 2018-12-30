@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                                .ToArray();
 
                 var filesByChannel = midiFile.SplitByChannel().ToList();
-                var allChannels = new List<FourBitNumber>(FourBitNumber.MaxValue + 1);
+                var allChannels = new List<FourBitNumber>(FourBitNumber.Values.Length);
 
                 foreach (var fileByChannel in filesByChannel)
                 {
