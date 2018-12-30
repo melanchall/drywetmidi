@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System.Linq;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Provides a way to get <see cref="IEventReader"/> for an event.
@@ -28,27 +30,16 @@
             if (statusByte == EventStatusBytes.Global.Meta)
                 return _metaEventReader;
 
-            // TODO: put to collection
             if (statusByte == EventStatusBytes.Global.EscapeSysEx ||
                 statusByte == EventStatusBytes.Global.NormalSysEx)
                 return _sysExEventReader;
 
             if (!smfOnly)
             {
-                // TODO: put to collection
-                if (statusByte == EventStatusBytes.SystemRealTime.ActiveSensing ||
-                    statusByte == EventStatusBytes.SystemRealTime.Continue ||
-                    statusByte == EventStatusBytes.SystemRealTime.Reset ||
-                    statusByte == EventStatusBytes.SystemRealTime.Start ||
-                    statusByte == EventStatusBytes.SystemRealTime.Stop ||
-                    statusByte == EventStatusBytes.SystemRealTime.TimingClock)
+                if (EventStatusBytes.SystemRealTime.StatusBytes.Contains(statusByte))
                     return _systemRealTimeEventReader;
 
-                // TODO: put to collection
-                if (statusByte == EventStatusBytes.SystemCommon.MtcQuarterFrame ||
-                    statusByte == EventStatusBytes.SystemCommon.SongPositionPointer ||
-                    statusByte == EventStatusBytes.SystemCommon.SongSelect ||
-                    statusByte == EventStatusBytes.SystemCommon.TuneRequest)
+                if (EventStatusBytes.SystemCommon.StatusBytes.Contains(statusByte))
                     return _systemCommonEventReader;
             }
 

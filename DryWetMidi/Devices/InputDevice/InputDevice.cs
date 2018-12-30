@@ -99,17 +99,18 @@ namespace Melanchall.DryWetMidi.Devices
             _startTime = DateTime.UtcNow;
         }
 
-        public static int GetDevicesCount()
+        public static uint GetDevicesCount()
         {
-            // TODO: process last error
-            // TODO: uint instead of int
             return MidiInWinApi.midiInGetNumDevs();
         }
 
         public static IEnumerable<InputDevice> GetAll()
         {
             var devicesCount = GetDevicesCount();
-            return Enumerable.Range(0, devicesCount).Select(i => new InputDevice((uint)i));
+            for (var deviceId = 0U; deviceId < devicesCount; deviceId++)
+            {
+                yield return new InputDevice(deviceId);
+            }
         }
 
         public static InputDevice GetByName(string name)

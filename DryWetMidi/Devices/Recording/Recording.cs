@@ -64,7 +64,6 @@ namespace Melanchall.DryWetMidi.Devices
             if (!IsRunning)
                 return;
 
-            // TODO: what if device was started from outside
             _inputDevice.Stop();
             _stopwatch.Stop();
 

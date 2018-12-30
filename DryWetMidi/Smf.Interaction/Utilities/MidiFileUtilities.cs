@@ -20,14 +20,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            // TODO: create method to get absolute time (or last time...)
-            var lastTime = midiFile.GetTimedEvents().LastOrDefault()?.Time;
-            if (lastTime.GetValueOrDefault() == 0)
+            var lastTime = midiFile.GetTimedEvents().LastOrDefault()?.Time ?? 0;
+            if (lastTime == 0)
                 return;
 
             var tempoMap = midiFile.GetTempoMap();
 
-            var oldLength = TimeConverter.ConvertTo((MidiTimeSpan)lastTime.Value, length.GetType(), tempoMap);
+            var oldLength = TimeConverter.ConvertTo((MidiTimeSpan)lastTime, length.GetType(), tempoMap);
             var ratio = TimeSpanUtilities.Divide(length, oldLength);
 
             ResizeByRatio(midiFile, ratio);

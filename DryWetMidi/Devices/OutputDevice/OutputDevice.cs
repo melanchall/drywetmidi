@@ -103,6 +103,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (sysExEvent != null)
             {
                 // TODO: implement sending SysEx events
+                throw new NotImplementedException("Sending of system exclusive events is not implemented yet.");
             }
         }
 
@@ -118,17 +119,18 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        public static int GetDevicesCount()
+        public static uint GetDevicesCount()
         {
-            // TODO: process last error
-            // TODO: uint instead of int
             return MidiOutWinApi.midiOutGetNumDevs();
         }
 
         public static IEnumerable<OutputDevice> GetAll()
         {
             var devicesCount = GetDevicesCount();
-            return Enumerable.Range(0, devicesCount).Select(i => new OutputDevice((uint)i));
+            for (var deviceId = 0U; deviceId < devicesCount; deviceId++)
+            {
+                yield return new OutputDevice(deviceId);
+            }
         }
 
         public static OutputDevice GetByName(string name)
