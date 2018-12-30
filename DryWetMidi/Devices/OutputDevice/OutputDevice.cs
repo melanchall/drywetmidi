@@ -86,11 +86,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        public void PrepareForEventsSending()
-        {
-            EnsureHandleIsCreated();
-        }
-
         public void SendEvent(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -108,6 +103,19 @@ namespace Melanchall.DryWetMidi.Devices
             if (sysExEvent != null)
             {
                 // TODO: implement sending SysEx events
+            }
+        }
+
+        public void TurnAllNotesOff()
+        {
+            // TODO: put all values collection to data types
+            var allChannels = Enumerable.Range(FourBitNumber.MinValue, FourBitNumber.MaxValue - FourBitNumber.MinValue + 1).Select(channel => (FourBitNumber)channel);
+            var allNoteNumbers = Enumerable.Range(SevenBitNumber.MinValue, SevenBitNumber.MaxValue - SevenBitNumber.MinValue + 1).Select(noteNumber => (SevenBitNumber)noteNumber);
+            var allNotesOffEvents = allChannels.SelectMany(channel => allNoteNumbers.Select(noteNumber => new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = channel }));
+
+            foreach (var noteOffEvent in allNotesOffEvents)
+            {
+                SendEvent(noteOffEvent);
             }
         }
 
@@ -140,6 +148,11 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNegative(nameof(id), id, "Device ID is negative.");
 
             return new OutputDevice((uint)id);
+        }
+
+        internal void PrepareForEventsSending()
+        {
+            EnsureHandleIsCreated();
         }
 
         private void EnsureHandleIsCreated()
