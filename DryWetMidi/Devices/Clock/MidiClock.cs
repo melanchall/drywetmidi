@@ -84,8 +84,6 @@ namespace Melanchall.DryWetMidi.Devices
             if (IsRunning)
                 return;
 
-            // TODO: process errors
-
             var timeCaps = default(MidiTimerWinApi.TIMECAPS);
             MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps));
 
@@ -103,8 +101,6 @@ namespace Melanchall.DryWetMidi.Devices
         public void Stop()
         {
             IsRunning = false;
-
-            // TODO: process errors
 
             _stopwatch.Stop();
             MidiTimerWinApi.timeEndPeriod(_resolution);
@@ -151,10 +147,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                // TODO: dispose managed state (managed objects).
             }
 
-            // TODO: prevent exceptions
             Stop();
 
             _disposed = true;

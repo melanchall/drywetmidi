@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureHandleIsCreated();
 
             PrepareSysExBuffer();
-            ProcessMmResult(() => MidiInWinApi.midiInStart(_handle));
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInStart(_handle), GetErrorText);
             _startTime = DateTime.UtcNow;
         }
 
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            ProcessMmResult(() => MidiInWinApi.midiInStop(_handle));
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInStop(_handle), GetErrorText);
         }
 
         public void Reset()
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            ProcessMmResult(() => MidiInWinApi.midiInReset(_handle));
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInReset(_handle), GetErrorText);
             _startTime = DateTime.UtcNow;
         }
 
@@ -146,13 +146,13 @@ namespace Melanchall.DryWetMidi.Devices
             _sysExHeader.lpData = _sysExBufferPointer;
             _sysExHeader.dwBufferLength = _sysExHeader.dwBytesRecorded = (uint)buffer.Length;
 
-            ProcessMmResult(() => MidiInWinApi.midiInPrepareHeader(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)));
-            ProcessMmResult(() => MidiInWinApi.midiInAddBuffer(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)));
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInPrepareHeader(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)), GetErrorText);
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInAddBuffer(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)), GetErrorText);
         }
 
         private void UnprepareSysExBuffer()
         {
-            ProcessMmResult(() => MidiInWinApi.midiInUnprepareHeader(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)));
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInUnprepareHeader(_handle, ref _sysExHeader, Marshal.SizeOf(_sysExHeader)), GetErrorText);
             Marshal.FreeHGlobal(_sysExBufferPointer);
         }
 
@@ -162,7 +162,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _callback = OnMessage;
-            ProcessMmResult(() => MidiInWinApi.midiInOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction), GetErrorText);
         }
 
         private void DestroyHandle()
@@ -173,7 +173,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void SetDeviceInformation()
         {
             var caps = default(MidiInWinApi.MIDIINCAPS);
-            ProcessMmResult(() => MidiInWinApi.midiInGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)));
+            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)), GetErrorText);
 
             SetBasicDeviceInformation(caps.wMid, caps.wPid, caps.vDriverVersion, caps.szPname);
         }
@@ -247,6 +247,11 @@ namespace Melanchall.DryWetMidi.Devices
             _midiTimeCodeComponents.Clear();
         }
 
+        private static MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText)
+        {
+            return MidiInWinApi.midiInGetErrorText(mmrError, pszText, cchText);
+        }
+
         #endregion
 
         #region Overrides
@@ -269,11 +274,6 @@ namespace Melanchall.DryWetMidi.Devices
             DestroyHandle();
 
             _disposed = true;
-        }
-
-        internal override MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText)
-        {
-            return MidiInWinApi.midiInGetErrorText(mmrError, pszText, cchText);
         }
 
         internal override IntPtr GetHandle()
