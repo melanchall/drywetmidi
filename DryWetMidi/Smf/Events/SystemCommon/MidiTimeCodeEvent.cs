@@ -52,12 +52,11 @@ namespace Melanchall.DryWetMidi.Smf
         {
             var data = reader.ReadByte();
 
-            var messageType = data.GetHead();
-            // TODO: proper exception
-            if (!Enum.IsDefined(typeof(MidiTimeCodeComponent), (byte)messageType))
-                throw new Exception();
+            var midiTimeCodeComponent = (byte)data.GetHead();
+            if (!Enum.IsDefined(typeof(MidiTimeCodeComponent), midiTimeCodeComponent))
+                throw new InvalidMidiTimeCodeComponentException("Invalid MIDI Time Code component.", midiTimeCodeComponent);
 
-            Component = (MidiTimeCodeComponent)(byte)messageType;
+            Component = (MidiTimeCodeComponent)midiTimeCodeComponent;
 
             var componentValue = data.GetTail();
             if (componentValue > ComponentValueMasks[Component])
