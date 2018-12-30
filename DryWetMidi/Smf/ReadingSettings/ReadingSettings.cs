@@ -104,6 +104,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// </remarks>
         public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy { get; set; }
 
+        public InvalidSystemCommonEventParameterValuePolicy InvalidSystemCommonEventParameterValuePolicy { get; set; }
+
         /// <summary>
         /// Gets or sets reaction of the reading engine on lack of bytes in the underlying stream
         /// that are needed to read some value (for example, DWORD requires 4 bytes available).

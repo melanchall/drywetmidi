@@ -246,7 +246,6 @@ namespace Melanchall.DryWetMidi.Devices
             while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < _clock.StartTime);
         }
 
-        // TODO: prepare events in bytes format
         private static IEnumerable<PlaybackEvent> GetPlaybackEvents(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
         {
             return events.Where(e => e != null)
