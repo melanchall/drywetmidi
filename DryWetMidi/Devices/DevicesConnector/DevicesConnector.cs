@@ -70,7 +70,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                // TODO: dispose managed state (managed objects).
             }
 
             Disconnect();

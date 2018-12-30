@@ -75,23 +75,6 @@ namespace Melanchall.DryWetMidi.Devices
             memoryStream.Seek(0, SeekOrigin.Begin);
         }
 
-        internal void ProcessMmResult(Func<MMRESULT> method)
-        {
-            var mmResult = method();
-            if (mmResult == MMRESULT.MMSYSERR_NOERROR)
-                return;
-
-            var stringBuilder = new StringBuilder((int)MidiWinApi.MaxErrorLength);
-            var getErrorTextResult = GetErrorText(mmResult, stringBuilder, MidiWinApi.MaxErrorLength + 1);
-            if (getErrorTextResult != MMRESULT.MMSYSERR_NOERROR)
-                throw new MidiDeviceException("Error occured but failed to get description for it.");
-
-            var errorText = stringBuilder.ToString();
-            throw new MidiDeviceException(errorText);
-        }
-
-        internal abstract MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText);
-
         internal abstract IntPtr GetHandle();
 
         #endregion
