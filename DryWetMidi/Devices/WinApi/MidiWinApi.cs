@@ -12,15 +12,15 @@ namespace Melanchall.DryWetMidi.Devices
         internal struct MIDIHDR
         {
             public IntPtr lpData;
-            public uint dwBufferLength;
-            public uint dwBytesRecorded;
+            public int dwBufferLength;
+            public int dwBytesRecorded;
             public IntPtr dwUser;
-            public uint dwFlags;
+            public int dwFlags;
             public IntPtr lpNext;
             public IntPtr reserved;
-            public uint dwOffset;
+            public int dwOffset;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public IntPtr[] dwReserved;
+            public int[] dwReserved;
         }
 
         public delegate void MidiMessageCallback(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
@@ -33,6 +33,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public const uint MaxErrorLength = 256;
         public const uint CallbackFunction = 196608;
+
+        public static readonly int MidiHeaderSize = Marshal.SizeOf(typeof(MIDIHDR));
 
         #endregion
 

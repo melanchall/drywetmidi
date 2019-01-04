@@ -48,13 +48,13 @@ namespace Melanchall.DryWetMidi.Devices
         public static extern MMRESULT midiInReset(IntPtr hMidiIn);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInPrepareHeader(IntPtr hMidiIn, ref MidiWinApi.MIDIHDR lpMidiInHdr, int cbMidiInHdr);
+        public static extern MMRESULT midiInPrepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInUnprepareHeader(IntPtr hMidiIn, ref MidiWinApi.MIDIHDR lpMidiInHdr, int cbMidiInHdr);
+        public static extern MMRESULT midiInUnprepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInAddBuffer(IntPtr hMidiIn, ref MidiWinApi.MIDIHDR lpMidiInHdr, int cbMidiInHdr);
+        public static extern MMRESULT midiInAddBuffer(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
         #endregion
     }
