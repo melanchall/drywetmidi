@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -53,6 +54,22 @@ namespace Melanchall.DryWetMidi.Devices
 
             var errorText = stringBuilder.ToString();
             throw new MidiDeviceException(errorText);
+        }
+
+        public static byte[] UnpackSysExBytes(IntPtr headerPointer)
+        {
+            var header = (MIDIHDR)Marshal.PtrToStructure(headerPointer, typeof(MIDIHDR));
+            var data = new byte[header.dwBytesRecorded - 1];
+            Marshal.Copy(IntPtr.Add(header.lpData, 1), data, 0, data.Length);
+
+            return data;
+        }
+
+        public static void UnpackShortEventBytes(int message, out byte statusByte, out byte firstDataByte, out byte secondDataByte)
+        {
+            statusByte = message.GetFourthByte();
+            firstDataByte = message.GetThirdByte();
+            secondDataByte = message.GetSecondByte();
         }
 
         #endregion

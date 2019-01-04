@@ -24,6 +24,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public event EventHandler<MidiEventReceivedEventArgs> EventReceived;
         public event EventHandler<MidiTimeCodeReceivedEventArgs> MidiTimeCodeReceived;
+        public event EventHandler<InvalidSysExEventReceivedEventArgs> InvalidSysExEventReceived;
+        public event EventHandler<InvalidShortEventReceivedEventArgs> InvalidShortEventReceived;
 
         #endregion
 
@@ -138,6 +140,16 @@ namespace Melanchall.DryWetMidi.Devices
             MidiTimeCodeReceived?.Invoke(this, new MidiTimeCodeReceivedEventArgs(timeCodeType, hours, minutes, seconds, frames));
         }
 
+        private void OnInvalidSysExEventReceived(byte[] data)
+        {
+            InvalidSysExEventReceived?.Invoke(this, new InvalidSysExEventReceivedEventArgs(data));
+        }
+
+        private void OnInvalidShortEventReceived(byte statusByte, byte firstDataByte, byte secondDataByte)
+        {
+            InvalidShortEventReceived?.Invoke(this, new InvalidShortEventReceivedEventArgs(statusByte, firstDataByte, secondDataByte));
+        }
+
         private void PrepareSysExBuffer()
         {
             var header = new MidiWinApi.MIDIHDR
@@ -200,6 +212,7 @@ namespace Melanchall.DryWetMidi.Devices
             switch (wMsg)
             {
                 case MidiMessage.MIM_DATA:
+                case MidiMessage.MIM_MOREDATA:
                     OnShortMessage(dwParam1.ToInt32(), dwParam2.ToInt32());
                     break;
 
@@ -208,15 +221,24 @@ namespace Melanchall.DryWetMidi.Devices
                     break;
 
                 case MidiMessage.MIM_ERROR:
+                    byte statusByte, firstDataByte, secondDataByte;
+                    MidiWinApi.UnpackShortEventBytes(dwParam1.ToInt32(), out statusByte, out firstDataByte, out secondDataByte);
+                    OnInvalidShortEventReceived(statusByte, firstDataByte, secondDataByte);
+                    break;
+
+                case MidiMessage.MIM_LONGERROR:
+                    OnInvalidSysExEventReceived(MidiWinApi.UnpackSysExBytes(dwParam1));
                     break;
             }
         }
 
         private void OnShortMessage(int message, int milliseconds)
         {
-            WriteBytesToStream(_channelMessageMemoryStream, message.GetThirdByte(), message.GetSecondByte());
+            byte statusByte, firstDataByte, secondDataByte;
+            MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
 
-            var statusByte = message.GetFourthByte();
+            WriteBytesToStream(_channelMessageMemoryStream, firstDataByte, secondDataByte);
+
             var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
             var midiEvent = eventReader.Read(_channelEventReader, ReadingSettings, statusByte);
 
@@ -232,10 +254,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnSysExMessage(IntPtr sysExHeaderPointer, int milliseconds)
         {
-            var header = (MidiWinApi.MIDIHDR)Marshal.PtrToStructure(sysExHeaderPointer, typeof(MidiWinApi.MIDIHDR));
-            var data = new byte[header.dwBytesRecorded - 1];
-            Marshal.Copy(IntPtr.Add(header.lpData, 1), data, 0, data.Length);
-
+            var data = MidiWinApi.UnpackSysExBytes(sysExHeaderPointer);
             var midiEvent = new NormalSysExEvent(data);
             OnEventReceived(midiEvent, milliseconds);
 
