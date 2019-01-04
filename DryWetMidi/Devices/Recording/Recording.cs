@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (IsRunning)
                 return;
 
-            _inputDevice.Start();
+            _inputDevice.StartEventsListening();
             _stopwatch.Start();
 
             IsRunning = true;
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (!IsRunning)
                 return;
 
-            _inputDevice.Stop();
+            _inputDevice.StopEventsListening();
             _stopwatch.Stop();
 
             IsRunning = false;
