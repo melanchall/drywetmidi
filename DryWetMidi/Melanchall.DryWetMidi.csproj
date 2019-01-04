@@ -53,6 +53,8 @@
     <Compile Include="Devices\Clock\TickEventArgs.cs" />
     <Compile Include="Devices\DevicesConnector\DevicesConnector.cs" />
     <Compile Include="Devices\DevicesConnector\MidiConnectWinApi.cs" />
+    <Compile Include="Devices\InputDevice\InvalidShortEventReceivedEventArgs.cs" />
+    <Compile Include="Devices\InputDevice\InvalidSysExEventReceivedEventArgs.cs" />
     <Compile Include="Devices\InputDevice\MidiEventReceivedEventArgs.cs" />
     <Compile Include="Devices\InputDevice\InputDevice.cs" />
     <Compile Include="Devices\InputDevice\MidiTimeCodeReceivedEventArgs.cs" />
