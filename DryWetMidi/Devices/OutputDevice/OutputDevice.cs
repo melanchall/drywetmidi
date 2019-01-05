@@ -215,7 +215,7 @@ namespace Melanchall.DryWetMidi.Devices
             // TODO: process MOM_DONE
         }
 
-        private static MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText)
+        private static uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
         {
             return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
         }

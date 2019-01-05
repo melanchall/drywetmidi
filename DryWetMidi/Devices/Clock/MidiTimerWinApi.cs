@@ -28,19 +28,19 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         [DllImport("winmm.dll", SetLastError = true)]
-        public static extern MMRESULT timeGetDevCaps(ref TIMECAPS timeCaps, uint sizeTimeCaps);
+        public static extern uint timeGetDevCaps(ref TIMECAPS timeCaps, uint sizeTimeCaps);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT timeBeginPeriod(uint uPeriod);
+        public static extern uint timeBeginPeriod(uint uPeriod);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT timeEndPeriod(uint uPeriod);
+        public static extern uint timeEndPeriod(uint uPeriod);
 
         [DllImport("winmm.dll", SetLastError = true)]
         public static extern uint timeSetEvent(uint uDelay, uint uResolution, TimeProc lpTimeProc, IntPtr dwUser, uint fuEvent);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT timeKillEvent(uint uTimerID);
+        public static extern uint timeKillEvent(uint uTimerID);
 
         #endregion
     }

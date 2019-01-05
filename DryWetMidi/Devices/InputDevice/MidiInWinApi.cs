@@ -24,37 +24,37 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         [DllImport("winmm.dll", SetLastError = true)]
-        public static extern MMRESULT midiInGetDevCaps(UIntPtr uDeviceID, ref MIDIINCAPS caps, uint cbMidiInCaps);
+        public static extern uint midiInGetDevCaps(UIntPtr uDeviceID, ref MIDIINCAPS caps, uint cbMidiInCaps);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInGetErrorText(MMRESULT wError, StringBuilder lpText, uint cchText);
+        public static extern uint midiInGetErrorText(uint wError, StringBuilder lpText, uint cchText);
 
         [DllImport("winmm.dll")]
         public static extern uint midiInGetNumDevs();
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInOpen(out IntPtr lphMidiIn, uint uDeviceID, MidiWinApi.MidiMessageCallback dwCallback, IntPtr dwInstance, uint dwFlags);
+        public static extern uint midiInOpen(out IntPtr lphMidiIn, uint uDeviceID, MidiWinApi.MidiMessageCallback dwCallback, IntPtr dwInstance, uint dwFlags);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInClose(IntPtr hMidiIn);
+        public static extern uint midiInClose(IntPtr hMidiIn);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInStart(IntPtr hMidiIn);
+        public static extern uint midiInStart(IntPtr hMidiIn);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInStop(IntPtr hMidiIn);
+        public static extern uint midiInStop(IntPtr hMidiIn);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInReset(IntPtr hMidiIn);
+        public static extern uint midiInReset(IntPtr hMidiIn);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInPrepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
+        public static extern uint midiInPrepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInUnprepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
+        public static extern uint midiInUnprepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiInAddBuffer(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
+        public static extern uint midiInAddBuffer(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
         #endregion
     }

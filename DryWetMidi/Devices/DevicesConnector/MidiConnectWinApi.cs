@@ -8,10 +8,10 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiConnect(IntPtr hMidi, IntPtr hmo, IntPtr pReserved);
+        public static extern uint midiConnect(IntPtr hMidi, IntPtr hmo, IntPtr pReserved);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiDisconnect(IntPtr hMidi, IntPtr hmo, IntPtr pReserved);
+        public static extern uint midiDisconnect(IntPtr hMidi, IntPtr hmo, IntPtr pReserved);
 
         #endregion
     }
