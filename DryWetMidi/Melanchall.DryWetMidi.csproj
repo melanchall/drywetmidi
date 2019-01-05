@@ -75,7 +75,6 @@
     <Compile Include="Devices\WinApi\MidiMessage.cs" />
     <Compile Include="Devices\InputDevice\MidiInWinApi.cs" />
     <Compile Include="Devices\WinApi\MidiWinApi.cs" />
-    <Compile Include="Devices\WinApi\MMRESULT.cs" />
     <Compile Include="Devices\OutputDevice\MidiOutWinApi.cs" />
     <Compile Include="MusicTheory\Interval\IntervalParser.cs" />
     <Compile Include="MusicTheory\Interval\IntervalUtilities.cs" />

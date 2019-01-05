@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -45,12 +46,27 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void Connect()
         {
-            MidiConnectWinApi.midiConnect(InputDevice.GetHandle(), OutputDevice.GetHandle(), IntPtr.Zero);
+            MidiWinApi.ProcessMmResult(() => MidiConnectWinApi.midiConnect(InputDevice.GetHandle(), OutputDevice.GetHandle(), IntPtr.Zero), GetErrorText);
         }
 
         public void Disconnect()
         {
-            MidiConnectWinApi.midiDisconnect(InputDevice.GetHandle(), OutputDevice.GetHandle(), IntPtr.Zero);
+            MidiWinApi.ProcessMmResult(() => MidiConnectWinApi.midiDisconnect(InputDevice.GetHandle(), OutputDevice.GetHandle(), IntPtr.Zero), GetErrorText);
+        }
+
+        private static uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
+        {
+            switch (mmrError)
+            {
+                case MidiWinApi.MMSYSERR_INVALHANDLE:
+                    pszText.Append("Specified device handle is invalid.");
+                    break;
+                case MidiWinApi.MIDIERR_NOTREADY:
+                    pszText.Append("Specified input device is already connected to an output device.");
+                    break;
+            }
+
+            return MidiWinApi.MMSYSERR_NOERROR;
         }
 
         #endregion

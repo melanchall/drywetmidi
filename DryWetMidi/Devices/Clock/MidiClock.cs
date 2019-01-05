@@ -1,12 +1,20 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
     internal sealed class MidiClock : IDisposable
     {
+        #region Constants
+
+        private const double DefaultSpeed = 1.0;
+
+        #endregion
+
         #region Events
 
         public event EventHandler<TickEventArgs> Tick;
@@ -24,7 +32,7 @@ namespace Melanchall.DryWetMidi.Devices
         private MidiTimerWinApi.TimeProc _tickCallback;
         private uint _timerId;
 
-        private double _speed = 1.0;
+        private double _speed = DefaultSpeed;
 
         #endregion
 
@@ -69,8 +77,8 @@ namespace Melanchall.DryWetMidi.Devices
 
                 if (start)
                 {
-                    IsRunning = true;
                     _stopwatch.Start();
+                    IsRunning = true;
                 }
             }
         }
@@ -85,24 +93,28 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             var timeCaps = default(MidiTimerWinApi.TIMECAPS);
-            MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps));
+            MidiWinApi.ProcessMmResult(() => MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)), GetErrorText);
 
             _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
             _tickCallback = OnTick;
 
-            _stopwatch.Start();
-
-            MidiTimerWinApi.timeBeginPeriod(_resolution);
+            MidiWinApi.ProcessMmResult(() => MidiTimerWinApi.timeBeginPeriod(_resolution), GetErrorText);
             _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
+            if (_timerId == 0)
+            {
+                var errorCode = Marshal.GetLastWin32Error();
+                throw new MidiDeviceException("Unable to initialize clock.", new Win32Exception(errorCode));
+            }
 
+            _stopwatch.Start();
             IsRunning = true;
         }
 
         public void Stop()
         {
             IsRunning = false;
-
             _stopwatch.Stop();
+
             MidiTimerWinApi.timeEndPeriod(_resolution);
             MidiTimerWinApi.timeKillEvent(_timerId);
         }
@@ -128,6 +140,19 @@ namespace Melanchall.DryWetMidi.Devices
 
             CurrentTime = StartTime + new TimeSpan(MathUtilities.RoundToLong((_stopwatch.Elapsed - StartTime).Ticks * Speed));
             Tick?.Invoke(this, new TickEventArgs(CurrentTime));
+        }
+
+        private static uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
+        {
+            switch (mmrError)
+            {
+                case MidiWinApi.MMSYSERR_ERROR:
+                case MidiWinApi.TIMERR_NOCANDO:
+                    pszText.Append("Error occurred.");
+                    break;
+            }
+
+            return MidiWinApi.MMSYSERR_NOERROR;
         }
 
         #endregion

@@ -37,28 +37,28 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         [DllImport("winmm.dll", SetLastError = true)]
-        public static extern MMRESULT midiOutGetDevCaps(UIntPtr uDeviceID, ref MIDIOUTCAPS lpMidiOutCaps, uint cbMidiOutCaps);
+        public static extern uint midiOutGetDevCaps(UIntPtr uDeviceID, ref MIDIOUTCAPS lpMidiOutCaps, uint cbMidiOutCaps);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiOutGetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText);
+        public static extern uint midiOutGetErrorText(uint mmrError, StringBuilder pszText, uint cchText);
 
         [DllImport("winmm.dll")]
         public static extern uint midiOutGetNumDevs();
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiOutOpen(out IntPtr lphmo, uint uDeviceID, MidiWinApi.MidiMessageCallback dwCallback, IntPtr dwInstance, uint dwFlags);
+        public static extern uint midiOutOpen(out IntPtr lphmo, uint uDeviceID, MidiWinApi.MidiMessageCallback dwCallback, IntPtr dwInstance, uint dwFlags);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiOutClose(IntPtr hmo);
+        public static extern uint midiOutClose(IntPtr hmo);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiOutShortMsg(IntPtr hMidiOut, uint dwMsg);
+        public static extern uint midiOutShortMsg(IntPtr hMidiOut, uint dwMsg);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiOutGetVolume(IntPtr hmo, ref uint lpdwVolume);
+        public static extern uint midiOutGetVolume(IntPtr hmo, ref uint lpdwVolume);
 
         [DllImport("winmm.dll")]
-        public static extern MMRESULT midiOutSetVolume(IntPtr hmo, uint dwVolume);
+        public static extern uint midiOutSetVolume(IntPtr hmo, uint dwVolume);
 
         #endregion
     }

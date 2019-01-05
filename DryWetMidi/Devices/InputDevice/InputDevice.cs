@@ -289,7 +289,7 @@ namespace Melanchall.DryWetMidi.Devices
             _midiTimeCodeComponents.Clear();
         }
 
-        private static MMRESULT GetErrorText(MMRESULT mmrError, StringBuilder pszText, uint cchText)
+        private static uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
         {
             return MidiInWinApi.midiInGetErrorText(mmrError, pszText, cchText);
         }
