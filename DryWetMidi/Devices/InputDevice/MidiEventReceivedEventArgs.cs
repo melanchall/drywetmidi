@@ -1,5 +1,4 @@
-﻿using System;
-using Melanchall.DryWetMidi.Smf;
+﻿using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -7,10 +6,9 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
-        internal MidiEventReceivedEventArgs(MidiEvent midiEvent, DateTime time)
+        internal MidiEventReceivedEventArgs(MidiEvent midiEvent)
         {
             Event = midiEvent;
-            Time = time;
         }
 
         #endregion
@@ -18,8 +16,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Properties
 
         public MidiEvent Event { get; }
-
-        public DateTime Time { get; }
 
         #endregion
     }
