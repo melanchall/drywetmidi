@@ -127,6 +127,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void TurnAllNotesOff()
         {
+            EnsureDeviceIsNotDisposed();
+            EnsureHandleIsCreated();
+
             var allNotesOffEvents = from channel in FourBitNumber.Values
                                     from noteNumber in SevenBitNumber.Values
                                     select new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = channel };
@@ -232,7 +235,6 @@ namespace Melanchall.DryWetMidi.Devices
             var headerPointer = PrepareSysExBuffer(data);
             _sysExHeadersPointers.Add(headerPointer);
 
-            // TODO: catch exception
             ProcessMmResult(MidiOutWinApi.midiOutLongMsg(_handle, headerPointer, MidiWinApi.MidiHeaderSize));
         }
 
