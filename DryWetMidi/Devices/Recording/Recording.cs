@@ -24,6 +24,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         public Recording(TempoMap tempoMap, InputDevice inputDevice)
         {
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
 
             _tempoMap = tempoMap;

@@ -267,7 +267,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 var exception = new MidiDeviceException($"Failed to parse short message.", ex);
                 exception.Data.Add("Message", message);
-                OnError(ex);
+                OnError(exception);
             }
         }
 
