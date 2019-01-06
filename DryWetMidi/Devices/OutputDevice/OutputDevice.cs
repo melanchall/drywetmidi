@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Devices
             get
             {
                 var volume = default(uint);
-                MidiWinApi.ProcessMmResult(() => MidiOutWinApi.midiOutGetVolume(_handle, ref volume), GetErrorText);
+                ProcessMmResult(MidiOutWinApi.midiOutGetVolume(_handle, ref volume));
 
                 var leftVolume = volume.GetTail();
                 var rightVolume = volume.GetHead();
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Devices
                     throw new ArgumentException("Device doesn't support separate volume control for each channel.", nameof(value));
 
                 var volume = DataTypesUtilities.Combine(rightVolume, leftVolume);
-                MidiWinApi.ProcessMmResult(() => MidiOutWinApi.midiOutSetVolume(_handle, volume), GetErrorText);
+                ProcessMmResult(MidiOutWinApi.midiOutSetVolume(_handle, volume));
             }
         }
 
@@ -169,6 +169,11 @@ namespace Melanchall.DryWetMidi.Devices
             return new OutputDevice((uint)id);
         }
 
+        protected override uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
+        {
+            return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
+        }
+
         internal void PrepareForEventsSending()
         {
             EnsureHandleIsCreated();
@@ -180,7 +185,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _callback = OnMessage;
-            MidiWinApi.ProcessMmResult(() => MidiOutWinApi.midiOutOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction), GetErrorText);
+            ProcessMmResult(MidiOutWinApi.midiOutOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
         }
 
         private void DestroyHandle()
@@ -194,7 +199,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void SetDeviceInformation()
         {
             var caps = default(MidiOutWinApi.MIDIOUTCAPS);
-            MidiWinApi.ProcessMmResult(() => MidiOutWinApi.midiOutGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)), GetErrorText);
+            ProcessMmResult(MidiOutWinApi.midiOutGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)));
 
             SetBasicDeviceInformation(caps.wMid, caps.wPid, caps.vDriverVersion, caps.szPname);
 
@@ -215,7 +220,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void SendShortEvent(MidiEvent midiEvent)
         {
             var message = PackShortEvent(midiEvent);
-            MidiWinApi.ProcessMmResult(() => MidiOutWinApi.midiOutShortMsg(_handle, (uint)message), GetErrorText);
+            ProcessMmResult(MidiOutWinApi.midiOutShortMsg(_handle, (uint)message));
         }
 
         private void SendSysExEvent(SysExEvent sysExEvent)
@@ -228,7 +233,7 @@ namespace Melanchall.DryWetMidi.Devices
             _sysExHeadersPointers.Add(headerPointer);
 
             // TODO: catch exception
-            MidiWinApi.ProcessMmResult(() => MidiOutWinApi.midiOutLongMsg(_handle, headerPointer, MidiWinApi.MidiHeaderSize), GetErrorText);
+            ProcessMmResult(MidiOutWinApi.midiOutLongMsg(_handle, headerPointer, MidiWinApi.MidiHeaderSize));
         }
 
         private int PackShortEvent(MidiEvent midiEvent)
@@ -254,12 +259,23 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnSysExEventSent(IntPtr sysExHeaderPointer)
         {
-            var data = MidiWinApi.UnpackSysExBytes(sysExHeaderPointer);
-            var midiEvent = new NormalSysExEvent(data);
-            OnEventSent(midiEvent);
+            byte[] data = null;
 
-            UnprepareSysExBuffer(sysExHeaderPointer);
-            _sysExHeadersPointers.Remove(sysExHeaderPointer);
+            try
+            {
+                data = MidiWinApi.UnpackSysExBytes(sysExHeaderPointer);
+                var midiEvent = new NormalSysExEvent(data);
+                OnEventSent(midiEvent);
+
+                UnprepareSysExBuffer(sysExHeaderPointer);
+                _sysExHeadersPointers.Remove(sysExHeaderPointer);
+            }
+            catch (Exception ex)
+            {
+                var exception = new MidiDeviceException("Failed to parse sent system exclusive event.", ex);
+                exception.Data.Add("Data", data);
+                OnError(exception);
+            }
         }
 
         private IntPtr PrepareSysExBuffer(byte[] data)
@@ -279,7 +295,7 @@ namespace Melanchall.DryWetMidi.Devices
             var headerPointer = Marshal.AllocHGlobal(MidiWinApi.MidiHeaderSize);
             Marshal.StructureToPtr(header, headerPointer, false);
 
-            MidiWinApi.ProcessMmResult(() => MidiOutWinApi.midiOutPrepareHeader(_handle, headerPointer, MidiWinApi.MidiHeaderSize), GetErrorText);
+            ProcessMmResult(MidiOutWinApi.midiOutPrepareHeader(_handle, headerPointer, MidiWinApi.MidiHeaderSize));
 
             return headerPointer;
         }
@@ -299,11 +315,6 @@ namespace Melanchall.DryWetMidi.Devices
         private void OnEventSent(MidiEvent midiEvent)
         {
             EventSent?.Invoke(this, new MidiEventSentEventArgs(midiEvent));
-        }
-
-        private static uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
-        {
-            return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
         }
 
         #endregion

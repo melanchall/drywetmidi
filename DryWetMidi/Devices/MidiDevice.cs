@@ -6,6 +6,12 @@ namespace Melanchall.DryWetMidi.Devices
 {
     public abstract class MidiDevice : IDisposable
     {
+        #region Events
+
+        public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+
+        #endregion
+
         #region Fields
 
         protected readonly uint _id;
@@ -46,10 +52,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        protected void SetBasicDeviceInformation(ushort manufacturerIdentifier,
-                                          ushort productIdentifier,
-                                          uint driverVersion,
-                                          string name)
+        protected void SetBasicDeviceInformation(ushort manufacturerIdentifier, ushort productIdentifier, uint driverVersion, string name)
         {
             Name = name;
             DriverManufacturer = Enum.IsDefined(typeof(Manufacturer), manufacturerIdentifier)
@@ -67,6 +70,27 @@ namespace Melanchall.DryWetMidi.Devices
             if (_disposed)
                 throw new ObjectDisposedException("Device is disposed.");
         }
+
+        protected void ProcessMmResult(uint mmResult)
+        {
+            if (mmResult == MidiWinApi.MMSYSERR_NOERROR)
+                return;
+
+            var stringBuilder = new StringBuilder((int)MidiWinApi.MaxErrorLength);
+            var getErrorTextResult = GetErrorText(mmResult, stringBuilder, MidiWinApi.MaxErrorLength + 1);
+            if (getErrorTextResult != MidiWinApi.MMSYSERR_NOERROR)
+                throw new MidiDeviceException("Error occured during operation on device.");
+
+            var errorText = stringBuilder.ToString();
+            throw new MidiDeviceException(errorText);
+        }
+
+        protected void OnError(Exception exception)
+        {
+            ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
+        }
+
+        protected abstract uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText);
 
         protected static void WriteBytesToStream(MemoryStream memoryStream, params byte[] bytes)
         {

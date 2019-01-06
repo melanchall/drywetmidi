@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureHandleIsCreated();
 
             PrepareSysExBuffer();
-            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInStart(_handle), GetErrorText);
+            ProcessMmResult(MidiInWinApi.midiInStart(_handle));
             _startTime = DateTime.UtcNow;
         }
 
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInStop(_handle), GetErrorText);
+            ProcessMmResult(MidiInWinApi.midiInStop(_handle));
         }
 
         public void Reset()
@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInReset(_handle), GetErrorText);
+            ProcessMmResult(MidiInWinApi.midiInReset(_handle));
             _startTime = DateTime.UtcNow;
         }
 
@@ -139,6 +139,11 @@ namespace Melanchall.DryWetMidi.Devices
             return new InputDevice((uint)id);
         }
 
+        protected override uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
+        {
+            return MidiInWinApi.midiInGetErrorText(mmrError, pszText, cchText);
+        }
+
         private void OnEventReceived(MidiEvent midiEvent)
         {
             EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent));
@@ -171,8 +176,8 @@ namespace Melanchall.DryWetMidi.Devices
             _sysExHeaderPointer = Marshal.AllocHGlobal(MidiWinApi.MidiHeaderSize);
             Marshal.StructureToPtr(header, _sysExHeaderPointer, false);
 
-            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInPrepareHeader(_handle, _sysExHeaderPointer, MidiWinApi.MidiHeaderSize), GetErrorText);
-            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInAddBuffer(_handle, _sysExHeaderPointer, MidiWinApi.MidiHeaderSize), GetErrorText);
+            ProcessMmResult(MidiInWinApi.midiInPrepareHeader(_handle, _sysExHeaderPointer, MidiWinApi.MidiHeaderSize));
+            ProcessMmResult(MidiInWinApi.midiInAddBuffer(_handle, _sysExHeaderPointer, MidiWinApi.MidiHeaderSize));
         }
 
         private void UnprepareSysExBuffer(IntPtr headerPointer)
@@ -193,7 +198,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _callback = OnMessage;
-            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction), GetErrorText);
+            ProcessMmResult(MidiInWinApi.midiInOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
         }
 
         private void DestroyHandle()
@@ -207,7 +212,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void SetDeviceInformation()
         {
             var caps = default(MidiInWinApi.MIDIINCAPS);
-            MidiWinApi.ProcessMmResult(() => MidiInWinApi.midiInGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)), GetErrorText);
+            ProcessMmResult(MidiInWinApi.midiInGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)));
 
             SetBasicDeviceInformation(caps.wMid, caps.wPid, caps.vDriverVersion, caps.szPname);
         }
@@ -239,32 +244,52 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnShortMessage(int message)
         {
-            byte statusByte, firstDataByte, secondDataByte;
-            MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
-
-            WriteBytesToStream(_channelMessageMemoryStream, firstDataByte, secondDataByte);
-
-            var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
-            var midiEvent = eventReader.Read(_channelEventReader, ReadingSettings, statusByte);
-
-            OnEventReceived(midiEvent);
-
-            if (RaiseMidiTimeCodeReceived)
+            try
             {
-                var midiTimeCodeEvent = midiEvent as MidiTimeCodeEvent;
-                if (midiTimeCodeEvent != null)
-                    TryRaiseMidiTimeCodeReceived(midiTimeCodeEvent);
+                byte statusByte, firstDataByte, secondDataByte;
+                MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
+
+                WriteBytesToStream(_channelMessageMemoryStream, firstDataByte, secondDataByte);
+
+                var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
+                var midiEvent = eventReader.Read(_channelEventReader, ReadingSettings, statusByte);
+
+                OnEventReceived(midiEvent);
+
+                if (RaiseMidiTimeCodeReceived)
+                {
+                    var midiTimeCodeEvent = midiEvent as MidiTimeCodeEvent;
+                    if (midiTimeCodeEvent != null)
+                        TryRaiseMidiTimeCodeReceived(midiTimeCodeEvent);
+                }
+            }
+            catch (Exception ex)
+            {
+                var exception = new MidiDeviceException($"Failed to parse short message.", ex);
+                exception.Data.Add("Message", message);
+                OnError(ex);
             }
         }
 
         private void OnSysExMessage(IntPtr sysExHeaderPointer)
         {
-            var data = MidiWinApi.UnpackSysExBytes(sysExHeaderPointer);
-            var midiEvent = new NormalSysExEvent(data);
-            OnEventReceived(midiEvent);
+            byte[] data = null;
 
-            UnprepareSysExBuffer(sysExHeaderPointer);
-            PrepareSysExBuffer();
+            try
+            {
+                data = MidiWinApi.UnpackSysExBytes(sysExHeaderPointer);
+                var midiEvent = new NormalSysExEvent(data);
+                OnEventReceived(midiEvent);
+
+                UnprepareSysExBuffer(sysExHeaderPointer);
+                PrepareSysExBuffer();
+            }
+            catch (Exception ex)
+            {
+                var exception = new MidiDeviceException($"Failed to parse system exclusive message.", ex);
+                exception.Data.Add("Data", data);
+                OnError(exception);
+            }
         }
 
         private void TryRaiseMidiTimeCodeReceived(MidiTimeCodeEvent midiTimeCodeEvent)
@@ -292,11 +317,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             OnMidiTimeCodeReceived(timeCodeType, hours, minutes, seconds, frames);
             _midiTimeCodeComponents.Clear();
-        }
-
-        private static uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
-        {
-            return MidiInWinApi.midiInGetErrorText(mmrError, pszText, cchText);
         }
 
         #endregion

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -26,8 +25,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         public delegate void MidiMessageCallback(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
 
-        public delegate uint ErrorTextGetter(uint mmrError, StringBuilder pszText, uint cchText);
-
         #endregion
 
         #region Constants
@@ -48,21 +45,6 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Methods
-
-        public static void ProcessMmResult(Func<uint> method, ErrorTextGetter errorTextGetter)
-        {
-            var mmResult = method();
-            if (mmResult == MMSYSERR_NOERROR)
-                return;
-
-            var stringBuilder = new StringBuilder((int)MaxErrorLength);
-            var getErrorTextResult = errorTextGetter(mmResult, stringBuilder, MaxErrorLength + 1);
-            if (getErrorTextResult != MMSYSERR_NOERROR)
-                throw new MidiDeviceException("Error occured during operation on device.");
-
-            var errorText = stringBuilder.ToString();
-            throw new MidiDeviceException(errorText);
-        }
 
         public static byte[] UnpackSysExBytes(IntPtr headerPointer)
         {
