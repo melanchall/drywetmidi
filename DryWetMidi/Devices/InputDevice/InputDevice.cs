@@ -59,6 +59,15 @@ namespace Melanchall.DryWetMidi.Devices
 
         #endregion
 
+        #region Finalizer
+
+        ~InputDevice()
+        {
+            Dispose(false);
+        }
+
+        #endregion
+
         #region Properties
 
         public bool RaiseMidiTimeCodeReceived { get; set; } = true;
@@ -130,9 +139,9 @@ namespace Melanchall.DryWetMidi.Devices
             return new InputDevice((uint)id);
         }
 
-        private void OnEventReceived(MidiEvent midiEvent, int milliseconds)
+        private void OnEventReceived(MidiEvent midiEvent)
         {
-            EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, _startTime.AddMilliseconds(milliseconds)));
+            EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent));
         }
 
         private void OnMidiTimeCodeReceived(MidiTimeCodeType timeCodeType, int hours, int minutes, int seconds, int frames)
@@ -154,7 +163,6 @@ namespace Melanchall.DryWetMidi.Devices
         {
             var header = new MidiWinApi.MIDIHDR
             {
-                // TODO: investigate reusing allocated memory
                 lpData = Marshal.AllocHGlobal(SysExBufferLength),
                 dwBufferLength = SysExBufferLength,
                 dwBytesRecorded = SysExBufferLength
@@ -174,15 +182,9 @@ namespace Melanchall.DryWetMidi.Devices
 
             MidiInWinApi.midiInUnprepareHeader(_handle, headerPointer, MidiWinApi.MidiHeaderSize);
 
-            try
-            {
-                var header = (MidiWinApi.MIDIHDR)Marshal.PtrToStructure(headerPointer, typeof(MidiWinApi.MIDIHDR));
-                Marshal.FreeHGlobal(header.lpData);
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(headerPointer);
-            }
+            var header = (MidiWinApi.MIDIHDR)Marshal.PtrToStructure(headerPointer, typeof(MidiWinApi.MIDIHDR));
+            Marshal.FreeHGlobal(header.lpData);
+            Marshal.FreeHGlobal(headerPointer);
         }
 
         private void EnsureHandleIsCreated()
@@ -196,6 +198,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void DestroyHandle()
         {
+            if (_handle == IntPtr.Zero)
+                return;
+
             MidiInWinApi.midiInClose(_handle);
         }
 
@@ -213,11 +218,11 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 case MidiMessage.MIM_DATA:
                 case MidiMessage.MIM_MOREDATA:
-                    OnShortMessage(dwParam1.ToInt32(), dwParam2.ToInt32());
+                    OnShortMessage(dwParam1.ToInt32());
                     break;
 
                 case MidiMessage.MIM_LONGDATA:
-                    OnSysExMessage(dwParam1, dwParam2.ToInt32());
+                    OnSysExMessage(dwParam1);
                     break;
 
                 case MidiMessage.MIM_ERROR:
@@ -232,7 +237,7 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        private void OnShortMessage(int message, int milliseconds)
+        private void OnShortMessage(int message)
         {
             byte statusByte, firstDataByte, secondDataByte;
             MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
@@ -242,7 +247,7 @@ namespace Melanchall.DryWetMidi.Devices
             var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
             var midiEvent = eventReader.Read(_channelEventReader, ReadingSettings, statusByte);
 
-            OnEventReceived(midiEvent, milliseconds);
+            OnEventReceived(midiEvent);
 
             if (RaiseMidiTimeCodeReceived)
             {
@@ -252,11 +257,11 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        private void OnSysExMessage(IntPtr sysExHeaderPointer, int milliseconds)
+        private void OnSysExMessage(IntPtr sysExHeaderPointer)
         {
             var data = MidiWinApi.UnpackSysExBytes(sysExHeaderPointer);
             var midiEvent = new NormalSysExEvent(data);
-            OnEventReceived(midiEvent, milliseconds);
+            OnEventReceived(midiEvent);
 
             UnprepareSysExBuffer(sysExHeaderPointer);
             PrepareSysExBuffer();
@@ -305,9 +310,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                if (_handle == IntPtr.Zero)
-                    return;
-
                 _channelMessageMemoryStream.Dispose();
                 _channelEventReader.Dispose();
             }

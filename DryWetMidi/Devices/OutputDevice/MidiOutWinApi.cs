@@ -60,6 +60,15 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport("winmm.dll")]
         public static extern uint midiOutSetVolume(IntPtr hmo, uint dwVolume);
 
+        [DllImport("winmm.dll")]
+        public static extern uint midiOutPrepareHeader(IntPtr hmo, IntPtr lpMidiOutHdr, int cbMidiOutHdr);
+
+        [DllImport("winmm.dll")]
+        public static extern uint midiOutUnprepareHeader(IntPtr hmo, IntPtr lpMidiOutHdr, int cbMidiOutHdr);
+
+        [DllImport("winmm.dll")]
+        public static extern uint midiOutLongMsg(IntPtr hmo, IntPtr lpMidiOutHdr, int cbMidiOutHdr);
+
         #endregion
     }
 }
