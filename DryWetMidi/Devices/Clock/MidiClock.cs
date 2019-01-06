@@ -93,12 +93,12 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             var timeCaps = default(MidiTimerWinApi.TIMECAPS);
-            MidiWinApi.ProcessMmResult(() => MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)), GetErrorText);
+            ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
 
             _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
             _tickCallback = OnTick;
 
-            MidiWinApi.ProcessMmResult(() => MidiTimerWinApi.timeBeginPeriod(_resolution), GetErrorText);
+            ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
             _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
             if (_timerId == 0)
             {
@@ -142,17 +142,14 @@ namespace Melanchall.DryWetMidi.Devices
             Tick?.Invoke(this, new TickEventArgs(CurrentTime));
         }
 
-        private static uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
+        private static void ProcessMmResult(uint mmResult)
         {
-            switch (mmrError)
+            switch (mmResult)
             {
                 case MidiWinApi.MMSYSERR_ERROR:
                 case MidiWinApi.TIMERR_NOCANDO:
-                    pszText.Append("Error occurred.");
-                    break;
+                    throw new MidiDeviceException("Error occurred.");
             }
-
-            return MidiWinApi.MMSYSERR_NOERROR;
         }
 
         #endregion
