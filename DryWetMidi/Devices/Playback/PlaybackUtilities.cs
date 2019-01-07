@@ -46,24 +46,6 @@ namespace Melanchall.DryWetMidi.Devices
             return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputDevice);
         }
 
-        public static Playback GetPlayback(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, bool ignoreStartTime)
-        {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
-
-            return GetPlayback(notes, events => events.AddNotes(notes), tempoMap, outputDevice, ignoreStartTime);
-        }
-
-        public static Playback GetPlayback(this IEnumerable<Chord> chords, TempoMap tempoMap, OutputDevice outputDevice, bool ignoreStartTime)
-        {
-            ThrowIfArgument.IsNull(nameof(chords), chords);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
-
-            return GetPlayback(chords, events => events.AddChords(chords), tempoMap, outputDevice, ignoreStartTime);
-        }
-
         public static void Play(this TrackChunk trackChunk, TempoMap tempoMap, OutputDevice outputDevice)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -103,39 +85,6 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
             pattern.ToTrackChunk(tempoMap, channel).Play(tempoMap, outputDevice);
-        }
-
-        public static void Play(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, bool ignoreStartTime)
-        {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
-
-            notes.GetPlayback(tempoMap, outputDevice, ignoreStartTime).Start();
-        }
-
-        public static void Play(this IEnumerable<Chord> chords, TempoMap tempoMap, OutputDevice outputDevice, bool ignoreStartTime)
-        {
-            ThrowIfArgument.IsNull(nameof(chords), chords);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
-
-            chords.GetPlayback(tempoMap, outputDevice, ignoreStartTime).Start();
-        }
-
-        private static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects,
-                                                     Action<EventsCollection> objectsToEventsCollectionAdder,
-                                                     TempoMap tempoMap,
-                                                     OutputDevice outputDevice,
-                                                     bool ignoreStartTime)
-            where TObject : ILengthedObject
-        {
-            var eventsCollection = new EventsCollection();
-            objectsToEventsCollectionAdder(eventsCollection);
-            if (ignoreStartTime && eventsCollection.Any())
-                eventsCollection.First().DeltaTime = 0;
-
-            return new Playback(eventsCollection, tempoMap, outputDevice);
         }
 
         #endregion
