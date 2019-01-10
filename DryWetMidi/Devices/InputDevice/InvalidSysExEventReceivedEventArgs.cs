@@ -1,6 +1,11 @@
-﻿namespace Melanchall.DryWetMidi.Devices
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Devices
 {
-    public sealed class InvalidSysExEventReceivedEventArgs
+    /// <summary>
+    /// Provides data for the <see cref="InputDevice.InvalidSysExEventReceived"/> event.
+    /// </summary>
+    public sealed class InvalidSysExEventReceivedEventArgs : EventArgs
     {
         #region Constructor
 
@@ -13,6 +18,9 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets the data of invalid system exclusive event received by <see cref="InputDevice"/>.
+        /// </summary>
         public byte[] Data { get; }
 
         #endregion

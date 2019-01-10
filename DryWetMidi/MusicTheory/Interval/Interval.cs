@@ -216,7 +216,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="interval">When this method returns, contains the <see cref="Interval"/>
         /// equivalent of the musical interval contained in <paramref name="input"/>, if the conversion succeeded,
         /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
-        /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
+        /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out Interval interval)

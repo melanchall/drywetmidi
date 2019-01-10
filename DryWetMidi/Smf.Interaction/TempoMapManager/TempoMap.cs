@@ -143,6 +143,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return tempoMap;
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="TempoMap"/> with the specified time signature using
+        /// default time division (96 ticks per quarter note).
+        /// </summary>
+        /// <param name="timeSignature">Time signature of the tempo map.</param>
+        /// <returns><see cref="TempoMap"/> with the specified time signature.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSignature"/> is null.</exception>
         public static TempoMap Create(TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
@@ -153,6 +160,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return tempoMap;
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="TempoMap"/> with the specified time division using
+        /// default tempo (120 BPM) and default time signature (4/4).
+        /// </summary>
+        /// <param name="timeDivision">Time division of the tempo map.</param>
+        /// <returns><see cref="TempoMap"/> with the specified time division.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null.</exception>
         public static TempoMap Create(TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -160,6 +174,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new TempoMap(timeDivision);
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="TempoMap"/> with the specified time division and
+        /// tempo using default time signature (4/4).
+        /// </summary>
+        /// <param name="timeDivision">Time division of the tempo map.</param>
+        /// <param name="tempo">Tempo of the tempo map.</param>
+        /// <returns><see cref="TempoMap"/> with the specified time division and tempo.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
+        /// <paramref name="tempo"/> is null.</exception>
         public static TempoMap Create(TimeDivision timeDivision, Tempo tempo)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -171,6 +194,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return tempoMap;
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="TempoMap"/> with the specified time division and
+        /// time signature using default tempo (120 BPM).
+        /// </summary>
+        /// <param name="timeDivision">Time division of the tempo map.</param>
+        /// <param name="timeSignature">Time signature of the tempo map.</param>
+        /// <returns><see cref="TempoMap"/> with the specified time division and time signature.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
+        /// <paramref name="timeSignature"/> is null.</exception>
         public static TempoMap Create(TimeDivision timeDivision, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -182,6 +214,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return tempoMap;
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="TempoMap"/> with the specified time division,
+        /// tempo and time signature.
+        /// </summary>
+        /// <param name="timeDivision">Time division of the tempo map.</param>
+        /// <param name="tempo">Tempo of the tempo map.</param>
+        /// <param name="timeSignature">Time signature of the tempo map.</param>
+        /// <returns><see cref="TempoMap"/> with the specified time division, tempoand time signature.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
+        /// <paramref name="tempo"/> is null. -or- <paramref name="timeSignature"/> is null.</exception>
         public static TempoMap Create(TimeDivision timeDivision, Tempo tempo, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);

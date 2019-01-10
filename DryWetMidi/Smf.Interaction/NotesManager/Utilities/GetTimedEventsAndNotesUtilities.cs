@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// If there is no corresponding Note Off event for Note On (or if there is no correspinding
         /// Note On event for Note Off) the event will be returned as is.
         /// </remarks>
-        /// <param name="timedEvents">Collection of <see cref="TimedEvent"/> to make notes.</param>
+        /// <param name="timedEvents">Collection of <see cref="TimedEvent"/> to iterate over.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timedEvents"/> is null.</exception>
@@ -148,6 +148,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             }
         }
 
+        /// <summary>
+        /// Iterates through the events contained in the specified <see cref="TrackChunk"/> returning
+        /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
+        /// for all other events.
+        /// </summary>
+        /// <remarks>
+        /// If there is no corresponding Note Off event for Note On (or if there is no correspinding
+        /// Note On event for Note Off) the event will be returned as is.
+        /// </remarks>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to iterate over.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
+        /// or <see cref="Note"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -155,6 +168,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.GetTimedEvents().GetTimedEventsAndNotes();
         }
 
+        /// <summary>
+        /// Iterates through the events contained in the specified collection of <see cref="TrackChunk"/> returning
+        /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
+        /// for all other events.
+        /// </summary>
+        /// <remarks>
+        /// If there is no corresponding Note Off event for Note On (or if there is no correspinding
+        /// Note On event for Note Off) the event will be returned as is.
+        /// </remarks>
+        /// <param name="trackChunks"><see cref="TrackChunk"/> containing events to iterate over.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
+        /// or <see cref="Note"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -162,6 +188,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunks.GetTimedEvents().GetTimedEventsAndNotes();
         }
 
+        /// <summary>
+        /// Iterates through the events contained in the specified <see cref="MidiFile"/> returning
+        /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
+        /// for all other events.
+        /// </summary>
+        /// <remarks>
+        /// If there is no corresponding Note Off event for Note On (or if there is no correspinding
+        /// Note On event for Note Off) the event will be returned as is.
+        /// </remarks>
+        /// <param name="midiFile"><see cref="MidiFile"/> containing events to iterate over.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
+        /// or <see cref="Note"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

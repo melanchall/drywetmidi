@@ -9,6 +9,9 @@ using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Represents an output MIDI device.
+    /// </summary>
     public sealed class OutputDevice : MidiDevice
     {
         #region Constants
@@ -22,6 +25,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Events
 
+        /// <summary>
+        /// Occurs when a MIDI event is sent.
+        /// </summary>
         public event EventHandler<MidiEventSentEventArgs> EventSent;
 
         #endregion
@@ -51,6 +57,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Finalizer
 
+        /// <summary>
+        /// Finalizes the current instance of the <see cref="OutputDevice"/>.
+        /// </summary>
         ~OutputDevice()
         {
             Dispose(false);
@@ -60,24 +69,59 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets the type of the current <see cref="OutputDevice"/>.
+        /// </summary>
         public OutputDeviceType DeviceType { get; private set; }
 
+        /// <summary>
+        /// Gets the number of voices supported by an internal synthesizer device. If the device is a port,
+        /// this member is not meaningful and will be 0.
+        /// </summary>
         public int VoicesNumber { get; private set; }
 
+        /// <summary>
+        /// Gets the maximum number of simultaneous notes that can be played by an internal synthesizer device.
+        /// If the device is a port, this member is not meaningful and will be 0.
+        /// </summary>
         public int NotesNumber { get; private set; }
 
+        /// <summary>
+        /// Gets the channels that an internal synthesizer device responds to.
+        /// </summary>
         public IEnumerable<FourBitNumber> Channels { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether device supports patch caching.
+        /// </summary>
         public bool SupportsPatchCaching { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether device supports separate left and right volume control or not.
+        /// </summary>
         public bool SupportsLeftRightVolumeControl { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether device supports volume control.
+        /// </summary>
         public bool SupportsVolumeControl { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the volume of the output MIDI device.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>
+        /// <exception cref="InvalidOperationException">Device doesn't support volume control.</exception>
+        /// <exception cref="ArgumentException">Device doesn't support separate volume control for each channel.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public Volume Volume
         {
             get
             {
+                EnsureDeviceIsNotDisposed();
+
+                if (!SupportsVolumeControl)
+                    throw new InvalidOperationException("Device doesn't support volume control.");
+
                 var volume = default(uint);
                 ProcessMmResult(MidiOutWinApi.midiOutGetVolume(_handle, ref volume));
 
@@ -90,6 +134,11 @@ namespace Melanchall.DryWetMidi.Devices
             }
             set
             {
+                EnsureDeviceIsNotDisposed();
+
+                if (!SupportsVolumeControl)
+                    throw new InvalidOperationException("Device doesn't support volume control.");
+
                 var leftVolume = value.LeftVolume;
                 var rightVolume = value.RightVolume;
 
@@ -105,6 +154,13 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
+        /// <summary>
+        /// Send a MIDI event to the current <see cref="OutputDevice"/>.
+        /// </summary>
+        /// <param name="midiEvent">MIDI event to send.</param>
+        /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void SendEvent(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -125,6 +181,12 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Turns off all notes that were turned on by sending Note On events, and which haven't
+        /// yet been turned off by respective Note Off events.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void TurnAllNotesOff()
         {
             EnsureDeviceIsNotDisposed();
@@ -140,38 +202,66 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        public static uint GetDevicesCount()
+        /// <summary>
+        /// Retrieves the number of output MIDI devices presented in the system.
+        /// </summary>
+        /// <returns>Number of output MIDI devices presented in the system.</returns>
+        public static int GetDevicesCount()
         {
-            return MidiOutWinApi.midiOutGetNumDevs();
+            return (int)MidiOutWinApi.midiOutGetNumDevs();
         }
 
+        /// <summary>
+        /// Retrieves all output MIDI devices presented in the system.
+        /// </summary>
+        /// <returns>All output MIDI devices presented in the system.</returns>
         public static IEnumerable<OutputDevice> GetAll()
         {
             var devicesCount = GetDevicesCount();
-            for (var deviceId = 0U; deviceId < devicesCount; deviceId++)
+            for (var deviceId = 0; deviceId < devicesCount; deviceId++)
             {
-                yield return new OutputDevice(deviceId);
+                yield return new OutputDevice((uint)deviceId);
             }
         }
 
+        /// <summary>
+        /// Retrieves a first output MIDI device with the specified name.
+        /// </summary>
+        /// <param name="name">The name of an output MIDI device to retrieve.</param>
+        /// <returns>Output MIDI device with the specified name.</returns>
+        /// <exception cref="ArgumentException"><paramref name="name"/> is null or contains white-spaces only. -or-
+        /// <paramref name="name"/> specifies an output MIDI device which is not presented in the system.</exception>
         public static OutputDevice GetByName(string name)
         {
-            ThrowIfArgument.IsNullOrEmptyString(nameof(name), name, "Device name");
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 
             var device = GetAll().FirstOrDefault(d => d.Name == name);
             if (device == null)
-                throw new MidiDeviceException($"There is no output device named '{name}'.");
+                throw new ArgumentException($"There is no output MIDI device '{name}'.", nameof(name));
 
             return device;
         }
 
+        /// <summary>
+        /// Retrieves output MIDI device with the specified ID.
+        /// </summary>
+        /// <param name="id">Device ID which is number from 0 to <see cref="GetDevicesCount"/> minus 1.</param>
+        /// <returns>Output MIDI device with the specified ID.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="id"/> is out of valid range.</exception>
         public static OutputDevice GetById(int id)
         {
-            ThrowIfArgument.IsNegative(nameof(id), id, "Device ID is negative.");
+            ThrowIfArgument.IsOutOfRange(nameof(id), id, 0, GetDevicesCount() - 1, "Device ID is out of range.");
 
             return new OutputDevice((uint)id);
         }
 
+        /// <summary>
+        /// Gets error description for the specified MMRESULT which is return value of winmm function.
+        /// </summary>
+        /// <param name="mmrError">MMRESULT which is return value of winmm function.</param>
+        /// <param name="pszText"><see cref="StringBuilder"/> to write error description to.</param>
+        /// <param name="cchText">Size of <paramref name="pszText"/> buffer.</param>
+        /// <returns>Return value of winmm function which gets error description.</returns>
         protected override uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
         {
             return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
@@ -323,6 +413,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Overrides
 
+        /// <summary>
+        /// Releases the unmanaged resources used by the MIDI device class and optionally releases
+        /// the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to
+        /// release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             if (_disposed)

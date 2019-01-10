@@ -104,6 +104,17 @@ namespace Melanchall.DryWetMidi.Smf
         /// </remarks>
         public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy { get; set; }
 
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on invalid value of a system common event's
+        /// parameter value. For example, 255 is the invalid value for the <see cref="SongSelectEvent.Number"/>
+        /// and will be processed according with this policy. The default is
+        /// <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/> is used an instance of the
+        /// <see cref="InvalidSystemCommonEventParameterValueException"/> will be thrown if event's parameter value
+        /// just read is invalid.
+        /// </remarks>
         public InvalidSystemCommonEventParameterValuePolicy InvalidSystemCommonEventParameterValuePolicy { get; set; }
 
         /// <summary>

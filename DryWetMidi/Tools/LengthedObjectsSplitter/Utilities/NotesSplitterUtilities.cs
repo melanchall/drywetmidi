@@ -218,6 +218,17 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitNotesByGrid(grid, tempoMap);
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="TrackChunk"/> at the specified distance
+        /// from a note's start or end.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="distance">Distance to split notes at.</param>
+        /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -228,6 +239,17 @@ namespace Melanchall.DryWetMidi.Tools
             SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitAtDistance(notes, distance, from, tempoMap));
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified collection of <see cref="TrackChunk"/> at the specified
+        /// distance from a note's start or end.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="distance">Distance to split notes at.</param>
+        /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -241,6 +263,16 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="MidiFile"/> at the specified distance
+        /// from a note's start or end.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
+        /// <param name="distance">Distance to split notes at.</param>
+        /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="distance"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -252,6 +284,21 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitNotesAtDistance(distance, from, tempoMap);
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="TrackChunk"/> by the specified ratio of a
+        /// note's length measuring it from the note's start or end. For example, 0.5 means splitting
+        /// at the center of a note.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="ratio">Ratio of a note's length to split by. Valid values are from 0 to 1.</param>
+        /// <param name="lengthType">The type a note's length should be processed according to.</param>
+        /// <param name="from">Point of a note distance should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
+        /// <paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -267,6 +314,21 @@ namespace Melanchall.DryWetMidi.Tools
             SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitAtDistance(notes, ratio, lengthType, from, tempoMap));
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified collection of <see cref="TrackChunk"/> by the
+        /// specified ratio of a note's length measuring it from the note's start or end.
+        /// For example, 0.5 means splitting at the center of a note.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
+        /// <param name="ratio">Ratio of a note's length to split by. Valid values are from 0 to 1.</param>
+        /// <param name="lengthType">The type a note's length should be processed according to.</param>
+        /// <param name="from">Point of a note distance should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
+        /// <paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -285,6 +347,19 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits notes contained in the specified <see cref="MidiFile"/> by the specified ratio of a
+        /// note's length measuring it from the note's start or end. For example, 0.5 means splitting
+        /// at the center of a note.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
+        /// <param name="ratio">Ratio of a note's length to split by. Valid values are from 0 to 1.</param>
+        /// <param name="lengthType">The type a note's length should be processed according to.</param>
+        /// <param name="from">Point of a note distance should be measured from.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
+        /// <paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

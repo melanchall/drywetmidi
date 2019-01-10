@@ -204,6 +204,18 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits objects at the specified distance from an object's start or end.
+        /// </summary>
+        /// <param name="objects">Objects to split.</param>
+        /// <param name="distance">Distance to split objects at.</param>
+        /// <param name="from">Point of an object <paramref name="distance"/> should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
+        /// order as elements of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public IEnumerable<TObject> SplitAtDistance(IEnumerable<TObject> objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -229,6 +241,22 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits objects by the specified ratio of an object's length measuring it from
+        /// the object's start or end. For example, 0.5 means splitting at the center of an object.
+        /// </summary>
+        /// <param name="objects">Objects to split.</param>
+        /// <param name="ratio">Ratio of an object's length to split by. Valid values are from 0 to 1.</param>
+        /// <param name="lengthType">The type an object's length should be processed according to.</param>
+        /// <param name="from">Point of an object distance should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
+        /// order as elements of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
+        /// <paramref name="from"/> specified an invalid value.</exception>
         public IEnumerable<TObject> SplitAtDistance(IEnumerable<TObject> objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

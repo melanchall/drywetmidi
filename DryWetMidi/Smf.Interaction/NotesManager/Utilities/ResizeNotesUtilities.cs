@@ -22,8 +22,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="tempoMap"></param>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
         /// <paramref name="length"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
-        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> used for <paramref name="distanceCalculationType"/>
-        /// with relative resizing.</exception>
+        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> is used for
+        /// <paramref name="distanceCalculationType"/> which is unsupported.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="distanceCalculationType"/> specified an
         /// invalid value.</exception>
         public static void ResizeNotes(this IEnumerable<Note> notes,
@@ -70,6 +70,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ResizeNotesByRatio(notNullNotes, ratio, distanceCalculationType, tempoMap, startTime);
         }
 
+        /// <summary>
+        /// Resizes group of notes by the specified ratio treating all notes as single object. For example,
+        /// resizing by ratio of 0.5 shrinks group of notes by two times.
+        /// </summary>
+        /// <param name="notes">Notes to resize.</param>
+        /// <param name="ratio">Ratio to resize notes by.</param>
+        /// <param name="distanceCalculationType">Type of distance calculations.</param>
+        /// <param name="tempoMap"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> is used for
+        /// <paramref name="distanceCalculationType"/> which is unsupported.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="distanceCalculationType"/> specified an
+        /// invalid value.</exception>
         public static void ResizeNotes(this IEnumerable<Note> notes,
                                        double ratio,
                                        TimeSpanType distanceCalculationType,

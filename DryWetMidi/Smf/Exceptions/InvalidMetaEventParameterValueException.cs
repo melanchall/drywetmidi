@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// the specified error message and invalid meta event's parameter value.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        /// <param name="value">The value of the meta event's parameter that causes this exception.</param>
+        /// <param name="value">The value of the meta event's parameter that caused this exception.</param>
         public InvalidMetaEventParameterValueException(string message, int value)
             : base(message)
         {
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Smf
         #region Properties
 
         /// <summary>
-        /// Gets the value of the meta event's parameter that causes this exception.
+        /// Gets the value of the meta event's parameter that caused this exception.
         /// </summary>
         public int Value { get; }
 

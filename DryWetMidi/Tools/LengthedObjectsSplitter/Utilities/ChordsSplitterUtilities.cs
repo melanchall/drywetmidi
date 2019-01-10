@@ -254,6 +254,20 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitChordsByGrid(grid, tempoMap, notesTolerance);
         }
 
+        /// <summary>
+        /// Splits chords contained in the specified <see cref="TrackChunk"/> at the specified distance
+        /// from a chord's start or end.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split chords in.</param>
+        /// <param name="distance">Distance to split chords at.</param>
+        /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -265,6 +279,20 @@ namespace Melanchall.DryWetMidi.Tools
             SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, distance, from, tempoMap), notesTolerance);
         }
 
+        /// <summary>
+        /// Splits chords contained in the specified collection of <see cref="TrackChunk"/> at the specified
+        /// distance from a chord's start or end.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split chords in.</param>
+        /// <param name="distance">Distance to split chords at.</param>
+        /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -279,6 +307,19 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits chords contained in the specified <see cref="MidiFile"/> at the specified distance
+        /// from a chord's start or end.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
+        /// <param name="distance">Distance to split chords at.</param>
+        /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="distance"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -291,6 +332,24 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitChordsAtDistance(distance, from, tempoMap, notesTolerance);
         }
 
+        /// <summary>
+        /// Splits chords contained in the specified <see cref="TrackChunk"/> by the specified ratio of a
+        /// chord's length measuring it from the chord's start or end. For example, 0.5 means splitting
+        /// at the center of a chord.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split chords in.</param>
+        /// <param name="ratio">Ratio of a chord's length to split by. Valid values are from 0 to 1.</param>
+        /// <param name="lengthType">The type a chord's length should be processed according to.</param>
+        /// <param name="from">Point of a chord distance should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range. -or-
+        /// <paramref name="notesTolerance"/> is negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
+        /// <paramref name="from"/> specified an invalid value.</exception>
         public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -307,6 +366,24 @@ namespace Melanchall.DryWetMidi.Tools
             SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, ratio, lengthType, from, tempoMap), notesTolerance);
         }
 
+        /// <summary>
+        /// Splits chords contained in the specified collection of <see cref="TrackChunk"/> by the
+        /// specified ratio of a chord's length measuring it from the chord's start or end.
+        /// For example, 0.5 means splitting at the center of a chord.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split chords in.</param>
+        /// <param name="ratio">Ratio of a chord's length to split by. Valid values are from 0 to 1.</param>
+        /// <param name="lengthType">The type a chord's length should be processed according to.</param>
+        /// <param name="from">Point of a chord distance should be measured from.</param>
+        /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range. -or-
+        /// <paramref name="notesTolerance"/> is negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
+        /// <paramref name="from"/> specified an invalid value.</exception>
         public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -326,6 +403,22 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits chords contained in the specified <see cref="MidiFile"/> by the specified ratio of a
+        /// chord's length measuring it from the chord's start or end. For example, 0.5 means splitting
+        /// at the center of a chord.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
+        /// <param name="ratio">Ratio of a chord's length to split by. Valid values are from 0 to 1.</param>
+        /// <param name="lengthType">The type a chord's length should be processed according to.</param>
+        /// <param name="from">Point of a chord distance should be measured from.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range. -or-
+        /// <paramref name="notesTolerance"/> is negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
+        /// <paramref name="from"/> specified an invalid value.</exception>
         public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
