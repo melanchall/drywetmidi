@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents MIDI Time Code (MIDI Quarter Frame) event.
+    /// </summary>
+    /// <remarks>
+    /// A MIDI event that carries the MIDI quarter frame message is timing information in the
+    /// hours:minutes:seconds:frames format (similar to SMPTE) that is used to synchronize MIDI devices.
+    /// </remarks>
     public sealed class MidiTimeCodeEvent : SystemCommonEvent
     {
         #region Constants
@@ -24,10 +32,21 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiTimeCodeEvent"/>.
+        /// </summary>
         public MidiTimeCodeEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiTimeCodeEvent"/> with the specified
+        /// time code component and its value.
+        /// </summary>
+        /// <param name="component">MIDI time code component.</param>
+        /// <param name="componentValue">Value of <paramref name="component"/>.</param>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="component"/> specified an
+        /// invalid value.</exception>
         public MidiTimeCodeEvent(MidiTimeCodeComponent component, FourBitNumber componentValue)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(component), component);
@@ -40,8 +59,14 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the MIDI time code component presented by the current <see cref="MidiTimeCodeEvent"/>.
+        /// </summary>
         public MidiTimeCodeComponent Component { get; set; }
 
+        /// <summary>
+        /// Gets or sets value of the MIDI time code component presented by the current <see cref="MidiTimeCodeEvent"/>.
+        /// </summary>
         public FourBitNumber ComponentValue { get; set; }
 
         #endregion
@@ -92,11 +117,19 @@ namespace Melanchall.DryWetMidi.Smf
             return 1;
         }
 
+        /// <summary>
+        /// Clones event by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
             return new MidiTimeCodeEvent(Component, ComponentValue);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"MIDI Time Code ({Component}, {ComponentValue})";

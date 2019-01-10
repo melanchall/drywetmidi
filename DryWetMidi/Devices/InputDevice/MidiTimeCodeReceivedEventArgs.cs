@@ -1,8 +1,12 @@
-﻿using Melanchall.DryWetMidi.Smf;
+﻿using System;
+using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    public sealed class MidiTimeCodeReceivedEventArgs
+    /// <summary>
+    /// Provides data for the <see cref="InputDevice.MidiTimeCodeReceived"/> event.
+    /// </summary>
+    public sealed class MidiTimeCodeReceivedEventArgs : EventArgs
     {
         #region Constructor
 
@@ -19,14 +23,29 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets format of MIDI time code.
+        /// </summary>
         public MidiTimeCodeType Format { get; }
 
+        /// <summary>
+        /// Gets the hours component of MIDI time code.
+        /// </summary>
         public int Hours { get; }
 
+        /// <summary>
+        /// Gets the minutes component of MIDI time code.
+        /// </summary>
         public int Minutes { get; }
 
+        /// <summary>
+        /// Gets the seconds component of MIDI time code.
+        /// </summary>
         public int Seconds { get; }
 
+        /// <summary>
+        /// Gets the frames component of MIDI time code.
+        /// </summary>
         public int Frames { get; }
 
         #endregion

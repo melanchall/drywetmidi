@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
     /// Provides data for the <see cref="ChordsCollection.CollectionChanged"/> event.
     /// </summary>
-    public sealed class ChordsCollectionChangedEventArgs
+    public sealed class ChordsCollectionChangedEventArgs : EventArgs
     {
         #region Constructor
 

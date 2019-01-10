@@ -1,8 +1,12 @@
-﻿using Melanchall.DryWetMidi.Smf;
+﻿using System;
+using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    public sealed class MidiEventSentEventArgs
+    /// <summary>
+    /// Provides data for the <see cref="OutputDevice.EventSent"/> event.
+    /// </summary>
+    public sealed class MidiEventSentEventArgs : EventArgs
     {
         #region Constructor
 
@@ -15,6 +19,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets MIDI event sent to <see cref="OutputDevice"/>.
+        /// </summary>
         public MidiEvent Event { get; }
 
         #endregion

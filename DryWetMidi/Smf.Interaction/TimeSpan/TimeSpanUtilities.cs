@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -127,6 +128,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="timeSpanType">The type of time span to get maximumvalue.</param>
         /// <returns>An object that represents maximum value of time span defined by <paramref name="timeSpanType"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeSpanType"/> specified an
+        /// invalid value.</exception>
         public static ITimeSpan GetMaxTimeSpan(TimeSpanType timeSpanType)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);

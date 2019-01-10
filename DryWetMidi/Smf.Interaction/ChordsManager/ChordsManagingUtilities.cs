@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="file"><see cref="MidiFile"/> to search for chords.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
-        /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
+        /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this MidiFile file, long notesTolerance = 0)
@@ -124,6 +124,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return file.GetTrackChunks().GetChords(notesTolerance);
         }
 
+        /// <summary>
+        /// Creates chords from notes.
+        /// </summary>
+        /// <param name="notes">Notes to create chords from.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Collection of chords made up from <paramref name="notes"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this IEnumerable<Note> notes, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);

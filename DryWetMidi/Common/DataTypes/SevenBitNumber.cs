@@ -26,6 +26,9 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         public static readonly SevenBitNumber MaxValue = new SevenBitNumber(Max);
 
+        /// <summary>
+        /// All possible values of <see cref="SevenBitNumber"/>.
+        /// </summary>
         public static readonly SevenBitNumber[] Values = Enumerable.Range(MinValue, MaxValue - MinValue + 1)
                                                                    .Select(value => (SevenBitNumber)value)
                                                                    .ToArray();
@@ -60,18 +63,37 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
-        public static bool TryParse(string input, out SevenBitNumber result)
+        /// <summary>
+        /// Converts the string representation of a seven-bit number to its <see cref="SevenBitNumber"/> equivalent.
+        /// A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="input">A string containing a number to convert.</param>
+        /// <param name="sevenBitNumber">When this method returns, contains the <see cref="SevenBitNumber"/>
+        /// equivalent of the seven-bit number contained in <paramref name="input"/>, if the conversion succeeded,
+        /// or zero if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
+        /// any value originally supplied in result will be overwritten.</param>
+        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
+        public static bool TryParse(string input, out SevenBitNumber sevenBitNumber)
         {
-            result = default(SevenBitNumber);
+            sevenBitNumber = default(SevenBitNumber);
 
             byte byteValue;
             var parsed = ShortByteParser.TryParse(input, Min, Max, out byteValue).Status == ParsingStatus.Parsed;
             if (parsed)
-                result = (SevenBitNumber)byteValue;
+                sevenBitNumber = (SevenBitNumber)byteValue;
 
             return parsed;
         }
 
+        /// <summary>
+        /// Converts the string representation of a seven-bit number to its <see cref="SevenBitNumber"/> equivalent.
+        /// </summary>
+        /// <param name="input">A string containing a number to convert.</param>
+        /// <returns>A <see cref="SevenBitNumber"/> equivalent to the seven-bit number contained in
+        /// <paramref name="input"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static SevenBitNumber Parse(string input)
         {
             byte byteValue;

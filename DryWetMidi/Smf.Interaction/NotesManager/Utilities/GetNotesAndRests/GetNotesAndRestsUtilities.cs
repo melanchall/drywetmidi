@@ -41,45 +41,83 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 case RestSeparationPolicy.NoSeparation:
                     return GetNotesAndRests(notes,
                                             n => NoSeparationNoteDescriptor,
-                                            false,
-                                            false);
+                                            setRestChannel: false,
+                                            setRestNoteNumber: false);
                 case RestSeparationPolicy.SeparateByChannel:
                     return GetNotesAndRests(notes,
                                             n => n.Channel,
-                                            true,
-                                            false);
+                                            setRestChannel: true,
+                                            setRestNoteNumber: false);
                 case RestSeparationPolicy.SeparateByNoteNumber:
                     return GetNotesAndRests(notes,
                                             n => n.NoteNumber,
-                                            false,
-                                            true);
+                                            setRestChannel: false,
+                                            setRestNoteNumber: true);
                 case RestSeparationPolicy.SeparateByChannelAndNoteNumber:
                     return GetNotesAndRests(notes,
                                             n => n.GetNoteId(),
-                                            true,
-                                            true);
+                                            setRestChannel: true,
+                                            setRestNoteNumber: true);
             }
 
             throw new NotSupportedException($"Rest separation policy {restSeparationPolicy} is not supported.");
         }
 
+        /// <summary>
+        /// Iterates through the notes contained in the specified <see cref="TrackChunk"/> returning
+        /// instances of <see cref="Note"/> and <see cref="Rest"/> where rests calculated using the specified policy.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> containing notes to iterate over.</param>
+        /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
+        /// or <see cref="Rest"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
+        /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(this TrackChunk trackChunk, RestSeparationPolicy restSeparationPolicy)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(restSeparationPolicy), restSeparationPolicy);
 
             return trackChunk.GetNotes().GetNotesAndRests(restSeparationPolicy);
         }
 
+        /// <summary>
+        /// Iterates through the notes contained in the specified collection of <see cref="TrackChunk"/>
+        /// returning instances of <see cref="Note"/> and <see cref="Rest"/> where rests calculated
+        /// using the specified policy.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing notes to iterate over.</param>
+        /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
+        /// or <see cref="Rest"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
+        /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(this IEnumerable<TrackChunk> trackChunks, RestSeparationPolicy restSeparationPolicy)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(restSeparationPolicy), restSeparationPolicy);
 
             return trackChunks.GetNotes().GetNotesAndRests(restSeparationPolicy);
         }
 
+        /// <summary>
+        /// Iterates through the collection of notes contained in the specified <see cref="MidiFile"/>
+        /// returning instances of <see cref="Note"/> and <see cref="Rest"/> where rests calculated
+        /// using the specified policy.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> containing notes to iterate over.</param>
+        /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
+        /// or <see cref="Rest"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
+        /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(this MidiFile midiFile, RestSeparationPolicy restSeparationPolicy)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(restSeparationPolicy), restSeparationPolicy);
 
             return midiFile.GetNotes().GetNotesAndRests(restSeparationPolicy);
         }

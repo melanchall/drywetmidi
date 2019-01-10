@@ -3,14 +3,30 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Represents Song Position Pointer event.
+    /// </summary>
+    /// <remarks>
+    /// A MIDI event that carries the MIDI song position pointer message tells a MIDI device
+    /// to cue to a point in the MIDI sequence to be ready to play.
+    /// </remarks>
     public sealed class SongPositionPointerEvent : SystemCommonEvent
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SongPositionPointerEvent"/>.
+        /// </summary>
         public SongPositionPointerEvent()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SongPositionPointerEvent"/> with the specified
+        /// MSB and LSB parts of the pointer value.
+        /// </summary>
+        /// <param name="msb"></param>
+        /// <param name="lsb"></param>
         public SongPositionPointerEvent(SevenBitNumber msb, SevenBitNumber lsb)
         {
             Msb = msb;
@@ -21,8 +37,14 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets MSB of the song position pointer value.
+        /// </summary>
         public SevenBitNumber Msb { get; set; }
 
+        /// <summary>
+        /// Gets or sets LSB of the song position pointer value.
+        /// </summary>
         public SevenBitNumber Lsb { get; set; }
 
         #endregion
@@ -66,11 +88,19 @@ namespace Melanchall.DryWetMidi.Smf
             return 2;
         }
 
+        /// <summary>
+        /// Clones event by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
             return new SongPositionPointerEvent(Msb, Lsb);
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return $"Song Position Pointer ({Msb}, {Lsb})";

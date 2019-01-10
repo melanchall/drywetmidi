@@ -42,6 +42,12 @@ namespace Melanchall.DryWetMidi.Common
             return (short)((head << 8) | tail);
         }
 
+        /// <summary>
+        /// Merges two unsigned 16-bit numbers into one 32-bit unsigned integer number.
+        /// </summary>
+        /// <param name="head">16-bit unsigned number representing left part of resulting number.</param>
+        /// <param name="tail">16-bit unsigned number representing right part of resulting number.</param>
+        /// <returns>Single 32-bit unsigned integer number made of 16-bit unsigned integer halfs.</returns>
         public static uint Combine(ushort head, ushort tail)
         {
             return (uint)((head << 16) | tail);
@@ -51,7 +57,7 @@ namespace Melanchall.DryWetMidi.Common
         /// Extracts right four-bit part of a byte.
         /// </summary>
         /// <param name="number">Byte to extract right part of.</param>
-        /// <returns><see cref="FourBitNumber"/> representing the right part of the byte.</returns>
+        /// <returns><see cref="FourBitNumber"/> representing the right part of <paramref name="number"/>.</returns>
         public static FourBitNumber GetTail(this byte number)
         {
             return (FourBitNumber)(number & FourBitNumber.MaxValue);
@@ -61,22 +67,27 @@ namespace Melanchall.DryWetMidi.Common
         /// Extracts right seven-bit part of an unsigned 16-bit integer number.
         /// </summary>
         /// <param name="number">Number to extract right part of.</param>
-        /// <returns><see cref="SevenBitNumber"/> representing the right part of the unsigned 16-bit integer number.</returns>
+        /// <returns><see cref="SevenBitNumber"/> representing the right part of <paramref name="number"/>.</returns>
         public static SevenBitNumber GetTail(this ushort number)
         {
             return (SevenBitNumber)(number & SevenBitNumber.MaxValue);
         }
 
         /// <summary>
-        /// Extracts right eight-bit part of an nsigned 16-bit integer number.
+        /// Extracts right eight-bit part of an unsigned 16-bit integer number.
         /// </summary>
         /// <param name="number">Number to extract right part of.</param>
-        /// <returns>Byte representing the right part of the signed 16-bit integer number.</returns>
+        /// <returns>Byte representing the right part of <paramref name="number"/>.</returns>
         public static byte GetTail(this short number)
         {
             return (byte)(number & byte.MaxValue);
         }
 
+        /// <summary>
+        /// Extracts right 16-bit part of an unsigned 32-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract right part of.</param>
+        /// <returns>16-bit unsigned integer number representing the right part of <paramref name="number"/>.</returns>
         public static ushort GetTail(this uint number)
         {
             return (ushort)(number & ushort.MaxValue);
@@ -86,7 +97,7 @@ namespace Melanchall.DryWetMidi.Common
         /// Extracts left four-bit part of a byte.
         /// </summary>
         /// <param name="number">Byte to extract left part of.</param>
-        /// <returns><see cref="FourBitNumber"/> representing the left part of the byte.</returns>
+        /// <returns><see cref="FourBitNumber"/> representing the left part of <paramref name="number"/>.</returns>
         public static FourBitNumber GetHead(this byte number)
         {
             return (FourBitNumber)(number >> 4);
@@ -96,7 +107,7 @@ namespace Melanchall.DryWetMidi.Common
         /// Extracts left seven-bit part of an unsigned 16-bit integer number.
         /// </summary>
         /// <param name="number">Number to extract left part of.</param>
-        /// <returns><see cref="SevenBitNumber"/> representing the left part of the unsigned 16-bit integer number.</returns>
+        /// <returns><see cref="SevenBitNumber"/> representing the left part of <paramref name="number"/>.</returns>
         public static SevenBitNumber GetHead(this ushort number)
         {
             return (SevenBitNumber)(number >> 7);
@@ -106,12 +117,17 @@ namespace Melanchall.DryWetMidi.Common
         /// Extracts left eight-bit part of an signed 16-bit integer number.
         /// </summary>
         /// <param name="number">Number to extract left part of.</param>
-        /// <returns>Byte representing the left part of the signed 16-bit integer number.</returns>
+        /// <returns>Byte representing the left part of <paramref name="number"/>.</returns>
         public static byte GetHead(this short number)
         {
             return (byte)(number >> 8);
         }
 
+        /// <summary>
+        /// Extracts left 16-bit part of an unsigned 32-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract left part of.</param>
+        /// <returns>16-bit unsigned integer number representing the left part of <paramref name="number"/>.</returns>
         public static ushort GetHead(this uint number)
         {
             return (ushort)(number >> 16);
@@ -206,21 +222,41 @@ namespace Melanchall.DryWetMidi.Common
             return result;
         }
 
-        public static byte GetFisrtByte(this int number)
+        /// <summary>
+        /// Extracts first byte (leftmost) of signed 32-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract first byte of.</param>
+        /// <returns>First byte of <paramref name="number"/>.</returns>
+        public static byte GetFirstByte(this int number)
         {
             return (byte)((number >> 24) & 0xFF);
         }
 
+        /// <summary>
+        /// Extracts second byte (starting from left) of signed 32-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract second byte of.</param>
+        /// <returns>Second byte of <paramref name="number"/>.</returns>
         public static byte GetSecondByte(this int number)
         {
             return (byte)((number >> 16) & 0xFF);
         }
 
+        /// <summary>
+        /// Extracts third byte (starting from left) of signed 32-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract third byte of.</param>
+        /// <returns>Third byte of <paramref name="number"/>.</returns>
         public static byte GetThirdByte(this int number)
         {
             return (byte)((number >> 8) & 0xFF);
         }
 
+        /// <summary>
+        /// Extracts fourth byte (rightmost) of signed 32-bit integer number.
+        /// </summary>
+        /// <param name="number">Number to extract fourth byte of.</param>
+        /// <returns>Fourth byte of <paramref name="number"/>.</returns>
         public static byte GetFourthByte(this int number)
         {
             return (byte)(number & 0xFF);
