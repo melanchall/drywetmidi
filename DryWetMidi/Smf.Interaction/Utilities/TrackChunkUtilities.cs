@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var convertedDistance = TimeConverter.ConvertFrom(distance, tempoMap);
+            var convertedDistance = TimeConverter.ConvertFrom(distance, TempoMap.Create(tempoMap.TimeDivision));
 
             var firstEvent = trackChunk.Events.FirstOrDefault();
             if (firstEvent == null)
