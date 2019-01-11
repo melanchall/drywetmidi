@@ -6,6 +6,8 @@ before_build:
 - cmd: nuget restore
 build:
   verbosity: normal
+before_test:
+- ps: '& "$env:APPVEYOR_BUILD_FOLDER\Resources\Scripts\Setup MIDI ports.ps1"'
 test:
   assemblies:
     except:

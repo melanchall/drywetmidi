@@ -47,6 +47,9 @@
   <ItemGroup>
     <Compile Include="Common\DataTypes\FourBitNumberTests.cs" />
     <Compile Include="Common\DataTypes\SevenBitNumberTests.cs" />
+    <Compile Include="Devices\InpurDevice\InpurDeviceTests.cs" />
+    <Compile Include="Devices\OutputDevice\OutputDeviceTests.cs" />
+    <Compile Include="Devices\Utilities\MidiDevicesNames.cs" />
     <Compile Include="Smf.Interaction\Utilities\MidiFileUtilitiesTests.cs" />
     <Compile Include="Utilities\ChordMethods.cs" />
     <Compile Include="Utilities\LengthedObjectMethods.cs" />
