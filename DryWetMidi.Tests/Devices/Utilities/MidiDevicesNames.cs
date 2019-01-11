@@ -1,0 +1,9 @@
+﻿namespace Melanchall.DryWetMidi.Tests.Devices
+{
+    public static class MidiDevicesNames
+    {
+        public const string MicrosoftGSWavetableSynth = "Microsoft GS Wavetable Synth";
+        public const string DeviceA = "MIDI A";
+        public const string DeviceB = "MIDI B";
+    }
+}
