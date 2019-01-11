@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Starts playing of the MIDI data.
+        /// Starts playing of the MIDI data. This method is non-blocking.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
@@ -195,6 +195,23 @@ namespace Melanchall.DryWetMidi.Devices
             _clock.Stop();
             StopNotes();
             IsRunning = false;
+        }
+
+        /// <summary>
+        /// Starts playing of the MIDI data. This method will block execution of a program until all
+        /// MIDI data is played.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="Loop"/> is set to true, this method will execute forever.
+        /// </remarks>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        public void Play()
+        {
+            EnsureIsNotDisposed();
+
+            Start();
+            while (_clock.IsRunning) { }
         }
 
         /// <summary>

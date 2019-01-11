@@ -108,10 +108,9 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            // TODO: check not disposed before events played
             using (var playback = trackChunk.GetPlayback(tempoMap, outputDevice))
             {
-                playback.Start();
+                playback.Play();
             }
         }
 
@@ -131,7 +130,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             using (var playback = trackChunks.GetPlayback(tempoMap, outputDevice))
             {
-                playback.Start();
+                playback.Play();
             }
         }
 
