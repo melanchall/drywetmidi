@@ -21,11 +21,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Fields
 
         /// <summary>
-        /// Device ID.
-        /// </summary>
-        protected readonly uint _id;
-
-        /// <summary>
         /// Device handle.
         /// </summary>
         protected IntPtr _handle = IntPtr.Zero;
@@ -39,9 +34,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal MidiDevice(uint id)
+        internal MidiDevice(int id)
         {
-            _id = id;
+            Id = id;
         }
 
         #endregion
@@ -59,6 +54,11 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets the ID of a MIDI device.
+        /// </summary>
+        public int Id { get; }
 
         /// <summary>
         /// Gets the name of MIDI device.

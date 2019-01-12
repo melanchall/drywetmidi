@@ -77,8 +77,9 @@ namespace Melanchall.DryWetMidi.Devices
             if (IsRunning)
                 return;
 
-            // TODO: remove
-            _inputDevice.StartEventsListening();
+            if (!_inputDevice.IsListeningForEvents)
+                throw new InvalidOperationException($"Input device is not listening for MIDI events. Call {nameof(InputDevice.StartEventsListening)} prior to recording start.");
+
             _stopwatch.Start();
 
             IsRunning = true;
@@ -93,8 +94,6 @@ namespace Melanchall.DryWetMidi.Devices
             if (!IsRunning)
                 return;
 
-            // TODO: remove
-            _inputDevice.StopEventsListening();
             _stopwatch.Stop();
 
             IsRunning = false;
