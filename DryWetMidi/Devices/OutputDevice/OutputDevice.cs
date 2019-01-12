@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal OutputDevice(uint id)
+        internal OutputDevice(int id)
             : base(id)
         {
             _midiWriter = new MidiWriter(_memoryStream);
@@ -220,7 +220,7 @@ namespace Melanchall.DryWetMidi.Devices
             var devicesCount = GetDevicesCount();
             for (var deviceId = 0; deviceId < devicesCount; deviceId++)
             {
-                yield return new OutputDevice((uint)deviceId);
+                yield return new OutputDevice(deviceId);
             }
         }
 
@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsOutOfRange(nameof(id), id, 0, GetDevicesCount() - 1, "Device ID is out of range.");
 
-            return new OutputDevice((uint)id);
+            return new OutputDevice(id);
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _callback = OnMessage;
-            ProcessMmResult(MidiOutWinApi.midiOutOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
+            ProcessMmResult(MidiOutWinApi.midiOutOpen(out _handle, Id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
         }
 
         private void DestroyHandle()
@@ -292,7 +292,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void SetDeviceInformation()
         {
             var caps = default(MidiOutWinApi.MIDIOUTCAPS);
-            ProcessMmResult(MidiOutWinApi.midiOutGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)));
+            ProcessMmResult(MidiOutWinApi.midiOutGetDevCaps(new IntPtr(Id), ref caps, (uint)Marshal.SizeOf(caps)));
 
             SetBasicDeviceInformation(caps.wMid, caps.wPid, caps.vDriverVersion, caps.szPname);
 

@@ -52,8 +52,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private DateTime _startTime;
-
         private readonly MemoryStream _channelMessageMemoryStream = new MemoryStream(ChannelParametersBufferSize);
         private readonly MidiReader _channelEventReader;
 
@@ -69,7 +67,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal InputDevice(uint id)
+        internal InputDevice(int id)
             : base(id)
         {
             _channelEventReader = new MidiReader(_channelMessageMemoryStream);
@@ -99,6 +97,12 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public bool RaiseMidiTimeCodeReceived { get; set; } = true;
 
+        /// <summary>
+        /// Gets a value that indicates whether <see cref="InputDevice"/> started to listen for
+        /// incoming MIDI events.
+        /// </summary>
+        public bool IsListeningForEvents { get; private set; }
+
         #endregion
 
         #region Methods
@@ -115,7 +119,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             PrepareSysExBuffer();
             ProcessMmResult(MidiInWinApi.midiInStart(_handle));
-            _startTime = DateTime.UtcNow;
+
+            IsListeningForEvents = true;
         }
 
         /// <summary>
@@ -129,6 +134,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (_handle == IntPtr.Zero)
                 return;
+
+            IsListeningForEvents = false;
 
             ProcessMmResult(MidiInWinApi.midiInStop(_handle));
         }
@@ -147,7 +154,6 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             ProcessMmResult(MidiInWinApi.midiInReset(_handle));
-            _startTime = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -168,7 +174,7 @@ namespace Melanchall.DryWetMidi.Devices
             var devicesCount = GetDevicesCount();
             for (var deviceId = 0; deviceId < devicesCount; deviceId++)
             {
-                yield return new InputDevice((uint)deviceId);
+                yield return new InputDevice(deviceId);
             }
         }
 
@@ -200,7 +206,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsOutOfRange(nameof(id), id, 0, GetDevicesCount() - 1, "Device ID is out of range.");
 
-            return new InputDevice((uint)id);
+            return new InputDevice(id);
         }
 
         /// <summary>
@@ -269,7 +275,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _callback = OnMessage;
-            ProcessMmResult(MidiInWinApi.midiInOpen(out _handle, _id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
+            ProcessMmResult(MidiInWinApi.midiInOpen(out _handle, Id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
         }
 
         private void DestroyHandle()
@@ -283,7 +289,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void SetDeviceInformation()
         {
             var caps = default(MidiInWinApi.MIDIINCAPS);
-            ProcessMmResult(MidiInWinApi.midiInGetDevCaps(new UIntPtr(_id), ref caps, (uint)Marshal.SizeOf(caps)));
+            ProcessMmResult(MidiInWinApi.midiInGetDevCaps(new IntPtr(Id), ref caps, (uint)Marshal.SizeOf(caps)));
 
             SetBasicDeviceInformation(caps.wMid, caps.wPid, caps.vDriverVersion, caps.szPname);
         }
