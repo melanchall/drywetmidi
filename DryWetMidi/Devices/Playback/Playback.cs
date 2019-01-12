@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
@@ -22,9 +23,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Fields
 
         private readonly IEnumerator<PlaybackEvent> _eventsEnumerator;
-
-        private readonly TempoMap _tempoMap;
-        private readonly OutputDevice _outputDevice;
 
         private readonly MidiClock _clock;
         private readonly Dictionary<NoteId, NoteOnEvent> _noteOnEvents = new Dictionary<NoteId, NoteOnEvent>();
@@ -68,8 +66,8 @@ namespace Melanchall.DryWetMidi.Devices
             _eventsEnumerator = GetPlaybackEvents(events, tempoMap).GetEnumerator();
             _eventsEnumerator.MoveNext();
 
-            _tempoMap = tempoMap;
-            _outputDevice = outputDevice;
+            TempoMap = tempoMap;
+            OutputDevice = outputDevice;
 
             _clock = new MidiClock(ClockInterval);
             _clock.Tick += OnClockTick;
@@ -90,6 +88,16 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets the tempo map used to calculate events times.
+        /// </summary>
+        public TempoMap TempoMap { get; }
+
+        /// <summary>
+        /// Gets the output MIDI device to play MIDI data through.
+        /// </summary>
+        public OutputDevice OutputDevice { get; }
 
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
@@ -140,7 +148,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
 
-            return TimeConverter.ConvertTo((MetricTimeSpan)_clock.CurrentTime, timeType, _tempoMap);
+            return TimeConverter.ConvertTo((MetricTimeSpan)_clock.CurrentTime, timeType, TempoMap);
         }
 
         /// <summary>
@@ -152,7 +160,7 @@ namespace Melanchall.DryWetMidi.Devices
         public TTimeSpan GetCurrentTime<TTimeSpan>()
             where TTimeSpan : ITimeSpan
         {
-            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan)_clock.CurrentTime, _tempoMap);
+            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan)_clock.CurrentTime, TempoMap);
         }
 
         /// <summary>
@@ -167,11 +175,11 @@ namespace Melanchall.DryWetMidi.Devices
             if (_clock.IsRunning)
                 return;
 
-            _outputDevice.PrepareForEventsSending();
+            OutputDevice.PrepareForEventsSending();
 
             foreach (var noteOnEvent in _noteOnEvents.Values)
             {
-                _outputDevice.SendEvent(noteOnEvent);
+                OutputDevice.SendEvent(noteOnEvent);
             }
             _noteOnEvents.Clear();
 
@@ -211,7 +219,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             Start();
-            while (_clock.IsRunning) { }
+            SpinWait.SpinUntil(() => _clock.IsRunning);
         }
 
         /// <summary>
@@ -297,7 +305,7 @@ namespace Melanchall.DryWetMidi.Devices
                 if (!_clock.IsRunning)
                     return;
 
-                _outputDevice.SendEvent(midiEvent);
+                OutputDevice.SendEvent(midiEvent);
 
                 var noteOnEvent = midiEvent as NoteOnEvent;
                 if (noteOnEvent != null)
@@ -347,13 +355,13 @@ namespace Melanchall.DryWetMidi.Devices
         {
             foreach (var noteId in _noteOnEvents.Keys)
             {
-                _outputDevice.SendEvent(new NoteOffEvent(noteId.NoteNumber, SevenBitNumber.MinValue) { Channel = noteId.Channel });
+                OutputDevice.SendEvent(new NoteOffEvent(noteId.NoteNumber, SevenBitNumber.MinValue) { Channel = noteId.Channel });
             }
         }
 
         private void SetStartTime(ITimeSpan time)
         {
-            _clock.StartTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, _tempoMap);
+            _clock.StartTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
 
             _eventsEnumerator.Reset();
             do { _eventsEnumerator.MoveNext(); }

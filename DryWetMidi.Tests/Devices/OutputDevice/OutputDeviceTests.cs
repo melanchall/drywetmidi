@@ -8,16 +8,29 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     public sealed class OutputDeviceTests
     {
         #region Test methods
-
-        [Test]
-        public void CheckOutputDevices()
+        
+        [TestCase(MidiDevicesNames.DeviceA)]
+        [TestCase(MidiDevicesNames.DeviceB)]
+        [TestCase(MidiDevicesNames.MicrosoftGSWavetableSynth)]
+        public void FindOutputDevice(string deviceName)
         {
-            var allInputDevicesNames = OutputDevice.GetAll().Select(d => d.Name).ToArray();
+            Assert.IsTrue(
+                OutputDevice.GetAll().Any(d => d.Name == deviceName),
+                $"There is no device '{deviceName}' in the system.");
+        }
 
-            foreach (var deviceName in new[] { MidiDevicesNames.DeviceA, MidiDevicesNames.DeviceB, MidiDevicesNames.MicrosoftGSWavetableSynth })
-            {
-                Assert.Contains(deviceName, allInputDevicesNames, $"There is no '{deviceName}' output MIDI device is the system.");
-            }
+        [TestCase(MidiDevicesNames.DeviceA)]
+        [TestCase(MidiDevicesNames.DeviceB)]
+        [TestCase(MidiDevicesNames.MicrosoftGSWavetableSynth)]
+        public void CheckOutputDeviceId(string deviceName)
+        {
+            var device = OutputDevice.GetByName(deviceName);
+            Assert.IsNotNull(device, $"Unable to get device '{deviceName}' by its name.");
+
+            var deviceId = device.Id;
+            device = OutputDevice.GetById(deviceId);
+            Assert.IsNotNull(device, $"Unable to get device '{deviceName}' by its ID.");
+            Assert.AreEqual(deviceName, device.Name, "Device retrieved by ID is not the same as retrieved by its name.");//
         }
 
         #endregion
