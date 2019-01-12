@@ -15,8 +15,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Fields
 
         private readonly List<RecordingEvent> _events = new List<RecordingEvent>();
-        private readonly InputDevice _inputDevice;
-        private readonly TempoMap _tempoMap;
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
         private bool _disposed = false;
@@ -38,14 +36,24 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
 
-            _tempoMap = tempoMap;
-            _inputDevice = inputDevice;
-            _inputDevice.EventReceived += OnEventReceived;
+            TempoMap = tempoMap;
+            InputDevice = inputDevice;
+            InputDevice.EventReceived += OnEventReceived;
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets the tempo map used to calculate recorded events times.
+        /// </summary>
+        public TempoMap TempoMap { get; }
+
+        /// <summary>
+        /// Gets the input MIDI device to record MIDI data from.
+        /// </summary>
+        public InputDevice InputDevice { get; }
 
         /// <summary>
         /// Gets a value indicating whether recording is currently running or not.
@@ -64,7 +72,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>MIDI events recorded by the current <see cref="Recording"/>.</returns>
         public IReadOnlyList<TimedEvent> GetEvents()
         {
-            return _events.Select(e => new TimedEvent(e.Event, TimeConverter.ConvertFrom((MetricTimeSpan)e.Time, _tempoMap)))
+            return _events.Select(e => new TimedEvent(e.Event, TimeConverter.ConvertFrom((MetricTimeSpan)e.Time, TempoMap)))
                           .ToList()
                           .AsReadOnly();
         }
@@ -72,12 +80,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Starts MIDI data recording.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Input device is not listening for MIDI events</exception>
         public void Start()
         {
             if (IsRunning)
                 return;
 
-            if (!_inputDevice.IsListeningForEvents)
+            if (!InputDevice.IsListeningForEvents)
                 throw new InvalidOperationException($"Input device is not listening for MIDI events. Call {nameof(InputDevice.StartEventsListening)} prior to recording start.");
 
             _stopwatch.Start();
@@ -127,7 +136,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (disposing)
             {
                 Stop();
-                _inputDevice.EventReceived -= OnEventReceived;
+                InputDevice.EventReceived -= OnEventReceived;
             }
 
             _disposed = true;
