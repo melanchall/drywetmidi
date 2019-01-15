@@ -267,6 +267,7 @@ namespace Melanchall.DryWetMidi.Devices
             return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
         }
 
+        // TODO: make it public
         internal void PrepareForEventsSending()
         {
             EnsureHandleIsCreated();

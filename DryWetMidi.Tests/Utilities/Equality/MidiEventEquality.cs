@@ -64,6 +64,26 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 {
                     return ArrayEquality.AreEqual(((UnknownMetaEvent)e1).Data, ((UnknownMetaEvent)e2).Data);
                 },
+
+                [typeof(MidiTimeCodeEvent)] = (e1, e2) =>
+                {
+                    var midiTimeCodeEvent1 = (MidiTimeCodeEvent)e1;
+                    var midiTimeCodeEvent2 = (MidiTimeCodeEvent)e2;
+                    return midiTimeCodeEvent1.Component == midiTimeCodeEvent2.Component &&
+                           midiTimeCodeEvent1.ComponentValue == midiTimeCodeEvent2.ComponentValue;
+                },
+                [typeof(SongPositionPointerEvent)] = (e1, e2) =>
+                {
+                    var songPositionPointerEvent1 = (SongPositionPointerEvent)e1;
+                    var songPositionPointerEvent2 = (SongPositionPointerEvent)e2;
+                    return songPositionPointerEvent1.Lsb == songPositionPointerEvent2.Lsb &&
+                           songPositionPointerEvent1.Msb == songPositionPointerEvent2.Msb;
+                },
+                [typeof(SongSelectEvent)] = (e1, e2) =>
+                {
+                    return ((SongSelectEvent)e1).Number == ((SongSelectEvent)e2).Number;
+                },
+                [typeof(TuneRequestEvent)] = (e1, e2) => true
             };
 
         #endregion
@@ -83,6 +103,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
             if (event1.GetType() != event2.GetType())
                 return false;
+
+            if (event1 is SystemRealTimeEvent)
+                return true;
 
             if (event1 is ChannelEvent)
             {
@@ -108,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             if (Comparers.TryGetValue(event1.GetType(), out comparer))
                 return comparer(event1, event2);
 
-            return true;
+            throw new NotImplementedException("Events comparing is not implemented.");
         }
 
         #endregion

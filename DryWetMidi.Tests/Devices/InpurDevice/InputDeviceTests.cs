@@ -6,6 +6,7 @@ using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
@@ -27,6 +28,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             public MidiEvent Event { get; }
 
             public TimeSpan Delay { get; }
+
+            public override string ToString()
+            {
+                return $"{Event} after {Delay} of delay";
+            }
         }
 
         private sealed class ReceivedEvent
@@ -40,13 +46,63 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             public MidiEvent Event { get; }
 
             public TimeSpan Time { get; }
+
+            public override string ToString()
+            {
+                return $"{Event} at {Time}";
+            }
+        }
+
+        private sealed class SentEvent
+        {
+            public SentEvent(MidiEvent midiEvent, TimeSpan time)
+            {
+                Event = midiEvent;
+                Time = time;
+            }
+
+            public MidiEvent Event { get; }
+
+            public TimeSpan Time { get; }
+
+            public override string ToString()
+            {
+                return $"{Event} at {Time}";
+            }
+        }
+
+        private sealed class MidiTimeCode
+        {
+            public MidiTimeCode(MidiTimeCodeType timeCodeType, int hours, int minutes, int seconds, int frames)
+            {
+                Format = timeCodeType;
+                Hours = hours;
+                Minutes = minutes;
+                Seconds = seconds;
+                Frames = frames;
+            }
+
+            public MidiTimeCodeType Format { get; }
+
+            public int Hours { get; }
+
+            public int Minutes { get; }
+
+            public int Seconds { get; }
+
+            public int Frames { get; }
+
+            public override string ToString()
+            {
+                return $"[{Format}] {Hours}:{Minutes}:{Seconds}.{Frames}";
+            }
         }
 
         #endregion
 
         #region Constants
 
-        private static readonly TimeSpan EventReceivingDelay = TimeSpan.FromMilliseconds(50);
+        private static readonly TimeSpan MaximumEventReceivingDelay = TimeSpan.FromMilliseconds(15);
 
         #endregion
 
@@ -71,42 +127,135 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var deviceId = device.Id;
             device = InputDevice.GetById(deviceId);
             Assert.IsNotNull(device, $"Unable to get device '{deviceName}' by its ID.");
-            Assert.AreEqual(deviceName, device.Name, "Device retrieved by ID is not the same as retrieved by its name.");//
+            Assert.AreEqual(deviceName, device.Name, "Device retrieved by ID is not the same as retrieved by its name.");
         }
 
         [Test]
         public void CheckEventsReceiving()
         {
-            var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var eventsReceived = new List<ReceivedEvent>();
-            var stopwatch = new Stopwatch();
+            CheckEventsReceiving(new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NormalSysExEvent(new byte[] { 1, 2, 3, 0xF7 }), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
+                new EventToSend(new NormalSysExEvent(new byte[] { 4, 5, 6, 0xF7 }), TimeSpan.FromSeconds(2)),
+                new EventToSend(new SongSelectEvent((SevenBitNumber)20), TimeSpan.Zero),
+                new EventToSend(new TuneRequestEvent(), TimeSpan.FromMilliseconds(200)),
+            });
+        }
+
+        [Test]
+        public void CheckMidiTimeCodeEventReceiving()
+        {
+            MidiTimeCode midiTimeCodeReceived = null;
 
             var eventsToSend = new[]
             {
-                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2))
+                new EventToSend(new ProgramChangeEvent((SevenBitNumber)100), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesLsb, (FourBitNumber)1), TimeSpan.FromSeconds(1)),
+                new EventToSend(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesMsb, (FourBitNumber)1), TimeSpan.FromSeconds(2)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursLsb, (FourBitNumber)7), TimeSpan.FromSeconds(1)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursMsbAndTimeCodeType, (FourBitNumber)7), TimeSpan.FromSeconds(2)),
+                new EventToSend(new ProgramChangeEvent((SevenBitNumber)80), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesLsb, (FourBitNumber)10), TimeSpan.FromSeconds(1)),
+                new EventToSend(new ProgramChangeEvent((SevenBitNumber)10), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new ProgramChangeEvent((SevenBitNumber)15), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesMsb, (FourBitNumber)2), TimeSpan.FromSeconds(2)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsLsb, (FourBitNumber)10), TimeSpan.FromSeconds(1)),
+                new EventToSend(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsMsb, (FourBitNumber)1), TimeSpan.FromSeconds(2))
             };
 
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
-                inputDevice.EventReceived += (_, e) => eventsReceived.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                inputDevice.MidiTimeCodeReceived += (_, e) => midiTimeCodeReceived = new MidiTimeCode(e.Format, e.Hours, e.Minutes, e.Seconds, e.Frames);
                 inputDevice.StartEventsListening();
 
-                stopwatch.Start();
                 SendEvents(eventsToSend, outputDevice);
-                stopwatch.Stop();
+
+                var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventReceivingDelay;
+                var isMidiTimeCodeReceived = SpinWait.SpinUntil(() => midiTimeCodeReceived != null, timeout);
+                Assert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code received for timeout {timeout}.");
+
+                inputDevice.StopEventsListening();
             }
 
-            var timeout = TimeSpan.FromSeconds(2) + EventReceivingDelay;
-            var areEventsReceived = SpinWait.SpinUntil(() => eventsReceived.Count == 2, timeout);
-            Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+            Assert.AreEqual(MidiTimeCodeType.Thirty, midiTimeCodeReceived.Format, "Format is invalid.");
+            Assert.AreEqual(23, midiTimeCodeReceived.Hours, "Hours number is invalid.");
+            Assert.AreEqual(42, midiTimeCodeReceived.Minutes, "Minutes number is invalid.");
+            Assert.AreEqual(26, midiTimeCodeReceived.Seconds, "Seconds number is invalid.");
+            Assert.AreEqual(17, midiTimeCodeReceived.Frames, "Frames number is invalid.");
+        }
 
-            CompareSentReceivedEvents(eventsToSend, eventsReceived);
+        [Test]
+        public void CheckFileEventsReceiving()
+        {
+            var filesToTest = TestFilesProvider.GetValidFiles(
+                f => f.GetTrackChunks().Count() == 1,
+                f =>
+                {
+                    var tempoMap = f.GetTempoMap();
+                    return (TimeSpan)f.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap) < TimeSpan.FromSeconds(30);
+                })
+                .Take(5)
+                .ToArray();
+
+            for (var i = 0; i < filesToTest.Length; i++)
+            {
+                var file = filesToTest[i];
+                var tempoMap = file.GetTempoMap();
+
+                var eventsToSend = new List<EventToSend>();
+                var currentTime = TimeSpan.Zero;
+
+                foreach (var timedEvent in file.GetTimedEvents().Where(e => !(e.Event is MetaEvent)))
+                {
+                    var time = (TimeSpan)timedEvent.TimeAs<MetricTimeSpan>(tempoMap);
+                    var eventToSend = new EventToSend(timedEvent.Event, time - currentTime);
+                    currentTime = time;
+                    eventsToSend.Add(eventToSend);
+                }
+
+                CheckEventsReceiving(eventsToSend);
+            }
         }
 
         #endregion
 
         #region Private methods
+
+        private static void CheckEventsReceiving(ICollection<EventToSend> eventsToSend)
+        {
+            var receivedEvents = new List<ReceivedEvent>();
+            var sentEvents = new List<SentEvent>();
+            var stopwatch = new Stopwatch();
+
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                outputDevice.PrepareForEventsSending();
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+                {
+                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    inputDevice.StartEventsListening();
+
+                    stopwatch.Start();
+                    SendEvents(eventsToSend, outputDevice);
+                    stopwatch.Stop();
+
+                    var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventReceivingDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsToSend.Count, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+
+                    inputDevice.StopEventsListening();
+                }
+            }
+
+            CompareSentReceivedEvents(sentEvents, receivedEvents);
+        }
 
         private static void SendEvents(IEnumerable<EventToSend> eventsToSend, OutputDevice outputDevice)
         {
@@ -117,25 +266,27 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
-        private static void CompareSentReceivedEvents(IEnumerable<EventToSend> sentEvents, IEnumerable<ReceivedEvent> receivedEvents)
+        private static void CompareSentReceivedEvents(IEnumerable<SentEvent> sentEvents, IEnumerable<ReceivedEvent> receivedEvents)
         {
-            var currentTime = TimeSpan.Zero;
+            var delays = new List<TimeSpan>();
 
-            foreach (var eventsPair in sentEvents.Zip(receivedEvents, (s, r) => new { Sent = s, Received = r }))
+            var eventsPairs = sentEvents.Zip(receivedEvents, (s, r) => new { Sent = s, Received = r }).ToList();
+            for (var i = 0; i < eventsPairs.Count; i++)
             {
+                var eventsPair = eventsPairs[i];
                 var sentEvent = eventsPair.Sent;
                 var receivedEvent = eventsPair.Received;
-
-                currentTime += sentEvent.Delay;
 
                 Assert.IsTrue(
                     MidiEventEquality.AreEqual(sentEvent.Event, receivedEvent.Event, false),
                     $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
 
-                // TODO: decrease delta!
+                var delay = receivedEvent.Time - sentEvent.Time;
+                delays.Add(delay);
+
                 Assert.IsTrue(
-                    receivedEvent.Time - currentTime <= EventReceivingDelay,
-                    $"Event received too late (at {receivedEvent.Time} instead of {currentTime}).");
+                    delay <= MaximumEventReceivingDelay,
+                    $"Event received too late (at {receivedEvent.Time} instead of {sentEvent.Time}).");
             }
         }
 
