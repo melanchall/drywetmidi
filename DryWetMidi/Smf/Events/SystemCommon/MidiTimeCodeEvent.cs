@@ -51,6 +51,12 @@ namespace Melanchall.DryWetMidi.Smf
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(component), component);
 
+            var maximumComponentValue = ComponentValueMasks[component];
+            ThrowIfArgument.IsGreaterThan(nameof(componentValue),
+                                          componentValue,
+                                          maximumComponentValue,
+                                          $"Component's value is greater than maximum valid one which is {maximumComponentValue}.");
+
             Component = component;
             ComponentValue = componentValue;
         }

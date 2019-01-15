@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Devices
         public bool RaiseMidiTimeCodeReceived { get; set; } = true;
 
         /// <summary>
-        /// Gets a value that indicates whether <see cref="InputDevice"/> started to listen for
+        /// Gets a value that indicates whether <see cref="InputDevice"/> is currently listening for
         /// incoming MIDI events.
         /// </summary>
         public bool IsListeningForEvents { get; private set; }
@@ -283,6 +283,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
+            MidiInWinApi.midiInReset(_handle);
             MidiInWinApi.midiInClose(_handle);
         }
 
@@ -296,6 +297,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
+            // TODO: fix invalid longdata on reset
+            if (!IsListeningForEvents)
+                return;
+
             switch (wMsg)
             {
                 case MidiMessage.MIM_DATA:
@@ -417,8 +422,9 @@ namespace Melanchall.DryWetMidi.Devices
                 _channelEventReader.Dispose();
             }
 
-            UnprepareSysExBuffer(_sysExHeaderPointer);
+            StopEventsListening();
             DestroyHandle();
+            UnprepareSysExBuffer(_sysExHeaderPointer);
 
             _disposed = true;
         }
