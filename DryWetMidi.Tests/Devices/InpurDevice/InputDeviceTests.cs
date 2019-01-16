@@ -102,7 +102,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #region Constants
 
-        private static readonly TimeSpan MaximumEventReceivingDelay = TimeSpan.FromMilliseconds(15);
+        private const string DeviceToTestOnName = MidiDevicesNames.DeviceA;
+        private static readonly TimeSpan MaximumEventReceivingDelay = TimeSpan.FromMilliseconds(30);
 
         #endregion
 
@@ -226,18 +227,18 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #region Private methods
 
-        private static void CheckEventsReceiving(ICollection<EventToSend> eventsToSend)
+        private void CheckEventsReceiving(ICollection<EventToSend> eventsToSend)
         {
             var receivedEvents = new List<ReceivedEvent>();
             var sentEvents = new List<SentEvent>();
             var stopwatch = new Stopwatch();
 
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var outputDevice = OutputDevice.GetByName(DeviceToTestOnName))
             {
-                outputDevice.PrepareForEventsSending();
+                WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+                using (var inputDevice = InputDevice.GetByName(DeviceToTestOnName))
                 {
                     inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
                     inputDevice.StartEventsListening();
@@ -257,7 +258,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             CompareSentReceivedEvents(sentEvents, receivedEvents);
         }
 
-        private static void SendEvents(IEnumerable<EventToSend> eventsToSend, OutputDevice outputDevice)
+        private void SendEvents(IEnumerable<EventToSend> eventsToSend, OutputDevice outputDevice)
         {
             foreach (var eventToSend in eventsToSend)
             {
@@ -266,7 +267,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
-        private static void CompareSentReceivedEvents(IEnumerable<SentEvent> sentEvents, IEnumerable<ReceivedEvent> receivedEvents)
+        private void CompareSentReceivedEvents(IEnumerable<SentEvent> sentEvents, IEnumerable<ReceivedEvent> receivedEvents)
         {
             var delays = new List<TimeSpan>();
 
@@ -288,6 +289,17 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     delay <= MaximumEventReceivingDelay,
                     $"Event received too late (at {receivedEvent.Time} instead of {sentEvent.Time}).");
             }
+        }
+
+        private void WarmUpDevice(OutputDevice outputDevice)
+        {
+            var eventsToSend = Enumerable.Range(0, 100)
+                                         .SelectMany(_ => new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent() })
+                                         .Select(e => new EventToSend(e, TimeSpan.FromMilliseconds(10)))
+                                         .ToList();
+
+            outputDevice.PrepareForEventsSending();
+            SendEvents(eventsToSend, outputDevice);
         }
 
         #endregion
