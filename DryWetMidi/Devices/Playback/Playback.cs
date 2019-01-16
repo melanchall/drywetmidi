@@ -219,7 +219,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             Start();
-            SpinWait.SpinUntil(() => _clock.IsRunning);
+            SpinWait.SpinUntil(() => !_clock.IsRunning);
         }
 
         /// <summary>

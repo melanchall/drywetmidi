@@ -17,60 +17,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     {
         #region Nested classes
 
-        private sealed class EventToSend
-        {
-            public EventToSend(MidiEvent midiEvent, TimeSpan delay)
-            {
-                Event = midiEvent;
-                Delay = delay;
-            }
-
-            public MidiEvent Event { get; }
-
-            public TimeSpan Delay { get; }
-
-            public override string ToString()
-            {
-                return $"{Event} after {Delay} of delay";
-            }
-        }
-
-        private sealed class ReceivedEvent
-        {
-            public ReceivedEvent(MidiEvent midiEvent, TimeSpan time)
-            {
-                Event = midiEvent;
-                Time = time;
-            }
-
-            public MidiEvent Event { get; }
-
-            public TimeSpan Time { get; }
-
-            public override string ToString()
-            {
-                return $"{Event} at {Time}";
-            }
-        }
-
-        private sealed class SentEvent
-        {
-            public SentEvent(MidiEvent midiEvent, TimeSpan time)
-            {
-                Event = midiEvent;
-                Time = time;
-            }
-
-            public MidiEvent Event { get; }
-
-            public TimeSpan Time { get; }
-
-            public override string ToString()
-            {
-                return $"{Event} at {Time}";
-            }
-        }
-
         private sealed class MidiTimeCode
         {
             public MidiTimeCode(MidiTimeCodeType timeCodeType, int hours, int minutes, int seconds, int frames)
@@ -269,8 +215,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private void CompareSentReceivedEvents(IEnumerable<SentEvent> sentEvents, IEnumerable<ReceivedEvent> receivedEvents)
         {
-            var delays = new List<TimeSpan>();
-
             var eventsPairs = sentEvents.Zip(receivedEvents, (s, r) => new { Sent = s, Received = r }).ToList();
             for (var i = 0; i < eventsPairs.Count; i++)
             {
@@ -283,11 +227,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
 
                 var delay = receivedEvent.Time - sentEvent.Time;
-                delays.Add(delay);
-
                 Assert.IsTrue(
                     delay <= MaximumEventReceivingDelay,
-                    $"Event received too late (at {receivedEvent.Time} instead of {sentEvent.Time}).");
+                    $"Event was received too late (at {receivedEvent.Time} instead of {sentEvent.Time}).");
             }
         }
 

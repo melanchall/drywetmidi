@@ -9,6 +9,30 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     internal static class MidiEventEquality
     {
+        #region Nested classes
+
+        public sealed class EqualityComparer : IEqualityComparer<MidiEvent>
+        {
+            private readonly bool _compareDeltaTimes;
+
+            public EqualityComparer(bool compareDeltaTimes)
+            {
+                _compareDeltaTimes = compareDeltaTimes;
+            }
+
+            public bool Equals(MidiEvent x, MidiEvent y)
+            {
+                return AreEqual(x, y, _compareDeltaTimes);
+            }
+
+            public int GetHashCode(MidiEvent obj)
+            {
+                return 0;
+            }
+        }
+
+        #endregion
+
         #region Constants
 
         private static readonly Dictionary<Type, Func<MidiEvent, MidiEvent, bool>> Comparers =
