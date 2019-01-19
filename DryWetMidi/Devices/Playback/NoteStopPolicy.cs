@@ -6,14 +6,14 @@
     public enum NoteStopPolicy
     {
         /// <summary>
-        /// Interrupt notes by sending corresponding Note Off events.
-        /// </summary>
-        Interrupt = 0,
-
-        /// <summary>
         /// Do nothing and let notes playing.
         /// </summary>
-        Hold,
+        Hold = 0,
+
+        /// <summary>
+        /// Interrupt notes by sending corresponding Note Off events.
+        /// </summary>
+        Interrupt,
 
         /// <summary>
         /// Split notes at the moment of playback stopped. Notes will be interrupted by

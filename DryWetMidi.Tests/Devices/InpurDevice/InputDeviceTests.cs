@@ -42,13 +42,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #endregion
 
-        #region Constants
-
-        private const string DeviceToTestOnName = MidiDevicesNames.DeviceA;
-        private static readonly TimeSpan MaximumEventReceivingDelay = TimeSpan.FromMilliseconds(30);
-
-        #endregion
-
         #region Test methods
 
         [TestCase(MidiDevicesNames.DeviceA)]
@@ -104,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
 
-                var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventReceivingDelay;
+                var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var isMidiTimeCodeReceived = SpinWait.SpinUntil(() => midiTimeCodeReceived != null, timeout);
                 Assert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code received for timeout {timeout}.");
 
