@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
@@ -34,10 +35,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #endregion
 
-        #region Constants
+        #region Delegates
 
-        private const string DeviceToTestOnName = MidiDevicesNames.DeviceA;
-        private static readonly TimeSpan MaximumEventSendingReceivingDelay = TimeSpan.FromMilliseconds(30);
+        private delegate void PlaybackAction(PlaybackContext context, Playback playback);
 
         #endregion
 
@@ -65,18 +65,18 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 startPlayback: (context, playback) => playback.Start(),
                 afterPlaybackStarted: (context, playback) =>
                 {
-                    Assert.LessOrEqual(context.Stopwatch.Elapsed, MaximumEventSendingReceivingDelay, "Playback blocks current thread.");
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
                     Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
                 },
                 waiting: (context, playback) =>
                 {
-                    var timeout = context.ExpectedTimes.Last() + MaximumEventSendingReceivingDelay;
+                    var timeout = context.ExpectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
                     var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, MaximumEventSendingReceivingDelay);
+                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 });
         }
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 waiting: (context, playback) =>
                 {
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, MaximumEventSendingReceivingDelay);
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(areEventsReceived, $"Events are not received.");
                 },
                 finalChecks: (context, playback) => { });
@@ -146,13 +146,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 startPlayback: (context, playback) => playback.Start(),
                 afterPlaybackStarted: (context, playback) =>
                 {
-                    Assert.LessOrEqual(context.Stopwatch.Elapsed, MaximumEventSendingReceivingDelay, "Playback blocks current thread.");
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
                     Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
                 },
                 waiting: (context, playback) =>
                 {
-                    var timeout = context.ExpectedTimes.Last() + MaximumEventSendingReceivingDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length * repetitionsNumber, timeout);
+                    var timeout = context.ExpectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= eventsToSend.Length * repetitionsNumber, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
@@ -187,7 +187,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: eventsToSend,
                 stopAfter: TimeSpan.FromMilliseconds(2500),
                 stopPeriod: TimeSpan.FromSeconds(3),
-                setupPlayback: (context, playback) => { });
+                setupPlayback: (context, playback) => { },
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => { },
+                afterResume: (context, playback) => { });
         }
 
         [Test]
@@ -207,7 +210,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
-                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Interrupt);
+                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Interrupt,
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => { },
+                afterResume: (context, playback) => { });
         }
 
         [Test]
@@ -224,7 +230,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: eventsToSend,
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
-                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Hold);
+                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Hold,
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => { },
+                afterResume: (context, playback) => { });
         }
 
         [Test]
@@ -240,12 +249,81 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 {
                     new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
                     new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
-                    new EventToSend(new NoteOnEvent(), TimeSpan.FromMilliseconds(1)),
+                    new EventToSend(new NoteOnEvent(), TimeSpan.FromTicks(1)),
                     new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(4))
                 },
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
-                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Split);
+                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Split,
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => { },
+                afterResume: (context, playback) => { });
+        }
+
+        [Test]
+        public void GetCurrentTime()
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+            };
+
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            CheckPlaybackStop(
+                eventsToSend,
+                eventsWillBeSent: eventsToSend,
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => { },
+                afterStart: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "started"),
+                afterStop: (context, playback) => CheckCurrentTime(playback, stopAfter, "stopped"),
+                afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter, "resumed"),
+                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, stopAfter + TimeSpan.FromSeconds(1), "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) => CheckCurrentTime(playback, stopAfter + TimeSpan.FromSeconds(3), "resumed"))
+                });
+        }
+
+        [Test]
+        public void MoveToStart()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => { },
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => playback.MoveToStart(),
+                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
+                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(1), "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
+                    {
+                        playback.MoveToStart();
+                        CheckCurrentTime(playback, TimeSpan.Zero, "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(2), "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    TimeSpan.FromSeconds(4),
+                    TimeSpan.FromSeconds(7),
+                    TimeSpan.FromSeconds(17)
+                });
         }
 
         #endregion
@@ -255,11 +333,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         private void CheckPlayback(
             ICollection<EventToSend> eventsToSend,
             double speed,
-            Action<PlaybackContext, Playback> beforePlaybackStarted,
-            Action<PlaybackContext, Playback> startPlayback,
-            Action<PlaybackContext, Playback> afterPlaybackStarted,
-            Action<PlaybackContext, Playback> waiting,
-            Action<PlaybackContext, Playback> finalChecks)
+            PlaybackAction beforePlaybackStarted,
+            PlaybackAction startPlayback,
+            PlaybackAction afterPlaybackStarted,
+            PlaybackAction waiting,
+            PlaybackAction finalChecks)
         {
             var playbackContext = new PlaybackContext();
 
@@ -322,7 +400,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             ICollection<EventToSend> eventsWillBeSent,
             TimeSpan stopAfter,
             TimeSpan stopPeriod,
-            Action<PlaybackContext, Playback> setupPlayback)
+            PlaybackAction setupPlayback,
+            PlaybackAction afterStart,
+            PlaybackAction afterStop,
+            PlaybackAction afterResume,
+            IEnumerable<Tuple<TimeSpan, PlaybackAction>> runningAfterResume = null,
+            ICollection<TimeSpan> explicitExpectedTimes = null)
         {
             var playbackContext = new PlaybackContext();
 
@@ -343,11 +426,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsForPlayback.Add(midiEvent);
             }
 
-            currentTime = TimeSpan.Zero;
-            foreach (var eventWillBeSent in eventsWillBeSent)
+            if (explicitExpectedTimes != null)
+                expectedTimes.AddRange(explicitExpectedTimes);
+            else
             {
-                currentTime += eventWillBeSent.Delay;
-                expectedTimes.Add(currentTime > stopAfter ? currentTime + stopPeriod : currentTime);
+                currentTime = TimeSpan.Zero;
+                foreach (var eventWillBeSent in eventsWillBeSent)
+                {
+                    currentTime += eventWillBeSent.Delay;
+                    expectedTimes.Add(currentTime > stopAfter ? currentTime + stopPeriod : currentTime);
+                }
             }
 
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
@@ -372,19 +460,34 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         stopwatch.Start();
                         playback.Start();
 
+                        afterStart(playbackContext, playback);
+
                         SpinWait.SpinUntil(() => stopwatch.Elapsed >= stopAfter);
                         playback.Stop();
+
+                        afterStop(playbackContext, playback);
 
                         Thread.Sleep(stopPeriod);
                         playback.Start();
 
-                        var timeout = expectedTimes.Last() + MaximumEventSendingReceivingDelay;
-                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
+                        afterResume(playbackContext, playback);
+
+                        if (runningAfterResume != null)
+                        {
+                            foreach (var check in runningAfterResume)
+                            {
+                                Thread.Sleep(check.Item1);
+                                check.Item2(playbackContext, playback);
+                            }
+                        }
+
+                        var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == expectedTimes.Count, timeout);
                         Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                         stopwatch.Stop();
 
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, MaximumEventSendingReceivingDelay);
+                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                         Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                     }
                 }
@@ -408,11 +511,28 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     MidiEventEquality.AreEqual(sentEvent.Event, receivedEvent.Event, false),
                     $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
 
-                var offsetFromExpectedTime = sentEvent.Time - expectedTime;
-                Assert.IsTrue(
-                    offsetFromExpectedTime >= TimeSpan.Zero && offsetFromExpectedTime <= MaximumEventSendingReceivingDelay,
+                var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
+                Assert.LessOrEqual(
+                    offsetFromExpectedTime,
+                    SendReceiveUtilities.MaximumEventSendReceiveDelay,
                     $"Event was sent too late (at {sentEvent.Time} instead of {expectedTime}).");
             }
+        }
+
+        private static void CheckCurrentTime(Playback playback, TimeSpan expectedCurrentTime, string afterPlaybackAction)
+        {
+            TimeSpan currentTime = (MetricTimeSpan)playback.GetCurrentTime(TimeSpanType.Metric);
+            Assert.IsTrue(
+                AreTimeSpansEqual(currentTime, expectedCurrentTime),
+                $"Current time ({currentTime}) is invalid after playback {afterPlaybackAction} ({expectedCurrentTime}).");
+        }
+
+        private static bool AreTimeSpansEqual(TimeSpan timeSpan1, TimeSpan timeSpan2)
+        {
+            // TODO: decrease epsilon
+            var epsilon = TimeSpan.FromMilliseconds(15);
+            var delta = (timeSpan1 - timeSpan2).Duration();
+            return delta <= epsilon;
         }
 
         #endregion

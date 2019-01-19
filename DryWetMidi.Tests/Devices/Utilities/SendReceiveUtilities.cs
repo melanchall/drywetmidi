@@ -14,8 +14,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     {
         #region Constants
 
-        private const string DeviceToTestOnName = MidiDevicesNames.DeviceA;
-        private static readonly TimeSpan MaximumEventReceivingDelay = TimeSpan.FromMilliseconds(30);
+        public const string DeviceToTestOnName = MidiDevicesNames.DeviceA;
+        public static readonly TimeSpan MaximumEventSendReceiveDelay = TimeSpan.FromMilliseconds(30);
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     SendEvents(eventsToSend, outputDevice);
                     stopwatch.Stop();
 
-                    var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventReceivingDelay;
+                    var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventSendReceiveDelay;
                     var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsToSend.Count, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
@@ -77,9 +77,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     MidiEventEquality.AreEqual(sentEvent.Event, receivedEvent.Event, false),
                     $"Received event ({receivedEvent.Event}) doesn't match the sent one ({sentEvent.Event}).");
 
-                var delay = receivedEvent.Time - sentEvent.Time;
-                Assert.IsTrue(
-                    delay <= MaximumEventReceivingDelay,
+                var delay = (receivedEvent.Time - sentEvent.Time).Duration();
+                Assert.LessOrEqual(
+                    delay,
+                    MaximumEventSendReceiveDelay,
                     $"Event was received too late (at {receivedEvent.Time} instead of {sentEvent.Time}).");
             }
         }

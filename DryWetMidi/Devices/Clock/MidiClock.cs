@@ -55,11 +55,11 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        public bool IsRunning { get; private set; }
+        public bool IsRunning => _stopwatch.IsRunning;
 
         public TimeSpan StartTime { get; set; } = TimeSpan.Zero;
 
-        public TimeSpan CurrentTime { get; private set; } = TimeSpan.Zero;
+        public TimeSpan CurrentTime { get; set; } = TimeSpan.Zero;
 
         public double Speed
         {
@@ -68,17 +68,13 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 var start = IsRunning;
 
-                IsRunning = false;
-                _stopwatch.Stop();
+                StopInternalTimer();
 
                 StartTime = _stopwatch.Elapsed;
                 _speed = value;
 
                 if (start)
-                {
-                    _stopwatch.Start();
-                    IsRunning = true;
-                }
+                    StartInternalTimer();
             }
         }
 
@@ -102,17 +98,15 @@ namespace Melanchall.DryWetMidi.Devices
             if (_timerId == 0)
             {
                 var errorCode = Marshal.GetLastWin32Error();
-                throw new MidiDeviceException("Unable to initialize clock.", new Win32Exception(errorCode));
+                throw new MidiDeviceException("Unable to initialize MIDI clock.", new Win32Exception(errorCode));
             }
 
-            _stopwatch.Start();
-            IsRunning = true;
+            StartInternalTimer();
         }
 
         public void Stop()
         {
-            IsRunning = false;
-            _stopwatch.Stop();
+            StopInternalTimer();
 
             MidiTimerWinApi.timeEndPeriod(_resolution);
             MidiTimerWinApi.timeKillEvent(_timerId);
@@ -127,9 +121,29 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void Reset()
         {
-            _stopwatch.Reset();
+            ResetInternalTimer();
             StartTime = TimeSpan.Zero;
             CurrentTime = TimeSpan.Zero;
+        }
+
+        public void StopInternalTimer()
+        {
+            _stopwatch.Stop();
+        }
+
+        public void ResetInternalTimer()
+        {
+            _stopwatch.Reset();
+        }
+
+        public void StartInternalTimer()
+        {
+            _stopwatch.Start();
+        }
+
+        public void RestartInternalTimer()
+        {
+            _stopwatch.Restart();
         }
 
         private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
@@ -147,7 +161,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 case MidiWinApi.MMSYSERR_ERROR:
                 case MidiWinApi.TIMERR_NOCANDO:
-                    throw new MidiDeviceException("Error occurred.");
+                    throw new MidiDeviceException("Error occurred on MIDI clock.");
             }
         }
 

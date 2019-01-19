@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
         /// </summary>
-        public bool IsRunning { get; private set; }
+        public bool IsRunning => _clock.IsRunning;
 
         /// <summary>
         /// Gets or sets a value indicating whether playing should automatically start
@@ -112,6 +112,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Gets or sets a value determining how currently playing notes should react on playback stopped.
+        /// The default value is <see cref="NoteStopPolicy.Hold"/>.
         /// </summary>
         public NoteStopPolicy NoteStopPolicy { get; set; }
 
@@ -184,7 +185,6 @@ namespace Melanchall.DryWetMidi.Devices
             _noteOnEvents.Clear();
 
             _clock.Start();
-            IsRunning = true;
         }
 
         /// <summary>
@@ -197,12 +197,11 @@ namespace Melanchall.DryWetMidi.Devices
         {
             EnsureIsNotDisposed();
 
-            if (!_clock.IsRunning)
+            if (!IsRunning)
                 return;
 
             _clock.Stop();
             StopNotes();
-            IsRunning = false;
         }
 
         /// <summary>
@@ -248,11 +247,11 @@ namespace Melanchall.DryWetMidi.Devices
 
             var needStart = IsRunning;
 
-            Stop();
+            _clock.ResetInternalTimer();
             SetStartTime(time);
 
             if (needStart)
-                Start();
+                _clock.StartInternalTimer();
         }
 
         /// <summary>
@@ -302,7 +301,7 @@ namespace Melanchall.DryWetMidi.Devices
 
                 var midiEvent = timedEvent.Event;
 
-                if (!_clock.IsRunning)
+                if (!IsRunning)
                     return;
 
                 OutputDevice.SendEvent(midiEvent);
@@ -323,9 +322,11 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
             }
 
-            _clock.Restart();
+            _clock.StopInternalTimer();
+            _clock.Reset();
             _eventsEnumerator.Reset();
             _eventsEnumerator.MoveNext();
+            _clock.StartInternalTimer();
         }
 
         private void EnsureIsNotDisposed()
@@ -361,7 +362,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void SetStartTime(ITimeSpan time)
         {
-            _clock.StartTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
+            _clock.StartTime = _clock.CurrentTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
 
             _eventsEnumerator.Reset();
             do { _eventsEnumerator.MoveNext(); }

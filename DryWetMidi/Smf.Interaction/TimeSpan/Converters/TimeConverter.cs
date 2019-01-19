@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return ConvertTo<TTimeSpan>(ConvertFrom(time, tempoMap), tempoMap);
+            return TimeSpanConverter.ConvertTo<TTimeSpan>(time, 0, tempoMap);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return ConvertTo(ConvertFrom(time, tempoMap), timeType, tempoMap);
+            return TimeSpanConverter.ConvertTo(time, timeType, 0, tempoMap);
         }
 
         /// <summary>
