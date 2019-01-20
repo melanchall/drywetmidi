@@ -20,9 +20,18 @@ namespace Melanchall.DryWetMidi.Devices
 
         #endregion
 
+        #region Events
+
+        public event EventHandler Started;
+        public event EventHandler Stopped;
+        public event EventHandler Finished;
+
+        #endregion
+
         #region Fields
 
         private readonly IEnumerator<PlaybackEvent> _eventsEnumerator;
+        private readonly TimeSpan _duration;
 
         private readonly MidiClock _clock;
         private readonly Dictionary<NoteId, NoteOnEvent> _noteOnEvents = new Dictionary<NoteId, NoteOnEvent>();
@@ -63,7 +72,10 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            _eventsEnumerator = GetPlaybackEvents(events, tempoMap).GetEnumerator();
+            var playbackEvents = GetPlaybackEvents(events, tempoMap);
+            _duration = playbackEvents.LastOrDefault()?.Time ?? TimeSpan.Zero;
+
+            _eventsEnumerator = playbackEvents.GetEnumerator();
             _eventsEnumerator.MoveNext();
 
             TempoMap = tempoMap;
@@ -139,6 +151,33 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         /// <summary>
+        /// Retrieves the duration of the playback in the specified format.
+        /// </summary>
+        /// <param name="durationType">Type that will represent the duration.</param>
+        /// <returns>The duration of the playback as an instance of time span defined by
+        /// <paramref name="durationType"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/>
+        /// specified an invalid value.</exception>
+        public ITimeSpan GetDuration(TimeSpanType durationType)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
+
+            return TimeConverter.ConvertTo((MetricTimeSpan)_duration, durationType, TempoMap);
+        }
+
+        /// <summary>
+        /// Retrieves the duration of the playback in the specified format.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">Type that will represent the duration.</typeparam>
+        /// <returns>The duration of the playback as an instance of
+        /// <typeparamref name="TTimeSpan"/>.</returns>
+        public TTimeSpan GetDuration<TTimeSpan>()
+            where TTimeSpan : ITimeSpan
+        {
+            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan)_duration, TempoMap);
+        }
+
+        /// <summary>
         /// Retrieves the current time of the playback in the specified format.
         /// </summary>
         /// <param name="timeType">Type that will represent the current time.</param>
@@ -185,6 +224,8 @@ namespace Melanchall.DryWetMidi.Devices
             _noteOnEvents.Clear();
 
             _clock.Start();
+
+            OnStarted();
         }
 
         /// <summary>
@@ -202,6 +243,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             _clock.Stop();
             StopNotes();
+
+            OnStopped();
         }
 
         /// <summary>
@@ -286,6 +329,21 @@ namespace Melanchall.DryWetMidi.Devices
             MoveToTime(currentTime.Subtract(step, TimeSpanMode.TimeLength));
         }
 
+        private void OnStarted()
+        {
+            Started?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnStopped()
+        {
+            Stopped?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnFinished()
+        {
+            Finished?.Invoke(this, EventArgs.Empty);
+        }
+
         private void OnClockTick(object sender, TickEventArgs e)
         {
             var time = e.Time;
@@ -318,7 +376,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (!Loop)
             {
-                Stop();
+                _clock.Stop();
+                OnFinished();
                 return;
             }
 
@@ -369,7 +428,7 @@ namespace Melanchall.DryWetMidi.Devices
             while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < _clock.StartTime);
         }
 
-        private static IEnumerable<PlaybackEvent> GetPlaybackEvents(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
+        private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
         {
             return events.Where(e => e != null)
                          .Select(e => new TrackChunk(e.Where(midiEvent => !(midiEvent is MetaEvent))))

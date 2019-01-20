@@ -40,7 +40,52 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #endregion
 
+        #region Constants
+
+        private static readonly PlaybackAction NoPlaybackAction = (context, playback) => { };
+
+        private static readonly object[] ParametersForDurationCheck = new[]
+        {
+            new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(2) },
+            new object[] { TimeSpan.FromMilliseconds(500), TimeSpan.FromSeconds(3) },
+            new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(10) },
+            new object[] { TimeSpan.FromSeconds(4), TimeSpan.FromSeconds(12) }
+        };
+
+        #endregion
+
         #region Test methods
+
+        [Test]
+        public void CheckPlaybackEvents()
+        {
+            var startedRaised = false;
+            var stoppedRaised = false;
+            var finishedRaised = false;
+
+            var playbackEvents = new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent
+                {
+                    DeltaTime = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 5), TempoMap.Default)
+                }
+            };
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var playback = new Playback(playbackEvents, TempoMap.Default, outputDevice))
+            {
+                playback.Started += (sender, args) => startedRaised = true;
+                playback.Stopped += (sender, args) => stoppedRaised = true;
+                playback.Finished += (sender, args) => finishedRaised = true;
+
+                playback.Start();
+                playback.Stop();
+                playback.Start();
+
+                SpinWait.SpinUntil(() => startedRaised && stoppedRaised && finishedRaised, TimeSpan.FromSeconds(6));
+            }
+        }
 
         [TestCase(1.0)]
         [TestCase(2.0)]
@@ -60,7 +105,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             CheckPlayback(
                 eventsToSend,
                 speed,
-                beforePlaybackStarted: (context, playback) => { },
+                beforePlaybackStarted: NoPlaybackAction,
                 startPlayback: (context, playback) => playback.Start(),
                 afterPlaybackStarted: (context, playback) =>
                 {
@@ -98,7 +143,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             CheckPlayback(
                 eventsToSend,
                 speed,
-                beforePlaybackStarted: (context, playback) => { },
+                beforePlaybackStarted: NoPlaybackAction,
                 startPlayback: (context, playback) => playback.Play(),
                 afterPlaybackStarted: (context, playback) =>
                 {
@@ -109,7 +154,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(areEventsReceived, $"Events are not received.");
                 },
-                finalChecks: (context, playback) => { });
+                finalChecks: NoPlaybackAction);
         }
 
         [TestCase(1)]
@@ -186,10 +231,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: eventsToSend,
                 stopAfter: TimeSpan.FromMilliseconds(2500),
                 stopPeriod: TimeSpan.FromSeconds(3),
-                setupPlayback: (context, playback) => { },
-                afterStart: (context, playback) => { },
-                afterStop: (context, playback) => { },
-                afterResume: (context, playback) => { });
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
+                afterStop: NoPlaybackAction,
+                afterResume: NoPlaybackAction);
         }
 
         [Test]
@@ -210,9 +255,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
                 setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Interrupt,
-                afterStart: (context, playback) => { },
-                afterStop: (context, playback) => { },
-                afterResume: (context, playback) => { });
+                afterStart: NoPlaybackAction,
+                afterStop: NoPlaybackAction,
+                afterResume: NoPlaybackAction);
         }
 
         [Test]
@@ -230,9 +275,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
                 setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Hold,
-                afterStart: (context, playback) => { },
-                afterStop: (context, playback) => { },
-                afterResume: (context, playback) => { });
+                afterStart: NoPlaybackAction,
+                afterStop: NoPlaybackAction,
+                afterResume: NoPlaybackAction);
         }
 
         [Test]
@@ -254,9 +299,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
                 setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Split,
-                afterStart: (context, playback) => { },
-                afterStop: (context, playback) => { },
-                afterResume: (context, playback) => { });
+                afterStart: NoPlaybackAction,
+                afterStop: NoPlaybackAction,
+                afterResume: NoPlaybackAction);
         }
 
         [Test]
@@ -276,7 +321,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: eventsToSend,
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => { },
+                setupPlayback: NoPlaybackAction,
                 afterStart: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "started"),
                 afterStop: (context, playback) => CheckCurrentTime(playback, stopAfter, "stopped"),
                 afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter, "resumed"),
@@ -302,8 +347,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => { },
-                afterStart: (context, playback) => { },
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToStart(),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
                 runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
@@ -343,8 +388,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => { },
-                afterStart: (context, playback) => { },
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveForward((MetricTimeSpan)stepAfterStop),
                 afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter + stepAfterStop, "stopped"),
                 runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
@@ -382,8 +427,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => { },
-                afterStart: (context, playback) => { },
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveBack((MetricTimeSpan)stepAfterStop),
                 afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter - stepAfterStop, "stopped"),
                 runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
@@ -418,8 +463,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => { },
-                afterStart: (context, playback) => { },
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 1)),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(1), "stopped"),
                 runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
@@ -437,6 +482,32 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     TimeSpan.Zero,
                     TimeSpan.FromSeconds(11)
                 });
+        }
+
+        [TestCaseSource(nameof(ParametersForDurationCheck))]
+        public void GetDuration(TimeSpan start, TimeSpan delayFromStart)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), start),
+                new EventToSend(new NoteOffEvent(), delayFromStart)
+            };
+
+            CheckPlaybackStop(
+                eventsToSend: eventsToSend,
+                eventsWillBeSent: eventsToSend,
+                stopAfter: TimeSpan.Zero,
+                stopPeriod: TimeSpan.Zero,
+                setupPlayback: NoPlaybackAction,
+                afterStart: (context, playback) =>
+                {
+                    var duration = playback.GetDuration<MetricTimeSpan>();
+                    Assert.IsTrue(
+                        AreTimeSpansEqual(duration, start + delayFromStart),
+                        $"Duration is invalid. Actual is {duration}. Expected is {start + delayFromStart}.");
+                },
+                afterStop: (context, playback) => { },
+                afterResume: (context, playback) => { });
         }
 
         #endregion
