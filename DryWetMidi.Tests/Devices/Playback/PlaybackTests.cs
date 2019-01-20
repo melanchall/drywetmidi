@@ -7,7 +7,6 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Melanchall.DryWetMidi.Tests.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
@@ -323,6 +322,120 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     TimeSpan.FromSeconds(4),
                     TimeSpan.FromSeconds(7),
                     TimeSpan.FromSeconds(17)
+                });
+        }
+
+        [Test]
+        public void MoveForward()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            var stepAfterStop = TimeSpan.FromSeconds(2);
+            var stepAfterResumed = TimeSpan.FromSeconds(1);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => { },
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => playback.MoveForward((MetricTimeSpan)stepAfterStop),
+                afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter + stepAfterStop, "stopped"),
+                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, stopAfter + stepAfterStop + TimeSpan.FromSeconds(1), "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
+                    {
+                        playback.MoveForward((MetricTimeSpan)stepAfterResumed);
+                        CheckCurrentTime(playback, stopAfter + stepAfterStop + stepAfterResumed + TimeSpan.FromSeconds(3), "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, stopAfter + stepAfterStop + stepAfterResumed + TimeSpan.FromSeconds(4), "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    TimeSpan.FromSeconds(12) - stepAfterStop - stepAfterResumed
+                });
+        }
+
+        [Test]
+        public void MoveBack()
+        {
+            var stopAfter = TimeSpan.FromSeconds(4);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            var stepAfterStop = TimeSpan.FromSeconds(2);
+            var stepAfterResumed = TimeSpan.FromSeconds(1);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => { },
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => playback.MoveBack((MetricTimeSpan)stepAfterStop),
+                afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter - stepAfterStop, "stopped"),
+                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, stopAfter - stepAfterStop + TimeSpan.FromSeconds(1), "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
+                    {
+                        playback.MoveBack((MetricTimeSpan)stepAfterResumed);
+                        CheckCurrentTime(playback, stopAfter - stepAfterStop - stepAfterResumed + TimeSpan.FromSeconds(3), "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, stopAfter - stepAfterStop - stepAfterResumed + TimeSpan.FromSeconds(4), "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    TimeSpan.FromSeconds(12) + stepAfterStop + stepAfterResumed
+                });
+        }
+
+        [Test]
+        public void MoveToTime()
+        {
+            var stopAfter = TimeSpan.FromSeconds(4);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => { },
+                afterStart: (context, playback) => { },
+                afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 1)),
+                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(1), "stopped"),
+                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(2), "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
+                    {
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 8));
+                        CheckCurrentTime(playback, TimeSpan.FromSeconds(8), "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(9), "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    TimeSpan.FromSeconds(11)
                 });
         }
 
