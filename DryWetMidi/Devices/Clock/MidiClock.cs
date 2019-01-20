@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (!IsRunning)
                 return;
 
-            CurrentTime = StartTime + new TimeSpan(MathUtilities.RoundToLong((_stopwatch.Elapsed - StartTime).Ticks * Speed));
+            CurrentTime = StartTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
             Tick?.Invoke(this, new TickEventArgs(CurrentTime));
         }
 
