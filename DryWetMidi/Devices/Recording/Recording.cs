@@ -12,6 +12,20 @@ namespace Melanchall.DryWetMidi.Devices
     /// </summary>
     public sealed class Recording : IDisposable
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when recording started via <see cref="Start"/> method.
+        /// </summary>
+        public event EventHandler Started;
+
+        /// <summary>
+        /// Occurs when recording stopped via <see cref="Stop"/> method.
+        /// </summary>
+        public event EventHandler Stopped;
+
+        #endregion
+
         #region Fields
 
         private readonly List<RecordingEvent> _events = new List<RecordingEvent>();
@@ -58,7 +72,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets a value indicating whether recording is currently running or not.
         /// </summary>
-        public bool IsRunning { get; private set; }
+        public bool IsRunning => _stopwatch.IsRunning;
 
         #endregion
 
@@ -80,18 +94,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Starts MIDI data recording.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Input device is not listening for MIDI events</exception>
+        /// <exception cref="InvalidOperationException">Input device is not listening for MIDI events.</exception>
         public void Start()
         {
             if (IsRunning)
                 return;
 
             if (!InputDevice.IsListeningForEvents)
-                throw new InvalidOperationException($"Input device is not listening for MIDI events. Call {nameof(InputDevice.StartEventsListening)} prior to recording start.");
+                throw new InvalidOperationException($"Input device is not listening for MIDI events. Call {nameof(InputDevice.StartEventsListening)} prior to start recording.");
 
             _stopwatch.Start();
-
-            IsRunning = true;
+            OnStarted();
         }
 
         /// <summary>
@@ -104,8 +117,17 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _stopwatch.Stop();
+            OnStopped();
+        }
 
-            IsRunning = false;
+        private void OnStarted()
+        {
+            Started?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnStopped()
+        {
+            Stopped?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
