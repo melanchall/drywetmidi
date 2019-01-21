@@ -22,8 +22,20 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Events
 
+        /// <summary>
+        /// Occurs when playback started via <see cref="Start"/> or <see cref="Play"/> methods.
+        /// </summary>
         public event EventHandler Started;
+
+        /// <summary>
+        /// Occurs when playback stopped via <see cref="Stop"/> method.
+        /// </summary>
         public event EventHandler Stopped;
+
+        /// <summary>
+        /// Occurs when playback finished, i.e. last event has been played and no
+        /// need to restart playback due to value of the <see cref="Loop"/>.
+        /// </summary>
         public event EventHandler Finished;
 
         #endregion
