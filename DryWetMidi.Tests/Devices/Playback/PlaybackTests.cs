@@ -326,7 +326,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterStart: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "started"),
                 afterStop: (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter, speed), "stopped"),
                 afterResume: (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter, speed), "resumed"),
-                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                runningAfterResume: new[]
                 {
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter + TimeSpan.FromSeconds(1), speed), "resumed")),
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter + TimeSpan.FromSeconds(3), speed), "resumed"))
@@ -355,7 +355,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToStart(),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
-                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                runningAfterResume: new[]
                 {
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(TimeSpan.FromSeconds(1), speed), "resumed")),
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
@@ -399,7 +399,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveForward((MetricTimeSpan)stepAfterStop),
                 afterResume: (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter, speed) + stepAfterStop, "stopped"),
-                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                runningAfterResume: new[]
                 {
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter + TimeSpan.FromSeconds(1), speed) + stepAfterStop, "resumed")),
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
@@ -415,6 +415,35 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     ScaleTimeSpan(TimeSpan.FromSeconds(15) - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod
                 },
                 speed: speed);
+        }
+
+        [Test]
+        public void MoveForward_BeyondDuration()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            var stepAfterStop = TimeSpan.FromSeconds(10);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(4))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveForward((MetricTimeSpan)stepAfterStop),
+                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(4), "stopped"),
+                runningAfterResume: null,
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    stopAfter + stopPeriod
+                });
         }
 
         [TestCase(1.0)]
@@ -447,7 +476,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveBack((MetricTimeSpan)stepAfterStop),
                 afterResume: (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter, speed) - stepAfterStop, "stopped"),
-                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                runningAfterResume: new[]
                 {
                     Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, ScaleTimeSpan(stopAfter + firstAfterResumeDelay, speed) - stepAfterStop, "resumed")),
                     Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
@@ -463,6 +492,52 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod
                 },
                 speed: speed);
+        }
+
+        [Test]
+        public void MoveBack_BeyondZero()
+        {
+            var stopAfter = TimeSpan.FromSeconds(3);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            var stepAfterStop = TimeSpan.FromSeconds(5);
+            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
+
+            var lastEventTime = TimeSpan.FromSeconds(5);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), lastEventTime)
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveBack((MetricTimeSpan)stepAfterStop),
+                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
+                runningAfterResume: new[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, firstAfterResumeDelay, "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    {
+                        playback.MoveBack((MetricTimeSpan)stepAfterResumed);
+                        CheckCurrentTime(playback, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    stopAfter + stopPeriod,
+                    lastEventTime + stopAfter + stopPeriod + stepAfterResumed
+                });
         }
 
         [Test]
@@ -484,7 +559,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 1)),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(1), "stopped"),
-                runningAfterResume: new Tuple<TimeSpan, PlaybackAction>[]
+                runningAfterResume: new[]
                 {
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(2), "resumed")),
                     Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
@@ -498,6 +573,33 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 {
                     TimeSpan.Zero,
                     TimeSpan.FromSeconds(11)
+                });
+        }
+
+        [Test]
+        public void MoveToTime_BeyondDuration()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(4))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: NoPlaybackAction,
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 10)),
+                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(4), "stopped"),
+                runningAfterResume: null,
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    stopAfter + stopPeriod
                 });
         }
 

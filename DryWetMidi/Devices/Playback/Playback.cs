@@ -44,6 +44,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly IEnumerator<PlaybackEvent> _eventsEnumerator;
         private readonly TimeSpan _duration;
+        private readonly long _durationInTicks;
 
         private readonly MidiClock _clock;
         private readonly Dictionary<NoteId, NoteOnEvent> _noteOnEvents = new Dictionary<NoteId, NoteOnEvent>();
@@ -86,6 +87,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             var playbackEvents = GetPlaybackEvents(events, tempoMap);
             _duration = playbackEvents.LastOrDefault()?.Time ?? TimeSpan.Zero;
+            _durationInTicks = playbackEvents.LastOrDefault()?.RawTime ?? 0;
 
             _eventsEnumerator = playbackEvents.GetEnumerator();
             _eventsEnumerator.MoveNext();
@@ -300,6 +302,9 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(time), time);
             EnsureIsNotDisposed();
 
+            if (TimeConverter.ConvertFrom(time, TempoMap) > _durationInTicks)
+                time = (MetricTimeSpan)_duration;
+
             var needStart = IsRunning;
 
             _clock.ResetInternalTimer();
@@ -338,7 +343,9 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
-            MoveToTime(currentTime.Subtract(step, TimeSpanMode.TimeLength));
+            MoveToTime(TimeConverter.ConvertTo<MetricTimeSpan>(step, TempoMap) > currentTime
+                ? new MetricTimeSpan()
+                : currentTime.Subtract(step, TimeSpanMode.TimeLength));
         }
 
         private void OnStarted()
