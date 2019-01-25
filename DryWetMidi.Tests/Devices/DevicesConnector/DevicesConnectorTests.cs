@@ -15,6 +15,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     [TestFixture]
     public sealed class DevicesConnectorTests
     {
+        #region Constants
+
+        public static readonly TimeSpan MaximumEventSendReceiveDelay = TimeSpan.FromMilliseconds(50);
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -105,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 }
             }
 
-            SendReceiveUtilities.CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEvents);
+            SendReceiveUtilities.CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEvents, MaximumEventSendReceiveDelay);
         }
 
         #endregion

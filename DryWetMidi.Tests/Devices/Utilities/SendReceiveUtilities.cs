@@ -63,6 +63,15 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         public static void CompareSentReceivedEvents(IReadOnlyList<EventToSend> eventsToSend, IReadOnlyList<SentEvent> sentEvents, IReadOnlyList<ReceivedEvent> receivedEvents)
         {
+            CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEvents, MaximumEventSendReceiveDelay);
+        }
+
+        public static void CompareSentReceivedEvents(
+            IReadOnlyList<EventToSend> eventsToSend,
+            IReadOnlyList<SentEvent> sentEvents,
+            IReadOnlyList<ReceivedEvent> receivedEvents,
+            TimeSpan maximumEventSendReceiveDelay)
+        {
             for (var i = 0; i < sentEvents.Count; i++)
             {
                 var eventToSend = eventsToSend[i];
@@ -80,8 +89,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var delay = (receivedEvent.Time - sentEvent.Time).Duration();
                 Assert.LessOrEqual(
                     delay,
-                    MaximumEventSendReceiveDelay,
-                    $"Event was received too late (at {receivedEvent.Time} instead of {sentEvent.Time}).");
+                    maximumEventSendReceiveDelay,
+                    $"Event was received too late (at {receivedEvent.Time} instead of {sentEvent.Time}). Delay is too big.");
             }
         }
 
