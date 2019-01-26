@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
+using NUnit.Framework;
+
+namespace Melanchall.DryWetMidi.Tests.Devices
+{
+    [TestFixture]
+    public sealed class RecordingTests
+    {
+        #region Constants
+
+        private const int RetriesNumber = 3;
+
+        #endregion
+
+        #region Test methods
+
+        [Test]
+        public void StartRecording_DeviceNotListeningEvents()
+        {
+            using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var recording = new Recording(TempoMap.Default, inputDevice))
+            {
+                Assert.Throws<InvalidOperationException>(() => recording.Start(), "Recording started on device which is not listening events.");
+            }
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckRecording()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromSeconds(2);
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new TimingClockEvent(), TimeSpan.FromSeconds(5))
+            };
+
+            var sentEvents = new List<SentEvent>();
+            var receivedEvents = new List<ReceivedEvent>();
+            var stopwatch = new Stopwatch();
+
+            var expectedTimes = new List<TimeSpan>();
+            var expectedRecordedTimes = new List<TimeSpan>();
+            var currentTime = TimeSpan.Zero;
+            foreach (var eventToSend in eventsToSend)
+            {
+                currentTime += eventToSend.Delay;
+                expectedTimes.Add(currentTime);
+                expectedRecordedTimes.Add(currentTime > stopAfter ? currentTime - stopPeriod : currentTime);
+            }
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                {
+                    inputDevice.StartEventsListening();
+                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+                    using (var recording = new Recording(tempoMap, inputDevice))
+                    {
+                        var sendingThread = new Thread(() =>
+                        {
+                            SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                        });
+
+                        stopwatch.Start();
+                        recording.Start();
+                        sendingThread.Start();
+                        Thread.Sleep(stopAfter);
+
+                        recording.Stop();
+                        Thread.Sleep(stopPeriod);
+
+                        recording.Start();
+
+                        var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == expectedTimes.Count, timeout);
+                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+
+                        CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
+
+                        var recordedEvents = recording.GetEvents();
+                        CheckRecordedEvents(recordedEvents, expectedRecordedTimes, tempoMap);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void CompareSentReceivedEvents(
+            IReadOnlyList<SentEvent> sentEvents,
+            IReadOnlyList<ReceivedEvent> receivedEvents,
+            IReadOnlyList<TimeSpan> expectedTimes)
+        {
+            for (var i = 0; i < sentEvents.Count; i++)
+            {
+                var sentEvent = sentEvents[i];
+                var receivedEvent = receivedEvents[i];
+                var expectedTime = expectedTimes[i];
+
+                Assert.IsTrue(
+                    MidiEventEquality.AreEqual(sentEvent.Event, receivedEvent.Event, false),
+                    $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
+
+                var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
+                Assert.LessOrEqual(
+                    offsetFromExpectedTime,
+                    SendReceiveUtilities.MaximumEventSendReceiveDelay,
+                    $"Event was sent at wrong time (at {sentEvent.Time} instead of {expectedTime}).");
+            }
+        }
+
+        private void CheckRecordedEvents(
+            IReadOnlyList<TimedEvent> recordedEvents,
+            IReadOnlyList<TimeSpan> expectedTimes,
+            TempoMap tempoMap)
+        {
+            for (var i = 0; i < recordedEvents.Count; i++)
+            {
+                var recordedEvent = recordedEvents[i];
+                var expectedTime = expectedTimes[i];
+
+                var convertedRecordedTime = (TimeSpan)recordedEvent.TimeAs<MetricTimeSpan>(tempoMap);
+                var offsetFromExpectedTime = (convertedRecordedTime - expectedTime).Duration();
+                Assert.LessOrEqual(
+                    offsetFromExpectedTime,
+                    SendReceiveUtilities.MaximumEventSendReceiveDelay,
+                    $"Event was recorded at wrong time (at {convertedRecordedTime} instead of {expectedTime}).");
+            }
+        }
+
+        #endregion
+    }
+}
