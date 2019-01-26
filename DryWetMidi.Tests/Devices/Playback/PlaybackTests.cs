@@ -42,6 +42,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #region Constants
 
+        private const int RetriesNumber = 3;
+
         private static readonly PlaybackAction NoPlaybackAction = (context, playback) => { };
 
         private static readonly object[] ParametersForDurationCheck = new[]
@@ -56,6 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #region Test methods
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckPlaybackEvents_Normal()
         {
@@ -71,6 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckPlaybackEvents_Looped()
         {
@@ -86,6 +90,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -124,6 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -156,6 +162,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 finalChecks: NoPlaybackAction);
         }
 
+        [Retry(RetriesNumber)]
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(10)]
@@ -212,6 +219,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckPlaybackStop()
         {
@@ -236,6 +244,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterResume: NoPlaybackAction);
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckNoteStop_Interrupt()
         {
@@ -259,6 +268,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterResume: NoPlaybackAction);
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckNoteStop_Hold()
         {
@@ -279,6 +289,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterResume: NoPlaybackAction);
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckNoteStop_Split()
         {
@@ -303,6 +314,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterResume: NoPlaybackAction);
         }
 
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -334,6 +346,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 speed: speed);
         }
 
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -375,6 +388,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 speed: speed);
         }
 
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -417,6 +431,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 speed: speed);
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void MoveForward_BeyondDuration()
         {
@@ -446,6 +461,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -494,6 +510,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 speed: speed);
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void MoveBack_BeyondZero()
         {
@@ -540,6 +557,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void MoveToTime()
         {
@@ -576,6 +594,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void MoveToTime_BeyondDuration()
         {
@@ -603,6 +622,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
         [TestCaseSource(nameof(ParametersForDurationCheck))]
         public void GetDuration(TimeSpan start, TimeSpan delayFromStart)
         {

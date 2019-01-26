@@ -42,6 +42,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #endregion
 
+        #region Constants
+
+        private const int RetriesNumber = 3;
+
+        #endregion
+
         #region Test methods
 
         [TestCase(MidiDevicesNames.DeviceA)]
@@ -66,6 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             Assert.AreEqual(deviceName, device.Name, "Device retrieved by ID is not the same as retrieved by its name.");
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckMidiTimeCodeEventReceiving()
         {

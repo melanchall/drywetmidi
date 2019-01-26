@@ -12,8 +12,15 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     [TestFixture]
     public sealed class SendReceiveTests
     {
+        #region Constants
+
+        private const int RetriesNumber = 3;
+
+        #endregion
+
         #region Test methods
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckEventsReceiving()
         {
@@ -28,6 +35,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             });
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckFileEventsReceiving()
         {
