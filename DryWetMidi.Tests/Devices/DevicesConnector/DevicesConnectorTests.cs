@@ -17,12 +17,15 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     {
         #region Constants
 
+        private const int RetriesNumber = 3;
+
         public static readonly TimeSpan MaximumEventSendReceiveDelay = TimeSpan.FromMilliseconds(50);
 
         #endregion
 
         #region Test methods
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckEventsReceivingOnConnectedDevices()
         {
@@ -35,6 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             });
         }
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckFileEventsReceivingOnConnectedDevices()
         {

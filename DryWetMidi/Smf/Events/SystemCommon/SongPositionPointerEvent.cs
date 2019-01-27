@@ -1,5 +1,4 @@
-﻿using System;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -12,6 +11,13 @@ namespace Melanchall.DryWetMidi.Smf
     /// </remarks>
     public sealed class SongPositionPointerEvent : SystemCommonEvent
     {
+        #region Fields
+
+        private SevenBitNumber _lsb;
+        private SevenBitNumber _msb;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -25,12 +31,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="SongPositionPointerEvent"/> with the specified
         /// MSB and LSB parts of the pointer value.
         /// </summary>
-        /// <param name="msb"></param>
-        /// <param name="lsb"></param>
-        public SongPositionPointerEvent(SevenBitNumber msb, SevenBitNumber lsb)
+        /// <param name="pointerValue">The value of a song position pointer.</param>
+        public SongPositionPointerEvent(ushort pointerValue)
         {
-            Msb = msb;
-            Lsb = lsb;
+            PointerValue = pointerValue;
         }
 
         #endregion
@@ -38,14 +42,20 @@ namespace Melanchall.DryWetMidi.Smf
         #region Properties
 
         /// <summary>
-        /// Gets or sets MSB of the song position pointer value.
+        /// Gets the song position pointer value.
         /// </summary>
-        public SevenBitNumber Msb { get; set; }
-
-        /// <summary>
-        /// Gets or sets LSB of the song position pointer value.
-        /// </summary>
-        public SevenBitNumber Lsb { get; set; }
+        public ushort PointerValue
+        {
+            get
+            {
+                return DataTypesUtilities.Combine(_msb, _lsb);
+            }
+            set
+            {
+                _msb = value.GetHead();
+                _lsb = value.GetTail();
+            }
+        }
 
         #endregion
 
@@ -58,7 +68,7 @@ namespace Melanchall.DryWetMidi.Smf
                 switch (policy)
                 {
                     case InvalidSystemCommonEventParameterValuePolicy.Abort:
-                        throw new InvalidSystemCommonEventParameterValueException($"{value} is invalid value for the {property} of a Song Position Pointer event.", value);
+                        throw new InvalidSystemCommonEventParameterValueException($"{value} is invalid value for the {property} of a song position Pointer event.", value);
                     case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
                         return SevenBitNumber.MaxValue;
                 }
@@ -73,14 +83,14 @@ namespace Melanchall.DryWetMidi.Smf
 
         internal override void Read(MidiReader reader, ReadingSettings settings, int size)
         {
-            Lsb = ProcessValue(reader.ReadByte(), nameof(Lsb), settings.InvalidSystemCommonEventParameterValuePolicy);
-            Msb = ProcessValue(reader.ReadByte(), nameof(Msb), settings.InvalidSystemCommonEventParameterValuePolicy);
+            _lsb = ProcessValue(reader.ReadByte(), "LSB", settings.InvalidSystemCommonEventParameterValuePolicy);
+            _msb = ProcessValue(reader.ReadByte(), "MSB", settings.InvalidSystemCommonEventParameterValuePolicy);
         }
 
         internal override void Write(MidiWriter writer, WritingSettings settings)
         {
-            writer.WriteByte(Lsb);
-            writer.WriteByte(Msb);
+            writer.WriteByte(_lsb);
+            writer.WriteByte(_msb);
         }
 
         internal override int GetSize(WritingSettings settings)
@@ -94,7 +104,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new SongPositionPointerEvent(Msb, Lsb);
+            return new SongPositionPointerEvent(PointerValue);
         }
 
         /// <summary>
@@ -103,7 +113,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Song Position Pointer ({Msb}, {Lsb})";
+            return $"Song Position Pointer ({PointerValue})";
         }
 
         #endregion

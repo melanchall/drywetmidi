@@ -98,10 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 },
                 [typeof(SongPositionPointerEvent)] = (e1, e2) =>
                 {
-                    var songPositionPointerEvent1 = (SongPositionPointerEvent)e1;
-                    var songPositionPointerEvent2 = (SongPositionPointerEvent)e2;
-                    return songPositionPointerEvent1.Lsb == songPositionPointerEvent2.Lsb &&
-                           songPositionPointerEvent1.Msb == songPositionPointerEvent2.Msb;
+                    return ((SongPositionPointerEvent)e1).PointerValue == ((SongPositionPointerEvent)e2).PointerValue;
                 },
                 [typeof(SongSelectEvent)] = (e1, e2) =>
                 {
