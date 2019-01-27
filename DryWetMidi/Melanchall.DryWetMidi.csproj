@@ -401,6 +401,8 @@
     <Compile Include="Tools\Randomizer\Utilities\TimedEventsRandomizerUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagrams\SystemRealTimeEventsClassDiagram.cd" />
+    <None Include="ClassDiagrams\SystemCommonEventsClassDiagram.cd" />
     <None Include="ClassDiagrams\ChannelEventsClassDiagram.cd" />
     <None Include="ClassDiagrams\EventsClassDiagram.cd" />
     <None Include="ClassDiagrams\MetaEventsClassDiagram.cd" />

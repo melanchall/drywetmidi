@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Melanchall.DryWetMidi.Smf.ActiveSensingEvent" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="0.812" />
+        <Point X="3.375" Y="0.812" />
+        <Point X="3.375" Y="1.002" />
+        <Point X="4" Y="1.002" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\ActiveSensingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.ContinueEvent" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="0.812" />
+        <Point X="3.375" Y="0.812" />
+        <Point X="3.375" Y="2.846" />
+        <Point X="4" Y="2.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\ContinueEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.ResetEvent" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="0.812" />
+        <Point X="3.375" Y="0.812" />
+        <Point X="3.375" Y="4.846" />
+        <Point X="4" Y="4.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\ResetEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.StartEvent" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="0.812" />
+        <Point X="3.375" Y="0.812" />
+        <Point X="3.375" Y="1.846" />
+        <Point X="4" Y="1.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\StartEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.StopEvent" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="0.812" />
+        <Point X="3.375" Y="0.812" />
+        <Point X="3.375" Y="3.846" />
+        <Point X="4" Y="3.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\StopEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.TimingClockEvent" Collapsed="true">
+    <Position X="4" Y="5.5" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="0.812" />
+        <Point X="3.375" Y="0.812" />
+        <Point X="3.375" Y="5.846" />
+        <Point X="4" Y="5.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\TimingClockEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" Collapsed="true">
+    <Position X="1.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAgAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\Base\SystemRealTimeEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

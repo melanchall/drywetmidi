@@ -3,30 +3,29 @@
   <Class Name="Melanchall.DryWetMidi.Smf.ChannelEvent" Collapsed="true">
     <Position X="5" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAgAAAEAACAgAAAAAAiAAAAAIAAAAAAAAEAAAA=</HashCode>
-      <FileName>Events\Base\ChannelEvent.cs</FileName>
+      <HashCode>AAAAAAAgAAAEAACACAAAAAAiAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\Base\ChannelEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.MetaEvent" Collapsed="true">
     <Position X="7.25" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAAAACAAAAAAEAgAAAEAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>Events\Base\MetaEvent.cs</FileName>
+      <FileName>Smf\Events\Base\MetaEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.MidiEvent" Collapsed="true">
     <Position X="7.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAACBgAAAAAAiAAAAAIAAACAAAAEAQBA=</HashCode>
-      <FileName>Events\Base\MidiEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAACBAAAAAAAiAAAAAAAAACAAAAEAQBA=</HashCode>
+      <FileName>Smf\Events\Base\MidiEvent.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.SysExEvent" Collapsed="true">
     <Position X="11.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAKAgAAAAAACAAAAAJAAAAAAAAEAAAA=</HashCode>
-      <FileName>Events\Base\SysExEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAKAAAAAAAAiAAAAABAQAAAAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\Base\SysExEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.ChannelAftertouchEvent" Collapsed="true">
@@ -40,7 +39,7 @@
     </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAAAAAIAAAAAAAEAAAAAAAAAAgAAAAAAAAAAAAgAAA=</HashCode>
-      <FileName>Events\Channel\ChannelAftertouchEvent.cs</FileName>
+      <FileName>Smf\Events\Channel\ChannelAftertouchEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.ControlChangeEvent" Collapsed="true">
@@ -54,7 +53,7 @@
     </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAAACAIAAAAAAAEAAAAAIAAAAAAgAAAAAAAAACAAAA=</HashCode>
-      <FileName>Events\Channel\ControlChangeEvent.cs</FileName>
+      <FileName>Smf\Events\Channel\ControlChangeEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.NoteAftertouchEvent" Collapsed="true">
@@ -68,10 +67,40 @@
     </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAAAAAIAAAAAAAEAAAAACAAAAgAAAAAAAAAAAAgAgA=</HashCode>
-      <FileName>Events\Channel\NoteAftertouchEvent.cs</FileName>
+      <FileName>Smf\Events\Channel\NoteAftertouchEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.NoteOffEvent" Collapsed="true">
+    <Position X="1.5" Y="6" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.NoteEvent" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.5" Y="3.875" />
+        <Point X="3.804" Y="3.875" />
+        <Point X="3.804" Y="6.375" />
+        <Point X="3.5" Y="6.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Channel\NoteOffEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.NoteOnEvent" Collapsed="true">
+    <Position X="1.5" Y="5" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.NoteEvent" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="4.5" Y="3.875" />
+        <Point X="3.793" Y="3.875" />
+        <Point X="3.793" Y="5.346" />
+        <Point X="3.5" Y="5.346" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Channel\NoteOnEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.PitchBendEvent" Collapsed="true">
     <Position X="4" Y="8" Width="2" />
     <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
@@ -81,11 +110,11 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAQAAIAAAAAAAEAAAAACAAAAAAAAAAAAAAAAAEAgA=</HashCode>
-      <FileName>Events\Channel\NoteOffEvent.cs</FileName>
+      <HashCode>AAAAAAAIAABAAAAEAAAAAABAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Channel\PitchBendEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Melanchall.DryWetMidi.Smf.NoteOnEvent" Collapsed="true">
+  <Class Name="Melanchall.DryWetMidi.Smf.ProgramChangeEvent" Collapsed="true">
     <Position X="4" Y="9" Width="2" />
     <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
@@ -95,36 +124,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAQAAIAAAAAAAEAAAAACAAAAAAAAAAAAAAAAAEAgA=</HashCode>
-      <FileName>Events\Channel\NoteOnEvent.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Melanchall.DryWetMidi.Smf.PitchBendEvent" Collapsed="true">
-    <Position X="4" Y="10" Width="2" />
-    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="6.25" Y="2.691" />
-        <Point X="6.25" Y="10.375" />
-        <Point X="6" Y="10.375" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AACAAAAIAABAAAAEAAAAABBAAAAAIAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Channel\PitchBendEvent.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Melanchall.DryWetMidi.Smf.ProgramChangeEvent" Collapsed="true">
-    <Position X="4" Y="11" Width="2" />
-    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="6.25" Y="2.691" />
-        <Point X="6.25" Y="11.375" />
-        <Point X="6" Y="11.375" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
       <HashCode>AAAAAAAIAAAAAAAEAAAAgAAAAAAAAAAAACAAAAAAAAA=</HashCode>
-      <FileName>Events\Channel\ProgramChangeEvent.cs</FileName>
+      <FileName>Smf\Events\Channel\ProgramChangeEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.BaseTextEvent" Collapsed="true">
@@ -137,8 +138,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAAgAAAAEAAAAAEAIAAAAAACAAAAAA=</HashCode>
-      <FileName>Events\Meta\BaseTextEvent.cs</FileName>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAEAAAAAEAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\BaseTextEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.ChannelPrefixEvent" Collapsed="true">
@@ -151,8 +152,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAgAAAAAAAEgAAAAEACAAAEAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\ChannelPrefixEvent.cs</FileName>
+      <HashCode>AAAAAgAgAAAAAAAEAAAAAEACAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\ChannelPrefixEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.CopyrightNoticeEvent" Collapsed="true">
@@ -166,8 +167,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\CopyrightNoticeEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\CopyrightNoticeEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.CuePointEvent" Collapsed="true">
@@ -181,8 +182,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\CuePointEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\CuePointEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.DeviceNameEvent" Collapsed="true">
@@ -196,8 +197,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\DeviceNameEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\DeviceNameEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.EndOfTrackEvent" Collapsed="true">
@@ -210,8 +211,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAEgAAAAEACAAAEAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\EndOfTrackEvent.cs</FileName>
+      <HashCode>AAAAAgAAAAAAAAAEAAAAAEACAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\EndOfTrackEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.InstrumentNameEvent" Collapsed="true">
@@ -225,8 +226,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\InstrumentNameEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\InstrumentNameEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.KeySignatureEvent" Collapsed="true">
@@ -239,8 +240,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>gAAAAgAAACAAAAQEgAIAAEACAAAEAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\KeySignatureEvent.cs</FileName>
+      <HashCode>gAAAAgIAASAAAAQFAAKAAEACAAAEAIAAAAAAQAAAACA=</HashCode>
+      <FileName>Smf\Events\Meta\KeySignatureEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.LyricEvent" Collapsed="true">
@@ -254,8 +255,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\LyricEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\LyricEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.MarkerEvent" Collapsed="true">
@@ -269,8 +270,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\MarkerEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\MarkerEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.PortPrefixEvent" Collapsed="true">
@@ -283,8 +284,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAEgAAAAEACCAAEAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\PortPrefixEvent.cs</FileName>
+      <HashCode>AAAAAgAAAAAAAAAEAAAAAEACCAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\PortPrefixEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.ProgramNameEvent" Collapsed="true">
@@ -298,8 +299,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\ProgramNameEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\ProgramNameEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.SequenceNumberEvent" Collapsed="true">
@@ -312,8 +313,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAEgEAAAEACAAAEAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\SequenceNumberEvent.cs</FileName>
+      <HashCode>AAAAAgAAAAAAAAAEAEAAAEACAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\SequenceNumberEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.SequencerSpecificEvent" Collapsed="true">
@@ -326,8 +327,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAEgAAAAEACAAAEAJAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\SequencerSpecificEvent.cs</FileName>
+      <HashCode>AAAAAgAAAAAAAAAEAAAAAEACAAAEABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\SequencerSpecificEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.SequenceTrackNameEvent" Collapsed="true">
@@ -341,8 +342,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\SequenceTrackNameEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\SequenceTrackNameEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.SetTempoEvent" Collapsed="true">
@@ -355,8 +356,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAEAgAAAAEAAAAEgAAAAEACAAAEAIAAAAAAAAAIAAA=</HashCode>
-      <FileName>Events\Meta\SetTempoEvent.cs</FileName>
+      <HashCode>AAAEAgAAAAEAAAAEAAAAAEACAAAEAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\SetTempoEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.SmpteOffsetEvent" Collapsed="true">
@@ -369,8 +370,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAQAAAEwAAAAEACAAAEAIAAAAABAAEAAAE=</HashCode>
-      <FileName>Events\Meta\SmpteOffsetEvent.cs</FileName>
+      <HashCode>BAAAAgASAEAxQEAEQAAEBEAGAggEAAAQAAABQAHAAQE=</HashCode>
+      <FileName>Smf\Events\Meta\SmpteOffsetEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.TextEvent" Collapsed="true">
@@ -384,8 +385,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAACAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\TextEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\TextEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.TimeSignatureEvent" Collapsed="true">
@@ -398,8 +399,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>BAAAAgAAAAgAAAAEgIAAAEACAAAEAIAAIAAAChAAAgA=</HashCode>
-      <FileName>Events\Meta\TimeSignatureEvent.cs</FileName>
+      <HashCode>BAAAAgAIAAgAABAEAAAAAEACAAAkEAAAIAAACBAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\TimeSignatureEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.UnknownMetaEvent" Collapsed="true">
@@ -412,8 +413,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAEgABAAEACAAAEAJAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\Meta\UnknownMetaEvent.cs</FileName>
+      <HashCode>AAAAAgAAAAAAAAAEAABAAEACAAAEABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Meta\UnknownMetaEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.EscapeSysExEvent" Collapsed="true">
@@ -426,8 +427,8 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAgAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Events\SysEx\EscapeSysExEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SysEx\EscapeSysExEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Melanchall.DryWetMidi.Smf.NormalSysExEvent" Collapsed="true">
@@ -440,8 +441,177 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAgAAAAAIAQAAAAAAAAAAA=</HashCode>
-      <FileName>Events\SysEx\NormalSysExEvent.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SysEx\NormalSysExEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.NoteEvent" Collapsed="true">
+    <Position X="4.5" Y="3.5" Width="1.5" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.ChannelEvent" FixedFromPoint="true">
+      <Path>
+        <Point X="6.25" Y="2.691" />
+        <Point X="6.25" Y="3.125" />
+        <Point X="5.25" Y="3.125" />
+        <Point X="5.25" Y="3.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAIAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAEAgA=</HashCode>
+      <FileName>Smf\Events\Channel\NoteEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.SystemCommonEvent" Collapsed="true">
+    <Position X="16.25" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\Base\SystemCommonEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" Collapsed="true">
+    <Position X="18.75" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAgAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\Base\SystemRealTimeEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.MidiTimeCodeEvent" Collapsed="true">
+    <Position X="15.5" Y="5" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemCommonEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17.812" Y="2.691" />
+        <Point X="17.812" Y="5.375" />
+        <Point X="17.5" Y="5.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAASEAAAAAAAiAAAAAAAAIABAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\SystemCommon\MidiTimeCodeEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.SongPositionPointerEvent" Collapsed="true">
+    <Position X="15.5" Y="7" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemCommonEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17.812" Y="2.691" />
+        <Point X="17.812" Y="7.375" />
+        <Point X="17.5" Y="7.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACEAAAAAAAiAAAABgAAAAAAQAEAAAA=</HashCode>
+      <FileName>Smf\Events\SystemCommon\SongPositionPointerEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.SongSelectEvent" Collapsed="true">
+    <Position X="15.5" Y="6" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemCommonEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17.812" Y="2.691" />
+        <Point X="17.812" Y="6.375" />
+        <Point X="17.5" Y="6.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACEAEAAAAAiAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\SystemCommon\SongSelectEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.TuneRequestEvent" Collapsed="true">
+    <Position X="15.5" Y="8" Width="2" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemCommonEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17.812" Y="2.691" />
+        <Point X="17.812" Y="8.375" />
+        <Point X="17.5" Y="8.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACEAAAAAAAiAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Smf\Events\SystemCommon\TuneRequestEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.ActiveSensingEvent" Collapsed="true">
+    <Position X="19.5" Y="5" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.125" Y="2.691" />
+        <Point X="19.125" Y="5.375" />
+        <Point X="19.5" Y="5.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\ActiveSensingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.ContinueEvent" Collapsed="true">
+    <Position X="19.5" Y="7" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.125" Y="2.691" />
+        <Point X="19.125" Y="7.375" />
+        <Point X="19.5" Y="7.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\ContinueEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.ResetEvent" Collapsed="true">
+    <Position X="19.5" Y="9" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.125" Y="2.691" />
+        <Point X="19.125" Y="9.375" />
+        <Point X="19.5" Y="9.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\ResetEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.StartEvent" Collapsed="true">
+    <Position X="19.5" Y="6" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.125" Y="2.691" />
+        <Point X="19.125" Y="6.375" />
+        <Point X="19.5" Y="6.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\StartEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.StopEvent" Collapsed="true">
+    <Position X="19.5" Y="8" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.125" Y="2.691" />
+        <Point X="19.125" Y="8.375" />
+        <Point X="19.5" Y="8.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\StopEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Melanchall.DryWetMidi.Smf.TimingClockEvent" Collapsed="true">
+    <Position X="19.5" Y="10" Width="1.75" />
+    <InheritanceLine Type="Melanchall.DryWetMidi.Smf.SystemRealTimeEvent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.125" Y="2.691" />
+        <Point X="19.125" Y="10.375" />
+        <Point X="19.5" Y="10.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Smf\Events\SystemRealTime\TimingClockEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
