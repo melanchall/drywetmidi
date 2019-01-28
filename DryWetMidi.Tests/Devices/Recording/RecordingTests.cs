@@ -18,6 +18,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private const int RetriesNumber = 3;
 
+        private static readonly object[] ParametersForDurationCheck = new[]
+        {
+            new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(2) },
+            new object[] { TimeSpan.FromMilliseconds(500), TimeSpan.FromSeconds(3) },
+            new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(3) },
+            new object[] { TimeSpan.FromSeconds(4), TimeSpan.FromSeconds(1) }
+        };
+
         #endregion
 
         #region Test methods
@@ -29,6 +37,50 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             using (var recording = new Recording(TempoMap.Default, inputDevice))
             {
                 Assert.Throws<InvalidOperationException>(() => recording.Start(), "Recording started on device which is not listening events.");
+            }
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCaseSource(nameof(ParametersForDurationCheck))]
+        public void GetDuration(TimeSpan start, TimeSpan delayFromStart)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), start),
+                new EventToSend(new NoteOffEvent(), delayFromStart)
+            };
+
+            var receivedEvents = new List<ReceivedEvent>();
+            var stopwatch = new Stopwatch();
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+
+                using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                {
+                    inputDevice.StartEventsListening();
+                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+                    using (var recording = new Recording(TempoMap.Default, inputDevice))
+                    {
+                        recording.Start();
+                        stopwatch.Start();
+                        SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+
+                        var timeout = start + delayFromStart + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsToSend.Length, timeout);
+                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+
+                        recording.Stop();
+                        Assert.IsFalse(recording.IsRunning, "Recording is running after stop.");
+
+                        TimeSpan duration = recording.GetDuration<MetricTimeSpan>();
+                        Assert.IsTrue(
+                            AreTimeSpansEqual(duration, start + delayFromStart),
+                            $"Duration is invalid. Actual is {duration}. Expected is {start + delayFromStart}.");
+                    }
+                }
             }
         }
 
@@ -146,6 +198,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
                     $"Event was recorded at wrong time (at {convertedRecordedTime} instead of {expectedTime}).");
             }
+        }
+
+        private static bool AreTimeSpansEqual(TimeSpan timeSpan1, TimeSpan timeSpan2)
+        {
+            var epsilon = TimeSpan.FromMilliseconds(15);
+            var delta = (timeSpan1 - timeSpan2).Duration();
+            return delta <= epsilon;
         }
 
         #endregion

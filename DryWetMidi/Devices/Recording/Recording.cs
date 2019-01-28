@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -78,7 +79,32 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        // TODO: add methods to get recording length
+        /// <summary>
+        /// Retrieves the duration of the recording in the specified format.
+        /// </summary>
+        /// <param name="durationType">Type that will represent the duration.</param>
+        /// <returns>The duration of the recording as an instance of time span defined by
+        /// <paramref name="durationType"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/>
+        /// specified an invalid value.</exception>
+        public ITimeSpan GetDuration(TimeSpanType durationType)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
+
+            return TimeConverter.ConvertTo((MetricTimeSpan)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), durationType, TempoMap);
+        }
+
+        /// <summary>
+        /// Retrieves the duration of the recording in the specified format.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">Type that will represent the duration.</typeparam>
+        /// <returns>The duration of the recording as an instance of
+        /// <typeparamref name="TTimeSpan"/>.</returns>
+        public TTimeSpan GetDuration<TTimeSpan>()
+            where TTimeSpan : ITimeSpan
+        {
+            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), TempoMap);
+        }
 
         /// <summary>
         /// Gets MIDI events recorded by the current <see cref="Recording"/>.
