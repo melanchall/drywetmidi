@@ -899,7 +899,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private static bool AreTimeSpansEqual(TimeSpan timeSpan1, TimeSpan timeSpan2)
         {
-            // TODO: decrease epsilon
             var epsilon = TimeSpan.FromMilliseconds(15);
             var delta = (timeSpan1 - timeSpan2).Duration();
             return delta <= epsilon;
