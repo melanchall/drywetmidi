@@ -297,7 +297,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
-            // TODO: fix invalid longdata on reset
             if (!IsListeningForEvents)
                 return;
 

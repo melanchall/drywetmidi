@@ -61,7 +61,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Assert.IsTrue(TimedEventEquality.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false));
         }
 
-        // TODO: more tests
         [Test]
         public void Resize_Midi()
         {
