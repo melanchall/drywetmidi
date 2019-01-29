@@ -203,6 +203,20 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
+        /// Prepares output MIDI device for sending events to it allocating necessary
+        /// resources.
+        /// </summary>
+        /// <remarks>It is not needed to call this method before actual MIDI data
+        /// sending since first call of <see cref="SendEvent(MidiEvent)"/> will prepare
+        /// the device automatically. But it can take some time so you may decide
+        /// to call <see cref="PrepareForEventsSending"/> before working with device.</remarks>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        public void PrepareForEventsSending()
+        {
+            EnsureHandleIsCreated();
+        }
+
+        /// <summary>
         /// Retrieves the number of output MIDI devices presented in the system.
         /// </summary>
         /// <returns>Number of output MIDI devices presented in the system.</returns>
@@ -265,12 +279,6 @@ namespace Melanchall.DryWetMidi.Devices
         protected override uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
         {
             return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
-        }
-
-        // TODO: make it public
-        internal void PrepareForEventsSending()
-        {
-            EnsureHandleIsCreated();
         }
 
         private void EnsureHandleIsCreated()
