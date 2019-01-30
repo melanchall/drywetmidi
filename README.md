@@ -9,6 +9,7 @@ DryWetMIDI is the .NET library to work with MIDI files. Visit [Wiki](https://git
 With the DryWetMIDI you can:
 
 * Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
+* Send MIDI events to/receive them from MIDI devices, play MIDI data and record it. 
 * Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
 * Implement [custom meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks) that can be written to and read from MIDI files.
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
@@ -116,6 +117,17 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 
 Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (500,000 microseconds per beat).
 
+Instead of modifying a MIDI file you can use [`Playback`](https://github.com/melanchall/drywetmidi/wiki/Playback) class:
+
+```csharp
+using (var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
+using (var playback = midiFile.GetPlayback(outputDevice))
+{
+    playback.Speed = 2.0;
+    playback.Play();
+}
+```
+
 To get duration of a MIDI file as `TimeSpan` use this code:
 
 ```csharp
@@ -197,4 +209,42 @@ Pattern pattern = new PatternBuilder()
     .Build();
 
 MidiFile midiFile = pattern.ToFile(TempoMap.Default);
+```
+
+DryWetMIDI provides [devices API](https://github.com/melanchall/drywetmidi/wiki/MIDI-devices) allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:
+
+```csharp
+using System;
+using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Smf;
+
+// ...
+
+using (var outputDevice = OutputDevice.GetByName("MIDI Device"))
+{
+    outputDevice.EventSent += OnEventSent;
+
+    using (var inputDevice = InputDevice.GetByName("MIDI Device"))
+    {
+        inputDevice.EventReceived += OnEventReceived;
+        inputDevice.StartEventsListening();
+
+        outputDevice.SendEvent(new NoteOnEvent());
+        outputDevice.SendEvent(new NoteOffEvent());
+    }
+}
+
+// ...
+
+private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+{
+    var midiDevice = (MidiDevice)sender;
+    Console.WriteLine($"Event received from '{midiDevice.Name}' at {DateTime.Now}: {e.Event}");
+}
+
+private void OnEventSent(object sender, MidiEventSentEventArgs e)
+{
+    var midiDevice = (MidiDevice)sender;
+    Console.WriteLine($"Event sent to '{midiDevice.Name}' at {DateTime.Now}: {e.Event}");
+}
 ```
