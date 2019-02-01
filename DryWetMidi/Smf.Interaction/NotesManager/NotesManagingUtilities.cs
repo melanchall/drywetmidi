@@ -45,6 +45,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
         }
 
+        public static IEnumerable<Note> GetNotes(this IEnumerable<MidiEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(events);
+
+            return eventsCollection.ManageNotes().Notes.ToList();
+        }
+
         /// <summary>
         /// Gets notes contained in the specified <see cref="EventsCollection"/>.
         /// </summary>
