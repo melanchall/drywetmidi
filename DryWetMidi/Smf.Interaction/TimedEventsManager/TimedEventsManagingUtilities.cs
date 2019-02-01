@@ -45,6 +45,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageTimedEvents(sameTimeEventsComparison);
         }
 
+        public static IEnumerable<TimedEvent> GetTimedEvents(this IEnumerable<MidiEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(events);
+
+            return eventsCollection.ManageTimedEvents().Events.ToList();
+        }
+
         /// <summary>
         /// Gets timed events contained in the specified <see cref="EventsCollection"/>.
         /// </summary>

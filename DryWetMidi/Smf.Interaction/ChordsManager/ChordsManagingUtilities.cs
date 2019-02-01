@@ -53,6 +53,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return trackChunk.Events.ManageChords(notesTolerance, sameTimeEventsComparison);
         }
 
+        public static IEnumerable<Chord> GetChords(this IEnumerable<MidiEvent> events, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(events);
+
+            return eventsCollection.ManageChords(notesTolerance).Chords.ToList();
+        }
+
         /// <summary>
         /// Gets chords contained in the specified <see cref="EventsCollection"/>.
         /// </summary>
