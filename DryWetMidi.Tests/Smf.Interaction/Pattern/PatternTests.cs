@@ -121,8 +121,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             });
 
             var tempoMap = midiFile.GetTempoMap();
-            Assert.AreEqual(new MetricTimeSpan(0, 1, 29),
-                            new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)));
+            Assert.AreEqual(new MetricTimeSpan(0, 1, 29), midiFile.GetDuration<MetricTimeSpan>());
         }
 
         [Test]
@@ -150,7 +149,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             var tempoMap = midiFile.GetTempoMap();
             Assert.AreEqual(new MetricTimeSpan(0, 1, 29).TotalMicroseconds,
-                            new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)).TotalMicroseconds);
+                            midiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds);
         }
 
         [Test]
