@@ -42,15 +42,24 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void CheckFileEventsReceivingOnConnectedDevices()
         {
+            var filesToTestCount = 5;
+            var maxFileDuration = TimeSpan.FromSeconds(10);
+
             var filesToTest = TestFilesProvider.GetValidFiles(
                 f => f.GetTrackChunks().Count() == 1,
                 f =>
                 {
                     var tempoMap = f.GetTempoMap();
-                    return (TimeSpan)f.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap) < TimeSpan.FromSeconds(30);
+                    return (TimeSpan)f.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap) < maxFileDuration;
                 })
-                .Take(5)
+                .OrderByDescending(f =>
+                {
+                    var tempoMap = f.GetTempoMap();
+                    return f.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap);
+                })
+                .Take(filesToTestCount)
                 .ToArray();
+            Debug.Assert(filesToTest.Length == filesToTestCount, "Not enough files for test.");
 
             for (var i = 0; i < filesToTest.Length; i++)
             {

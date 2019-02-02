@@ -12,6 +12,9 @@ test:
   assemblies:
     except:
     - '**\*.Benchmarks.dll'
+artifacts:
+- path: TestResult.xml
+  name: Test results
 skip_commits:
   files:
     - '**/*.md'

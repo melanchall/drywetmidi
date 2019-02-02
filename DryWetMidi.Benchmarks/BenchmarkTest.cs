@@ -20,6 +20,10 @@ namespace Melanchall.DryWetMidi.Benchmarks
         [SetUp]
         public void SetupTest()
         {
+#if DEBUG
+            Assert.Inconclusive("Unable to run benchmarks on Debug configuration. Use Release.");
+#endif
+
             Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
         }
 

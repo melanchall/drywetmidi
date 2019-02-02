@@ -35,6 +35,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             });
         }
 
+        // TODO: Use files collecting from devices connector tests (hangs on midiInStop)
         [Retry(RetriesNumber)]
         [Test]
         public void CheckFileEventsReceiving()
