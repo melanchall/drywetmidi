@@ -2,14 +2,14 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg)](https://www.nuget.org/packages/Melanchall.DryWetMidi/) [![Build](https://ci.appveyor.com/api/projects/status/github/melanchall/drywetmidi?svg=true&branch=develop)](https://ci.appveyor.com/project/melanchall/drywetmidi/branch/develop)
 
-DryWetMIDI is the .NET library to work with MIDI files. Visit [Wiki](https://github.com/melanchall/drymidi/wiki) to learn how to use the DryWetMIDI. The library was tested on 130,000 files taken from [here](https://www.reddit.com/r/WeAreTheMusicMakers/comments/3ajwe4/the_largest_midi_collection_on_the_internet/). Thanks *midi-man* for this great collection. You can get the latest version via [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi).
+DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. Visit [Wiki](https://github.com/melanchall/drymidi/wiki) to learn how to use the DryWetMIDI. The library was tested on 130,000 files taken from [here](https://www.reddit.com/r/WeAreTheMusicMakers/comments/3ajwe4/the_largest_midi_collection_on_the_internet/). Thanks *midi-man* for this great collection. You can get the latest version via [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi).
 
 ## Features
 
 With the DryWetMIDI you can:
 
 * Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
-* Send MIDI events to/receive them from MIDI devices, play MIDI data and record it. 
+* [Send](https://github.com/melanchall/drywetmidi/wiki/Output-device) MIDI events to/[receive](https://github.com/melanchall/drywetmidi/wiki/Input-device) them from MIDI devices, [play](https://github.com/melanchall/drywetmidi/wiki/Playback) MIDI data and [record](https://github.com/melanchall/drywetmidi/wiki/Recording) it.
 * Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
 * Implement [custom meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks) that can be written to and read from MIDI files.
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
@@ -21,8 +21,9 @@ With the DryWetMIDI you can:
 
 There are several articles that can help you dive into API provided by DryWetMIDI:
 
-* [DryWetMIDI: High-level processing of MIDI files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
+* [DryWetMIDI: High-Level Processing of MIDI Files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
 * [DryWetMIDI: Notes Quantization](https://www.codeproject.com/Articles/1204629/DryWetMIDI-Notes-Quantization)
+* [DryWetMIDI: Working with MIDI Devices](https://www.codeproject.com/Articles/1275475/DryWetMIDI-Working-with-MIDI-Devices)
 
 Let's see some examples of what you can do with DryWetMIDI.
 
