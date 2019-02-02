@@ -9,7 +9,7 @@ DryWetMIDI is the .NET library to work with MIDI files. Visit [Wiki](https://git
 With the DryWetMIDI you can:
 
 * Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
-* Send MIDI events to/receive them from MIDI devices, play MIDI data and record it. 
+* [Send](https://github.com/melanchall/drywetmidi/wiki/Output-device) MIDI events to/[receive](https://github.com/melanchall/drywetmidi/wiki/Input-device) them from MIDI devices, [play](https://github.com/melanchall/drywetmidi/wiki/Playback) MIDI data and [record](https://github.com/melanchall/drywetmidi/wiki/Recording) it.
 * Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
 * Implement [custom meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks) that can be written to and read from MIDI files.
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
