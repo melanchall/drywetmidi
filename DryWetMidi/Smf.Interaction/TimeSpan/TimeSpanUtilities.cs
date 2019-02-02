@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -48,6 +49,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [TimeSpanType.Metric] = new MetricTimeSpan(TimeSpan.MaxValue),
             [TimeSpanType.Musical] = new MusicalTimeSpan(long.MaxValue, 1),
             [TimeSpanType.BarBeat] = new BarBeatTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue)
+        };
+
+        private static readonly Dictionary<TimeSpanType, ITimeSpan> ZeroTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
+        {
+            [TimeSpanType.Midi] = new MidiTimeSpan(),
+            [TimeSpanType.Metric] = new MetricTimeSpan(),
+            [TimeSpanType.Musical] = new MusicalTimeSpan(),
+            [TimeSpanType.BarBeat] = new BarBeatTimeSpan()
         };
 
         #endregion
@@ -135,6 +144,19 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);
 
             return MaximumTimeSpans[timeSpanType];
+        }
+
+        public static ITimeSpan GetZeroTimeSpan(TimeSpanType timeSpanType)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);
+
+            return ZeroTimeSpans[timeSpanType];
+        }
+
+        public static TTimeSpan GetZeroTimeSpan<TTimeSpan>()
+            where TTimeSpan : ITimeSpan
+        {
+            return (TTimeSpan)ZeroTimeSpans.Values.FirstOrDefault(timeSpan => timeSpan is TTimeSpan);
         }
 
         internal static double Divide(ITimeSpan timeSpan1, ITimeSpan timeSpan2)

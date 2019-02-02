@@ -46,17 +46,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var maxFileDuration = TimeSpan.FromSeconds(10);
 
             var filesToTest = TestFilesProvider.GetValidFiles(
-                f => f.GetTrackChunks().Count() == 1,
-                f =>
-                {
-                    var tempoMap = f.GetTempoMap();
-                    return (TimeSpan)f.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap) < maxFileDuration;
-                })
-                .OrderByDescending(f =>
-                {
-                    var tempoMap = f.GetTempoMap();
-                    return f.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap);
-                })
+                    f => f.GetTrackChunks().Count() == 1,
+                    f => (TimeSpan)f.GetDuration<MetricTimeSpan>() < maxFileDuration)
+                .OrderByDescending(f => f.GetDuration<MetricTimeSpan>())
                 .Take(filesToTestCount)
                 .ToArray();
             Debug.Assert(filesToTest.Length == filesToTestCount, "Not enough files for test.");

@@ -41,12 +41,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         public void CheckFileEventsReceiving()
         {
             var filesToTest = TestFilesProvider.GetValidFiles(
-                f => f.GetTrackChunks().Count() == 1,
-                f =>
-                {
-                    var tempoMap = f.GetTempoMap();
-                    return (TimeSpan)f.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap) < TimeSpan.FromSeconds(30);
-                })
+                    f => f.GetTrackChunks().Count() == 1,
+                    f => (TimeSpan)f.GetDuration<MetricTimeSpan>() < TimeSpan.FromSeconds(30))
                 .Take(5)
                 .ToArray();
 

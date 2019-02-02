@@ -11,6 +11,33 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Methods
 
+        public static TTimeSpan GetDuration<TTimeSpan>(this MidiFile midiFile)
+            where TTimeSpan : class, ITimeSpan
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            var tempoMap = midiFile.GetTempoMap();
+            return midiFile.GetTimedEvents().LastOrDefault()?.TimeAs<TTimeSpan>(tempoMap) ??
+                   TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+        }
+
+        public static ITimeSpan GetDuration(this MidiFile midiFile, TimeSpanType durationType)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
+
+            var tempoMap = midiFile.GetTempoMap();
+            return midiFile.GetTimedEvents().LastOrDefault()?.TimeAs(durationType, tempoMap) ??
+                   TimeSpanUtilities.GetZeroTimeSpan(durationType);
+        }
+
+        public static bool IsEmpty(this MidiFile midiFile)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            return !midiFile.GetEvents().Any();
+        }
+
         /// <summary>
         /// Shifts events forward inside <see cref="MidiFile"/> by the specified distance.
         /// </summary>
@@ -38,13 +65,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            var lastTime = midiFile.GetTimedEvents().LastOrDefault()?.Time ?? 0;
-            if (lastTime == 0)
+            if (midiFile.IsEmpty())
                 return;
 
             var tempoMap = midiFile.GetTempoMap();
+            var duration = midiFile.GetDuration<MidiTimeSpan>();
 
-            var oldLength = TimeConverter.ConvertTo((MidiTimeSpan)lastTime, length.GetType(), tempoMap);
+            var oldLength = TimeConverter.ConvertTo(duration, length.GetType(), tempoMap);
             var ratio = TimeSpanUtilities.Divide(length, oldLength);
 
             ResizeByRatio(midiFile, ratio);
