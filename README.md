@@ -21,8 +21,9 @@ With the DryWetMIDI you can:
 
 There are several articles that can help you dive into API provided by DryWetMIDI:
 
-* [DryWetMIDI: High-level processing of MIDI files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
+* [DryWetMIDI: High-Level Processing of MIDI Files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
 * [DryWetMIDI: Notes Quantization](https://www.codeproject.com/Articles/1204629/DryWetMIDI-Notes-Quantization)
+* [DryWetMIDI: Working with MIDI Devices](https://www.codeproject.com/Articles/1275475/DryWetMIDI-Working-with-MIDI-Devices)
 
 Let's see some examples of what you can do with DryWetMIDI.
 
