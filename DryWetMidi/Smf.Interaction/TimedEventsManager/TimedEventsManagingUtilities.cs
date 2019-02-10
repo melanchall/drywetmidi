@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             return trackChunks.Where(c => c != null)
                               .SelectMany(GetTimedEvents)
-                              .OrderBy(n => n.Time)
+                              .OrderBy(e => e.Time)
                               .ToList();
         }
 
