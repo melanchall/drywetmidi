@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using System;
+using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -16,10 +17,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        public NotePlaybackEventTag(Note note, NoteBound noteBound)
+        public NotePlaybackEventTag(Note note, NoteBound noteBound, TimeSpan startTime, TimeSpan endTime)
         {
             Note = note;
             Bound = noteBound;
+            StartTime = startTime;
+            EndTime = endTime;
         }
 
         #endregion
@@ -27,6 +30,10 @@ namespace Melanchall.DryWetMidi.Devices
         #region Properties
 
         public Note Note { get; }
+
+        public TimeSpan StartTime { get; }
+
+        public TimeSpan EndTime { get; }
 
         public NoteBound Bound { get; }
 
