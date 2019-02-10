@@ -307,11 +307,11 @@ namespace Melanchall.DryWetMidi.Devices
 
             var needStart = IsRunning;
 
-            _clock.ResetInternalTimer();
+            _clock.Reset();
             SetStartTime(time);
 
             if (needStart)
-                _clock.StartInternalTimer();
+                _clock.Start();
         }
 
         /// <summary>
@@ -400,11 +400,11 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
             }
 
-            _clock.StopInternalTimer();
+            _clock.Stop();
             _clock.Reset();
             _eventsEnumerator.Reset();
             _eventsEnumerator.MoveNext();
-            _clock.StartInternalTimer();
+            _clock.Start();
         }
 
         private void EnsureIsNotDisposed()

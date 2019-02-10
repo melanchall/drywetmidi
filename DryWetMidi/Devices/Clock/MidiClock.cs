@@ -11,6 +11,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Constants
 
         private const double DefaultSpeed = 1.0;
+        private const uint NoTimerId = 0;
 
         #endregion
 
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private uint _resolution;
         private MidiTimerWinApi.TimeProc _tickCallback;
-        private uint _timerId;
+        private uint _timerId = NoTimerId;
 
         private double _speed = DefaultSpeed;
 
@@ -68,13 +69,13 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 var start = IsRunning;
 
-                StopInternalTimer();
+                Stop();
 
                 StartTime = _stopwatch.Elapsed;
                 _speed = value;
 
                 if (start)
-                    StartInternalTimer();
+                    Start();
             }
         }
 
@@ -87,29 +88,30 @@ namespace Melanchall.DryWetMidi.Devices
             if (IsRunning)
                 return;
 
-            var timeCaps = default(MidiTimerWinApi.TIMECAPS);
-            ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
-
-            _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
-            _tickCallback = OnTick;
-
-            ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
-            _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
-            if (_timerId == 0)
+            if (_timerId == NoTimerId)
             {
-                var errorCode = Marshal.GetLastWin32Error();
-                throw new MidiDeviceException("Unable to initialize MIDI clock.", new Win32Exception(errorCode));
+
+                var timeCaps = default(MidiTimerWinApi.TIMECAPS);
+                ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
+
+                _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
+                _tickCallback = OnTick;
+
+                ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
+                _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
+                if (_timerId == 0)
+                {
+                    var errorCode = Marshal.GetLastWin32Error();
+                    throw new MidiDeviceException("Unable to initialize MIDI clock.", new Win32Exception(errorCode));
+                }
             }
 
-            StartInternalTimer();
+            _stopwatch.Start();
         }
 
         public void Stop()
         {
-            StopInternalTimer();
-
-            MidiTimerWinApi.timeEndPeriod(_resolution);
-            MidiTimerWinApi.timeKillEvent(_timerId);
+            _stopwatch.Stop();
         }
 
         public void Restart()
@@ -121,29 +123,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void Reset()
         {
-            ResetInternalTimer();
+            _stopwatch.Reset();
             StartTime = TimeSpan.Zero;
             CurrentTime = TimeSpan.Zero;
-        }
-
-        public void StopInternalTimer()
-        {
-            _stopwatch.Stop();
-        }
-
-        public void ResetInternalTimer()
-        {
-            _stopwatch.Reset();
-        }
-
-        public void StartInternalTimer()
-        {
-            _stopwatch.Start();
-        }
-
-        public void RestartInternalTimer()
-        {
-            _stopwatch.Restart();
         }
 
         private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
@@ -184,7 +166,11 @@ namespace Melanchall.DryWetMidi.Devices
             {
             }
 
-            Stop();
+            if (_timerId != NoTimerId)
+            {
+                MidiTimerWinApi.timeEndPeriod(_resolution);
+                MidiTimerWinApi.timeKillEvent(_timerId);
+            }
 
             _disposed = true;
         }
