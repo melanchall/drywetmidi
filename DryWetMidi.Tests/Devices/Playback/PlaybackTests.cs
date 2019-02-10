@@ -315,6 +315,34 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
+        [Test]
+        public void CheckNoteStop_Split_MoveBeyondNote()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(500);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new EventToSend(new ProgramChangeEvent(SevenBitNumber.MinValue), TimeSpan.FromSeconds(1))
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), stopAfter),
+                    new EventToSend(new TextEvent("Text"), TimeSpan.FromMilliseconds(500))
+                },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Split,
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveForward(new MetricTimeSpan(0, 0, 1)),
+                afterResume: NoPlaybackAction);
+        }
+
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
