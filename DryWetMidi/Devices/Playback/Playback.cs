@@ -369,14 +369,14 @@ namespace Melanchall.DryWetMidi.Devices
 
             do
             {
-                var timedEvent = _eventsEnumerator.Current;
-                if (timedEvent == null)
+                var playbackEvent = _eventsEnumerator.Current;
+                if (playbackEvent == null)
                     continue;
 
-                if (timedEvent.Time > time)
+                if (playbackEvent.Time > time)
                     return;
 
-                var midiEvent = timedEvent.Event;
+                var midiEvent = playbackEvent.Event;
 
                 if (!IsRunning)
                     return;
@@ -449,12 +449,37 @@ namespace Melanchall.DryWetMidi.Devices
 
         private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
         {
-            return events.Where(e => e != null)
-                         .Select(e => new TrackChunk(e.Where(midiEvent => !(midiEvent is MetaEvent))))
-                         .GetTimedEvents()
-                         .Select(e => new PlaybackEvent(e.Event, e.TimeAs<MetricTimeSpan>(tempoMap), e.Time))
-                         .OrderBy(e => e, new PlaybackEventsComparer())
-                         .ToList();
+            var timedEventsAndNotes = events
+                .Where(e => e != null)
+                .SelectMany(e => e.Where(midiEvent => midiEvent != null && !(midiEvent is MetaEvent))
+                                  .GetTimedEvents()
+                                  .GetTimedEventsAndNotes());
+
+            var playbackEvents = new List<PlaybackEvent>();
+
+            foreach (var timedObject in timedEventsAndNotes)
+            {
+                var note = timedObject as Note;
+                if (note != null)
+                {
+                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOnEvent, NotePlaybackEventTag.NoteBound.Start, tempoMap));
+                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOffEvent, NotePlaybackEventTag.NoteBound.End, tempoMap));
+                    continue;
+                }
+
+                var timedEvent = timedObject as TimedEvent;
+                if (timedEvent != null)
+                    playbackEvents.Add(new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time));
+            }
+
+            return playbackEvents.OrderBy(e => e, new PlaybackEventsComparer()).ToList();
+        }
+
+        private static PlaybackEvent GetPlaybackEventWithNoteTag(Note note, TimedEvent timedEvent, NotePlaybackEventTag.NoteBound noteBound, TempoMap tempoMap)
+        {
+            var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
+            playbackEvent.Tags.Add(new NotePlaybackEventTag(note, noteBound));
+            return playbackEvent;
         }
 
         #endregion

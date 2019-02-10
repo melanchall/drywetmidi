@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -23,6 +24,8 @@ namespace Melanchall.DryWetMidi.Devices
         public TimeSpan Time { get; }
 
         public long RawTime { get; }
+
+        public ICollection<IPlaybackEventTag> Tags { get; } = new List<IPlaybackEventTag>();
 
         #endregion
     }
