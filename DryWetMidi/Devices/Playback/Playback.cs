@@ -389,7 +389,7 @@ namespace Melanchall.DryWetMidi.Devices
                     switch (notePlaybackEventTag.Bound)
                     {
                         case NotePlaybackEventTag.NoteBound.Start:
-                            _noteOnEvents.Add(notePlaybackEventTag.Note.GetNoteId(), notePlaybackEventTag);
+                            _noteOnEvents[notePlaybackEventTag.Note.GetNoteId()] = notePlaybackEventTag;
                             break;
                         case NotePlaybackEventTag.NoteBound.End:
                             _noteOnEvents.Remove(notePlaybackEventTag.Note.GetNoteId());
