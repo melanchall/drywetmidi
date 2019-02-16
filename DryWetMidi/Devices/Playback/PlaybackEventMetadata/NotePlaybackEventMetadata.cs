@@ -3,26 +3,17 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal sealed class NotePlaybackEventTag : IPlaybackEventTag
+    internal sealed class NotePlaybackEventMetadata
     {
-        #region Nested types
-
-        public enum NoteBound
-        {
-            Start,
-            End
-        }
-
-        #endregion
-
         #region Constructor
 
-        public NotePlaybackEventTag(Note note, NoteBound noteBound, TimeSpan startTime, TimeSpan endTime)
+        public NotePlaybackEventMetadata(Note note, bool isNoteOnEvent, TimeSpan startTime, TimeSpan endTime)
         {
             Note = note;
-            Bound = noteBound;
+            IsNoteOnEvent = isNoteOnEvent;
             StartTime = startTime;
             EndTime = endTime;
+            NoteId = note.GetNoteId();
         }
 
         #endregion
@@ -35,7 +26,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         public TimeSpan EndTime { get; }
 
-        public NoteBound Bound { get; }
+        public bool IsNoteOnEvent { get; }
+
+        public NoteId NoteId { get; }
 
         #endregion
     }

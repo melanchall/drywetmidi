@@ -47,7 +47,7 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly long _durationInTicks;
 
         private readonly MidiClock _clock;
-        private readonly Dictionary<NoteId, NotePlaybackEventTag> _noteOnEvents = new Dictionary<NoteId, NotePlaybackEventTag>();
+        private readonly Dictionary<NoteId, NotePlaybackEventMetadata> _activeNotesMetadata = new Dictionary<NoteId, NotePlaybackEventMetadata>();
 
         private bool _disposed = false;
 
@@ -231,12 +231,12 @@ namespace Melanchall.DryWetMidi.Devices
 
             OutputDevice.PrepareForEventsSending();
 
-            foreach (var notePlaybackEventTag in _noteOnEvents.Values.Where(t => t.StartTime < _clock.CurrentTime && t.EndTime > _clock.CurrentTime))
+            foreach (var noteMetadata in _activeNotesMetadata.Values.Where(m => m.StartTime < _clock.CurrentTime && m.EndTime > _clock.CurrentTime))
             {
-                OutputDevice.SendEvent(notePlaybackEventTag.Note.TimedNoteOnEvent.Event);
+                OutputDevice.SendEvent(noteMetadata.Note.TimedNoteOnEvent.Event);
             }
 
-            _noteOnEvents.Clear();
+            _activeNotesMetadata.Clear();
             _clock.Start();
 
             OnStarted();
@@ -383,18 +383,13 @@ namespace Melanchall.DryWetMidi.Devices
 
                 OutputDevice.SendEvent(midiEvent);
 
-                var notePlaybackEventTag = playbackEvent.Tags.OfType<NotePlaybackEventTag>().FirstOrDefault();
-                if (notePlaybackEventTag != null)
+                var noteMetadata = playbackEvent.Metadata.Note;
+                if (noteMetadata != null)
                 {
-                    switch (notePlaybackEventTag.Bound)
-                    {
-                        case NotePlaybackEventTag.NoteBound.Start:
-                            _noteOnEvents[notePlaybackEventTag.Note.GetNoteId()] = notePlaybackEventTag;
-                            break;
-                        case NotePlaybackEventTag.NoteBound.End:
-                            _noteOnEvents.Remove(notePlaybackEventTag.Note.GetNoteId());
-                            break;
-                    }
+                    if (noteMetadata.IsNoteOnEvent)
+                        _activeNotesMetadata[noteMetadata.NoteId] = noteMetadata;
+                    else
+                        _activeNotesMetadata.Remove(noteMetadata.NoteId);
                 }
             }
             while (_eventsEnumerator.MoveNext());
@@ -425,10 +420,10 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 case NoteStopPolicy.Interrupt:
                     FinishCurrentNotes();
-                    _noteOnEvents.Clear();
+                    _activeNotesMetadata.Clear();
                     break;
                 case NoteStopPolicy.Hold:
-                    _noteOnEvents.Clear();
+                    _activeNotesMetadata.Clear();
                     break;
                 case NoteStopPolicy.Split:
                     FinishCurrentNotes();
@@ -438,7 +433,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void FinishCurrentNotes()
         {
-            foreach (var noteId in _noteOnEvents.Keys)
+            foreach (var noteId in _activeNotesMetadata.Keys)
             {
                 OutputDevice.SendEvent(new NoteOffEvent(noteId.NoteNumber, SevenBitNumber.MinValue) { Channel = noteId.Channel });
             }
@@ -468,8 +463,8 @@ namespace Melanchall.DryWetMidi.Devices
                 var note = timedObject as Note;
                 if (note != null)
                 {
-                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOnEvent, NotePlaybackEventTag.NoteBound.Start, tempoMap));
-                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOffEvent, NotePlaybackEventTag.NoteBound.End, tempoMap));
+                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOnEvent, tempoMap));
+                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOffEvent, tempoMap));
                     continue;
                 }
 
@@ -478,16 +473,17 @@ namespace Melanchall.DryWetMidi.Devices
                     playbackEvents.Add(new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time));
             }
 
-            return playbackEvents.OrderBy(e => e, new PlaybackEventsComparer()).ToList();
+            playbackEvents.Sort(new PlaybackEventsComparer());
+            return playbackEvents;
         }
 
-        private static PlaybackEvent GetPlaybackEventWithNoteTag(Note note, TimedEvent timedEvent, NotePlaybackEventTag.NoteBound noteBound, TempoMap tempoMap)
+        private static PlaybackEvent GetPlaybackEventWithNoteTag(Note note, TimedEvent timedEvent, TempoMap tempoMap)
         {
             var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
 
             TimeSpan noteStartTime = note.TimeAs<MetricTimeSpan>(tempoMap);
             TimeSpan noteEndTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time + note.Length, tempoMap);
-            playbackEvent.Tags.Add(new NotePlaybackEventTag(note, noteBound, noteStartTime, noteEndTime));
+            playbackEvent.Metadata.Note = new NotePlaybackEventMetadata(note, timedEvent.Event is NoteOnEvent, noteStartTime, noteEndTime);
 
             return playbackEvent;
         }
