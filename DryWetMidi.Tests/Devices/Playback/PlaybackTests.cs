@@ -262,7 +262,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
-                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Interrupt,
+                setupPlayback: (context, playback) => playback.InterruptNotesOnStop = true,
                 afterStart: NoPlaybackAction,
                 afterStop: NoPlaybackAction,
                 afterResume: NoPlaybackAction);
@@ -270,7 +270,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [Test]
-        public void CheckNoteStop_Hold()
+        public void CheckNoteStop_DontInterrupt()
         {
             var eventsToSend = new[]
             {
@@ -283,62 +283,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: eventsToSend,
                 stopAfter: TimeSpan.FromSeconds(1),
                 stopPeriod: TimeSpan.FromSeconds(2),
-                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Hold,
+                setupPlayback: (context, playback) => playback.InterruptNotesOnStop = false,
                 afterStart: NoPlaybackAction,
                 afterStop: NoPlaybackAction,
-                afterResume: NoPlaybackAction);
-        }
-
-        [Retry(RetriesNumber)]
-        [Test]
-        public void CheckNoteStop_Split()
-        {
-            CheckPlaybackStop(
-                eventsToSend: new[]
-                {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(5))
-                },
-                eventsWillBeSent: new[]
-                {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
-                    new EventToSend(new NoteOnEvent(), TimeSpan.FromTicks(1)),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(4))
-                },
-                stopAfter: TimeSpan.FromSeconds(1),
-                stopPeriod: TimeSpan.FromSeconds(2),
-                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Split,
-                afterStart: NoPlaybackAction,
-                afterStop: NoPlaybackAction,
-                afterResume: NoPlaybackAction);
-        }
-
-        [Retry(RetriesNumber)]
-        [Test]
-        public void CheckNoteStop_Split_MoveBeyondNote()
-        {
-            var stopAfter = TimeSpan.FromMilliseconds(500);
-            var stopPeriod = TimeSpan.FromSeconds(1);
-
-            CheckPlaybackStop(
-                eventsToSend: new[]
-                {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
-                    new EventToSend(new ProgramChangeEvent(SevenBitNumber.MinValue), TimeSpan.FromSeconds(1))
-                },
-                eventsWillBeSent: new[]
-                {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), stopAfter),
-                    new EventToSend(new TextEvent("Text"), TimeSpan.FromMilliseconds(500))
-                },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteStopPolicy = NoteStopPolicy.Split,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveForward(new MetricTimeSpan(0, 0, 1)),
                 afterResume: NoPlaybackAction);
         }
 

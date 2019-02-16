@@ -47,7 +47,8 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly long _durationInTicks;
 
         private readonly MidiClock _clock;
-        private readonly Dictionary<NoteId, NotePlaybackEventMetadata> _activeNotesMetadata = new Dictionary<NoteId, NotePlaybackEventMetadata>();
+        private readonly HashSet<NoteId> _activeNotesIds = new HashSet<NoteId>();
+        private readonly List<NotePlaybackEventMetadata> _notesMetadata = new List<NotePlaybackEventMetadata>();
 
         private bool _disposed = false;
 
@@ -86,11 +87,15 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
             var playbackEvents = GetPlaybackEvents(events, tempoMap);
-            _duration = playbackEvents.LastOrDefault()?.Time ?? TimeSpan.Zero;
-            _durationInTicks = playbackEvents.LastOrDefault()?.RawTime ?? 0;
-
             _eventsEnumerator = playbackEvents.GetEnumerator();
             _eventsEnumerator.MoveNext();
+
+            var lastPlaybackEvent = playbackEvents.LastOrDefault();
+            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
+            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
+
+            _notesMetadata.AddRange(playbackEvents.Select(e => e.Metadata.Note).Where(m => m != null));
+            _notesMetadata.Sort((m1, m2) => Math.Sign(m1.StartTime.Ticks - m2.StartTime.Ticks));
 
             TempoMap = tempoMap;
             OutputDevice = outputDevice;
@@ -136,11 +141,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public bool Loop { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value determining how currently playing notes should react on playback stopped.
-        /// The default value is <see cref="NoteStopPolicy.Hold"/>.
-        /// </summary>
-        public NoteStopPolicy NoteStopPolicy { get; set; }
+        public bool InterruptNotesOnStop { get; set; }
 
         /// <summary>
         /// Gets or sets the speed of events playing. 1 means normal speed. For example, to play
@@ -230,13 +231,6 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             OutputDevice.PrepareForEventsSending();
-
-            foreach (var noteMetadata in _activeNotesMetadata.Values.Where(m => m.StartTime < _clock.CurrentTime && m.EndTime > _clock.CurrentTime))
-            {
-                OutputDevice.SendEvent(noteMetadata.Note.TimedNoteOnEvent.Event);
-            }
-
-            _activeNotesMetadata.Clear();
             _clock.Start();
 
             OnStarted();
@@ -256,7 +250,16 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _clock.Stop();
-            StopNotes();
+
+            if (InterruptNotesOnStop)
+            {
+                foreach (var noteId in _activeNotesIds)
+                {
+                    OutputDevice.SendEvent(new NoteOffEvent(noteId.NoteNumber, SevenBitNumber.MinValue) { Channel = noteId.Channel });
+                }
+            }
+
+            _activeNotesIds.Clear();
 
             OnStopped();
         }
@@ -305,12 +308,18 @@ namespace Melanchall.DryWetMidi.Devices
             if (TimeConverter.ConvertFrom(time, TempoMap) > _durationInTicks)
                 time = (MetricTimeSpan)_duration;
 
-            var needStart = IsRunning;
+            var isRunning = IsRunning;
 
             _clock.Reset();
             SetStartTime(time);
 
-            if (needStart)
+            var currentTime = _clock.CurrentTime;
+            var notesMetadata = _notesMetadata.SkipWhile(m => m.EndTime <= currentTime)
+                                              .TakeWhile(m => m.StartTime < currentTime)
+                                              .Where(m => m.StartTime > currentTime && m.EndTime > currentTime)
+                                              .ToArray();
+
+            if (isRunning)
                 _clock.Start();
         }
 
@@ -387,9 +396,9 @@ namespace Melanchall.DryWetMidi.Devices
                 if (noteMetadata != null)
                 {
                     if (noteMetadata.IsNoteOnEvent)
-                        _activeNotesMetadata[noteMetadata.NoteId] = noteMetadata;
+                        _activeNotesIds.Add(noteMetadata.NoteId);
                     else
-                        _activeNotesMetadata.Remove(noteMetadata.NoteId);
+                        _activeNotesIds.Remove(noteMetadata.NoteId);
                 }
             }
             while (_eventsEnumerator.MoveNext());
@@ -412,31 +421,6 @@ namespace Melanchall.DryWetMidi.Devices
         {
             if (_disposed)
                 throw new ObjectDisposedException("Playback is disposed.");
-        }
-
-        private void StopNotes()
-        {
-            switch (NoteStopPolicy)
-            {
-                case NoteStopPolicy.Interrupt:
-                    FinishCurrentNotes();
-                    _activeNotesMetadata.Clear();
-                    break;
-                case NoteStopPolicy.Hold:
-                    _activeNotesMetadata.Clear();
-                    break;
-                case NoteStopPolicy.Split:
-                    FinishCurrentNotes();
-                    break;
-            }
-        }
-
-        private void FinishCurrentNotes()
-        {
-            foreach (var noteId in _activeNotesMetadata.Keys)
-            {
-                OutputDevice.SendEvent(new NoteOffEvent(noteId.NoteNumber, SevenBitNumber.MinValue) { Channel = noteId.Channel });
-            }
         }
 
         private void SetStartTime(ITimeSpan time)
