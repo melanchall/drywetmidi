@@ -246,22 +246,28 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [Test]
-        public void CheckNoteStop_Interrupt()
+        public void InterruptNotesOnStop()
         {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
             CheckPlaybackStop(
                 eventsToSend: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(5))
+                    new EventToSend(new NoteOnEvent(), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay)
                 },
                 eventsWillBeSent: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(4))
+                    new EventToSend(new NoteOnEvent(), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(), stopAfter),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay - stopAfter)
                 },
-                stopAfter: TimeSpan.FromSeconds(1),
-                stopPeriod: TimeSpan.FromSeconds(2),
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
                 setupPlayback: (context, playback) => playback.InterruptNotesOnStop = true,
                 afterStart: NoPlaybackAction,
                 afterStop: NoPlaybackAction,
@@ -270,19 +276,19 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [Test]
-        public void CheckNoteStop_DontInterrupt()
+        public void DontInterruptNotesOnStop()
         {
             var eventsToSend = new[]
             {
                 new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(5))
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(2))
             };
 
             CheckPlaybackStop(
                 eventsToSend,
                 eventsWillBeSent: eventsToSend,
                 stopAfter: TimeSpan.FromSeconds(1),
-                stopPeriod: TimeSpan.FromSeconds(2),
+                stopPeriod: TimeSpan.FromMilliseconds(400),
                 setupPlayback: (context, playback) => playback.InterruptNotesOnStop = false,
                 afterStart: NoPlaybackAction,
                 afterStop: NoPlaybackAction,
@@ -655,9 +661,399 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Retry(RetriesNumber)]
+        [Test()]
+        public void TrackNotes_MoveForwardToNote()
+        {
+            var noteNumber = (SevenBitNumber)60;
+            var noteOnDelay = TimeSpan.FromSeconds(1);
+            var noteOnVelocity = (SevenBitNumber)100;
+            var noteOffDelay = TimeSpan.FromMilliseconds(800);
+            var noteOffVelocity = (SevenBitNumber)80;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(1500);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveBackToNote()
+        {
+            var noteNumber = (SevenBitNumber)60;
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOnVelocity = (SevenBitNumber)100;
+            var noteOffDelay = TimeSpan.FromMilliseconds(800);
+            var noteOffVelocity = (SevenBitNumber)80;
+            var pitchBendDelay = TimeSpan.FromMilliseconds(300);
+
+            var moveFrom = TimeSpan.FromSeconds(1);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay),
+                    new EventToSend(new PitchBendEvent(), pitchBendDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay),
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom - (noteOnDelay + noteOffDelay)),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo),
+                    new EventToSend(new PitchBendEvent(), pitchBendDelay)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveForwardFromNote()
+        {
+            var noteNumber = (SevenBitNumber)60;
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOnVelocity = (SevenBitNumber)100;
+            var noteOffDelay = TimeSpan.FromMilliseconds(800);
+            var noteOffVelocity = (SevenBitNumber)80;
+            var pitchBendDelay = TimeSpan.FromMilliseconds(400);
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(1000);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay),
+                    new EventToSend(new PitchBendEvent(), pitchBendDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom - noteOnDelay),
+                    new EventToSend(new PitchBendEvent(), noteOnDelay + noteOffDelay + pitchBendDelay - moveTo)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveBackFromNote()
+        {
+            var noteNumber = (SevenBitNumber)60;
+            var noteOnDelay = TimeSpan.FromSeconds(1);
+            var noteOnVelocity = (SevenBitNumber)100;
+            var noteOffDelay = TimeSpan.FromMilliseconds(400);
+            var noteOffVelocity = (SevenBitNumber)80;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1200);
+            var moveTo = TimeSpan.FromMilliseconds(700);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom - noteOnDelay),
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay - moveTo),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveForwardToSameNote()
+        {
+            var noteNumber = (SevenBitNumber)60;
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOnVelocity = (SevenBitNumber)100;
+            var noteOffDelay = TimeSpan.FromSeconds(1);
+            var noteOffVelocity = (SevenBitNumber)80;
+
+            var moveFrom = TimeSpan.FromMilliseconds(200);
+            var moveTo = TimeSpan.FromMilliseconds(700);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveBackToSameNote()
+        {
+            var noteNumber = (SevenBitNumber)60;
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOnVelocity = (SevenBitNumber)100;
+            var noteOffDelay = TimeSpan.FromSeconds(1);
+            var noteOffVelocity = (SevenBitNumber)80;
+
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(400);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveForwardFromNoteToNote()
+        {
+            var noteNumber1 = (SevenBitNumber)60;
+            var noteOnDelay1 = TimeSpan.Zero;
+            var noteOnVelocity1 = (SevenBitNumber)100;
+            var noteOffDelay1 = TimeSpan.FromSeconds(1);
+            var noteOffVelocity1 = (SevenBitNumber)80;
+
+            var noteNumber2 = (SevenBitNumber)70;
+            var noteOnDelay2 = TimeSpan.FromMilliseconds(200);
+            var noteOnVelocity2 = (SevenBitNumber)95;
+            var noteOffDelay2 = TimeSpan.FromMilliseconds(800);
+            var noteOffVelocity2 = (SevenBitNumber)85;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(1400);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOffDelay1),
+                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
+                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOffDelay2)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), moveFrom),
+                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2 - moveTo)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveBackFromNoteToNote()
+        {
+            var noteNumber1 = (SevenBitNumber)60;
+            var noteOnDelay1 = TimeSpan.Zero;
+            var noteOnVelocity1 = (SevenBitNumber)100;
+            var noteOffDelay1 = TimeSpan.FromSeconds(1);
+            var noteOffVelocity1 = (SevenBitNumber)80;
+
+            var noteNumber2 = (SevenBitNumber)70;
+            var noteOnDelay2 = TimeSpan.FromMilliseconds(200);
+            var noteOnVelocity2 = (SevenBitNumber)95;
+            var noteOffDelay2 = TimeSpan.FromMilliseconds(800);
+            var noteOffVelocity2 = (SevenBitNumber)85;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1400);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckTrackNotes(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOffDelay1),
+                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
+                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOffDelay2)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOffDelay1),
+                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
+                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), moveFrom - (noteOnDelay1 + noteOffDelay1 + noteOnDelay2)),
+                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1 - moveTo),
+                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
+                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOffDelay2)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_StopStart_InterruptNotesOnStop()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.Zero;
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(), stopAfter),
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), noteOnDelay + noteOffDelay - stopAfter)
+                },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) =>
+                {
+                    playback.InterruptNotesOnStop = true;
+                    playback.TrackNotes = true;
+                },
+                afterStart: NoPlaybackAction,
+                afterStop: NoPlaybackAction,
+                afterResume: NoPlaybackAction);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_StopStart_DontInterruptNotesOnStop()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.Zero;
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.TrackNotes = true;
+                },
+                afterStart: NoPlaybackAction,
+                afterStop: NoPlaybackAction,
+                afterResume: NoPlaybackAction);
+        }
+
         #endregion
 
         #region Private methods
+
+        private void CheckTrackNotes(
+            ICollection<EventToSend> eventsToSend,
+            ICollection<EventToSend> eventsWillBeSent,
+            TimeSpan moveFrom,
+            TimeSpan moveTo)
+        {
+            var playbackContext = new PlaybackContext();
+
+            var receivedEvents = playbackContext.ReceivedEvents;
+            var sentEvents = playbackContext.SentEvents;
+            var stopwatch = playbackContext.Stopwatch;
+            var tempoMap = playbackContext.TempoMap;
+
+            var eventsForPlayback = new List<MidiEvent>();
+            var currentTime = TimeSpan.Zero;
+
+            foreach (var eventToSend in eventsToSend)
+            {
+                var midiEvent = eventToSend.Event.Clone();
+                midiEvent.DeltaTime = LengthConverter.ConvertFrom((MetricTimeSpan)eventToSend.Delay, (MetricTimeSpan)currentTime, tempoMap);
+                currentTime += eventToSend.Delay;
+                eventsForPlayback.Add(midiEvent);
+            }
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                {
+                    playback.TrackNotes = true;
+
+                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                    {
+                        inputDevice.EventReceived += (_, e) =>
+                        {
+                            lock (playbackContext.ReceivedEventsLockObject)
+                            {
+                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                            }
+                        };
+                        inputDevice.StartEventsListening();
+                        stopwatch.Start();
+                        playback.Start();
+
+                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                        playback.MoveToTime((MetricTimeSpan)moveTo);
+
+                        var timeout = TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
+                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+
+                        stopwatch.Stop();
+
+                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                    }
+                }
+            }
+
+            CompareSentReceivedEvents(sentEvents, receivedEvents, eventsWillBeSent.ToList());
+        }
 
         private void CheckPlaybackEvents(
             int expectedStartedRaised,
@@ -870,6 +1266,36 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
 
             CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
+        }
+
+        private void CompareSentReceivedEvents(
+            IReadOnlyList<SentEvent> sentEvents,
+            IReadOnlyList<ReceivedEvent> receivedEvents,
+            IReadOnlyList<EventToSend> expectedEvents)
+        {
+            var currentTime = TimeSpan.Zero;
+
+            for (var i = 0; i < sentEvents.Count; i++)
+            {
+                var sentEvent = sentEvents[i];
+                var receivedEvent = receivedEvents[i];
+                var expectedEvent = expectedEvents[i];
+                var expectedTime = (currentTime += expectedEvent.Delay);
+
+                Assert.IsTrue(
+                    MidiEventEquality.AreEqual(sentEvent.Event, expectedEvent.Event, false),
+                    $"Sent event {sentEvent.Event} doesn't match expected one {expectedEvent.Event}.");
+
+                Assert.IsTrue(
+                    MidiEventEquality.AreEqual(sentEvent.Event, receivedEvent.Event, false),
+                    $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
+
+                var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
+                Assert.LessOrEqual(
+                    offsetFromExpectedTime,
+                    SendReceiveUtilities.MaximumEventSendReceiveDelay,
+                    $"Event was sent at wrong time (at {sentEvent.Time} instead of {expectedTime}).");
+            }
         }
 
         private void CompareSentReceivedEvents(
