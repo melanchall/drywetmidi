@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    public sealed class NoteEventArgs : EventArgs
+    public sealed class NotesEventArgs : EventArgs
     {
         #region Constructor
 
-        internal NoteEventArgs(Note note)
+        internal NotesEventArgs(params Note[] notes)
         {
-            Note = note;
+            Notes = notes;
         }
 
         #endregion
 
         #region Properties
 
-        public Note Note { get; }
+        public IEnumerable<Note> Notes { get; }
 
         #endregion
     }

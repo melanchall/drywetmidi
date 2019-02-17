@@ -686,7 +686,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0 },
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
@@ -719,7 +721,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new PitchBendEvent(), pitchBendDelay)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0, 0 },
+                notesWillBeFinished: new[] { 0, 0 });
         }
 
         [Retry(RetriesNumber)]
@@ -750,7 +754,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new PitchBendEvent(), noteOnDelay + noteOffDelay + pitchBendDelay - moveTo)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0 },
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
@@ -780,7 +786,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0, 0 },
+                notesWillBeFinished: new[] { 0, 0 });
         }
 
         [Retry(RetriesNumber)]
@@ -808,7 +816,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0 },
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
@@ -836,7 +846,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0 },
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
@@ -874,7 +886,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2 - moveTo)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0, 1 },
+                notesWillBeFinished: new[] { 0, 1 });
         }
 
         [Retry(RetriesNumber)]
@@ -916,7 +930,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOffDelay2)
                 },
                 moveFrom: moveFrom,
-                moveTo: moveTo);
+                moveTo: moveTo,
+                notesWillBeStarted: new[] { 0, 1, 0, 1 },
+                notesWillBeFinished: new[] { 0, 1, 0, 1 });
         }
 
         [Retry(RetriesNumber)]
@@ -995,7 +1011,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             ICollection<EventToSend> eventsToSend,
             ICollection<EventToSend> eventsWillBeSent,
             TimeSpan moveFrom,
-            TimeSpan moveTo)
+            TimeSpan moveTo,
+            IEnumerable<int> notesWillBeStarted,
+            IEnumerable<int> notesWillBeFinished)
         {
             var playbackContext = new PlaybackContext();
 
@@ -1015,6 +1033,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsForPlayback.Add(midiEvent);
             }
 
+            var notes = eventsForPlayback.GetNotes().ToArray();
+            var notesStarted = new List<Note>();
+            var notesFinished = new List<Note>();
+
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
@@ -1023,6 +1045,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
                 {
                     playback.TrackNotes = true;
+                    playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
+                    playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
 
                     using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
                     {
@@ -1053,6 +1077,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
 
             CompareSentReceivedEvents(sentEvents, receivedEvents, eventsWillBeSent.ToList());
+
+            Assert.IsTrue(NoteEquality.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i])), "Invalid notes started.");
+            Assert.IsTrue(NoteEquality.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i])), "Invalid notes finished.");
         }
 
         private void CheckPlaybackEvents(
