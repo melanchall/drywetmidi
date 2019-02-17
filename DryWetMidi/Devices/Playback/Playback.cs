@@ -38,6 +38,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler Finished;
 
+        public event EventHandler<NotesEventArgs> NotesPlaybackStarted;
+
+        public event EventHandler<NotesEventArgs> NotesPlaybackFinished;
+
         #endregion
 
         #region Fields
@@ -49,8 +53,6 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly MidiClock _clock;
 
         private readonly Dictionary<NoteId, Note> _activeNotes = new Dictionary<NoteId, Note>();
-        private readonly List<Note> _onNotes = new List<Note>();
-        private readonly List<Note> _offNotes = new List<Note>();
         private readonly List<NotePlaybackEventMetadata> _notesMetadata;
 
         private bool _disposed = false;
@@ -261,7 +263,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 foreach (var note in _activeNotes)
                 {
-                    OutputDevice.SendEvent(new NoteOffEvent(note.Key.NoteNumber, note.Value.OffVelocity) { Channel = note.Key.Channel });
+                    SendEvent(new NoteOffEvent(note.Key.NoteNumber, note.Value.OffVelocity) { Channel = note.Key.Channel });
                 }
 
                 _activeNotes.Clear();
@@ -374,24 +376,24 @@ namespace Melanchall.DryWetMidi.Devices
                                             .ToArray();
             var notesIds = notesToPlay.Select(n => n.GetNoteId()).ToArray();
 
-            _onNotes.AddRange(notesToPlay.Where(n => !_activeNotes.ContainsValue(n)));
-            _offNotes.AddRange(_activeNotes.Where(n => !notesIds.Contains(n.Key)).Select(n => n.Value));
+            var onNotes = notesToPlay.Where(n => !_activeNotes.ContainsValue(n)).ToArray();
+            var offNotes = _activeNotes.Where(n => !notesIds.Contains(n.Key)).Select(n => n.Value).ToArray();
 
             OutputDevice.PrepareForEventsSending();
 
-            foreach (var note in _offNotes)
+            foreach (var note in offNotes)
             {
-                OutputDevice.SendEvent(note.TimedNoteOffEvent.Event);
+                SendEvent(note.TimedNoteOffEvent.Event);
             }
 
-            _offNotes.Clear();
+            OnNotesPlaybackFinished(offNotes);
 
-            foreach (var note in _onNotes)
+            foreach (var note in onNotes)
             {
-                OutputDevice.SendEvent(note.TimedNoteOnEvent.Event);
+                SendEvent(note.TimedNoteOnEvent.Event);
             }
 
-            _onNotes.Clear();
+            OnNotesPlaybackStarted(onNotes);
         }
 
         private void OnStarted()
@@ -407,6 +409,16 @@ namespace Melanchall.DryWetMidi.Devices
         private void OnFinished()
         {
             Finished?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnNotesPlaybackStarted(params Note[] notes)
+        {
+            NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes));
+        }
+
+        private void OnNotesPlaybackFinished(params Note[] notes)
+        {
+            NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes));
         }
 
         private void OnClockTick(object sender, TickEventArgs e)
@@ -427,15 +439,21 @@ namespace Melanchall.DryWetMidi.Devices
                 if (!IsRunning)
                     return;
 
-                OutputDevice.SendEvent(midiEvent);
+                SendEvent(midiEvent);
 
                 var noteMetadata = playbackEvent.Metadata.Note;
                 if (noteMetadata != null)
                 {
                     if (noteMetadata.IsNoteOnEvent)
+                    {
                         _activeNotes[noteMetadata.NoteId] = noteMetadata.Note;
+                        OnNotesPlaybackStarted(noteMetadata.Note);
+                    }
                     else
+                    {
                         _activeNotes.Remove(noteMetadata.NoteId);
+                        OnNotesPlaybackFinished(noteMetadata.Note);
+                    }
                 }
             }
             while (_eventsEnumerator.MoveNext());
@@ -467,6 +485,11 @@ namespace Melanchall.DryWetMidi.Devices
             _eventsEnumerator.Reset();
             do { _eventsEnumerator.MoveNext(); }
             while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < _clock.StartTime);
+        }
+
+        private void SendEvent(MidiEvent midiEvent)
+        {
+            OutputDevice.SendEvent(midiEvent);
         }
 
         private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
