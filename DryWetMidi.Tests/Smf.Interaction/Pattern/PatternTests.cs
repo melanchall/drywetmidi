@@ -14,6 +14,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
     [TestFixture]
     public class PatternTests
     {
+        #region Nested classes
+
         private sealed class NoteInfo
         {
             #region Constructor
@@ -71,6 +73,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             #endregion
         }
+
+        #endregion
+
+        #region Constants
+
+        private static readonly FourBitNumber Channel = (FourBitNumber)2;
+
+        #endregion
 
         #region Test methods
 
@@ -619,7 +629,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent(programNumber), eventTime)
+                new TimedEventInfo(new ProgramChangeEvent(programNumber) { Channel = Channel }, eventTime)
             });
         }
 
@@ -639,7 +649,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent(program.AsSevenBitNumber()), eventTime)
+                new TimedEventInfo(new ProgramChangeEvent(program.AsSevenBitNumber()) { Channel = Channel }, eventTime)
             });
         }
 
@@ -667,9 +677,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ControlChangeEvent(bankMsbControlNumber, bankMsb), eventsTime),
-                new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb), eventsTime),
-                new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()), eventsTime),
+                new TimedEventInfo(new ControlChangeEvent(bankMsbControlNumber, bankMsb) { Channel = Channel }, eventsTime),
+                new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb) { Channel = Channel }, eventsTime),
+                new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()) { Channel = Channel }, eventsTime),
             });
         }
 
@@ -679,8 +689,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         private static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params Tuple<long, Tempo>[] tempoChanges)
         {
-            var channel = (FourBitNumber)2;
-
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -692,7 +700,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var midiFile = pattern.ToFile(tempoMap, channel);
+            var midiFile = pattern.ToFile(tempoMap, Channel);
 
             var expectedNotes = expectedNotesInfos.Select(i =>
             {
@@ -702,7 +710,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 return new DryWetMidi.Smf.Interaction.Note(i.NoteNumber, expectedLength, expectedTime)
                 {
                     Velocity = i.Velocity,
-                    Channel = channel
+                    Channel = Channel
                 };
             });
 
@@ -716,8 +724,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             ICollection<TimedEventInfo> expectedTimedEventsInfos,
             params Tuple<long, Tempo>[] tempoChanges)
         {
-            var channel = (FourBitNumber)2;
-
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -729,7 +735,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var midiFile = pattern.ToFile(tempoMap, channel);
+            var midiFile = pattern.ToFile(tempoMap, Channel);
 
             var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
                 new TimedEvent(i.Event,
