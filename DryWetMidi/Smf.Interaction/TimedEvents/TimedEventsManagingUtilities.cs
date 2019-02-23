@@ -12,6 +12,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Methods
 
+        public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(timedEvent), timedEvent);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            timedEvent.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            return timedEvent;
+        }
+
         /// <summary>
         /// Creates an instance of the <see cref="TimedEventsManager"/> initializing it with the
         /// specified events collection and comparison delegate for events that have same time.

@@ -12,6 +12,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Methods
 
+        public static Note SetTimeAndLength(this Note note, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(note), note);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            note.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            note.Length = LengthConverter.ConvertFrom(length, note.Time, tempoMap);
+            return note;
+        }
+
         /// <summary>
         /// Creates an instance of the <see cref="NotesManager"/> initializing it with the
         /// specified events collection and comparison delegate for events that have same time.
