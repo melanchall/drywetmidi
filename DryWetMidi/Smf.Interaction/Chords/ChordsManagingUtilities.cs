@@ -12,6 +12,18 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Methods
 
+        public static Chord SetTimeAndLength(this Chord chord, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            chord.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            chord.Length = LengthConverter.ConvertFrom(length, chord.Time, tempoMap);
+            return chord;
+        }
+
         /// <summary>
         /// Creates an instance of the <see cref="ChordsManager"/> initializing it with the
         /// specified events collection, notes tolerance and comparison delegate for events that have same time.
