@@ -86,12 +86,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, OutputDevice outputDevice)
+            : this(GetTimedObjects(events), tempoMap, outputDevice)
         {
-            ThrowIfArgument.IsNull(nameof(events), events);
+        }
+
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, OutputDevice outputDevice)
+        {
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            var playbackEvents = GetPlaybackEvents(events, tempoMap);
+            var playbackEvents = GetPlaybackEvents(timedObjects, tempoMap);
             _eventsEnumerator = playbackEvents.GetEnumerator();
             _eventsEnumerator.MoveNext();
 
@@ -100,7 +105,7 @@ namespace Melanchall.DryWetMidi.Devices
             _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
 
             _notesMetadata = playbackEvents.Select(e => e.Metadata.Note).Where(m => m != null).ToList();
-            _notesMetadata.Sort((m1, m2) => Math.Sign(m1.StartTime.Ticks - m2.StartTime.Ticks));
+            _notesMetadata.Sort((m1, m2) => m1.StartTime.CompareTo(m2.StartTime));
 
             TempoMap = tempoMap;
             OutputDevice = outputDevice;
@@ -492,23 +497,23 @@ namespace Melanchall.DryWetMidi.Devices
             OutputDevice.SendEvent(midiEvent);
         }
 
-        private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
+        private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
         {
-            var timedEventsAndNotes = events
-                .Where(e => e != null)
-                .SelectMany(e => e.Where(midiEvent => midiEvent != null && !(midiEvent is MetaEvent))
-                                  .GetTimedEvents()
-                                  .GetTimedEventsAndNotes());
-
             var playbackEvents = new List<PlaybackEvent>();
 
-            foreach (var timedObject in timedEventsAndNotes)
+            foreach (var timedObject in timedObjects)
             {
+                var chord = timedObject as Chord;
+                if (chord != null)
+                {
+                    playbackEvents.AddRange(GetPlaybackEvents(chord, tempoMap));
+                    continue;
+                }
+
                 var note = timedObject as Note;
                 if (note != null)
                 {
-                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOnEvent, tempoMap));
-                    playbackEvents.Add(GetPlaybackEventWithNoteTag(note, note.TimedNoteOffEvent, tempoMap));
+                    playbackEvents.AddRange(GetPlaybackEvents(note, tempoMap));
                     continue;
                 }
 
@@ -521,6 +526,23 @@ namespace Melanchall.DryWetMidi.Devices
             return playbackEvents;
         }
 
+        private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Chord chord, TempoMap tempoMap)
+        {
+            foreach (var note in chord.Notes)
+            {
+                foreach (var playbackEvent in GetPlaybackEvents(note, tempoMap))
+                {
+                    yield return playbackEvent;
+                }
+            }
+        }
+
+        private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Note note, TempoMap tempoMap)
+        {
+            yield return GetPlaybackEventWithNoteTag(note, note.TimedNoteOnEvent, tempoMap);
+            yield return GetPlaybackEventWithNoteTag(note, note.TimedNoteOffEvent, tempoMap);
+        }
+
         private static PlaybackEvent GetPlaybackEventWithNoteTag(Note note, TimedEvent timedEvent, TempoMap tempoMap)
         {
             var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
@@ -530,6 +552,16 @@ namespace Melanchall.DryWetMidi.Devices
             playbackEvent.Metadata.Note = new NotePlaybackEventMetadata(note, timedEvent.Event is NoteOnEvent, noteStartTime, noteEndTime);
 
             return playbackEvent;
+        }
+
+        private static IEnumerable<ITimedObject> GetTimedObjects(IEnumerable<IEnumerable<MidiEvent>> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            return events.Where(e => e != null)
+                         .SelectMany(e => e.Where(midiEvent => midiEvent != null && !(midiEvent is MetaEvent))
+                                           .GetTimedEvents()
+                                           .GetTimedEventsAndNotes());
         }
 
         #endregion
