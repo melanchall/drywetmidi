@@ -5,7 +5,7 @@ using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Standards
 {
-    internal static class GeneralMidi2Utilities
+    public static class GeneralMidi2Utilities
     {
         #region Nested classes
 
@@ -484,7 +484,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         #region Methods
 
-        public static IEnumerable<MidiEvent> GetProgramEvents(this GeneralMidi2Program program)
+        public static IEnumerable<MidiEvent> GetProgramEvents(this GeneralMidi2Program program, FourBitNumber channel)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
 
@@ -492,9 +492,9 @@ namespace Melanchall.DryWetMidi.Standards
 
             return new[]
             {
-                ControlName.BankSelect.GetControlChangeEvent(programData.BankMsb),
-                ControlName.LsbForBankSelect.GetControlChangeEvent(programData.BankLsb),
-                programData.GeneralMidiProgram.GetProgramEvent()
+                ControlName.BankSelect.GetControlChangeEvent(programData.BankMsb, channel),
+                ControlName.LsbForBankSelect.GetControlChangeEvent(programData.BankLsb, channel),
+                programData.GeneralMidiProgram.GetProgramEvent(channel)
             };
         }
 
