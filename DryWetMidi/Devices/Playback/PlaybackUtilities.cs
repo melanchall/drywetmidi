@@ -4,6 +4,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Standards;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -94,6 +95,44 @@ namespace Melanchall.DryWetMidi.Devices
             return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputDevice);
         }
 
+        public static Playback GetPlayback(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+
+            return GetNotesPlayback(notes,
+                                    tempoMap,
+                                    outputDevice,
+                                    channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } });
+        }
+
+        public static Playback GetPlayback(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidiProgram), generalMidiProgram);
+
+            return GetNotesPlayback(notes,
+                                    tempoMap,
+                                    outputDevice,
+                                    channel => new[] { generalMidiProgram.GetProgramEvent(channel) });
+        }
+
+        public static Playback GetPlayback(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidi2Program), generalMidi2Program);
+
+            return GetNotesPlayback(notes,
+                                    tempoMap,
+                                    outputDevice,
+                                    channel => generalMidi2Program.GetProgramEvents(channel));
+        }
+
         /// <summary>
         /// Plays MIDI events contained in the specified <see cref="TrackChunk"/>.
         /// </summary>
@@ -165,6 +204,58 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
             pattern.ToTrackChunk(tempoMap, channel).Play(tempoMap, outputDevice);
+        }
+
+        public static void Play(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+
+            using (var playback = notes.GetPlayback(tempoMap, outputDevice, programNumber))
+            {
+                playback.Play();
+            }
+        }
+
+        public static void Play(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidiProgram), generalMidiProgram);
+
+            using (var playback = notes.GetPlayback(tempoMap, outputDevice, generalMidiProgram))
+            {
+                playback.Play();
+            }
+        }
+
+        public static void Play(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidi2Program), generalMidi2Program);
+
+            using (var playback = notes.GetPlayback(tempoMap, outputDevice, generalMidi2Program))
+            {
+                playback.Play();
+            }
+        }
+
+        private static Playback GetNotesPlayback(IEnumerable<Note> notes,
+                                                 TempoMap tempoMap,
+                                                 OutputDevice outputDevice,
+                                                 Func<FourBitNumber,
+                                                 IEnumerable<MidiEvent>> programChangeEventsGetter)
+        {
+            var programChangeEvents = notes.Select(n => n.Channel)
+                                           .Distinct()
+                                           .SelectMany(programChangeEventsGetter)
+                                           .Select(e => (ITimedObject)new TimedEvent(e));
+
+            return new Playback(programChangeEvents.Concat(notes), tempoMap, outputDevice);
         }
 
         #endregion
