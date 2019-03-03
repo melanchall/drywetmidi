@@ -51,8 +51,8 @@
     <Compile Include="Devices\DevicesConnector\DevicesConnectorTests.cs" />
     <Compile Include="Devices\InpurDevice\InputDeviceTests.cs" />
     <Compile Include="Devices\OutputDevice\OutputDeviceTests.cs" />
-    <Compile Include="Devices\Playback\PlaybackTests.cs" />
     <Compile Include="Devices\Playback\PlaybackUtilitiesTests.cs" />
+    <Compile Include="Devices\Playback\PlaybackTests.cs" />
     <Compile Include="Devices\Recording\RecordingTests.cs" />
     <Compile Include="Devices\SendReceiveTests.cs" />
     <Compile Include="Devices\Utilities\EventToSend.cs" />

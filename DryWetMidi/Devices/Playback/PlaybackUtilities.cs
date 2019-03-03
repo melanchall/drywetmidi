@@ -95,42 +95,45 @@ namespace Melanchall.DryWetMidi.Devices
             return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputDevice);
         }
 
-        public static Playback GetPlayback(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
+        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
+            where TObject : IMusicalObject, ITimedObject
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            return GetNotesPlayback(notes,
-                                    tempoMap,
-                                    outputDevice,
-                                    channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } });
+            return GetMusicalObjectsPlayback(objects,
+                                             tempoMap,
+                                             outputDevice,
+                                             channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } });
         }
 
-        public static Playback GetPlayback(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
+        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
+            where TObject : IMusicalObject, ITimedObject
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidiProgram), generalMidiProgram);
 
-            return GetNotesPlayback(notes,
-                                    tempoMap,
-                                    outputDevice,
-                                    channel => new[] { generalMidiProgram.GetProgramEvent(channel) });
+            return GetMusicalObjectsPlayback(objects,
+                                             tempoMap,
+                                             outputDevice,
+                                             channel => new[] { generalMidiProgram.GetProgramEvent(channel) });
         }
 
-        public static Playback GetPlayback(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
+        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
+            where TObject : IMusicalObject, ITimedObject
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidi2Program), generalMidi2Program);
 
-            return GetNotesPlayback(notes,
-                                    tempoMap,
-                                    outputDevice,
-                                    channel => generalMidi2Program.GetProgramEvents(channel));
+            return GetMusicalObjectsPlayback(notes,
+                                             tempoMap,
+                                             outputDevice,
+                                             channel => generalMidi2Program.GetProgramEvents(channel));
         }
 
         /// <summary>
@@ -206,56 +209,59 @@ namespace Melanchall.DryWetMidi.Devices
             pattern.ToTrackChunk(tempoMap, channel).Play(tempoMap, outputDevice);
         }
 
-        public static void Play(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
+        public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
+            where TObject : IMusicalObject, ITimedObject
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            using (var playback = notes.GetPlayback(tempoMap, outputDevice, programNumber))
+            using (var playback = objects.GetPlayback(tempoMap, outputDevice, programNumber))
             {
                 playback.Play();
             }
         }
 
-        public static void Play(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
+        public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
+            where TObject : IMusicalObject, ITimedObject
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidiProgram), generalMidiProgram);
 
-            using (var playback = notes.GetPlayback(tempoMap, outputDevice, generalMidiProgram))
+            using (var playback = objects.GetPlayback(tempoMap, outputDevice, generalMidiProgram))
             {
                 playback.Play();
             }
         }
 
-        public static void Play(this IEnumerable<Note> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
+        public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
+            where TObject : IMusicalObject, ITimedObject
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidi2Program), generalMidi2Program);
 
-            using (var playback = notes.GetPlayback(tempoMap, outputDevice, generalMidi2Program))
+            using (var playback = objects.GetPlayback(tempoMap, outputDevice, generalMidi2Program))
             {
                 playback.Play();
             }
         }
 
-        private static Playback GetNotesPlayback(IEnumerable<Note> notes,
-                                                 TempoMap tempoMap,
-                                                 OutputDevice outputDevice,
-                                                 Func<FourBitNumber,
-                                                 IEnumerable<MidiEvent>> programChangeEventsGetter)
+        private static Playback GetMusicalObjectsPlayback<TObject>(IEnumerable<TObject> objects,
+                                                                   TempoMap tempoMap,
+                                                                   OutputDevice outputDevice,
+                                                                   Func<FourBitNumber, IEnumerable<MidiEvent>> programChangeEventsGetter)
+            where TObject : IMusicalObject, ITimedObject
         {
-            var programChangeEvents = notes.Select(n => n.Channel)
-                                           .Distinct()
-                                           .SelectMany(programChangeEventsGetter)
-                                           .Select(e => (ITimedObject)new TimedEvent(e));
+            var programChangeEvents = objects.Select(n => n.Channel)
+                                             .Distinct()
+                                             .SelectMany(programChangeEventsGetter)
+                                             .Select(e => (ITimedObject)new TimedEvent(e));
 
-            return new Playback(programChangeEvents.Concat(notes), tempoMap, outputDevice);
+            return new Playback(programChangeEvents.Concat((IEnumerable<ITimedObject>)objects), tempoMap, outputDevice);
         }
 
         #endregion

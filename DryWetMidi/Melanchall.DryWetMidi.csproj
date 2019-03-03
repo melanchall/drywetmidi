@@ -93,6 +93,7 @@
     <Compile Include="MusicTheory\Scale\ScaleIntervals.cs" />
     <Compile Include="MusicTheory\Scale\ScaleParser.cs" />
     <Compile Include="MusicTheory\Scale\ScaleUtilities.cs" />
+    <Compile Include="Smf.Interaction\IMusicalObject.cs" />
     <Compile Include="Smf.Interaction\LengthedObject\SplittedLengthedObject.cs" />
     <Compile Include="Smf.Interaction\Notes\Utilities\GetNotesAndRests\GetNotesAndRestsUtilities.cs" />
     <Compile Include="Smf.Interaction\Notes\Utilities\GetNotesAndRests\Rest.cs" />
