@@ -15,6 +15,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     [TestFixture]
     public sealed class PlaybackUtilitiesTests
     {
+        #region Constants
+
+        private const int RetriesNumber = 3;
+
+        #endregion
+
         #region Nested classes
 
         private sealed class ReceivedNote
@@ -37,12 +43,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             #endregion
         }
-
-        #endregion
-
-        #region Constants
-
-        private const int RetriesNumber = 3;
 
         #endregion
 
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #endregion
 
-        #region Private methods
+        #region Methods
 
         private static void CheckNotesPlayback(Func<IEnumerable<Note>, TempoMap, OutputDevice, Playback> playbackGetter,
                                                Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
@@ -88,7 +88,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var tempoMap = TempoMap.Default;
             var channel1 = (FourBitNumber)5;
             var channel2 = (FourBitNumber)7;
-            var stopwatch = new Stopwatch();
 
             var notes1 = new PatternBuilder()
                 .Note(DryWetMidi.MusicTheory.NoteName.A, new MetricTimeSpan(0, 0, 5))
@@ -106,6 +105,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 .GetNotes();
             var notes = notes1.Concat(notes2).ToList();
 
+            CheckNotesPlayback(notes, (m, d) => playbackGetter(notes, m, d), programEventsGetter);
+        }
+
+        private static void CheckNotesPlayback(IEnumerable<Note> notes,
+                                               Func<TempoMap, OutputDevice, Playback> playbackGetter,
+                                               Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
+        {
+            var tempoMap = TempoMap.Default;
+            var stopwatch = new Stopwatch();
+
             var receivedNotesStarted = new List<ReceivedNote>();
             var receivedNotesFinished = new List<ReceivedNote>();
 
@@ -122,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             {
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = playbackGetter(notes, tempoMap, outputDevice))
+                using (var playback = playbackGetter(tempoMap, outputDevice))
                 {
                     playback.NotesPlaybackStarted += (_, e) => receivedNotesStarted.AddRange(e.Notes.Select(n => new ReceivedNote(n, stopwatch.Elapsed)));
                     playback.NotesPlaybackFinished += (_, e) => receivedNotesFinished.AddRange(e.Notes.Select(n => new ReceivedNote(n, stopwatch.Elapsed)));
@@ -137,10 +146,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             CompareReceivedNotes(receivedNotesStarted, expectedReceivedNotesStarted);
             CompareReceivedNotes(receivedNotesFinished, expectedReceivedNotesFinished);
 
-            var expectedProgramEvents1 = programEventsGetter(channel1);
-            var expectedProgramEvents2 = programEventsGetter(channel2);
+            var expectedProgramEvents = notes.Select(n => n.Channel).Distinct().SelectMany(c => programEventsGetter(c)).ToList();
 
-            CheckProgramEvents(sentEvents, expectedProgramEvents1.Concat(expectedProgramEvents2).ToList());
+            CheckProgramEvents(sentEvents, expectedProgramEvents);
         }
 
         private static void CompareReceivedNotes(IReadOnlyList<ReceivedNote> receivedNotes, IReadOnlyList<ReceivedNote> expectedReceivedNotes)

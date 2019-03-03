@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents a musical chord.
     /// </summary>
-    public sealed class Chord : ILengthedObject
+    public sealed class Chord : ILengthedObject, IMusicalObject
     {
         #region Events
 
