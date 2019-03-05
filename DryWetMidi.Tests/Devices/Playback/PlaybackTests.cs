@@ -640,16 +640,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 new EventToSend(new NoteOffEvent(), delayFromStart)
             };
 
-            var eventsForPlayback = new List<MidiEvent>();
-            var currentTime = TimeSpan.Zero;
-
-            foreach (var eventToSend in eventsToSend)
-            {
-                var midiEvent = eventToSend.Event.Clone();
-                midiEvent.DeltaTime = LengthConverter.ConvertFrom((MetricTimeSpan)eventToSend.Delay, (MetricTimeSpan)currentTime, tempoMap);
-                currentTime += eventToSend.Delay;
-                eventsForPlayback.Add(midiEvent);
-            }
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
@@ -1003,6 +994,77 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 afterResume: NoPlaybackAction);
         }
 
+        [Retry(RetriesNumber)]
+        [Test]
+        public void ChangeOutputDeviceDuringPlayback()
+        {
+            var tempoMap = TempoMap.Default;
+            var stopwatch = new Stopwatch();
+
+            var changeDeviceAfter = TimeSpan.FromSeconds(1);
+            var firstEventDelay = TimeSpan.Zero;
+            var secondEventDelay = TimeSpan.FromSeconds(2);
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), firstEventDelay),
+                new EventToSend(new NoteOffEvent(), secondEventDelay)
+            };
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            var sentEventsA = new List<SentEvent>();
+            var sentEventsB = new List<SentEvent>();
+
+            var receivedEventsA = new List<ReceivedEvent>();
+            var receivedEventsB = new List<ReceivedEvent>();
+
+            using (var outputDeviceA = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                outputDeviceA.EventSent += (_, e) => sentEventsA.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                using (var inputDeviceA = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+                {
+                    inputDeviceA.StartEventsListening();
+                    inputDeviceA.EventReceived += (_, e) => receivedEventsA.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+                    using (var outputDeviceB = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
+                    {
+                        outputDeviceB.EventSent += (_, e) => sentEventsB.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                        using (var inputDeviceB = InputDevice.GetByName(MidiDevicesNames.DeviceB))
+                        {
+                            inputDeviceB.StartEventsListening();
+                            inputDeviceB.EventReceived += (_, e) => receivedEventsB.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+                            using (var playback = new Playback(eventsForPlayback, tempoMap))
+                            {
+                                Assert.IsNull(playback.OutputDevice, "Output device is not null on playback created.");
+                                Assert.Throws<InvalidOperationException>(() => playback.Start(), "Playback started without output device.");
+
+                                playback.OutputDevice = outputDeviceA;
+                                Assert.AreSame(outputDeviceA, playback.OutputDevice, "Output device was not changed to Device A.");
+
+                                playback.Start();
+                                stopwatch.Start();
+
+                                Thread.Sleep(changeDeviceAfter);
+
+                                playback.OutputDevice = outputDeviceB;
+                                Assert.AreSame(outputDeviceB, playback.OutputDevice, "Output device was not changed to Device B.");
+
+                                var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, firstEventDelay + secondEventDelay - changeDeviceAfter + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                                Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                            }
+                        }
+                    }
+                }
+            }
+
+            CompareSentReceivedEvents(sentEventsA, receivedEventsA, new[] { eventsToSend.First() });
+            CompareSentReceivedEvents(sentEventsB, receivedEventsB, new[] { eventsToSend.Last() });
+        }
+
         #endregion
 
         #region Private methods
@@ -1022,16 +1084,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var stopwatch = playbackContext.Stopwatch;
             var tempoMap = playbackContext.TempoMap;
 
-            var eventsForPlayback = new List<MidiEvent>();
-            var currentTime = TimeSpan.Zero;
-
-            foreach (var eventToSend in eventsToSend)
-            {
-                var midiEvent = eventToSend.Event.Clone();
-                midiEvent.DeltaTime = LengthConverter.ConvertFrom((MetricTimeSpan)eventToSend.Delay, (MetricTimeSpan)currentTime, tempoMap);
-                currentTime += eventToSend.Delay;
-                eventsForPlayback.Add(midiEvent);
-            }
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
 
             var notes = eventsForPlayback.GetNotes().ToArray();
             var notesStarted = new List<Note>();
@@ -1211,23 +1264,15 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var stopwatch = playbackContext.Stopwatch;
             var tempoMap = playbackContext.TempoMap;
 
-            var eventsForPlayback = new List<MidiEvent>();
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
             var expectedTimes = playbackContext.ExpectedTimes;
-            var currentTime = TimeSpan.Zero;
-
-            foreach (var eventToSend in eventsToSend)
-            {
-                var midiEvent = eventToSend.Event.Clone();
-                midiEvent.DeltaTime = LengthConverter.ConvertFrom((MetricTimeSpan)eventToSend.Delay, (MetricTimeSpan)currentTime, tempoMap);
-                currentTime += eventToSend.Delay;
-                eventsForPlayback.Add(midiEvent);
-            }
 
             if (explicitExpectedTimes != null)
                 expectedTimes.AddRange(explicitExpectedTimes);
             else
             {
-                currentTime = TimeSpan.Zero;
+                var currentTime = TimeSpan.Zero;
+
                 foreach (var eventWillBeSent in eventsWillBeSent)
                 {
                     currentTime += eventWillBeSent.Delay;
@@ -1293,6 +1338,22 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
 
             CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
+        }
+
+        private static IEnumerable<MidiEvent> GetEventsForPlayback(IEnumerable<EventToSend> eventsToSend, TempoMap tempoMap)
+        {
+            var eventsForPlayback = new List<MidiEvent>();
+            var currentTime = TimeSpan.Zero;
+
+            foreach (var eventToSend in eventsToSend)
+            {
+                var midiEvent = eventToSend.Event.Clone();
+                midiEvent.DeltaTime = LengthConverter.ConvertFrom((MetricTimeSpan)eventToSend.Delay, (MetricTimeSpan)currentTime, tempoMap);
+                currentTime += eventToSend.Delay;
+                eventsForPlayback.Add(midiEvent);
+            }
+
+            return eventsForPlayback;
         }
 
         private void CompareSentReceivedEvents(

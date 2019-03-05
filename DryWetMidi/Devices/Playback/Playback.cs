@@ -57,9 +57,17 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
+        private OutputDevice _outputDevice;
+
         #endregion
 
         #region Constructor
+
+        public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap)
+            : this(new[] { events }, tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Playback"/> with the specified
@@ -76,6 +84,11 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(events), events);
         }
 
+        public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
+            : this(GetTimedObjects(events), tempoMap)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Playback"/> with the specified
         /// collection of MIDI events collections, tempo map and output MIDI device to play events through.
@@ -88,6 +101,28 @@ namespace Melanchall.DryWetMidi.Devices
         public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, OutputDevice outputDevice)
             : this(GetTimedObjects(events), tempoMap, outputDevice)
         {
+        }
+
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            var playbackEvents = GetPlaybackEvents(timedObjects, tempoMap);
+            _eventsEnumerator = playbackEvents.GetEnumerator();
+            _eventsEnumerator.MoveNext();
+
+            var lastPlaybackEvent = playbackEvents.LastOrDefault();
+            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
+            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
+
+            _notesMetadata = playbackEvents.Select(e => e.Metadata.Note).Where(m => m != null).ToList();
+            _notesMetadata.Sort((m1, m2) => m1.StartTime.CompareTo(m2.StartTime));
+
+            TempoMap = tempoMap;
+
+            _clock = new MidiClock(ClockInterval);
+            _clock.Tick += OnClockTick;
         }
 
         public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, OutputDevice outputDevice)
@@ -136,9 +171,17 @@ namespace Melanchall.DryWetMidi.Devices
         public TempoMap TempoMap { get; }
 
         /// <summary>
-        /// Gets the output MIDI device to play MIDI data through.
+        /// Gets or sets the output MIDI device to play MIDI data through.
         /// </summary>
-        public OutputDevice OutputDevice { get; }
+        public OutputDevice OutputDevice
+        {
+            get { return _outputDevice; }
+            set
+            {
+                ThrowIfArgument.IsNull(nameof(value), value);
+                _outputDevice = value;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
@@ -238,6 +281,9 @@ namespace Melanchall.DryWetMidi.Devices
         public void Start()
         {
             EnsureIsNotDisposed();
+
+            if (OutputDevice == null)
+                throw new InvalidOperationException("Output device is not set.");
 
             if (_clock.IsRunning)
                 return;
