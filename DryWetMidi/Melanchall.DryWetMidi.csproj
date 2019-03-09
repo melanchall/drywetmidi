@@ -197,6 +197,7 @@
     <Compile Include="Smf\Exceptions\InvalidChannelEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\InvalidMetaEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\InvalidMidiTimeCodeComponentException.cs" />
+    <Compile Include="Smf\Exceptions\InvalidSysExDataParameterException.cs" />
     <Compile Include="Smf\Exceptions\InvalidSystemCommonEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\NoHeaderChunkException.cs" />
     <Compile Include="Smf\Exceptions\NotEnoughBytesException.cs" />
@@ -302,6 +303,31 @@
     <Compile Include="Smf\ReadingSettings\InvalidChunkSizePolicy.cs" />
     <Compile Include="Smf\ReadingSettings\UnknownFileFormatPolicy.cs" />
     <Compile Include="Common\SmpteFormat.cs" />
+    <Compile Include="Smf\SysExData\Info\UniversalSysExDataIds.cs" />
+    <Compile Include="Smf\SysExData\Info\UniversalSysExDataStatusBytes.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\AckSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpCancelSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\LoopType.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\NakSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpDataPacketSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpHandshakingSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpRequestSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpWaitSysExData.cs" />
+    <Compile Include="Smf\SysExData\Readers\RealTimeSysExDataReader.cs" />
+    <Compile Include="Smf\SysExData\Readers\UniversalSysExDataReader.cs" />
+    <Compile Include="Smf\SysExData\ReadingSettings\InvalidSysExDataParameterValuePolicy.cs" />
+    <Compile Include="Smf\SysExData\SysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTimeSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpHeaderSysExData.cs" />
+    <Compile Include="Smf\SysExData\Readers\ISysExDataReader.cs" />
+    <Compile Include="Smf\SysExData\Readers\SysExDataReaderFactory.cs" />
+    <Compile Include="Smf\SysExData\Readers\UniversalSysExDataId.cs" />
+    <Compile Include="Smf\SysExData\Readers\NonRealTimeSysExDataReader.cs" />
+    <Compile Include="Smf\SysExData\RealTimeSysExData.cs" />
+    <Compile Include="Smf\SysExData\ReadingSettings\SysExDataReadingSettings.cs" />
+    <Compile Include="Smf\SysExData\SysExDataUtilities.cs" />
+    <Compile Include="Smf\SysExData\UniversalSysExData.cs" />
+    <Compile Include="Smf\SysExData\UnknownSysExData.cs" />
     <Compile Include="Smf\TimeDivision\TimeDivision.cs" />
     <Compile Include="Smf\TimeDivision\SmpteTimeDivision.cs" />
     <Compile Include="Smf\TimeDivision\TicksPerQuarterNoteTimeDivision.cs" />
@@ -413,7 +439,9 @@
     <None Include="ClassDiagrams\MetaEventsClassDiagram.cd" />
     <None Include="ClassDiagrams\SysExEventsClassDiagram.cd" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Smf\SysExData\RealTime\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
