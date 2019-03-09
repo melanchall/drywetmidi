@@ -31,6 +31,11 @@ namespace Melanchall.DryWetMidi.Common
             return (ushort)((head << 7) | tail);
         }
 
+        public static uint Combine(SevenBitNumber head, SevenBitNumber middle, SevenBitNumber tail)
+        {
+            return (uint)((head << 14) | (middle << 7) | tail);
+        }
+
         /// <summary>
         /// Merges two signed bytes into one 16-bit signed integer number.
         /// </summary>
