@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Common
     /// out-of-range errors all validation of numbers in the [0; 15] range happens on data type
     /// level via casting C# integer values to the <see cref="FourBitNumber"/>.
     /// </remarks>
-    public struct FourBitNumber : IComparable<FourBitNumber>
+    public struct FourBitNumber : IComparable<FourBitNumber>, IConvertible
     {
         #region Constants
 
@@ -144,6 +144,95 @@ namespace Melanchall.DryWetMidi.Common
         public int CompareTo(FourBitNumber other)
         {
             return _value.CompareTo(other._value);
+        }
+
+        #endregion
+
+        #region IConvertible
+
+        public TypeCode GetTypeCode()
+        {
+            return _value.GetTypeCode();
+        }
+
+        bool IConvertible.ToBoolean(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToBoolean(provider);
+        }
+
+        char IConvertible.ToChar(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToChar(provider);
+        }
+
+        sbyte IConvertible.ToSByte(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToSByte(provider);
+        }
+
+        byte IConvertible.ToByte(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToByte(provider);
+        }
+
+        short IConvertible.ToInt16(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToInt16(provider);
+        }
+
+        ushort IConvertible.ToUInt16(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToUInt16(provider);
+        }
+
+        int IConvertible.ToInt32(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToInt32(provider);
+        }
+
+        uint IConvertible.ToUInt32(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToUInt32(provider);
+        }
+
+        long IConvertible.ToInt64(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToInt64(provider);
+        }
+
+        ulong IConvertible.ToUInt64(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToUInt64(provider);
+        }
+
+        float IConvertible.ToSingle(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToSingle(provider);
+        }
+
+        double IConvertible.ToDouble(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToDouble(provider);
+        }
+
+        decimal IConvertible.ToDecimal(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToDecimal(provider);
+        }
+
+        DateTime IConvertible.ToDateTime(IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToDateTime(provider);
+        }
+
+        string IConvertible.ToString(IFormatProvider provider)
+        {
+            return _value.ToString(provider);
+        }
+
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+        {
+            return ((IConvertible)_value).ToType(conversionType, provider);
         }
 
         #endregion
