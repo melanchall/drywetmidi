@@ -137,16 +137,21 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             TimeSpanUtilities.TryParse(input, out var actualTimeSpan);
             Assert.AreEqual(expectedTimeSpan,
                             actualTimeSpan,
-                            "TryParse: incorrect result.");
+                            $"TryParse: incorrect result for '{input}'.");
 
             actualTimeSpan = TimeSpanUtilities.Parse(input);
             Assert.AreEqual(expectedTimeSpan,
                             actualTimeSpan,
-                            "Parse: incorrect result.");
+                            $"Parse: incorrect result for '{input}'.");
 
             Assert.AreEqual(expectedTimeSpan,
                             TimeSpanUtilities.Parse(expectedTimeSpan.ToString()),
-                            "Parse: string representation was not parsed to the original time span.");
+                            $"Parse: string representation was not parsed to the original time span for '{input}'.");
+        }
+
+        public static void ParseInvalidInput(string input)
+        {
+            Assert.Throws<FormatException>(() => TimeSpanUtilities.Parse(input));
         }
 
         public static void Add_SameType<TTimeSpan>(TTimeSpan timeSpan1, TTimeSpan timeSpan2, TTimeSpan expectedTimeSpan)
