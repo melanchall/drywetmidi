@@ -128,9 +128,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf
         }
 
         [Test]
-        public void ReadSysExData_SampleDumpCancel()
+        public void ReadSysExData_Cancel()
         {
-            var sampleDumpCancelSysExData = ReadSysExData<SampleDumpCancelSysExData>(new byte[]
+            var sampleDumpCancelSysExData = ReadSysExData<CancelSysExData>(new byte[]
             {
                 0x7E, // non-real time universal sys ex event
                 0x00, // channel
@@ -144,9 +144,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf
         }
 
         [Test]
-        public void ReadSysExData_SampleDumpWait()
+        public void ReadSysExData_Wait()
         {
-            var sampleDumpWaitSysExData = ReadSysExData<SampleDumpWaitSysExData>(new byte[]
+            var sampleDumpWaitSysExData = ReadSysExData<WaitSysExData>(new byte[]
             {
                 0x7E, // non-real time universal sys ex event
                 0x00, // channel

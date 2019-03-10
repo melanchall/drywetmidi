@@ -14,8 +14,8 @@ namespace Melanchall.DryWetMidi.Smf
             [UniversalSysExDataIds.NonRealTime.SampleDumpRequest] = typeof(SampleDumpRequestSysExData),
             [UniversalSysExDataIds.NonRealTime.Ack] = typeof(AckSysExData),
             [UniversalSysExDataIds.NonRealTime.Nak] = typeof(NakSysExData),
-            [UniversalSysExDataIds.NonRealTime.SampleDumpCancel] = typeof(SampleDumpCancelSysExData),
-            [UniversalSysExDataIds.NonRealTime.SampleDumpWait] = typeof(SampleDumpWaitSysExData),
+            [UniversalSysExDataIds.NonRealTime.Cancel] = typeof(CancelSysExData),
+            [UniversalSysExDataIds.NonRealTime.Wait] = typeof(WaitSysExData),
         };
 
         #endregion

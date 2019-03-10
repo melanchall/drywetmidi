@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
-    public sealed class NakSysExData : SampleDumpHandshakingSysExData
+    public sealed class NakSysExData : HandshakingSysExData
     {
         #region Overrides
 

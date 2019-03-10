@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Smf
 {
-    public abstract class SampleDumpHandshakingSysExData : NonRealTimeSysExData
+    public abstract class HandshakingSysExData : NonRealTimeSysExData
     {
         #region Properties
 
