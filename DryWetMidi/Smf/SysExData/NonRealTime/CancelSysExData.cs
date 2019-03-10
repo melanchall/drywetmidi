@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Smf
 {
-    public sealed class SampleDumpCancelSysExData : SampleDumpHandshakingSysExData
+    public sealed class CancelSysExData : HandshakingSysExData
     {
         #region Overrides
 

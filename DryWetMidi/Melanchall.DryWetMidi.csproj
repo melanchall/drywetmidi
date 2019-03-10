@@ -306,13 +306,13 @@
     <Compile Include="Smf\SysExData\Info\UniversalSysExDataIds.cs" />
     <Compile Include="Smf\SysExData\Info\UniversalSysExDataStatusBytes.cs" />
     <Compile Include="Smf\SysExData\NonRealTime\AckSysExData.cs" />
-    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpCancelSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\CancelSysExData.cs" />
     <Compile Include="Smf\SysExData\NonRealTime\LoopType.cs" />
     <Compile Include="Smf\SysExData\NonRealTime\NakSysExData.cs" />
     <Compile Include="Smf\SysExData\NonRealTime\SampleDumpDataPacketSysExData.cs" />
-    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpHandshakingSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\HandshakingSysExData.cs" />
     <Compile Include="Smf\SysExData\NonRealTime\SampleDumpRequestSysExData.cs" />
-    <Compile Include="Smf\SysExData\NonRealTime\SampleDumpWaitSysExData.cs" />
+    <Compile Include="Smf\SysExData\NonRealTime\WaitSysExData.cs" />
     <Compile Include="Smf\SysExData\Readers\RealTimeSysExDataReader.cs" />
     <Compile Include="Smf\SysExData\Readers\UniversalSysExDataReader.cs" />
     <Compile Include="Smf\SysExData\ReadingSettings\InvalidSysExDataParameterValuePolicy.cs" />

@@ -9,8 +9,8 @@
             public static readonly UniversalSysExDataId SampleDumpRequest = new UniversalSysExDataId(0x03);
             public static readonly UniversalSysExDataId Ack = new UniversalSysExDataId(0x7F);
             public static readonly UniversalSysExDataId Nak = new UniversalSysExDataId(0x7E);
-            public static readonly UniversalSysExDataId SampleDumpCancel = new UniversalSysExDataId(0x7D);
-            public static readonly UniversalSysExDataId SampleDumpWait = new UniversalSysExDataId(0x7C);
+            public static readonly UniversalSysExDataId Cancel = new UniversalSysExDataId(0x7D);
+            public static readonly UniversalSysExDataId Wait = new UniversalSysExDataId(0x7C);
         }
 
         internal static class RealTime
