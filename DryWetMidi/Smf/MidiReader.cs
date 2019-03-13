@@ -65,6 +65,25 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Methods
 
+        public byte[] ReadAllBytes()
+        {
+            const int bufferSize = 512;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                var buffer = new byte[bufferSize];
+
+                int count;
+                while ((count = _binaryReader.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    memoryStream.Write(buffer, 0, count);
+                }
+
+                return memoryStream.ToArray();
+            }
+
+        }
+
         /// <summary>
         /// Reads a byte from the underlying stream and advances the current position by one byte.
         /// </summary>

@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             var sampleDumpHeaderSysExData = ReadSysExData<SampleDumpHeaderSysExData>(new byte[]
             {
                 0x7E,             // non-real time universal sys ex event
-                0x01,             // channel
+                0x01,             // device ID
                 0x01,             // 'sample dump header'
                 0x03, 0x00,       // sample number
                 0x10,             // sample format
@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 0xF7              // end of sys ex event
             });
 
-            Assert.AreEqual((SevenBitNumber)1, sampleDumpHeaderSysExData.Channel, "Channel is invalid.");
+            Assert.AreEqual((SevenBitNumber)1, sampleDumpHeaderSysExData.DeviceId, "Device ID is invalid.");
             Assert.AreEqual(3, sampleDumpHeaderSysExData.SampleNumber, "Sample number is invalid.");
             Assert.AreEqual(16, sampleDumpHeaderSysExData.SampleFormat, "Sample format is invalid.");
             Assert.AreEqual(22676, sampleDumpHeaderSysExData.SamplePeriod, "Sample period is invalid.");
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             var sampleDumpDataPacketSysExData = ReadSysExData<SampleDumpDataPacketSysExData>(new byte[]
             {
                 0x7E,           // non-real time universal sys ex event
-                0x02,           // channel
+                0x02,           // device ID
                 0x02,           // 'sample dump data packet'
                 0x05,           // packet number
             }
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             })
             .ToArray());
 
-            Assert.AreEqual((SevenBitNumber)2, sampleDumpDataPacketSysExData.Channel, "Channel is invalid.");
+            Assert.AreEqual((SevenBitNumber)2, sampleDumpDataPacketSysExData.DeviceId, "Device ID is invalid.");
             Assert.AreEqual((SevenBitNumber)5, sampleDumpDataPacketSysExData.PacketNumber, "Packet number is invalid.");
             CollectionAssert.AreEqual(sampleData.Select(d => (SevenBitNumber)d), sampleDumpDataPacketSysExData.SampleData, "Sample data is invalid.");
             Assert.AreEqual((SevenBitNumber)22, sampleDumpDataPacketSysExData.Checksum, "Checksum is invalid.");
@@ -85,83 +85,197 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             var sampleDumpRequestSysExData = ReadSysExData<SampleDumpRequestSysExData>(new byte[]
             {
                 0x7E,       // non-real time universal sys ex event
-                0x02,       // channel
+                0x02,       // device ID
                 0x03,       // 'sample dump request'
                 0x05, 0x1F, // sample number
                 0xF7        // end of sys ex event
             });
 
-            Assert.AreEqual((SevenBitNumber)2, sampleDumpRequestSysExData.Channel, "Channel is invalid.");
+            Assert.AreEqual((SevenBitNumber)2, sampleDumpRequestSysExData.DeviceId, "Device ID is invalid.");
             Assert.AreEqual(3973, sampleDumpRequestSysExData.SampleNumber, "Sample number is invalid.");
         }
 
         [Test]
         public void ReadSysExData_Ack()
         {
-            var ackSysExData = ReadSysExData<AckSysExData>(new byte[]
-            {
-                0x7E, // non-real time universal sys ex event
-                0x02, // channel
-                0x7F, // 'ACK'
-                0x05, // packet number
-                0xF7  // end of sys ex event
-            });
-
-            Assert.AreEqual((SevenBitNumber)2, ackSysExData.Channel, "Channel is invalid.");
-            Assert.AreEqual((SevenBitNumber)5, ackSysExData.PacketNumber, "Packet number is invalid.");
+            CheckReadingHandshakingSysExData<AckSysExData>(0x7F);
         }
 
         [Test]
         public void ReadSysExData_Nak()
         {
-            var nakSysExData = ReadSysExData<NakSysExData>(new byte[]
-            {
-                0x7E, // non-real time universal sys ex event
-                0x00, // channel
-                0x7E, // 'NAK'
-                0x05, // packet number
-                0xF7  // end of sys ex event
-            });
-
-            Assert.AreEqual((SevenBitNumber)0, nakSysExData.Channel, "Channel is invalid.");
-            Assert.AreEqual((SevenBitNumber)5, nakSysExData.PacketNumber, "Packet number is invalid.");
+            CheckReadingHandshakingSysExData<NakSysExData>(0x7E);
         }
 
         [Test]
         public void ReadSysExData_Cancel()
         {
-            var sampleDumpCancelSysExData = ReadSysExData<CancelSysExData>(new byte[]
-            {
-                0x7E, // non-real time universal sys ex event
-                0x00, // channel
-                0x7D, // 'CANCEL'
-                0x00, // packet number
-                0xF7  // end of sys ex event
-            });
-
-            Assert.AreEqual((SevenBitNumber)0, sampleDumpCancelSysExData.Channel, "Channel is invalid.");
-            Assert.AreEqual((SevenBitNumber)0, sampleDumpCancelSysExData.PacketNumber, "Packet number is invalid.");
+            CheckReadingHandshakingSysExData<CancelSysExData>(0x7D);
         }
 
         [Test]
         public void ReadSysExData_Wait()
         {
-            var sampleDumpWaitSysExData = ReadSysExData<WaitSysExData>(new byte[]
-            {
-                0x7E, // non-real time universal sys ex event
-                0x00, // channel
-                0x7C, // 'WAIT'
-                0x00, // packet number
-                0xF7  // end of sys ex event
-            });
+            CheckReadingHandshakingSysExData<WaitSysExData>(0x7C);
+        }
 
-            Assert.AreEqual((SevenBitNumber)0, sampleDumpWaitSysExData.Channel, "Channel is invalid.");
-            Assert.AreEqual((SevenBitNumber)0, sampleDumpWaitSysExData.PacketNumber, "Packet number is invalid.");
+        [Test]
+        public void ReadSysExData_Eof()
+        {
+            CheckReadingHandshakingSysExData<EofSysExData>(0x7B);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcSpecial()
+        {
+            CheckReadingMtcSysExData<MtcSpecialSysExData>(0x00);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcPunchInPoint()
+        {
+            CheckReadingMtcSysExData<MtcPunchInSysExData>(0x01);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcPunchOutPoint()
+        {
+            CheckReadingMtcSysExData<MtcPunchOutSysExData>(0x02);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcDeletePunchInPoint()
+        {
+            CheckReadingMtcSysExData<MtcDeletePunchInSysExData>(0x03);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcDeletePunchOutPoint()
+        {
+            CheckReadingMtcSysExData<MtcDeletePunchOutSysExData>(0x04);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcEventStart()
+        {
+            CheckReadingMtcSysExData<MtcEventStartSysExData>(0x05);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcEventStop()
+        {
+            CheckReadingMtcSysExData<MtcEventStopSysExData>(0x06);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcEventStartWithInfo()
+        {
+            CheckReadingMtcWithInfoSysExData<MtcEventStartWithInfoSysExData>(0x07);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcEventStopWithInfo()
+        {
+            CheckReadingMtcWithInfoSysExData<MtcEventStopWithInfoSysExData>(0x08);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcDeleteEventStart()
+        {
+            CheckReadingMtcSysExData<MtcDeleteEventStartSysExData>(0x09);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcDeleteEventStop()
+        {
+            CheckReadingMtcSysExData<MtcDeleteEventStopSysExData>(0x0A);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcCuePoint()
+        {
+            CheckReadingMtcSysExData<MtcCuePointSysExData>(0x0B);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcCuePointWithInfo()
+        {
+            CheckReadingMtcWithInfoSysExData<MtcCuePointWithInfoSysExData>(0x0C);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcDeleteCuePoint()
+        {
+            CheckReadingMtcSysExData<MtcDeleteCuePointSysExData>(0x0D);
+        }
+
+        [Test]
+        public void ReadSysExData_MtcEventNameInInfo()
+        {
+            CheckReadingMtcWithInfoSysExData<MtcEventNameInInfoSysExData>(0x0E);
         }
 
         #endregion
 
         #region Private methods
+
+        private static TData CheckReadingMtcWithInfoSysExData<TData>(byte subId2) where TData : MtcWithInfoSysExData
+        {
+            var info = new byte[] { 1, 2, 3, 4 };
+            var sysExData = CheckReadingMtcSysExData<TData>(subId2, info);
+
+            CollectionAssert.AreEqual(info, sysExData.Info, "Info is invalid.");
+
+            return sysExData;
+        }
+
+        private static TData CheckReadingMtcSysExData<TData>(byte subId2, params byte[] info) where TData : MtcSysExData
+        {
+            var sysExData = ReadSysExData<TData>(new byte[]
+            {
+                0x7E,      // non-real time universal sys ex event
+                0x02,      // device ID
+                0x04,      // MTC event 
+                subId2,    //
+                0x4C,      // 30 fps / 12 hours
+                0x02,      // 2 minutes
+                0x04,      // 4 seconds
+                0x0A,      // 10 frames
+                0x3F,      // 63 sub-frames
+                0x03, 0x00 // event number
+            }
+            .Concat(info)
+            .Concat(new byte[]
+            {
+                0xF7    // end of sys ex event
+            })
+            .ToArray());
+
+            Assert.AreEqual((SevenBitNumber)2, sysExData.DeviceId, "Device ID is invalid.");
+            Assert.AreEqual(SmpteFormat.ThirtyDrop, sysExData.Format, "Format is invalid.");
+            Assert.AreEqual(12, sysExData.Hours, "Hours number is invalid.");
+            Assert.AreEqual(2, sysExData.Minutes, "Minutes number is invalid.");
+            Assert.AreEqual(4, sysExData.Seconds, "Seconds number is invalid.");
+            Assert.AreEqual(10, sysExData.Frames, "Frames number is invalid.");
+            Assert.AreEqual(63, sysExData.SubFrames, "Sub-frames number is invalid.");
+
+            return sysExData;
+        }
+
+        private static void CheckReadingHandshakingSysExData<TData>(byte sysExDataId) where TData : HandshakingSysExData
+        {
+            var sysExData = ReadSysExData<TData>(new byte[]
+            {
+                0x7E,        // non-real time universal sys ex event
+                0x00,        // device ID
+                sysExDataId, // 
+                0x00,        // packet number
+                0xF7         // end of sys ex event
+            });
+
+            Assert.AreEqual((SevenBitNumber)0, sysExData.DeviceId, "Device ID is invalid.");
+            Assert.AreEqual((SevenBitNumber)0, sysExData.PacketNumber, "Packet number is invalid.");
+        }
 
         private static TData ReadSysExData<TData>(byte[] sysExDataBytes) where TData : SysExData
         {

@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Smf
             get
             {
                 var actualChecksum = UniversalSysExDataStatusBytes.NonRealTime ^
-                                     Channel ^
+                                     DeviceId ^
                                      UniversalSysExDataIds.NonRealTime.SampleDumpDataPacket.SubId1 ^
                                      PacketNumber ^
                                      SampleData?.Aggregate(0, (result, d) => result ^ d);
