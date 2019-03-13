@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tools
                 [typeof(KeySignatureEvent)] = GetParameters<KeySignatureEvent>((e, s) => e.Key,
                                                                                (e, s) => e.Scale),
                 [typeof(SetTempoEvent)] = GetParameters<SetTempoEvent>((e, s) => e.MicrosecondsPerQuarterNote),
-                [typeof(SmpteOffsetEvent)] = GetParameters<SmpteOffsetEvent>((e, s) => e.GetFormatAndHours(),
+                [typeof(SmpteOffsetEvent)] = GetParameters<SmpteOffsetEvent>((e, s) => SmpteData.GetFormatAndHours(e.Format, e.Hours),
                                                                              (e, s) => e.Minutes,
                                                                              (e, s) => e.Seconds,
                                                                              (e, s) => e.Frames,

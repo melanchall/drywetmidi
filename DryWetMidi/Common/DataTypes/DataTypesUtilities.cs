@@ -42,9 +42,9 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="head">Byte representing left part of resulting number.</param>
         /// <param name="tail">Byte representing right part of resulting number.</param>
         /// <returns>Single signed 16-bit integer number made of byte halfs.</returns>
-        public static short Combine(byte head, byte tail)
+        public static ushort Combine(byte head, byte tail)
         {
-            return (short)((head << 8) | tail);
+            return (ushort)((head << 8) | tail);
         }
 
         /// <summary>

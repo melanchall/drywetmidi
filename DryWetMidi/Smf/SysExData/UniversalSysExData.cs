@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Smf
     {
         #region Properties
 
-        public SevenBitNumber Channel { get; set; }
+        public SevenBitNumber DeviceId { get; set; }
 
         #endregion
     }

@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Smf
         public SysExData Read(MidiReader reader, SysExDataReadingSettings settings)
         {
             var statusByte = reader.ReadByte();
-            var channel = reader.ReadByte();
+            var deviceId = reader.ReadByte();
             var subId1 = reader.ReadByte();
 
             Type sysExDataType;
@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Smf
             var sysExData = (UniversalSysExData)Activator.CreateInstance(sysExDataType);
 
             // TODO: throw on out of 7-bit number
-            sysExData.Channel = (SevenBitNumber)channel;
+            sysExData.DeviceId = (SevenBitNumber)deviceId;
             sysExData.Read(reader, settings);
 
             return sysExData;

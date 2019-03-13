@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Smf
     {
         #region Constants
 
-        private const byte EndOfEventByte = 0xF7;
+        public const byte EndOfEventByte = 0xF7;
 
         #endregion
 
