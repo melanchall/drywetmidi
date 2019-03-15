@@ -18,6 +18,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
         }
 
+        public BarBeatTimeSpan(long bars)
+            : this(bars, 0)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BarBeatTimeSpan"/> with the specified
         /// number of bars and beats.
