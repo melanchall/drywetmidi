@@ -29,6 +29,11 @@ namespace Melanchall.DryWetMidi.Tools
             Times = times;
         }
 
+        public ArbitraryGrid(params ITimeSpan[] times)
+            : this(times as IEnumerable<ITimeSpan>)
+        {
+        }
+
         #endregion
 
         #region Properties
