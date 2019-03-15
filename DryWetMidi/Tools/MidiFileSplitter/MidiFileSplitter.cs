@@ -139,27 +139,43 @@ namespace Melanchall.DryWetMidi.Tools
                     if (time == 0)
                         continue;
 
-                    var timedEvents = operation.GetTimedEvents(startTime, time, settings.PreserveTimes);
-                    var trackChunks = timedEvents.Select(e => e.ToTrackChunk())
-                                                 .Where(c => settings.PreserveTrackChunks || c.Events.Any())
-                                                 .ToList();
-
-                    if (trackChunks.Any() || !settings.RemoveEmptyFiles)
-                    {
-                        var file = new MidiFile(trackChunks)
-                        {
-                            TimeDivision = midiFile.TimeDivision.Clone()
-                        };
-
+                    var file = GetFilePart(midiFile, operation, startTime, time, settings);
+                    if (file != null)
                         yield return file;
-                    }
 
                     if (operation.AllEventsProcessed)
                         break;
 
                     startTime = time;
                 }
+
+                if (!operation.AllEventsProcessed)
+                {
+                    var file = GetFilePart(midiFile, operation, startTime, long.MaxValue, settings);
+                    if (file != null)
+                        yield return file;
+                }
             }
+        }
+
+        private static MidiFile GetFilePart(MidiFile midiFile, SplitMidiFileByGridOperation operation, long startTime, long endTime, SplittingMidiFileByGridSettings settings)
+        {
+            var timedEvents = operation.GetTimedEvents(startTime, endTime, settings.PreserveTimes);
+            var trackChunks = timedEvents.Select(e => e.ToTrackChunk())
+                                         .Where(c => settings.PreserveTrackChunks || c.Events.Any())
+                                         .ToList();
+
+            if (trackChunks.Any() || !settings.RemoveEmptyFiles)
+            {
+                var file = new MidiFile(trackChunks)
+                {
+                    TimeDivision = midiFile.TimeDivision.Clone()
+                };
+
+                return file;
+            }
+
+            return null;
         }
 
         #endregion

@@ -297,6 +297,67 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        [Description("Split MIDI file by arbitrary grid: don't split notes, don't preserve times.")]
+        public void SplitByGrid_ArbitraryGrid_DontSplitNotes_DontPreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var grid = new ArbitraryGrid((MidiTimeSpan)100, (MidiTimeSpan)200);
+            var settings = new SplittingMidiFileByGridSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+
+            CompareTimedEvents(
+                newFiles[0].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90)
+                },
+                "First file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[1].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),
+                },
+                "Second file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[2].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new TextEvent("Test"), 0)
+                },
+                "Third file contains invalid events.");
+        }
+
+        [Test]
         [Description("Split MIDI file by grid: don't split notes, preserve times.")]
         public void SplitByGrid_DontSplitNotes_PreserveTimes()
         {
