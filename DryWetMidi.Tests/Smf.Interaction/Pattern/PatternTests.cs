@@ -637,19 +637,27 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Set program by General MIDI Level 1 program.")]
         public void SetProgram_GeneralMidiProgram()
         {
-            var program = GeneralMidiProgram.Applause;
+            var program1 = GeneralMidiProgram.Applause;
+            var program2 = GeneralMidiProgram.AltoSax;
             var eventTime = MusicalTimeSpan.Quarter;
+
+            var noteNumber = (SevenBitNumber)100;
+            var note = DryWetMidi.MusicTheory.Note.Get(noteNumber);
 
             var pattern = new PatternBuilder()
 
-                .Note(NoteName.A, eventTime)
-                .SetProgram(program)
+                .SetProgram(program1)
+                .Note(note, eventTime)
+                .SetProgram(program2)
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            TestTimedEventsWithExactOrder(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent(program.AsSevenBitNumber()) { Channel = Channel }, eventTime)
+                new TimedEventInfo(new ProgramChangeEvent(program1.AsSevenBitNumber()) { Channel = Channel }, new MidiTimeSpan()),
+                new TimedEventInfo(new NoteOnEvent(noteNumber, DryWetMidi.Smf.Interaction.Note.DefaultVelocity) { Channel = Channel }, new MidiTimeSpan()),
+                new TimedEventInfo(new ProgramChangeEvent(program2.AsSevenBitNumber()) { Channel = Channel }, eventTime),
+                new TimedEventInfo(new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = Channel }, eventTime)
             });
         }
 
@@ -745,9 +753,35 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             foreach (var expectedEvent in expectedTimedEvents)
             {
-                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.AreEqual(expectedEvent, actual, true)),
+                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.AreEqual(expectedEvent, actual, false)),
                               $"There are no event: {expectedEvent}");
             }
+        }
+
+        private static void TestTimedEventsWithExactOrder(
+            Pattern pattern,
+            ICollection<TimedEventInfo> expectedTimedEventsInfos,
+            params Tuple<long, Tempo>[] tempoChanges)
+        {
+            TempoMap tempoMap;
+            using (var tempoMapManager = new TempoMapManager())
+            {
+                foreach (var tempoChange in tempoChanges)
+                {
+                    tempoMapManager.SetTempo(tempoChange.Item1, tempoChange.Item2);
+                }
+
+                tempoMap = tempoMapManager.TempoMap;
+            }
+
+            var midiFile = pattern.ToFile(tempoMap, Channel);
+
+            var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
+                new TimedEvent(i.Event, TimeConverter.ConvertFrom(i.Time ?? new MidiTimeSpan(), tempoMap)));
+
+            var actualTimedEvents = midiFile.GetTimedEvents();
+
+            Assert.IsTrue(TimedEventEquality.AreEqual(expectedTimedEvents, actualTimedEvents, false), "Events have invalid order.");
         }
 
         #endregion
