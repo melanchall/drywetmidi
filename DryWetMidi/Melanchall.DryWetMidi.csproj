@@ -85,6 +85,7 @@
     <Compile Include="Devices\OutputDevice\MidiOutWinApi.cs" />
     <Compile Include="MusicTheory\Interval\IntervalParser.cs" />
     <Compile Include="MusicTheory\Interval\IntervalUtilities.cs" />
+    <Compile Include="MusicTheory\Notes.cs" />
     <Compile Include="MusicTheory\Note\NoteNameParser.cs" />
     <Compile Include="MusicTheory\Note\NoteParser.cs" />
     <Compile Include="MusicTheory\Note\NoteUtilities.cs" />
