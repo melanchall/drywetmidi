@@ -6,7 +6,7 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    internal sealed class SplitMidiFileByGridOperation : IDisposable
+    internal sealed class MidiFileSlicer : IDisposable
     {
         #region Nested classes
 
@@ -90,6 +90,9 @@ namespace Melanchall.DryWetMidi.Tools
         #region Fields
 
         private readonly TimedEventsHolder[] _timedEventsHolders;
+        private readonly TimeDivision _timeDivision;
+
+        private long _lastTime;
 
         private bool _disposed = false;
 
@@ -97,9 +100,10 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constructor
 
-        public SplitMidiFileByGridOperation(IEnumerator<TimedEvent>[] timedEventsEnumerators)
+        private MidiFileSlicer(TimeDivision timeDivision, IEnumerator<TimedEvent>[] timedEventsEnumerators)
         {
             _timedEventsHolders = timedEventsEnumerators.Select(e => new TimedEventsHolder(e)).ToArray();
+            _timeDivision = timeDivision;
         }
 
         #endregion
@@ -112,7 +116,22 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public IEnumerable<IEnumerable<TimedEvent>> GetTimedEvents(long startTime, long endTime, bool preserveTimes)
+        public MidiFile GetNextSlice(long endTime, SliceMidiFileSettings settings)
+        {
+            var timedEvents = GetNextTimedEvents(endTime, settings.PreserveTimes);
+            var trackChunks = timedEvents.Select(e => e.ToTrackChunk())
+                                         .Where(c => settings.PreserveTrackChunks || c.Events.Any())
+                                         .ToList();
+
+            var file = new MidiFile(trackChunks)
+            {
+                TimeDivision = _timeDivision.Clone()
+            };
+
+            return file;
+        }
+
+        private IEnumerable<IEnumerable<TimedEvent>> GetNextTimedEvents(long endTime, bool preserveTimes)
         {
             for (int i = 0; i < _timedEventsHolders.Length; i++)
             {
@@ -157,19 +176,21 @@ namespace Melanchall.DryWetMidi.Tools
                 while (timedEventsEnumerator.MoveNext());
 
                 if (!preserveTimes)
-                    MoveEventsToStart(takenTimedEvents, newEventsStartIndex, startTime);
+                    MoveEventsToStart(takenTimedEvents, newEventsStartIndex, _lastTime);
 
                 yield return takenTimedEvents;
             }
+
+            _lastTime = endTime;
         }
 
-        public static SplitMidiFileByGridOperation Create(MidiFile midiFile)
+        public static MidiFileSlicer CreateFromFile(MidiFile midiFile)
         {
             var timedEventsEnumerators = midiFile.GetTrackChunks()
                                                  .Select(c => c.GetTimedEvents().GetEnumerator())
                                                  .ToArray();
 
-            return new SplitMidiFileByGridOperation(timedEventsEnumerators);
+            return new MidiFileSlicer(midiFile.TimeDivision, timedEventsEnumerators);
         }
 
         private static void TryToUpdateNotesInformation(MidiEvent midiEvent, List<NoteId> noteOnIds)

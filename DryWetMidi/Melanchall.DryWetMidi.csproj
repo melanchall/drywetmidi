@@ -414,8 +414,8 @@
     <Compile Include="Tools\CsvConverter\MidiFile\MidiFileCsvConversionSettings.cs" />
     <Compile Include="Tools\CsvConverter\CsvConverter.cs" />
     <Compile Include="Tools\MidiFileSplitter\MidiFileSplitter.cs" />
-    <Compile Include="Tools\MidiFileSplitter\SplittingMidiFileByGridSettings.cs" />
-    <Compile Include="Tools\MidiFileSplitter\SplitMidiFileByGridOperation.cs" />
+    <Compile Include="Tools\MidiFileSplitter\MidiFileSlicer.cs" />
+    <Compile Include="Tools\MidiFileSplitter\SliceMidiFileSettings.cs" />
     <Compile Include="Tools\NotesMerger\NotesMerger.cs" />
     <Compile Include="Tools\NotesMerger\NotesMergerUtilities.cs" />
     <Compile Include="Tools\NotesMerger\NotesMergingSettings.cs" />
