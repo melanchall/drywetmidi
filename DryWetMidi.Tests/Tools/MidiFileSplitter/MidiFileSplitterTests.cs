@@ -24,7 +24,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region SplitByChannel
 
         [Test]
-        [Description("Split valid MIDI files by channel.")]
         public void SplitByChannel_ValidFiles()
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
@@ -72,7 +71,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region SplitByNotes
 
         [Test]
-        [Description("Split empty MIDI file without track chunks by notes.")]
         public void SplitByNotes_EmptyFile()
         {
             var midiFile = new MidiFile();
@@ -81,7 +79,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split MIDI file without note events by notes.")]
         public void SplitByNotes_NoNoteEvents()
         {
             var midiFile = new MidiFile(
@@ -93,7 +90,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split MIDI file with single channel notes by notes.")]
         public void SplitByNotes_SingleChannel()
         {
             var tempoMap = TempoMap.Default;
@@ -131,7 +127,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split MIDI file with notes of different channels by notes.")]
         public void SplitByNotes_DifferentChannels()
         {
             var tempoMap = TempoMap.Default;
@@ -172,7 +167,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split valid MIDI files by notes.")]
         public void SplitByNotes_ValidFiles()
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
@@ -225,7 +219,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region SplitByGrid
 
         [Test]
-        [Description("Split empty MIDI file by grid.")]
         public void SplitByGrid_EmptyFile()
         {
             var midiFile = new MidiFile();
@@ -236,7 +229,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split MIDI file by grid: don't split notes, don't preserve times.")]
         public void SplitByGrid_DontSplitNotes_DontPreserveTimes()
         {
             var timedEvents = new[]
@@ -253,7 +245,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFile = timedEvents.ToFile();
             var grid = new SteppedGrid((MidiTimeSpan)100);
-            var settings = new SplittingMidiFileByGridSettings
+            var settings = new SliceMidiFileSettings
             {
                 SplitNotes = false,
                 PreserveTimes = false
@@ -297,7 +289,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split MIDI file by arbitrary grid: don't split notes, don't preserve times.")]
         public void SplitByGrid_ArbitraryGrid_DontSplitNotes_DontPreserveTimes()
         {
             var timedEvents = new[]
@@ -314,7 +305,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFile = timedEvents.ToFile();
             var grid = new ArbitraryGrid((MidiTimeSpan)100, (MidiTimeSpan)200);
-            var settings = new SplittingMidiFileByGridSettings
+            var settings = new SliceMidiFileSettings
             {
                 SplitNotes = false,
                 PreserveTimes = false
@@ -358,7 +349,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split MIDI file by grid: don't split notes, preserve times.")]
         public void SplitByGrid_DontSplitNotes_PreserveTimes()
         {
             var timedEvents = new[]
@@ -373,7 +363,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFile = timedEvents.ToFile();
             var grid = new SteppedGrid((MidiTimeSpan)100);
-            var settings = new SplittingMidiFileByGridSettings
+            var settings = new SliceMidiFileSettings
             {
                 SplitNotes = false,
                 PreserveTimes = true
@@ -415,7 +405,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        [Description("Split MIDI file by grid: split notes.")]
         public void SplitByGrid_SplitNotes()
         {
             var timedEvents = new[]
@@ -429,7 +418,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFile = timedEvents.ToFile();
             var grid = new SteppedGrid((MidiTimeSpan)100);
-            var settings = new SplittingMidiFileByGridSettings
+            var settings = new SliceMidiFileSettings
             {
                 SplitNotes = true,
                 PreserveTimes = false
@@ -461,9 +450,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Second file contains invalid events.");
         }
 
-        [TestCase(true, Description = "Split MIDI file by grid removing empty files.")]
-        [TestCase(false, Description = "Split MIDI file by grid keeping empty files.")]
-        public void SplitByGrid_RemoveEmptyFiles(bool removeEmptyFiles)
+        [Test]
+        public void SplitByGrid_EmptyFiles()
         {
             var timedEvents = new[]
             {
@@ -475,15 +463,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFile = timedEvents.ToFile();
             var grid = new SteppedGrid((MidiTimeSpan)100);
-            var settings = new SplittingMidiFileByGridSettings
+            var settings = new SliceMidiFileSettings
             {
                 SplitNotes = false,
-                PreserveTimes = false,
-                RemoveEmptyFiles = removeEmptyFiles
+                PreserveTimes = false
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(removeEmptyFiles ? 2 : 4, newFiles.Count, "New files count is invalid.");
+            Assert.AreEqual(4, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
                 newFiles[0].GetTimedEvents(),
@@ -494,20 +481,17 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 },
                 "First file contains invalid events.");
 
-            if (!removeEmptyFiles)
-            {
-                CompareTimedEvents(
-                    newFiles[1].GetTimedEvents(),
-                    Enumerable.Empty<TimedEvent>(),
-                    "Second file contains invalid events.");
-                CompareTimedEvents(
-                    newFiles[2].GetTimedEvents(),
-                    Enumerable.Empty<TimedEvent>(),
-                    "Third file contains invalid events.");
-            }
+            CompareTimedEvents(
+                newFiles[1].GetTimedEvents(),
+                Enumerable.Empty<TimedEvent>(),
+                "Second file contains invalid events.");
+            CompareTimedEvents(
+                newFiles[2].GetTimedEvents(),
+                Enumerable.Empty<TimedEvent>(),
+                "Third file contains invalid events.");
 
             CompareTimedEvents(
-                newFiles[removeEmptyFiles ? 1 : 3].GetTimedEvents(),
+                newFiles[3].GetTimedEvents(),
                 new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 0),
@@ -516,8 +500,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Last file contains invalid events.");
         }
 
-        [TestCase(true, Description = "Split MIDI file by grid preserving track chunks.")]
-        [TestCase(false, Description = "Split MIDI file by grid without preserving track chunks.")]
+        [TestCase(true)]
+        [TestCase(false)]
         public void SplitByGrid_PreserveTrackChunks(bool preserveTrackChunks)
         {
             var timedEvents1 = new[]
@@ -538,7 +522,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedEvents1.ToTrackChunk(),
                 timedEvents2.ToTrackChunk());
             var grid = new SteppedGrid((MidiTimeSpan)100);
-            var settings = new SplittingMidiFileByGridSettings
+            var settings = new SliceMidiFileSettings
             {
                 SplitNotes = false,
                 PreserveTimes = false,
@@ -580,6 +564,539 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)21, (SevenBitNumber)100), 100)
                 },
                 "Second track chunk of second file contains invalid events.");
+        }
+
+        #endregion
+
+        #region SkipPart
+
+        [Test]
+        public void SkipPart_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            var result = midiFile.SkipPart(MusicalTimeSpan.Eighth);
+
+            Assert.IsTrue(result.IsEmpty(), "Empty file part skipping produced non-empty result.");
+        }
+
+        [Test]
+        public void SkipPart_DontSplitNotes_DontPreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.SkipPart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),
+                    new TimedEvent(new TextEvent("Test"), 100)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void SkipPart_DontSplitNotes_PreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new PitchBendEvent(1000), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            };
+
+            var result = midiFile.SkipPart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                    new TimedEvent(new PitchBendEvent(1000), 200),
+                    new TimedEvent(new TextEvent("Test"), 200)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void SkipPart_SplitNotes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = true,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.SkipPart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void SkipPart_EmptyFiles()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.SkipPart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                Enumerable.Empty<TimedEvent>(),
+                "Resulting file contains invalid events.");
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void SkipPart_PreserveTrackChunks(bool preserveTrackChunks)
+        {
+            var timedEvents1 = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95)
+            };
+
+            var timedEvents2 = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)21, (SevenBitNumber)100), 100),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)21, (SevenBitNumber)100), 200)
+            };
+
+            var midiFile = new MidiFile(timedEvents1.ToTrackChunk(), timedEvents2.ToTrackChunk());
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false,
+                PreserveTrackChunks = preserveTrackChunks
+            };
+
+            var result = midiFile.SkipPart(partLength, settings);
+            Assert.AreEqual(preserveTrackChunks ? 2 : 1, result.GetTrackChunks().Count(), "Track chunks count of resulting file is invalid.");
+
+            if (preserveTrackChunks)
+            {
+                CompareTimedEvents(
+                    result.GetTrackChunks().First().GetTimedEvents(),
+                    Enumerable.Empty<TimedEvent>(),
+                    "First track chunk of resulting file contains invalid events.");
+            }
+
+            CompareTimedEvents(
+                result.GetTrackChunks().Last().GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)21, (SevenBitNumber)100), 0),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)21, (SevenBitNumber)100), 100)
+                },
+                "Second track chunk of resulting file contains invalid events.");
+        }
+
+        #endregion
+
+        #region TakePart (from start)
+
+        [Test]
+        public void TakePart_FromStart_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            var result = midiFile.TakePart(MusicalTimeSpan.Eighth);
+
+            Assert.IsTrue(result.IsEmpty(), "Empty file part taking produced non-empty result.");
+        }
+
+        [Test]
+        public void TakePart_FromStart_DontSplitNotes_DontPreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.TakePart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void TakePart_FromStart_DontSplitNotes_PreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new PitchBendEvent(1000), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            };
+
+            var result = midiFile.TakePart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void TakePart_FromStart_SplitNotes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = true,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.TakePart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 100)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void TakePart_FromStart_EmptyFiles()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 300),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 400)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.TakePart(partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                Enumerable.Empty<TimedEvent>(),
+                "Resulting file contains invalid events.");
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TakePart_FromStart_PreserveTrackChunks(bool preserveTrackChunks)
+        {
+            var timedEvents1 = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95),
+            };
+
+            var timedEvents2 = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)21, (SevenBitNumber)100), 100),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)21, (SevenBitNumber)100), 200)
+            };
+
+            var midiFile = new MidiFile(timedEvents1.ToTrackChunk(), timedEvents2.ToTrackChunk());
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false,
+                PreserveTrackChunks = preserveTrackChunks
+            };
+
+            var result = midiFile.TakePart(partLength, settings);
+            Assert.AreEqual(preserveTrackChunks ? 2 : 1, result.GetTrackChunks().Count(), "Track chunks count of resulting file is invalid.");
+
+            CompareTimedEvents(
+                result.GetTrackChunks().First().GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95),
+                },
+                "First track chunk of resulting file contains invalid events.");
+            if (preserveTrackChunks)
+            {
+                CompareTimedEvents(
+                    result.GetTrackChunks().Last().GetTimedEvents(),
+                    Enumerable.Empty<TimedEvent>(),
+                    "Second track chunk of resulting file contains invalid events.");
+            }
+        }
+
+        #endregion
+
+        #region TakePart (in middle)
+
+        [Test]
+        public void TakePart_InMiddle_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            var result = midiFile.TakePart(new MetricTimeSpan(0, 0, 1), MusicalTimeSpan.Eighth);
+
+            Assert.IsTrue(result.IsEmpty(), "Empty file part taking produced non-empty result.");
+        }
+
+        [Test]
+        public void TakePart_InMiddle_DontSplitNotes_DontPreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partStart = (MidiTimeSpan)100;
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.TakePart(partStart, partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(200000), 0),
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void TakePart_InMiddle_DontSplitNotes_PreserveTimes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                new TimedEvent(new SetTempoEvent(200000), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200),
+                new TimedEvent(new PitchBendEvent(1000), 200),
+                new TimedEvent(new TextEvent("Test"), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partStart = (MidiTimeSpan)100;
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            };
+
+            var result = midiFile.TakePart(partStart, partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new InstrumentNameEvent("Test instrument"), 10),
+                    new TimedEvent(new SetTempoEvent(200000), 90),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void TakePart_InMiddle_SplitNotes()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new SetTempoEvent(100000), 0),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 150),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 190),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 200)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partStart = (MidiTimeSpan)100;
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = true,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.TakePart(partStart, partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new SetTempoEvent(100000), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 90),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100)
+                },
+                "Resulting file contains invalid events.");
+        }
+
+        [Test]
+        public void TakePart_InMiddle_EmptyFiles()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)70), 95),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 300),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 400)
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var partStart = (MidiTimeSpan)100;
+            var partLength = (MidiTimeSpan)100;
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var result = midiFile.TakePart(partStart, partLength, settings);
+
+            CompareTimedEvents(
+                result.GetTimedEvents(),
+                Enumerable.Empty<TimedEvent>(),
+                "Resulting file contains invalid events.");
         }
 
         #endregion
