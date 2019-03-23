@@ -123,30 +123,16 @@ namespace Melanchall.DryWetMidi.Devices
 
             _clock = new MidiClock(ClockInterval);
             _clock.Tick += OnClockTick;
+
+            Snapping = new PlaybackSnapping(playbackEvents, tempoMap);
         }
 
         public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, OutputDevice outputDevice)
+            : this(timedObjects, tempoMap)
         {
-            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            var playbackEvents = GetPlaybackEvents(timedObjects, tempoMap);
-            _eventsEnumerator = playbackEvents.GetEnumerator();
-            _eventsEnumerator.MoveNext();
-
-            var lastPlaybackEvent = playbackEvents.LastOrDefault();
-            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
-            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
-
-            _notesMetadata = playbackEvents.Select(e => e.Metadata.Note).Where(m => m != null).ToList();
-            _notesMetadata.Sort((m1, m2) => m1.StartTime.CompareTo(m2.StartTime));
-
-            TempoMap = tempoMap;
             OutputDevice = outputDevice;
-
-            _clock = new MidiClock(ClockInterval);
-            _clock.Tick += OnClockTick;
         }
 
         #endregion
@@ -215,6 +201,8 @@ namespace Melanchall.DryWetMidi.Devices
                 _clock.Speed = value;
             }
         }
+
+        public PlaybackSnapping Snapping { get; }
 
         #endregion
 
@@ -338,6 +326,55 @@ namespace Melanchall.DryWetMidi.Devices
 
             Start();
             SpinWait.SpinUntil(() => !_clock.IsRunning);
+        }
+
+        public void MoveToSnapPoint(SnapPoint snapPoint)
+        {
+            ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
+            EnsureIsNotDisposed();
+
+            if (!snapPoint.IsEnabled)
+                return;
+
+            MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        public void MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)
+        {
+            ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        public void MoveToPreviousSnapPoint()
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        public void MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)
+        {
+            ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        public void MoveToNextSnapPoint()
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
         }
 
         /// <summary>
