@@ -76,6 +76,9 @@
     <Compile Include="Devices\Playback\PlaybackNotesDictionary.cs" />
     <Compile Include="Devices\Playback\PlaybackNotesDictionaryEntry.cs" />
     <Compile Include="Devices\Playback\PlaybackUtilities.cs" />
+    <Compile Include="Devices\Playback\Snapping\PlaybackSnapping.cs" />
+    <Compile Include="Devices\Playback\Snapping\SnapPoint.cs" />
+    <Compile Include="Devices\Playback\Snapping\SnapPointsGroup.cs" />
     <Compile Include="Devices\Recording\Recording.cs" />
     <Compile Include="Devices\Recording\RecordingEvent.cs" />
     <Compile Include="Devices\Recording\RecordingUtilities.cs" />
