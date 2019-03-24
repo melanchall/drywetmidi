@@ -1479,7 +1479,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 setupPlayback: (context, playback) =>
                 {
                     snapPointsGroup = playback.Snapping.SnapToNotesEnds();
-                    var snapPointsGroup2 = playback.Snapping.SnapToNotesStarts();
+                    var snapPointsGroup2 = playback.Snapping.SnapToNotesEnds();
                     Assert.That(playback.Snapping.SnapPoints, Has.Count.EqualTo(2), "Count of snap points is invalid.");
                     Assert.AreSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
                 },
