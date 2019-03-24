@@ -1416,7 +1416,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => snapPointsGroup = playback.Snapping.SnapToNotesStarts(),
+                setupPlayback: (context, playback) =>
+                {
+                    snapPointsGroup = playback.Snapping.SnapToNotesStarts();
+                    var snapPointsGroup2 = playback.Snapping.SnapToNotesStarts();
+                    Assert.That(playback.Snapping.SnapPoints, Has.Count.EqualTo(2), "Count of snap points is invalid.");
+                    Assert.AreSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
+                },
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(snapPointsGroup),
                 afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
@@ -1470,7 +1476,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => snapPointsGroup = playback.Snapping.SnapToNotesEnds(),
+                setupPlayback: (context, playback) =>
+                {
+                    snapPointsGroup = playback.Snapping.SnapToNotesEnds();
+                    var snapPointsGroup2 = playback.Snapping.SnapToNotesStarts();
+                    Assert.That(playback.Snapping.SnapPoints, Has.Count.EqualTo(2), "Count of snap points is invalid.");
+                    Assert.AreSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
+                },
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(snapPointsGroup),
                 afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),

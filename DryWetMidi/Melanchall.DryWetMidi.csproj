@@ -373,9 +373,9 @@
     <Compile Include="Standards\GeneralMidi\GeneralMidiPercussion.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidiProgram.cs" />
     <Compile Include="Standards\GeneralMidi\GeneralMidiUtilities.cs" />
-    <Compile Include="Tools\Common\Grid\ArbitraryGrid.cs" />
-    <Compile Include="Tools\Common\Grid\IGrid.cs" />
-    <Compile Include="Tools\Common\Grid\SteppedGrid.cs" />
+    <Compile Include="Smf.Interaction\Grid\ArbitraryGrid.cs" />
+    <Compile Include="Smf.Interaction\Grid\IGrid.cs" />
+    <Compile Include="Smf.Interaction\Grid\SteppedGrid.cs" />
     <Compile Include="Tools\Common\LengthedObjectTarget.cs" />
     <Compile Include="Tools\Common\LengthSetter.cs" />
     <Compile Include="Tools\Common\TimeProcessing\TimeProcessingInstruction.cs" />
