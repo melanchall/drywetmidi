@@ -1132,6 +1132,102 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void AddSnapPoint_WithoutData()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+            };
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            {
+                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
+                Assert.IsNotNull(snapPoint, "Snap point is null.");
+                Assert.IsInstanceOf<Guid>(snapPoint.Data, "Snap point's data is not of Guid type.");
+                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint, "Snap points doesn't contain the snap point.");
+            }
+        }
+
+        [Test]
+        public void AddSnapPoint_WithData()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+            };
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            {
+                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "Data");
+                Assert.IsNotNull(snapPoint, "Snap point is null.");
+                Assert.AreEqual("Data", snapPoint.Data, "Snap point's data is invalid.");
+                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint, "Snap points doesn't contain the snap point.");
+            }
+        }
+
+        [Test]
+        public void RemoveSnapPoint()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+            };
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            {
+                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
+                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint, "Snap points doesn't contain the snap point.");
+
+                playback.Snapping.RemoveSnapPoint(snapPoint);
+                CollectionAssert.DoesNotContain(playback.Snapping.SnapPoints, snapPoint, "Snap points contain the snap point after removing.");
+            }
+        }
+
+        [Test]
+        public void RemoveSnapPointsByData()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+            };
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "DataX");
+                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 2), "DataY");
+                var snapPoint3 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 3), "Something");
+                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint1, "Snap points doesn't contain the snap point #1.");
+                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint2, "Snap points doesn't contain the snap point #2.");
+                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint3, "Snap points doesn't contain the snap point #3.");
+
+                playback.Snapping.RemoveSnapPointsByData((string data) => data.StartsWith("Data"));
+                CollectionAssert.DoesNotContain(playback.Snapping.SnapPoints, snapPoint1, "Snap points contain the snap point #1.");
+                CollectionAssert.DoesNotContain(playback.Snapping.SnapPoints, snapPoint2, "Snap points contain the snap point #2.");
+                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint3, "Snap points doesn't contain the snap point #3.");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void MoveToSnapPoint()

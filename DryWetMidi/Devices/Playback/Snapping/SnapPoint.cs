@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
-        public SnapPoint(TimeSpan time)
+        internal SnapPoint(TimeSpan time)
         {
             Time = time;
         }
@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
-        public SnapPoint(TimeSpan time, TData data)
+        internal SnapPoint(TimeSpan time, TData data)
             : base(time)
         {
             Data = data;

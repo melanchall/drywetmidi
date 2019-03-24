@@ -52,11 +52,29 @@ namespace Melanchall.DryWetMidi.Devices
             return snapPoint;
         }
 
-        public void RemoveSnapPoint(SnapPoint snapPoint)
+        public SnapPoint<Guid> AddSnapPoint(ITimeSpan time)
+        {
+            ThrowIfArgument.IsNull(nameof(time), time);
+
+            return AddSnapPoint(time, Guid.NewGuid());
+        }
+
+        public void RemoveSnapPoint<TData>(SnapPoint<TData> snapPoint)
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
 
             _snapPoints.Remove(snapPoint);
+        }
+
+        public void RemoveSnapPointsByData<TData>(Predicate<TData> predicate)
+        {
+            ThrowIfArgument.IsNull(nameof(predicate), predicate);
+
+            _snapPoints.RemoveAll(p =>
+            {
+                var snapPoint = p as SnapPoint<TData>;
+                return snapPoint != null && predicate(snapPoint.Data);
+            });
         }
 
         public SnapPointsGroup SnapToGrid(IGrid grid)
