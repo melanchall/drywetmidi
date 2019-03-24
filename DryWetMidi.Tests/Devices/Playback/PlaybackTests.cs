@@ -1387,6 +1387,114 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
+        [Test]
+        public void SnapToNotesStarts()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            SnapPointsGroup snapPointsGroup = null;
+
+            var snapPointTime1 = TimeSpan.FromSeconds(1);
+            var snapPointTime2 = TimeSpan.FromSeconds(3);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(300);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(600);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+
+            var endTime = snapPointTime2 + TimeSpan.FromMilliseconds(1200);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1),
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), snapPointTime2 - snapPointTime1),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), TimeSpan.FromSeconds(1)),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), TimeSpan.FromMilliseconds(200))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => snapPointsGroup = playback.Snapping.SnapToNotesStarts(),
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(snapPointsGroup),
+                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
+                runningAfterResume: new[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    {
+                        playback.MoveToNextSnapPoint(snapPointsGroup);
+                        CheckCurrentTime(playback, snapPointTime2, "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime2 + thirdAfterResumeDelay, "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    snapPointTime1,
+                    stopAfter + stopPeriod,
+                    stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay,
+                    stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + TimeSpan.FromSeconds(1),
+                    endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void SnapToNotesEnds()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            SnapPointsGroup snapPointsGroup = null;
+
+            var snapPointTime1 = TimeSpan.FromSeconds(1);
+            var snapPointTime2 = TimeSpan.FromSeconds(3);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(300);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(600);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+
+            var endTime = snapPointTime2 + TimeSpan.FromMilliseconds(200);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), TimeSpan.FromMilliseconds(200)),
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), TimeSpan.FromMilliseconds(300)),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1 - TimeSpan.FromMilliseconds(500)),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), snapPointTime2 - snapPointTime1),
+                    new EventToSend(new PitchBendEvent(100), TimeSpan.FromMilliseconds(200))
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) => snapPointsGroup = playback.Snapping.SnapToNotesEnds(),
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(snapPointsGroup),
+                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
+                runningAfterResume: new[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    {
+                        playback.MoveToNextSnapPoint(snapPointsGroup);
+                        CheckCurrentTime(playback, snapPointTime2, "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime2 + thirdAfterResumeDelay, "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.FromMilliseconds(200),
+                    TimeSpan.FromMilliseconds(500),
+                    snapPointTime1,
+                    stopAfter + stopPeriod,
+                    stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay,
+                    endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                });
+        }
+
         #endregion
 
         #region Private methods

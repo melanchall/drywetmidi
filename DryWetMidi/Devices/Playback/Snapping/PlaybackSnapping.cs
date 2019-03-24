@@ -17,6 +17,9 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly TempoMap _tempoMap;
         private readonly TimeSpan _maxTime;
 
+        private SnapPointsGroup _noteStartSnapPointsGroup;
+        private SnapPointsGroup _noteEndSnapPointsGroup;
+
         #endregion
 
         #region Constructor
@@ -74,6 +77,16 @@ namespace Melanchall.DryWetMidi.Devices
             return snapPointsGroup;
         }
 
+        public SnapPointsGroup SnapToNotesStarts()
+        {
+            return _noteStartSnapPointsGroup ?? (_noteStartSnapPointsGroup = SnapToNoteEvents(snapToNoteOn: true));
+        }
+
+        public SnapPointsGroup SnapToNotesEnds()
+        {
+            return _noteEndSnapPointsGroup ?? (_noteEndSnapPointsGroup = SnapToNoteEvents(snapToNoteOn: false));
+        }
+
         public void EnableSnapPointsGroup(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
@@ -106,6 +119,22 @@ namespace Melanchall.DryWetMidi.Devices
         internal SnapPoint GetPreviousSnapPoint(TimeSpan time)
         {
             return GetActiveSnapPoints().TakeWhile(p => p.Time < time).LastOrDefault();
+        }
+
+        private SnapPointsGroup SnapToNoteEvents(bool snapToNoteOn)
+        {
+            var times = new List<ITimeSpan>();
+
+            foreach (var playbackEvent in _playbackEvents)
+            {
+                var noteMetadata = playbackEvent.Metadata.Note;
+                if (noteMetadata == null || noteMetadata.IsNoteOnEvent != snapToNoteOn)
+                    continue;
+
+                times.Add((MetricTimeSpan)playbackEvent.Time);
+            }
+
+            return SnapToGrid(new ArbitraryGrid(times));
         }
 
         private IEnumerable<SnapPoint> GetActiveSnapPoints()
