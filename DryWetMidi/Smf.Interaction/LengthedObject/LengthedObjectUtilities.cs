@@ -33,6 +33,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return LengthConverter.ConvertTo<TLength>(obj.Length, obj.Time, tempoMap);
         }
 
+        public static TTime EndTimeAs<TTime>(this ILengthedObject obj, TempoMap tempoMap)
+            where TTime : ITimeSpan
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeConverter.ConvertTo<TTime>(obj.Time + obj.Length, tempoMap);
+        }
+
         /// <summary>
         /// Gets length of an <see cref="ILengthedObject"/> as an instance of type defined by the
         /// specified time span type.
@@ -52,6 +61,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             return LengthConverter.ConvertTo(obj.Length, lengthType, obj.Time, tempoMap);
+        }
+
+        public static ITimeSpan EndTimeAs(this ILengthedObject obj, TimeSpanType timeType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeConverter.ConvertTo(obj.Time + obj.Length, timeType, tempoMap);
         }
 
         /// <summary>
