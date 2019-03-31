@@ -638,12 +638,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(other, null))
                 return 1;
 
-            if (other.Numerator == long.MaxValue && Numerator < long.MaxValue)
-                return -1;
-
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(this, other, out numerator1, out numerator2, out denominator);
-            return Math.Sign(numerator1 - numerator2);
+            var difference = ((double)Numerator * other.Denominator - (double)other.Numerator * Denominator) / ((double)Denominator * other.Denominator);
+            return Math.Sign(difference);
         }
 
         #endregion
