@@ -110,6 +110,52 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void Quantize_Start_OneStep_FromZero_Musical()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_Start_DontFixEnd(
+                new[]
+                {
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, (MidiTimeSpan)123, tempoMap)
+                },
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Quarter,
+                    MusicalTimeSpan.Eighth
+                },
+                tempoMap,
+                TimeSpanType.Musical);
+        }
+
+        [Test]
+        public void Quantize_Start_OneStep_FromZero_Metric()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Quantize_Start_DontFixEnd(
+                new[]
+                {
+                    ObjectMethods.Create((MidiTimeSpan)0, MusicalTimeSpan.Whole, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Quarter + MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Half, tempoMap),
+                    ObjectMethods.Create(MusicalTimeSpan.Eighth, (MidiTimeSpan)123, tempoMap)
+                },
+                new SteppedGrid(MusicalTimeSpan.Eighth),
+                new ITimeSpan[]
+                {
+                    (MidiTimeSpan)0,
+                    MusicalTimeSpan.Quarter,
+                    MusicalTimeSpan.Eighth
+                },
+                tempoMap,
+                TimeSpanType.Metric);
+        }
+
+        [Test]
         [Description("Quantize start times by grid of one step starting away from zero.")]
         public void Quantize_Start_OneStep_AwayFromZero()
         {
@@ -1064,9 +1110,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                            quantizingLevel: quantizingLevel);
         }
 
-        private void Quantize_Start_DontFixEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap)
+        private void Quantize_Start_DontFixEnd(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap, TimeSpanType distanceType = TimeSpanType.Midi)
         {
-            Quantize_Start(actualObjects, grid, GetExpectedTimesAndLengths(actualObjects, expectedTimes), false, tempoMap);
+            Quantize_Start(actualObjects, grid, GetExpectedTimesAndLengths(actualObjects, expectedTimes), false, tempoMap, distanceType: distanceType);
         }
 
         private void Quantize_Start_DontFixEnd_CustomDistanceType(IEnumerable<TObject> actualObjects, IGrid grid, IEnumerable<ITimeSpan> expectedTimes, TempoMap tempoMap, TimeSpanType distanceType)
