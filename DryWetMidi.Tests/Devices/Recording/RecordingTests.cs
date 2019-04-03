@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private const int RetriesNumber = 3;
 
-        private static readonly object[] ParametersForDurationCheck = new[]
+        private static readonly object[] ParametersForDurationCheck =
         {
             new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(2) },
             new object[] { TimeSpan.FromMilliseconds(500), TimeSpan.FromSeconds(3) },

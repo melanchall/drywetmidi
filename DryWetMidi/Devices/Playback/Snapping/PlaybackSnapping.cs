@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
-using Melanchall.DryWetMidi.Tools;
 
 namespace Melanchall.DryWetMidi.Devices
 {

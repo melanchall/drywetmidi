@@ -208,7 +208,7 @@ namespace Melanchall.DryWetMidi.Tools
         private static object[] ProcessParameter(object parameter)
         {
             if (parameter == null)
-                return new[] { string.Empty };
+                return new object[] { string.Empty };
 
             var bytes = parameter as byte[];
             if (bytes != null)
