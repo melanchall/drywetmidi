@@ -1120,12 +1120,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 Assert.IsTrue(snapPointsGroup.IsEnabled, "Snap points group is not enabled on start.");
                 Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active.");
 
-                playback.Snapping.DisableSnapPointsGroup(snapPointsGroup);
+                snapPointsGroup.IsEnabled = false;
                 Assert.IsFalse(snapPointsGroup.IsEnabled, "Snap points group is not disabled.");
                 Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled after group disabled.");
                 CollectionAssert.IsEmpty(GetActiveSnapPoints(playback), "Some snap points are active after group disabled.");
 
-                playback.Snapping.EnableSnapPointsGroup(snapPointsGroup);
+                snapPointsGroup.IsEnabled = true;
                 Assert.IsTrue(snapPointsGroup.IsEnabled, "Snap points group is not enabled.");
                 Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
                 Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active after group enabled.");

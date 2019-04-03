@@ -65,6 +65,14 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Methods
 
+        /// <summary>
+        /// Reads all remaining bytes from the underlying stream and moves the current position
+        /// to the stream's end.
+        /// </summary>
+        /// <returns>All bytes read from the underlying stream.</returns>
+        /// <exception cref="EndOfStreamException">The end of the underlying stream is reached.</exception>
+        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte[] ReadAllBytes()
         {
             const int bufferSize = 512;

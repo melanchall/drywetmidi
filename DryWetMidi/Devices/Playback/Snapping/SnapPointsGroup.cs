@@ -1,5 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Represents a group of snap points.
+    /// </summary>
     public sealed class SnapPointsGroup
     {
         #region Constructor
@@ -12,7 +15,11 @@
 
         #region Properties
 
-        internal bool IsEnabled { get; set; } = true;
+        /// <summary>
+        /// Gets or sets a value indicating whether the current <see cref="SnapPointsGroup"/>
+        /// is enabled or not.
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
 
         #endregion
     }

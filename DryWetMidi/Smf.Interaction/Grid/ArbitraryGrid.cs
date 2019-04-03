@@ -28,6 +28,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             Times = times;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArbitraryGrid"/> with the specified
+        /// collection of times.
+        /// </summary>
+        /// <param name="times">Grid's times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="times"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="times"/> contains null.</exception>
         public ArbitraryGrid(params ITimeSpan[] times)
             : this(times as IEnumerable<ITimeSpan>)
         {

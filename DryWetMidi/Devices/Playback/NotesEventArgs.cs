@@ -4,6 +4,10 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Holds notes collection for <see cref="Playback.NotesPlaybackStarted"/> and
+    /// <see cref="Playback.NotesPlaybackFinished"/>
+    /// </summary>
     public sealed class NotesEventArgs : EventArgs
     {
         #region Constructor
@@ -17,6 +21,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets notes collection that started or finished to play by a <see cref="Playback"/>.
+        /// </summary>
         public IEnumerable<Note> Notes { get; }
 
         #endregion

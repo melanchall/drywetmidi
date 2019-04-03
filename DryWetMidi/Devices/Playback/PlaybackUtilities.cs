@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
@@ -95,6 +96,18 @@ namespace Melanchall.DryWetMidi.Devices
             return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputDevice);
         }
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing musical objects using
+        /// the specified program.
+        /// </summary>
+        /// <typeparam name="TObject">The type of objects to play.</typeparam>
+        /// <param name="objects">Objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
             where TObject : IMusicalObject, ITimedObject
         {
@@ -108,6 +121,19 @@ namespace Melanchall.DryWetMidi.Devices
                                              channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } });
         }
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing musical objects using
+        /// the specified General MIDI 1 program.
+        /// </summary>
+        /// <typeparam name="TObject">The type of objects to play.</typeparam>
+        /// <param name="objects">Objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidiProgram"/> specified an invalid value.</exception>
         public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
             where TObject : IMusicalObject, ITimedObject
         {
@@ -122,15 +148,28 @@ namespace Melanchall.DryWetMidi.Devices
                                              channel => new[] { generalMidiProgram.GetProgramEvent(channel) });
         }
 
-        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> notes, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing musical objects using
+        /// the specified General MIDI 2 program.
+        /// </summary>
+        /// <typeparam name="TObject">The type of objects to play.</typeparam>
+        /// <param name="objects">Objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidi2Program"/> specified an invalid value.</exception>
+        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
             where TObject : IMusicalObject, ITimedObject
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidi2Program), generalMidi2Program);
 
-            return GetMusicalObjectsPlayback(notes,
+            return GetMusicalObjectsPlayback(objects,
                                              tempoMap,
                                              outputDevice,
                                              channel => generalMidi2Program.GetProgramEvents(channel));
@@ -209,6 +248,16 @@ namespace Melanchall.DryWetMidi.Devices
             pattern.ToTrackChunk(tempoMap, channel).Play(tempoMap, outputDevice);
         }
 
+        /// <summary>
+        /// Plays musical objects using the specified program.
+        /// </summary>
+        /// <typeparam name="TObject">The type of objects to play.</typeparam>
+        /// <param name="objects">Objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber)
             where TObject : IMusicalObject, ITimedObject
         {
@@ -222,6 +271,17 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Plays musical objects using the specified General MIDI 1 program.
+        /// </summary>
+        /// <typeparam name="TObject">The type of objects to play.</typeparam>
+        /// <param name="objects">Objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidiProgram"/> specified an invalid value.</exception>
         public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidiProgram generalMidiProgram)
             where TObject : IMusicalObject, ITimedObject
         {
@@ -236,6 +296,17 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Plays musical objects using the specified General MIDI 2 program.
+        /// </summary>
+        /// <typeparam name="TObject">The type of objects to play.</typeparam>
+        /// <param name="objects">Objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidi2Program"/> specified an invalid value.</exception>
         public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, GeneralMidi2Program generalMidi2Program)
             where TObject : IMusicalObject, ITimedObject
         {

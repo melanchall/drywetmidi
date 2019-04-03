@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Gets an object that represents maximum value of time span defined by the specified
         /// time span type.
         /// </summary>
-        /// <param name="timeSpanType">The type of time span to get maximumvalue.</param>
+        /// <param name="timeSpanType">The type of time span to get maximum value.</param>
         /// <returns>An object that represents maximum value of time span defined by <paramref name="timeSpanType"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeSpanType"/> specified an
         /// invalid value.</exception>
@@ -146,6 +146,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return MaximumTimeSpans[timeSpanType];
         }
 
+        /// <summary>
+        /// Gets an object that represents zero value of time span defined by the specified
+        /// time span type.
+        /// </summary>
+        /// <param name="timeSpanType">The type of time span to get zero value.</param>
+        /// <returns>An object that represents zero value of time span defined by <paramref name="timeSpanType"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeSpanType"/> specified an
+        /// invalid value.</exception>
         public static ITimeSpan GetZeroTimeSpan(TimeSpanType timeSpanType)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);
@@ -153,6 +161,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return ZeroTimeSpans[timeSpanType];
         }
 
+        /// <summary>
+        /// Gets an object that represents zero value of time span defined by the specified
+        /// time span type.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">The type of time span to get zero value.</typeparam>
+        /// <returns>An object that represents zero value of time span defined by <typeparamref name="TTimeSpan"/>.</returns>
         public static TTimeSpan GetZeroTimeSpan<TTimeSpan>()
             where TTimeSpan : ITimeSpan
         {

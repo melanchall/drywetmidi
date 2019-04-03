@@ -1,5 +1,10 @@
-﻿namespace Melanchall.DryWetMidi.Tools
+﻿using Melanchall.DryWetMidi.Smf;
+
+namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Settings according to which a <see cref="MidiFile"/> should be splitted.
+    /// </summary>
     public class SliceMidiFileSettings
     {
         #region Properties

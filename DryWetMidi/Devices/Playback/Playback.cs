@@ -38,8 +38,16 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler Finished;
 
+        /// <summary>
+        /// Occurs when notes started to play. It will raised if playback's cursor
+        /// gets in to notes.
+        /// </summary>
         public event EventHandler<NotesEventArgs> NotesPlaybackStarted;
 
+        /// <summary>
+        /// Occurs when notes finished to play. It will raised if playback's cursor
+        /// gets out from notes.
+        /// </summary>
         public event EventHandler<NotesEventArgs> NotesPlaybackFinished;
 
         #endregion
@@ -63,6 +71,14 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of MIDI events and tempo map.
+        /// </summary>
+        /// <param name="events">Collection of MIDI events to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap)
             : this(new[] { events }, tempoMap)
         {
@@ -84,6 +100,14 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(events), events);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of MIDI events collections and tempo map.
+        /// </summary>
+        /// <param name="events">Collection of MIDI events collections to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
             : this(GetTimedObjects(events), tempoMap)
         {
@@ -103,6 +127,14 @@ namespace Melanchall.DryWetMidi.Devices
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of timed objects and tempo map.
+        /// </summary>
+        /// <param name="timedObjects">Collection of timed objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -127,6 +159,15 @@ namespace Melanchall.DryWetMidi.Devices
             Snapping = new PlaybackSnapping(playbackEvents, tempoMap);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of timed objects, tempo map and output MIDI device to play events through.
+        /// </summary>
+        /// <param name="timedObjects">Collection of timed objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="timedObjects"/> through.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, OutputDevice outputDevice)
             : this(timedObjects, tempoMap)
         {
@@ -180,8 +221,16 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public bool Loop { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether currently playing notes must be stopped
+        /// on playback stop or not.
+        /// </summary>
         public bool InterruptNotesOnStop { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether notes must be tracked or not. If false, notes
+        /// will be treated as just Note On/Note Off events.
+        /// </summary>
         public bool TrackNotes { get; set; }
 
         /// <summary>
@@ -202,6 +251,9 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Gets an object to manage playback's snap points.
+        /// </summary>
         public PlaybackSnapping Snapping { get; }
 
         #endregion
@@ -328,6 +380,13 @@ namespace Melanchall.DryWetMidi.Devices
             SpinWait.SpinUntil(() => !_clock.IsRunning);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of the specified snap point.
+        /// </summary>
+        /// <param name="snapPoint">Snap point to move to.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is null.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToSnapPoint(SnapPoint snapPoint)
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
@@ -339,6 +398,15 @@ namespace Melanchall.DryWetMidi.Devices
             MoveToTime((MetricTimeSpan)snapPoint.Time);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of the previous snap point (relative to the current
+        /// time of playback) that belongs to the specified <see cref="SnapPointsGroup"/>.
+        /// </summary>
+        /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
+        /// select the one from.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is null.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
@@ -349,6 +417,12 @@ namespace Melanchall.DryWetMidi.Devices
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of the previous snap point (relative to the current
+        /// time of playback).
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToPreviousSnapPoint()
         {
             EnsureIsNotDisposed();
@@ -358,6 +432,15 @@ namespace Melanchall.DryWetMidi.Devices
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of the next snap point (relative to the current
+        /// time of playback) that belongs to the specified <see cref="SnapPointsGroup"/>.
+        /// </summary>
+        /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
+        /// select the one from.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is null.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
@@ -368,6 +451,12 @@ namespace Melanchall.DryWetMidi.Devices
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of the next snap point (relative to the current
+        /// time of playback).
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToNextSnapPoint()
         {
             EnsureIsNotDisposed();
