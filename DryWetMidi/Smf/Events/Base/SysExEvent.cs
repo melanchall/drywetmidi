@@ -15,6 +15,9 @@ namespace Melanchall.DryWetMidi.Smf
     {
         #region Constants
 
+        /// <summary>
+        /// The value indicating the end of a system exclusive event.
+        /// </summary>
         public const byte EndOfEventByte = 0xF7;
 
         #endregion

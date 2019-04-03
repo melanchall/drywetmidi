@@ -201,7 +201,6 @@
     <Compile Include="Smf\Exceptions\InvalidChannelEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\InvalidMetaEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\InvalidMidiTimeCodeComponentException.cs" />
-    <Compile Include="Smf\Exceptions\InvalidSysExDataParameterException.cs" />
     <Compile Include="Smf\Exceptions\InvalidSystemCommonEventParameterValueException.cs" />
     <Compile Include="Smf\Exceptions\NoHeaderChunkException.cs" />
     <Compile Include="Smf\Exceptions\NotEnoughBytesException.cs" />

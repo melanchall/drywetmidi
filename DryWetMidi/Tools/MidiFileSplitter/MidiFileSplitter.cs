@@ -144,6 +144,17 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Skips part of the specified length of MIDI file and returns remaining part as
+        /// an instance of <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to skip part of.</param>
+        /// <param name="partLength">The length of part to skip.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/>
+        /// should be splitted.</param>
+        /// <returns><see cref="MidiFile"/> which is result of skipping a part of the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="partLength"/> is null.</exception>
         public static MidiFile SkipPart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -164,6 +175,17 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Takes part of the specified length of a MIDI file (starting at the beginning of the file)
+        /// and returns it as an instance of <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to take part of.</param>
+        /// <param name="partLength">The length of part to take.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/>
+        /// should be splitted.</param>
+        /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="partLength"/> is null.</exception>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -183,6 +205,18 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Takes part of the specified length of a MIDI file (starting at the specified time within the file)
+        /// and returns it as an instance of <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to take part of.</param>
+        /// <param name="partStart">The start time of part to take.</param>
+        /// <param name="partLength">The length of part to take.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/>
+        /// should be splitted.</param>
+        /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="partStart"/> is null. -or- <paramref name="partLength"/> is null.</exception>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

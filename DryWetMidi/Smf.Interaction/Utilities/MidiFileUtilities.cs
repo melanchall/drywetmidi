@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
@@ -11,6 +12,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     {
         #region Methods
 
+        /// <summary>
+        /// Gets the duration of the specified <see cref="MidiFile"/>. Duration is
+        /// defined by the time of last MIDI event of the file.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">The type of time span representing the duration of <paramref name="midiFile"/>.</typeparam>
+        /// <param name="midiFile"><see cref="MidiFile"/> to get duration of.</param>
+        /// <returns>An instance of <typeparamref name="TTimeSpan"/> representing
+        /// duration of <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan GetDuration<TTimeSpan>(this MidiFile midiFile)
             where TTimeSpan : class, ITimeSpan
         {
@@ -21,6 +32,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                    TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
         }
 
+        /// <summary>
+        /// Gets the duration of the specified <see cref="MidiFile"/>. Duration is
+        /// defined by the time of last MIDI event of the file.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to get duration of.</param>
+        /// <param name="durationType">The type of time span representing the duration of <paramref name="midiFile"/>.</param>
+        /// <returns>An implementation of <see cref="ITimeSpan"/> representing
+        /// duration of <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
         public static ITimeSpan GetDuration(this MidiFile midiFile, TimeSpanType durationType)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -31,6 +52,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                    TimeSpanUtilities.GetZeroTimeSpan(durationType);
         }
 
+        /// <summary>
+        /// Checks whether the specified <see cref="MidiFile"/> is empty or not. <see cref="MidiFile"/>
+        /// is empty when it doesn't contain MIDI events.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to check emptiness of.</param>
+        /// <returns>A value indicating whether <paramref name="midiFile"/> is empty or not.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
         public static bool IsEmpty(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
