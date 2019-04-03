@@ -130,7 +130,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new NoteInfo(NoteName.B, 2, new MetricTimeSpan(0, 1, 24), new MetricTimeSpan(0, 0, 5)),
             });
 
-            var tempoMap = midiFile.GetTempoMap();
             Assert.AreEqual(new MetricTimeSpan(0, 1, 29), midiFile.GetDuration<MetricTimeSpan>());
         }
 
@@ -157,7 +156,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                       .Select(i => Tuple.Create(i * 1000L, new Tempo(i * 100 + 10)))
                       .ToArray());
 
-            var tempoMap = midiFile.GetTempoMap();
             Assert.AreEqual(new MetricTimeSpan(0, 1, 29).TotalMicroseconds,
                             midiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds);
         }

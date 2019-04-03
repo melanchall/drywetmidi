@@ -19,8 +19,6 @@ namespace Melanchall.DryWetMidi.Devices
         private const int ChannelEventBufferSize = 3;
         private static readonly byte[] ZeroBuffer = new byte[ChannelEventBufferSize];
 
-        private const int SysExBufferLength = 2048;
-
         #endregion
 
         #region Events

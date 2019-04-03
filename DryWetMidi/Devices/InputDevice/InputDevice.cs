@@ -55,8 +55,6 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly MemoryStream _channelMessageMemoryStream = new MemoryStream(ChannelParametersBufferSize);
         private readonly MidiReader _channelEventReader;
 
-        private readonly MemoryStream _sysExMessageMemoryStream = new MemoryStream(SysExBufferLength);
-        private readonly MidiReader _sysExEventReader;
         private IntPtr _sysExHeaderPointer = IntPtr.Zero;
 
         private MidiWinApi.MidiMessageCallback _callback;
@@ -67,11 +65,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal InputDevice(int id)
+        private InputDevice(int id)
             : base(id)
         {
             _channelEventReader = new MidiReader(_channelMessageMemoryStream);
-            _sysExEventReader = new MidiReader(_sysExMessageMemoryStream);
 
             SetDeviceInformation();
         }

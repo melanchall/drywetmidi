@@ -47,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private static readonly PlaybackAction NoPlaybackAction = (context, playback) => { };
 
-        private static readonly object[] ParametersForDurationCheck = new[]
+        private static readonly object[] ParametersForDurationCheck =
         {
             new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(2) },
             new object[] { TimeSpan.FromMilliseconds(500), TimeSpan.FromSeconds(3) },

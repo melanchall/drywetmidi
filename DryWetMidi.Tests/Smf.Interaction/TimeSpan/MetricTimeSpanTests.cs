@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Tuple.Create(new MetricTimeSpan(10000), new MetricTimeSpan(10000)),
         };
 
-        private static readonly object[] ParametersForValidParseCheck = new[]
+        private static readonly object[] ParametersForValidParseCheck =
         {
             new object[] { "0:0:0:0", new MetricTimeSpan() },
             new object[] { "0:0:0", new MetricTimeSpan() },
