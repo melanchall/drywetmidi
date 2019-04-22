@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -48,6 +49,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [TimeSpanType.Metric] = new MetricTimeSpan(TimeSpan.MaxValue),
             [TimeSpanType.Musical] = new MusicalTimeSpan(long.MaxValue, 1),
             [TimeSpanType.BarBeat] = new BarBeatTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue)
+        };
+
+        private static readonly Dictionary<TimeSpanType, ITimeSpan> ZeroTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
+        {
+            [TimeSpanType.Midi] = new MidiTimeSpan(),
+            [TimeSpanType.Metric] = new MetricTimeSpan(),
+            [TimeSpanType.Musical] = new MusicalTimeSpan(),
+            [TimeSpanType.BarBeat] = new BarBeatTimeSpan()
         };
 
         #endregion
@@ -126,7 +135,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// Gets an object that represents maximum value of time span defined by the specified
         /// time span type.
         /// </summary>
-        /// <param name="timeSpanType">The type of time span to get maximumvalue.</param>
+        /// <param name="timeSpanType">The type of time span to get maximum value.</param>
         /// <returns>An object that represents maximum value of time span defined by <paramref name="timeSpanType"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeSpanType"/> specified an
         /// invalid value.</exception>
@@ -135,6 +144,33 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);
 
             return MaximumTimeSpans[timeSpanType];
+        }
+
+        /// <summary>
+        /// Gets an object that represents zero value of time span defined by the specified
+        /// time span type.
+        /// </summary>
+        /// <param name="timeSpanType">The type of time span to get zero value.</param>
+        /// <returns>An object that represents zero value of time span defined by <paramref name="timeSpanType"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeSpanType"/> specified an
+        /// invalid value.</exception>
+        public static ITimeSpan GetZeroTimeSpan(TimeSpanType timeSpanType)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeSpanType), timeSpanType);
+
+            return ZeroTimeSpans[timeSpanType];
+        }
+
+        /// <summary>
+        /// Gets an object that represents zero value of time span defined by the specified
+        /// time span type.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">The type of time span to get zero value.</typeparam>
+        /// <returns>An object that represents zero value of time span defined by <typeparamref name="TTimeSpan"/>.</returns>
+        public static TTimeSpan GetZeroTimeSpan<TTimeSpan>()
+            where TTimeSpan : ITimeSpan
+        {
+            return (TTimeSpan)ZeroTimeSpans.Values.FirstOrDefault(timeSpan => timeSpan is TTimeSpan);
         }
 
         internal static double Divide(ITimeSpan timeSpan1, ITimeSpan timeSpan2)

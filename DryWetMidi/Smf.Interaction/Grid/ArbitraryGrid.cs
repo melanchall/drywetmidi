@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Tools
+namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
     /// Grid where points in time are distributed arbitrarily according to provided collection
@@ -27,6 +26,18 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.ContainsNull(nameof(times), times);
 
             Times = times;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArbitraryGrid"/> with the specified
+        /// collection of times.
+        /// </summary>
+        /// <param name="times">Grid's times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="times"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="times"/> contains null.</exception>
+        public ArbitraryGrid(params ITimeSpan[] times)
+            : this(times as IEnumerable<ITimeSpan>)
+        {
         }
 
         #endregion

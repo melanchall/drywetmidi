@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 var parametersField = typeof(ChannelEvent).GetField("_parameters", BindingFlags.Instance | BindingFlags.NonPublic);
                 var e1Parameters = (SevenBitNumber[])parametersField.GetValue(event1);
                 var e2Parameters = (SevenBitNumber[])parametersField.GetValue(event2);
-                return e1Parameters.SequenceEqual(e2Parameters);
+                return e1Parameters.SequenceEqual(e2Parameters) && ((ChannelEvent)event1).Channel == ((ChannelEvent)event2).Channel;
             }
 
             var sysExEvent1 = event1 as SysExEvent;

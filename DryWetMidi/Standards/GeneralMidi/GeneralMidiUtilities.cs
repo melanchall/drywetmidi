@@ -44,13 +44,14 @@ namespace Melanchall.DryWetMidi.Standards
         /// General MIDI Level 1 program.
         /// </summary>
         /// <param name="program"><see cref="GeneralMidiProgram"/> to get an event for.</param>
+        /// <param name="channel">Channel an event should be created for.</param>
         /// <returns>An instance of the <see cref="ProgramChangeEvent"/> corresponding to the <paramref name="program"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
-        public static MidiEvent GetProgramEvent(this GeneralMidiProgram program)
+        public static MidiEvent GetProgramEvent(this GeneralMidiProgram program, FourBitNumber channel)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
 
-            return new ProgramChangeEvent(program.AsSevenBitNumber());
+            return new ProgramChangeEvent(program.AsSevenBitNumber()) { Channel = channel };
         }
 
         /// <summary>
@@ -59,14 +60,15 @@ namespace Melanchall.DryWetMidi.Standards
         /// </summary>
         /// <param name="percussion"><see cref="GeneralMidiPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
+        /// <param name="channel">Channel an event should be created for.</param>
         /// <returns>An instance of the <see cref="NoteOnEvent"/> corresponding to the specified
         /// <paramref name="percussion"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="percussion"/> specified an invalid value.</exception>
-        public static NoteOnEvent GetNoteOnEvent(this GeneralMidiPercussion percussion, SevenBitNumber velocity)
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidiPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
 
-            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity);
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
         }
 
         /// <summary>
@@ -75,14 +77,15 @@ namespace Melanchall.DryWetMidi.Standards
         /// </summary>
         /// <param name="percussion"><see cref="GeneralMidiPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
+        /// <param name="channel">Channel an event should be created for.</param>
         /// <returns>An instance of the <see cref="NoteOffEvent"/> corresponding to the specified
         /// <paramref name="percussion"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="percussion"/> specified an invalid value.</exception>
-        public static NoteOffEvent GetNoteOffEvent(this GeneralMidiPercussion percussion, SevenBitNumber velocity)
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidiPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
 
-            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity);
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
         }
 
         #endregion

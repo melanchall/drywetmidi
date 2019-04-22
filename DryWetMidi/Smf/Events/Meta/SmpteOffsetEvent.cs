@@ -1,8 +1,6 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -16,57 +14,9 @@ namespace Melanchall.DryWetMidi.Smf
     /// </remarks>
     public sealed class SmpteOffsetEvent : MetaEvent
     {
-        #region Constants
-
-        /// <summary>
-        /// Maximum value for the <see cref="Hours"/>.
-        /// </summary>
-        public const byte MaxHours = 23;
-
-        /// <summary>
-        /// Maximum value for the <see cref="Minutes"/>.
-        /// </summary>
-        public const byte MaxMinutes = 59;
-
-        /// <summary>
-        /// Maximum value for the <see cref="Seconds"/>.
-        /// </summary>
-        public const byte MaxSeconds = 59;
-
-        /// <summary>
-        /// Maximum value for the <see cref="SubFrames"/>.
-        /// </summary>
-        public const byte MaxSubFrames = 99;
-
-        private static readonly Dictionary<SmpteFormat, byte> MaxFrames = new Dictionary<SmpteFormat, byte>
-        {
-            [SmpteFormat.TwentyFour] = 23,
-            [SmpteFormat.TwentyFive] = 24,
-            [SmpteFormat.ThirtyDrop] = 28,
-            [SmpteFormat.Thirty] = 29
-        };
-
-        private const int FormatMask = 0x60; // 01100000
-        private const int FormatOffset = 5;
-        private const int HoursMask = 0x1F; // 00011111
-
-        private static readonly Dictionary<int, SmpteFormat> Formats = new Dictionary<int, SmpteFormat>
-        {
-            [0] = SmpteFormat.TwentyFour,
-            [1] = SmpteFormat.TwentyFive,
-            [2] = SmpteFormat.ThirtyDrop,
-            [3] = SmpteFormat.Thirty
-        };
-
-        #endregion
-
         #region Fields
 
-        private byte _hours;
-        private byte _minutes;
-        private byte _seconds;
-        private byte _frames;
-        private byte _subFrames;
+        private SmpteData _smpteData = new SmpteData();
 
         #endregion
 
@@ -96,8 +46,6 @@ namespace Melanchall.DryWetMidi.Smf
         public SmpteOffsetEvent(SmpteFormat format, byte hours, byte minutes, byte seconds, byte frames, byte subFrames)
             : this()
         {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
-
             Format = format;
             Hours = hours;
             Minutes = minutes;
@@ -113,7 +61,11 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Gets or sets SMPTE format.
         /// </summary>
-        public SmpteFormat Format { get; set; }
+        public SmpteFormat Format
+        {
+            get { return _smpteData.Format; }
+            set { _smpteData.Format = value; }
+        }
 
         /// <summary>
         /// Gets or sets number of hours.
@@ -121,17 +73,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentOutOfRangeException">Hours number is out of valid range (0-23).</exception>
         public byte Hours
         {
-            get { return _hours; }
-            set
-            {
-                ThrowIfArgument.IsOutOfRange(nameof(value),
-                                             value,
-                                             0,
-                                             MaxHours,
-                                             $"Hours number is out of valid range (0-{MaxHours}).");
-
-                _hours = value;
-            }
+            get { return _smpteData.Hours; }
+            set { _smpteData.Hours = value; }
         }
 
         /// <summary>
@@ -140,17 +83,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentOutOfRangeException">Minutes number is out of valid range (0-59).</exception>
         public byte Minutes
         {
-            get { return _minutes; }
-            set
-            {
-                ThrowIfArgument.IsOutOfRange(nameof(value),
-                                             value,
-                                             0,
-                                             MaxMinutes,
-                                             $"Minutes number is out of valid range (0-{MaxMinutes}).");
-
-                _minutes = value;
-            }
+            get { return _smpteData.Minutes; }
+            set { _smpteData.Minutes = value; }
         }
 
         /// <summary>
@@ -159,17 +93,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentOutOfRangeException">Seconds number is out of valid range (0-59).</exception>
         public byte Seconds
         {
-            get { return _seconds; }
-            set
-            {
-                ThrowIfArgument.IsOutOfRange(nameof(value),
-                                             value,
-                                             0,
-                                             MaxSeconds,
-                                             $"Seconds number is out of valid range (0-{MaxSeconds}).");
-
-                _seconds = value;
-            }
+            get { return _smpteData.Seconds; }
+            set { _smpteData.Seconds = value; }
         }
 
         /// <summary>
@@ -183,18 +108,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// </remarks>
         public byte Frames
         {
-            get { return _frames; }
-            set
-            {
-                var maxFrames = MaxFrames[Format];
-                ThrowIfArgument.IsOutOfRange(nameof(value),
-                                             value,
-                                             0,
-                                             maxFrames,
-                                             $"Frames number is out of valid range (0-{maxFrames}).");
-
-                _frames = value;
-            }
+            get { return _smpteData.Frames; }
+            set { _smpteData.Frames = value; }
         }
 
         /// <summary>
@@ -203,52 +118,13 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="ArgumentOutOfRangeException">Sub-frames number is out of valid range (0-99).</exception>
         public byte SubFrames
         {
-            get { return _subFrames; }
-            set
-            {
-                ThrowIfArgument.IsOutOfRange(nameof(value),
-                                             value,
-                                             0,
-                                             MaxSubFrames,
-                                             $"Sub-frames number is out of valid range (0-{MaxSubFrames}).");
-
-                _subFrames = value;
-            }
+            get { return _smpteData.SubFrames; }
+            set { _smpteData.SubFrames = value; }
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Gets SMPTE format from a byte containing format and number of hours.
-        /// </summary>
-        /// <param name="formatAndHours">Byte containing format and number of hours.</param>
-        /// <returns>SMPTE format in terms of frame rate.</returns>
-        internal static SmpteFormat GetFormat(byte formatAndHours)
-        {
-            return Formats[(formatAndHours & FormatMask) >> FormatOffset];
-        }
-
-        /// <summary>
-        /// Gets number of hours from a byte containing format and number of hours.
-        /// </summary>
-        /// <param name="formatAndHours">Byte containing format and number of hours.</param>
-        /// <returns>Number of hours.</returns>
-        internal static byte GetHours(byte formatAndHours)
-        {
-            return (byte)(formatAndHours & HoursMask);
-        }
-
-        /// <summary>
-        /// Gets byte containing SMPTE format and number of hours.
-        /// </summary>
-        /// <returns>Byte containing SMPTE format and number of hours.</returns>
-        internal byte GetFormatAndHours()
-        {
-            var format = Formats.First(f => f.Value == Format).Key << FormatOffset;
-            return (byte)(format & Hours);
-        }
 
         private static byte ProcessValue(byte value, string property, byte max, InvalidMetaEventParameterValuePolicy policy)
         {
@@ -278,30 +154,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="size">Size of the event's content.</param>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            var invalidMetaEventParameterValuePolicy = settings.InvalidMetaEventParameterValuePolicy;
-
-            var formatAndHours = reader.ReadByte();
-            Format = GetFormat(formatAndHours);
-            Hours = ProcessValue(GetHours(formatAndHours),
-                                 nameof(Hours),
-                                 MaxHours,
-                                 invalidMetaEventParameterValuePolicy);
-            Minutes = ProcessValue(reader.ReadByte(),
-                                   nameof(Minutes),
-                                   MaxMinutes,
-                                   invalidMetaEventParameterValuePolicy);
-            Seconds = ProcessValue(reader.ReadByte(),
-                                   nameof(Seconds),
-                                   MaxSeconds,
-                                   invalidMetaEventParameterValuePolicy);
-            Frames = ProcessValue(reader.ReadByte(),
-                                  nameof(Frames),
-                                  MaxFrames[Format],
-                                  invalidMetaEventParameterValuePolicy);
-            SubFrames = ProcessValue(reader.ReadByte(),
-                                     nameof(SubFrames),
-                                     MaxSubFrames,
-                                     invalidMetaEventParameterValuePolicy);
+            _smpteData = SmpteData.Read(
+                reader.ReadByte,
+                (value, propertyName, max) => ProcessValue(value, propertyName, max, settings.InvalidMetaEventParameterValuePolicy));
         }
 
         /// <summary>
@@ -311,11 +166,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
-            writer.WriteByte(GetFormatAndHours());
-            writer.WriteByte(Minutes);
-            writer.WriteByte(Seconds);
-            writer.WriteByte(Frames);
-            writer.WriteByte(SubFrames);
+            _smpteData.Write(writer.WriteByte);
         }
 
         /// <summary>

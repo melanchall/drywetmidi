@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> produced during splitting the input file by grid.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
         /// <paramref name="grid"/> is null.</exception>
-        public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SplittingMidiFileByGridSettings settings = null)
+        public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -121,45 +121,132 @@ namespace Melanchall.DryWetMidi.Tools
             if (!midiFile.GetEvents().Any())
                 yield break;
 
-            settings = settings ?? new SplittingMidiFileByGridSettings();
+            settings = settings ?? new SliceMidiFileSettings();
+            midiFile = PrepareMidiFileForSlicing(midiFile, grid, settings);
 
-            if (settings.SplitNotes)
-            {
-                midiFile = midiFile.Clone();
-                midiFile.SplitNotesByGrid(grid);
-            }
-
-            var startTime = 0L;
             var tempoMap = midiFile.GetTempoMap();
 
-            using (var operation = SplitMidiFileByGridOperation.Create(midiFile))
+            using (var slicer = MidiFileSlicer.CreateFromFile(midiFile))
             {
                 foreach (var time in grid.GetTimes(tempoMap))
                 {
                     if (time == 0)
                         continue;
 
-                    var timedEvents = operation.GetTimedEvents(startTime, time, settings.PreserveTimes);
-                    var trackChunks = timedEvents.Select(e => e.ToTrackChunk())
-                                                 .Where(c => settings.PreserveTrackChunks || c.Events.Any())
-                                                 .ToList();
+                    yield return slicer.GetNextSlice(time, settings);
 
-                    if (trackChunks.Any() || !settings.RemoveEmptyFiles)
-                    {
-                        var file = new MidiFile(trackChunks)
-                        {
-                            TimeDivision = midiFile.TimeDivision.Clone()
-                        };
-
-                        yield return file;
-                    }
-
-                    if (operation.AllEventsProcessed)
+                    if (slicer.AllEventsProcessed)
                         break;
-
-                    startTime = time;
                 }
+
+                if (!slicer.AllEventsProcessed)
+                    yield return slicer.GetNextSlice(long.MaxValue, settings);
             }
+        }
+
+        /// <summary>
+        /// Skips part of the specified length of MIDI file and returns remaining part as
+        /// an instance of <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to skip part of.</param>
+        /// <param name="partLength">The length of part to skip.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/>
+        /// should be splitted.</param>
+        /// <returns><see cref="MidiFile"/> which is result of skipping a part of the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="partLength"/> is null.</exception>
+        public static MidiFile SkipPart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsNull(nameof(partLength), partLength);
+
+            var grid = new ArbitraryGrid(partLength);
+
+            settings = settings ?? new SliceMidiFileSettings();
+            midiFile = PrepareMidiFileForSlicing(midiFile, grid, settings);
+
+            var tempoMap = midiFile.GetTempoMap();
+            var time = grid.GetTimes(tempoMap).First();
+
+            using (var slicer = MidiFileSlicer.CreateFromFile(midiFile))
+            {
+                slicer.GetNextSlice(time, settings);
+                return slicer.GetNextSlice(long.MaxValue, settings);
+            }
+        }
+
+        /// <summary>
+        /// Takes part of the specified length of a MIDI file (starting at the beginning of the file)
+        /// and returns it as an instance of <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to take part of.</param>
+        /// <param name="partLength">The length of part to take.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/>
+        /// should be splitted.</param>
+        /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="partLength"/> is null.</exception>
+        public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsNull(nameof(partLength), partLength);
+
+            var grid = new ArbitraryGrid(partLength);
+
+            settings = settings ?? new SliceMidiFileSettings();
+            midiFile = PrepareMidiFileForSlicing(midiFile, grid, settings);
+
+            var tempoMap = midiFile.GetTempoMap();
+            var time = grid.GetTimes(tempoMap).First();
+
+            using (var slicer = MidiFileSlicer.CreateFromFile(midiFile))
+            {
+                return slicer.GetNextSlice(time, settings);
+            }
+        }
+
+        /// <summary>
+        /// Takes part of the specified length of a MIDI file (starting at the specified time within the file)
+        /// and returns it as an instance of <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to take part of.</param>
+        /// <param name="partStart">The start time of part to take.</param>
+        /// <param name="partLength">The length of part to take.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/>
+        /// should be splitted.</param>
+        /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
+        /// <paramref name="partStart"/> is null. -or- <paramref name="partLength"/> is null.</exception>
+        public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsNull(nameof(partStart), partStart);
+            ThrowIfArgument.IsNull(nameof(partLength), partLength);
+
+            var grid = new ArbitraryGrid(partStart, partStart.Add(partLength, TimeSpanMode.TimeLength));
+
+            settings = settings ?? new SliceMidiFileSettings();
+            midiFile = PrepareMidiFileForSlicing(midiFile, grid, settings);
+
+            var tempoMap = midiFile.GetTempoMap();
+            var times = grid.GetTimes(tempoMap).ToArray();
+
+            using (var slicer = MidiFileSlicer.CreateFromFile(midiFile))
+            {
+                slicer.GetNextSlice(times[0], settings);
+                return slicer.GetNextSlice(times[1], settings);
+            }
+        }
+
+        private static MidiFile PrepareMidiFileForSlicing(MidiFile midiFile, IGrid grid, SliceMidiFileSettings settings)
+        {
+            if (settings.SplitNotes)
+            {
+                midiFile = midiFile.Clone();
+                midiFile.SplitNotesByGrid(grid);
+            }
+
+            return midiFile;
         }
 
         #endregion

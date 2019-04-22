@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Standards
 {
-    internal static class GeneralMidi2Utilities
+    /// <summary>
+    /// Provides utilities for General MIDI Level 2.
+    /// </summary>
+    public static class GeneralMidi2Utilities
     {
         #region Nested classes
 
@@ -484,7 +488,14 @@ namespace Melanchall.DryWetMidi.Standards
 
         #region Methods
 
-        public static IEnumerable<MidiEvent> GetProgramEvents(this GeneralMidi2Program program)
+        /// <summary>
+        /// Gets MIDI events sequence to switch to the specified General MIDI Level 2 program.
+        /// </summary>
+        /// <param name="program"><see cref="GeneralMidi2Program"/> to get events for.</param>
+        /// <param name="channel">Channel events should be created for.</param>
+        /// <returns>MIDI events sequence to switch to the <paramref name="program"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
+        public static IEnumerable<MidiEvent> GetProgramEvents(this GeneralMidi2Program program, FourBitNumber channel)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
 
@@ -492,9 +503,9 @@ namespace Melanchall.DryWetMidi.Standards
 
             return new[]
             {
-                ControlName.BankSelect.GetControlChangeEvent(programData.BankMsb),
-                ControlName.LsbForBankSelect.GetControlChangeEvent(programData.BankLsb),
-                programData.GeneralMidiProgram.GetProgramEvent()
+                ControlName.BankSelect.GetControlChangeEvent(programData.BankMsb, channel),
+                ControlName.LsbForBankSelect.GetControlChangeEvent(programData.BankLsb, channel),
+                programData.GeneralMidiProgram.GetProgramEvent(channel)
             };
         }
 

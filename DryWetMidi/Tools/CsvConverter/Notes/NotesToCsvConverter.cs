@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 foreach (var note in notes.Where(n => n != null))
                 {
-                    csvWriter.WriteRecord(new object[]
+                    csvWriter.WriteRecord(new[]
                     {
                         note.TimeAs(settings.TimeType, tempoMap),
                         note.Channel,

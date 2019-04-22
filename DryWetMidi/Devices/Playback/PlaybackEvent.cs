@@ -24,6 +24,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public long RawTime { get; }
 
+        public PlaybackEventMetadata Metadata { get; } = new PlaybackEventMetadata();
+
         #endregion
     }
 }

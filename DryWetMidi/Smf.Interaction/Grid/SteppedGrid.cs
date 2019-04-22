@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Tools
+namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
     /// Grid where points in time are distributed with the specified step or

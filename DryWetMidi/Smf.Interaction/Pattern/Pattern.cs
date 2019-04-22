@@ -55,14 +55,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             var trackChunk = new TrackChunk();
 
-            using (var notesManager = trackChunk.ManageNotes())
-            {
-                notesManager.Notes.Add(result.Notes ?? Enumerable.Empty<Note>());
-            }
-
             using (var eventsManager = trackChunk.ManageTimedEvents())
             {
                 eventsManager.Events.Add(result.Events ?? Enumerable.Empty<TimedEvent>());
+            }
+
+            using (var notesManager = trackChunk.ManageNotes())
+            {
+                notesManager.Notes.Add(result.Notes ?? Enumerable.Empty<Note>());
             }
 
             //

@@ -3,9 +3,9 @@
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Settings according to which <see cref="MidiFile"/> should be splitted by grid.
+    /// Settings according to which a <see cref="MidiFile"/> should be splitted.
     /// </summary>
-    public sealed class SplittingMidiFileByGridSettings
+    public class SliceMidiFileSettings
     {
         #region Properties
 
@@ -19,12 +19,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// intersecting notes.
         /// </remarks>
         public bool SplitNotes { get; set; } = true;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether empty files produced during splitting should
-        /// be removed from result or not. The default value is true.
-        /// </summary>
-        public bool RemoveEmptyFiles { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether original times of events should be saved or not.

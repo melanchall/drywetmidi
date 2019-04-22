@@ -32,14 +32,26 @@ namespace Melanchall.DryWetMidi.Common
         }
 
         /// <summary>
+        /// Merges three seven-bit numbers into one 32-bit unsigned integer number.
+        /// </summary>
+        /// <param name="head"><see cref="SevenBitNumber"/> representing left part of resulting number.</param>
+        /// <param name="middle"><see cref="SevenBitNumber"/> representing middle part of resulting number.</param>
+        /// <param name="tail"><see cref="SevenBitNumber"/> representing right part of resulting number.</param>
+        /// <returns>Single unsigned 32-bit integer number made of seven-bit halfs.</returns>
+        public static uint Combine(SevenBitNumber head, SevenBitNumber middle, SevenBitNumber tail)
+        {
+            return (uint)((head << 14) | (middle << 7) | tail);
+        }
+
+        /// <summary>
         /// Merges two signed bytes into one 16-bit signed integer number.
         /// </summary>
         /// <param name="head">Byte representing left part of resulting number.</param>
         /// <param name="tail">Byte representing right part of resulting number.</param>
         /// <returns>Single signed 16-bit integer number made of byte halfs.</returns>
-        public static short Combine(byte head, byte tail)
+        public static ushort Combine(byte head, byte tail)
         {
-            return (short)((head << 8) | tail);
+            return (ushort)((head << 8) | tail);
         }
 
         /// <summary>

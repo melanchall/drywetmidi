@@ -13,7 +13,6 @@ namespace Melanchall.DryWetMidi.Devices
         /// Initializes a new instance of the <see cref="MidiDeviceException"/>.
         /// </summary>
         public MidiDeviceException()
-            : base()
         {
         }
 

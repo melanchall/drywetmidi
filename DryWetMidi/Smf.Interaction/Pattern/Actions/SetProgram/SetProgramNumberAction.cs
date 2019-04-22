@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public PatternActionResult Invoke(long time, PatternContext context)
         {
-            var programChangeEvent = new ProgramChangeEvent(ProgramNumber);
+            var programChangeEvent = new ProgramChangeEvent(ProgramNumber) { Channel = context.Channel };
             var timedEvent = new TimedEvent(programChangeEvent, time);
 
             return new PatternActionResult(time, new[] { timedEvent });

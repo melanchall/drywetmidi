@@ -44,8 +44,8 @@ namespace Melanchall.DryWetMidi.Tools
                     x => new SetTempoEvent((long)x[0]),
                     TypeParser.Long),
                 [MidiCsvRecordTypes.Events.SmpteOffset] = GetEventParser(
-                    x => new SmpteOffsetEvent(SmpteOffsetEvent.GetFormat((byte)x[0]),
-                                              SmpteOffsetEvent.GetHours((byte)x[0]),
+                    x => new SmpteOffsetEvent(SmpteData.GetFormat((byte)x[0]),
+                                              SmpteData.GetHours((byte)x[0]),
                                               (byte)x[1],
                                               (byte)x[2],
                                               (byte)x[3],
@@ -109,8 +109,8 @@ namespace Melanchall.DryWetMidi.Tools
                     x => new SetTempoEvent((long)x[0]),
                     TypeParser.Long),
                 [DryWetMidiRecordTypes.Events.SmpteOffset] = GetEventParser(
-                    x => new SmpteOffsetEvent(SmpteOffsetEvent.GetFormat((byte)x[0]),
-                                              SmpteOffsetEvent.GetHours((byte)x[0]),
+                    x => new SmpteOffsetEvent(SmpteData.GetFormat((byte)x[0]),
+                                              SmpteData.GetHours((byte)x[0]),
                                               (byte)x[1],
                                               (byte)x[2],
                                               (byte)x[3],

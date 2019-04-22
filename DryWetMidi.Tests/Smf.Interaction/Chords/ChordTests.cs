@@ -387,9 +387,39 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #endregion
 
+        #region EndTimeAs
+
+        [Test]
+        public void EndTimeAs_ZeroTime_ZeroLength()
+        {
+            CheckEndTime(new MetricTimeSpan(), new MetricTimeSpan(), new MetricTimeSpan());
+        }
+
+        [Test]
+        public void EndTimeAs_ZeroLength()
+        {
+            CheckEndTime(MusicalTimeSpan.Eighth, new MetricTimeSpan(), MusicalTimeSpan.Eighth);
+        }
+
+        [Test]
+        public void EndTimeAs()
+        {
+            CheckEndTime(MusicalTimeSpan.Eighth, MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter);
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
+
+        private static void CheckEndTime<TTimeSpan>(ITimeSpan time, ITimeSpan length, TTimeSpan expectedEndTime)
+            where TTimeSpan : ITimeSpan
+        {
+            var tempoMap = TempoMap.Default;
+            var chord = new ChordMethods().Create(time, length, tempoMap);
+            TimeSpanTestUtilities.AreEqual(expectedEndTime, chord.EndTimeAs<TTimeSpan>(tempoMap), "End time is invalid.");
+        }
 
         private static Chord GetChord_NoNotes()
         {

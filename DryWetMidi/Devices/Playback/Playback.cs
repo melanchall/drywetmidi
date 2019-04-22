@@ -38,6 +38,18 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler Finished;
 
+        /// <summary>
+        /// Occurs when notes started to play. It will raised if playback's cursor
+        /// gets in to notes.
+        /// </summary>
+        public event EventHandler<NotesEventArgs> NotesPlaybackStarted;
+
+        /// <summary>
+        /// Occurs when notes finished to play. It will raised if playback's cursor
+        /// gets out from notes.
+        /// </summary>
+        public event EventHandler<NotesEventArgs> NotesPlaybackFinished;
+
         #endregion
 
         #region Fields
@@ -47,13 +59,31 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly long _durationInTicks;
 
         private readonly MidiClock _clock;
-        private readonly Dictionary<NoteId, NoteOnEvent> _noteOnEvents = new Dictionary<NoteId, NoteOnEvent>();
+
+        private readonly Dictionary<NoteId, Note> _activeNotes = new Dictionary<NoteId, Note>();
+        private readonly List<NotePlaybackEventMetadata> _notesMetadata;
 
         private bool _disposed = false;
+
+        private OutputDevice _outputDevice;
 
         #endregion
 
         #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of MIDI events and tempo map.
+        /// </summary>
+        /// <param name="events">Collection of MIDI events to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap)
+            : this(new[] { events }, tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Playback"/> with the specified
@@ -72,6 +102,19 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of MIDI events collections and tempo map.
+        /// </summary>
+        /// <param name="events">Collection of MIDI events collections to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
+            : this(GetTimedObjects(events), tempoMap)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
         /// collection of MIDI events collections, tempo map and output MIDI device to play events through.
         /// </summary>
         /// <param name="events">Collection of MIDI events collections to play.</param>
@@ -80,23 +123,57 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, OutputDevice outputDevice)
+            : this(GetTimedObjects(events), tempoMap, outputDevice)
         {
-            ThrowIfArgument.IsNull(nameof(events), events);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of timed objects and tempo map.
+        /// </summary>
+        /// <param name="timedObjects">Collection of timed objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            var playbackEvents = GetPlaybackEvents(events, tempoMap);
-            _duration = playbackEvents.LastOrDefault()?.Time ?? TimeSpan.Zero;
-            _durationInTicks = playbackEvents.LastOrDefault()?.RawTime ?? 0;
-
+            var playbackEvents = GetPlaybackEvents(timedObjects, tempoMap);
             _eventsEnumerator = playbackEvents.GetEnumerator();
             _eventsEnumerator.MoveNext();
 
+            var lastPlaybackEvent = playbackEvents.LastOrDefault();
+            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
+            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
+
+            _notesMetadata = playbackEvents.Select(e => e.Metadata.Note).Where(m => m != null).ToList();
+            _notesMetadata.Sort((m1, m2) => m1.StartTime.CompareTo(m2.StartTime));
+
             TempoMap = tempoMap;
-            OutputDevice = outputDevice;
 
             _clock = new MidiClock(ClockInterval);
             _clock.Tick += OnClockTick;
+
+            Snapping = new PlaybackSnapping(playbackEvents, tempoMap);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playback"/> with the specified
+        /// collection of timed objects, tempo map and output MIDI device to play events through.
+        /// </summary>
+        /// <param name="timedObjects">Collection of timed objects to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play <paramref name="timedObjects"/> through.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, OutputDevice outputDevice)
+            : this(timedObjects, tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+
+            OutputDevice = outputDevice;
         }
 
         #endregion
@@ -121,9 +198,17 @@ namespace Melanchall.DryWetMidi.Devices
         public TempoMap TempoMap { get; }
 
         /// <summary>
-        /// Gets the output MIDI device to play MIDI data through.
+        /// Gets or sets the output MIDI device to play MIDI data through.
         /// </summary>
-        public OutputDevice OutputDevice { get; }
+        public OutputDevice OutputDevice
+        {
+            get { return _outputDevice; }
+            set
+            {
+                ThrowIfArgument.IsNull(nameof(value), value);
+                _outputDevice = value;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
@@ -137,10 +222,16 @@ namespace Melanchall.DryWetMidi.Devices
         public bool Loop { get; set; }
 
         /// <summary>
-        /// Gets or sets a value determining how currently playing notes should react on playback stopped.
-        /// The default value is <see cref="NoteStopPolicy.Hold"/>.
+        /// Gets or sets a value indicating whether currently playing notes must be stopped
+        /// on playback stop or not.
         /// </summary>
-        public NoteStopPolicy NoteStopPolicy { get; set; }
+        public bool InterruptNotesOnStop { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether notes must be tracked or not. If false, notes
+        /// will be treated as just Note On/Note Off events.
+        /// </summary>
+        public bool TrackNotes { get; set; }
 
         /// <summary>
         /// Gets or sets the speed of events playing. 1 means normal speed. For example, to play
@@ -159,6 +250,11 @@ namespace Melanchall.DryWetMidi.Devices
                 _clock.Speed = value;
             }
         }
+
+        /// <summary>
+        /// Gets an object to manage playback's snap points.
+        /// </summary>
+        public PlaybackSnapping Snapping { get; }
 
         #endregion
 
@@ -226,17 +322,14 @@ namespace Melanchall.DryWetMidi.Devices
         {
             EnsureIsNotDisposed();
 
+            if (OutputDevice == null)
+                throw new InvalidOperationException("Output device is not set.");
+
             if (_clock.IsRunning)
                 return;
 
             OutputDevice.PrepareForEventsSending();
-
-            foreach (var noteOnEvent in _noteOnEvents.Values)
-            {
-                OutputDevice.SendEvent(noteOnEvent);
-            }
-            _noteOnEvents.Clear();
-
+            StopStartNotes();
             _clock.Start();
 
             OnStarted();
@@ -256,7 +349,16 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _clock.Stop();
-            StopNotes();
+
+            if (InterruptNotesOnStop)
+            {
+                foreach (var note in _activeNotes)
+                {
+                    SendEvent(new NoteOffEvent(note.Key.NoteNumber, note.Value.OffVelocity) { Channel = note.Key.Channel });
+                }
+
+                _activeNotes.Clear();
+            }
 
             OnStopped();
         }
@@ -276,6 +378,92 @@ namespace Melanchall.DryWetMidi.Devices
 
             Start();
             SpinWait.SpinUntil(() => !_clock.IsRunning);
+        }
+
+        /// <summary>
+        /// Sets playback position to the time of the specified snap point.
+        /// </summary>
+        /// <param name="snapPoint">Snap point to move to.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is null.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        public void MoveToSnapPoint(SnapPoint snapPoint)
+        {
+            ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
+            EnsureIsNotDisposed();
+
+            if (!snapPoint.IsEnabled)
+                return;
+
+            MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        /// <summary>
+        /// Sets playback position to the time of the previous snap point (relative to the current
+        /// time of playback) that belongs to the specified <see cref="SnapPointsGroup"/>.
+        /// </summary>
+        /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
+        /// select the one from.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is null.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        public void MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)
+        {
+            ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        /// <summary>
+        /// Sets playback position to the time of the previous snap point (relative to the current
+        /// time of playback).
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        public void MoveToPreviousSnapPoint()
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        /// <summary>
+        /// Sets playback position to the time of the next snap point (relative to the current
+        /// time of playback) that belongs to the specified <see cref="SnapPointsGroup"/>.
+        /// </summary>
+        /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
+        /// select the one from.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is null.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        public void MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)
+        {
+            ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        /// <summary>
+        /// Sets playback position to the time of the next snap point (relative to the current
+        /// time of playback).
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        public void MoveToNextSnapPoint()
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
         }
 
         /// <summary>
@@ -305,13 +493,16 @@ namespace Melanchall.DryWetMidi.Devices
             if (TimeConverter.ConvertFrom(time, TempoMap) > _durationInTicks)
                 time = (MetricTimeSpan)_duration;
 
-            var needStart = IsRunning;
+            var isRunning = IsRunning;
 
-            _clock.ResetInternalTimer();
+            _clock.Reset();
             SetStartTime(time);
 
-            if (needStart)
-                _clock.StartInternalTimer();
+            if (isRunning)
+            {
+                StopStartNotes();
+                _clock.Start();
+            }
         }
 
         /// <summary>
@@ -348,6 +539,40 @@ namespace Melanchall.DryWetMidi.Devices
                 : currentTime.Subtract(step, TimeSpanMode.TimeLength));
         }
 
+        private void StopStartNotes()
+        {
+            if (!TrackNotes)
+                return;
+
+            var currentTime = _clock.CurrentTime;
+            var notesToPlay = _notesMetadata.SkipWhile(m => m.EndTime <= currentTime)
+                                            .TakeWhile(m => m.StartTime < currentTime)
+                                            .Where(m => m.StartTime < currentTime && m.EndTime > currentTime)
+                                            .Select(m => m.Note)
+                                            .Distinct()
+                                            .ToArray();
+            var notesIds = notesToPlay.Select(n => n.GetNoteId()).ToArray();
+
+            var onNotes = notesToPlay.Where(n => !_activeNotes.ContainsValue(n)).ToArray();
+            var offNotes = _activeNotes.Where(n => !notesIds.Contains(n.Key)).Select(n => n.Value).ToArray();
+
+            OutputDevice.PrepareForEventsSending();
+
+            foreach (var note in offNotes)
+            {
+                SendEvent(note.TimedNoteOffEvent.Event);
+            }
+
+            OnNotesPlaybackFinished(offNotes);
+
+            foreach (var note in onNotes)
+            {
+                SendEvent(note.TimedNoteOnEvent.Event);
+            }
+
+            OnNotesPlaybackStarted(onNotes);
+        }
+
         private void OnStarted()
         {
             Started?.Invoke(this, EventArgs.Empty);
@@ -363,33 +588,50 @@ namespace Melanchall.DryWetMidi.Devices
             Finished?.Invoke(this, EventArgs.Empty);
         }
 
+        private void OnNotesPlaybackStarted(params Note[] notes)
+        {
+            NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes));
+        }
+
+        private void OnNotesPlaybackFinished(params Note[] notes)
+        {
+            NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes));
+        }
+
         private void OnClockTick(object sender, TickEventArgs e)
         {
             var time = e.Time;
 
             do
             {
-                var timedEvent = _eventsEnumerator.Current;
-                if (timedEvent == null)
+                var playbackEvent = _eventsEnumerator.Current;
+                if (playbackEvent == null)
                     continue;
 
-                if (timedEvent.Time > time)
+                if (playbackEvent.Time > time)
                     return;
 
-                var midiEvent = timedEvent.Event;
+                var midiEvent = playbackEvent.Event;
 
                 if (!IsRunning)
                     return;
 
-                OutputDevice.SendEvent(midiEvent);
+                SendEvent(midiEvent);
 
-                var noteOnEvent = midiEvent as NoteOnEvent;
-                if (noteOnEvent != null)
-                    _noteOnEvents[noteOnEvent.GetNoteId()] = noteOnEvent;
-
-                var noteOffEvent = midiEvent as NoteOffEvent;
-                if (noteOffEvent != null)
-                    _noteOnEvents.Remove(noteOffEvent.GetNoteId());
+                var noteMetadata = playbackEvent.Metadata.Note;
+                if (noteMetadata != null)
+                {
+                    if (noteMetadata.IsNoteOnEvent)
+                    {
+                        _activeNotes[noteMetadata.NoteId] = noteMetadata.Note;
+                        OnNotesPlaybackStarted(noteMetadata.Note);
+                    }
+                    else
+                    {
+                        _activeNotes.Remove(noteMetadata.NoteId);
+                        OnNotesPlaybackFinished(noteMetadata.Note);
+                    }
+                }
             }
             while (_eventsEnumerator.MoveNext());
 
@@ -400,42 +642,17 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
             }
 
-            _clock.StopInternalTimer();
+            _clock.Stop();
             _clock.Reset();
             _eventsEnumerator.Reset();
             _eventsEnumerator.MoveNext();
-            _clock.StartInternalTimer();
+            _clock.Start();
         }
 
         private void EnsureIsNotDisposed()
         {
             if (_disposed)
                 throw new ObjectDisposedException("Playback is disposed.");
-        }
-
-        private void StopNotes()
-        {
-            switch (NoteStopPolicy)
-            {
-                case NoteStopPolicy.Interrupt:
-                    FinishCurrentNotes();
-                    _noteOnEvents.Clear();
-                    break;
-                case NoteStopPolicy.Hold:
-                    _noteOnEvents.Clear();
-                    break;
-                case NoteStopPolicy.Split:
-                    FinishCurrentNotes();
-                    break;
-            }
-        }
-
-        private void FinishCurrentNotes()
-        {
-            foreach (var noteId in _noteOnEvents.Keys)
-            {
-                OutputDevice.SendEvent(new NoteOffEvent(noteId.NoteNumber, SevenBitNumber.MinValue) { Channel = noteId.Channel });
-            }
         }
 
         private void SetStartTime(ITimeSpan time)
@@ -447,14 +664,76 @@ namespace Melanchall.DryWetMidi.Devices
             while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < _clock.StartTime);
         }
 
-        private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap)
+        private void SendEvent(MidiEvent midiEvent)
         {
+            OutputDevice.SendEvent(midiEvent);
+        }
+
+        private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
+        {
+            var playbackEvents = new List<PlaybackEvent>();
+
+            foreach (var timedObject in timedObjects)
+            {
+                var chord = timedObject as Chord;
+                if (chord != null)
+                {
+                    playbackEvents.AddRange(GetPlaybackEvents(chord, tempoMap));
+                    continue;
+                }
+
+                var note = timedObject as Note;
+                if (note != null)
+                {
+                    playbackEvents.AddRange(GetPlaybackEvents(note, tempoMap));
+                    continue;
+                }
+
+                var timedEvent = timedObject as TimedEvent;
+                if (timedEvent != null)
+                    playbackEvents.Add(new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time));
+            }
+
+            playbackEvents.Sort(new PlaybackEventsComparer());
+            return playbackEvents;
+        }
+
+        private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Chord chord, TempoMap tempoMap)
+        {
+            foreach (var note in chord.Notes)
+            {
+                foreach (var playbackEvent in GetPlaybackEvents(note, tempoMap))
+                {
+                    yield return playbackEvent;
+                }
+            }
+        }
+
+        private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Note note, TempoMap tempoMap)
+        {
+            yield return GetPlaybackEventWithNoteTag(note, note.TimedNoteOnEvent, tempoMap);
+            yield return GetPlaybackEventWithNoteTag(note, note.TimedNoteOffEvent, tempoMap);
+        }
+
+        private static PlaybackEvent GetPlaybackEventWithNoteTag(Note note, TimedEvent timedEvent, TempoMap tempoMap)
+        {
+            var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
+
+            TimeSpan noteStartTime = note.TimeAs<MetricTimeSpan>(tempoMap);
+            TimeSpan noteEndTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time + note.Length, tempoMap);
+            playbackEvent.Metadata.Note = new NotePlaybackEventMetadata(note, timedEvent.Event is NoteOnEvent, noteStartTime, noteEndTime);
+
+            return playbackEvent;
+        }
+
+        private static IEnumerable<ITimedObject> GetTimedObjects(IEnumerable<IEnumerable<MidiEvent>> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
             return events.Where(e => e != null)
-                         .Select(e => new TrackChunk(e.Where(midiEvent => !(midiEvent is MetaEvent))))
-                         .GetTimedEvents()
-                         .Select(e => new PlaybackEvent(e.Event, e.TimeAs<MetricTimeSpan>(tempoMap), e.Time))
-                         .OrderBy(e => e, new PlaybackEventsComparer())
-                         .ToList();
+                         .SelectMany(e => e.Where(midiEvent => midiEvent != null && !(midiEvent is MetaEvent))
+                                           .GetTimedEvents()
+                                           .GetTimedEventsAndNotes());
         }
 
         #endregion
