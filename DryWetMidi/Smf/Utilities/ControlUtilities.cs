@@ -42,13 +42,14 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="controlName"><see cref="ControlName"/> to get an event for.</param>
         /// <param name="controlValue">Controller value to set to event.</param>
+        /// <param name="channel">Channel an event should be created for.</param>
         /// <returns>An instance of the <see cref="ControlChangeEvent"/> corresponding to the <paramref name="controlName"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="controlName"/> specified an invalid value.</exception>
-        public static ControlChangeEvent GetControlChangeEvent(this ControlName controlName, SevenBitNumber controlValue)
+        public static ControlChangeEvent GetControlChangeEvent(this ControlName controlName, SevenBitNumber controlValue, FourBitNumber channel)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(controlName), controlName);
 
-            return new ControlChangeEvent(controlName.AsSevenBitNumber(), controlValue);
+            return new ControlChangeEvent(controlName.AsSevenBitNumber(), controlValue) { Channel = channel };
         }
 
         /// <summary>

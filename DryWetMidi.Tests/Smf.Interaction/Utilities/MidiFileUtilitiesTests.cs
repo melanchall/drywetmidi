@@ -12,6 +12,66 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
     {
         #region Test methods
 
+        #region GetDuration
+
+        [Test]
+        public void GetDuration_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            var duration = midiFile.GetDuration<MetricTimeSpan>();
+            Assert.AreEqual(new MetricTimeSpan(), duration, "Duration of empty MIDI file is invalid.");
+        }
+
+        [Test]
+        public void GetDuration_Metric()
+        {
+            var midiFile = new PatternBuilder()
+                .SetNoteLength(new MetricTimeSpan(0, 0, 1))
+                .Note(DryWetMidi.MusicTheory.NoteName.CSharp)
+                .Repeat(9)
+                .Build()
+                .ToFile(TempoMap.Default);
+
+            var duration = midiFile.GetDuration(TimeSpanType.Metric);
+            TimeSpanTestUtilities.AreEqual(new MetricTimeSpan(0, 0, 10), duration, "Duration of MIDI file is invalid.");
+        }
+
+        [Test]
+        public void GetDuration_Midi()
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }));
+
+            var duration = midiFile.GetDuration(TimeSpanType.Midi);
+            Assert.AreEqual(new MidiTimeSpan(1000), duration, "Duration of MIDI file is invalid.");
+        }
+
+        #endregion
+
+        #region IsEmpty
+
+        [Test]
+        public void IsEmpty_True()
+        {
+            Assert.IsTrue(new MidiFile().IsEmpty());
+        }
+
+        [Test]
+        public void IsEmpty_False_SingeTrackChunk()
+        {
+            Assert.IsFalse(new MidiFile(new TrackChunk(new TextEvent())).IsEmpty());
+        }
+
+        [Test]
+        public void IsEmpty_False_MultipleTrackChunks()
+        {
+            Assert.IsFalse(new MidiFile(new TrackChunk(new TextEvent()), new TrackChunk(new NoteOnEvent(), new NoteOffEvent())).IsEmpty());
+        }
+
+        #endregion
+
         #region ShiftEvents
 
         [Test]

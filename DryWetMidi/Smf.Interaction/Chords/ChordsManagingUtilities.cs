@@ -13,6 +13,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
+        /// Sets time and length of the specified chord.
+        /// </summary>
+        /// <param name="chord">Chord to set time and length to.</param>
+        /// <param name="time">Time to set to <paramref name="chord"/>.</param>
+        /// <param name="length">Length to set to <paramref name="chord"/>.</param>
+        /// <param name="tempoMap">Tempo map that will be used for time and length conversion.</param>
+        /// <returns>An input <paramref name="chord"/> with new time and length.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="time"/> is null. -or- <paramref name="length"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        public static Chord SetTimeAndLength(this Chord chord, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            chord.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            chord.Length = LengthConverter.ConvertFrom(length, chord.Time, tempoMap);
+            return chord;
+        }
+
+        /// <summary>
         /// Creates an instance of the <see cref="ChordsManager"/> initializing it with the
         /// specified events collection, notes tolerance and comparison delegate for events that have same time.
         /// </summary>
@@ -51,6 +74,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             return trackChunk.Events.ManageChords(notesTolerance, sameTimeEventsComparison);
+        }
+
+        /// <summary>
+        /// Gets chords contained in the specified collection of <see cref="MidiEvent"/>.
+        /// </summary>
+        /// <param name="events">Collection of<see cref="MidiFile"/> to search for chords.</param>
+        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
+        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Collection of chords contained in <paramref name="events"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        public static IEnumerable<Chord> GetChords(this IEnumerable<MidiEvent> events, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(events);
+
+            return eventsCollection.ManageChords(notesTolerance).Chords.ToList();
         }
 
         /// <summary>

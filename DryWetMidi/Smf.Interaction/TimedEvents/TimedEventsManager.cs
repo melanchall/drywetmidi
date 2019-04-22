@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             _eventsCollection = eventsCollection;
-            Events = new TimedEventsCollection(CreateTimedEvents(eventsCollection));
+            Events = new TimedEventsCollection(CreateTimedEvents(eventsCollection), sameTimeEventsComparison);
         }
 
         #endregion

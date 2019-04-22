@@ -66,6 +66,33 @@ namespace Melanchall.DryWetMidi.Smf
         #region Methods
 
         /// <summary>
+        /// Reads all remaining bytes from the underlying stream and moves the current position
+        /// to the stream's end.
+        /// </summary>
+        /// <returns>All bytes read from the underlying stream.</returns>
+        /// <exception cref="EndOfStreamException">The end of the underlying stream is reached.</exception>
+        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
+        public byte[] ReadAllBytes()
+        {
+            const int bufferSize = 512;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                var buffer = new byte[bufferSize];
+
+                int count;
+                while ((count = _binaryReader.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    memoryStream.Write(buffer, 0, count);
+                }
+
+                return memoryStream.ToArray();
+            }
+
+        }
+
+        /// <summary>
         /// Reads a byte from the underlying stream and advances the current position by one byte.
         /// </summary>
         /// <returns>The next byte read from the underlying stream.</returns>

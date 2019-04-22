@@ -14,6 +14,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
     [TestFixture]
     public class PatternTests
     {
+        #region Nested classes
+
         private sealed class NoteInfo
         {
             #region Constructor
@@ -72,6 +74,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             #endregion
         }
 
+        #endregion
+
+        #region Constants
+
+        private static readonly FourBitNumber Channel = (FourBitNumber)2;
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -120,9 +130,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 new NoteInfo(NoteName.B, 2, new MetricTimeSpan(0, 1, 24), new MetricTimeSpan(0, 0, 5)),
             });
 
-            var tempoMap = midiFile.GetTempoMap();
-            Assert.AreEqual(new MetricTimeSpan(0, 1, 29),
-                            new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)));
+            Assert.AreEqual(new MetricTimeSpan(0, 1, 29), midiFile.GetDuration<MetricTimeSpan>());
         }
 
         [Test]
@@ -148,9 +156,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                       .Select(i => Tuple.Create(i * 1000L, new Tempo(i * 100 + 10)))
                       .ToArray());
 
-            var tempoMap = midiFile.GetTempoMap();
             Assert.AreEqual(new MetricTimeSpan(0, 1, 29).TotalMicroseconds,
-                            new MetricTimeSpan(midiFile.GetTimedEvents().Last().TimeAs<MetricTimeSpan>(tempoMap)).TotalMicroseconds);
+                            midiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds);
         }
 
         [Test]
@@ -620,7 +627,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent(programNumber), eventTime)
+                new TimedEventInfo(new ProgramChangeEvent(programNumber) { Channel = Channel }, eventTime)
             });
         }
 
@@ -628,19 +635,27 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Set program by General MIDI Level 1 program.")]
         public void SetProgram_GeneralMidiProgram()
         {
-            var program = GeneralMidiProgram.Applause;
+            var program1 = GeneralMidiProgram.Applause;
+            var program2 = GeneralMidiProgram.AltoSax;
             var eventTime = MusicalTimeSpan.Quarter;
+
+            var noteNumber = (SevenBitNumber)100;
+            var note = DryWetMidi.MusicTheory.Note.Get(noteNumber);
 
             var pattern = new PatternBuilder()
 
-                .Note(NoteName.A, eventTime)
-                .SetProgram(program)
+                .SetProgram(program1)
+                .Note(note, eventTime)
+                .SetProgram(program2)
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            TestTimedEventsWithExactOrder(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent(program.AsSevenBitNumber()), eventTime)
+                new TimedEventInfo(new ProgramChangeEvent(program1.AsSevenBitNumber()) { Channel = Channel }, new MidiTimeSpan()),
+                new TimedEventInfo(new NoteOnEvent(noteNumber, DryWetMidi.Smf.Interaction.Note.DefaultVelocity) { Channel = Channel }, new MidiTimeSpan()),
+                new TimedEventInfo(new ProgramChangeEvent(program2.AsSevenBitNumber()) { Channel = Channel }, eventTime),
+                new TimedEventInfo(new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = Channel }, eventTime)
             });
         }
 
@@ -668,9 +683,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ControlChangeEvent(bankMsbControlNumber, bankMsb), eventsTime),
-                new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb), eventsTime),
-                new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()), eventsTime),
+                new TimedEventInfo(new ControlChangeEvent(bankMsbControlNumber, bankMsb) { Channel = Channel }, eventsTime),
+                new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb) { Channel = Channel }, eventsTime),
+                new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()) { Channel = Channel }, eventsTime),
             });
         }
 
@@ -680,8 +695,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         private static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params Tuple<long, Tempo>[] tempoChanges)
         {
-            var channel = (FourBitNumber)2;
-
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -693,7 +706,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var midiFile = pattern.ToFile(tempoMap, channel);
+            var midiFile = pattern.ToFile(tempoMap, Channel);
 
             var expectedNotes = expectedNotesInfos.Select(i =>
             {
@@ -703,7 +716,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 return new DryWetMidi.Smf.Interaction.Note(i.NoteNumber, expectedLength, expectedTime)
                 {
                     Velocity = i.Velocity,
-                    Channel = channel
+                    Channel = Channel
                 };
             });
 
@@ -717,8 +730,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             ICollection<TimedEventInfo> expectedTimedEventsInfos,
             params Tuple<long, Tempo>[] tempoChanges)
         {
-            var channel = (FourBitNumber)2;
-
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -730,7 +741,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var midiFile = pattern.ToFile(tempoMap, channel);
+            var midiFile = pattern.ToFile(tempoMap, Channel);
 
             var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
                 new TimedEvent(i.Event,
@@ -740,9 +751,35 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             foreach (var expectedEvent in expectedTimedEvents)
             {
-                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.AreEqual(expectedEvent, actual, true)),
+                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.AreEqual(expectedEvent, actual, false)),
                               $"There are no event: {expectedEvent}");
             }
+        }
+
+        private static void TestTimedEventsWithExactOrder(
+            Pattern pattern,
+            ICollection<TimedEventInfo> expectedTimedEventsInfos,
+            params Tuple<long, Tempo>[] tempoChanges)
+        {
+            TempoMap tempoMap;
+            using (var tempoMapManager = new TempoMapManager())
+            {
+                foreach (var tempoChange in tempoChanges)
+                {
+                    tempoMapManager.SetTempo(tempoChange.Item1, tempoChange.Item2);
+                }
+
+                tempoMap = tempoMapManager.TempoMap;
+            }
+
+            var midiFile = pattern.ToFile(tempoMap, Channel);
+
+            var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
+                new TimedEvent(i.Event, TimeConverter.ConvertFrom(i.Time ?? new MidiTimeSpan(), tempoMap)));
+
+            var actualTimedEvents = midiFile.GetTimedEvents();
+
+            Assert.IsTrue(TimedEventEquality.AreEqual(expectedTimedEvents, actualTimedEvents, false), "Events have invalid order.");
         }
 
         #endregion

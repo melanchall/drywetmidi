@@ -13,6 +13,25 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
+        /// Sets time of the specified timed event.
+        /// </summary>
+        /// <param name="timedEvent">Timed event to set time to.</param>
+        /// <param name="time">Time to set to <paramref name="timedEvent"/>.</param>
+        /// <param name="tempoMap">Tempo map that will be used for time conversion.</param>
+        /// <returns>An input <paramref name="timedEvent"/> with new time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timedEvent"/> is null. -or-
+        /// <paramref name="time"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(timedEvent), timedEvent);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            timedEvent.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            return timedEvent;
+        }
+
+        /// <summary>
         /// Creates an instance of the <see cref="TimedEventsManager"/> initializing it with the
         /// specified events collection and comparison delegate for events that have same time.
         /// </summary>
@@ -43,6 +62,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
             return trackChunk.Events.ManageTimedEvents(sameTimeEventsComparison);
+        }
+
+        /// <summary>
+        /// Gets collection of <see cref="MidiEvent"/> as a collection of timed events.
+        /// </summary>
+        /// <param name="events">Collection of <see cref="MidiEvent"/> to get timed events for.</param>
+        /// <returns>Collection of timed events contained in <paramref name="events"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        public static IEnumerable<TimedEvent> GetTimedEvents(this IEnumerable<MidiEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(events);
+
+            return eventsCollection.ManageTimedEvents().Events.ToList();
         }
 
         /// <summary>
@@ -83,7 +118,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             return trackChunks.Where(c => c != null)
                               .SelectMany(GetTimedEvents)
-                              .OrderBy(n => n.Time)
+                              .OrderBy(e => e.Time)
                               .ToList();
         }
 

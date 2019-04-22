@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// If you want to specify custom order of such events you need to specify appropriate comparison delegate.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
-        internal TimedEventsCollection(IEnumerable<TimedEvent> events, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        internal TimedEventsCollection(IEnumerable<TimedEvent> events, Comparison<MidiEvent> sameTimeEventsComparison)
             : base(events)
         {
             _eventsComparer = new TimedEventsComparer(sameTimeEventsComparison);

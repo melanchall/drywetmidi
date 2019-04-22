@@ -17,6 +17,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private static readonly string SecondsGroup = ParsingUtilities.GetNonnegativeNumberGroup(SecondsGroupName);
         private static readonly string MillisecondsGroup = ParsingUtilities.GetNonnegativeNumberGroup(MillisecondsGroupName);
 
+        private static readonly string LetteredHoursGroup = $@"{HoursGroup}\s*h";
+        private static readonly string LetteredMinutesGroup = $@"{MinutesGroup}\s*m";
+        private static readonly string LetteredSecondsGroup = $@"{SecondsGroup}\s*s";
+        private static readonly string LetteredMillisecondsGroup = $@"{MillisecondsGroup}\s*ms";
+
         private static readonly string Divider = Regex.Escape(":");
 
         private static readonly string[] Patterns = new[]
@@ -29,6 +34,51 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             // minutes:seconds -> 0:minutes:seconds:0
             $@"{MinutesGroup}\s*{Divider}\s*{SecondsGroup}",
+
+            // hours h minutes m seconds s milliseconds ms -> hours:minutes:seconds:milliseconds
+            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+
+            // hours h minutes m seconds s -> hours:minutes:seconds:0
+            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}",
+
+            // hours h minutes m milliseconds ms -> hours:minutes:0:milliseconds
+            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}",
+
+            // hours h seconds s milliseconds ms -> hours:0:seconds:milliseconds
+            $@"{LetteredHoursGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+
+            // minutes m seconds s milliseconds ms -> 0:minutes:seconds:milliseconds
+            $@"{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+
+            // hours h minutes m -> hours:minutes:0:0
+            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}",
+
+            // hours h seconds s -> hours:0:seconds:0
+            $@"{LetteredHoursGroup}\s*{LetteredSecondsGroup}",
+
+            // hours h milliseconds ms -> hours:0:0:milliseconds
+            $@"{LetteredHoursGroup}\s*{LetteredMillisecondsGroup}",
+
+            // minutes m seconds s -> 0:minutes:seconds:0
+            $@"{LetteredMinutesGroup}\s*{LetteredSecondsGroup}",
+
+            // hours h milliseconds ms -> hours:0:0:milliseconds
+            $@"{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}",
+
+            // seconds s milliseconds ms -> 0:0:seconds:milliseconds
+            $@"{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+
+            // hours h -> hours:0:0:0
+            LetteredHoursGroup,
+
+            // minutes m -> 0:minutes:0:0
+            LetteredMinutesGroup,
+
+            // seconds s -> 0:0:seconds:0
+            LetteredSecondsGroup,
+
+            // milliseconds ms -> 0:0:0:milliseconds
+            LetteredMillisecondsGroup
         };
 
         private const string HoursIsOutOfRange = "Hours number is out of range.";

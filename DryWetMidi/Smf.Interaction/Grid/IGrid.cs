@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Tools
+namespace Melanchall.DryWetMidi.Smf.Interaction
 {
     /// <summary>
     /// Represents a time grid which is the set of points in time.

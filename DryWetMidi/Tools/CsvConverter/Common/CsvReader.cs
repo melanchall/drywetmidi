@@ -11,8 +11,6 @@ namespace Melanchall.DryWetMidi.Tools
         #region Constants
 
         private const char Quote = '"';
-        private const string QuoteString = "\"";
-        private const string DoubleQuote = "\"\"";
 
         #endregion
 

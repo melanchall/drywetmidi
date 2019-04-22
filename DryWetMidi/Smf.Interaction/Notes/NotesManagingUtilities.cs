@@ -13,6 +13,29 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
+        /// Sets time and length of the specified note.
+        /// </summary>
+        /// <param name="note">Note to set time and length to.</param>
+        /// <param name="time">Time to set to <paramref name="note"/>.</param>
+        /// <param name="length">Length to set to <paramref name="note"/>.</param>
+        /// <param name="tempoMap">Tempo map that will be used for time and length conversion.</param>
+        /// <returns>An input <paramref name="note"/> with new time and length.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null. -or-
+        /// <paramref name="time"/> is null. -or- <paramref name="length"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        public static Note SetTimeAndLength(this Note note, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(note), note);
+            ThrowIfArgument.IsNull(nameof(time), time);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            note.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            note.Length = LengthConverter.ConvertFrom(length, note.Time, tempoMap);
+            return note;
+        }
+
+        /// <summary>
         /// Creates an instance of the <see cref="NotesManager"/> initializing it with the
         /// specified events collection and comparison delegate for events that have same time.
         /// </summary>
@@ -43,6 +66,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
+        }
+
+        /// <summary>
+        /// Gets notes contained in the specified collection of <see cref="MidiEvent"/>.
+        /// </summary>
+        /// <param name="events">Collection of<see cref="MidiFile"/> to search for notes.</param>
+        /// <returns>Collection of notes contained in <paramref name="events"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        public static IEnumerable<Note> GetNotes(this IEnumerable<MidiEvent> events)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(events);
+
+            return eventsCollection.ManageNotes().Notes.ToList();
         }
 
         /// <summary>

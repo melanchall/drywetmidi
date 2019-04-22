@@ -20,6 +20,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BarBeatTimeSpan"/> with the specified
+        /// number of bars.
+        /// </summary>
+        /// <param name="bars">The number of bars.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
+        public BarBeatTimeSpan(long bars)
+            : this(bars, 0)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarBeatTimeSpan"/> with the specified
         /// number of bars and beats.
         /// </summary>
         /// <param name="bars">The number of bars.</param>

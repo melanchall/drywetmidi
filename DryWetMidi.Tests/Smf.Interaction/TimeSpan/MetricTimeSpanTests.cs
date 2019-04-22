@@ -53,6 +53,28 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             Tuple.Create(new MetricTimeSpan(10000), new MetricTimeSpan(10000)),
         };
 
+        private static readonly object[] ParametersForValidParseCheck =
+        {
+            new object[] { "0:0:0:0", new MetricTimeSpan() },
+            new object[] { "0:0:0", new MetricTimeSpan() },
+            new object[] { "0:0", new MetricTimeSpan() },
+            new object[] { "0:0:0:156", new MetricTimeSpan(0, 0, 0, 156) },
+            new object[] { "2:0:156", new MetricTimeSpan(2, 0, 156) },
+            new object[] { "1:156", new MetricTimeSpan(0, 1, 156) },
+
+            new object[] { "1h2m3s4ms", new MetricTimeSpan(1, 2, 3, 4) },
+            new object[] { "1h 2m3s", new MetricTimeSpan(1, 2, 3, 0) },
+            new object[] { "1h2M 4ms", new MetricTimeSpan(1, 2, 0, 4) },
+            new object[] { "1 h3s4ms", new MetricTimeSpan(1, 0, 3, 4) },
+            new object[] { "2M3 S 4 MS", new MetricTimeSpan(0, 2, 3, 4) },
+            new object[] { "1h2m", new MetricTimeSpan(1, 2, 0, 0) },
+            new object[] { "1h 3s", new MetricTimeSpan(1, 0, 3, 0) },
+            new object[] { "1h4MS", new MetricTimeSpan(1, 0, 0, 4) },
+            new object[] { "2M3s", new MetricTimeSpan(0, 2, 3, 0) },
+            new object[] { "2 m 4 Ms", new MetricTimeSpan(0, 2, 0, 4) },
+            new object[] { "3 s 4 mS", new MetricTimeSpan(0, 0, 3, 4) },
+        };
+
         #endregion
 
         #region Test methods
@@ -324,46 +346,18 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
         #region Parse
 
-        [Test]
-        [Description("Parse zero metric time span with all components.")]
-        public void Parse_1()
+        [TestCaseSource(nameof(ParametersForValidParseCheck))]
+        public void ParseMetricTimeSpan_Valid(string metricTimeSpanString, MetricTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.Parse("0:0:0:0", new MetricTimeSpan());
+            TimeSpanTestUtilities.Parse(metricTimeSpanString, expectedTimeSpan);
         }
 
-        [Test]
-        [Description("Parse zero metric time span without milliseconds.")]
-        public void Parse_2()
+        [TestCase("Not a time span")]
+        [TestCase("h H")]
+        [TestCase("m s")]
+        public void ParseMetricTimeSpan_InvalidInput(string invalidMetricTimeSpanString)
         {
-            TimeSpanTestUtilities.Parse("0:0:0", new MetricTimeSpan());
-        }
-
-        [Test]
-        [Description("Parse zero metric time span with minutes and seconds.")]
-        public void Parse_3()
-        {
-            TimeSpanTestUtilities.Parse("0:0", new MetricTimeSpan());
-        }
-
-        [Test]
-        [Description("Parse arbitrary metric time span with all components.")]
-        public void Parse_4()
-        {
-            TimeSpanTestUtilities.Parse("0:0:0:156", new MetricTimeSpan(0, 0, 0, 156));
-        }
-
-        [Test]
-        [Description("Parse arbitrary metric time span without milliseconds.")]
-        public void Parse_5()
-        {
-            TimeSpanTestUtilities.Parse("2:0:156", new MetricTimeSpan(2, 0, 156));
-        }
-
-        [Test]
-        [Description("Parse arbitrary metric time span with minutes and seconds.")]
-        public void Parse_6()
-        {
-            TimeSpanTestUtilities.Parse("1:156", new MetricTimeSpan(0, 1, 156));
+            TimeSpanTestUtilities.ParseInvalidInput(invalidMetricTimeSpanString);
         }
 
         #endregion

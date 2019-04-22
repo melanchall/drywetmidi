@@ -55,6 +55,47 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
+        /// Gets end time of an <see cref="ITimedObject"/> as an instance of type that implements the
+        /// <see cref="ITimeSpan"/> interface.
+        /// </summary>
+        /// <typeparam name="TTime">Type that will represent the end time of the <paramref name="obj"/>.</typeparam>
+        /// <param name="obj">Object to get end time of.</param>
+        /// <param name="tempoMap">Tempo map to calculate end time of the <paramref name="obj"/>.</param>
+        /// <returns>End time of the specified object as an instance of <typeparamref name="TTime"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
+        public static TTime EndTimeAs<TTime>(this ILengthedObject obj, TempoMap tempoMap)
+            where TTime : ITimeSpan
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeConverter.ConvertTo<TTime>(obj.Time + obj.Length, tempoMap);
+        }
+
+        /// <summary>
+        /// Gets end time of an <see cref="ITimedObject"/> as an instance of time span defined by the
+        /// specified time span type.
+        /// </summary>
+        /// <param name="obj">Object to get end time of.</param>
+        /// <param name="timeType">The type of time span to convert the end time of <paramref name="obj"/> to.</param>
+        /// <param name="tempoMap">Tempo map to calculate end time of the <paramref name="obj"/>.</param>
+        /// <returns>End time of the specified object as an instance of time span defined by the
+        /// <paramref name="timeType"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
+        public static ITimeSpan EndTimeAs(this ILengthedObject obj, TimeSpanType timeType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return TimeConverter.ConvertTo(obj.Time + obj.Length, timeType, tempoMap);
+        }
+
+        /// <summary>
         /// Filters collection of <see cref="ILengthedObject"/> to return objects that start at the specified time.
         /// </summary>
         /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
