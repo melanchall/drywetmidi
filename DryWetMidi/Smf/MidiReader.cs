@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Smf
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
-            _binaryReader = new BinaryReader(stream, SmfUtilities.DefaultEncoding);
+            _binaryReader = new BinaryReader(stream, SmfUtilities.DefaultEncoding, leaveOpen: true);
         }
 
         #endregion

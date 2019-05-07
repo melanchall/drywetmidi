@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// or is already closed.</exception>
         public MidiWriter(Stream stream)
         {
-            _binaryWriter = new BinaryWriter(stream, SmfUtilities.DefaultEncoding);
+            _binaryWriter = new BinaryWriter(stream, SmfUtilities.DefaultEncoding, leaveOpen: true);
         }
 
         #endregion

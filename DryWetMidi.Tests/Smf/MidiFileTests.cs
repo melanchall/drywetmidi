@@ -40,8 +40,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf
 
         #region Test methods
 
-        #region Read_Invalid
-
         [Test]
         [Description("Read MIDI file with invalid channel event parameter value and treat that as error.")]
         public void Read_InvalidChannelEventParameterValue_Abort()
@@ -327,10 +325,6 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 });
         }
 
-        #endregion
-
-        #region Clone
-
         [Test]
         [Description("Check whether a clone of a MIDI file equals to the original file.")]
         public void Clone_Read()
@@ -345,7 +339,34 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             }
         }
 
-        #endregion
+        [Test]
+        public void Read_StreamIsNotDisposed()
+        {
+            var midiFile = new MidiFile();
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                midiFile.Write(streamToWrite);
+
+                using (var streamToRead = new MemoryStream(streamToWrite.ToArray()))
+                {
+                    var readMidiFile = MidiFile.Read(streamToRead);
+                    Assert.DoesNotThrow(() => { var l = streamToRead.Length; });
+                }
+            }
+        }
+
+        [Test]
+        public void Write_StreamIsNotDisposed()
+        {
+            var midiFile = new MidiFile();
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                midiFile.Write(streamToWrite);
+                Assert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+            }
+        }
 
         #endregion
 
