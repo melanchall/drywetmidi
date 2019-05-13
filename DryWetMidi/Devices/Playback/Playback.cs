@@ -322,13 +322,10 @@ namespace Melanchall.DryWetMidi.Devices
         {
             EnsureIsNotDisposed();
 
-            if (OutputDevice == null)
-                throw new InvalidOperationException("Output device is not set.");
-
             if (_clock.IsRunning)
                 return;
 
-            OutputDevice.PrepareForEventsSending();
+            OutputDevice?.PrepareForEventsSending();
             StopStartNotes();
             _clock.Start();
 
@@ -556,7 +553,7 @@ namespace Melanchall.DryWetMidi.Devices
             var onNotes = notesToPlay.Where(n => !_activeNotes.ContainsValue(n)).ToArray();
             var offNotes = _activeNotes.Where(n => !notesIds.Contains(n.Key)).Select(n => n.Value).ToArray();
 
-            OutputDevice.PrepareForEventsSending();
+            OutputDevice?.PrepareForEventsSending();
 
             foreach (var note in offNotes)
             {
@@ -666,7 +663,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void SendEvent(MidiEvent midiEvent)
         {
-            OutputDevice.SendEvent(midiEvent);
+            OutputDevice?.SendEvent(midiEvent);
         }
 
         private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)

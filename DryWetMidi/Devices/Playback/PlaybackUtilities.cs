@@ -37,6 +37,14 @@ namespace Melanchall.DryWetMidi.Devices
             return new Playback(trackChunk.Events, tempoMap, outputDevice);
         }
 
+        public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return new Playback(trackChunk.Events, tempoMap);
+        }
+
         /// <summary>
         /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the specified collection of <see cref="TrackChunk"/>.
@@ -57,6 +65,14 @@ namespace Melanchall.DryWetMidi.Devices
             return new Playback(trackChunks.Select(c => c.Events), tempoMap, outputDevice);
         }
 
+        public static Playback GetPlayback(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return new Playback(trackChunks.Select(c => c.Events), tempoMap);
+        }
+
         /// <summary>
         /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the specified <see cref="MidiFile"/>.
@@ -73,6 +89,13 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
             return GetPlayback(midiFile.GetTrackChunks(), midiFile.GetTempoMap(), outputDevice);
+        }
+
+        public static Playback GetPlayback(this MidiFile midiFile)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            return GetPlayback(midiFile.GetTrackChunks(), midiFile.GetTempoMap());
         }
 
         /// <summary>
@@ -94,6 +117,14 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
             return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputDevice);
+        }
+
+        public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap);
         }
 
         /// <summary>
