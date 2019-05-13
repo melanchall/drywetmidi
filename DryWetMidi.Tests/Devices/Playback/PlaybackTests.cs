@@ -8,7 +8,6 @@ using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
-using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
@@ -654,8 +653,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
-        [Test()]
-        public void TrackNotes_MoveForwardToNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveForwardToNote(bool useOutputDevice)
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.FromSeconds(1);
@@ -680,12 +680,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 });
+                notesWillBeFinished: new[] { 0 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void TrackNotes_MoveBackToNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveBackToNote(bool useOutputDevice)
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -715,12 +717,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0, 0 },
-                notesWillBeFinished: new[] { 0, 0 });
+                notesWillBeFinished: new[] { 0, 0 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void TrackNotes_MoveForwardFromNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveForwardFromNote(bool useOutputDevice)
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -748,12 +752,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 });
+                notesWillBeFinished: new[] { 0 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void TrackNotes_MoveBackFromNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveBackFromNote(bool useOutputDevice)
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.FromSeconds(1);
@@ -780,12 +786,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0, 0 },
-                notesWillBeFinished: new[] { 0, 0 });
+                notesWillBeFinished: new[] { 0, 0 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void TrackNotes_MoveForwardToSameNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveForwardToSameNote(bool useOutputDevice)
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -810,12 +818,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 });
+                notesWillBeFinished: new[] { 0 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void TrackNotes_MoveBackToSameNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveBackToSameNote(bool useOutputDevice)
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -840,12 +850,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 });
+                notesWillBeFinished: new[] { 0 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void TrackNotes_MoveForwardFromNoteToNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveForwardFromNoteToNote(bool useOutputDevice)
         {
             var noteNumber1 = (SevenBitNumber)60;
             var noteOnDelay1 = TimeSpan.Zero;
@@ -880,12 +892,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0, 1 },
-                notesWillBeFinished: new[] { 0, 1 });
+                notesWillBeFinished: new[] { 0, 1 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void TrackNotes_MoveBackFromNoteToNote()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackNotes_MoveBackFromNoteToNote(bool useOutputDevice)
         {
             var noteNumber1 = (SevenBitNumber)60;
             var noteOnDelay1 = TimeSpan.Zero;
@@ -924,7 +938,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 notesWillBeStarted: new[] { 0, 1, 0, 1 },
-                notesWillBeFinished: new[] { 0, 1, 0, 1 });
+                notesWillBeFinished: new[] { 0, 1, 0, 1 },
+                useOutputDevice: useOutputDevice);
         }
 
         [Retry(RetriesNumber)]
@@ -1041,7 +1056,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                             using (var playback = new Playback(eventsForPlayback, tempoMap))
                             {
                                 Assert.IsNull(playback.OutputDevice, "Output device is not null on playback created.");
-                                Assert.Throws<InvalidOperationException>(() => playback.Start(), "Playback started without output device.");
 
                                 playback.OutputDevice = outputDeviceA;
                                 Assert.AreSame(outputDeviceA, playback.OutputDevice, "Output device was not changed to Device A.");
@@ -1628,6 +1642,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             TimeSpan moveFrom,
             TimeSpan moveTo,
             IEnumerable<int> notesWillBeStarted,
+            IEnumerable<int> notesWillBeFinished,
+            bool useOutputDevice)
+        {
+            if (useOutputDevice)
+                CheckTrackNotesWithOutputDevice(eventsToSend, eventsWillBeSent, moveFrom, moveTo, notesWillBeStarted, notesWillBeFinished);
+            else
+                CheckTrackNotesWithoutOutputDevice(eventsToSend, eventsWillBeSent, moveFrom, moveTo, notesWillBeStarted, notesWillBeFinished);
+        }
+
+        private void CheckTrackNotesWithOutputDevice(
+            ICollection<EventToSend> eventsToSend,
+            ICollection<EventToSend> eventsWillBeSent,
+            TimeSpan moveFrom,
+            TimeSpan moveTo,
+            IEnumerable<int> notesWillBeStarted,
             IEnumerable<int> notesWillBeFinished)
         {
             var playbackContext = new PlaybackContext();
@@ -1683,6 +1712,49 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
 
             CompareSentReceivedEvents(sentEvents, receivedEvents, eventsWillBeSent.ToList());
+
+            Assert.IsTrue(NoteEquality.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i])), "Invalid notes started.");
+            Assert.IsTrue(NoteEquality.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i])), "Invalid notes finished.");
+        }
+
+        private void CheckTrackNotesWithoutOutputDevice(
+            ICollection<EventToSend> eventsToSend,
+            ICollection<EventToSend> eventsWillBeSent,
+            TimeSpan moveFrom,
+            TimeSpan moveTo,
+            IEnumerable<int> notesWillBeStarted,
+            IEnumerable<int> notesWillBeFinished)
+        {
+            var playbackContext = new PlaybackContext();
+
+            var stopwatch = playbackContext.Stopwatch;
+            var tempoMap = playbackContext.TempoMap;
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            var notes = eventsForPlayback.GetNotes().ToArray();
+            var notesStarted = new List<Note>();
+            var notesFinished = new List<Note>();
+
+            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            {
+                playback.TrackNotes = true;
+                playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
+                playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
+
+                stopwatch.Start();
+                playback.Start();
+
+                SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                playback.MoveToTime((MetricTimeSpan)moveTo);
+
+                Thread.Sleep(TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+
+                stopwatch.Stop();
+
+                var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+            }
 
             Assert.IsTrue(NoteEquality.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i])), "Invalid notes started.");
             Assert.IsTrue(NoteEquality.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i])), "Invalid notes finished.");
