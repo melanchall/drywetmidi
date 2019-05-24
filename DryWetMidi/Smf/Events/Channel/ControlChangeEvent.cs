@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="ControlChangeEvent"/>.
         /// </summary>
         public ControlChangeEvent()
-            : base(ParametersCount)
+            : base(MidiEventType.ControlChange, ParametersCount)
         {
         }
 

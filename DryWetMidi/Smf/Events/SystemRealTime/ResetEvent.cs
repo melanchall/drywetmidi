@@ -8,6 +8,15 @@
     /// </remarks>
     public sealed class ResetEvent : SystemRealTimeEvent
     {
+        #region Constructor
+
+        public ResetEvent()
+            : base(MidiEventType.Reset)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

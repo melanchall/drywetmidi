@@ -2,6 +2,15 @@
 {
     internal sealed class EndOfTrackEvent : MetaEvent
     {
+        #region Constructor
+
+        public EndOfTrackEvent()
+            : base(MidiEventType.EndOfTrack)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

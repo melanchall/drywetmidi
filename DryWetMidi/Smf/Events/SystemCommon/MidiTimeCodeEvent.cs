@@ -36,6 +36,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="MidiTimeCodeEvent"/>.
         /// </summary>
         public MidiTimeCodeEvent()
+            : base(MidiEventType.MidiTimeCode)
         {
         }
 
@@ -48,6 +49,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <exception cref="InvalidEnumArgumentException"><paramref name="component"/> specified an
         /// invalid value.</exception>
         public MidiTimeCodeEvent(MidiTimeCodeComponent component, FourBitNumber componentValue)
+            : this()
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(component), component);
 

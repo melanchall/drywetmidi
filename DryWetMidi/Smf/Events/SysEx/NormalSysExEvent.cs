@@ -22,6 +22,7 @@
         /// Initializes a new instance of the <see cref="NormalSysExEvent"/>.
         /// </summary>
         public NormalSysExEvent()
+            : base(MidiEventType.NormalSysEx)
         {
         }
 
@@ -31,6 +32,7 @@
         /// </summary>
         /// <param name="data">Data of the sysex event.</param>
         public NormalSysExEvent(byte[] data)
+            : this()
         {
             Data = data;
         }

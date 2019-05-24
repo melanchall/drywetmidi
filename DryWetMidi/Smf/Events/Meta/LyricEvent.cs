@@ -14,6 +14,7 @@
         /// Initializes a new instance of the <see cref="LyricEvent"/>.
         /// </summary>
         public LyricEvent()
+            : base(MidiEventType.Lyric)
         {
         }
 
@@ -23,7 +24,7 @@
         /// </summary>
         /// <param name="text">Text of the lyrics.</param>
         public LyricEvent(string text)
-            : base(text)
+            : base(MidiEventType.Lyric, text)
         {
         }
 

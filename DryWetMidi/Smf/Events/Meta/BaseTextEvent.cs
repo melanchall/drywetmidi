@@ -17,7 +17,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseTextEvent"/>.
         /// </summary>
-        public BaseTextEvent()
+        public BaseTextEvent(MidiEventType eventType)
+            : base(eventType)
         {
         }
 
@@ -25,8 +26,8 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="BaseTextEvent"/> with the specified text.
         /// </summary>
         /// <param name="text">Text contained in the event.</param>
-        public BaseTextEvent(string text)
-            : this()
+        public BaseTextEvent(MidiEventType eventType, string text)
+            : this(eventType)
         {
             Text = text;
         }

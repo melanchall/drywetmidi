@@ -17,6 +17,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="SongSelectEvent"/>.
         /// </summary>
         public SongSelectEvent()
+            : base(MidiEventType.SongSelect)
         {
         }
 
@@ -26,6 +27,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="number">Number of the song to be chosen.</param>
         public SongSelectEvent(SevenBitNumber number)
+            : this()
         {
             Number = number;
         }

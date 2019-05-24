@@ -15,6 +15,7 @@
         /// Initializes a new instance of the <see cref="DeviceNameEvent"/>.
         /// </summary>
         public DeviceNameEvent()
+            : base(MidiEventType.DeviceName)
         {
         }
 
@@ -24,7 +25,7 @@
         /// </summary>
         /// <param name="deviceName">Name of the device.</param>
         public DeviceNameEvent(string deviceName)
-            : base(deviceName)
+            : base(MidiEventType.DeviceName, deviceName)
         {
         }
 

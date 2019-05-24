@@ -8,6 +8,15 @@
     /// </remarks>
     public sealed class TuneRequestEvent : SystemCommonEvent
     {
+        #region Constructor
+
+        public TuneRequestEvent()
+            : base(MidiEventType.TuneRequest)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override void Read(MidiReader reader, ReadingSettings settings, int size)

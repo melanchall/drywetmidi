@@ -24,11 +24,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="parametersCount">Count of the parameters for this channel event.</param>
         /// <exception cref="ArgumentOutOfRangeException">Parameters count is negative number which is unallowable.</exception>
-        protected ChannelEvent(int parametersCount)
+        protected ChannelEvent(MidiEventType eventType, int parametersCount)
+            : base(eventType)
         {
-            ThrowIfArgument.IsNegative(nameof(parametersCount),
-                                        parametersCount,
-                                        "Parameters count is negative.");
+            ThrowIfArgument.IsNegative(nameof(parametersCount), parametersCount, "Parameters count is negative.");
 
             _parameters = new SevenBitNumber[parametersCount];
         }

@@ -9,6 +9,15 @@
     /// </remarks>
     public sealed class ActiveSensingEvent : SystemRealTimeEvent
     {
+        #region Constructor
+
+        public ActiveSensingEvent()
+            : base(MidiEventType.ActiveSensing)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

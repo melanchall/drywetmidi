@@ -8,6 +8,15 @@
     /// </remarks>
     public sealed class StartEvent : SystemRealTimeEvent
     {
+        #region Constructor
+
+        public StartEvent()
+            : base(MidiEventType.Start)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

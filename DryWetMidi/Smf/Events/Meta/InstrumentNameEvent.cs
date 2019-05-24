@@ -17,6 +17,7 @@
         /// Initializes a new instance of the <see cref="InstrumentNameEvent"/>.
         /// </summary>
         public InstrumentNameEvent()
+            : base(MidiEventType.InstrumentName)
         {
         }
 
@@ -26,7 +27,7 @@
         /// </summary>
         /// <param name="instrumentName">Name of the instrument.</param>
         public InstrumentNameEvent(string instrumentName)
-            : base(instrumentName)
+            : base(MidiEventType.InstrumentName, instrumentName)
         {
         }
 

@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="NoteAftertouchEvent"/>.
         /// </summary>
         public NoteAftertouchEvent()
-            : base(ParametersCount)
+            : base(MidiEventType.NoteAftertouch, ParametersCount)
         {
         }
 

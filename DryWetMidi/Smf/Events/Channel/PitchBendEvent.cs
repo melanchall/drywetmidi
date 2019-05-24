@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="PitchBendEvent"/>.
         /// </summary>
         public PitchBendEvent()
-            : base(ParametersCount)
+            : base(MidiEventType.PitchBend, ParametersCount)
         {
         }
 

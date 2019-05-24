@@ -16,6 +16,7 @@
         /// Initializes a new instance of the <see cref="SequenceTrackNameEvent"/>.
         /// </summary>
         public SequenceTrackNameEvent()
+            : base(MidiEventType.SequenceTrackName)
         {
         }
 
@@ -25,7 +26,7 @@
         /// </summary>
         /// <param name="name">Name of a sequence or track.</param>
         public SequenceTrackNameEvent(string name)
-            : base(name)
+            : base(MidiEventType.SequenceTrackName, name)
         {
         }
 

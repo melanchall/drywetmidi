@@ -17,6 +17,7 @@
         /// Initializes a new instance of the <see cref="CuePointEvent"/>.
         /// </summary>
         public CuePointEvent()
+            : base(MidiEventType.CuePoint)
         {
         }
 
@@ -26,7 +27,7 @@
         /// </summary>
         /// <param name="text">Text of the cue.</param>
         public CuePointEvent(string text)
-            : base(text)
+            : base(MidiEventType.CuePoint, text)
         {
         }
 

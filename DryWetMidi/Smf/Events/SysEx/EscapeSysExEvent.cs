@@ -24,6 +24,7 @@
         /// Initializes a new instance of the <see cref="EscapeSysExEvent"/>.
         /// </summary>
         public EscapeSysExEvent()
+            : base(MidiEventType.EscapeSysEx)
         {
         }
 
@@ -33,6 +34,7 @@
         /// </summary>
         /// <param name="data">Data of the "escape" sysex event.</param>
         public EscapeSysExEvent(byte[] data)
+            : this()
         {
             Data = data;
         }

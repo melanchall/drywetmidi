@@ -9,6 +9,15 @@
     /// </remarks>
     public abstract class SystemRealTimeEvent : MidiEvent
     {
+        #region Constructor
+
+        protected SystemRealTimeEvent(MidiEventType eventType)
+            : base(eventType)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         internal override sealed void Read(MidiReader reader, ReadingSettings settings, int size)

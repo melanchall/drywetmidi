@@ -14,6 +14,7 @@
         /// Initializes a new instance of the <see cref="CopyrightNoticeEvent"/>.
         /// </summary>
         public CopyrightNoticeEvent()
+            : base(MidiEventType.CopyrightNotice)
         {
         }
 
@@ -23,7 +24,7 @@
         /// </summary>
         /// <param name="text">Text of copyright notice.</param>
         public CopyrightNoticeEvent(string text)
-            : base(text)
+            : base(MidiEventType.CopyrightNotice, text)
         {
         }
 

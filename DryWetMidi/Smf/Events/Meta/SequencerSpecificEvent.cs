@@ -18,6 +18,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="SequencerSpecificEvent"/>.
         /// </summary>
         public SequencerSpecificEvent()
+            : base(MidiEventType.SequencerSpecific)
         {
         }
 

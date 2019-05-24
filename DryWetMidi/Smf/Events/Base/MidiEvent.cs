@@ -23,7 +23,18 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
+        #region Constructor
+
+        public MidiEvent(MidiEventType eventType)
+        {
+            EventType = eventType;
+        }
+
+        #endregion
+
         #region Properties
+
+        public MidiEventType EventType { get; }
 
         /// <summary>
         /// Gets or sets delta-time of the event.

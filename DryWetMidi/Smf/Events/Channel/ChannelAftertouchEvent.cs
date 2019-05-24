@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="ChannelAftertouchEvent"/>.
         /// </summary>
         public ChannelAftertouchEvent()
-            : base(ParametersCount)
+            : base(MidiEventType.ChannelAftertouch, ParametersCount)
         {
         }
 

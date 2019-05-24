@@ -15,6 +15,7 @@
         /// Initializes a new instance of the <see cref="PortPrefixEvent"/>.
         /// </summary>
         public PortPrefixEvent()
+            : base(MidiEventType.PortPrefix)
         {
         }
 
