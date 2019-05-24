@@ -14,6 +14,7 @@
         /// Initializes a new instance of the <see cref="MarkerEvent"/>.
         /// </summary>
         public MarkerEvent()
+            : base(MidiEventType.Marker)
         {
         }
 
@@ -23,7 +24,7 @@
         /// </summary>
         /// <param name="text">Text of the marker.</param>
         public MarkerEvent(string text)
-            : base(text)
+            : base(MidiEventType.Marker, text)
         {
         }
 

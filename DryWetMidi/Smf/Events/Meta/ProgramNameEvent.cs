@@ -16,6 +16,7 @@
         /// Initializes a new instance of the <see cref="ProgramNameEvent"/>.
         /// </summary>
         public ProgramNameEvent()
+            : base(MidiEventType.ProgramName)
         {
         }
 
@@ -25,7 +26,7 @@
         /// </summary>
         /// <param name="programName">Name of the program.</param>
         public ProgramNameEvent(string programName)
-            : base(programName)
+            : base(MidiEventType.ProgramName, programName)
         {
         }
 

@@ -32,6 +32,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="SetTempoEvent"/>.
         /// </summary>
         public SetTempoEvent()
+            : base(MidiEventType.SetTempo)
         {
         }
 

@@ -16,6 +16,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="NoteOnEvent"/>.
         /// </summary>
         public NoteOnEvent()
+            : base(MidiEventType.NoteOn)
         {
         }
 
@@ -26,7 +27,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="noteNumber">Note number.</param>
         /// <param name="velocity">Velocity.</param>
         public NoteOnEvent(SevenBitNumber noteNumber, SevenBitNumber velocity)
-            : base(noteNumber, velocity)
+            : base(MidiEventType.NoteOn, noteNumber, velocity)
         {
         }
 

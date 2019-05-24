@@ -11,6 +11,15 @@
     /// </remarks>
     public sealed class TimingClockEvent : SystemRealTimeEvent
     {
+        #region Constructor
+
+        public TimingClockEvent()
+            : base(MidiEventType.TimingClock)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

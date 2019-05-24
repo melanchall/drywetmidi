@@ -8,6 +8,15 @@
     /// </remarks>
     public abstract class MetaEvent : MidiEvent
     {
+        #region Constructor
+
+        protected MetaEvent(MidiEventType eventType)
+            : base(eventType)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

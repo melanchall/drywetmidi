@@ -14,6 +14,7 @@
         /// Initializes a new instance of the <see cref="TextEvent"/>.
         /// </summary>
         public TextEvent()
+            : base(MidiEventType.Text)
         {
         }
 
@@ -23,7 +24,7 @@
         /// </summary>
         /// <param name="text">Text of the message.</param>
         public TextEvent(string text)
-            : base(text)
+            : base(MidiEventType.Text, text)
         {
         }
 

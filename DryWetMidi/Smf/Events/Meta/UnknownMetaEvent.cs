@@ -32,6 +32,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <param name="statusByte">Status byte of the meta event.</param>
         /// <param name="data">Data of an unknown meta event.</param>
         internal UnknownMetaEvent(byte statusByte, byte[] data)
+            : base(MidiEventType.UnknownMeta)
         {
             StatusByte = statusByte;
             Data = data;

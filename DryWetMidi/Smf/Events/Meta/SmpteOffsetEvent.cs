@@ -26,6 +26,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="SmpteOffsetEvent"/>.
         /// </summary>
         public SmpteOffsetEvent()
+            : base(MidiEventType.SmpteOffset)
         {
         }
 

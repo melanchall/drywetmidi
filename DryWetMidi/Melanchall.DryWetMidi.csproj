@@ -176,6 +176,7 @@
     <Compile Include="Smf\Collections\ChunksCollection.cs" />
     <Compile Include="Smf\Collections\EventsCollection.cs" />
     <Compile Include="Smf\Events\Base\SystemRealTimeEvent.cs" />
+    <Compile Include="Smf\Events\Base\MidiEventType.cs" />
     <Compile Include="Smf\Events\Readers\SystemCommonEventReader.cs" />
     <Compile Include="Smf\Events\Readers\SystemRealTimeEventReader.cs" />
     <Compile Include="Smf\Events\SystemCommon\MidiTimeCodeEvent.cs" />

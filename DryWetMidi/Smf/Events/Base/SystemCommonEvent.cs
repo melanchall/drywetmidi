@@ -10,5 +10,13 @@
     /// </remarks>
     public abstract class SystemCommonEvent : MidiEvent
     {
+        #region Constructor
+
+        protected SystemCommonEvent(MidiEventType eventType)
+            : base(eventType)
+        {
+        }
+
+        #endregion
     }
 }

@@ -24,6 +24,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="SongPositionPointerEvent"/>.
         /// </summary>
         public SongPositionPointerEvent()
+            : base(MidiEventType.SongPositionPointer)
         {
         }
 
@@ -33,6 +34,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         /// <param name="pointerValue">The value of a song position pointer.</param>
         public SongPositionPointerEvent(ushort pointerValue)
+            : this()
         {
             PointerValue = pointerValue;
         }

@@ -22,6 +22,15 @@ namespace Melanchall.DryWetMidi.Smf
 
         #endregion
 
+        #region Constructor
+
+        protected SysExEvent(MidiEventType eventType)
+            : base(eventType)
+        {
+        }
+
+        #endregion
+
         #region Properties
 
         /// <summary>

@@ -8,6 +8,15 @@
     /// </remarks>
     public sealed class StopEvent : SystemRealTimeEvent
     {
+        #region Constructor
+
+        public StopEvent()
+            : base(MidiEventType.Stop)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>

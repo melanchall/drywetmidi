@@ -47,6 +47,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// Initializes a new instance of the <see cref="TimeSignatureEvent"/>.
         /// </summary>
         public TimeSignatureEvent()
+            : base(MidiEventType.TimeSignature)
         {
         }
 

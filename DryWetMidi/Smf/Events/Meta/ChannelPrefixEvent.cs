@@ -15,6 +15,7 @@
         /// Initializes a new instance of the <see cref="ChannelPrefixEvent"/>.
         /// </summary>
         public ChannelPrefixEvent()
+            : base(MidiEventType.ChannelPrefix)
         {
         }
 

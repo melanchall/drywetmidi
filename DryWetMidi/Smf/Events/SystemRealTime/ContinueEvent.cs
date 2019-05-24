@@ -8,6 +8,15 @@
     /// </remarks>
     public sealed class ContinueEvent : SystemRealTimeEvent
     {
+        #region Constructor
+
+        public ContinueEvent()
+            : base(MidiEventType.Continue)
+        {
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
