@@ -28,6 +28,7 @@
         KeySignature,
         SequencerSpecific,
         UnknownMeta,
+        CustomMeta,
 
         // Channel
 
