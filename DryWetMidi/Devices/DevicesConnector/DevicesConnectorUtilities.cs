@@ -13,18 +13,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Connects an input device to the specified output device.
         /// </summary>
-        /// <param name="inputDevice">Input MIDI device to connect to <paramref name="outputDevice"/>.</param>
-        /// <param name="outputDevice">Output MIDI device to connect <paramref name="inputDevice"/> to.</param>
+        /// <param name="inputDevice">Input MIDI device to connect to <paramref name="outputDevices"/>.</param>
+        /// <param name="outputDevices">Output MIDI devices to connect <paramref name="inputDevice"/> to.</param>
         /// <exception cref="ArgumentNullException"><paramref name="inputDevice"/> is null. -or-
-        /// <paramref name="outputDevice"/> is null.</exception>
-        /// <exception cref="MidiDeviceException"><see cref="InputDevice"/> is already connected
-        /// to <see cref="OutputDevice"/>.</exception>
-        public static DevicesConnector Connect(this InputDevice inputDevice, OutputDevice outputDevice)
+        /// <paramref name="outputDevices"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="outputDevices"/> contains null.</exception>
+        public static DevicesConnector Connect(this InputDevice inputDevice, params OutputDevice[] outputDevices)
         {
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputDevices), outputDevices);
 
-            var devicesConnector = new DevicesConnector(inputDevice, outputDevice);
+            var devicesConnector = new DevicesConnector(inputDevice, outputDevices);
             devicesConnector.Connect();
             return devicesConnector;
         }

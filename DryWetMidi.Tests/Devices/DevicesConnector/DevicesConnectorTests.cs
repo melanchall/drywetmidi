@@ -83,40 +83,49 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private static void CheckEventsReceiving(IReadOnlyList<EventToSend> eventsToSend)
         {
-            var receivedEvents = new List<ReceivedEvent>();
+            var receivedEventsB = new List<ReceivedEvent>();
+            var receivedEventsC = new List<ReceivedEvent>();
             var sentEvents = new List<SentEvent>();
             var stopwatch = new Stopwatch();
 
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var outputA = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+                SendReceiveUtilities.WarmUpDevice(outputA);
+                outputA.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceB))
+                using (var inputB = InputDevice.GetByName(MidiDevicesNames.DeviceB))
+                using (var inputC = InputDevice.GetByName(MidiDevicesNames.DeviceC))
                 {
-                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                    inputDevice.StartEventsListening();
+                    inputB.EventReceived += (_, e) => receivedEventsB.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    inputB.StartEventsListening();
 
-                    using (var inputOutputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+                    inputC.EventReceived += (_, e) => receivedEventsC.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    inputC.StartEventsListening();
+
+                    using (var inputA = InputDevice.GetByName(MidiDevicesNames.DeviceA))
                     {
-                        inputOutputDevice.StartEventsListening();
+                        inputA.StartEventsListening();
 
-                        using (var outputInputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
-                        using (var devicesConnector = inputOutputDevice.Connect(outputInputDevice))
+                        using (var outputB = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
+                        using (var outputC = OutputDevice.GetByName(MidiDevicesNames.DeviceC))
+                        using (var devicesConnector = inputA.Connect(outputB, outputC))
                         {
                             stopwatch.Start();
-                            SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                            SendReceiveUtilities.SendEvents(eventsToSend, outputA);
                             stopwatch.Stop();
 
                             var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                            var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsToSend.Count, timeout);
+                            var areEventsReceived = SpinWait.SpinUntil(
+                                () => receivedEventsB.Count == eventsToSend.Count && receivedEventsC.Count == eventsToSend.Count,
+                                timeout);
                             Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                         }
                     }
                 }
             }
 
-            SendReceiveUtilities.CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEvents, MaximumEventSendReceiveDelay);
+            SendReceiveUtilities.CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEventsB, MaximumEventSendReceiveDelay);
+            SendReceiveUtilities.CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEventsC, MaximumEventSendReceiveDelay);
         }
 
         #endregion
