@@ -17,6 +17,13 @@ With the DryWetMIDI you can:
 * Build musical compositions (see [Pattern](https://github.com/melanchall/drywetmidi/wiki/Pattern) page of the library Wiki).
 * Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://github.com/melanchall/drywetmidi/wiki/Tools) page of the Wiki).
 
+## Projects using DryWetMIDI
+
+Here the list of noticeable projects that use DryWetMIDI:
+
+* [Clone Hero](https://clonehero.net)  
+  Free rhythm game, which can be played with any 5 or 6 button guitar controller, game controllers, or just your standard computer keyboard. The game is a clone of Guitar Hero.
+
 ## Getting Started
 
 There are several articles that can help you dive into API provided by DryWetMIDI:
