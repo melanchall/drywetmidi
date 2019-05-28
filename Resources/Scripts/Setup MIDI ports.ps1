@@ -26,7 +26,7 @@ sleep 1
 Write-Host "Creating MIDI ports..."
 $wshell.AppActivate('loopMIDI') | Out-Null
 sleep 1
-$wshell.SendKeys('{TAB}MIDI A{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}MIDI B{TAB}{TAB}{TAB}{ENTER}')
+$wshell.SendKeys('{TAB}MIDI A{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}MIDI B{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}MIDI C{TAB}{TAB}{TAB}{ENTER}')
 
 Write-Host "Switching back to '$currentDirectory'..."
 cd $currentDirectory
