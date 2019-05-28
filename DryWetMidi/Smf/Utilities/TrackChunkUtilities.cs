@@ -40,7 +40,6 @@ namespace Melanchall.DryWetMidi.Smf
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
             return ConvertTrackChunks(trackChunks, MidiFileFormat.SingleTrack).First();
-
         }
 
         /// <summary>
@@ -58,7 +57,20 @@ namespace Melanchall.DryWetMidi.Smf
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
             return ConvertTrackChunks(new[] { trackChunk }, MidiFileFormat.MultiTrack);
+        }
 
+        public static IEnumerable<FourBitNumber> GetChannels(this TrackChunk trackChunk)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+
+            return trackChunk.Events.OfType<ChannelEvent>().Select(e => e.Channel).Distinct().ToArray();
+        }
+
+        public static IEnumerable<FourBitNumber> GetChannels(this IEnumerable<TrackChunk> trackChunks)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            return trackChunks.Where(c => c != null).SelectMany(GetChannels).Distinct().ToArray();
         }
 
         private static IEnumerable<TrackChunk> ConvertTrackChunks(IEnumerable<TrackChunk> trackChunks, MidiFileFormat format)
