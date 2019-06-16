@@ -1,5 +1,5 @@
 ﻿using System;
-using BenchmarkDotNet.Attributes.Jobs;
+using BenchmarkDotNet.Attributes;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using NUnit.Framework;
 

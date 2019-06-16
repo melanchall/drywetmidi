@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
             foreach (var error in summary.ValidationErrors)
             {
-                var benchmarkDisplayInfo = error.Benchmark?.DisplayInfo;
+                var benchmarkDisplayInfo = error.BenchmarkCase?.DisplayInfo;
                 var isCritical = error.IsCritical;
                 var message = error.Message;
 

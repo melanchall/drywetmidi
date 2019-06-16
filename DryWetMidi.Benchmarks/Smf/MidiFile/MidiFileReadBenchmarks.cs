@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
 using Melanchall.DryWetMidi.Smf;
 using NUnit.Framework;
 
@@ -18,7 +17,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
             private const string MiddleFilesDirectoryName = "Middle";
             private const string LargeFilesDirectoryName = "Large";
 
-            [Params(@"..\..\..\Resources\MIDI files\Valid")]
+            [Params(@"..\..\..\..\Resources\MIDI files\Valid")]
             public string FilesPath { get; set; }
 
             [Benchmark]
