@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf.Interaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,67 @@ namespace Melanchall.DryWetMidi.Smf
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
             return trackChunks.Where(c => c != null).SelectMany(GetChannels).Distinct().ToArray();
+        }
+
+        public static void TrimEnd(this TrackChunk trackChunk, Predicate<MidiEvent> match)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            var events = trackChunk.Events;
+
+            for (var i = events.Count - 1; i >= 0; i--)
+            {
+                var midiEvent = events[i];
+                if (!match(midiEvent))
+                    break;
+
+                events.RemoveAt(i);
+            }
+        }
+
+        public static void TrimEnd(this IEnumerable<TrackChunk> trackChunks, Predicate<MidiEvent> match)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            var trackChunksWuthAbsoluteTimes = trackChunks.Select(c =>
+            {
+                var absoluteTime = 0L;
+                var eventsWithTimes = c.Events.Select(e => absoluteTime += e.DeltaTime).ToList();
+                return Tuple.Create(c, eventsWithTimes);
+            }).ToArray();
+
+            while (true)
+            {
+                Tuple<TrackChunk, List<long>> trackChunkWithAbsoluteTimes = null;
+                long maxTime = -1;
+
+                foreach (var trackChunkWithTimes in trackChunksWuthAbsoluteTimes.Where(c => c.Item1.Events.Any()))
+                {
+                    var lastTime = trackChunkWithTimes.Item2.LastOrDefault();
+                    if (lastTime <= maxTime)
+                        continue;
+
+                    trackChunkWithAbsoluteTimes = trackChunkWithTimes;
+                    maxTime = lastTime;
+                }
+
+                if (trackChunkWithAbsoluteTimes == null)
+                    break;
+
+                var events = trackChunkWithAbsoluteTimes.Item1.Events;
+                var midiEvent = events.LastOrDefault();
+                if (midiEvent == null)
+                    break;
+
+                if (!match(midiEvent))
+                    break;
+
+                var lastIndex = events.Count - 1;
+                events.RemoveAt(lastIndex);
+                trackChunkWithAbsoluteTimes.Item2.RemoveAt(lastIndex);
+            }
         }
 
         private static IEnumerable<TrackChunk> ConvertTrackChunks(IEnumerable<TrackChunk> trackChunks, MidiFileFormat format)

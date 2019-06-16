@@ -8,6 +8,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf
     [TestFixture]
     public sealed class TrackChunkUtilitiesTests
     {
+        #region Test methods
+
+        #region GetChannels
+
         [Test]
         public void GetChannels_SingleTrackChunk_NoEvents()
         {
@@ -109,5 +113,105 @@ namespace Melanchall.DryWetMidi.Tests.Smf
                 trackChunks.GetChannels(),
                 "Channels collection is invalid.");
         }
+
+        #endregion
+
+        #region TrimEnd
+
+        [Test]
+        public void TrimEnd_SingleTrackChunk_Empty()
+        {
+            var trackChunk = new TrackChunk();
+
+            trackChunk.TrimEnd(_ => true);
+
+            CollectionAssert.IsEmpty(trackChunk.Events, "Trimmed empty track chunk is not empty.");
+        }
+
+        [Test]
+        public void TrimEnd_SingleTrackChunk_AllMatched()
+        {
+            var trackChunk = new TrackChunk(new NoteOnEvent(), new NoteOffEvent(), new TextEvent());
+
+            trackChunk.TrimEnd(_ => true);
+
+            CollectionAssert.IsEmpty(trackChunk.Events, "Fully trimmed track chunk is not empty.");
+        }
+
+        [Test]
+        public void TrimEnd_SingleTrackChunk_NoneMatched()
+        {
+            var midiEvents = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent() };
+            var trackChunk = new TrackChunk(midiEvents);
+
+            trackChunk.TrimEnd(_ => false);
+
+            CollectionAssert.AreEqual(midiEvents, trackChunk.Events, "Fully untrimmed track chunk contains different events.");
+        }
+
+        [Test]
+        public void TrimEnd_SingleTrackChunk()
+        {
+            var midiEvents = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent() };
+            var trackChunk = new TrackChunk(midiEvents);
+
+            trackChunk.TrimEnd(e => e is TextEvent);
+
+            CollectionAssert.AreEqual(midiEvents.Take(2).ToArray(), trackChunk.Events, "Track chunk is trimmed incorrectly.");
+        }
+
+        [Test]
+        public void TrimEnd_MultipleTrackChunks_Empty()
+        {
+            var trackChunks = new[] { new TrackChunk(), new TrackChunk() };
+
+            trackChunks.TrimEnd(_ => true);
+
+            CollectionAssert.IsEmpty(trackChunks.SelectMany(c => c.Events), "Trimmed empty track chunks are not empty.");
+        }
+
+        [Test]
+        public void TrimEnd_MultipleTrackChunks_AllMatched()
+        {
+            var trackChunk1 = new TrackChunk(new NoteOnEvent(), new NoteOffEvent(), new TextEvent());
+            var trackChunk2 = new TrackChunk(new NoteOnEvent(), new NoteOffEvent(), new TextEvent());
+
+            new[] { trackChunk1, trackChunk2 }.TrimEnd(_ => true);
+
+            CollectionAssert.IsEmpty(trackChunk1.Events, "Fully trimmed first track chunk is not empty.");
+            CollectionAssert.IsEmpty(trackChunk2.Events, "Fully trimmed second track chunk is not empty.");
+        }
+
+        [Test]
+        public void TrimEnd_MultipleTrackChunks_NoneMatched()
+        {
+            var midiEvents1 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent() };
+            var trackChunk1 = new TrackChunk(midiEvents1);
+            var midiEvents2 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent(), new NoteOnEvent() };
+            var trackChunk2 = new TrackChunk(midiEvents2);
+
+            new[] { trackChunk1, trackChunk2 }.TrimEnd(_ => false);
+
+            CollectionAssert.AreEqual(midiEvents1, trackChunk1.Events, "Fully untrimmed first track chunk contains different events.");
+            CollectionAssert.AreEqual(midiEvents2, trackChunk2.Events, "Fully untrimmed second track chunk contains different events.");
+        }
+
+        [Test]
+        public void TrimEnd_MultipleTrackChunks()
+        {
+            var midiEvents1 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 15 }, new TextEvent() };
+            var trackChunk1 = new TrackChunk(midiEvents1);
+            var midiEvents2 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent { DeltaTime = 10 } };
+            var trackChunk2 = new TrackChunk(midiEvents2);
+
+            new[] { trackChunk1, trackChunk2 }.TrimEnd(e => e is TextEvent);
+
+            CollectionAssert.AreEqual(midiEvents1.Take(2).ToArray(), trackChunk1.Events, "First track chunk is trimmed incorrectly.");
+            CollectionAssert.AreEqual(midiEvents2, trackChunk2.Events, "Second track chunk is trimmed incorrectly.");
+        }
+
+        #endregion
+
+        #endregion
     }
 }
