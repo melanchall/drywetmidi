@@ -135,6 +135,70 @@ namespace Melanchall.DryWetMidi.Smf
             }
         }
 
+        public static void TrimStart(this TrackChunk trackChunk, Predicate<MidiEvent> match)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            var events = trackChunk.Events;
+
+            while (events.Any())
+            {
+                var midiEvent = events.First();
+                if (!match(midiEvent))
+                    break;
+
+                events.RemoveAt(0);
+            }
+
+            var firstEvent = events.FirstOrDefault();
+            if (firstEvent != null)
+                firstEvent.DeltaTime = 0;
+        }
+
+        public static void TrimStart(this IEnumerable<TrackChunk> trackChunks, Predicate<MidiEvent> match)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            while (true)
+            {
+                TrackChunk trackChunkToRemoveEvent = null;
+                long minDeltaTime = long.MaxValue;
+
+                foreach (var trackChunk in trackChunks.Where(c => c.Events.Any()))
+                {
+                    var firstMidiEvent = trackChunk.Events.FirstOrDefault();
+                    if (firstMidiEvent.DeltaTime < minDeltaTime)
+                    {
+                        minDeltaTime = firstMidiEvent.DeltaTime;
+                        trackChunkToRemoveEvent = trackChunk;
+                    }
+                }
+
+                if (trackChunkToRemoveEvent == null)
+                    break;
+
+                var midiEvent = trackChunkToRemoveEvent.Events.First();
+                if (!match(midiEvent))
+                    break;
+
+                trackChunkToRemoveEvent.Events.Remove(midiEvent);
+
+                foreach (var trackChunk in trackChunks.Where(c => c != trackChunkToRemoveEvent && c.Events.Any()))
+                {
+                    trackChunk.Events.First().DeltaTime -= midiEvent.DeltaTime;
+                }
+            }
+
+            var minTime = trackChunks.Select(c => c.Events.FirstOrDefault()?.DeltaTime ?? 0).DefaultIfEmpty().Min();
+
+            foreach (var trackChunk in trackChunks.Where(c => c.Events.Any()))
+            {
+                trackChunk.Events.First().DeltaTime -= minTime;
+            }
+        }
+
         private static IEnumerable<TrackChunk> ConvertTrackChunks(IEnumerable<TrackChunk> trackChunks, MidiFileFormat format)
         {
             var chunksConverter = ChunksConverterFactory.GetConverter(format);
