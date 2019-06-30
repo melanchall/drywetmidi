@@ -24,6 +24,14 @@ namespace Melanchall.DryWetMidi.Smf
             midiFile.GetTrackChunks().TrimEnd(match);
         }
 
+        public static void TrimStart(this MidiFile midiFile, Predicate<MidiEvent> match)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            midiFile.GetTrackChunks().TrimStart(match);
+        }
+
         internal static IEnumerable<MidiEvent> GetEvents(this MidiFile midiFile)
         {
             return midiFile.GetTrackChunks().SelectMany(c => c.Events);
