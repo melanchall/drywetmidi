@@ -291,6 +291,7 @@
     <Compile Include="Smf\MidiReader.cs" />
     <Compile Include="Smf\MidiWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Smf\ReadingSettings\DecodeTextCallback.cs" />
     <Compile Include="Smf\ReadingSettings\ExtraTrackChunkPolicy.cs" />
     <Compile Include="Smf\ReadingSettings\InvalidChannelEventParameterValuePolicy.cs" />
     <Compile Include="Smf\ReadingSettings\InvalidEventSizePolicy.cs" />

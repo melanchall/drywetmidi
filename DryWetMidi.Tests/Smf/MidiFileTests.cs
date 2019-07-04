@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
@@ -368,9 +370,87 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             }
         }
 
+        [Test]
+        public void Read_DecodeTextCallback_NoCallback()
+        {
+            const string text = "Just text";
+
+            var midiFile = WriteRead(new MidiFile(new TrackChunk(new TextEvent(text))));
+            var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
+
+            Assert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
+        }
+
+        [TestCase(null)]
+        [TestCase("New text")]
+        public void Read_DecodeTextCallback_ReturnNewText(string newText)
+        {
+            const string text = "Just text";
+
+            var midiFile = WriteRead(
+                new MidiFile(new TrackChunk(new TextEvent(text))),
+                readingSettings: new ReadingSettings
+                {
+                    DecodeTextCallback = (bytes, settings) => newText
+                });
+
+            var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
+
+            Assert.AreEqual(newText, textEvent.Text, "Text decoded incorrectly.");
+        }
+
+        [Test]
+        public void Read_TextEncoding_NotSpecifiedOnRead()
+        {
+            const string text = "Just text";
+
+            var midiFile = WriteRead(
+                new MidiFile(new TrackChunk(new TextEvent(text))),
+                writingSettings: new WritingSettings
+                {
+                    TextEncoding = Encoding.UTF32
+                });
+
+            var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
+
+            Assert.AreNotEqual(text, textEvent.Text, "Text decoded incorrectly.");
+        }
+
+        [Test]
+        public void Read_TextEncoding()
+        {
+            const string text = "Just text";
+
+            var midiFile = WriteRead(
+                new MidiFile(new TrackChunk(new TextEvent(text))),
+                writingSettings: new WritingSettings
+                {
+                    TextEncoding = Encoding.UTF32
+                },
+                readingSettings: new ReadingSettings
+                {
+                    TextEncoding = Encoding.UTF32
+                });
+
+            var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
+
+            Assert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
+        }
+
         #endregion
 
         #region Private methods
+
+        private MidiFile WriteRead(MidiFile midiFile, WritingSettings writingSettings = null, ReadingSettings readingSettings = null)
+        {
+            var filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.mid");
+
+            midiFile.Write(filePath, settings: writingSettings);
+            midiFile = MidiFile.Read(filePath, readingSettings);
+
+            File.Delete(filePath);
+            return midiFile;
+        }
 
         private void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings)
             where TException : Exception
