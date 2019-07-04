@@ -158,5 +158,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
         public Encoding TextEncoding { get; set; } = SmfUtilities.DefaultEncoding;
+
+        public DecodeTextCallback DecodeTextCallback { get; set; }
     }
 }

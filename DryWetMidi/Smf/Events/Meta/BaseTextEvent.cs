@@ -64,7 +64,11 @@ namespace Melanchall.DryWetMidi.Smf
 
             var bytes = reader.ReadBytes(size);
             var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
-            Text = encoding.GetString(bytes);
+
+            var decodeTextCallback = settings.DecodeTextCallback;
+            Text = decodeTextCallback != null
+                ? decodeTextCallback(bytes, settings)
+                : encoding.GetString(bytes);
         }
 
         /// <summary>
