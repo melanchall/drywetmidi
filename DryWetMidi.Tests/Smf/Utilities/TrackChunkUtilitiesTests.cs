@@ -187,6 +187,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
         {
             var midiEvents1 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent() };
             var trackChunk1 = new TrackChunk(midiEvents1);
+
             var midiEvents2 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent(), new NoteOnEvent() };
             var trackChunk2 = new TrackChunk(midiEvents2);
 
@@ -201,6 +202,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
         {
             var midiEvents1 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 15 }, new TextEvent() };
             var trackChunk1 = new TrackChunk(midiEvents1);
+
             var midiEvents2 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent(), new TextEvent { DeltaTime = 10 } };
             var trackChunk2 = new TrackChunk(midiEvents2);
 
@@ -208,6 +210,21 @@ namespace Melanchall.DryWetMidi.Tests.Smf
 
             CollectionAssert.AreEqual(midiEvents1.Take(2).ToArray(), trackChunk1.Events, "First track chunk is trimmed incorrectly.");
             CollectionAssert.AreEqual(midiEvents2, trackChunk2.Events, "Second track chunk is trimmed incorrectly.");
+        }
+
+        [Test]
+        public void TrimEnd_MultipleTrackChunks_MatchedAndNonMatchedOnSameTime()
+        {
+            var midiEvents1 = new MidiEvent[] { new NoteOnEvent(), new TextEvent { DeltaTime = 200 }, new TextEvent { DeltaTime = 100 } };
+            var trackChunk1 = new TrackChunk(midiEvents1);
+
+            var midiEvents2 = new MidiEvent[] { new NoteOnEvent { DeltaTime = 200 } };
+            var trackChunk2 = new TrackChunk(midiEvents2);
+
+            new[] { trackChunk1, trackChunk2 }.TrimEnd(e => e is TextEvent);
+
+            CollectionAssert.AreEqual(midiEvents1.Take(1).ToArray(), trackChunk1.Events, "First track chunk is trimmed incorrectly.");
+            CollectionAssert.AreEqual(midiEvents2.Take(1).ToArray(), trackChunk2.Events, "Second track chunk is trimmed incorrectly.");
         }
 
         #endregion
@@ -361,6 +378,32 @@ namespace Melanchall.DryWetMidi.Tests.Smf
 
             CollectionAssert.AreEqual(midiEvents3, trackChunk3.Events, "Third track chunk is trimmed incorrectly.");
             Assert.AreEqual(200, trackChunk3.Events[0].DeltaTime, "Delta-time of the first event of third track chunk hasn't been truncated.");
+        }
+
+        [Test]
+        public void TrimStart_MultipleTrackChunks_MatchedAndNonMatchedOnSameTime()
+        {
+            var midiEvents1 = new MidiEvent[]
+            {
+                new TextEvent { DeltaTime = 100 },
+                new TextEvent { DeltaTime = 100 },
+                new NoteOnEvent { DeltaTime = 200 }
+            };
+            var trackChunk1 = new TrackChunk(midiEvents1);
+
+            var midiEvents2 = new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 400 },
+            };
+            var trackChunk2 = new TrackChunk(midiEvents2);
+
+            new[] { trackChunk1, trackChunk2 }.TrimStart(e => e is TextEvent);
+
+            CollectionAssert.AreEqual(midiEvents1.Skip(2).ToArray(), trackChunk1.Events, "First track chunk is trimmed incorrectly.");
+            Assert.AreEqual(0, trackChunk1.Events[0].DeltaTime, "Delta-time of the first event of first track chunk hasn't been truncated to zero.");
+
+            CollectionAssert.AreEqual(midiEvents2, trackChunk2.Events, "Second track chunk is trimmed incorrectly.");
+            Assert.AreEqual(0, trackChunk2.Events[0].DeltaTime, "Delta-time of the first event of second track chunk hasn't been truncated to zero.");
         }
 
         #endregion
