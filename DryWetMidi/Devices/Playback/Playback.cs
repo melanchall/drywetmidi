@@ -691,8 +691,7 @@ namespace Melanchall.DryWetMidi.Devices
                     playbackEvents.Add(new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time));
             }
 
-            playbackEvents.Sort(new PlaybackEventsComparer());
-            return playbackEvents;
+            return playbackEvents.OrderBy(e => e, new PlaybackEventsComparer()).ToList();
         }
 
         private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Chord chord, TempoMap tempoMap)
