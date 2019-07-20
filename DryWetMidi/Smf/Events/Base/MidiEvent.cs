@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -25,8 +26,15 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiEvent"/> with the specified event type.
+        /// </summary>
+        /// <param name="eventType">The type of event.</param>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         public MidiEvent(MidiEventType eventType)
         {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(eventType), eventType);
+
             EventType = eventType;
         }
 
@@ -34,6 +42,9 @@ namespace Melanchall.DryWetMidi.Smf
 
         #region Properties
 
+        /// <summary>
+        /// Gets the type of the event.
+        /// </summary>
         public MidiEventType EventType { get; }
 
         /// <summary>

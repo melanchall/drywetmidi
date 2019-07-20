@@ -37,6 +37,16 @@ namespace Melanchall.DryWetMidi.Devices
             return new Playback(trackChunk.Events, tempoMap, outputDevice);
         }
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events contained in
+        /// the specified <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
+        /// the <paramref name="trackChunk"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -65,6 +75,16 @@ namespace Melanchall.DryWetMidi.Devices
             return new Playback(trackChunks.Select(c => c.Events), tempoMap, outputDevice);
         }
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events contained in
+        /// the specified collection of <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing events to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
+        /// the <paramref name="trackChunks"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public static Playback GetPlayback(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -91,6 +111,14 @@ namespace Melanchall.DryWetMidi.Devices
             return GetPlayback(midiFile.GetTrackChunks(), midiFile.GetTempoMap(), outputDevice);
         }
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events contained in
+        /// the specified <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> containing events to play.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
+        /// the <paramref name="midiFile"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
         public static Playback GetPlayback(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -119,6 +147,17 @@ namespace Melanchall.DryWetMidi.Devices
             return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputDevice);
         }
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events that will be
+        /// produced by specified <see cref="Pattern"/>.
+        /// </summary>
+        /// <param name="pattern"><see cref="Pattern"/> producing events to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="channel">MIDI channel to play channel events on.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
+        /// produced by the <paramref name="pattern"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
+        /// <paramref name="tempoMap"/> is null.</exception>
         public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);

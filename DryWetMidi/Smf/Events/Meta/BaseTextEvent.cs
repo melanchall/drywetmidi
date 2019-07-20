@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -25,7 +26,9 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseTextEvent"/> with the specified text.
         /// </summary>
+        /// <param name="eventType">The type of event.</param>
         /// <param name="text">Text contained in the event.</param>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         public BaseTextEvent(MidiEventType eventType, string text)
             : this(eventType)
         {

@@ -22,6 +22,7 @@ namespace Melanchall.DryWetMidi.Smf
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelEvent"/> with the specified parameters count.
         /// </summary>
+        /// <param name="eventType">The type of event.</param>
         /// <param name="parametersCount">Count of the parameters for this channel event.</param>
         /// <exception cref="ArgumentOutOfRangeException">Parameters count is negative number which is unallowable.</exception>
         protected ChannelEvent(MidiEventType eventType, int parametersCount)

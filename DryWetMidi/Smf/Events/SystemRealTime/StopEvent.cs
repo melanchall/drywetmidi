@@ -10,6 +10,9 @@
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StopEvent"/>.
+        /// </summary>
         public StopEvent()
             : base(MidiEventType.Stop)
         {

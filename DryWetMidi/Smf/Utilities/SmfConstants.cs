@@ -2,6 +2,9 @@
 
 namespace Melanchall.DryWetMidi.Smf
 {
+    /// <summary>
+    /// Constants related to Standard MIDI Files.
+    /// </summary>
     public static class SmfConstants
     {
         #region Properties
