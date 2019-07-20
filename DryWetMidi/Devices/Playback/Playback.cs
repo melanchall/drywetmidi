@@ -65,8 +65,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private OutputDevice _outputDevice;
-
         #endregion
 
         #region Constructor
@@ -200,15 +198,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets or sets the output MIDI device to play MIDI data through.
         /// </summary>
-        public OutputDevice OutputDevice
-        {
-            get { return _outputDevice; }
-            set
-            {
-                ThrowIfArgument.IsNull(nameof(value), value);
-                _outputDevice = value;
-            }
-        }
+        public OutputDevice OutputDevice { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
