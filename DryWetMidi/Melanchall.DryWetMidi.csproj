@@ -318,7 +318,7 @@
     <Compile Include="Smf\Utilities\IOUtilities.cs" />
     <Compile Include="Smf\Utilities\MidiFileUtilities.cs" />
     <Compile Include="Smf\Utilities\NoteEventUtilities.cs" />
-    <Compile Include="Smf\Utilities\SmfUtilities.cs" />
+    <Compile Include="Smf\Utilities\SmfConstants.cs" />
     <Compile Include="Smf\Utilities\SmpteData.cs" />
     <Compile Include="Smf\Utilities\TrackChunkUtilities.cs" />
     <Compile Include="Smf\WritingSettings\CompressionPolicy.cs" />

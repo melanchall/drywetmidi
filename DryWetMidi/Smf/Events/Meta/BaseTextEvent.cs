@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Smf
                 return;
 
             var bytes = reader.ReadBytes(size);
-            var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
+            var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
 
             var decodeTextCallback = settings.DecodeTextCallback;
             Text = decodeTextCallback != null
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Smf
             if (string.IsNullOrEmpty(text))
                 return;
 
-            var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
+            var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
             var bytes = encoding.GetBytes(text);
             writer.WriteBytes(bytes);
         }
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Smf
             if (string.IsNullOrEmpty(text))
                 return 0;
 
-            var encoding = settings.TextEncoding ?? SmfUtilities.DefaultEncoding;
+            var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
             return encoding.GetByteCount(Text);
         }
 

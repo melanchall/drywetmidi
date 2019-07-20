@@ -24,6 +24,6 @@ namespace Melanchall.DryWetMidi.Smf
         /// Gets or sets an <see cref="Encoding"/> that will be used to write the text of a
         /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
-        public Encoding TextEncoding { get; set; } = SmfUtilities.DefaultEncoding;
+        public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
     }
 }
