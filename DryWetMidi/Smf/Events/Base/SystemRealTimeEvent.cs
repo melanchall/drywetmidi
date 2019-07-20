@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System.ComponentModel;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a system real-time event.
@@ -11,6 +13,11 @@
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SystemRealTimeEvent"/> with the specified event type.
+        /// </summary>
+        /// <param name="eventType">The type of event.</param>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         protected SystemRealTimeEvent(MidiEventType eventType)
             : base(eventType)
         {

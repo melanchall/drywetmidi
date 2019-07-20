@@ -13,6 +13,9 @@
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimingClockEvent"/>.
+        /// </summary>
         public TimingClockEvent()
             : base(MidiEventType.TimingClock)
         {

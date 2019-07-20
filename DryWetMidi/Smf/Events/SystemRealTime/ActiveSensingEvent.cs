@@ -11,6 +11,9 @@
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActiveSensingEvent"/>.
+        /// </summary>
         public ActiveSensingEvent()
             : base(MidiEventType.ActiveSensing)
         {

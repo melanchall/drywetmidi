@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf
+﻿using System.ComponentModel;
+
+namespace Melanchall.DryWetMidi.Smf
 {
     /// <summary>
     /// Represents a system common event.
@@ -12,6 +14,11 @@
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SystemCommonEvent"/> with the specified event type.
+        /// </summary>
+        /// <param name="eventType">The type of event.</param>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         protected SystemCommonEvent(MidiEventType eventType)
             : base(eventType)
         {

@@ -159,6 +159,10 @@ namespace Melanchall.DryWetMidi.Smf
         /// </summary>
         public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
 
+        /// <summary>
+        /// Gets or sets a callback used to decode a string from the specified bytes during reading a text-based
+        /// meta event. The default is null.
+        /// </summary>
         public DecodeTextCallback DecodeTextCallback { get; set; }
     }
 }

@@ -1,8 +1,7 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf
 {
@@ -60,6 +59,12 @@ namespace Melanchall.DryWetMidi.Smf
             return ConvertTrackChunks(new[] { trackChunk }, MidiFileFormat.MultiTrack);
         }
 
+        /// <summary>
+        /// Gets all channel numbers presented in the specified <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to get channels of.</param>
+        /// <returns>Collection of channel numbers presented in the <paramref name="trackChunk"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
         public static IEnumerable<FourBitNumber> GetChannels(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -67,6 +72,12 @@ namespace Melanchall.DryWetMidi.Smf
             return trackChunk.Events.OfType<ChannelEvent>().Select(e => e.Channel).Distinct().ToArray();
         }
 
+        /// <summary>
+        /// Gets all channel numbers presented in the specified collection of <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to get channels of.</param>
+        /// <returns>Collection of channel numbers presented in the <paramref name="trackChunks"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
         public static IEnumerable<FourBitNumber> GetChannels(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -74,6 +85,13 @@ namespace Melanchall.DryWetMidi.Smf
             return trackChunks.Where(c => c != null).SelectMany(GetChannels).Distinct().ToArray();
         }
 
+        /// <summary>
+        /// Removes all trailing MIDI events of <see cref="TrackChunk"/> satisfying to the specified predicate.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to trim.</param>
+        /// <param name="match">Predicate to check MIDI events.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="match"/> is null.</exception>
         public static void TrimEnd(this TrackChunk trackChunk, Predicate<MidiEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -91,6 +109,14 @@ namespace Melanchall.DryWetMidi.Smf
             }
         }
 
+        /// <summary>
+        /// Removes all trailing MIDI events of collection of <see cref="TrackChunk"/> satisfying to
+        /// the specified predicate.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to trim.</param>
+        /// <param name="match">Predicate to check MIDI events.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="match"/> is null.</exception>
         public static void TrimEnd(this IEnumerable<TrackChunk> trackChunks, Predicate<MidiEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -135,6 +161,13 @@ namespace Melanchall.DryWetMidi.Smf
             }
         }
 
+        /// <summary>
+        /// Removes all leading MIDI events of <see cref="TrackChunk"/> satisfying to the specified predicate.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to trim.</param>
+        /// <param name="match">Predicate to check MIDI events.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
+        /// <paramref name="match"/> is null.</exception>
         public static void TrimStart(this TrackChunk trackChunk, Predicate<MidiEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -156,6 +189,13 @@ namespace Melanchall.DryWetMidi.Smf
                 firstEvent.DeltaTime = 0;
         }
 
+        /// <summary>
+        /// Removes all leading MIDI events of collection of <see cref="TrackChunk"/> satisfying to the specified predicate.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to trim.</param>
+        /// <param name="match">Predicate to check MIDI events.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
+        /// <paramref name="match"/> is null.</exception>
         public static void TrimStart(this IEnumerable<TrackChunk> trackChunks, Predicate<MidiEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);

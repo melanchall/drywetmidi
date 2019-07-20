@@ -10,6 +10,9 @@
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StartEvent"/>.
+        /// </summary>
         public StartEvent()
             : base(MidiEventType.Start)
         {
