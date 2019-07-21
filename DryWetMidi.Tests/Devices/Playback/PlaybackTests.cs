@@ -1617,6 +1617,55 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Test]
+        public void SetEventCallback_ReturnNull()
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(2)),
+                new EventToSend(new ProgramChangeEvent(), TimeSpan.FromSeconds(1))
+            };
+
+            var playbackContext = new PlaybackContext();
+
+            var tempoMap = playbackContext.TempoMap;
+            var receivedEvents = playbackContext.ReceivedEvents;
+            var stopwatch = playbackContext.Stopwatch;
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+
+                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                {
+                    playback.EventCallback = (midiEvent, time, rawTime) => null;
+
+                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                    {
+                        inputDevice.EventReceived += (_, e) =>
+                        {
+                            lock (playbackContext.ReceivedEventsLockObject)
+                            {
+                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                            }
+                        };
+
+                        inputDevice.StartEventsListening();
+                        stopwatch.Start();
+
+                        playback.Start();
+                        SpinWait.SpinUntil(() => !playback.IsRunning);
+
+                        stopwatch.Stop();
+                    }
+                }
+            }
+
+            CollectionAssert.IsEmpty(receivedEvents, "Received events collection is not empty.");
+        }
+
         #endregion
 
         #region Private methods

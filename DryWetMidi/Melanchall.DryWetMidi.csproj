@@ -69,6 +69,7 @@
     <Compile Include="Devices\Playback\NotesEventArgs.cs" />
     <Compile Include="Devices\Playback\Playback.cs" />
     <Compile Include="Devices\Playback\PlaybackEvent.cs" />
+    <Compile Include="Devices\Playback\PlaybackEventCallback.cs" />
     <Compile Include="Devices\Playback\PlaybackEventMetadata\NotePlaybackEventMetadata.cs" />
     <Compile Include="Devices\Playback\PlaybackEventMetadata\PlaybackEventMetadata.cs" />
     <Compile Include="Devices\Playback\PlaybackEventsComparer.cs" />
