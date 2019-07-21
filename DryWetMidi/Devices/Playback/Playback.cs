@@ -246,6 +246,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public PlaybackSnapping Snapping { get; }
 
+        public PlaybackEventCallback EventCallback { get; set; }
+
         #endregion
 
         #region Methods
@@ -599,6 +601,13 @@ namespace Melanchall.DryWetMidi.Devices
                     return;
 
                 var midiEvent = playbackEvent.Event;
+
+                var eventCallback = EventCallback;
+                if (eventCallback != null)
+                    midiEvent = eventCallback.Invoke(midiEvent, playbackEvent.Time, playbackEvent.RawTime);
+
+                if (midiEvent == null)
+                    continue;
 
                 if (!IsRunning)
                     return;
