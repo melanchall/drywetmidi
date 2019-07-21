@@ -73,8 +73,6 @@
     <Compile Include="Devices\Playback\PlaybackEventMetadata\NotePlaybackEventMetadata.cs" />
     <Compile Include="Devices\Playback\PlaybackEventMetadata\PlaybackEventMetadata.cs" />
     <Compile Include="Devices\Playback\PlaybackEventsComparer.cs" />
-    <Compile Include="Devices\Playback\PlaybackNotesDictionary.cs" />
-    <Compile Include="Devices\Playback\PlaybackNotesDictionaryEntry.cs" />
     <Compile Include="Devices\Playback\PlaybackUtilities.cs" />
     <Compile Include="Devices\Playback\Snapping\PlaybackSnapping.cs" />
     <Compile Include="Devices\Playback\Snapping\SnapPoint.cs" />
