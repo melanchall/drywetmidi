@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Description("Check that interval of the same steps number are equal by reference.")]
         public void CheckReferences()
         {
-            Assert.IsTrue(ReferenceEquals(Interval.FromHalfSteps(10), Interval.FromHalfSteps(10)));
+            Assert.AreSame(Interval.FromHalfSteps(10), Interval.FromHalfSteps(10));
         }
 
         [Test]

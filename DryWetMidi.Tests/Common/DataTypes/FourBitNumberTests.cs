@@ -33,16 +33,14 @@ namespace Melanchall.DryWetMidi.Tests.Common
         [Test]
         public void TryParse_InvalidFormat()
         {
-            FourBitNumber result;
-            Assert.AreEqual(false, FourBitNumber.TryParse("sdsd", out result));
+            Assert.AreEqual(false, FourBitNumber.TryParse("sdsd", out _));
         }
 
         [Test]
         public void TryParse_OutOfRange()
         {
-            FourBitNumber result;
-            Assert.AreEqual(false, FourBitNumber.TryParse("200", out result));
-            Assert.AreEqual(false, FourBitNumber.TryParse("16", out result));
+            Assert.AreEqual(false, FourBitNumber.TryParse("200", out _));
+            Assert.AreEqual(false, FourBitNumber.TryParse("16", out _));
         }
 
         [Test]
