@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var lineNumber = 0;
                 Record record;
 
-                while ((record = ReadRecord(csvReader, lineNumber, settings)) != null)
+                while ((record = ReadRecord(csvReader, settings)) != null)
                 {
                     var recordType = GetRecordType(record.RecordType, settings);
                     if (recordType == null)
@@ -242,7 +242,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var channel = (FourBitNumber)TypeParser.FourBitNumber(parameters[++i], settings);
                 var noteNumber = (SevenBitNumber)TypeParser.NoteNumber(parameters[++i], settings);
 
-                ITimeSpan length = null;
+                ITimeSpan length;
                 TimeSpanUtilities.TryParse(parameters[++i], settings.NoteLengthType, out length);
 
                 var velocity = (SevenBitNumber)TypeParser.SevenBitNumber(parameters[++i], settings);
@@ -262,7 +262,7 @@ namespace Melanchall.DryWetMidi.Tools
             return null;
         }
 
-        private static Record ReadRecord(CsvReader csvReader, int lineNumber, MidiFileCsvConversionSettings settings)
+        private static Record ReadRecord(CsvReader csvReader, MidiFileCsvConversionSettings settings)
         {
             var record = csvReader.ReadRecord();
             if (record == null)
@@ -277,7 +277,7 @@ namespace Melanchall.DryWetMidi.Tools
                 ? (int?)parsedTrackNumber
                 : null;
 
-            ITimeSpan time = null;
+            ITimeSpan time;
             TimeSpanUtilities.TryParse(values[1], settings.TimeType, out time);
 
             var recordType = values[2];

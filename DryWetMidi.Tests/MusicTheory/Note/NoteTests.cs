@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Description("Check that notes of the same note number are equal by reference.")]
         public void CheckReferences()
         {
-            Assert.IsTrue(ReferenceEquals(Note.Get((SevenBitNumber)34), Note.Get((SevenBitNumber)34)));
+            Assert.AreSame(Note.Get((SevenBitNumber)34), Note.Get((SevenBitNumber)34));
         }
 
         [Test]

@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 .Note(NoteName.DSharp)
 
                 .Build()
-                .ToTrackChunk(tempoMap, channel1);
+                .ToTrackChunk(tempoMap, channel2);
 
             var midiFile = new MidiFile(trackChunk1, trackChunk2);
             var notes = midiFile.GetNotes().ToList();
