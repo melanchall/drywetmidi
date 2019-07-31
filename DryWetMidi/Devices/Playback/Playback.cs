@@ -246,17 +246,6 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public PlaybackSnapping Snapping { get; }
 
-        /// <summary>
-        /// Gets or sets a callback used to modify MIDI event before playing. Callback can return
-        /// modified original event or a new one.
-        /// </summary>
-        /// <remarks>
-        /// This property allows to modify outgoing MIDI events which can be useful to
-        /// alter playback on the fly without necessity to recreate <see cref="Playback"/> object.
-        /// For example, callback can be used to transpose notes or to change instrument.
-        /// </remarks>
-        public PlaybackEventCallback EventCallback { get; set; }
-
         #endregion
 
         #region Methods
@@ -610,11 +599,6 @@ namespace Melanchall.DryWetMidi.Devices
                     return;
 
                 var midiEvent = playbackEvent.Event;
-
-                var eventCallback = EventCallback;
-                if (eventCallback != null)
-                    midiEvent = eventCallback.Invoke(midiEvent.Clone(), playbackEvent.Time, playbackEvent.RawTime);
-
                 if (midiEvent == null)
                     continue;
 
