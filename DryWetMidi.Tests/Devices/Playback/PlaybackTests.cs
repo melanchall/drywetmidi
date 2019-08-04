@@ -1742,6 +1742,53 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 expectedNotesFinished: new[] { note1, note2 });
         }
 
+        [Retry(RetriesNumber)]
+        [Test]
+        public void InterruptNotesOnStop_NoteCallback_Transpose()
+        {
+            var transposeBy = (SevenBitNumber)20;
+
+            NoteCallback noteCallback = (d, rt, rl, t) =>
+            {
+                return new NotePlaybackData((SevenBitNumber)(d.NoteNumber + transposeBy), d.Velocity, d.OffVelocity, d.Channel);
+            };
+
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new NoteOnEvent(transposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new EventToSend(new NoteOffEvent(transposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new EventToSend(new NoteOffEvent(transposeBy, SevenBitNumber.MinValue), noteOffDelay - stopAfter)
+                },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) =>
+                {
+                    playback.InterruptNotesOnStop = true;
+                    playback.NoteCallback = noteCallback;
+                },
+                afterStart: NoPlaybackAction,
+                afterStop: NoPlaybackAction,
+                afterResume: NoPlaybackAction,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(transposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(transposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new ReceivedEvent(new NoteOffEvent(transposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter)
+                });
+        }
+
         #endregion
 
         #region Private methods
@@ -2068,7 +2115,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             PlaybackAction afterResume,
             IEnumerable<Tuple<TimeSpan, PlaybackAction>> runningAfterResume = null,
             ICollection<TimeSpan> explicitExpectedTimes = null,
-            double speed = 1.0)
+            double speed = 1.0,
+            ICollection<ReceivedEvent> expectedReceivedEvents = null)
         {
             var playbackContext = new PlaybackContext();
 
@@ -2151,6 +2199,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
 
             CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
+
+            if (expectedReceivedEvents != null)
+                CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
         }
 
         private static IEnumerable<MidiEvent> GetEventsForPlayback(IEnumerable<EventToSend> eventsToSend, TempoMap tempoMap)
