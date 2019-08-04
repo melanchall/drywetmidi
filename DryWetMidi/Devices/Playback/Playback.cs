@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly MidiClock _clock;
 
-        private readonly Dictionary<NoteId, Note> _activeNotes = new Dictionary<NoteId, Note>();
+        private readonly HashSet<NotePlaybackEventMetadata> _activeNotesMetadata = new HashSet<NotePlaybackEventMetadata>();
         private readonly List<NotePlaybackEventMetadata> _notesMetadata;
 
         private bool _disposed = false;
@@ -341,12 +341,20 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (InterruptNotesOnStop)
             {
-                foreach (var note in _activeNotes)
+                var currentTime = _clock.CurrentTime;
+
+                Note note;
+                var notes = new List<Note>();
+
+                foreach (var noteMetadata in _activeNotesMetadata.ToArray())
                 {
-                    SendEvent(new NoteOffEvent(note.Key.NoteNumber, note.Value.OffVelocity) { Channel = note.Key.Channel });
+                    TryPlayNoteEvent(noteMetadata, false, currentTime, out note);
+                    notes.Add(note);
                 }
 
-                _activeNotes.Clear();
+                OnNotesPlaybackFinished(notes.ToArray());
+
+                _activeNotesMetadata.Clear();
             }
 
             OnStopped();
@@ -537,29 +545,32 @@ namespace Melanchall.DryWetMidi.Devices
             var notesToPlay = _notesMetadata.SkipWhile(m => m.EndTime <= currentTime)
                                             .TakeWhile(m => m.StartTime < currentTime)
                                             .Where(m => m.StartTime < currentTime && m.EndTime > currentTime)
-                                            .Select(m => m.RawNote)
                                             .Distinct()
                                             .ToArray();
-            var notesIds = notesToPlay.Select(n => n.GetNoteId()).ToArray();
-
-            var onNotes = notesToPlay.Where(n => !_activeNotes.ContainsValue(n)).ToArray();
-            var offNotes = _activeNotes.Where(n => !notesIds.Contains(n.Key)).Select(n => n.Value).ToArray();
+            var onNotesMetadata = notesToPlay.Where(n => !_activeNotesMetadata.Contains(n)).ToArray();
+            var offNotesMetadata = _activeNotesMetadata.Where(n => !notesToPlay.Contains(n)).ToArray();
 
             OutputDevice?.PrepareForEventsSending();
 
-            foreach (var note in offNotes)
+            Note note;
+            var notes = new List<Note>();
+
+            foreach (var noteMetadata in offNotesMetadata)
             {
-                SendEvent(note.TimedNoteOffEvent.Event);
+                TryPlayNoteEvent(noteMetadata, false, currentTime, out note);
+                notes.Add(note);
             }
 
-            OnNotesPlaybackFinished(offNotes);
+            OnNotesPlaybackFinished(notes.ToArray());
+            notes.Clear();
 
-            foreach (var note in onNotes)
+            foreach (var noteMetadata in onNotesMetadata)
             {
-                SendEvent(note.TimedNoteOnEvent.Event);
+                TryPlayNoteEvent(noteMetadata, true, currentTime, out note);
+                notes.Add(note);
             }
 
-            OnNotesPlaybackStarted(onNotes);
+            OnNotesPlaybackStarted(notes.ToArray());
         }
 
         private void OnStarted()
@@ -607,8 +618,19 @@ namespace Melanchall.DryWetMidi.Devices
                 if (!IsRunning)
                     return;
 
-                if (TryPlayNoteEvent(playbackEvent))
+                Note note;
+                if (TryPlayNoteEvent(playbackEvent, out note))
+                {
+                    if (note != null)
+                    {
+                        if (playbackEvent.Event is NoteOnEvent)
+                            OnNotesPlaybackStarted(note);
+                        else
+                            OnNotesPlaybackFinished(note);
+                    }
+
                     continue;
+                }
 
                 SendEvent(midiEvent);
             }
@@ -648,23 +670,33 @@ namespace Melanchall.DryWetMidi.Devices
             OutputDevice?.SendEvent(midiEvent);
         }
 
-        private bool TryPlayNoteEvent(PlaybackEvent playbackEvent)
+        private bool TryPlayNoteEvent(NotePlaybackEventMetadata noteMetadata, bool isNoteOnEvent, TimeSpan time, out Note note)
         {
-            var noteMetadata = playbackEvent.Metadata.Note;
+            return TryPlayNoteEvent(noteMetadata, null, isNoteOnEvent, time, out note);
+        }
+
+        private bool TryPlayNoteEvent(PlaybackEvent playbackEvent, out Note note)
+        {
+            return TryPlayNoteEvent(playbackEvent.Metadata.Note, playbackEvent.Event, playbackEvent.Event is NoteOnEvent, playbackEvent.Time, out note);
+        }
+
+        private bool TryPlayNoteEvent(NotePlaybackEventMetadata noteMetadata, MidiEvent midiEvent, bool isNoteOnEvent, TimeSpan time, out Note note)
+        {
+            note = null;
+
             if (noteMetadata == null)
                 return false;
 
-            var midiEvent = playbackEvent.Event;
             var notePlaybackData = noteMetadata.NotePlaybackData;
 
             var noteCallback = NoteCallback;
             if (noteCallback != null && midiEvent is NoteOnEvent)
             {
-                notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.RawNote.Time, noteMetadata.RawNote.Length, playbackEvent.Time);
+                notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.RawNote.Time, noteMetadata.RawNote.Length, time);
                 noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
             }
 
-            var note = noteMetadata.RawNote;
+            note = noteMetadata.RawNote;
 
             if (noteMetadata.IsCustomNotePlaybackDataSet)
             {
@@ -678,26 +710,22 @@ namespace Melanchall.DryWetMidi.Devices
                         : notePlaybackData.GetNoteOffEvent();
                 }
             }
+            else if (midiEvent == null)
+                midiEvent = isNoteOnEvent
+                    ? (MidiEvent)notePlaybackData.GetNoteOnEvent()
+                    : notePlaybackData.GetNoteOffEvent();
 
             if (midiEvent != null)
             {
-                if (midiEvent is NoteOnEvent)
-                {
-                    _activeNotes[note.GetNoteId()] = note;
-                    OnNotesPlaybackStarted(note);
-                }
-
                 SendEvent(midiEvent);
 
-                if (midiEvent is NoteOffEvent)
-                {
-                    _activeNotes.Remove(note.GetNoteId());
-                    OnNotesPlaybackFinished(note);
-                }
+                if (midiEvent is NoteOnEvent)
+                    _activeNotesMetadata.Add(noteMetadata);
+                else
+                    _activeNotesMetadata.Remove(noteMetadata);
             }
-
-            if (playbackEvent.Event is NoteOffEvent)
-                noteMetadata.SetRawNotePlaybackData();
+            else
+                note = null;
 
             return true;
         }

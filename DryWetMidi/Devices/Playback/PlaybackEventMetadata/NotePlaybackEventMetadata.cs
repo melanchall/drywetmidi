@@ -59,12 +59,6 @@ namespace Melanchall.DryWetMidi.Devices
             IsCustomNotePlaybackDataSet = true;
         }
 
-        public void SetRawNotePlaybackData()
-        {
-            NotePlaybackData = RawNotePlaybackData;
-            IsCustomNotePlaybackDataSet = false;
-        }
-
         #endregion
     }
 }
