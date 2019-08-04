@@ -9,12 +9,11 @@ namespace Melanchall.DryWetMidi.Devices
 
         public NotePlaybackEventMetadata(Note note, TimeSpan startTime, TimeSpan endTime)
         {
-            Note = note;
+            RawNote = note;
             StartTime = startTime;
             EndTime = endTime;
-            NoteId = note.GetNoteId();
 
-            RawNotePlaybackData = new NotePlaybackData(Note.NoteNumber, Note.Velocity, Note.OffVelocity, Note.Channel);
+            RawNotePlaybackData = new NotePlaybackData(RawNote.NoteNumber, RawNote.Velocity, RawNote.OffVelocity, RawNote.Channel);
             NotePlaybackData = RawNotePlaybackData;
         }
 
@@ -22,13 +21,11 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        public Note Note { get; }
+        public Note RawNote { get; }
 
         public TimeSpan StartTime { get; }
 
         public TimeSpan EndTime { get; }
-
-        public NoteId NoteId { get; }
 
         public NotePlaybackData RawNotePlaybackData { get; }
 
@@ -46,7 +43,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (notePlaybackData == null)
                 return null;
 
-            var note = Note.Clone();
+            var note = RawNote.Clone();
 
             note.NoteNumber = notePlaybackData.NoteNumber;
             note.Velocity = notePlaybackData.Velocity;

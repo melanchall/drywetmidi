@@ -1632,13 +1632,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 expectedReceivedEvents: new ReceivedEvent[] { },
                 changeCallbackAfter: TimeSpan.FromMilliseconds(500),
                 noteCallback: (d, rt, rl, t) => null,
-                secondNoteCallback: (d, rt, rl, t) => NotePlaybackData.SkipNote);
+                secondNoteCallback: (d, rt, rl, t) => NotePlaybackData.SkipNote,
+                expectedNotesStarted: new Note[] { },
+                expectedNotesFinished: new Note[] { });
         }
 
         [Retry(RetriesNumber)]
         [Test]
         public void NoteCallback_ReturnNull_ReturnOriginal()
         {
+            var note = new Note((SevenBitNumber)100)
+            {
+                Velocity = (SevenBitNumber)80
+            }
+            .SetTimeAndLength((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), (MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default);
+
             CheckNoteCallback(
                 eventsToSend: new[]
                 {
@@ -1654,13 +1662,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 changeCallbackAfter: TimeSpan.FromMilliseconds(500),
                 noteCallback: (d, rt, rl, t) => null,
-                secondNoteCallback: (d, rt, rl, t) => d);
+                secondNoteCallback: (d, rt, rl, t) => d,
+                expectedNotesStarted: new[] { note },
+                expectedNotesFinished: new[] { note });
         }
 
         [Retry(RetriesNumber)]
         [Test]
         public void NoteCallback_ReturnOriginal_ReturnNull()
         {
+            var note = new Note(SevenBitNumber.MinValue)
+            {
+                Velocity = SevenBitNumber.MinValue
+            }
+            .SetTimeAndLength((MetricTimeSpan)TimeSpan.Zero, (MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default);
+
             CheckNoteCallback(
                 eventsToSend: new[]
                 {
@@ -1676,7 +1692,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 changeCallbackAfter: TimeSpan.FromMilliseconds(500),
                 noteCallback: (d, rt, rl, t) => d,
-                secondNoteCallback: (d, rt, rl, t) => null);
+                secondNoteCallback: (d, rt, rl, t) => null,
+                expectedNotesStarted: new[] { note },
+                expectedNotesFinished: new[] { note });
         }
 
         [Retry(RetriesNumber)]
@@ -1689,6 +1707,18 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             {
                 return new NotePlaybackData((SevenBitNumber)(d.NoteNumber + transposeBy), d.Velocity, d.OffVelocity, d.Channel);
             };
+
+            var note1 = new Note(transposeBy)
+            {
+                Velocity = SevenBitNumber.MinValue
+            }
+            .SetTimeAndLength((MetricTimeSpan)TimeSpan.Zero, (MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default);
+
+            var note2 = new Note((SevenBitNumber)(100 + transposeBy))
+            {
+                Velocity = (SevenBitNumber)80
+            }
+            .SetTimeAndLength((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), (MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default);
 
             CheckNoteCallback(
                 eventsToSend: new[]
@@ -1707,7 +1737,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 changeCallbackAfter: TimeSpan.FromMilliseconds(500),
                 noteCallback: noteCallback,
-                secondNoteCallback: noteCallback);
+                secondNoteCallback: noteCallback,
+                expectedNotesStarted: new[] { note1, note2 },
+                expectedNotesFinished: new[] { note1, note2 });
         }
 
         #endregion
@@ -1734,7 +1766,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             ICollection<ReceivedEvent> expectedReceivedEvents,
             TimeSpan changeCallbackAfter,
             NoteCallback noteCallback,
-            NoteCallback secondNoteCallback)
+            NoteCallback secondNoteCallback,
+            ICollection<Note> expectedNotesStarted,
+            ICollection<Note> expectedNotesFinished)
         {
             var playbackContext = new PlaybackContext();
 
@@ -1745,6 +1779,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
 
+            var notesStarted = new List<Note>();
+            var notesFinished = new List<Note>();
+
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
@@ -1752,6 +1789,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
                 {
+                    playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
+                    playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
+
                     playback.NoteCallback = noteCallback;
 
                     using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
@@ -1779,6 +1819,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
 
             CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
+
+            Assert.IsTrue(NoteEquality.AreEqual(notesStarted, expectedNotesStarted), "Invalid notes started.");
+            Assert.IsTrue(NoteEquality.AreEqual(notesFinished, expectedNotesFinished), "Invalid notes finished.");
         }
 
         private void CheckTrackNotes(
