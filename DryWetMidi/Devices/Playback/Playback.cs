@@ -246,6 +246,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public PlaybackSnapping Snapping { get; }
 
+        public NoteCallback NoteCallback { get; set; }
+
         #endregion
 
         #region Methods
@@ -605,22 +607,10 @@ namespace Melanchall.DryWetMidi.Devices
                 if (!IsRunning)
                     return;
 
-                SendEvent(midiEvent);
+                if (TryPlayNoteEvent(playbackEvent))
+                    continue;
 
-                var noteMetadata = playbackEvent.Metadata.Note;
-                if (noteMetadata != null)
-                {
-                    if (noteMetadata.IsNoteOnEvent)
-                    {
-                        _activeNotes[noteMetadata.NoteId] = noteMetadata.Note;
-                        OnNotesPlaybackStarted(noteMetadata.Note);
-                    }
-                    else
-                    {
-                        _activeNotes.Remove(noteMetadata.NoteId);
-                        OnNotesPlaybackFinished(noteMetadata.Note);
-                    }
-                }
+                SendEvent(midiEvent);
             }
             while (_eventsEnumerator.MoveNext());
 
@@ -656,6 +646,55 @@ namespace Melanchall.DryWetMidi.Devices
         private void SendEvent(MidiEvent midiEvent)
         {
             OutputDevice?.SendEvent(midiEvent);
+        }
+
+        private bool TryPlayNoteEvent(PlaybackEvent playbackEvent)
+        {
+            var noteMetadata = playbackEvent.Metadata.Note;
+            if (noteMetadata == null)
+                return false;
+
+            var midiEvent = playbackEvent.Event;
+            var notePlaybackData = noteMetadata.NotePlaybackData;
+
+            var noteCallback = NoteCallback;
+            if (noteCallback != null && midiEvent is NoteOnEvent)
+            {
+                notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.Note.Time, noteMetadata.Note.Length, playbackEvent.Time);
+                noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
+            }
+
+            if (noteMetadata.IsCustomNotePlaybackDataSet)
+            {
+                if (notePlaybackData == null || !notePlaybackData.PlayNote)
+                    midiEvent = null;
+                else
+                    midiEvent = midiEvent is NoteOnEvent
+                        ? (MidiEvent)notePlaybackData?.GetNoteOnEvent()
+                        : notePlaybackData?.GetNoteOffEvent();
+            }
+
+            if (midiEvent != null)
+            {
+                if (midiEvent is NoteOnEvent)
+                {
+                    _activeNotes[noteMetadata.NoteId] = noteMetadata.Note;
+                    OnNotesPlaybackStarted(noteMetadata.Note);
+                }
+
+                SendEvent(midiEvent);
+
+                if (midiEvent is NoteOffEvent)
+                {
+                    _activeNotes.Remove(noteMetadata.NoteId);
+                    OnNotesPlaybackFinished(noteMetadata.Note);
+                }
+            }
+
+            if (playbackEvent.Event is NoteOffEvent)
+                noteMetadata.SetRawNotePlaybackData();
+
+            return true;
         }
 
         private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
@@ -699,18 +738,18 @@ namespace Melanchall.DryWetMidi.Devices
 
         private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Note note, TempoMap tempoMap)
         {
-            yield return GetPlaybackEventWithNoteTag(note, note.TimedNoteOnEvent, tempoMap);
-            yield return GetPlaybackEventWithNoteTag(note, note.TimedNoteOffEvent, tempoMap);
-        }
-
-        private static PlaybackEvent GetPlaybackEventWithNoteTag(Note note, TimedEvent timedEvent, TempoMap tempoMap)
-        {
-            var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
-
             TimeSpan noteStartTime = note.TimeAs<MetricTimeSpan>(tempoMap);
             TimeSpan noteEndTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time + note.Length, tempoMap);
-            playbackEvent.Metadata.Note = new NotePlaybackEventMetadata(note, timedEvent.Event is NoteOnEvent, noteStartTime, noteEndTime);
+            var noteMetadata = new NotePlaybackEventMetadata(note, noteStartTime, noteEndTime);
 
+            yield return GetPlaybackEventWithNoteMetadata(note.TimedNoteOnEvent, tempoMap, noteMetadata);
+            yield return GetPlaybackEventWithNoteMetadata(note.TimedNoteOffEvent, tempoMap, noteMetadata);
+        }
+
+        private static PlaybackEvent GetPlaybackEventWithNoteMetadata(TimedEvent timedEvent, TempoMap tempoMap, NotePlaybackEventMetadata noteMetadata)
+        {
+            var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
+            playbackEvent.Metadata.Note = noteMetadata;
             return playbackEvent;
         }
 

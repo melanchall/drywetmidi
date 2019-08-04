@@ -66,6 +66,8 @@
     <Compile Include="Devices\OutputDevice\OutputDevice.cs" />
     <Compile Include="Devices\OutputDevice\OutputDeviceType.cs" />
     <Compile Include="Devices\OutputDevice\Volume.cs" />
+    <Compile Include="Devices\Playback\NoteCallback.cs" />
+    <Compile Include="Devices\Playback\NotePlaybackData.cs" />
     <Compile Include="Devices\Playback\NotesEventArgs.cs" />
     <Compile Include="Devices\Playback\Playback.cs" />
     <Compile Include="Devices\Playback\PlaybackEvent.cs" />

@@ -90,7 +90,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (_timerId == NoTimerId)
             {
-
                 var timeCaps = default(MidiTimerWinApi.TIMECAPS);
                 ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
 

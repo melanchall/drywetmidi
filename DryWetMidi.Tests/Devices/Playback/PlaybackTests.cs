@@ -1617,6 +1617,99 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_ReturnNull_ReturnSkipNote()
+        {
+            CheckNoteCallback(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(500)),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(500))
+                },
+                expectedReceivedEvents: new ReceivedEvent[] { },
+                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
+                noteCallback: (d, rt, rl, t) => null,
+                secondNoteCallback: (d, rt, rl, t) => NotePlaybackData.SkipNote);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_ReturnNull_ReturnOriginal()
+        {
+            CheckNoteCallback(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(500)),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(500))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                },
+                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
+                noteCallback: (d, rt, rl, t) => null,
+                secondNoteCallback: (d, rt, rl, t) => d);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_ReturnOriginal_ReturnNull()
+        {
+            CheckNoteCallback(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(500)),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(500))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1))
+                },
+                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
+                noteCallback: (d, rt, rl, t) => d,
+                secondNoteCallback: (d, rt, rl, t) => null);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_Transpose()
+        {
+            var transposeBy = (SevenBitNumber)20;
+
+            NoteCallback noteCallback = (d, rt, rl, t) =>
+            {
+                return new NotePlaybackData((SevenBitNumber)(d.NoteNumber + transposeBy), d.Velocity, d.OffVelocity, d.Channel);
+            };
+
+            CheckNoteCallback(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(500)),
+                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(500))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(transposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(transposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(1)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + transposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + transposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                },
+                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
+                noteCallback: noteCallback,
+                secondNoteCallback: noteCallback);
+        }
+
         #endregion
 
         #region Private methods
@@ -1634,6 +1727,58 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
 
             return result;
+        }
+
+        private void CheckNoteCallback(
+            ICollection<EventToSend> eventsToSend,
+            ICollection<ReceivedEvent> expectedReceivedEvents,
+            TimeSpan changeCallbackAfter,
+            NoteCallback noteCallback,
+            NoteCallback secondNoteCallback)
+        {
+            var playbackContext = new PlaybackContext();
+
+            var receivedEvents = playbackContext.ReceivedEvents;
+            var sentEvents = playbackContext.SentEvents;
+            var stopwatch = playbackContext.Stopwatch;
+            var tempoMap = playbackContext.TempoMap;
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                {
+                    playback.NoteCallback = noteCallback;
+
+                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                    {
+                        inputDevice.EventReceived += (_, e) =>
+                        {
+                            lock (playbackContext.ReceivedEventsLockObject)
+                            {
+                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                            }
+                        };
+
+                        inputDevice.StartEventsListening();
+                        stopwatch.Start();
+                        playback.Start();
+
+                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= changeCallbackAfter);
+                        playback.NoteCallback = secondNoteCallback;
+
+                        var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                    }
+                }
+            }
+
+            CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
         }
 
         private void CheckTrackNotes(
@@ -2031,6 +2176,30 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
                     $"Event was sent at wrong time (at {sentEvent.Time} instead of {expectedTime}).");
+            }
+        }
+
+        private void CompareReceivedEvents(
+            IReadOnlyList<ReceivedEvent> receivedEvents,
+            IReadOnlyList<ReceivedEvent> expectedReceivedEvents)
+        {
+            Assert.AreEqual(expectedReceivedEvents.Count, receivedEvents.Count, "Received events count is invalid.");
+
+            for (var i = 0; i < receivedEvents.Count; i++)
+            {
+                var receivedEvent = receivedEvents[i];
+                var expectedReceivedEvent = expectedReceivedEvents[i];
+
+                Assert.IsTrue(
+                    MidiEventEquality.AreEqual(expectedReceivedEvent.Event, receivedEvent.Event, false),
+                    $"Received event {receivedEvent.Event} doesn't match expected one {expectedReceivedEvent.Event}.");
+
+                var expectedTime = expectedReceivedEvent.Time;
+                var offsetFromExpectedTime = (receivedEvent.Time - expectedTime).Duration();
+                Assert.LessOrEqual(
+                    offsetFromExpectedTime,
+                    SendReceiveUtilities.MaximumEventSendReceiveDelay,
+                    $"Event was received at wrong time (at {receivedEvent.Time} instead of {expectedTime}).");
             }
         }
 
