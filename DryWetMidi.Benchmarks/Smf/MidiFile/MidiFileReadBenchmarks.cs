@@ -12,6 +12,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
         #region Nested classes
 
         [ClrJob]
+        [InProcess]
         public class Benchmarks
         {
             private const string SmallFilesDirectoryName = "Small";

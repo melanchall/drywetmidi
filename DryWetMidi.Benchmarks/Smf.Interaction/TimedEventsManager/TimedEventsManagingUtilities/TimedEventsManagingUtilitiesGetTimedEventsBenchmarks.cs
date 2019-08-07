@@ -13,6 +13,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Nested classes
 
         [ClrJob]
+        [InProcess]
         public class Benchmarks
         {
             private static readonly IEnumerable<TimedEvent> _midiFileTimedEvents = CreateTestFile().GetTimedEvents();
