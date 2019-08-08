@@ -33,14 +33,33 @@ steps:
     testSelector: testAssemblies
     testAssemblyVer2:
       '**/*.Benchmarks.dll'
-    rerunMaxAttempts: '3'
-    
-- task: CopyFiles@2
+
+- task: PowerShell@2
+  displayName: Print results
   inputs:
-    contents: '**/bin/**'
+    targetType: 'inline'
+    script: |
+      $directory = '$(Build.SourcesDirectory)\DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results'
+      $fileNames = Get-ChildItem -Path "$directory\*.asciidoc" -Recurse -Force -Name
+      Foreach ($name in $fileNames)
+      {
+      	$nameParts = $name.Split(".")
+      	$nameKey = $nameParts[$nameParts.Length - 2]
+      	Write-Host $nameKey
+      	$content = [IO.File]::ReadAllText("$directory\$name")
+      	$tableStart = $content.IndexOf("|===")
+      	$table = $content.Substring($tableStart)
+      	Write-Host $table
+      }
+
+- task: CopyFiles@2
+  displayName: Copy results
+  inputs:
+    contents: '**/BenchmarkDotNet.Artifacts/**/*.*'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
+  displayName: Publish results
   inputs:
     pathToPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: MyBuildOutputs
+    artifactName: BenchmarksResults

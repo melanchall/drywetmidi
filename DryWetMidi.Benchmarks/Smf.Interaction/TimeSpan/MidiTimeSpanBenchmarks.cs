@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes.Jobs;
+﻿using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using NUnit.Framework;
 
@@ -9,8 +9,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Nested classes
 
-        [ClrJob]
-        [InProcess]
+        [InProcessSimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 5, targetCount: 5, invocationCount: 5)]
         public class Benchmarks : TimeSpanBenchmarks<MidiTimeSpan>
         {
             #region Overrides
