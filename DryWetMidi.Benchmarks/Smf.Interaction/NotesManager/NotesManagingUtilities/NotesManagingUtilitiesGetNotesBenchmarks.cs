@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
+using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
@@ -14,8 +14,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Nested classes
 
-        [ClrJob]
-        [InProcess]
+        [InProcessSimpleJob(RunStrategy.Throughput)]
         public class Benchmarks
         {
             private static readonly IEnumerable<Note> _midiFileNotes = CreateTestFile().GetNotes();

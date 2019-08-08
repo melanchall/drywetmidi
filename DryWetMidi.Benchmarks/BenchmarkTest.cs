@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Text;
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Json;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Toolchains.InProcess;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks
@@ -29,8 +33,16 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
         protected void RunBenchmarks<TBenchmarks>()
         {
-            var summary = BenchmarkRunner.Run<TBenchmarks>(ManualConfig.Create(DefaultConfig.Instance)
-                                                                       .With(JsonExporter.Brief));
+            RunBenchmarks(typeof(TBenchmarks));
+        }
+
+        protected void RunBenchmarks(Type type, params IColumn[] columns)
+        {
+            var summary = BenchmarkRunner.Run(
+                type,
+                ManualConfig.Create(DefaultConfig.Instance)
+                            .With(AsciiDocExporter.Default)
+                            .With(columns));
 
             // Assert validation errors
 

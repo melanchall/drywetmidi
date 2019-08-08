@@ -1,5 +1,10 @@
 trigger:
-- develop
+  branches:
+    include:
+    - develop
+  paths:
+    exclude:
+    - DryWetMidi.Benchmarks
 
 pool:
   vmImage: 'windows-latest'
