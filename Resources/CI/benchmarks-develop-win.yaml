@@ -10,6 +10,24 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: PowerShell@2
+  displayName: Create directories for results
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "PreviousResults" -ItemType "Directory"
+      New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "CurrentResults" -ItemType "Directory"
+
+- task: DownloadPipelineArtifact@2
+  displayName: Download previous results
+  inputs:
+    buildType: 'specific'
+    project: 'd286d31e-d5f6-443f-b126-d81074c91872'
+    definition: '3'
+    buildVersionToDownload: 'latest'
+    artifactName: 'BenchmarksResults'
+    targetPath: $(Build.ArtifactStagingDirectory)\PreviousResults
+
 - task: NuGetToolInstaller@1
   displayName: Install NuGet tools
 
@@ -34,32 +52,64 @@ steps:
     testAssemblyVer2:
       '**/*.Benchmarks.dll'
 
+- task: CopyFiles@2
+  displayName: Copy results
+  inputs:
+    contents: '**/BenchmarkDotNet.Artifacts/**/*.*'
+    targetFolder: $(Build.ArtifactStagingDirectory)\CurrentResults
+
 - task: PowerShell@2
   displayName: Print results
   inputs:
     targetType: 'inline'
     script: |
-      $directory = '$(Build.SourcesDirectory)\DryWetMidi.Benchmarks\bin\Release\BenchmarkDotNet.Artifacts\results'
-      $fileNames = Get-ChildItem -Path "$directory\*.asciidoc" -Recurse -Force -Name
-      Foreach ($name in $fileNames)
+      $previousDirectory = "$(Build.ArtifactStagingDirectory)\PreviousResults"
+      $currentDirectory = "$(Build.ArtifactStagingDirectory)\CurrentResults"
+      $currentFiles = Get-ChildItem -Path "$currentDirectory" -Recurse -Name -Include *.json
+      
+      foreach ($fileName in $currentFiles)
       {
-      	$nameParts = $name.Split(".")
-      	$nameKey = $nameParts[$nameParts.Length - 2]
-      	Write-Host $nameKey
-      	$content = [IO.File]::ReadAllText("$directory\$name")
-      	$tableStart = $content.IndexOf("|===")
-      	$table = $content.Substring($tableStart)
-      	Write-Host $table
+        $fileNameWithoutExtension = [System.IO.Path]::GetFileNameWithoutExtension($fileName)
+        $className = $fileNameWithoutExtension.Split('.')[-1].Replace("+", " -> ") -Replace "\-report\-brief",""
+
+        Write-Host "========================================"
+        Write-Host $className
+        
+        $currentJson = Get-Content "$currentDirectory\$fileName" | Out-String | ConvertFrom-Json
+
+        For ($i=0; $i -lt $currentJson.Benchmarks.Length; $i++)
+        {
+          Write-Host "----------------------------------------"
+          Write-Host $currentJson.Benchmarks[$i].MethodTitle
+  
+          $currentMean = [math]::Round($currentJson.Benchmarks[$i].Statistics.Mean / 1000000, 3)
+          
+          $previousFileExists = Test-Path -Path "$previousDirectory\$fileName"
+          If (-Not $previousFileExists)
+          {
+            Write-Host "    $currentMean"
+            continue
+          }
+          
+          $previousJson = Get-Content "$previousDirectory\$fileName" | Out-String | ConvertFrom-Json
+          $previousMean = [math]::Round($previousJson.Benchmarks[$i].Statistics.Mean / 1000000, 3)
+          
+          $delta = $currentMean - $previousMean
+          
+          $resultString = "    $previousMean ms -> $currentMean ms | $delta ms"
+          If ($currentMean -le $previousMean)
+          {
+            Write-Host $resultString
+          }
+          Else
+          {
+            Write-Host "##vso[task.logissue type=warning]$resultString"
+          }
+        }
       }
 
-- task: CopyFiles@2
-  displayName: Copy results
-  inputs:
-    contents: '**/BenchmarkDotNet.Artifacts/**/*.*'
-    targetFolder: $(Build.ArtifactStagingDirectory)
-
-- task: PublishBuildArtifacts@1
+- task: PublishPipelineArtifact@1
   displayName: Publish results
   inputs:
-    pathToPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: BenchmarksResults
+    targetPath: $(Build.ArtifactStagingDirectory)\CurrentResults
+    artifact: BenchmarksResults

@@ -14,27 +14,20 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Nested classes
 
-        [InProcessSimpleJob(RunStrategy.Throughput)]
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
         public class Benchmarks
         {
-            private static readonly IEnumerable<Note> _midiFileNotes = CreateTestFile().GetNotes();
+            private static readonly MidiFile _midiFile = CreateTestFile();
 
             [Benchmark]
             public void GetNotes_MidiFile()
             {
-                const int iterationsNumber = 10;
-
-                for (int i = 0; i < iterationsNumber; i++)
-                {
-                    foreach (var note in _midiFileNotes)
-                    {
-                    }
-                }
+                var note = _midiFile.GetNotes();
             }
 
             private static MidiFile CreateTestFile()
             {
-                const int trackChunksNumber = 100;
+                const int trackChunksNumber = 50;
                 const int notesPerTrackChunk = 1000;
                 const int noteLength = 100;
 
