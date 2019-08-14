@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
             var summary = BenchmarkRunner.Run(
                 type,
                 ManualConfig.Create(DefaultConfig.Instance)
-                            .With(AsciiDocExporter.Default)
+                            .With(AsciiDocExporter.Default, JsonExporter.Brief)
                             .With(columns));
 
             // Assert validation errors

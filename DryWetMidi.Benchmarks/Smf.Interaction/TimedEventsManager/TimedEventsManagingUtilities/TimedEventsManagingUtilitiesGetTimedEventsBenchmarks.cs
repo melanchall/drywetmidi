@@ -12,27 +12,20 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Nested classes
 
-        [InProcessSimpleJob(RunStrategy.Throughput)]
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
         public class Benchmarks
         {
-            private static readonly IEnumerable<TimedEvent> _midiFileTimedEvents = CreateTestFile().GetTimedEvents();
+            private static readonly MidiFile _midiFile = CreateTestFile();
 
             [Benchmark]
             public void GetTimedEvents_MidiFile()
             {
-                const int iterationsNumber = 10;
-
-                for (int i = 0; i < iterationsNumber; i++)
-                {
-                    foreach (var timedEvent in _midiFileTimedEvents)
-                    {
-                    }
-                }
+                var timedEvents = _midiFile.GetTimedEvents();
             }
 
             private static MidiFile CreateTestFile()
             {
-                const int trackChunksNumber = 100;
+                const int trackChunksNumber = 10;
                 const int eventsPerTrackChunk = 10000;
 
                 var midiFile = new MidiFile();
