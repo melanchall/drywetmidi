@@ -155,6 +155,8 @@
     <Compile Include="Attributes\InProcessSimpleJobAttribute.cs" />
     <Compile Include="BenchmarkTest.cs" />
     <Compile Include="Columns\MidiFileEventsCountsColumn.cs" />
+    <Compile Include="Devices\Playback\PlaybackBenchmarks.cs" />
+    <Compile Include="Devices\SendReceiveBenchmarks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Smf.Interaction\ChordsManager\ChordsManagingUtilities\ChordsManagingUtilitiesGetChordsBenchmarks.cs" />
     <Compile Include="Smf.Interaction\NotesManager\NotesManagingUtilities\NotesManagingUtilitiesGetNotesBenchmarks.cs" />
@@ -165,6 +167,7 @@
     <Compile Include="Smf.Interaction\TimeSpan\MetricTimeSpanBenchmarks.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanBenchmarks.cs" />
     <Compile Include="Smf\MidiFile\MidiFileReadBenchmarks.cs" />
+    <Compile Include="TestBenchmarks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
