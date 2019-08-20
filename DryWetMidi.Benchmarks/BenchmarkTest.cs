@@ -6,7 +6,6 @@ using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNet.Toolchains.InProcess;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks
