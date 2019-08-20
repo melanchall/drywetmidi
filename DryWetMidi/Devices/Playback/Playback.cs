@@ -248,6 +248,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public NoteCallback NoteCallback { get; set; }
 
+        public EventCallback EventCallback { get; set; }
+
         #endregion
 
         #region Methods
@@ -631,6 +633,13 @@ namespace Melanchall.DryWetMidi.Devices
 
                     continue;
                 }
+
+                var eventCallback = EventCallback;
+                if (eventCallback != null)
+                    midiEvent = eventCallback(midiEvent.Clone(), playbackEvent.RawTime, time);
+
+                if (midiEvent == null)
+                    continue;
 
                 SendEvent(midiEvent);
             }

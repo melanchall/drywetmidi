@@ -52,6 +52,7 @@
     <Compile Include="Devices\InpurDevice\InputDeviceTests.cs" />
     <Compile Include="Devices\OutputDevice\OutputDeviceTests.cs" />
     <Compile Include="Devices\Playback\PlaybackTests.Asserts.cs" />
+    <Compile Include="Devices\Playback\PlaybackTests.EventCallback.cs" />
     <Compile Include="Devices\Playback\PlaybackTests.NoteCallback.cs" />
     <Compile Include="Devices\Playback\PlaybackTests.Snapping.cs" />
     <Compile Include="Devices\Playback\PlaybackTests.TimeManagement.cs" />

@@ -29,6 +29,64 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             return result;
         }
 
+        private void CheckEventCallback(
+            ICollection<EventToSend> eventsToSend,
+            ICollection<ReceivedEvent> expectedReceivedEvents,
+            TimeSpan changeCallbackAfter,
+            EventCallback eventCallback,
+            EventCallback secondEventCallback)
+        {
+            var playbackContext = new PlaybackContext();
+
+            var receivedEvents = playbackContext.ReceivedEvents;
+            var sentEvents = playbackContext.SentEvents;
+            var stopwatch = playbackContext.Stopwatch;
+            var tempoMap = playbackContext.TempoMap;
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            var notesStarted = new List<Note>();
+            var notesFinished = new List<Note>();
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                {
+                    playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
+                    playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
+
+                    playback.EventCallback = eventCallback;
+
+                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                    {
+                        inputDevice.EventReceived += (_, e) =>
+                        {
+                            lock (playbackContext.ReceivedEventsLockObject)
+                            {
+                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                            }
+                        };
+
+                        inputDevice.StartEventsListening();
+                        stopwatch.Start();
+                        playback.Start();
+
+                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= changeCallbackAfter);
+                        playback.EventCallback = secondEventCallback;
+
+                        var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                    }
+                }
+            }
+
+            CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
+        }
+
         private void CheckNoteCallback(
             ICollection<EventToSend> eventsToSend,
             ICollection<ReceivedEvent> expectedReceivedEvents,
