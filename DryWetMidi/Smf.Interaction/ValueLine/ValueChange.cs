@@ -104,7 +104,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            return Time.GetHashCode() ^ Value.GetHashCode();
+            unchecked
+            {
+                var result = 17;
+                result = result * 23 + Time.GetHashCode();
+                result = result * 23 + Value.GetHashCode();
+                return result;
+            }
         }
 
         #endregion

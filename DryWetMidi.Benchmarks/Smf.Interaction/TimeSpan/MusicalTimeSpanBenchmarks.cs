@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Nested classes
 
         [InProcessSimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 5, targetCount: 5, invocationCount: 5)]
-        public class Benchmarks : TimeSpanBenchmarks<MusicalTimeSpan>
+        public class Benchmarks_Musical : TimeSpanBenchmarks<MusicalTimeSpan>
         {
             #region Constants
 
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark musical time/length conversion.")]
         public void ConvertMusicalTimeSpan()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_Musical>();
         }
 
         #endregion

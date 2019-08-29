@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Common;
@@ -15,7 +14,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Nested classes
 
         [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
-        public class Benchmarks
+        public class Benchmarks_GetChords
         {
             private static readonly MidiFile _midiFile = CreateTestFile();
 
@@ -64,7 +63,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark ChordsManagingUtilities.GetChords method.")]
         public void GetChords()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_GetChords>();
         }
 
         #endregion

@@ -144,7 +144,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return RootNote.GetHashCode() ^ Intervals.GetHashCode();
+            unchecked
+            {
+                var result = 17;
+                result = result * 23 + RootNote.GetHashCode();
+                result = result * 23 + Intervals.GetHashCode();
+                return result;
+            }
         }
 
         #endregion

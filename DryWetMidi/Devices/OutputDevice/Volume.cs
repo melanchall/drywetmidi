@@ -124,7 +124,13 @@
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return LeftVolume ^ RightVolume;
+            unchecked
+            {
+                var result = 17;
+                result = result * 23 + LeftVolume.GetHashCode();
+                result = result * 23 + RightVolume.GetHashCode();
+                return result;
+            }
         }
 
         #endregion

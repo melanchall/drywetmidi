@@ -105,10 +105,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return Time.GetHashCode() ^
-                   Length.GetHashCode() ^
-                   Channel.GetValueOrDefault().GetHashCode() ^
-                   NoteNumber.GetValueOrDefault().GetHashCode();
+            unchecked
+            {
+                var result = 17;
+                result = result * 23 + Time.GetHashCode();
+                result = result * 23 + Length.GetHashCode();
+                result = result * 23 + Channel.GetHashCode();
+                result = result * 23 + NoteNumber.GetHashCode();
+                return result;
+            }
         }
 
         #endregion

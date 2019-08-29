@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Nested classes
 
         [InProcessSimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 5, targetCount: 5, invocationCount: 5)]
-        public class Benchmarks : TimeSpanBenchmarks<BarBeatTimeSpan>
+        public class Benchmarks_BarBeat : TimeSpanBenchmarks<BarBeatTimeSpan>
         {
             #region Constants
 
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark bar/beat time/length conversion.")]
         public void ConvertBarBeatTimeSpan()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_BarBeat>();
         }
 
         #endregion
