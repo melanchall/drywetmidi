@@ -5,6 +5,7 @@ trigger:
   paths:
     exclude:
     - DryWetMidi.Benchmarks
+    - README.md
 
 pool:
   vmImage: 'windows-latest'
