@@ -1,5 +1,10 @@
 trigger:
-- develop
+  branches:
+    include:
+    - develop
+  paths:
+    exclude:
+    - README.md
 
 pool:
   vmImage: 'windows-latest'
