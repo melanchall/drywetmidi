@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
     public sealed class PlaybackBenchmarks : BenchmarkTest
     {
         [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
-        public sealed class Benchmarks
+        public class Benchmarks
         {
             private Playback _playback;
             private Playback _playbackWithNoteCallback;

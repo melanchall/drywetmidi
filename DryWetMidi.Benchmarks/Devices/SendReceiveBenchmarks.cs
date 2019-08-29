@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
     public sealed class SendReceiveBenchmarks : BenchmarkTest
     {
         [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput, warmupCount: 32, targetCount: 32, launchCount: 32, invocationCount: 32)]
-        public sealed class Benchmarks
+        public class Benchmarks
         {
             private InputDevice _inputDevice;
             private OutputDevice _outputDevice;
