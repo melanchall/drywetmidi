@@ -37,12 +37,11 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
         protected void RunBenchmarks(Type type, params IColumn[] columns)
         {
-
             var summary = BenchmarkRunner.Run(
-                    type,
-                    ManualConfig.Create(DefaultConfig.Instance)
-                                .With(AsciiDocExporter.Default, JsonExporter.Brief)
-                                .With(columns));
+                type,
+                ManualConfig.Create(DefaultConfig.Instance)
+                            .With(AsciiDocExporter.Default, JsonExporter.Brief)
+                            .With(columns));
 
             // Assert validation errors
 
@@ -57,7 +56,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
             if (!string.IsNullOrEmpty(validationError))
                 Assert.Inconclusive(validationError);
 
-            // Assert build/generate errors
+            // Assert build/generate/execute errors
 
             var buildErrorsStringBuilder = new StringBuilder();
 
@@ -70,6 +69,14 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
                 if (!buildResult.IsGenerateSuccess)
                     buildErrorsStringBuilder.AppendLine($"Generate exception={buildResult.GenerateException.Message}");
+
+                foreach (var executeResult in report.ExecuteResults)
+                {
+                    if (executeResult.ExitCode == 0)
+                        continue;
+
+                    buildErrorsStringBuilder.AppendLine($"Execute result: exit code is not 0");
+                }
             }
 
             var buildError = buildErrorsStringBuilder.ToString().Trim();
