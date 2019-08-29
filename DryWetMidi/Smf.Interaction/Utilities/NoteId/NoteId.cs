@@ -39,7 +39,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public override int GetHashCode()
         {
-            return Channel.GetHashCode() ^ NoteNumber.GetHashCode();
+            unchecked
+            {
+                var result = 17;
+                result = result * 23 + Channel.GetHashCode();
+                result = result * 23 + NoteNumber.GetHashCode();
+                return result;
+            }
         }
 
         #endregion

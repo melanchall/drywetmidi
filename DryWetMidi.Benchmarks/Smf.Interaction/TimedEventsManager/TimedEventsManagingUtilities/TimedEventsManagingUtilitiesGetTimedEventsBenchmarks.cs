@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
@@ -13,7 +12,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Nested classes
 
         [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
-        public class Benchmarks
+        public class Benchmarks_GetTimedEvents
         {
             private static readonly MidiFile _midiFile = CreateTestFile();
 
@@ -57,7 +56,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark TimedEventsManagingUtilities.GetTimedEvents method.")]
         public void GetTimedEvents()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_GetTimedEvents>();
         }
 
         #endregion

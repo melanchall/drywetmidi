@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
     public sealed class TestBenchmarks : BenchmarkTest
     {
         [ClrJob]
-        public sealed class Benchmarks
+        public class Benchmarks_Test
         {
             [Benchmark]
             public void Run()
@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
         [Test]
         public void Run()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_Test>();
         }
     }
 }
