@@ -69,6 +69,7 @@
     <Compile Include="Devices\Playback\Callbacks\EventCallback.cs" />
     <Compile Include="Devices\Playback\Callbacks\NoteCallback.cs" />
     <Compile Include="Devices\Playback\Callbacks\NotePlaybackData.cs" />
+    <Compile Include="Devices\Playback\MidiEventPlayedEventArgs.cs" />
     <Compile Include="Devices\Playback\NotesEventArgs.cs" />
     <Compile Include="Devices\Playback\Playback.cs" />
     <Compile Include="Devices\Playback\PlaybackEvent.cs" />
