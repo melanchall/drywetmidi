@@ -150,6 +150,53 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             Assert.IsTrue(NoteEquality.AreEqual(notesFinished, expectedNotesFinished), "Invalid notes finished.");
         }
 
+        private void CheckEventPlayedEvent(
+            ICollection<EventToSend> eventsToSend,
+            ICollection<ReceivedEvent> expectedPlayedEvents)
+        {
+            var playbackContext = new PlaybackContext();
+
+            var playedEvents = playbackContext.ReceivedEvents;
+            var sentEvents = playbackContext.SentEvents;
+            var stopwatch = playbackContext.Stopwatch;
+            var tempoMap = playbackContext.TempoMap;
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            var notesStarted = new List<Note>();
+            var notesFinished = new List<Note>();
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                {
+                    playback.EventPlayed += (_, e) =>
+                    {
+                        lock (playbackContext.ReceivedEventsLockObject)
+                        {
+                            playedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                        }
+                    };
+
+                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                    {
+                        inputDevice.StartEventsListening();
+                        stopwatch.Start();
+                        playback.Start();
+
+                        var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                    }
+                }
+            }
+
+            CompareReceivedEvents(playedEvents, expectedPlayedEvents.ToList());
+        }
+
         private void CheckTrackNotes(
             ICollection<EventToSend> eventsToSend,
             ICollection<EventToSend> eventsWillBeSent,
@@ -395,10 +442,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             IEnumerable<Tuple<TimeSpan, PlaybackAction>> runningAfterResume = null,
             ICollection<TimeSpan> explicitExpectedTimes = null,
             double speed = 1.0,
-            ICollection<ReceivedEvent> expectedReceivedEvents = null)
+            ICollection<ReceivedEvent> expectedReceivedEvents = null,
+            ICollection<ReceivedEvent> expectedPlayedEvents = null)
         {
             var playbackContext = new PlaybackContext();
 
+            var playedEvents = new List<ReceivedEvent>();
             var receivedEvents = playbackContext.ReceivedEvents;
             var sentEvents = playbackContext.SentEvents;
             var stopwatch = playbackContext.Stopwatch;
@@ -407,8 +456,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
             var expectedTimes = playbackContext.ExpectedTimes;
 
-            if (explicitExpectedTimes != null || expectedReceivedEvents != null)
-                expectedTimes.AddRange(explicitExpectedTimes ?? expectedReceivedEvents.Select(e => e.Time));
+            if (explicitExpectedTimes != null || expectedReceivedEvents != null || expectedPlayedEvents != null)
+                expectedTimes.AddRange(explicitExpectedTimes ?? (expectedReceivedEvents?.Select(e => e.Time) ?? expectedPlayedEvents.Select(e => e.Time)));
             else
             {
                 var currentTime = TimeSpan.Zero;
@@ -430,6 +479,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 {
                     playback.Speed = speed;
                     setupPlayback(playbackContext, playback);
+
+                    if (expectedPlayedEvents != null)
+                        playback.EventPlayed += (_, e) => playedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
 
                     using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
                     {
@@ -481,6 +533,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             if (expectedReceivedEvents != null)
                 CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
+
+            if (expectedPlayedEvents != null)
+                CompareReceivedEvents(playedEvents, expectedPlayedEvents.ToList());
         }
 
         private static IEnumerable<MidiEvent> GetEventsForPlayback(IEnumerable<EventToSend> eventsToSend, TempoMap tempoMap)

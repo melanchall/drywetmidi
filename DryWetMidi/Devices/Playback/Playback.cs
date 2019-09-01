@@ -50,6 +50,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler<NotesEventArgs> NotesPlaybackFinished;
 
+        public event EventHandler<MidiEventPlayedEventArgs> EventPlayed;
+
         #endregion
 
         #region Fields
@@ -600,6 +602,11 @@ namespace Melanchall.DryWetMidi.Devices
             NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes));
         }
 
+        private void OnEventPlayed(MidiEvent midiEvent)
+        {
+            EventPlayed?.Invoke(this, new MidiEventPlayedEventArgs(midiEvent));
+        }
+
         private void OnClockTick(object sender, TickEventArgs e)
         {
             var time = e.Time;
@@ -677,6 +684,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void SendEvent(MidiEvent midiEvent)
         {
             OutputDevice?.SendEvent(midiEvent);
+            OnEventPlayed(midiEvent);
         }
 
         private bool TryPlayNoteEvent(NotePlaybackEventMetadata noteMetadata, bool isNoteOnEvent, TimeSpan time, out Note note)
