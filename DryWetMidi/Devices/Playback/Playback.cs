@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             TempoMap = tempoMap;
 
-            _clock = new MidiClock(ClockInterval);
+            _clock = new MidiClock(ClockInterval, false);
             _clock.Tick += OnClockTick;
 
             Snapping = new PlaybackSnapping(playbackEvents, tempoMap);

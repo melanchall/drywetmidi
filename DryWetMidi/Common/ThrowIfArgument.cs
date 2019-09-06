@@ -35,6 +35,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new InvalidEnumArgumentException(parameterName, Convert.ToInt32(argument), typeof(TEnum));
         }
 
+        internal static void IsOutOfRange(string parameterName, TimeSpan value, TimeSpan min, TimeSpan max, string message)
+        {
+            if (value < min || value > max)
+                throw new ArgumentOutOfRangeException(parameterName, value, message);
+        }
+
         internal static void IsOutOfRange(string parameterName, int value, int min, int max, string message)
         {
             if (value < min || value > max)
