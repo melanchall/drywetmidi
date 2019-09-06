@@ -78,6 +78,9 @@
     <Compile Include="Devices\Playback\PlaybackEventMetadata\PlaybackEventMetadata.cs" />
     <Compile Include="Devices\Playback\PlaybackEventsComparer.cs" />
     <Compile Include="Devices\Playback\PlaybackUtilities.cs" />
+    <Compile Include="Devices\Playback\CurrentTimeWatcher\PlaybackCurrentTime.cs" />
+    <Compile Include="Devices\Playback\CurrentTimeWatcher\PlaybackCurrentTimeWatcher.cs" />
+    <Compile Include="Devices\Playback\CurrentTimeWatcher\PlaybackCurrentTimeChangedEventArgs.cs" />
     <Compile Include="Devices\Playback\Snapping\PlaybackSnapping.cs" />
     <Compile Include="Devices\Playback\Snapping\SnapPoint.cs" />
     <Compile Include="Devices\Playback\Snapping\SnapPointsGroup.cs" />

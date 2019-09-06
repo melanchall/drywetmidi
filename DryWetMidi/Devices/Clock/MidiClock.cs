@@ -26,6 +26,7 @@ namespace Melanchall.DryWetMidi.Devices
         private bool _disposed = false;
 
         private readonly uint _interval;
+        private readonly bool _startImmediately;
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
         private uint _resolution;
@@ -38,9 +39,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        public MidiClock(uint interval)
+        public MidiClock(uint interval, bool startImmediately)
         {
             _interval = interval;
+            _startImmediately = startImmediately;
         }
 
         #endregion
@@ -94,7 +96,7 @@ namespace Melanchall.DryWetMidi.Devices
                 ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
 
                 _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
-                _tickCallback = OnTick;
+                _tickCallback = OnTimerTick;
 
                 ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
                 _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
@@ -106,6 +108,9 @@ namespace Melanchall.DryWetMidi.Devices
             }
 
             _stopwatch.Start();
+
+            if (_startImmediately)
+                OnTick();
         }
 
         public void Stop()
@@ -127,13 +132,13 @@ namespace Melanchall.DryWetMidi.Devices
             CurrentTime = TimeSpan.Zero;
         }
 
-        private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        private void OnTimerTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
         {
             if (!IsRunning)
                 return;
 
             CurrentTime = StartTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
-            Tick?.Invoke(this, new TickEventArgs(CurrentTime));
+            OnTick();
         }
 
         private static void ProcessMmResult(uint mmResult)
@@ -144,6 +149,11 @@ namespace Melanchall.DryWetMidi.Devices
                 case MidiWinApi.TIMERR_NOCANDO:
                     throw new MidiDeviceException("Error occurred on MIDI clock.");
             }
+        }
+
+        private void OnTick()
+        {
+            Tick?.Invoke(this, new TickEventArgs(CurrentTime));
         }
 
         #endregion
