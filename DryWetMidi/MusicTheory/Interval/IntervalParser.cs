@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private const string HalfStepsGroupName = "hs";
 
-        private static readonly string HalfStepsGroup = ParsingUtilities.GetNumberGroup(HalfStepsGroupName);
+        private static readonly string HalfStepsGroup = ParsingUtilities.GetIntegerNumberGroup(HalfStepsGroupName);
 
         private static readonly string[] Patterns = new[]
         {

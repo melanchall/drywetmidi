@@ -12,7 +12,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [TimeSpanType.Midi] = typeof(MidiTimeSpan),
             [TimeSpanType.Metric] = typeof(MetricTimeSpan),
             [TimeSpanType.Musical] = typeof(MusicalTimeSpan),
-            [TimeSpanType.BarBeat] = typeof(BarBeatTimeSpan)
+            [TimeSpanType.BarBeat] = typeof(BarBeatTimeSpan),
+            [TimeSpanType.BarBeatCents] = typeof(BarBeatCentsTimeSpan)
         };
 
         private static readonly Dictionary<Type, ITimeSpanConverter> Converters = new Dictionary<Type, ITimeSpanConverter>
@@ -21,6 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [typeof(MetricTimeSpan)] = new MetricTimeSpanConverter(),
             [typeof(MusicalTimeSpan)] = new MusicalTimeSpanConverter(),
             [typeof(BarBeatTimeSpan)] = new BarBeatTimeSpanConverter(),
+            [typeof(BarBeatCentsTimeSpan)] = new BarBeatCentsTimeSpanConverter(),
             [typeof(MathTimeSpan)] = new MathTimeSpanConverter()
         };
 

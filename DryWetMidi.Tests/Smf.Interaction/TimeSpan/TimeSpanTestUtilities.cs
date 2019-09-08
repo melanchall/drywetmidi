@@ -80,6 +80,43 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             #endregion
         }
 
+        private sealed class BarBeatCentsTimeSpanEqualityComparer : IEqualityComparer<ITimeSpan>
+        {
+            #region Fields
+
+            private readonly double _centsTolerance;
+
+            #endregion
+
+            #region Constructor
+
+            public BarBeatCentsTimeSpanEqualityComparer(double centsTolerance)
+            {
+                _centsTolerance = centsTolerance;
+            }
+
+            #endregion
+
+            #region IEqualityComparer<ITimeSpan>
+
+            public bool Equals(ITimeSpan x, ITimeSpan y)
+            {
+                var xTimeSpan = (BarBeatCentsTimeSpan)x;
+                var yTimeSpan = (BarBeatCentsTimeSpan)y;
+
+                return xTimeSpan.Bars == yTimeSpan.Bars &&
+                       xTimeSpan.Beats == yTimeSpan.Beats &&
+                       Math.Abs(xTimeSpan.Cents - yTimeSpan.Cents) <= _centsTolerance;
+            }
+
+            public int GetHashCode(ITimeSpan obj)
+            {
+                return obj.GetHashCode();
+            }
+
+            #endregion
+        }
+
         #endregion
 
         #region Constants
@@ -93,12 +130,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         // TODO: find a way to decrease this constant
         private const long MetricTimeSpanEqualityTolerance = 500; // μs
         private const long MidiTimeSpanEqualityTolerance = 1; // ticks
+        private const double BarBeatCentsTimeSpanEqualityTolerance = 0.001; // cents
 
         private static readonly Dictionary<Type, IEqualityComparer<ITimeSpan>> TimeSpanComparers =
             new Dictionary<Type, IEqualityComparer<ITimeSpan>>
             {
                 [typeof(MetricTimeSpan)] = new MetricTimeSpanEqualityComparer(MetricTimeSpanEqualityTolerance),
                 [typeof(MidiTimeSpan)] = new MidiTimeSpanEqualityComparer(MidiTimeSpanEqualityTolerance),
+                [typeof(BarBeatCentsTimeSpan)] = new BarBeatCentsTimeSpanEqualityComparer(BarBeatCentsTimeSpanEqualityTolerance)
             };
 
         #endregion

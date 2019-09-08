@@ -12,10 +12,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private const string SecondsGroupName = "s";
         private const string MillisecondsGroupName = "ms";
 
-        private static readonly string HoursGroup = ParsingUtilities.GetNonnegativeNumberGroup(HoursGroupName);
-        private static readonly string MinutesGroup = ParsingUtilities.GetNonnegativeNumberGroup(MinutesGroupName);
-        private static readonly string SecondsGroup = ParsingUtilities.GetNonnegativeNumberGroup(SecondsGroupName);
-        private static readonly string MillisecondsGroup = ParsingUtilities.GetNonnegativeNumberGroup(MillisecondsGroupName);
+        private static readonly string HoursGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(HoursGroupName);
+        private static readonly string MinutesGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(MinutesGroupName);
+        private static readonly string SecondsGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(SecondsGroupName);
+        private static readonly string MillisecondsGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(MillisecondsGroupName);
 
         private static readonly string LetteredHoursGroup = $@"{HoursGroup}\s*h";
         private static readonly string LetteredMinutesGroup = $@"{MinutesGroup}\s*m";

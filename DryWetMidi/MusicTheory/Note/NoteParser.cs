@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string NoteNameGroupName = "n";
         private const string OctaveGroupName = "o";
 
-        private static readonly string OctaveGroup = ParsingUtilities.GetNumberGroup(OctaveGroupName);
+        private static readonly string OctaveGroup = ParsingUtilities.GetIntegerNumberGroup(OctaveGroupName);
 
         private static readonly string[] Patterns = NoteNameParser.GetPatterns()
                                                                   .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}")
