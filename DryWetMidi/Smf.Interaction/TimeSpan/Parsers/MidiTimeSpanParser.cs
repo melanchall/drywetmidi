@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private const string TimeSpanGroupName = "ts";
 
-        private static readonly string TimeSpanGroup = ParsingUtilities.GetNonnegativeNumberGroup(TimeSpanGroupName);
+        private static readonly string TimeSpanGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(TimeSpanGroupName);
 
         private static readonly string[] Patterns = new[]
         {

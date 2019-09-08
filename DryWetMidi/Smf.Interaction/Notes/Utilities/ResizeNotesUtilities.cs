@@ -22,8 +22,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="tempoMap"></param>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
         /// <paramref name="length"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
-        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> is used for
-        /// <paramref name="distanceCalculationType"/> which is unsupported.</exception>
+        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> or <see cref="TimeSpanType.BarBeatCents"/>
+        /// is used for <paramref name="distanceCalculationType"/> which is unsupported.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="distanceCalculationType"/> specified an
         /// invalid value.</exception>
         public static void ResizeNotes(this IEnumerable<Note> notes,
@@ -36,8 +36,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(distanceCalculationType), distanceCalculationType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            if (distanceCalculationType == TimeSpanType.BarBeat)
-                throw new ArgumentException("BarBeat distance calculation type is not supported.", nameof(distanceCalculationType));
+            // TODO: why ???
+            if (distanceCalculationType == TimeSpanType.BarBeat || distanceCalculationType == TimeSpanType.BarBeatCents)
+                throw new ArgumentException("Bar/beat distance calculation type is not supported.", nameof(distanceCalculationType));
 
             var notNullNotes = notes.Where(n => n != null);
             if (!notNullNotes.Any())
@@ -80,8 +81,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="tempoMap"></param>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
-        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> is used for
-        /// <paramref name="distanceCalculationType"/> which is unsupported.</exception>
+        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeat"/> or <see cref="TimeSpanType.BarBeatCents"/>
+        /// is used for <paramref name="distanceCalculationType"/> which is unsupported.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="distanceCalculationType"/> specified an
         /// invalid value.</exception>
@@ -95,7 +96,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(distanceCalculationType), distanceCalculationType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            if (distanceCalculationType == TimeSpanType.BarBeat)
+            // TODO: why ???
+            if (distanceCalculationType == TimeSpanType.BarBeat || distanceCalculationType == TimeSpanType.BarBeatCents)
                 throw new ArgumentException("BarBeat distance calculation type is not supported.", nameof(distanceCalculationType));
 
             var notNullNotes = notes.Where(n => n != null);

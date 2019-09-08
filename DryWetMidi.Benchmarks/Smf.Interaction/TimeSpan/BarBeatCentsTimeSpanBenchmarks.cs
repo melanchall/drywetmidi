@@ -6,12 +6,12 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 {
     [TestFixture]
-    public sealed class BarBeatTimeSpanBenchmarks : BenchmarkTest
+    public sealed class BarBeatCentsTimeSpanBenchmarks : BenchmarkTest
     {
         #region Nested classes
 
         [InProcessSimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 5, targetCount: 5, invocationCount: 5)]
-        public class Benchmarks_BarBeat : TimeSpanBenchmarks<BarBeatTimeSpan>
+        public class Benchmarks_BarBeatCents : TimeSpanBenchmarks<BarBeatCentsTimeSpan>
         {
             #region Constants
 
@@ -59,10 +59,10 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Test methods
 
         [Test]
-        [Description("Benchmark bar.beat.ticks time/length conversion.")]
-        public void ConvertBarBeatTimeSpan()
+        [Description("Benchmark bar.beat.cents time/length conversion.")]
+        public void ConvertBarBeatCentsTimeSpan()
         {
-            RunBenchmarks<Benchmarks_BarBeat>();
+            RunBenchmarks<Benchmarks_BarBeatCents>();
         }
 
         #endregion

@@ -46,7 +46,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             [typeof(MidiTimeSpan)] = TimeSpanType.Midi,
             [typeof(MetricTimeSpan)] = TimeSpanType.Metric,
             [typeof(MusicalTimeSpan)] = TimeSpanType.Musical,
-            [typeof(BarBeatTimeSpan)] = TimeSpanType.BarBeat
+            [typeof(BarBeatTimeSpan)] = TimeSpanType.BarBeat,
+            [typeof(BarBeatCentsTimeSpan)] = TimeSpanType.BarBeatCents
         };
 
         #endregion

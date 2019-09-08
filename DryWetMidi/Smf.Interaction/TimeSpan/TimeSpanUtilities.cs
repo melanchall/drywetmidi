@@ -31,6 +31,11 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                     BarBeatTimeSpan timeSpan;
                     return Tuple.Create(BarBeatTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
                 },
+                [TimeSpanType.BarBeatCents] = input =>
+                {
+                    BarBeatCentsTimeSpan timeSpan;
+                    return Tuple.Create(BarBeatCentsTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
+                },
                 [TimeSpanType.Metric] = input =>
                 {
                     MetricTimeSpan timeSpan;
@@ -48,7 +53,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [TimeSpanType.Midi] = new MidiTimeSpan(long.MaxValue),
             [TimeSpanType.Metric] = new MetricTimeSpan(TimeSpan.MaxValue),
             [TimeSpanType.Musical] = new MusicalTimeSpan(long.MaxValue, 1),
-            [TimeSpanType.BarBeat] = new BarBeatTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue)
+            [TimeSpanType.BarBeat] = new BarBeatTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue),
+            [TimeSpanType.BarBeatCents] = new BarBeatCentsTimeSpan(long.MaxValue, long.MaxValue, BarBeatCentsTimeSpan.MaxCents)
         };
 
         private static readonly Dictionary<TimeSpanType, ITimeSpan> ZeroTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
@@ -56,7 +62,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [TimeSpanType.Midi] = new MidiTimeSpan(),
             [TimeSpanType.Metric] = new MetricTimeSpan(),
             [TimeSpanType.Musical] = new MusicalTimeSpan(),
-            [TimeSpanType.BarBeat] = new BarBeatTimeSpan()
+            [TimeSpanType.BarBeat] = new BarBeatTimeSpan(),
+            [TimeSpanType.BarBeatCents] = new BarBeatCentsTimeSpan()
         };
 
         #endregion
