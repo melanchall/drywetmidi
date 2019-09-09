@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <typeparam name="TSettings">The type of quantizer's settings.</typeparam>
     public abstract class LengthedObjectsQuantizer<TObject, TSettings> : Quantizer<TObject, TSettings>
         where TObject : ILengthedObject
-        where TSettings : LengthedObjectsQuantizingSettings, new()
+        where TSettings : LengthedObjectsQuantizingSettings<TObject>, new()
     {
         #region Methods
 

@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Settings according to which chords should be quantized.
     /// </summary>
-    public class ChordsQuantizingSettings : LengthedObjectsQuantizingSettings
+    public class ChordsQuantizingSettings : LengthedObjectsQuantizingSettings<Chord>
     {
     }
 
