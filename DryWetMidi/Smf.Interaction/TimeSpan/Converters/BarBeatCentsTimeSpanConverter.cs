@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             if (timeSpan == 0)
-                return new BarBeatTimeSpan();
+                return new BarBeatCentsTimeSpan();
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var endTime = time + timeSpan;

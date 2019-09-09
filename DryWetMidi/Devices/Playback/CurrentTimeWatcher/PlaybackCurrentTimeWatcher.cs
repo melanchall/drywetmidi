@@ -67,8 +67,6 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        public bool WatchRunningPlaybacksOnly { get; set; } = true;
-
         public IEnumerable<Playback> Playbacks
         {
             get
@@ -149,9 +147,6 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 foreach (var playback in _playbacks)
                 {
-                    if (!playback.Key.IsRunning && WatchRunningPlaybacksOnly)
-                        continue;
-
                     var currentTime = playback.Key.GetCurrentTime(playback.Value);
                     times.Add(new PlaybackCurrentTime(playback.Key, currentTime));
                 }
