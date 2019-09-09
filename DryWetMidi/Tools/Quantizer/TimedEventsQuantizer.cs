@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Settings according to which timed events should be quantized.
     /// </summary>
-    public class TimedEventsQuantizingSettings : QuantizingSettings
+    public class TimedEventsQuantizingSettings : QuantizingSettings<TimedEvent>
     {
     }
 
