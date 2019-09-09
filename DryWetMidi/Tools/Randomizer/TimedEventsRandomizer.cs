@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Settings according to which timed events should be randomized.
     /// </summary>
-    public sealed class TimedEventsRandomizingSettings : RandomizingSettings
+    public sealed class TimedEventsRandomizingSettings : RandomizingSettings<TimedEvent>
     {
     }
 
