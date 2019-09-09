@@ -51,7 +51,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             using (var playback = new Playback(events, TempoMap.Default))
             {
-                PlaybackCurrentTimeWatcher.Instance.WatchRunningPlaybacksOnly = false;
                 PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, TimeSpanType.Metric);
                 PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
 
@@ -67,6 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
+        [Retry(RetriesNumber)]
         public void PlaybackFinished()
         {
             var events = new MidiEvent[]
@@ -77,7 +77,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             var playback = new Playback(events, TempoMap.Default);
 
-            PlaybackCurrentTimeWatcher.Instance.WatchRunningPlaybacksOnly = false;
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, TimeSpanType.Midi);
 
             playback.Start();
@@ -98,9 +97,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             playback.Dispose();
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void WatchMultiplePlaybacks(bool watchRunningPlaybacksOnly)
+        [Test]
+        [Retry(RetriesNumber)]
+        public void WatchMultiplePlaybacks()
         {
             var tempoMap = TempoMap.Default;
 
@@ -126,14 +125,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             {
                 new MidiTimeSpan(0),
                 new MidiTimeSpan(100),
+                new MidiTimeSpan(200),
+                new MidiTimeSpan(200),
                 new MidiTimeSpan(200)
             };
 
-            if (!watchRunningPlaybacksOnly)
-                expectedTimes2.AddRange(new[] { new MidiTimeSpan(200), new MidiTimeSpan(200) });
-
             PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeConverter.ConvertTo<MetricTimeSpan>(100, tempoMap);
-            PlaybackCurrentTimeWatcher.Instance.WatchRunningPlaybacksOnly = watchRunningPlaybacksOnly;
 
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback1, TimeSpanType.Midi);
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback2, TimeSpanType.Midi);
@@ -164,11 +161,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             playback1.Dispose();
             playback2.Dispose();
 
-            CheckTimes(expectedTimes1, times[playback1]);
-            CheckTimes(expectedTimes2, times[playback2]);
+            CheckTimes(expectedTimes1, times[playback1], "Playback 1.");
+            CheckTimes(expectedTimes2, times[playback2], "Playback 2.");
         }
 
         [Test]
+        [Retry(RetriesNumber)]
         public void WatchMultiplePlaybacks_RemoveOne()
         {
             var tempoMap = TempoMap.Default;
@@ -200,7 +198,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             };
 
             PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeConverter.ConvertTo<MetricTimeSpan>(100, tempoMap);
-            PlaybackCurrentTimeWatcher.Instance.WatchRunningPlaybacksOnly = true;
 
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback1, TimeSpanType.Midi);
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback2, TimeSpanType.Midi);
@@ -238,6 +235,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
+        [Retry(RetriesNumber)]
         public void WatchCurrentTime_Metric()
         {
             CheckWatchCurrentTime(
@@ -248,6 +246,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
+        [Retry(RetriesNumber)]
         public void WatchCurrentTime_BarBeat()
         {
             CheckWatchCurrentTime(
@@ -264,6 +263,29 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
+        [Retry(RetriesNumber)]
+        public void WatchCurrentTime_BarBeatCents()
+        {
+            CheckWatchCurrentTime(
+                playbackLength: new BarBeatCentsTimeSpan(1, 0, 0),
+                pollingInterval: new BarBeatCentsTimeSpan(0, 0, 50),
+                timeType: TimeSpanType.BarBeatCents,
+                expectedTimes: new[]
+                {
+                    new BarBeatCentsTimeSpan(0, 0, 0),
+                    new BarBeatCentsTimeSpan(0, 0, 50),
+                    new BarBeatCentsTimeSpan(0, 1, 0),
+                    new BarBeatCentsTimeSpan(0, 1, 50),
+                    new BarBeatCentsTimeSpan(0, 2, 0),
+                    new BarBeatCentsTimeSpan(0, 2, 50),
+                    new BarBeatCentsTimeSpan(0, 3, 0),
+                    new BarBeatCentsTimeSpan(0, 3, 50),
+                    new BarBeatCentsTimeSpan(1, 0, 0)
+                });
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
         public void WatchCurrentTime_Musical()
         {
             CheckWatchCurrentTime(
@@ -274,6 +296,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
+        [Retry(RetriesNumber)]
         public void WatchCurrentTime_Midi()
         {
             CheckWatchCurrentTime(
@@ -308,7 +331,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             {
                 PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeConverter.ConvertTo<MetricTimeSpan>(pollingInterval, tempoMap);
                 PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, timeType);
-                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
+
+                EventHandler<PlaybackCurrentTimeChangedEventArgs> currentTimeChangedHandler = (_, e) => times.Add(e.Times.First().Time);
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += currentTimeChangedHandler;
 
                 playback.Start();
                 PlaybackCurrentTimeWatcher.Instance.Start();
@@ -318,6 +343,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 WaitExpectedTimes(expectedTimes, times);
 
                 PlaybackCurrentTimeWatcher.Instance.Stop();
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= currentTimeChangedHandler;
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
             }
 
@@ -331,16 +357,20 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             Assert.IsTrue(timesReceived, $"Times are not received for {timeout}.");
         }
 
-        private static void CheckTimes(ICollection<ITimeSpan> expectedTimes, ICollection<ITimeSpan> actualTimes)
+        private static void CheckTimes(ICollection<ITimeSpan> expectedTimes, ICollection<ITimeSpan> actualTimes, string message = null)
         {
-            Assert.AreEqual(expectedTimes.Count, actualTimes.Count, "Count of times is invalid.");
+            Assert.AreEqual(expectedTimes.Count, actualTimes.Count, $"Count of times is invalid. {message}");
 
             foreach (var expectedActual in expectedTimes.Zip(actualTimes, (e, a) => new { Expected = e, Actual = a }))
             {
                 var expected = expectedActual.Expected;
                 var actual = expectedActual.Actual;
 
-                Assert.IsTrue(AreTimeSpansEqual(expected, actual), $"Time is invalid. Expected {expected} but received {actual}.");
+                var expectedType = expected.GetType();
+                var actualType = actual.GetType();
+                Assert.AreEqual(expectedType, actualType, "Types are different.");
+
+                Assert.IsTrue(AreTimeSpansEqual(expected, actual), $"Time is invalid. Expected {expected} but received {actual}. {message}");
             }
         }
 
@@ -349,6 +379,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             const long microsecondsEpsilon = 3000;
             const long ticksEpsilon = 3;
             const double fractionEpsilon = 0.00001;
+            const double centsEpsilon = 0.1;
 
             if (x.GetType() != y.GetType())
                 return false;
@@ -360,6 +391,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 return xBarBeat.Bars == yBarBeat.Bars &&
                        xBarBeat.Beats == yBarBeat.Beats &&
                        Math.Abs(xBarBeat.Ticks - yBarBeat.Ticks) < ticksEpsilon;
+
+            if (x is BarBeatCentsTimeSpan xBarBeatCents && y is BarBeatCentsTimeSpan yBarBeatCents)
+                return xBarBeatCents.Bars == yBarBeatCents.Bars &&
+                       xBarBeatCents.Beats == yBarBeatCents.Beats &&
+                       Math.Abs(xBarBeatCents.Cents - yBarBeatCents.Cents) < centsEpsilon;
 
             if (x is MusicalTimeSpan xMusical && y is MusicalTimeSpan yMusical)
                 return Math.Abs(xMusical.Numerator / (double)xMusical.Denominator - yMusical.Numerator / (double)yMusical.Denominator) < fractionEpsilon;
