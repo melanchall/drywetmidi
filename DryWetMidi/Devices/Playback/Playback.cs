@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        private const uint ClockInterval = 1; // ms
+        private static readonly TimeSpan ClockInterval = MidiClock.MinInterval;
 
         #endregion
 
@@ -496,7 +496,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             var isRunning = IsRunning;
 
-            _clock.Reset();
             SetStartTime(time);
 
             if (isRunning)
@@ -674,11 +673,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void SetStartTime(ITimeSpan time)
         {
-            _clock.StartTime = _clock.CurrentTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
+            var convertedTime = (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
+            _clock.SetCurrentTime(convertedTime);
 
             _eventsEnumerator.Reset();
             do { _eventsEnumerator.MoveNext(); }
-            while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < _clock.StartTime);
+            while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < convertedTime);
         }
 
         private void SendEvent(MidiEvent midiEvent)

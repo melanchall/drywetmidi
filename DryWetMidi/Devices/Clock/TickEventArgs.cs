@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal sealed class TickEventArgs : EventArgs
+    public sealed class TickEventArgs : EventArgs
     {
         #region Constructor
 

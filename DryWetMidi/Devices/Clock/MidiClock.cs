@@ -6,9 +6,12 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal sealed class MidiClock : IDisposable
+    public sealed class MidiClock : IDisposable
     {
         #region Constants
+
+        public static readonly TimeSpan MinInterval = TimeSpan.FromMilliseconds(1);
+        public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(uint.MaxValue);
 
         private const double DefaultSpeed = 1.0;
         private const uint NoTimerId = 0;
@@ -28,6 +31,7 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly uint _interval;
         private readonly bool _startImmediately;
         private readonly Stopwatch _stopwatch = new Stopwatch();
+        private TimeSpan _startTime = TimeSpan.Zero;
 
         private uint _resolution;
         private MidiTimerWinApi.TimeProc _tickCallback;
@@ -39,9 +43,15 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        public MidiClock(uint interval, bool startImmediately)
+        public MidiClock(TimeSpan interval, bool startImmediately)
         {
-            _interval = interval;
+            ThrowIfArgument.IsOutOfRange(nameof(interval),
+                                         interval,
+                                         MinInterval,
+                                         MaxInterval,
+                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+
+            _interval = (uint)interval.TotalMilliseconds;
             _startImmediately = startImmediately;
         }
 
@@ -60,20 +70,21 @@ namespace Melanchall.DryWetMidi.Devices
 
         public bool IsRunning => _stopwatch.IsRunning;
 
-        public TimeSpan StartTime { get; set; } = TimeSpan.Zero;
-
-        public TimeSpan CurrentTime { get; set; } = TimeSpan.Zero;
+        public TimeSpan CurrentTime { get; private set; } = TimeSpan.Zero;
 
         public double Speed
         {
             get { return _speed; }
             set
             {
+                EnsureIsNotDisposed();
+                ThrowIfArgument.IsNegative(nameof(value), value, "Speed is negative.");
+
                 var start = IsRunning;
 
                 Stop();
 
-                StartTime = _stopwatch.Elapsed;
+                _startTime = _stopwatch.Elapsed;
                 _speed = value;
 
                 if (start)
@@ -87,6 +98,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void Start()
         {
+            EnsureIsNotDisposed();
+
             if (IsRunning)
                 return;
 
@@ -115,11 +128,15 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void Stop()
         {
+            EnsureIsNotDisposed();
+
             _stopwatch.Stop();
         }
 
         public void Restart()
         {
+            EnsureIsNotDisposed();
+
             Stop();
             Reset();
             Start();
@@ -127,17 +144,26 @@ namespace Melanchall.DryWetMidi.Devices
 
         public void Reset()
         {
+            EnsureIsNotDisposed();
+
+            SetCurrentTime(TimeSpan.Zero);
+        }
+
+        public void SetCurrentTime(TimeSpan time)
+        {
+            EnsureIsNotDisposed();
+
             _stopwatch.Reset();
-            StartTime = TimeSpan.Zero;
-            CurrentTime = TimeSpan.Zero;
+            _startTime = time;
+            CurrentTime = time;
         }
 
         private void OnTimerTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
         {
-            if (!IsRunning)
+            if (!IsRunning || _disposed)
                 return;
 
-            CurrentTime = StartTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
+            CurrentTime = _startTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
             OnTick();
         }
 
@@ -154,6 +180,12 @@ namespace Melanchall.DryWetMidi.Devices
         private void OnTick()
         {
             Tick?.Invoke(this, new TickEventArgs(CurrentTime));
+        }
+
+        private void EnsureIsNotDisposed()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException("MIDI clock is disposed.");
         }
 
         #endregion
