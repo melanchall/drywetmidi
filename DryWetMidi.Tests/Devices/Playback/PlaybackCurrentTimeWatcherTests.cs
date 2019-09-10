@@ -352,7 +352,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private static void WaitExpectedTimes(ICollection<ITimeSpan> expectedTimes, ICollection<ITimeSpan> times)
         {
-            var timeout = TimeSpan.FromMilliseconds(3);
+            var timeout = TimeSpan.FromMilliseconds(10);
             var timesReceived = SpinWait.SpinUntil(() => times.Count >= expectedTimes.Count, timeout);
             Assert.IsTrue(timesReceived, $"Times are not received for {timeout}.");
         }
