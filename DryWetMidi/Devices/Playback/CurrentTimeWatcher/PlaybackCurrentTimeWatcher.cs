@@ -10,8 +10,8 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        public static readonly TimeSpan MinPollingInterval = TimeSpan.FromMilliseconds(1);
-        public static readonly TimeSpan MaxPollingInterval = TimeSpan.FromMilliseconds(uint.MaxValue);
+        public static readonly TimeSpan MinPollingInterval = MidiClock.MinInterval;
+        public static readonly TimeSpan MaxPollingInterval = MidiClock.MaxInterval;
 
         private static readonly TimeSpan DefaultPollingInterval = TimeSpan.FromMilliseconds(100);
 
@@ -164,7 +164,7 @@ namespace Melanchall.DryWetMidi.Devices
         private void EnsureIsNotDisposed()
         {
             if (_disposed)
-                throw new ObjectDisposedException("Playback progress watcher is disposed.");
+                throw new ObjectDisposedException("Playback current time watcher is disposed.");
         }
 
         private void DisposeClock()
@@ -179,7 +179,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void CreateClock(TimeSpan pollingInterval)
         {
-            _clock = new MidiClock((uint)pollingInterval.TotalMilliseconds, true);
+            _clock = new MidiClock(pollingInterval, true);
             _clock.Tick += OnTick;
         }
 
