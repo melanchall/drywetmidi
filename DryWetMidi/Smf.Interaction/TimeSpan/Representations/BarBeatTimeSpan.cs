@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out BarBeatTimeSpan timeSpan)
         {
-            return BarBeatTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, BarBeatTimeSpanParser.TryParse, out timeSpan);
         }
 
         /// <summary>
@@ -112,12 +112,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static BarBeatTimeSpan Parse(string input)
         {
-            BarBeatTimeSpan timeSpan;
-            var parsingResult = BarBeatTimeSpanParser.TryParse(input, out timeSpan);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return timeSpan;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<BarBeatTimeSpan>(input, BarBeatTimeSpanParser.TryParse);
         }
 
         #endregion

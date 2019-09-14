@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out MetricTimeSpan timeSpan)
         {
-            return MetricTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, MetricTimeSpanParser.TryParse, out timeSpan);
         }
 
         /// <summary>
@@ -170,12 +170,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static MetricTimeSpan Parse(string input)
         {
-            MetricTimeSpan timeSpan;
-            var parsingResult = MetricTimeSpanParser.TryParse(input, out timeSpan);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return timeSpan;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<MetricTimeSpan>(input, MetricTimeSpanParser.TryParse);
         }
 
         #endregion

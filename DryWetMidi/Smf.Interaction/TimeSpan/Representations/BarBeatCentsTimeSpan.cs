@@ -58,17 +58,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         public static bool TryParse(string input, out BarBeatCentsTimeSpan timeSpan)
         {
-            return BarBeatCentsTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, BarBeatCentsTimeSpanParser.TryParse, out timeSpan);
         }
 
         public static BarBeatCentsTimeSpan Parse(string input)
         {
-            BarBeatCentsTimeSpan timeSpan;
-            var parsingResult = BarBeatCentsTimeSpanParser.TryParse(input, out timeSpan);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return timeSpan;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<BarBeatCentsTimeSpan>(input, BarBeatCentsTimeSpanParser.TryParse);
         }
 
         #endregion

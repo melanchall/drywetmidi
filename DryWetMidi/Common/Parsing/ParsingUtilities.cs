@@ -17,6 +17,21 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
+        public static bool TryParse<T>(string input, Parsing<T> parsing, out T result)
+        {
+            return parsing(input, out result).Status == ParsingStatus.Parsed;
+        }
+
+        public static T Parse<T>(string input, Parsing<T> parsing)
+        {
+            T result;
+            var parsingResult = parsing(input, out result);
+            if (parsingResult.Status == ParsingStatus.Parsed)
+                return result;
+
+            throw parsingResult.Exception;
+        }
+
         public static string GetNonnegativeIntegerNumberGroup(string groupName)
         {
             return $@"(?<{groupName}>\d+)";
