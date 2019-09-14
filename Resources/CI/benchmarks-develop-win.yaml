@@ -1,7 +1,4 @@
 trigger:
-  branches:
-    include:
-    - develop
   paths:
     exclude:
     - README.md
@@ -13,6 +10,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  version: '4.2.0'
+
+name: $(TeamProject)_$(SourceBranchName)_RunBenchmarks_Windows_$(version)$(Rev:.r)
 
 steps:
 - task: PowerShell@2
