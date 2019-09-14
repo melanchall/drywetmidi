@@ -162,7 +162,7 @@
     <Compile Include="Smf.Interaction\NotesManager\NotesManagingUtilities\NotesManagingUtilitiesGetNotesBenchmarks.cs" />
     <Compile Include="Smf.Interaction\TimedEventsManager\TimedEventsManagingUtilities\TimedEventsManagingUtilitiesGetTimedEventsBenchmarks.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\BarBeatCentsTimeSpanBenchmarks.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\BarBeatTimeSpanBenchmarks.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\BarBeatTicksTimeSpanBenchmarks.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MidiTimeSpanBenchmarks.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MusicalTimeSpanBenchmarks.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MetricTimeSpanBenchmarks.cs" />

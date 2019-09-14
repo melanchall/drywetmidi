@@ -6,44 +6,44 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// <summary>
     /// Represents bar/beat time span which represents bars, beats and ticks.
     /// </summary>
-    public sealed class BarBeatTimeSpan : ITimeSpan, IComparable<BarBeatTimeSpan>, IEquatable<BarBeatTimeSpan>
+    public sealed class BarBeatTicksTimeSpan : ITimeSpan, IComparable<BarBeatTicksTimeSpan>, IEquatable<BarBeatTicksTimeSpan>
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BarBeatTimeSpan"/>.
+        /// Initializes a new instance of the <see cref="BarBeatTicksTimeSpan"/>.
         /// </summary>
-        public BarBeatTimeSpan()
+        public BarBeatTicksTimeSpan()
             : this(0, 0)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BarBeatTimeSpan"/> with the specified
+        /// Initializes a new instance of the <see cref="BarBeatTicksTimeSpan"/> with the specified
         /// number of bars.
         /// </summary>
         /// <param name="bars">The number of bars.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
-        public BarBeatTimeSpan(long bars)
+        public BarBeatTicksTimeSpan(long bars)
             : this(bars, 0)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BarBeatTimeSpan"/> with the specified
+        /// Initializes a new instance of the <see cref="BarBeatTicksTimeSpan"/> with the specified
         /// number of bars and beats.
         /// </summary>
         /// <param name="bars">The number of bars.</param>
         /// <param name="beats">The number of beats.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative. -or-
         /// <paramref name="beats"/> is negative.</exception>
-        public BarBeatTimeSpan(long bars, long beats)
+        public BarBeatTicksTimeSpan(long bars, long beats)
             : this(bars, beats, 0)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BarBeatTimeSpan"/> with the specified
+        /// Initializes a new instance of the <see cref="BarBeatTicksTimeSpan"/> with the specified
         /// number of bars, beats and ticks.
         /// </summary>
         /// <param name="bars">The number of bars.</param>
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="ticks">The number of ticks.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative. -or-
         /// <paramref name="beats"/> is negative. -or- <paramref name="ticks"/> is negative.</exception>
-        public BarBeatTimeSpan(long bars, long beats, long ticks)
+        public BarBeatTicksTimeSpan(long bars, long beats, long ticks)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
             ThrowIfArgument.IsNegative(nameof(beats), beats, "Beats number is negative.");
@@ -67,17 +67,17 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Properties
 
         /// <summary>
-        /// Gets the bars component of the time represented by the current <see cref="BarBeatTimeSpan"/>.
+        /// Gets the bars component of the time represented by the current <see cref="BarBeatTicksTimeSpan"/>.
         /// </summary>
         public long Bars { get; }
 
         /// <summary>
-        /// Gets the beats component of the time represented by the current <see cref="BarBeatTimeSpan"/>.
+        /// Gets the beats component of the time represented by the current <see cref="BarBeatTicksTimeSpan"/>.
         /// </summary>
         public long Beats { get; }
 
         /// <summary>
-        /// Gets the ticks component of the time represented by the current <see cref="BarBeatTimeSpan"/>.
+        /// Gets the ticks component of the time represented by the current <see cref="BarBeatTicksTimeSpan"/>.
         /// </summary>
         public long Ticks { get; }
 
@@ -86,33 +86,33 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Methods
 
         /// <summary>
-        /// Converts the string representation of a bar/beat time span to its <see cref="BarBeatTimeSpan"/>
+        /// Converts the string representation of a bar/beat time span to its <see cref="BarBeatTicksTimeSpan"/>
         /// equivalent. A return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="input">A string containing a time span to convert.</param>
-        /// <param name="timeSpan">When this method returns, contains the <see cref="BarBeatTimeSpan"/>
+        /// <param name="timeSpan">When this method returns, contains the <see cref="BarBeatTicksTimeSpan"/>
         /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
         /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
-        public static bool TryParse(string input, out BarBeatTimeSpan timeSpan)
+        public static bool TryParse(string input, out BarBeatTicksTimeSpan timeSpan)
         {
-            return ParsingUtilities.TryParse(input, BarBeatTimeSpanParser.TryParse, out timeSpan);
+            return ParsingUtilities.TryParse(input, BarBeatTicksTimeSpanParser.TryParse, out timeSpan);
         }
 
         /// <summary>
-        /// Converts the string representation of a bar/beat time span to its <see cref="BarBeatTimeSpan"/>
+        /// Converts the string representation of a bar/beat time span to its <see cref="BarBeatTicksTimeSpan"/>
         /// equivalent.
         /// </summary>
         /// <param name="input">A string containing a time span to convert.</param>
-        /// <returns>A <see cref="BarBeatTimeSpan"/> equivalent to the time span contained in
+        /// <returns>A <see cref="BarBeatTicksTimeSpan"/> equivalent to the time span contained in
         /// <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static BarBeatTimeSpan Parse(string input)
+        public static BarBeatTicksTimeSpan Parse(string input)
         {
-            return ParsingUtilities.Parse<BarBeatTimeSpan>(input, BarBeatTimeSpanParser.TryParse);
+            return ParsingUtilities.Parse<BarBeatTicksTimeSpan>(input, BarBeatTicksTimeSpanParser.TryParse);
         }
 
         #endregion
@@ -120,12 +120,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #region Operators
 
         /// <summary>
-        /// Determines if two <see cref="BarBeatTimeSpan"/> objects are equal.
+        /// Determines if two <see cref="BarBeatTicksTimeSpan"/> objects are equal.
         /// </summary>
-        /// <param name="timeSpan1">The first <see cref="BarBeatTimeSpan"/> to compare.</param>
-        /// <param name="timeSpan2">The second <see cref="BarBeatTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan1">The first <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
         /// <returns>true if time spans are equal, false otherwise.</returns>
-        public static bool operator ==(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static bool operator ==(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, null))
                 return ReferenceEquals(timeSpan2, null);
@@ -134,37 +134,37 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Determines if two <see cref="BarBeatTimeSpan"/> objects are not equal.
+        /// Determines if two <see cref="BarBeatTicksTimeSpan"/> objects are not equal.
         /// </summary>
-        /// <param name="timeSpan1">The first <see cref="BarBeatTimeSpan"/> to compare.</param>
-        /// <param name="timeSpan2">The second <see cref="BarBeatTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan1">The first <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
         /// <returns>false if time spans are equal, true otherwise.</returns>
-        public static bool operator !=(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static bool operator !=(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
         }
 
         /// <summary>
-        /// Adds two specified <see cref="BarBeatTimeSpan"/> instances.
+        /// Adds two specified <see cref="BarBeatTicksTimeSpan"/> instances.
         /// </summary>
-        /// <param name="timeSpan1">The first <see cref="BarBeatTimeSpan"/> to add.</param>
-        /// <param name="timeSpan2">The second <see cref="BarBeatTimeSpan"/> to add.</param>
+        /// <param name="timeSpan1">The first <see cref="BarBeatTicksTimeSpan"/> to add.</param>
+        /// <param name="timeSpan2">The second <see cref="BarBeatTicksTimeSpan"/> to add.</param>
         /// <returns>An object whose value is the sum of the values of <paramref name="timeSpan1"/> and
         /// <paramref name="timeSpan2"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
         /// <paramref name="timeSpan2"/> is null.</exception>
-        public static BarBeatTimeSpan operator +(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static BarBeatTicksTimeSpan operator +(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return new BarBeatTimeSpan(timeSpan1.Bars + timeSpan2.Bars,
+            return new BarBeatTicksTimeSpan(timeSpan1.Bars + timeSpan2.Bars,
                                        timeSpan1.Beats + timeSpan2.Beats,
                                        timeSpan1.Ticks + timeSpan2.Ticks);
         }
 
         /// <summary>
-        /// Subtracts a specified <see cref="BarBeatTimeSpan"/> from another one.
+        /// Subtracts a specified <see cref="BarBeatTicksTimeSpan"/> from another one.
         /// </summary>
         /// <param name="timeSpan1">The minuend.</param>
         /// <param name="timeSpan2">The subtrahend.</param>
@@ -173,7 +173,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
         /// <paramref name="timeSpan2"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="timeSpan1"/> is less than <paramref name="timeSpan2"/>.</exception>
-        public static BarBeatTimeSpan operator -(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static BarBeatTicksTimeSpan operator -(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
@@ -181,21 +181,21 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (timeSpan1 < timeSpan2)
                 throw new ArgumentException("First time span is less than second one.", nameof(timeSpan1));
 
-            return new BarBeatTimeSpan(timeSpan1.Bars - timeSpan2.Bars,
+            return new BarBeatTicksTimeSpan(timeSpan1.Bars - timeSpan2.Bars,
                                        timeSpan1.Beats - timeSpan2.Beats,
                                        timeSpan1.Ticks - timeSpan2.Ticks);
         }
 
         /// <summary>
-        /// Indicates whether a specified <see cref="BarBeatTimeSpan"/> is less than another one.
+        /// Indicates whether a specified <see cref="BarBeatTicksTimeSpan"/> is less than another one.
         /// </summary>
-        /// <param name="timeSpan1">The first <see cref="BarBeatTimeSpan"/> to compare.</param>
-        /// <param name="timeSpan2">The second <see cref="BarBeatTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan1">The first <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is less than the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
         /// <paramref name="timeSpan2"/> is null.</exception>
-        public static bool operator <(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static bool operator <(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
@@ -204,15 +204,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Indicates whether a specified <see cref="BarBeatTimeSpan"/> is greater than another one.
+        /// Indicates whether a specified <see cref="BarBeatTicksTimeSpan"/> is greater than another one.
         /// </summary>
-        /// <param name="timeSpan1">The first <see cref="BarBeatTimeSpan"/> to compare.</param>
-        /// <param name="timeSpan2">The second <see cref="BarBeatTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan1">The first <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
         /// <paramref name="timeSpan2"/> is null.</exception>
-        public static bool operator >(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static bool operator >(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
@@ -221,16 +221,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Indicates whether a specified <see cref="BarBeatTimeSpan"/> is less than or equal to
+        /// Indicates whether a specified <see cref="BarBeatTicksTimeSpan"/> is less than or equal to
         /// another one.
         /// </summary>
-        /// <param name="timeSpan1">The first <see cref="BarBeatTimeSpan"/> to compare.</param>
-        /// <param name="timeSpan2">The second <see cref="BarBeatTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan1">The first <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
         /// <paramref name="timeSpan2"/> is null.</exception>
-        public static bool operator <=(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static bool operator <=(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
@@ -239,16 +239,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         }
 
         /// <summary>
-        /// Indicates whether a specified <see cref="BarBeatTimeSpan"/> is greater than or equal to
+        /// Indicates whether a specified <see cref="BarBeatTicksTimeSpan"/> is greater than or equal to
         /// another one.
         /// </summary>
-        /// <param name="timeSpan1">The first <see cref="BarBeatTimeSpan"/> to compare.</param>
-        /// <param name="timeSpan2">The second <see cref="BarBeatTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan1">The first <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
+        /// <param name="timeSpan2">The second <see cref="BarBeatTicksTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
         /// <paramref name="timeSpan2"/> is null.</exception>
-        public static bool operator >=(BarBeatTimeSpan timeSpan1, BarBeatTimeSpan timeSpan2)
+        public static bool operator >=(BarBeatTicksTimeSpan timeSpan1, BarBeatTicksTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
@@ -267,7 +267,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as BarBeatTimeSpan);
+            return Equals(obj as BarBeatTicksTimeSpan);
         }
 
         /// <summary>
@@ -316,9 +316,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
-            var barBeatTimeSpan = timeSpan as BarBeatTimeSpan;
-            return barBeatTimeSpan != null
-                ? this + barBeatTimeSpan
+            var barBeatTicksTimeSpan = timeSpan as BarBeatTicksTimeSpan;
+            return barBeatTicksTimeSpan != null
+                ? this + barBeatTicksTimeSpan
                 : TimeSpanUtilities.Add(this, timeSpan, mode);
         }
 
@@ -338,9 +338,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
-            var barBeatTimeSpan = timeSpan as BarBeatTimeSpan;
-            return barBeatTimeSpan != null
-                ? this - barBeatTimeSpan
+            var barBeatTicksTimeSpan = timeSpan as BarBeatTicksTimeSpan;
+            return barBeatTicksTimeSpan != null
+                ? this - barBeatTicksTimeSpan
                 : TimeSpanUtilities.Subtract(this, timeSpan, mode);
         }
 
@@ -353,7 +353,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new BarBeatTimeSpan(MathUtilities.RoundToLong(Bars * multiplier),
+            return new BarBeatTicksTimeSpan(MathUtilities.RoundToLong(Bars * multiplier),
                                        MathUtilities.RoundToLong(Beats * multiplier),
                                        MathUtilities.RoundToLong(Ticks * multiplier));
         }
@@ -367,7 +367,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new BarBeatTimeSpan(MathUtilities.RoundToLong(Bars / divisor),
+            return new BarBeatTicksTimeSpan(MathUtilities.RoundToLong(Bars / divisor),
                                        MathUtilities.RoundToLong(Beats / divisor),
                                        MathUtilities.RoundToLong(Ticks / divisor));
         }
@@ -378,7 +378,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>Copy of the current time span.</returns>
         public ITimeSpan Clone()
         {
-            return new BarBeatTimeSpan(Bars, Beats, Ticks);
+            return new BarBeatTicksTimeSpan(Bars, Beats, Ticks);
         }
 
         /// <summary>
@@ -397,16 +397,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ReferenceEquals(obj, null))
                 return 1;
 
-            var barBeatTimeSpan = obj as BarBeatTimeSpan;
-            if (ReferenceEquals(barBeatTimeSpan, null))
+            var barBeatTicksTimeSpan = obj as BarBeatTicksTimeSpan;
+            if (ReferenceEquals(barBeatTicksTimeSpan, null))
                 throw new ArgumentException("Time span is of different type.", nameof(obj));
 
-            return CompareTo(barBeatTimeSpan);
+            return CompareTo(barBeatTicksTimeSpan);
         }
 
         #endregion
 
-        #region IComparable<BarBeatTimeSpan>
+        #region IComparable<BarBeatTicksTimeSpan>
 
         /// <summary>
         /// Compares the current instance with another object of the same type and returns an integer
@@ -418,7 +418,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// return value has these meanings: Value Meaning Less than zero This instance precedes other
         /// in the sort order. Zero This instance occurs in the same position in the sort order as other.
         /// Greater than zero This instance follows other in the sort order.</returns>
-        public int CompareTo(BarBeatTimeSpan other)
+        public int CompareTo(BarBeatTicksTimeSpan other)
         {
             if (ReferenceEquals(other, null))
                 return 1;
@@ -432,14 +432,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #endregion
 
-        #region IEquatable<BarBeatTimeSpan>
+        #region IEquatable<BarBeatTicksTimeSpan>
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
-        public bool Equals(BarBeatTimeSpan other)
+        public bool Equals(BarBeatTicksTimeSpan other)
         {
             if (ReferenceEquals(this, other))
                 return true;

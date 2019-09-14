@@ -962,7 +962,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             {
                 Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new MidiTimeSpan(100)),
                 Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new MusicalTimeSpan(1, 1000)),
-                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new BarBeatTimeSpan(1, 2, 3))
+                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new BarBeatTicksTimeSpan(1, 2, 3))
             };
 
             foreach (var timeSpansPair in timeSpansPairs)
