@@ -247,7 +247,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out MusicalTimeSpan timeSpan)
         {
-            return MusicalTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, MusicalTimeSpanParser.TryParse, out timeSpan);
         }
 
         /// <summary>
@@ -261,12 +261,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static MusicalTimeSpan Parse(string input)
         {
-            MusicalTimeSpan timeSpan;
-            var parsingResult = MusicalTimeSpanParser.TryParse(input, out timeSpan);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return timeSpan;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<MusicalTimeSpan>(input, MusicalTimeSpanParser.TryParse);
         }
 
         /// <summary>

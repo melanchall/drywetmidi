@@ -43,6 +43,7 @@
     <Compile Include="Common\DataTypes\ShortByteParser.cs" />
     <Compile Include="Common\DisplayNameAttribute.cs" />
     <Compile Include="Common\MathUtilities.cs" />
+    <Compile Include="Common\Parsing\Parsing.cs" />
     <Compile Include="Common\Parsing\ParsingResult.cs" />
     <Compile Include="Common\Parsing\ParsingStatus.cs" />
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />

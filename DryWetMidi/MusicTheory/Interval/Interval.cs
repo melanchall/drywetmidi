@@ -221,7 +221,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out Interval interval)
         {
-            return IntervalParser.TryParse(input, out interval).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, IntervalParser.TryParse, out interval);
         }
 
         /// <summary>
@@ -233,12 +233,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Interval Parse(string input)
         {
-            Interval interval;
-            var parsingResult = IntervalParser.TryParse(input, out interval);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return interval;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<Interval>(input, IntervalParser.TryParse);
         }
 
         #endregion

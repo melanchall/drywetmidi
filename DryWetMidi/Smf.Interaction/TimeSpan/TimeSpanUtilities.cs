@@ -11,41 +11,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
     /// </summary>
     public static class TimeSpanUtilities
     {
-        #region Delegates
-
-        private delegate Tuple<ParsingResult, ITimeSpan> Parser(string input);
-
-        #endregion
-
         #region Constants
 
-        private static readonly Dictionary<TimeSpanType, Parser> Parsers = new Dictionary<TimeSpanType, Parser>
+        private static readonly Dictionary<TimeSpanType, Parsing<ITimeSpan>> Parsers =
+            new Dictionary<TimeSpanType, Parsing<ITimeSpan>>
             {
-                [TimeSpanType.Midi] = input =>
-                {
-                    MidiTimeSpan timeSpan;
-                    return Tuple.Create(MidiTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-                },
-                [TimeSpanType.BarBeat] = input =>
-                {
-                    BarBeatTimeSpan timeSpan;
-                    return Tuple.Create(BarBeatTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-                },
-                [TimeSpanType.BarBeatCents] = input =>
-                {
-                    BarBeatCentsTimeSpan timeSpan;
-                    return Tuple.Create(BarBeatCentsTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-                },
-                [TimeSpanType.Metric] = input =>
-                {
-                    MetricTimeSpan timeSpan;
-                    return Tuple.Create(MetricTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-                },
-                [TimeSpanType.Musical] = input =>
-                {
-                    MusicalTimeSpan timeSpan;
-                    return Tuple.Create(MusicalTimeSpanParser.TryParse(input, out timeSpan), (ITimeSpan)timeSpan);
-                }
+                [TimeSpanType.Midi] = GetParsing<MidiTimeSpan>(MidiTimeSpanParser.TryParse),
+                [TimeSpanType.BarBeat] = GetParsing<BarBeatTimeSpan>(BarBeatTimeSpanParser.TryParse),
+                [TimeSpanType.BarBeatCents] = GetParsing<BarBeatCentsTimeSpan>(BarBeatCentsTimeSpanParser.TryParse),
+                [TimeSpanType.Metric] = GetParsing<MetricTimeSpan>(MetricTimeSpanParser.TryParse),
+                [TimeSpanType.Musical] = GetParsing<MusicalTimeSpan>(MusicalTimeSpanParser.TryParse)
             };
 
         private static readonly Dictionary<TimeSpanType, ITimeSpan> MaximumTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
@@ -87,7 +62,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             foreach (var parser in Parsers.Values)
             {
-                if (TryParse(input, parser, out timeSpan))
+                if (ParsingUtilities.TryParse(input, parser, out timeSpan))
                     return true;
             }
 
@@ -108,7 +83,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, TimeSpanType timeSpanType, out ITimeSpan timeSpan)
         {
-            return TryParse(input, Parsers[timeSpanType], out timeSpan);
+            return ParsingUtilities.TryParse(input, Parsers[timeSpanType], out timeSpan);
         }
 
         /// <summary>
@@ -124,15 +99,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             foreach (var parser in Parsers.Values)
             {
-                var parsingResult = parser(input);
+                ITimeSpan timeSpan;
+                var parsingResult = parser(input, out timeSpan);
 
-                var result = parsingResult.Item1;
-                var timeSpan = parsingResult.Item2;
-
-                if (result.Status == ParsingStatus.Parsed)
+                if (parsingResult.Status == ParsingStatus.Parsed)
                     return timeSpan;
-                else if (result.Status == ParsingStatus.FormatError)
-                    throw result.Exception;
+                else if (parsingResult.Status == ParsingStatus.FormatError)
+                    throw parsingResult.Exception;
             }
 
             throw new FormatException("Time span has unknown format.");
@@ -214,18 +187,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, mode);
         }
 
-        private static bool TryParse(string input, Parser parser, out ITimeSpan timeSpan)
+        private static Parsing<ITimeSpan> GetParsing<TTimeSpan>(Parsing<TTimeSpan> parsing)
+            where TTimeSpan : ITimeSpan
         {
-            timeSpan = null;
-
-            var parsingResult = parser(input);
-            if (parsingResult.Item1.Status == ParsingStatus.Parsed)
+            return (string input, out ITimeSpan timeSpan) =>
             {
-                timeSpan = parsingResult.Item2;
-                return true;
-            }
-
-            return false;
+                TTimeSpan result;
+                var parsingResult = parsing(input, out result);
+                timeSpan = result;
+                return parsingResult;
+            };
         }
 
         #endregion

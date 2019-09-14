@@ -89,12 +89,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static MidiTimeSpan Parse(string input)
         {
-            MidiTimeSpan timeSpan;
-            var parsingResult = MidiTimeSpanParser.TryParse(input, out timeSpan);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return timeSpan;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<MidiTimeSpan>(input, MidiTimeSpanParser.TryParse);
         }
 
         #endregion
