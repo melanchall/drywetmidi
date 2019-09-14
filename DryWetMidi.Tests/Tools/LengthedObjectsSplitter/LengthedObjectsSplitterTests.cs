@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             [typeof(MidiTimeSpan)] = TimeSpanType.Midi,
             [typeof(MetricTimeSpan)] = TimeSpanType.Metric,
             [typeof(MusicalTimeSpan)] = TimeSpanType.Musical,
-            [typeof(BarBeatTimeSpan)] = TimeSpanType.BarBeat,
+            [typeof(BarBeatTicksTimeSpan)] = TimeSpanType.BarBeatTicks,
             [typeof(BarBeatCentsTimeSpan)] = TimeSpanType.BarBeatCents
         };
 
@@ -668,7 +668,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var tempoMap = TempoMap.Default;
 
             var obj1 = ObjectMethods.Create(new MidiTimeSpan(), MusicalTimeSpan.Whole, tempoMap);
-            var obj2 = ObjectMethods.Create(new MetricTimeSpan(0, 0, 0, 210), new BarBeatTimeSpan(1, 1), tempoMap);
+            var obj2 = ObjectMethods.Create(new MetricTimeSpan(0, 0, 0, 210), new BarBeatTicksTimeSpan(1, 1), tempoMap);
 
             var step1 = MusicalTimeSpan.ThirtySecond;
             var step2 = new MetricTimeSpan(0, 0, 1);
@@ -695,7 +695,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimeAndLength((2 * step1).Add(step2, TimeSpanMode.TimeLength), step2),
                         new TimeAndLength((2 * step1).Add(step2 + step2, TimeSpanMode.TimeLength), step1),
                         new TimeAndLength((3 * step1).Add(step2 + step2, TimeSpanMode.TimeLength),
-                                          new MetricTimeSpan(0, 0, 0, 210).Add(new BarBeatTimeSpan(1, 1), TimeSpanMode.TimeLength).Subtract((3 * step1).Add(step2 + step2, TimeSpanMode.TimeLength), TimeSpanMode.TimeTime)),
+                                          new MetricTimeSpan(0, 0, 0, 210).Add(new BarBeatTicksTimeSpan(1, 1), TimeSpanMode.TimeLength).Subtract((3 * step1).Add(step2 + step2, TimeSpanMode.TimeLength), TimeSpanMode.TimeTime)),
                     }
                 },
                 tempoMap: tempoMap);

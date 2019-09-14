@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    internal static class BarBeatTimeSpanParser
+    internal static class BarBeatTicksTimeSpanParser
     {
         #region Constants
 
@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out BarBeatTimeSpan timeSpan)
+        internal static ParsingResult TryParse(string input, out BarBeatTicksTimeSpan timeSpan)
         {
             timeSpan = null;
 
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (!ParsingUtilities.ParseNonnegativeLong(match, TicksGroupName, 0, out ticks))
                 return ParsingResult.Error(TicksIsOutOfRange);
 
-            timeSpan = new BarBeatTimeSpan(bars, beats, ticks);
+            timeSpan = new BarBeatTicksTimeSpan(bars, beats, ticks);
             return ParsingResult.Parsed;
         }
 

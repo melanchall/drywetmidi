@@ -6,40 +6,40 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 {
     [TestFixture]
-    public sealed class BarBeatTimeSpanTests
+    public sealed class BarBeatTicksTimeSpanTests
     {
         #region Constants
 
         private static readonly ITimeSpan MetricSpan = new MetricTimeSpan(0, 2, 30);
-        private static readonly ITimeSpan BarBeatSpan = new BarBeatTimeSpan(1, 2, 10);
+        private static readonly ITimeSpan BarBeatSpan = new BarBeatTicksTimeSpan(1, 2, 10);
 
         private const long ZeroTime = 0;
         private const long ShortTime = 1000;
         private const long LargeTime = 100000;
 
-        private static readonly Tuple<BarBeatTimeSpan, BarBeatTimeSpan>[] TimeSpansForComparison_Less = new[]
+        private static readonly Tuple<BarBeatTicksTimeSpan, BarBeatTicksTimeSpan>[] TimeSpansForComparison_Less = new[]
         {
-            Tuple.Create(new BarBeatTimeSpan(), new BarBeatTimeSpan(0, 0, 1)),
-            Tuple.Create(new BarBeatTimeSpan(), new BarBeatTimeSpan(0, 1, 0)),
-            Tuple.Create(new BarBeatTimeSpan(), new BarBeatTimeSpan(1, 0, 0)),
-            Tuple.Create(new BarBeatTimeSpan(), new BarBeatTimeSpan(0, 0, 1)),
-            Tuple.Create(new BarBeatTimeSpan(2, 0, 0), new BarBeatTimeSpan(10, 0, 1)),
-            Tuple.Create(new BarBeatTimeSpan(0, 10, 0), new BarBeatTimeSpan(0, 10, 1)),
-            Tuple.Create(new BarBeatTimeSpan(10, 10, 0), new BarBeatTimeSpan(10, 10, 1)),
-            Tuple.Create(new BarBeatTimeSpan(10000, 899, 0), new BarBeatTimeSpan(10000, 10000, 0)),
-            Tuple.Create(new BarBeatTimeSpan(0, 100), new BarBeatTimeSpan(0, 110, 1)),
-            Tuple.Create(new BarBeatTimeSpan(199, 0, 1000), new BarBeatTimeSpan(200, 0, 800)),
-            Tuple.Create(new BarBeatTimeSpan(), new BarBeatTimeSpan(10, 110, 891))
+            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 1)),
+            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 1, 0)),
+            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(1, 0, 0)),
+            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 1)),
+            Tuple.Create(new BarBeatTicksTimeSpan(2, 0, 0), new BarBeatTicksTimeSpan(10, 0, 1)),
+            Tuple.Create(new BarBeatTicksTimeSpan(0, 10, 0), new BarBeatTicksTimeSpan(0, 10, 1)),
+            Tuple.Create(new BarBeatTicksTimeSpan(10, 10, 0), new BarBeatTicksTimeSpan(10, 10, 1)),
+            Tuple.Create(new BarBeatTicksTimeSpan(10000, 899, 0), new BarBeatTicksTimeSpan(10000, 10000, 0)),
+            Tuple.Create(new BarBeatTicksTimeSpan(0, 100), new BarBeatTicksTimeSpan(0, 110, 1)),
+            Tuple.Create(new BarBeatTicksTimeSpan(199, 0, 1000), new BarBeatTicksTimeSpan(200, 0, 800)),
+            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(10, 110, 891))
         };
 
-        private static readonly Tuple<BarBeatTimeSpan, BarBeatTimeSpan>[] TimeSpansForComparison_Equal = new[]
+        private static readonly Tuple<BarBeatTicksTimeSpan, BarBeatTicksTimeSpan>[] TimeSpansForComparison_Equal = new[]
         {
-            Tuple.Create(new BarBeatTimeSpan(), new BarBeatTimeSpan()),
-            Tuple.Create(new BarBeatTimeSpan(), new BarBeatTimeSpan(0, 0, 0)),
-            Tuple.Create(new BarBeatTimeSpan(10, 0, 0), new BarBeatTimeSpan(10, 0, 0)),
-            Tuple.Create(new BarBeatTimeSpan(100, 100, 100), new BarBeatTimeSpan(100, 100, 100)),
-            Tuple.Create(new BarBeatTimeSpan(0, 345, 0), new BarBeatTimeSpan(0, 345, 0)),
-            Tuple.Create(new BarBeatTimeSpan(0, 0, 1234), new BarBeatTimeSpan(0, 0, 1234))
+            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan()),
+            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 0)),
+            Tuple.Create(new BarBeatTicksTimeSpan(10, 0, 0), new BarBeatTicksTimeSpan(10, 0, 0)),
+            Tuple.Create(new BarBeatTicksTimeSpan(100, 100, 100), new BarBeatTicksTimeSpan(100, 100, 100)),
+            Tuple.Create(new BarBeatTicksTimeSpan(0, 345, 0), new BarBeatTicksTimeSpan(0, 345, 0)),
+            Tuple.Create(new BarBeatTicksTimeSpan(0, 0, 1234), new BarBeatTicksTimeSpan(0, 0, 1234))
         };
 
         #endregion
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //  |=======================================|
             //  ^                   ^                   ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(2, 0),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(2, 0),
                                                  2 * MusicalTimeSpan.Whole,
                                                  null,
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //       |=======================================|
             //       '              ^                   ^    '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(2, 0),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(2, 0),
                                                  2 * MusicalTimeSpan.Whole,
                                                  MusicalTimeSpan.Quarter,
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                          |=======================================================|
             //                             '        ^                                   ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 2, 60),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 2, 60),
                                                  MusicalTimeSpan.Whole.SingleDotted() + MusicalTimeSpan.ThirtySecond,
                                                  MusicalTimeSpan.Half + 3 * MusicalTimeSpan.Sixteenth,
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                 |========================|
             //                 '    ^                   ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 1),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 1),
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter,
                                                  MusicalTimeSpan.Half.SingleDotted(),
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -124,7 +124,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                 |============================|
             //                 '    ^                   ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 1, 90),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 1, 90),
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter + 3 * MusicalTimeSpan.SixtyFourth,
                                                  MusicalTimeSpan.Half.SingleDotted(),
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                 |=========|
             //                 '    ^    '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 2),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 2),
                                                  MusicalTimeSpan.Half,
                                                  MusicalTimeSpan.Half.SingleDotted(),
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                           |=========|
             //                           '    '    '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 2),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 2),
                                                  MusicalTimeSpan.Half,
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter,
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -172,7 +172,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                                     |====|
             //                                     '    ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 1),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 1),
                                                  MusicalTimeSpan.Quarter,
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Half.SingleDotted(),
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -188,7 +188,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                                      |=========|
             //                                              ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 1),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 1),
                                                  MusicalTimeSpan.Quarter,
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Half.SingleDotted() + MusicalTimeSpan.ThirtySecond,
                                                  TimeSpanTestUtilities.DefaultTempoMap);
@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //  |==================================|
             //  ^                   ^              ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(2, 0),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(2, 0),
                                                  MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth,
                                                  null,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -222,7 +222,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //  |============================|
             //  ^                   ^  '  '  '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 3),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 3),
                                                  MusicalTimeSpan.Whole + 3 * MusicalTimeSpan.Eighth,
                                                  null,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -237,7 +237,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //       |=========|
             //       '    '    '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 2),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 2),
                                                  MusicalTimeSpan.Half,
                                                  MusicalTimeSpan.Quarter,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                         |=====|
             //                         '  '  '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 2),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 2),
                                                  MusicalTimeSpan.Quarter,
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Eighth,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -267,7 +267,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //            |==================|
             //            '    '    ^  '  '  '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 1),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 1),
                                                  MusicalTimeSpan.Half + 3 * MusicalTimeSpan.Eighth,
                                                  MusicalTimeSpan.Half,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //            |==============================|
             //            '    '    ^              ^ ' ' '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(2, 1),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(2, 1),
                                                  MusicalTimeSpan.Half + 5 * MusicalTimeSpan.Eighth + 3 * MusicalTimeSpan.Sixteenth,
                                                  MusicalTimeSpan.Half,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -297,7 +297,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                      |==================|
             //                      ^              ^ ' '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 2),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 2),
                                                  5 * MusicalTimeSpan.Eighth + 2 * MusicalTimeSpan.Sixteenth,
                                                  MusicalTimeSpan.Whole,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -312,7 +312,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //            |========================|
             //            '    '    ^              ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 2),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 2),
                                                  MusicalTimeSpan.Half + 5 * MusicalTimeSpan.Eighth,
                                                  MusicalTimeSpan.Half,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -327,7 +327,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                  |==================================|
             //                                  ^              ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 1, 60),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 1, 60),
                                                  MusicalTimeSpan.Quarter + 5 * MusicalTimeSpan.Eighth + MusicalTimeSpan.ThirtySecond,
                                                  MusicalTimeSpan.Half.SingleDotted() + MusicalTimeSpan.SixtyFourth,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -342,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //            |===========|
             //            '    '    ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 2, 60),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 2, 60),
                                                  MusicalTimeSpan.Half + MusicalTimeSpan.ThirtySecond,
                                                  MusicalTimeSpan.Half,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -357,7 +357,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //             |===|
             //            
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 0, 90),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 0, 90),
                                                  3 * MusicalTimeSpan.SixtyFourth,
                                                  MusicalTimeSpan.Half + MusicalTimeSpan.SixtyFourth,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -372,7 +372,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                          |===|
             //            
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 0, 90),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 0, 90),
                                                  3 * MusicalTimeSpan.SixtyFourth,
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Sixteenth,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -387,7 +387,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                            |==========|
             //                            '  '  '  ^ '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 4, 0),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 4, 0),
                                                  3 * MusicalTimeSpan.Eighth + MusicalTimeSpan.Sixteenth,
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -402,7 +402,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                             |===============|
             //                                     '  '  ^
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 3, 30),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 3, 30),
                                                  3 * MusicalTimeSpan.Eighth + MusicalTimeSpan.SixtyFourth,
                                                  MusicalTimeSpan.Whole + MusicalTimeSpan.Quarter + MusicalTimeSpan.SixtyFourth,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -417,7 +417,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                                |=====================|
             //                                  ^  '  '  '  '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(0, 4, 240),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(0, 4, 240),
                                                  5 * MusicalTimeSpan.Eighth,
                                                  MusicalTimeSpan.Half.SingleDotted() + 15 * MusicalTimeSpan.SixtyFourth,
                                                  TimeSpanTestUtilities.SimpleTempoMap);
@@ -436,7 +436,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //            |==========================================================|
             //            '    '    ^                   ^              ^         ^ ' '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(4, 0),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(4, 0),
                                                  MusicalTimeSpan.Half + MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth + 7 * MusicalTimeSpan.Sixteenth,
                                                  MusicalTimeSpan.Half,
                                                  TimeSpanTestUtilities.ComplexTempoMap);
@@ -451,7 +451,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //            |==================================================================|
             //            '    '    ^                   ^              ^         ^         ^ '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(4, 3),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(4, 3),
                                                  MusicalTimeSpan.Half + MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth + 11 * MusicalTimeSpan.Sixteenth,
                                                  MusicalTimeSpan.Half,
                                                  TimeSpanTestUtilities.ComplexTempoMap);
@@ -466,7 +466,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                                |===============================================================|
             //                                '    '    ^              ^         ^         ^         ^  '  '  '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(5, 1),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(5, 1),
                                                  MusicalTimeSpan.Half + 5 * MusicalTimeSpan.Eighth + 15 * MusicalTimeSpan.Sixteenth + 3 * MusicalTimeSpan.Eighth,
                                                  MusicalTimeSpan.Whole.SingleDotted(),
                                                  TimeSpanTestUtilities.ComplexTempoMap);
@@ -481,7 +481,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             //                                                                                 |===========|
             //                                                                                 ' ' ' ^  '  '
 
-            TimeSpanTestUtilities.TestConversion(new BarBeatTimeSpan(1, 0),
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(1, 0),
                                                  3 * MusicalTimeSpan.Sixteenth + 2 * MusicalTimeSpan.Eighth,
                                                  2 * MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth + 12 * MusicalTimeSpan.Sixteenth,
                                                  TimeSpanTestUtilities.ComplexTempoMap);
@@ -497,28 +497,28 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Parse zero bar-beat time span.")]
         public void Parse_1()
         {
-            TimeSpanTestUtilities.Parse("0.0.0", new BarBeatTimeSpan());
+            TimeSpanTestUtilities.Parse("0.0.0", new BarBeatTicksTimeSpan());
         }
 
         [Test]
         [Description("Parse one-bar time span.")]
         public void Parse_2()
         {
-            TimeSpanTestUtilities.Parse("1.0.0", new BarBeatTimeSpan(1, 0, 0));
+            TimeSpanTestUtilities.Parse("1.0.0", new BarBeatTicksTimeSpan(1, 0, 0));
         }
 
         [Test]
         [Description("Parse arbitrary bar-beat time span.")]
         public void Parse_3()
         {
-            TimeSpanTestUtilities.Parse("0.10.5", new BarBeatTimeSpan(0, 10, 5));
+            TimeSpanTestUtilities.Parse("0.10.5", new BarBeatTicksTimeSpan(0, 10, 5));
         }
 
         [Test]
         [Description("Parse arbitrary bar-beat time span.")]
         public void Parse_4()
         {
-            TimeSpanTestUtilities.Parse("100.20.0", new BarBeatTimeSpan(100, 20, 0));
+            TimeSpanTestUtilities.Parse("100.20.0", new BarBeatTicksTimeSpan(100, 20, 0));
         }
 
         #endregion
@@ -528,25 +528,25 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Test]
         public void Add_SameType_1()
         {
-            TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(),
-                                               new BarBeatTimeSpan(),
-                                               new BarBeatTimeSpan());
+            TimeSpanTestUtilities.Add_SameType(new BarBeatTicksTimeSpan(),
+                                               new BarBeatTicksTimeSpan(),
+                                               new BarBeatTicksTimeSpan());
         }
 
         [Test]
         public void Add_SameType_2()
         {
-            TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(10, 0, 10),
-                                               new BarBeatTimeSpan(),
-                                               new BarBeatTimeSpan(10, 0, 10));
+            TimeSpanTestUtilities.Add_SameType(new BarBeatTicksTimeSpan(10, 0, 10),
+                                               new BarBeatTicksTimeSpan(),
+                                               new BarBeatTicksTimeSpan(10, 0, 10));
         }
 
         [Test]
         public void Add_SameType_3()
         {
-            TimeSpanTestUtilities.Add_SameType(new BarBeatTimeSpan(10, 0, 10),
-                                               new BarBeatTimeSpan(0, 3, 5),
-                                               new BarBeatTimeSpan(10, 3, 15));
+            TimeSpanTestUtilities.Add_SameType(new BarBeatTicksTimeSpan(10, 0, 10),
+                                               new BarBeatTicksTimeSpan(0, 3, 5),
+                                               new BarBeatTicksTimeSpan(10, 3, 15));
         }
 
         [Test]
@@ -668,25 +668,25 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Test]
         public void Subtract_SameType_1()
         {
-            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTimeSpan(),
-                                                    new BarBeatTimeSpan(),
-                                                    new BarBeatTimeSpan());
+            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTicksTimeSpan(),
+                                                    new BarBeatTicksTimeSpan(),
+                                                    new BarBeatTicksTimeSpan());
         }
 
         [Test]
         public void Subtract_SameType_2()
         {
-            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTimeSpan(10, 0, 10),
-                                                    new BarBeatTimeSpan(),
-                                                    new BarBeatTimeSpan(10, 0, 10));
+            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTicksTimeSpan(10, 0, 10),
+                                                    new BarBeatTicksTimeSpan(),
+                                                    new BarBeatTicksTimeSpan(10, 0, 10));
         }
 
         [Test]
         public void Subtract_SameType_3()
         {
-            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTimeSpan(10, 7, 10),
-                                                    new BarBeatTimeSpan(0, 3, 6),
-                                                    new BarBeatTimeSpan(10, 4, 4));
+            TimeSpanTestUtilities.Subtract_SameType(new BarBeatTicksTimeSpan(10, 7, 10),
+                                                    new BarBeatTicksTimeSpan(0, 3, 6),
+                                                    new BarBeatTicksTimeSpan(10, 4, 4));
         }
 
         [Test]
@@ -826,39 +826,39 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Multiply zero time span by zero.")]
         public void Multiply_1()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(),
-                            new BarBeatTimeSpan().Multiply(0));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(),
+                            new BarBeatTicksTimeSpan().Multiply(0));
         }
 
         [Test]
         [Description("Multiply arbitrary time span by zero.")]
         public void Multiply_2()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(),
-                            new BarBeatTimeSpan(10, 5, 9).Multiply(0));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(),
+                            new BarBeatTicksTimeSpan(10, 5, 9).Multiply(0));
         }
 
         [Test]
         [Description("Multiply by integer number.")]
         public void Multiply_3()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(20, 10, 18),
-                            new BarBeatTimeSpan(10, 5, 9).Multiply(2));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(20, 10, 18),
+                            new BarBeatTicksTimeSpan(10, 5, 9).Multiply(2));
         }
 
         [Test]
         [Description("Multiply by non-integer number.")]
         public void Multiply_4()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(15, 12, 9),
-                            new BarBeatTimeSpan(10, 8, 6).Multiply(1.5));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(15, 12, 9),
+                            new BarBeatTicksTimeSpan(10, 8, 6).Multiply(1.5));
         }
 
         [Test]
         [Description("Multiply by negative number.")]
         public void Multiply_5()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTimeSpan().Multiply(-5));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Multiply(-5));
         }
 
         #endregion
@@ -869,46 +869,46 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Description("Divide arbitrary time span by one.")]
         public void Divide_1()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(5, 4, 3),
-                            new BarBeatTimeSpan(5, 4, 3).Divide(1));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(5, 4, 3),
+                            new BarBeatTicksTimeSpan(5, 4, 3).Divide(1));
         }
 
         [Test]
         [Description("Divide arbitrary time span by integer number.")]
         public void Divide_2()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(5, 3, 4),
-                            new BarBeatTimeSpan(10, 6, 8).Divide(2));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(5, 3, 4),
+                            new BarBeatTicksTimeSpan(10, 6, 8).Divide(2));
         }
 
         [Test]
         [Description("Divide by non-integer number.")]
         public void Divide_3()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(8, 2, 4),
-                            new BarBeatTimeSpan(12, 3, 6).Divide(1.5));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(8, 2, 4),
+                            new BarBeatTicksTimeSpan(12, 3, 6).Divide(1.5));
         }
 
         [Test]
         [Description("Divide by zero.")]
         public void Divide_4()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTimeSpan().Divide(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Divide(0));
         }
 
         [Test]
         [Description("Divide by negative number.")]
         public void Divide_5()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTimeSpan().Divide(-8));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Divide(-8));
         }
 
         [Test]
         [Description("Divide zero time span by one.")]
         public void Divide_6()
         {
-            Assert.AreEqual(new BarBeatTimeSpan(),
-                            new BarBeatTimeSpan().Divide(1));
+            Assert.AreEqual(new BarBeatTicksTimeSpan(),
+                            new BarBeatTicksTimeSpan().Divide(1));
         }
 
         #endregion
@@ -918,13 +918,13 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         [Test]
         public void Clone_1()
         {
-            TimeSpanTestUtilities.TestClone(new BarBeatTimeSpan());
+            TimeSpanTestUtilities.TestClone(new BarBeatTicksTimeSpan());
         }
 
         [Test]
         public void Clone_2()
         {
-            TimeSpanTestUtilities.TestClone(new BarBeatTimeSpan(1, 2, 3));
+            TimeSpanTestUtilities.TestClone(new BarBeatTicksTimeSpan(1, 2, 3));
         }
 
         #endregion
@@ -1009,9 +1009,9 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         {
             var timeSpansPairs = new[]
             {
-                Tuple.Create<BarBeatTimeSpan, ITimeSpan>(new BarBeatTimeSpan(), new MidiTimeSpan(100)),
-                Tuple.Create<BarBeatTimeSpan, ITimeSpan>(new BarBeatTimeSpan(), new MusicalTimeSpan(1, 1000)),
-                Tuple.Create<BarBeatTimeSpan, ITimeSpan>(new BarBeatTimeSpan(), new MetricTimeSpan(1, 2, 3))
+                Tuple.Create<BarBeatTicksTimeSpan, ITimeSpan>(new BarBeatTicksTimeSpan(), new MidiTimeSpan(100)),
+                Tuple.Create<BarBeatTicksTimeSpan, ITimeSpan>(new BarBeatTicksTimeSpan(), new MusicalTimeSpan(1, 1000)),
+                Tuple.Create<BarBeatTicksTimeSpan, ITimeSpan>(new BarBeatTicksTimeSpan(), new MetricTimeSpan(1, 2, 3))
             };
 
             foreach (var timeSpansPair in timeSpansPairs)

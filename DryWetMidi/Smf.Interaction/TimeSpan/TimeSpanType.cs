@@ -18,7 +18,7 @@
         /// <summary>
         /// Bar/beat time span which represents bars, beats and ticks.
         /// </summary>
-        BarBeat,
+        BarBeatTicks,
 
         BarBeatCents,
 

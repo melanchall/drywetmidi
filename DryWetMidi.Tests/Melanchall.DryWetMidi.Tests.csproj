@@ -101,7 +101,7 @@
     <Compile Include="Smf.Interaction\TimedEvents\TimedEventsManagerTests.cs" />
     <Compile Include="Smf.Interaction\TimedEvents\TimedEventTests.cs" />
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollectionTestUtilities.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\BarBeatTimeSpanTests.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\BarBeatTicksTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MetricTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MidiTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\MusicalTimeSpanTests.cs" />

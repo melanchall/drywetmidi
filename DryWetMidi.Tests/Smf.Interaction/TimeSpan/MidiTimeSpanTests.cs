@@ -819,7 +819,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             {
                 Tuple.Create<MidiTimeSpan, ITimeSpan>(new MidiTimeSpan(), new MetricTimeSpan(100)),
                 Tuple.Create<MidiTimeSpan, ITimeSpan>(new MidiTimeSpan(), new MusicalTimeSpan(1, 1000)),
-                Tuple.Create<MidiTimeSpan, ITimeSpan>(new MidiTimeSpan(), new BarBeatTimeSpan(1, 2, 3))
+                Tuple.Create<MidiTimeSpan, ITimeSpan>(new MidiTimeSpan(), new BarBeatTicksTimeSpan(1, 2, 3))
             };
 
             foreach (var timeSpansPair in timeSpansPairs)

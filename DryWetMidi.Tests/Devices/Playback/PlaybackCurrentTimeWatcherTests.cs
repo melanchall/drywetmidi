@@ -250,15 +250,15 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         public void WatchCurrentTime_BarBeat()
         {
             CheckWatchCurrentTime(
-                playbackLength: new BarBeatTimeSpan(3, 0, 0),
-                pollingInterval: new BarBeatTimeSpan(1, 0, 0),
-                timeType: TimeSpanType.BarBeat,
+                playbackLength: new BarBeatTicksTimeSpan(3, 0, 0),
+                pollingInterval: new BarBeatTicksTimeSpan(1, 0, 0),
+                timeType: TimeSpanType.BarBeatTicks,
                 expectedTimes: new[]
                 {
-                    new BarBeatTimeSpan(0, 0, 0),
-                    new BarBeatTimeSpan(1, 0, 0),
-                    new BarBeatTimeSpan(2, 0, 1),
-                    new BarBeatTimeSpan(3, 0, 1)
+                    new BarBeatTicksTimeSpan(0, 0, 0),
+                    new BarBeatTicksTimeSpan(1, 0, 0),
+                    new BarBeatTicksTimeSpan(2, 0, 1),
+                    new BarBeatTicksTimeSpan(3, 0, 1)
                 });
         }
 
@@ -387,7 +387,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             if (x is MetricTimeSpan xMetric && y is MetricTimeSpan yMetric)
                 return Math.Abs(xMetric.TotalMicroseconds - yMetric.TotalMicroseconds) < microsecondsEpsilon;
 
-            if (x is BarBeatTimeSpan xBarBeat && y is BarBeatTimeSpan yBarBeat)
+            if (x is BarBeatTicksTimeSpan xBarBeat && y is BarBeatTicksTimeSpan yBarBeat)
                 return xBarBeat.Bars == yBarBeat.Bars &&
                        xBarBeat.Beats == yBarBeat.Beats &&
                        Math.Abs(xBarBeat.Ticks - yBarBeat.Ticks) < ticksEpsilon;

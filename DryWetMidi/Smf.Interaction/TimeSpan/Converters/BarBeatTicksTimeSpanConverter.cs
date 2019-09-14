@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    internal sealed class BarBeatTimeSpanConverter : ITimeSpanConverter
+    internal sealed class BarBeatTicksTimeSpanConverter : ITimeSpanConverter
     {
         #region ITimeSpanConverter
 
@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             if (timeSpan == 0)
-                return new BarBeatTimeSpan();
+                return new BarBeatTicksTimeSpan();
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var endTime = time + timeSpan;
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            return new BarBeatTimeSpan(bars, beats, ticks);
+            return new BarBeatTicksTimeSpan(bars, beats, ticks);
         }
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
@@ -101,8 +101,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
-            var barBeatTimeSpan = (BarBeatTimeSpan)timeSpan;
-            if (barBeatTimeSpan.Bars == 0 && barBeatTimeSpan.Beats == 0 && barBeatTimeSpan.Ticks == 0)
+            var barBeatTicksTimeSpan = (BarBeatTicksTimeSpan)timeSpan;
+            if (barBeatTicksTimeSpan.Bars == 0 && barBeatTicksTimeSpan.Beats == 0 && barBeatTicksTimeSpan.Ticks == 0)
                 return 0;
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
@@ -110,9 +110,9 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            long bars = barBeatTimeSpan.Bars;
-            long beats = barBeatTimeSpan.Beats;
-            long ticks = barBeatTimeSpan.Ticks;
+            long bars = barBeatTicksTimeSpan.Bars;
+            long beats = barBeatTicksTimeSpan.Beats;
+            long ticks = barBeatTicksTimeSpan.Ticks;
 
             var startTimeSignature = timeSignatureLine.AtTime(time);
             var startBarLength = BarBeatTimeSpanUtilities.GetBarLength(startTimeSignature, ticksPerQuarterNote);

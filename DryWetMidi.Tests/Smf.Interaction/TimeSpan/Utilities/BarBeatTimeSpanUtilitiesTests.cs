@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(ticksPerQuarterNote)))
             {
-                tempoMapManager.SetTimeSignature(new BarBeatTimeSpan(changeOnEdge ? bars : bars - 1), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
+                tempoMapManager.SetTimeSignature(new BarBeatTicksTimeSpan(changeOnEdge ? bars : bars - 1), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
                 tempoMap = tempoMapManager.TempoMap;
             }
 
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(ticksPerQuarterNote)))
             {
-                tempoMapManager.SetTimeSignature(new BarBeatTimeSpan(changeOnEdge ? bars : bars - 1), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
+                tempoMapManager.SetTimeSignature(new BarBeatTicksTimeSpan(changeOnEdge ? bars : bars - 1), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
                 tempoMap = tempoMapManager.TempoMap;
             }
 
