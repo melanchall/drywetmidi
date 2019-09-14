@@ -1,7 +1,4 @@
 trigger:
-  branches:
-    include:
-    - develop
   paths:
     exclude:
     - DryWetMidi.Benchmarks
@@ -14,6 +11,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  version: '4.2.0'
+
+name: $(TeamProject)_$(SourceBranchName)_BuildAndTest_Windows_$(version)$(Rev:.r)
 
 steps:
 - task: NuGetToolInstaller@1
