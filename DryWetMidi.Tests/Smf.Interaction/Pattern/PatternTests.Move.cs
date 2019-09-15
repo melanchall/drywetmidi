@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(new MetricTimeSpan(0, 0, 30))
                 .StepBack(new MetricTimeSpan(0, 0, 37))
 
-                .Note(Octave.Get(0).A)
+                .Note(Notes.A0)
 
                 .Build();
 
@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(new MetricTimeSpan(0, 0, 30))
                 .StepBack(new MetricTimeSpan(0, 1, 37))
 
-                .Note(Octave.Get(0).A)
+                .Note(Notes.A0)
 
                 .Build();
 
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(MusicalTimeSpan.Whole)
                 .StepBack(MusicalTimeSpan.Half)
 
-                .Note(Octave.Get(0).A)
+                .Note(Notes.A0)
 
                 .Build();
 
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepForward(new MetricTimeSpan(0, 0, 30))
                 .StepBack(1000 * MusicalTimeSpan.Quarter)
 
-                .Note(Octave.Get(0).A)
+                .Note(Notes.A0)
 
                 .Build();
 
