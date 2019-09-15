@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
-                .Note(Octave.Get(0).A)
+                .Note(Notes.A0)
 
                 .Build();
 
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor()
 
-                .Note(Octave.Get(0).A)
+                .Note(Notes.A0)
 
                 .Build();
 
@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .StepBack(new MetricTimeSpan(0, 0, 5))
                 .MoveToFirstAnchor("Test")
 
-                .Note(Octave.Get(0).A)
+                .Note(Notes.A0)
 
                 .Build();
 
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                     .StepBack(new MetricTimeSpan(0, 0, 5))
                     .MoveToFirstAnchor()
 
-                    .Note(Octave.Get(0).A)
+                    .Note(Notes.A0)
 
                     .Build());
         }
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                     .StepBack(new MetricTimeSpan(0, 0, 5))
                     .MoveToFirstAnchor("Test")
 
-                    .Note(Octave.Get(0).A)
+                    .Note(Notes.A0)
 
                     .Build());
         }

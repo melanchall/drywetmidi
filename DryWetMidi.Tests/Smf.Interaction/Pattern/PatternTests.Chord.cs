@@ -54,10 +54,10 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var pattern = new PatternBuilder()
                 .SetNoteLength(defaultNoteLength)
                 .SetVelocity(defaultVelocity)
-                .SetRootNote(DryWetMidi.MusicTheory.Note.Get(NoteName.CSharp, 5))
+                .SetRootNote(Notes.CSharp5)
 
-                .Chord(new[] { Interval.Two, Interval.Five }, Octave.Get(2).A)
-                .Chord(new[] { Interval.Two, -Interval.Ten }, Octave.Get(2).B)
+                .Chord(new[] { Interval.Two, Interval.Five }, Notes.A2)
+                .Chord(new[] { Interval.Two, -Interval.Ten }, Notes.B2)
 
                 .Build();
 

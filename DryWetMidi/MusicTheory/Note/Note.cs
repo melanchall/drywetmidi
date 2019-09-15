@@ -15,6 +15,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
         internal const string SharpLongString = "Sharp";
         internal const string SharpShortString = "#";
 
+        internal const string FlatLongString = "Flat";
+        internal const string FlatShortString = "b";
+
         #endregion
 
         #region Fields

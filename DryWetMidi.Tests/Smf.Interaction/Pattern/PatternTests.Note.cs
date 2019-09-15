@@ -26,8 +26,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 .SetNoteLength(defaultNoteLength)
                 .SetVelocity(defaultVelocity)
 
-                .Note(Octave.Get(0).A)
-                .Note(Octave.Get(1).C, specifiedLength, specifiedVelocity)
+                .Note(Notes.A0)
+                .Note(Notes.C1, specifiedLength, specifiedVelocity)
 
                 .Build();
 
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var pattern = new PatternBuilder()
                 .SetNoteLength(defaultNoteLength)
                 .SetVelocity(defaultVelocity)
-                .SetRootNote(DryWetMidi.MusicTheory.Note.Get(NoteName.CSharp, 5))
+                .SetRootNote(Notes.CSharp5)
 
                 .Note(Interval.Two)
                 .Note(-Interval.Four)

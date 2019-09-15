@@ -22,6 +22,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Constants
 
+        public const int OctaveSize = 12;
+
         /// <summary>
         /// The smalles possible value of an octave's number.
         /// </summary>

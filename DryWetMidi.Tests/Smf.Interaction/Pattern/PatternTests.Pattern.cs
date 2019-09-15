@@ -15,15 +15,15 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var noteLength1 = MusicalTimeSpan.Quarter;
             var pattern1 = new PatternBuilder()
                 .SetNoteLength(noteLength1)
-                .Note(Octave.Get(0).A)
-                .Note(Octave.Get(1).C)
+                .Note(Notes.A0)
+                .Note(Notes.C1)
                 .Build();
 
             var noteLength2 = MusicalTimeSpan.Quarter;
             var pattern2 = new PatternBuilder()
                 .SetNoteLength(noteLength2)
-                .Note(Octave.Get(2).ASharp)
-                .Note(Octave.Get(2).CSharp)
+                .Note(Notes.ASharp2)
+                .Note(Notes.CSharp2)
                 .Pattern(pattern1)
                 .Build();
 
@@ -42,8 +42,8 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             var noteLength1 = MusicalTimeSpan.Quarter;
             var pattern1 = new PatternBuilder()
                 .SetNoteLength(noteLength1)
-                .Note(Octave.Get(0).A)
-                .Note(Octave.Get(1).C)
+                .Note(Notes.A0)
+                .Note(Notes.C1)
                 .Build();
 
             var noteLength2 = MusicalTimeSpan.Quarter;
