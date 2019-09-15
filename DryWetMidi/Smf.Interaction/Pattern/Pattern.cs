@@ -19,8 +19,6 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="actions">Actions that pattern have to invoke on export to MIDI.</param>
         internal Pattern(IEnumerable<IPatternAction> actions)
         {
-            Debug.Assert(actions != null);
-
             Actions = actions;
         }
 
