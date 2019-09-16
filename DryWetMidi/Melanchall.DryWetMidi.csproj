@@ -49,6 +49,8 @@
     <Compile Include="Common\Parsing\ParsingUtilities.cs" />
     <Compile Include="Common\ReflectionUtilities.cs" />
     <Compile Include="Common\ThrowIfArgument.cs" />
+    <Compile Include="Composing\Transformation\NoteDescriptor.cs" />
+    <Compile Include="Composing\Transformation\NoteTransformation.cs" />
     <Compile Include="Devices\Clock\MidiClock.cs" />
     <Compile Include="Devices\Clock\MidiTimerWinApi.cs" />
     <Compile Include="Devices\Clock\TickEventArgs.cs" />
