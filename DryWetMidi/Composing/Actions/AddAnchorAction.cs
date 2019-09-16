@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi.Smf.Interaction
+﻿namespace Melanchall.DryWetMidi.Composing
 {
     internal sealed class AddAnchorAction : IPatternAction
     {

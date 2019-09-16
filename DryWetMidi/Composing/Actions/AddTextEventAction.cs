@@ -1,6 +1,8 @@
 ﻿using System;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.Composing
 {
     internal sealed class AddTextEventAction<TEvent> : IPatternAction
         where TEvent : BaseTextEvent

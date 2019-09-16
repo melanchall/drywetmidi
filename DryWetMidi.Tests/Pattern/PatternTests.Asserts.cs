@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
+namespace Melanchall.DryWetMidi.Tests.Composing
 {
     [TestFixture]
     public sealed partial class PatternTests

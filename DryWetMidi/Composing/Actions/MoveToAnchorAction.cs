@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.Composing
 {
     internal enum AnchorPosition
     {
