@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
@@ -7,22 +6,16 @@ namespace Melanchall.DryWetMidi.Composing
     {
         #region Constructor
 
-        public AddNoteAction(MusicTheory.Note note, SevenBitNumber velocity, ITimeSpan length)
+        public AddNoteAction(NoteDescriptor noteDescriptor)
         {
-            Note = note;
-            Velocity = velocity;
-            Length = length;
+            NoteDescriptor = noteDescriptor;
         }
 
         #endregion
 
         #region Properties
 
-        public MusicTheory.Note Note { get; }
-
-        public SevenBitNumber Velocity { get; }
-
-        public ITimeSpan Length { get; }
+        public NoteDescriptor NoteDescriptor { get; }
 
         #endregion
 
@@ -32,12 +25,12 @@ namespace Melanchall.DryWetMidi.Composing
         {
             context.SaveTime(time);
 
-            var noteLength = LengthConverter.ConvertFrom(Length, time, context.TempoMap);
+            var noteLength = LengthConverter.ConvertFrom(NoteDescriptor.Length, time, context.TempoMap);
 
-            var note = new Note(Note.NoteNumber, noteLength, time)
+            var note = new Note(NoteDescriptor.Note.NoteNumber, noteLength, time)
             {
                 Channel = context.Channel,
-                Velocity = Velocity
+                Velocity = NoteDescriptor.Velocity
             };
 
             return new PatternActionResult(time + noteLength, new[] { note });

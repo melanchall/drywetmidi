@@ -251,7 +251,7 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(note), note);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return AddAction(new AddNoteAction(note, velocity, length));
+            return AddAction(new AddNoteAction(new NoteDescriptor(note, velocity, length)));
         }
 
         #endregion
