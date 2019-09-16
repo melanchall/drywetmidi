@@ -15,6 +15,20 @@ namespace Melanchall.DryWetMidi.Composing
     /// </summary>
     public sealed class PatternBuilder
     {
+        #region Constants
+
+        public static readonly SevenBitNumber DefaultVelocity = Smf.Interaction.Note.DefaultVelocity;
+
+        public static readonly ITimeSpan DefaultNoteLength = MusicalTimeSpan.Quarter;
+
+        public static readonly ITimeSpan DefaultStep = MusicalTimeSpan.Quarter;
+
+        public static readonly Octave DefaultOctave = Octave.Middle;
+
+        public static readonly MusicTheory.Note DefaultRootNote = Octave.Middle.C;
+
+        #endregion
+
         #region Fields
 
         private readonly List<IPatternAction> _actions = new List<IPatternAction>();
@@ -22,11 +36,19 @@ namespace Melanchall.DryWetMidi.Composing
         private readonly Dictionary<object, int> _anchorCounters = new Dictionary<object, int>();
         private int _globalAnchorsCounter = 0;
 
-        private SevenBitNumber _velocity = Smf.Interaction.Note.DefaultVelocity;
-        private ITimeSpan _noteLength = MusicalTimeSpan.Quarter;
-        private ITimeSpan _step = MusicalTimeSpan.Quarter;
-        private Octave _octave = Octave.Middle;
-        private MusicTheory.Note _rootNote = Octave.Middle.C;
+        #endregion
+
+        #region Properties
+
+        public SevenBitNumber Velocity { get; private set; } = DefaultVelocity;
+
+        public ITimeSpan NoteLength { get; private set; } = DefaultNoteLength;
+
+        public ITimeSpan Step { get; private set; } = DefaultStep;
+
+        public Octave Octave { get; private set; } = DefaultOctave;
+
+        public MusicTheory.Note RootNote { get; private set; } = DefaultRootNote;
 
         #endregion
 
@@ -51,7 +73,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
         public PatternBuilder Note(Interval interval)
         {
-            return Note(interval, _noteLength, _velocity);
+            return Note(interval, NoteLength, Velocity);
         }
 
         /// <summary>
@@ -72,7 +94,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
         public PatternBuilder Note(Interval interval, ITimeSpan length)
         {
-            return Note(interval, length, _velocity);
+            return Note(interval, length, Velocity);
         }
 
         /// <summary>
@@ -92,7 +114,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
         public PatternBuilder Note(Interval interval, SevenBitNumber velocity)
         {
-            return Note(interval, _noteLength, velocity);
+            return Note(interval, NoteLength, velocity);
         }
 
         /// <summary>
@@ -114,7 +136,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsNull(nameof(interval), interval);
 
-            return Note(_rootNote.Transpose(interval), length, velocity);
+            return Note(RootNote.Transpose(interval), length, velocity);
         }
 
         /// <summary>
@@ -131,7 +153,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         public PatternBuilder Note(NoteName noteName)
         {
-            return Note(noteName, _noteLength, _velocity);
+            return Note(noteName, NoteLength, Velocity);
         }
 
         /// <summary>
@@ -149,7 +171,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
         public PatternBuilder Note(NoteName noteName, ITimeSpan length)
         {
-            return Note(noteName, length, _velocity);
+            return Note(noteName, length, Velocity);
         }
 
         /// <summary>
@@ -166,7 +188,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         public PatternBuilder Note(NoteName noteName, SevenBitNumber velocity)
         {
-            return Note(noteName, _noteLength, velocity);
+            return Note(noteName, NoteLength, velocity);
         }
 
         /// <summary>
@@ -185,7 +207,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
-            return Note(_octave.GetNote(noteName), length, velocity);
+            return Note(Octave.GetNote(noteName), length, velocity);
         }
 
         /// <summary>
@@ -201,7 +223,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
         public PatternBuilder Note(MusicTheory.Note note)
         {
-            return Note(note, _noteLength, _velocity);
+            return Note(note, NoteLength, Velocity);
         }
 
         /// <summary>
@@ -218,7 +240,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Note(MusicTheory.Note note, ITimeSpan length)
         {
-            return Note(note, length, _velocity);
+            return Note(note, length, Velocity);
         }
 
         /// <summary>
@@ -234,7 +256,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
         public PatternBuilder Note(MusicTheory.Note note, SevenBitNumber velocity)
         {
-            return Note(note, _noteLength, velocity);
+            return Note(note, NoteLength, velocity);
         }
 
         /// <summary>
@@ -274,7 +296,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         public PatternBuilder Chord(IEnumerable<Interval> intervals, NoteName rootNoteName)
         {
-            return Chord(intervals, rootNoteName, _noteLength, _velocity);
+            return Chord(intervals, rootNoteName, NoteLength, Velocity);
         }
 
         /// <summary>
@@ -296,7 +318,7 @@ namespace Melanchall.DryWetMidi.Composing
                                     NoteName rootNoteName,
                                     ITimeSpan length)
         {
-            return Chord(intervals, rootNoteName, length, _velocity);
+            return Chord(intervals, rootNoteName, length, Velocity);
         }
 
         /// <summary>
@@ -317,7 +339,7 @@ namespace Melanchall.DryWetMidi.Composing
                                     NoteName rootNoteName,
                                     SevenBitNumber velocity)
         {
-            return Chord(intervals, rootNoteName, _noteLength, velocity);
+            return Chord(intervals, rootNoteName, NoteLength, velocity);
         }
 
         /// <summary>
@@ -338,7 +360,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
 
-            return Chord(intervals, _octave.GetNote(rootNoteName), length, velocity);
+            return Chord(intervals, Octave.GetNote(rootNoteName), length, velocity);
         }
 
         /// <summary>
@@ -361,7 +383,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
         public PatternBuilder Chord(IEnumerable<Interval> intervals, MusicTheory.Note rootNote)
         {
-            return Chord(intervals, rootNote, _noteLength, _velocity);
+            return Chord(intervals, rootNote, NoteLength, Velocity);
         }
 
         /// <summary>
@@ -386,7 +408,7 @@ namespace Melanchall.DryWetMidi.Composing
                                     MusicTheory.Note rootNote,
                                     ITimeSpan length)
         {
-            return Chord(interval, rootNote, length, _velocity);
+            return Chord(interval, rootNote, length, Velocity);
         }
 
         /// <summary>
@@ -411,7 +433,7 @@ namespace Melanchall.DryWetMidi.Composing
                                     MusicTheory.Note rootNote,
                                     SevenBitNumber velocity)
         {
-            return Chord(intervals, rootNote, _noteLength, velocity);
+            return Chord(intervals, rootNote, NoteLength, velocity);
         }
 
         /// <summary>
@@ -459,7 +481,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames)
         {
-            return Chord(noteNames, _noteLength, _velocity);
+            return Chord(noteNames, NoteLength, Velocity);
         }
 
         /// <summary>
@@ -477,7 +499,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames, ITimeSpan length)
         {
-            return Chord(noteNames, length, _velocity);
+            return Chord(noteNames, length, Velocity);
         }
 
         /// <summary>
@@ -494,7 +516,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames, SevenBitNumber velocity)
         {
-            return Chord(noteNames, _noteLength, velocity);
+            return Chord(noteNames, NoteLength, velocity);
         }
 
         /// <summary>
@@ -514,7 +536,7 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(noteNames), noteNames);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return Chord(noteNames.Select(n => _octave.GetNote(n)), length, velocity);
+            return Chord(noteNames.Select(n => Octave.GetNote(n)), length, velocity);
         }
 
         /// <summary>
@@ -530,7 +552,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes)
         {
-            return Chord(notes, _noteLength, _velocity);
+            return Chord(notes, NoteLength, Velocity);
         }
 
         /// <summary>
@@ -547,7 +569,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, ITimeSpan length)
         {
-            return Chord(notes, length, _velocity);
+            return Chord(notes, length, Velocity);
         }
 
         /// <summary>
@@ -563,7 +585,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
         public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, SevenBitNumber velocity)
         {
-            return Chord(notes, _noteLength, velocity);
+            return Chord(notes, NoteLength, velocity);
         }
 
         /// <summary>
@@ -760,7 +782,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </remarks>
         public PatternBuilder StepForward()
         {
-            return AddAction(new StepForwardAction(_step));
+            return AddAction(new StepForwardAction(Step));
         }
 
         /// <summary>
@@ -785,7 +807,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </remarks>
         public PatternBuilder StepBack()
         {
-            return AddAction(new StepBackAction(_step));
+            return AddAction(new StepBackAction(Step));
         }
 
         /// <summary>
@@ -932,7 +954,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
 
-            _rootNote = rootNote;
+            RootNote = rootNote;
             return this;
         }
 
@@ -946,7 +968,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </remarks>
         public PatternBuilder SetVelocity(SevenBitNumber velocity)
         {
-            _velocity = velocity;
+            Velocity = velocity;
             return this;
         }
 
@@ -963,7 +985,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            _noteLength = length;
+            NoteLength = length;
             return this;
         }
 
@@ -980,7 +1002,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsNull(nameof(step), step);
 
-            _step = step;
+            Step = step;
             return this;
         }
 
@@ -995,7 +1017,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
         public PatternBuilder SetOctave(int octave)
         {
-            _octave = Octave.Get(octave);
+            Octave = Octave.Get(octave);
             return this;
         }
 
