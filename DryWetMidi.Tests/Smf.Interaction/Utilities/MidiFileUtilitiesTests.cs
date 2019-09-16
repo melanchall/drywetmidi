@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;

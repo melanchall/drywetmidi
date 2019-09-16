@@ -1,6 +1,7 @@
-﻿using Melanchall.DryWetMidi.Standards;
+﻿using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Standards;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.Composing
 {
     internal sealed class SetGeneralMidiProgramAction : IPatternAction
     {

@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.Composing
 {
     internal sealed class AddNoteAction : IPatternAction
     {

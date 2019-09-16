@@ -1,6 +1,7 @@
 ﻿using System;
+using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.Composing
 {
     internal sealed class StepBackAction : StepAction
     {

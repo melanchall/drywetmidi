@@ -1,15 +1,17 @@
-﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.MusicTheory;
-using Melanchall.DryWetMidi.Standards;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.MusicTheory;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Standards;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.Composing
 {
     /// <summary>
-    /// Provides a fluent interface to build an instance of the <see cref="Interaction.Pattern"/>.
+    /// Provides a fluent interface to build an instance of the <see cref="Composing.Pattern"/>.
     /// </summary>
     public sealed class PatternBuilder
     {
@@ -20,7 +22,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         private readonly Dictionary<object, int> _anchorCounters = new Dictionary<object, int>();
         private int _globalAnchorsCounter = 0;
 
-        private SevenBitNumber _velocity = Interaction.Note.DefaultVelocity;
+        private SevenBitNumber _velocity = Smf.Interaction.Note.DefaultVelocity;
         private ITimeSpan _noteLength = MusicalTimeSpan.Quarter;
         private ITimeSpan _step = MusicalTimeSpan.Quarter;
         private Octave _octave = Octave.Middle;
@@ -1036,10 +1038,10 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         #endregion
 
         /// <summary>
-        /// Build an instance of the <see cref="Interaction.Pattern"/> holding all actions
+        /// Build an instance of the <see cref="Composing.Pattern"/> holding all actions
         /// defined via builder.
         /// </summary>
-        /// <returns>An instance of the <see cref="Interaction.Pattern"/> that holds all actions
+        /// <returns>An instance of the <see cref="Composing.Pattern"/> that holds all actions
         /// defined by the current <see cref="PatternBuilder"/>.</returns>
         public Pattern Build()
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Melanchall.DryWetMidi.Smf.Interaction;
 
-namespace Melanchall.DryWetMidi.Smf.Interaction
+namespace Melanchall.DryWetMidi.Composing
 {
     internal sealed class PatternActionResult
     {

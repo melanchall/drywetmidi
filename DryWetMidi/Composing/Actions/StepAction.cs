@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Smf.Interaction
+﻿using Melanchall.DryWetMidi.Smf.Interaction;
+
+namespace Melanchall.DryWetMidi.Composing
 {
     internal abstract class StepAction : IPatternAction
     {
