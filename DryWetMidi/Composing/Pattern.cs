@@ -42,12 +42,16 @@ namespace Melanchall.DryWetMidi.Composing
                 var addNoteAction = a as AddNoteAction;
                 if (addNoteAction != null)
                 {
-                    var noteDescriptor = noteTransformation(addNoteAction.Note, addNoteAction.Velocity, addNoteAction.Length);
-                    return new AddNoteAction(noteDescriptor.Note, noteDescriptor.Velocity, noteDescriptor.Length);
+                    var noteDescriptor = noteTransformation(addNoteAction.NoteDescriptor);
+                    return new AddNoteAction(noteDescriptor);
                 }
 
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null)
+                    return new AddPatternAction(addPatternAction.Pattern.TransformNotes(noteTransformation));
+
                 return a;
-            }));
+            }).ToList());
         }
 
         /// <summary>
