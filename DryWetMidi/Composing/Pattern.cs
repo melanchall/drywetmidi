@@ -12,6 +12,12 @@ namespace Melanchall.DryWetMidi.Composing
     /// </summary>
     public sealed class Pattern
     {
+        #region Fields
+
+        private readonly IEnumerable<IPatternAction> _actions;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -20,21 +26,29 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="actions">Actions that pattern have to invoke on export to MIDI.</param>
         internal Pattern(IEnumerable<IPatternAction> actions)
         {
-            Actions = actions;
+            _actions = actions;
         }
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// Gets the collection of actions that pattern have to invoke on export to MIDI.
-        /// </summary>
-        internal IEnumerable<IPatternAction> Actions { get; }
-
-        #endregion
-
         #region Methods
+
+        public Pattern TransformNotes(NoteTransformation noteTransformation)
+        {
+            ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
+
+            return new Pattern(_actions.Select(a =>
+            {
+                var addNoteAction = a as AddNoteAction;
+                if (addNoteAction != null)
+                {
+                    var noteDescriptor = noteTransformation(addNoteAction.Note, addNoteAction.Velocity, addNoteAction.Length);
+                    return new AddNoteAction(noteDescriptor.Note, noteDescriptor.Velocity, noteDescriptor.Length);
+                }
+
+                return a;
+            }));
+        }
 
         /// <summary>
         /// Exports the current <see cref="Pattern"/> to track chunk.
@@ -115,7 +129,7 @@ namespace Melanchall.DryWetMidi.Composing
             var notes = new List<Note>();
             var events = new List<TimedEvent>();
 
-            foreach (var action in Actions)
+            foreach (var action in _actions)
             {
                 var actionResult = action.Invoke(time, context);
 
