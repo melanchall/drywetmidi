@@ -602,7 +602,7 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return AddAction(new AddChordAction(notes, velocity, length));
+            return AddAction(new AddChordAction(new ChordDescriptor(notes, velocity, length)));
         }
 
         #endregion

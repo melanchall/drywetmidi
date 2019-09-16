@@ -1,15 +1,16 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System.Collections.Generic;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    public sealed class NoteDescriptor
+    public sealed class ChordDescriptor
     {
         #region Constructor
 
-        public NoteDescriptor(MusicTheory.Note note, SevenBitNumber velocity, ITimeSpan length)
+        public ChordDescriptor(IEnumerable<MusicTheory.Note> notes, SevenBitNumber velocity, ITimeSpan length)
         {
-            Note = note;
+            Notes = notes;
             Velocity = velocity;
             Length = length;
         }
@@ -18,11 +19,11 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Properties
 
-        public MusicTheory.Note Note { get; }
+        public IEnumerable<MusicTheory.Note> Notes { get; }
 
         public SevenBitNumber Velocity { get; }
 
-        public ITimeSpan Length { get; set; }
+        public ITimeSpan Length { get; }
 
         #endregion
 
@@ -30,7 +31,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         public override string ToString()
         {
-            return $"{Note} [{Velocity}]: {Length}";
+            return $"{string.Join(" ", Notes)} [{Velocity}]: {Length}";
         }
 
         #endregion
