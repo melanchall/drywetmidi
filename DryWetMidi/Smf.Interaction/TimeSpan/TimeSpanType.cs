@@ -20,7 +20,7 @@
         /// </summary>
         BarBeatTicks,
 
-        BarBeatCents,
+        BarBeatFraction,
 
         /// <summary>
         /// MIDI time span which represnts an amount of time measured in units of the time division

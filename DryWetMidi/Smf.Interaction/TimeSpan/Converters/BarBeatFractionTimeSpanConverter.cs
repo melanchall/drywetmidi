@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    internal sealed class BarBeatCentsTimeSpanConverter : ITimeSpanConverter
+    internal sealed class BarBeatFractionTimeSpanConverter : ITimeSpanConverter
     {
         #region ITimeSpanConverter
 
@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             if (timeSpan == 0)
-                return new BarBeatCentsTimeSpan();
+                return new BarBeatFractionTimeSpan();
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var endTime = time + timeSpan;
@@ -49,22 +49,22 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var lastTimeSignature = timeSignatureLine.AtTime(lastTime);
 
             long barsBefore, beatsBefore;
-            double centsBefore;
+            double fractionBefore;
             CalculateComponents(firstTime - time,
                                 firstTimeSignature,
                                 ticksPerQuarterNote,
                                 out barsBefore,
                                 out beatsBefore,
-                                out centsBefore);
+                                out fractionBefore);
 
             long barsAfter, beatsAfter;
-            double centsAfter;
+            double fractionAfter;
             CalculateComponents(time + timeSpan - lastTime,
                                 lastTimeSignature,
                                 ticksPerQuarterNote,
                                 out barsAfter,
                                 out beatsAfter,
-                                out centsAfter);
+                                out fractionAfter);
 
             bars += barsBefore + barsAfter;
 
@@ -82,13 +82,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             // Try to complete a beat
 
-            var cents = centsBefore + centsAfter;
-            beats += (int)(cents / 100);
-            cents %= 100;
+            var fraction = fractionBefore + fractionAfter;
+            beats += (long)Math.Truncate(fraction);
+            fraction -= Math.Truncate(fraction);
 
             //
 
-            return new BarBeatCentsTimeSpan(bars, beats, cents);
+            return new BarBeatFractionTimeSpan(bars, beats + fraction);
         }
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
@@ -97,8 +97,8 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
-            var barBeatCentsTimeSpan = (BarBeatCentsTimeSpan)timeSpan;
-            if (barBeatCentsTimeSpan.Bars == 0 && barBeatCentsTimeSpan.Beats == 0 && barBeatCentsTimeSpan.Cents < BarBeatCentsTimeSpan.CentsEpsilon)
+            var barBeatFractionTimeSpan = (BarBeatFractionTimeSpan)timeSpan;
+            if (barBeatFractionTimeSpan.Bars == 0 && barBeatFractionTimeSpan.Beats == 0)
                 return 0;
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
@@ -106,15 +106,16 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             //
 
-            long bars = barBeatCentsTimeSpan.Bars;
-            long beats = barBeatCentsTimeSpan.Beats;
-            double cents = barBeatCentsTimeSpan.Cents;
+            double fractionalBeats = barBeatFractionTimeSpan.Beats;
+            long bars = barBeatFractionTimeSpan.Bars;
+            long beats = (long)Math.Truncate(fractionalBeats);
+            double fraction = fractionalBeats - Math.Truncate(fractionalBeats);
 
             var startTimeSignature = timeSignatureLine.AtTime(time);
             var startBarLength = BarBeatTimeSpanUtilities.GetBarLength(startTimeSignature, ticksPerQuarterNote);
             var startBeatLength = BarBeatTimeSpanUtilities.GetBeatLength(startTimeSignature, ticksPerQuarterNote);
 
-            var totalTicks = bars * startBarLength + beats * startBeatLength + ConvertCentsToTicks(cents, startBeatLength);
+            var totalTicks = bars * startBarLength + beats * startBeatLength + ConvertFractionToTicks(fraction, startBeatLength);
             var timeSignatureChanges = timeSignatureLine.Where(v => v.Time > time && v.Time < time + totalTicks).ToList();
 
             var lastBarLength = 0L;
@@ -125,13 +126,13 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var lastTime = firstTimeSignatureChange?.Time ?? time;
 
             long barsBefore, beatsBefore;
-            double centsBefore;
+            double fractionBefore;
             CalculateComponents(lastTime - time,
                                 startTimeSignature,
                                 ticksPerQuarterNote,
                                 out barsBefore,
                                 out beatsBefore,
-                                out centsBefore);
+                                out fractionBefore);
 
             bars -= barsBefore;
 
@@ -164,7 +165,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                 }
             }
 
-            if (beats == beatsBefore && cents == centsBefore)
+            if (beats == beatsBefore && fraction == fractionBefore)
                 return lastTime - time;
 
             // Balance beats
@@ -183,15 +184,15 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
             // Balance cents
 
-            if (centsBefore > cents && lastBeatLength > 0)
-                lastTime += -lastBeatLength + ConvertCentsToTicks(cents + 100.0 - centsBefore, lastBeatLength);
+            if (fractionBefore > fraction && lastBeatLength > 0)
+                lastTime += -lastBeatLength + ConvertFractionToTicks(fraction + 1.0 - fractionBefore, lastBeatLength);
 
-            if (centsBefore < cents)
+            if (fractionBefore < fraction)
             {
                 if (lastBeatLength == 0)
                     lastBeatLength = BarBeatTimeSpanUtilities.GetBeatLength(timeSignatureLine.AtTime(lastTime), ticksPerQuarterNote);
 
-                lastTime += ConvertCentsToTicks(cents - centsBefore, lastBeatLength);
+                lastTime += ConvertFractionToTicks(fraction - fractionBefore, lastBeatLength);
             }
 
             //
@@ -208,7 +209,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                                 short ticksPerQuarterNote,
                                                 out long bars,
                                                 out long beats,
-                                                out double cents)
+                                                out double fraction)
         {
             long ticks;
 
@@ -218,12 +219,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             var beatLength = BarBeatTimeSpanUtilities.GetBeatLength(timeSignature, ticksPerQuarterNote);
             beats = Math.DivRem(ticks, beatLength, out ticks);
 
-            cents = ticks * 100.0 / beatLength;
+            fraction = (double)ticks / beatLength;
         }
 
-        private static long ConvertCentsToTicks(double cents, long beatLength)
+        private static long ConvertFractionToTicks(double fraction, long beatLength)
         {
-            return MathUtilities.RoundToLong(beatLength * cents / 100.0);
+            return MathUtilities.RoundToLong(beatLength * fraction);
         }
 
         #endregion
