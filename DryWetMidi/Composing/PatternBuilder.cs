@@ -636,8 +636,6 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsNull(nameof(anchor), anchor);
 
-            UpdateAnchorsCounters(anchor);
-
             return AddAction(new AddAnchorAction(anchor));
         }
 
@@ -647,8 +645,6 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         public PatternBuilder Anchor()
         {
-            UpdateAnchorsCounters(null);
-
             return AddAction(new AddAnchorAction());
         }
 
@@ -938,6 +934,29 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
+        #region Program
+
+        public PatternBuilder ProgramChange(SevenBitNumber programNumber)
+        {
+            return AddAction(new SetProgramNumberAction(programNumber));
+        }
+
+        public PatternBuilder ProgramChange(GeneralMidiProgram program)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
+
+            return AddAction(new SetGeneralMidiProgramAction(program));
+        }
+
+        public PatternBuilder ProgramChange(GeneralMidi2Program program)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
+
+            return AddAction(new SetGeneralMidi2ProgramAction(program));
+        }
+
+        #endregion
+
         #region Default
 
         /// <summary>
@@ -1021,42 +1040,6 @@ namespace Melanchall.DryWetMidi.Composing
             return this;
         }
 
-        /// <summary>
-        /// Sets MIDI program to specify an instrument that will be used by all following notes.
-        /// </summary>
-        /// <param name="programNumber">The number of a MIDI program.</param>
-        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        public PatternBuilder SetProgram(SevenBitNumber programNumber)
-        {
-            return AddAction(new SetProgramNumberAction(programNumber));
-        }
-
-        /// <summary>
-        /// Sets General MIDI Level 1 program to specify an instrument that will be used by all following notes.
-        /// </summary>
-        /// <param name="program">The General MIDI Level 1 program.</param>
-        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
-        public PatternBuilder SetProgram(GeneralMidiProgram program)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
-
-            return AddAction(new SetGeneralMidiProgramAction(program));
-        }
-
-        /// <summary>
-        /// Sets General MIDI Level 2 program to specify an instrument that will be used by all following notes.
-        /// </summary>
-        /// <param name="program">The General MIDI Level 2 program.</param>
-        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
-        public PatternBuilder SetProgram(GeneralMidi2Program program)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
-
-            return AddAction(new SetGeneralMidi2ProgramAction(program));
-        }
-
         #endregion
 
         /// <summary>
@@ -1070,9 +1053,13 @@ namespace Melanchall.DryWetMidi.Composing
             return new Pattern(_actions.ToList());
         }
 
-        private PatternBuilder AddAction(IPatternAction patternEvent)
+        private PatternBuilder AddAction(IPatternAction patternAction)
         {
-            _actions.Add(patternEvent);
+            var addAnchorAction = patternAction as AddAnchorAction;
+            if (addAnchorAction != null)
+                UpdateAnchorsCounters(addAnchorAction.Anchor);
+
+            _actions.Add(patternAction);
             return this;
         }
 
@@ -1108,11 +1095,7 @@ namespace Melanchall.DryWetMidi.Composing
 
             foreach (var action in newActions)
             {
-                var addAnchorAction = action as AddAnchorAction;
-                if (addAnchorAction != null)
-                    UpdateAnchorsCounters(addAnchorAction.Anchor);
-
-                _actions.Add(action);
+                AddAction(action);
             }
 
             return this;
