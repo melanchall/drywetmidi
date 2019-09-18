@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
                 .Note(NoteName.A)
 
-                .SetProgram((SevenBitNumber)20)
+                .ProgramChange((SevenBitNumber)20)
                 .Note(NoteName.C)
 
                 .Build()
