@@ -81,7 +81,7 @@
     <Compile Include="Composing\PatternTests.Repeat.cs" />
     <Compile Include="Composing\PatternTests.Text.cs" />
     <Compile Include="Smf.Interaction\TimedEvents\TimedEventsManagingUtilitiesTests.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\BarBeatCentsTimeSpanTests.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\BarBeatFractionTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Utilities\BarBeatTimeSpanUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\Utilities\MidiFileUtilitiesTests.cs" />
     <Compile Include="Smf\MidiEventTests.cs" />

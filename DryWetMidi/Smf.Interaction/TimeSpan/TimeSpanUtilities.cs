@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             {
                 [TimeSpanType.Midi] = GetParsing<MidiTimeSpan>(MidiTimeSpanParser.TryParse),
                 [TimeSpanType.BarBeatTicks] = GetParsing<BarBeatTicksTimeSpan>(BarBeatTicksTimeSpanParser.TryParse),
-                [TimeSpanType.BarBeatCents] = GetParsing<BarBeatCentsTimeSpan>(BarBeatCentsTimeSpanParser.TryParse),
+                [TimeSpanType.BarBeatFraction] = GetParsing<BarBeatFractionTimeSpan>(BarBeatFractionTimeSpanParser.TryParse),
                 [TimeSpanType.Metric] = GetParsing<MetricTimeSpan>(MetricTimeSpanParser.TryParse),
                 [TimeSpanType.Musical] = GetParsing<MusicalTimeSpan>(MusicalTimeSpanParser.TryParse)
             };
@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [TimeSpanType.Metric] = new MetricTimeSpan(TimeSpan.MaxValue),
             [TimeSpanType.Musical] = new MusicalTimeSpan(long.MaxValue, 1),
             [TimeSpanType.BarBeatTicks] = new BarBeatTicksTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue),
-            [TimeSpanType.BarBeatCents] = new BarBeatCentsTimeSpan(long.MaxValue, long.MaxValue, BarBeatCentsTimeSpan.MaxCents)
+            [TimeSpanType.BarBeatFraction] = new BarBeatFractionTimeSpan(long.MaxValue, double.MaxValue)
         };
 
         private static readonly Dictionary<TimeSpanType, ITimeSpan> ZeroTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
             [TimeSpanType.Metric] = new MetricTimeSpan(),
             [TimeSpanType.Musical] = new MusicalTimeSpan(),
             [TimeSpanType.BarBeatTicks] = new BarBeatTicksTimeSpan(),
-            [TimeSpanType.BarBeatCents] = new BarBeatCentsTimeSpan()
+            [TimeSpanType.BarBeatFraction] = new BarBeatFractionTimeSpan()
         };
 
         #endregion

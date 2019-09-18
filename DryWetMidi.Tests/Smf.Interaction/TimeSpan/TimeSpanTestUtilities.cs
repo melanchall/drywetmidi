@@ -80,19 +80,19 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             #endregion
         }
 
-        private sealed class BarBeatCentsTimeSpanEqualityComparer : IEqualityComparer<ITimeSpan>
+        private sealed class BarBeatFractionTimeSpanEqualityComparer : IEqualityComparer<ITimeSpan>
         {
             #region Fields
 
-            private readonly double _centsTolerance;
+            private readonly double _fractionalBeatsTolerance;
 
             #endregion
 
             #region Constructor
 
-            public BarBeatCentsTimeSpanEqualityComparer(double centsTolerance)
+            public BarBeatFractionTimeSpanEqualityComparer(double fractionalBeatsTolerance)
             {
-                _centsTolerance = centsTolerance;
+                _fractionalBeatsTolerance = fractionalBeatsTolerance;
             }
 
             #endregion
@@ -101,12 +101,11 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
 
             public bool Equals(ITimeSpan x, ITimeSpan y)
             {
-                var xTimeSpan = (BarBeatCentsTimeSpan)x;
-                var yTimeSpan = (BarBeatCentsTimeSpan)y;
+                var xTimeSpan = (BarBeatFractionTimeSpan)x;
+                var yTimeSpan = (BarBeatFractionTimeSpan)y;
 
                 return xTimeSpan.Bars == yTimeSpan.Bars &&
-                       xTimeSpan.Beats == yTimeSpan.Beats &&
-                       Math.Abs(xTimeSpan.Cents - yTimeSpan.Cents) <= _centsTolerance;
+                       Math.Abs(xTimeSpan.Beats - yTimeSpan.Beats) <= _fractionalBeatsTolerance;
             }
 
             public int GetHashCode(ITimeSpan obj)
@@ -130,14 +129,14 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
         // TODO: find a way to decrease this constant
         private const long MetricTimeSpanEqualityTolerance = 500; // μs
         private const long MidiTimeSpanEqualityTolerance = 1; // ticks
-        private const double BarBeatCentsTimeSpanEqualityTolerance = 0.001; // cents
+        private const double BarBeatFractionTimeSpanEqualityTolerance = 0.001;
 
         private static readonly Dictionary<Type, IEqualityComparer<ITimeSpan>> TimeSpanComparers =
             new Dictionary<Type, IEqualityComparer<ITimeSpan>>
             {
                 [typeof(MetricTimeSpan)] = new MetricTimeSpanEqualityComparer(MetricTimeSpanEqualityTolerance),
                 [typeof(MidiTimeSpan)] = new MidiTimeSpanEqualityComparer(MidiTimeSpanEqualityTolerance),
-                [typeof(BarBeatCentsTimeSpan)] = new BarBeatCentsTimeSpanEqualityComparer(BarBeatCentsTimeSpanEqualityTolerance)
+                [typeof(BarBeatFractionTimeSpan)] = new BarBeatFractionTimeSpanEqualityComparer(BarBeatFractionTimeSpanEqualityTolerance)
             };
 
         #endregion

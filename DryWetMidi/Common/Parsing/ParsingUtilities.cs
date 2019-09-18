@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public static string GetNonnegativeDoubleNumberGroup(string groupName)
         {
-            return $@"(?<{groupName}>\d+.\d+)";
+            return $@"(?<{groupName}>\d+(.\d+)?)";
         }
 
         public static Match Match(string input, IEnumerable<string> patterns)

@@ -141,7 +141,7 @@
     <Compile Include="Smf.Interaction\TempoMap\TempoMapLine.cs" />
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollection.cs" />
     <Compile Include="Smf.Interaction\TimedObject\TimedObjectsComparer.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\Converters\BarBeatCentsTimeSpanConverter.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\Converters\BarBeatFractionTimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\BarBeatTicksTimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\ITimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\LengthConverter.cs" />
@@ -152,8 +152,8 @@
     <Compile Include="Smf.Interaction\TimeSpan\Converters\TimeConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Converters\TimeSpanConverter.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\ITimeSpan.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\Parsers\BarBeatCentsTimeSpanParser.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\Representations\BarBeatCentsTimeSpan.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\Parsers\BarBeatFractionTimeSpanParser.cs" />
+    <Compile Include="Smf.Interaction\TimeSpan\Representations\BarBeatFractionTimeSpan.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TempoMapValuesCaches\MetricTempoMapValuesCache.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanComparer.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\TimeSpanMode.cs" />

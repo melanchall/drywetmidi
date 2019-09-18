@@ -264,23 +264,23 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Test]
         [Retry(RetriesNumber)]
-        public void WatchCurrentTime_BarBeatCents()
+        public void WatchCurrentTime_BarBeatFraction()
         {
             CheckWatchCurrentTime(
-                playbackLength: new BarBeatCentsTimeSpan(1, 0, 0),
-                pollingInterval: new BarBeatCentsTimeSpan(0, 0, 50),
-                timeType: TimeSpanType.BarBeatCents,
+                playbackLength: new BarBeatFractionTimeSpan(1, 0.00),
+                pollingInterval: new BarBeatFractionTimeSpan(0, 0.50),
+                timeType: TimeSpanType.BarBeatFraction,
                 expectedTimes: new[]
                 {
-                    new BarBeatCentsTimeSpan(0, 0, 0),
-                    new BarBeatCentsTimeSpan(0, 0, 50),
-                    new BarBeatCentsTimeSpan(0, 1, 0),
-                    new BarBeatCentsTimeSpan(0, 1, 50),
-                    new BarBeatCentsTimeSpan(0, 2, 0),
-                    new BarBeatCentsTimeSpan(0, 2, 50),
-                    new BarBeatCentsTimeSpan(0, 3, 0),
-                    new BarBeatCentsTimeSpan(0, 3, 50),
-                    new BarBeatCentsTimeSpan(1, 0, 0)
+                    new BarBeatFractionTimeSpan(0, 0.0),
+                    new BarBeatFractionTimeSpan(0, 0.50),
+                    new BarBeatFractionTimeSpan(0, 1.0),
+                    new BarBeatFractionTimeSpan(0, 1.50),
+                    new BarBeatFractionTimeSpan(0, 2.0),
+                    new BarBeatFractionTimeSpan(0, 2.50),
+                    new BarBeatFractionTimeSpan(0, 3.0),
+                    new BarBeatFractionTimeSpan(0, 3.50),
+                    new BarBeatFractionTimeSpan(1, 0.0)
                 });
         }
 
@@ -379,7 +379,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             const long microsecondsEpsilon = 3000;
             const long ticksEpsilon = 3;
             const double fractionEpsilon = 0.00001;
-            const double centsEpsilon = 0.1;
+            const double fractionalBeatsEpsilon = 0.1;
 
             if (x.GetType() != y.GetType())
                 return false;
@@ -392,10 +392,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                        xBarBeat.Beats == yBarBeat.Beats &&
                        Math.Abs(xBarBeat.Ticks - yBarBeat.Ticks) < ticksEpsilon;
 
-            if (x is BarBeatCentsTimeSpan xBarBeatCents && y is BarBeatCentsTimeSpan yBarBeatCents)
-                return xBarBeatCents.Bars == yBarBeatCents.Bars &&
-                       xBarBeatCents.Beats == yBarBeatCents.Beats &&
-                       Math.Abs(xBarBeatCents.Cents - yBarBeatCents.Cents) < centsEpsilon;
+            if (x is BarBeatFractionTimeSpan xBarBeatFraction && y is BarBeatFractionTimeSpan yBarBeatFraction)
+                return xBarBeatFraction.Bars == yBarBeatFraction.Bars &&
+                       Math.Abs(xBarBeatFraction.Beats - yBarBeatFraction.Beats) < fractionalBeatsEpsilon;
 
             if (x is MusicalTimeSpan xMusical && y is MusicalTimeSpan yMusical)
                 return Math.Abs(xMusical.Numerator / (double)xMusical.Denominator - yMusical.Numerator / (double)yMusical.Denominator) < fractionEpsilon;
