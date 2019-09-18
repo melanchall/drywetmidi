@@ -107,6 +107,11 @@ namespace Melanchall.DryWetMidi.Composing
             return ToFile(tempoMap, FourBitNumber.MinValue);
         }
 
+        public Pattern Clone()
+        {
+            return new Pattern(Actions.ToList());
+        }
+
         internal PatternActionResult InvokeActions(long time, PatternContext context)
         {
             var notes = new List<Note>();

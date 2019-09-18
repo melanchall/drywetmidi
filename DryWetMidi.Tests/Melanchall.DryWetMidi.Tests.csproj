@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Common\DataTypes\FourBitNumberTests.cs" />
     <Compile Include="Common\DataTypes\SevenBitNumberTests.cs" />
+    <Compile Include="Composing\PatternTests.Misc.cs" />
     <Compile Include="Devices\DevicesConnector\DevicesConnectorTests.cs" />
     <Compile Include="Devices\InpurDevice\InputDeviceTests.cs" />
     <Compile Include="Devices\OutputDevice\OutputDeviceTests.cs" />
