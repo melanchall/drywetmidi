@@ -38,6 +38,21 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
+        #region Constructor
+
+        public PatternBuilder()
+        {
+        }
+
+        public PatternBuilder(Pattern pattern)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+
+            ReplayPattern(pattern);
+        }
+
+        #endregion
+
         #region Properties
 
         public SevenBitNumber Velocity { get; private set; } = DefaultVelocity;
