@@ -1053,6 +1053,18 @@ namespace Melanchall.DryWetMidi.Composing
             return new Pattern(_actions.ToList());
         }
 
+        public PatternBuilder ReplayPattern(Pattern pattern)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+
+            foreach (var action in pattern.Actions)
+            {
+                AddAction(action);
+            }
+
+            return this;
+        }
+
         private PatternBuilder AddAction(IPatternAction patternAction)
         {
             var addAnchorAction = patternAction as AddAnchorAction;
