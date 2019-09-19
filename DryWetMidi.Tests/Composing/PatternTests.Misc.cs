@@ -115,6 +115,60 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             CollectionAssert.AreEqual(pattern.Actions, patternClone.Actions, "Pattern clone is invalid.");
         }
 
+        [Test]
+        public void ReplayPattern_Empty()
+        {
+            var pattern1 = new PatternBuilder().Build();
+
+            var pattern2 = new PatternBuilder()
+                .ReplayPattern(pattern1)
+                .Build();
+
+            CollectionAssert.IsEmpty(pattern2.Actions, "Pattern is not empty.");
+        }
+
+        [Test]
+        public void ReplayPattern_Notes()
+        {
+            var pattern1 = new PatternBuilder()
+                .Note(Notes.A4)
+                .Note(Notes.ASharp4)
+                .Build();
+
+            var pattern2 = new PatternBuilder()
+                .ReplayPattern(pattern1)
+                .Build();
+
+            TestNotes(pattern2, new[]
+            {
+                new NoteInfo(NoteName.A, 4, null, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity),
+                new NoteInfo(NoteName.ASharp, 4, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity)
+            });
+        }
+
+        [Test]
+        public void ReplayPattern_Anchor()
+        {
+            var pattern1 = new PatternBuilder()
+                .Note(Notes.A4)
+                .Anchor("X")
+                .Note(Notes.ASharp4)
+                .MoveToFirstAnchor("X")
+                .Note(Notes.DSharp3)
+                .Build();
+
+            var pattern2 = new PatternBuilder()
+                .ReplayPattern(pattern1)
+                .Build();
+
+            TestNotes(pattern2, new[]
+            {
+                new NoteInfo(NoteName.A, 4, null, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.ASharp, 4, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.DSharp, 3, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
+            });
+        }
+
         #endregion
     }
 }
