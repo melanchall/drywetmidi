@@ -1,4 +1,8 @@
 trigger:
+  branches:
+    include:
+    - master
+    - develop
   paths:
     exclude:
     - DryWetMidi.Benchmarks
