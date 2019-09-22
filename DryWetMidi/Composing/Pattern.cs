@@ -112,6 +112,13 @@ namespace Melanchall.DryWetMidi.Composing
             return new Pattern(Actions.ToList());
         }
 
+        public IEnumerable<Pattern> SplitAtAnchor(object anchor, bool removeEmptyPatterns = true)
+        {
+            ThrowIfArgument.IsNull(nameof(anchor), anchor);
+
+            return SplitAtActions(a => (a as AddAnchorAction)?.Anchor == anchor, removeEmptyPatterns);
+        }
+
         internal PatternActionResult InvokeActions(long time, PatternContext context)
         {
             var notes = new List<Note>();
@@ -135,6 +142,28 @@ namespace Melanchall.DryWetMidi.Composing
             }
 
             return new PatternActionResult(time, notes, events);
+        }
+
+        private IEnumerable<Pattern> SplitAtActions(Predicate<IPatternAction> actionSelector, bool removeEmptyPatterns)
+        {
+            var part = new List<IPatternAction>();
+
+            foreach (var action in Actions)
+            {
+                if (!actionSelector(action))
+                {
+                    part.Add(action);
+                    continue;
+                }
+
+                if (part.Any() || !removeEmptyPatterns)
+                    yield return new Pattern(part.AsReadOnly());
+
+                part = new List<IPatternAction>();
+            }
+
+            if (part.Any())
+                yield return new Pattern(part.AsReadOnly());
         }
 
         #endregion
