@@ -119,6 +119,11 @@ namespace Melanchall.DryWetMidi.Composing
             return SplitAtActions(a => (a as AddAnchorAction)?.Anchor == anchor, removeEmptyPatterns);
         }
 
+        public IEnumerable<Pattern> SplitAtAllAnchors(bool removeEmptyPatterns = true)
+        {
+            return SplitAtActions(a => a is AddAnchorAction, removeEmptyPatterns);
+        }
+
         internal PatternActionResult InvokeActions(long time, PatternContext context)
         {
             var notes = new List<Note>();
