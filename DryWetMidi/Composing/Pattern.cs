@@ -124,6 +124,18 @@ namespace Melanchall.DryWetMidi.Composing
             return SplitAtActions(a => a is AddAnchorAction, removeEmptyPatterns);
         }
 
+        public IEnumerable<Pattern> SplitAtMarker(string marker, bool removeEmptyPatterns = true, StringComparison stringComparison = StringComparison.CurrentCulture)
+        {
+            ThrowIfArgument.IsNull(nameof(marker), marker);
+
+            return SplitAtActions(a => (a as AddTextEventAction<MarkerEvent>)?.Text.Equals(marker, stringComparison) == true, removeEmptyPatterns);
+        }
+
+        public IEnumerable<Pattern> SplitAtAllMarkers(bool removeEmptyPatterns = true)
+        {
+            return SplitAtActions(a => a is AddTextEventAction<MarkerEvent>, removeEmptyPatterns);
+        }
+
         internal PatternActionResult InvokeActions(long time, PatternContext context)
         {
             var notes = new List<Note>();
