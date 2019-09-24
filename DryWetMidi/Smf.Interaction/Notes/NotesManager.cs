@@ -102,30 +102,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
 
         private static IEnumerable<Note> CreateNotes(IEnumerable<TimedEvent> events)
         {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            var noteOnTimedEvents = new List<TimedEvent>();
-
-            foreach (var timedEvent in events)
-            {
-                var midiEvent = timedEvent.Event;
-                if (midiEvent is NoteOnEvent)
-                {
-                    noteOnTimedEvents.Add(timedEvent);
-                    continue;
-                }
-
-                var noteOffEvent = midiEvent as NoteOffEvent;
-                if (noteOffEvent != null)
-                {
-                    var noteOnTimedEvent = noteOnTimedEvents.FirstOrDefault(e => NoteEventUtilities.IsNoteOnCorrespondToNoteOff((NoteOnEvent)e.Event, noteOffEvent));
-                    if (noteOnTimedEvent == null)
-                        continue;
-
-                    noteOnTimedEvents.Remove(noteOnTimedEvent);
-                    yield return new Note(noteOnTimedEvent, timedEvent);
-                }
-            }
+            return events.GetTimedEventsAndNotes().OfType<Note>();
         }
 
         private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)
