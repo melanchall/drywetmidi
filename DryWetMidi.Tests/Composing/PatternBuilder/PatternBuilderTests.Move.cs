@@ -13,8 +13,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         #region StepBack
 
         [Test]
-        [Description("Step back by metric step and add note.")]
-        public void StepBack_Metric()
+        public void StepBack()
         {
             var pattern = new PatternBuilder()
                 .MoveToTime(new MetricTimeSpan(0, 0, 10))
@@ -32,8 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        [Description("Step back by metric step beyond zero and add note.")]
-        public void StepBack_Metric_BeyondZero()
+        public void StepBack_BeyondZero()
         {
             var pattern = new PatternBuilder()
                 .MoveToTime(new MetricTimeSpan(0, 0, 10))
@@ -51,40 +49,98 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        [Description("Step back by musical step and add note.")]
-        public void StepBack_Musical()
+        public void StepBack_DefaultStep()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(MusicalTimeSpan.Eighth)
-                .StepForward(MusicalTimeSpan.Whole)
-                .StepBack(MusicalTimeSpan.Half)
-
+                .MoveToTime(MusicalTimeSpan.Whole)
+                .StepBack()
                 .Note(Notes.A0)
-
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, new MusicalTimeSpan(5, 8), MusicalTimeSpan.Quarter)
+                new NoteInfo(NoteName.A, 0, MusicalTimeSpan.Half.SingleDotted(), MusicalTimeSpan.Quarter)
             });
         }
 
         [Test]
-        [Description("Step back by musical step beyond zero and add note.")]
-        public void StepBack_Musical_BeyondZero()
+        public void StepBack_CustomStep()
         {
             var pattern = new PatternBuilder()
-                .MoveToTime(new MetricTimeSpan(0, 0, 10))
-                .StepForward(new MetricTimeSpan(0, 0, 30))
-                .StepBack(1000 * MusicalTimeSpan.Quarter)
-
+                .SetStep(MusicalTimeSpan.Sixteenth)
+                .MoveToTime(MusicalTimeSpan.Whole)
+                .StepBack()
                 .Note(Notes.A0)
-
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 0), MusicalTimeSpan.Quarter)
+                new NoteInfo(NoteName.A, 0, 15 * MusicalTimeSpan.Sixteenth, MusicalTimeSpan.Quarter)
+            });
+        }
+
+        #endregion
+
+        #region StepBack
+
+        [Test]
+        public void StepForward()
+        {
+            var pattern = new PatternBuilder()
+                .StepForward(new MetricTimeSpan(0, 0, 30))
+                .Note(Notes.A0)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 30), PatternBuilder.DefaultNoteLength)
+            });
+        }
+
+        [Test]
+        public void StepForward_DefaultStep()
+        {
+            var pattern = new PatternBuilder()
+                .StepForward()
+                .Note(Notes.A0)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, PatternBuilder.DefaultStep, PatternBuilder.DefaultNoteLength)
+            });
+        }
+
+        [Test]
+        public void StepForward_CustomStep()
+        {
+            var pattern = new PatternBuilder()
+                .SetStep(MusicalTimeSpan.Sixteenth)
+                .StepForward()
+                .Note(Notes.A0)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, MusicalTimeSpan.Sixteenth, PatternBuilder.DefaultNoteLength)
+            });
+        }
+
+        #endregion
+
+        #region MoveToTime
+
+        [Test]
+        public void MoveToTime()
+        {
+            var pattern = new PatternBuilder()
+                .MoveToTime(new MetricTimeSpan(1, 0, 0))
+                .Note(Notes.A0)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, new MetricTimeSpan(1, 0, 0), PatternBuilder.DefaultNoteLength)
             });
         }
 
