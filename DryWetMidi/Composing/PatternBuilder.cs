@@ -1048,10 +1048,12 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Setting default octave is not an action and thus will not be stored in a pattern.
         /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
-        public PatternBuilder SetOctave(int octave)
+        /// <exception cref="ArgumentNullException"><paramref name="octave"/> is null.</exception>
+        public PatternBuilder SetOctave(Octave octave)
         {
-            Octave = Octave.Get(octave);
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+
+            Octave = octave;
             return this;
         }
 

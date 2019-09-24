@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFile = new PatternBuilder()
                 .SetNoteLength(MusicalTimeSpan.Quarter)
-                .SetOctave(2)
+                .SetOctave(Octave.Get(2))
 
                 .Note(NoteName.A)
 
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var trackChunk1 = new PatternBuilder()
                 .SetNoteLength(MusicalTimeSpan.Quarter)
-                .SetOctave(2)
+                .SetOctave(Octave.Get(2))
 
                 .Note(NoteName.A)
                 .Note(NoteName.C)
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var trackChunk2 = new PatternBuilder()
                 .SetNoteLength(MusicalTimeSpan.Eighth)
-                .SetOctave(3)
+                .SetOctave(Octave.Get(3))
                 .StepForward(MusicalTimeSpan.ThirtySecond)
 
                 .Note(NoteName.D)
