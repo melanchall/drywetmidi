@@ -29,9 +29,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent(programNumber) { Channel = Channel }, eventTime)
+                new TimedEventInfo(new ProgramChangeEvent(programNumber) { Channel = PatternTestUtilities.Channel }, eventTime)
             });
         }
 
@@ -53,12 +53,12 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEventsWithExactOrder(pattern, new[]
+            PatternTestUtilities.TestTimedEventsWithExactOrder(pattern, new[]
             {
-                new TimedEventInfo(new ProgramChangeEvent(program1.AsSevenBitNumber()) { Channel = Channel }, new MidiTimeSpan()),
-                new TimedEventInfo(new NoteOnEvent(noteNumber, DryWetMidi.Smf.Interaction.Note.DefaultVelocity) { Channel = Channel }, new MidiTimeSpan()),
-                new TimedEventInfo(new ProgramChangeEvent(program2.AsSevenBitNumber()) { Channel = Channel }, eventTime),
-                new TimedEventInfo(new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = Channel }, eventTime)
+                new TimedEventInfo(new ProgramChangeEvent(program1.AsSevenBitNumber()) { Channel = PatternTestUtilities.Channel }, new MidiTimeSpan()),
+                new TimedEventInfo(new NoteOnEvent(noteNumber, DryWetMidi.Smf.Interaction.Note.DefaultVelocity) { Channel = PatternTestUtilities.Channel }, new MidiTimeSpan()),
+                new TimedEventInfo(new ProgramChangeEvent(program2.AsSevenBitNumber()) { Channel = PatternTestUtilities.Channel }, eventTime),
+                new TimedEventInfo(new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = PatternTestUtilities.Channel }, eventTime)
             });
         }
 
@@ -83,11 +83,11 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
-                new TimedEventInfo(new ControlChangeEvent(bankMsbControlNumber, bankMsb) { Channel = Channel }, eventsTime),
-                new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb) { Channel = Channel }, eventsTime),
-                new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()) { Channel = Channel }, eventsTime),
+                new TimedEventInfo(new ControlChangeEvent(bankMsbControlNumber, bankMsb) { Channel = PatternTestUtilities.Channel }, eventsTime),
+                new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb) { Channel = PatternTestUtilities.Channel }, eventsTime),
+                new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()) { Channel = PatternTestUtilities.Channel }, eventsTime),
             });
         }
 
@@ -149,7 +149,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .ReplayPattern(pattern1)
                 .Build();
 
-            TestNotes(pattern2, new[]
+            PatternTestUtilities.TestNotes(pattern2, new[]
             {
                 new NoteInfo(NoteName.A, 4, null, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity),
                 new NoteInfo(NoteName.ASharp, 4, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity)
@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .ReplayPattern(pattern1)
                 .Build();
 
-            TestNotes(pattern2, new[]
+            PatternTestUtilities.TestNotes(pattern2, new[]
             {
                 new NoteInfo(NoteName.A, 4, null, PatternBuilder.DefaultNoteLength),
                 new NoteInfo(NoteName.ASharp, 4, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength),
@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var pattern2 = new PatternBuilder(pattern1).Build();
 
-            TestNotes(pattern2, new[]
+            PatternTestUtilities.TestNotes(pattern2, new[]
             {
                 new NoteInfo(NoteName.A, 4, null, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity),
                 new NoteInfo(NoteName.ASharp, 4, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity)
@@ -222,502 +222,11 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var pattern2 = new PatternBuilder(pattern1).Build();
 
-            TestNotes(pattern2, new[]
+            PatternTestUtilities.TestNotes(pattern2, new[]
             {
                 new NoteInfo(NoteName.A, 4, null, PatternBuilder.DefaultNoteLength),
                 new NoteInfo(NoteName.ASharp, 4, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength),
                 new NoteInfo(NoteName.DSharp, 3, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        #endregion
-
-        #region SplitAtAnchor
-
-        [Test]
-        public void SplitAtAnchor_Empty()
-        {
-            var pattern = new PatternBuilder().Build();
-            var patterns = pattern.SplitAtAnchor(new object());
-            CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAnchor_NoActionsBetweenAnchors(bool removeEmptyPatterns)
-        {
-            var anchor = "A";
-            var pattern = new PatternBuilder()
-                .Anchor(anchor)
-                .Anchor(anchor)
-                .Build();
-
-            var patterns = pattern.SplitAtAnchor(anchor, removeEmptyPatterns).ToList();
-
-            if (removeEmptyPatterns)
-                CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-            else
-            {
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                CollectionAssert.IsEmpty(patterns[1].Actions, "Second sub-pattern is not empty.");
-            }
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAnchor_SingleAnchor(bool removeEmptyPatterns)
-        {
-            var anchor = "A";
-            var pattern = new PatternBuilder()
-                .Anchor(anchor)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Anchor(anchor)
-                .Note(Notes.DSharp0)
-                .Anchor(anchor)
-                .Build();
-
-            var patterns = pattern.SplitAtAnchor(anchor, removeEmptyPatterns).ToList();
-
-            var firstPatternIndex = 0;
-            var secondPatternIndex = 1;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                firstPatternIndex++;
-                secondPatternIndex++;
-            }
-
-            TestNotes(patterns[firstPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-
-            TestNotes(patterns[secondPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.DSharp, 0, null, PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAnchor_MultipleAnchors(bool removeEmptyPatterns)
-        {
-            var anchor1 = "A";
-            var anchor2 = "B";
-
-            var pattern = new PatternBuilder()
-                .Anchor(anchor1)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Anchor(anchor2)
-                .Note(Notes.DSharp0)
-                .Anchor(anchor1)
-                .Build();
-
-            var patterns = pattern.SplitAtAnchor(anchor1, removeEmptyPatterns).ToList();
-
-            var subPatternIndex = 0;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(1, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                subPatternIndex++;
-            }
-
-            TestNotes(patterns[subPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 0, PatternBuilder.DefaultNoteLength.Multiply(2), PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        #endregion
-
-        #region SpliAtAllAnchors
-
-        [Test]
-        public void SplitAtAllAnchors_Empty()
-        {
-            var pattern = new PatternBuilder().Build();
-            var patterns = pattern.SplitAtAllAnchors();
-            CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAllAnchors_NoActionsBetweenAnchors(bool removeEmptyPatterns)
-        {
-            var anchor = "A";
-            var pattern = new PatternBuilder()
-                .Anchor(anchor)
-                .Anchor(anchor)
-                .Build();
-
-            var patterns = pattern.SplitAtAllAnchors(removeEmptyPatterns).ToList();
-
-            if (removeEmptyPatterns)
-                CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-            else
-            {
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                CollectionAssert.IsEmpty(patterns[1].Actions, "Second sub-pattern is not empty.");
-            }
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAllAnchors_SingleAnchor(bool removeEmptyPatterns)
-        {
-            var anchor = "A";
-            var pattern = new PatternBuilder()
-                .Anchor(anchor)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Anchor(anchor)
-                .Note(Notes.DSharp0)
-                .Anchor(anchor)
-                .Build();
-
-            var patterns = pattern.SplitAtAllAnchors(removeEmptyPatterns).ToList();
-
-            var firstPatternIndex = 0;
-            var secondPatternIndex = 1;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                firstPatternIndex++;
-                secondPatternIndex++;
-            }
-
-            TestNotes(patterns[firstPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-
-            TestNotes(patterns[secondPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.DSharp, 0, null, PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAllAnchors_MultipleAnchors(bool removeEmptyPatterns)
-        {
-            var anchor1 = "A";
-            var anchor2 = "B";
-
-            var pattern = new PatternBuilder()
-                .Anchor(anchor1)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Anchor(anchor2)
-                .Note(Notes.DSharp0)
-                .Anchor(anchor1)
-                .Build();
-
-            var patterns = pattern.SplitAtAllAnchors(removeEmptyPatterns).ToList();
-
-            var firstPatternIndex = 0;
-            var secondPatternIndex = 1;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                firstPatternIndex++;
-                secondPatternIndex++;
-            }
-
-            TestNotes(patterns[firstPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-
-            TestNotes(patterns[secondPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.DSharp, 0, null, PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        #endregion
-
-        #region SplitAtMarker
-
-        [Test]
-        public void SplitAtMarker_Empty()
-        {
-            var pattern = new PatternBuilder().Build();
-            var patterns = pattern.SplitAtMarker("A");
-            CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtMarker_NoActionsBetweenMarkers(bool removeEmptyPatterns)
-        {
-            var marker = "A";
-            var pattern = new PatternBuilder()
-                .Marker(marker)
-                .Marker(marker)
-                .Build();
-
-            var patterns = pattern.SplitAtMarker(marker, removeEmptyPatterns).ToList();
-
-            if (removeEmptyPatterns)
-                CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-            else
-            {
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                CollectionAssert.IsEmpty(patterns[1].Actions, "Second sub-pattern is not empty.");
-            }
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtMarker_SingleMarker(bool removeEmptyPatterns)
-        {
-            var marker = "A";
-            var pattern = new PatternBuilder()
-                .Marker(marker)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Marker(marker)
-                .Note(Notes.DSharp0)
-                .Marker(marker)
-                .Build();
-
-            var patterns = pattern.SplitAtMarker(marker, removeEmptyPatterns).ToList();
-
-            var firstPatternIndex = 0;
-            var secondPatternIndex = 1;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                firstPatternIndex++;
-                secondPatternIndex++;
-            }
-
-            TestNotes(patterns[firstPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-
-            TestNotes(patterns[secondPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.DSharp, 0, null, PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtMarker_MultipleMarkers(bool removeEmptyPatterns)
-        {
-            var marker1 = "A";
-            var marker2 = "B";
-
-            var pattern = new PatternBuilder()
-                .Marker(marker1)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Marker(marker2)
-                .Note(Notes.DSharp0)
-                .Marker(marker1)
-                .Build();
-
-            var patterns = pattern.SplitAtMarker(marker1, removeEmptyPatterns).ToList();
-
-            var subPatternIndex = 0;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(1, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                subPatternIndex++;
-            }
-
-            TestNotes(patterns[subPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 0, PatternBuilder.DefaultNoteLength.Multiply(2), PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        [Test]
-        public void SplitAtMarker_MultipleMarkers_OrdinalIgnoreCase()
-        {
-            var marker1 = "A";
-            var marker2 = "a";
-
-            var pattern = new PatternBuilder()
-                .Marker(marker1)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Marker(marker2)
-                .Note(Notes.DSharp0)
-                .Marker(marker1)
-                .Build();
-
-            var patterns = pattern.SplitAtMarker(marker1, true, System.StringComparison.OrdinalIgnoreCase).ToList();
-
-            Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-
-            TestNotes(patterns[0], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-
-            TestNotes(patterns[1], new[]
-            {
-                new NoteInfo(NoteName.DSharp, 0, null, PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        #endregion
-
-        #region SpliAtAllMarkers
-
-        [Test]
-        public void SplitAtAllMarkers_Empty()
-        {
-            var pattern = new PatternBuilder().Build();
-            var patterns = pattern.SplitAtAllMarkers();
-            CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAllMarkers_NoActionsBetweenMarkers(bool removeEmptyPatterns)
-        {
-            var marker = "A";
-            var pattern = new PatternBuilder()
-                .Marker(marker)
-                .Marker(marker)
-                .Build();
-
-            var patterns = pattern.SplitAtAllMarkers(removeEmptyPatterns).ToList();
-
-            if (removeEmptyPatterns)
-                CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
-            else
-            {
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                CollectionAssert.IsEmpty(patterns[1].Actions, "Second sub-pattern is not empty.");
-            }
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAllMarkers_SingleMarker(bool removeEmptyPatterns)
-        {
-            var marker = "A";
-            var pattern = new PatternBuilder()
-                .Marker(marker)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Marker(marker)
-                .Note(Notes.DSharp0)
-                .Marker(marker)
-                .Build();
-
-            var patterns = pattern.SplitAtAllMarkers(removeEmptyPatterns).ToList();
-
-            var firstPatternIndex = 0;
-            var secondPatternIndex = 1;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                firstPatternIndex++;
-                secondPatternIndex++;
-            }
-
-            TestNotes(patterns[firstPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-
-            TestNotes(patterns[secondPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.DSharp, 0, null, PatternBuilder.DefaultNoteLength)
-            });
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SplitAtAllMarkers_MultipleMarkers(bool removeEmptyPatterns)
-        {
-            var marker1 = "A";
-            var marker2 = "B";
-
-            var pattern = new PatternBuilder()
-                .Marker(marker1)
-                .Note(Notes.FSharp4)
-                .Note(Notes.DSharp1)
-                .Marker(marker2)
-                .Note(Notes.DSharp0)
-                .Marker(marker1)
-                .Build();
-
-            var patterns = pattern.SplitAtAllMarkers(removeEmptyPatterns).ToList();
-
-            var firstPatternIndex = 0;
-            var secondPatternIndex = 1;
-
-            if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
-            else
-            {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
-                CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
-                firstPatternIndex++;
-                secondPatternIndex++;
-            }
-
-            TestNotes(patterns[firstPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.FSharp, 4, null, PatternBuilder.DefaultNoteLength),
-                new NoteInfo(NoteName.DSharp, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength)
-            });
-
-            TestNotes(patterns[secondPatternIndex], new[]
-            {
-                new NoteInfo(NoteName.DSharp, 0, null, PatternBuilder.DefaultNoteLength)
             });
         }
 

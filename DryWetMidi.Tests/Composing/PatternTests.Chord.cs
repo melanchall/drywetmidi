@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.C, defaultOctave, chordTime1, chordLength, defaultVelocity),
                 new NoteInfo(NoteName.G, defaultOctave, chordTime1, chordLength, defaultVelocity),
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 2, null, defaultNoteLength, defaultVelocity),
                 new NoteInfo(NoteName.B, 2, null, defaultNoteLength, defaultVelocity),

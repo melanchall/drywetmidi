@@ -10,6 +10,8 @@ namespace Melanchall.DryWetMidi.Tests.Composing
     {
         #region Test methods
 
+        #region StepBack
+
         [Test]
         [Description("Step back by metric step and add note.")]
         public void StepBack_Metric()
@@ -23,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 3), MusicalTimeSpan.Quarter)
             });
@@ -42,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 0), MusicalTimeSpan.Quarter)
             });
@@ -61,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, new MusicalTimeSpan(5, 8), MusicalTimeSpan.Quarter)
             });
@@ -80,11 +82,53 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, new MetricTimeSpan(0, 0, 0), MusicalTimeSpan.Quarter)
             });
         }
+
+        #endregion
+
+        #region MoveToPreviousTime
+
+        [Test]
+        public void MoveToPreviousTime()
+        {
+            var pattern = new PatternBuilder()
+                .Note(Notes.A0)
+                .MoveToPreviousTime()
+                .Note(Notes.B0)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, null, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.B, 0, null, PatternBuilder.DefaultNoteLength)
+            });
+        }
+
+        [Test]
+        public void MoveToPreviousTime_Pattern()
+        {
+            var subPattern = new PatternBuilder()
+                .Note(Notes.A0)
+                .Build();
+
+            var pattern = new PatternBuilder()
+                .Pattern(subPattern)
+                .MoveToPreviousTime()
+                .Note(Notes.B0)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, null, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.B, 0, null, PatternBuilder.DefaultNoteLength)
+            });
+        }
+
+        #endregion
 
         #endregion
     }

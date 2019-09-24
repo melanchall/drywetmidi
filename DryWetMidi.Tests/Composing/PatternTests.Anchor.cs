@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, anchorTime, MusicalTimeSpan.Quarter)
             });
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, anchorTime, MusicalTimeSpan.Quarter)
             });
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, anchorTime, MusicalTimeSpan.Quarter)
             });

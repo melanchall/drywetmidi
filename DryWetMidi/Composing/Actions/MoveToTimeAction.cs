@@ -28,7 +28,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         public PatternActionResult Invoke(long time, PatternContext context)
         {
-            context.SaveTime(time);
+            if (Time != null)
+                context.SaveTime(time);
+
             return new PatternActionResult(Time != null
                 ? TimeConverter.ConvertFrom(Time, context.TempoMap)
                 : context.RestoreTime());

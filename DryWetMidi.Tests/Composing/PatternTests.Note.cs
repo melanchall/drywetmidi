@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.A, 0, null, defaultNoteLength, defaultVelocity),
                 new NoteInfo(NoteName.C, 1, MusicalTimeSpan.Quarter, specifiedLength, specifiedVelocity)
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            var midiFile = TestNotes(pattern, new[]
+            var midiFile = PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.G, 2, null, new MetricTimeSpan(0, 0, 24)),
                 new NoteInfo(NoteName.A, 2, new MetricTimeSpan(0, 0, 24), new MetricTimeSpan(0, 1, 0)),
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            var midiFile = TestNotes(pattern, new[]
+            var midiFile = PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.G, 2, null, new MetricTimeSpan(0, 0, 24)),
                 new NoteInfo(NoteName.A, 2, new MetricTimeSpan(0, 0, 24), new MetricTimeSpan(0, 1, 0)),
@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
                 new NoteInfo(NoteName.DSharp, 5, null, defaultNoteLength, defaultVelocity),
                 new NoteInfo(NoteName.A, 4, defaultNoteLength, defaultNoteLength, defaultVelocity)

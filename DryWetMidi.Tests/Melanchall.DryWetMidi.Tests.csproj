@@ -49,6 +49,10 @@
     <Compile Include="Common\DataTypes\FourBitNumberTests.cs" />
     <Compile Include="Common\DataTypes\SevenBitNumberTests.cs" />
     <Compile Include="Composing\PatternTests.Misc.cs" />
+    <Compile Include="Composing\PatternUtilitiesTests.cs" />
+    <Compile Include="Composing\TestUtilities\NoteInfo.cs" />
+    <Compile Include="Composing\TestUtilities\PatternTestUtilities.cs" />
+    <Compile Include="Composing\TestUtilities\TimedEventInfo.cs" />
     <Compile Include="Devices\DevicesConnector\DevicesConnectorTests.cs" />
     <Compile Include="Devices\InpurDevice\InputDeviceTests.cs" />
     <Compile Include="Devices\OutputDevice\OutputDeviceTests.cs" />
@@ -69,7 +73,6 @@
     <Compile Include="Devices\Utilities\ReceivedEvent.cs" />
     <Compile Include="Devices\Utilities\SendReceiveUtilities.cs" />
     <Compile Include="Devices\Utilities\SentEvent.cs" />
-    <Compile Include="Composing\PatternTests.Transformation.cs" />
     <Compile Include="Smf.Interaction\Chords\ChordsManagingUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\Notes\NotesManagingUtilitiesTests.cs" />
     <Compile Include="Composing\PatternTests.Anchor.cs" />
@@ -105,7 +108,6 @@
     <Compile Include="Smf.Interaction\Notes\Utilities\GetNotesAndRestsUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\Notes\Utilities\GetTimedEventsAndNotesUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\Notes\Utilities\ResizeNotesUtilitiesTests.cs" />
-    <Compile Include="Composing\PatternTests.Asserts.cs" />
     <Compile Include="Smf.Interaction\TempoMap\TempoMapManagerTests.cs" />
     <Compile Include="Smf.Interaction\TempoMap\TempoMapTests.cs" />
     <Compile Include="Smf.Interaction\TimedEvents\TimedEventsManagerTests.cs" />

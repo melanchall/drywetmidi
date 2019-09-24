@@ -11,80 +11,17 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
-    [TestFixture]
-    public sealed partial class PatternTests
+    internal static class PatternTestUtilities
     {
-        #region Nested classes
-
-        private sealed class NoteInfo
-        {
-            #region Constructor
-
-            public NoteInfo(NoteName noteName, int octave, ITimeSpan time, ITimeSpan length)
-                : this(noteName, octave, time, length, DryWetMidi.Smf.Interaction.Note.DefaultVelocity)
-            {
-            }
-
-            public NoteInfo(NoteName noteName, int octave, ITimeSpan time, ITimeSpan length, SevenBitNumber velocity)
-                : this(NoteUtilities.GetNoteNumber(noteName, octave), time, length, velocity)
-            {
-            }
-
-            public NoteInfo(SevenBitNumber noteNumber, ITimeSpan time, ITimeSpan length, SevenBitNumber velocity)
-            {
-                NoteNumber = noteNumber;
-                Time = time;
-                Length = length;
-                Velocity = velocity;
-            }
-
-            #endregion
-
-            #region Properties
-
-            public SevenBitNumber NoteNumber { get; }
-
-            public ITimeSpan Time { get; }
-
-            public ITimeSpan Length { get; }
-
-            public SevenBitNumber Velocity { get; }
-
-            #endregion
-        }
-
-        private sealed class TimedEventInfo
-        {
-            #region Constructor
-
-            public TimedEventInfo(MidiEvent midiEvent, ITimeSpan time)
-            {
-                Event = midiEvent;
-                Time = time;
-            }
-
-            #endregion
-
-            #region Properties
-
-            public MidiEvent Event { get; }
-
-            public ITimeSpan Time { get; }
-
-            #endregion
-        }
-
-        #endregion
-
         #region Constants
 
-        private static readonly FourBitNumber Channel = (FourBitNumber)2;
+        public static readonly FourBitNumber Channel = (FourBitNumber)2;
 
         #endregion
 
-        #region Private methods
+        #region Methods
 
-        private static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params Tuple<long, Tempo>[] tempoChanges)
+        public static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params Tuple<long, Tempo>[] tempoChanges)
         {
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
@@ -129,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             return midiFile;
         }
 
-        private static void TestTimedEvents(
+        public static void TestTimedEvents(
             Pattern pattern,
             ICollection<TimedEventInfo> expectedTimedEventsInfos,
             params Tuple<long, Tempo>[] tempoChanges)
@@ -160,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             }
         }
 
-        private static void TestTimedEventsWithExactOrder(
+        public static void TestTimedEventsWithExactOrder(
             Pattern pattern,
             ICollection<TimedEventInfo> expectedTimedEventsInfos,
             params Tuple<long, Tempo>[] tempoChanges)

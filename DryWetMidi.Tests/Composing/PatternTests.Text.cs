@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
                 new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Quarter)
             });
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
                 new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Quarter),
                 new TimedEventInfo(new LyricEvent("B"), MusicalTimeSpan.Half)
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
                 new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Quarter),
                 new TimedEventInfo(new LyricEvent("A"), MusicalTimeSpan.Half)
@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
                 new TimedEventInfo(new MarkerEvent("Marker 1"), MusicalTimeSpan.Quarter)
             });
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
                 new TimedEventInfo(new MarkerEvent("Marker 1"), MusicalTimeSpan.Quarter),
                 new TimedEventInfo(new MarkerEvent("Marker 2"), MusicalTimeSpan.Half)
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestTimedEvents(pattern, new[]
+            PatternTestUtilities.TestTimedEvents(pattern, new[]
             {
                 new TimedEventInfo(new MarkerEvent(markerName), MusicalTimeSpan.Quarter),
                 new TimedEventInfo(new MarkerEvent(markerName), MusicalTimeSpan.Half)
