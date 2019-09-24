@@ -3,11 +3,11 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    public static class PatternTransformation
+    public static class PatternUtilities
     {
         #region Methods
 
-        public static Pattern TransformNotes(this Pattern pattern, NoteTransformation noteTransformation)
+        public static Pattern TransformNotes(this Pattern pattern, NoteTransformation noteTransformation, bool recursive = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Composing
                 }
 
                 var addPatternAction = a as AddPatternAction;
-                if (addPatternAction != null)
+                if (addPatternAction != null && recursive)
                     return new AddPatternAction(addPatternAction.Pattern.TransformNotes(noteTransformation));
 
                 return a;
@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Composing
             .ToList());
         }
 
-        public static Pattern TransformChords(this Pattern pattern, ChordTransformation chordTransformation)
+        public static Pattern TransformChords(this Pattern pattern, ChordTransformation chordTransformation, bool recursive = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(chordTransformation), chordTransformation);
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Composing
                 }
 
                 var addPatternAction = a as AddPatternAction;
-                if (addPatternAction != null)
+                if (addPatternAction != null && recursive)
                     return new AddPatternAction(addPatternAction.Pattern.TransformChords(chordTransformation));
 
                 return a;

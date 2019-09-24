@@ -51,7 +51,7 @@
     <Compile Include="Common\ThrowIfArgument.cs" />
     <Compile Include="Composing\Descriptors\ChordDescriptor.cs" />
     <Compile Include="Composing\Descriptors\NoteDescriptor.cs" />
-    <Compile Include="Composing\PatternTransformation.cs" />
+    <Compile Include="Composing\PatternUtilities.cs" />
     <Compile Include="Composing\Transformations\ChordTransformation.cs" />
     <Compile Include="Composing\Transformations\NoteTransformation.cs" />
     <Compile Include="Devices\Clock\MidiClock.cs" />

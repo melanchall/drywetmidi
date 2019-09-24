@@ -113,8 +113,18 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             .OrderBy(n => n.Time)
             .ToArray();
 
-            var actualNotes = midiFile.GetNotes();
-            Assert.IsTrue(NoteEquality.AreEqual(expectedNotes, actualNotes), "Notes are invalid.");
+            var actualNotes = midiFile.GetNotes().ToArray();
+            Assert.AreEqual(expectedNotes.Length, actualNotes.Length, "Notes count is invalid.");
+
+            var j = 0;
+            foreach (var expectedActual in expectedNotes.Zip(actualNotes, (e, a) => new { Expected = e, Actual = a }))
+            {
+                var expectedNote = expectedActual.Expected;
+                var actualNote = expectedActual.Actual;
+
+                Assert.IsTrue(NoteEquality.AreEqual(expectedNote, actualNote), $"Note {j} is invalid. Expected: {expectedNote}; actual: {actualNote}.");
+                j++;
+            }
 
             return midiFile;
         }
