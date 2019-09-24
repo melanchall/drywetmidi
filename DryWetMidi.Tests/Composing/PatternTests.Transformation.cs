@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void TransformNotes_Changed_Pattern()
+        public void TransformNotes_Changed_Pattern_Recursive()
         {
             var noteLength = MusicalTimeSpan.Eighth;
             var velocity = (SevenBitNumber)90;
@@ -87,6 +87,37 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 new NoteInfo(NoteName.D, 9, (MidiTimeSpan)200, (MidiTimeSpan)100, (SevenBitNumber)65),
                 new NoteInfo(NoteName.D, 9, (MidiTimeSpan)300, (MidiTimeSpan)100, (SevenBitNumber)65)
+            });
+        }
+
+        [Test]
+        public void TransformNotes_Changed_Pattern_NonRecursive()
+        {
+            var noteLength = MusicalTimeSpan.Eighth;
+            var velocity = (SevenBitNumber)90;
+
+            var subPattern = new PatternBuilder()
+                .Note(Notes.DSharp3)
+                .Note(Notes.B1)
+                .Build();
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(noteLength)
+                .SetVelocity(velocity)
+                .Note(Notes.A2)
+                .Note(Notes.C3)
+                .Pattern(subPattern)
+                .Build();
+
+            pattern = pattern.TransformNotes(d => new NoteDescriptor(Notes.D9, (SevenBitNumber)65, (MidiTimeSpan)100), recursive: false);
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 9, null, (MidiTimeSpan)100, (SevenBitNumber)65),
+                new NoteInfo(NoteName.D, 9, (MidiTimeSpan)100, (MidiTimeSpan)100, (SevenBitNumber)65),
+
+                new NoteInfo(NoteName.DSharp, 3, (MidiTimeSpan)200, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.B, 1, new MidiTimeSpan(200).Add(PatternBuilder.DefaultNoteLength, TimeSpanMode.LengthLength), PatternBuilder.DefaultNoteLength)
             });
         }
 
@@ -146,7 +177,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void TransformChords_Changed_Pattern()
+        public void TransformChords_Changed_Pattern_Recursive()
         {
             var noteLength = (MidiTimeSpan)200;
             var velocity = (SevenBitNumber)90;
@@ -180,6 +211,39 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 new NoteInfo(NoteName.C, 3, (MidiTimeSpan)(2 * noteLength) + (MidiTimeSpan)100, (MidiTimeSpan)100, (SevenBitNumber)65),
                 new NoteInfo(NoteName.C, 4, (MidiTimeSpan)(2 * noteLength) + (MidiTimeSpan)100, (MidiTimeSpan)100, (SevenBitNumber)65),
                 new NoteInfo(NoteName.C, 5, (MidiTimeSpan)(2 * noteLength) + (MidiTimeSpan)100, (MidiTimeSpan)100, (SevenBitNumber)65)
+            });
+        }
+
+        [Test]
+        public void TransformChords_Changed_Pattern_NonRecursive()
+        {
+            var noteLength = (MidiTimeSpan)200;
+            var velocity = (SevenBitNumber)90;
+
+            var subPattern = new PatternBuilder()
+                .Chord(new[] { Notes.A0, Notes.CSharp2 })
+                .Build();
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(noteLength)
+                .SetVelocity(velocity)
+                .Chord(new[] { Notes.A2, Notes.C3 })
+                .Pattern(subPattern)
+                .Build();
+
+            pattern = pattern.TransformChords(d => new ChordDescriptor(
+                d.Notes.Select(n => n.Transpose(Interval.One)),
+                (SevenBitNumber)65,
+                (MidiTimeSpan)100),
+                recursive: false);
+
+            TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.ASharp, 2, null, (MidiTimeSpan)100, (SevenBitNumber)65),
+                new NoteInfo(NoteName.CSharp, 3, null, (MidiTimeSpan)100, (SevenBitNumber)65),
+
+                new NoteInfo(NoteName.A, 0, new MidiTimeSpan(100), PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.CSharp, 2, new MidiTimeSpan(100), PatternBuilder.DefaultNoteLength)
             });
         }
 
