@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
     [TestFixture]
-    public sealed partial class PatternTests
+    public sealed partial class PatternBuilderTests
     {
         #region Test methods
 
@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         public void Note_Multiple_MetricLengths()
         {
             var pattern = new PatternBuilder()
-                .SetOctave(2)
+                .SetOctave(Octave.Get(2))
 
                 .Note(NoteName.G, new MetricTimeSpan(0, 0, 24))
                 .Note(NoteName.A, new MetricTimeSpan(0, 1, 0))
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         public void Note_Multiple_MetricLengths_TempoChanged()
         {
             var pattern = new PatternBuilder()
-                .SetOctave(2)
+                .SetOctave(Octave.Get(2))
 
                 .Note(NoteName.G, new MetricTimeSpan(0, 0, 24))
                 .Note(NoteName.A, new MetricTimeSpan(0, 1, 0))

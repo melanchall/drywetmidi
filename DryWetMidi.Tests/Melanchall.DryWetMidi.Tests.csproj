@@ -48,7 +48,8 @@
   <ItemGroup>
     <Compile Include="Common\DataTypes\FourBitNumberTests.cs" />
     <Compile Include="Common\DataTypes\SevenBitNumberTests.cs" />
-    <Compile Include="Composing\PatternTests.Misc.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Misc.cs" />
+    <Compile Include="Composing\PatternTests.cs" />
     <Compile Include="Composing\PatternUtilitiesTests.cs" />
     <Compile Include="Composing\TestUtilities\NoteInfo.cs" />
     <Compile Include="Composing\TestUtilities\PatternTestUtilities.cs" />
@@ -75,14 +76,14 @@
     <Compile Include="Devices\Utilities\SentEvent.cs" />
     <Compile Include="Smf.Interaction\Chords\ChordsManagingUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\Notes\NotesManagingUtilitiesTests.cs" />
-    <Compile Include="Composing\PatternTests.Anchor.cs" />
-    <Compile Include="Composing\PatternTests.Chord.cs" />
-    <Compile Include="Composing\PatternTests.Default.cs" />
-    <Compile Include="Composing\PatternTests.Move.cs" />
-    <Compile Include="Composing\PatternTests.Note.cs" />
-    <Compile Include="Composing\PatternTests.Pattern.cs" />
-    <Compile Include="Composing\PatternTests.Repeat.cs" />
-    <Compile Include="Composing\PatternTests.Text.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Anchor.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Chord.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Default.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Move.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Note.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Pattern.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Repeat.cs" />
+    <Compile Include="Composing\PatternBuilder\PatternBuilderTests.Text.cs" />
     <Compile Include="Smf.Interaction\TimedEvents\TimedEventsManagingUtilitiesTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\BarBeatFractionTimeSpanTests.cs" />
     <Compile Include="Smf.Interaction\TimeSpan\Utilities\BarBeatTimeSpanUtilitiesTests.cs" />

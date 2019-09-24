@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Smf;
@@ -10,7 +9,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
     [TestFixture]
-    public sealed partial class PatternTests
+    public sealed partial class PatternBuilderTests
     {
         #region Test methods
 
@@ -89,36 +88,6 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 new TimedEventInfo(new ControlChangeEvent(bankLsbControlNumber, bankLsb) { Channel = PatternTestUtilities.Channel }, eventsTime),
                 new TimedEventInfo(new ProgramChangeEvent(generalMidiProgram.AsSevenBitNumber()) { Channel = PatternTestUtilities.Channel }, eventsTime),
             });
-        }
-
-        #endregion
-
-        #region Clone
-
-        [Test]
-        public void Clone_Empty()
-        {
-            var pattern = new PatternBuilder()
-                .Build();
-
-            var patternClone = pattern.Clone();
-
-            CollectionAssert.IsEmpty(patternClone.Actions, "Actions count is invalid.");
-            CollectionAssert.AreEqual(pattern.Actions, patternClone.Actions, "Pattern clone is invalid.");
-        }
-
-        [Test]
-        public void Clone()
-        {
-            var pattern = new PatternBuilder()
-                .Note(Notes.A3)
-                .Repeat(9)
-                .Build();
-
-            var patternClone = pattern.Clone();
-
-            Assert.AreEqual(10, patternClone.Actions.Count(), "Actions count is invalid.");
-            CollectionAssert.AreEqual(pattern.Actions, patternClone.Actions, "Pattern clone is invalid.");
         }
 
         #endregion

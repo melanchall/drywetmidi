@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
     [TestFixture]
-    public sealed partial class PatternTests
+    public sealed partial class PatternBuilderTests
     {
         #region Test methods
 
@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         public void Chord_DefaultOctave()
         {
             var defaultVelocity = (SevenBitNumber)90;
-            var defaultOctave = 2;
+            var defaultOctave = Octave.Get(2);
 
             var chordLength = MusicalTimeSpan.Sixteenth.Triplet();
             var chordTime1 = new MetricTimeSpan(0, 1, 12);
@@ -38,10 +38,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.C, defaultOctave, chordTime1, chordLength, defaultVelocity),
-                new NoteInfo(NoteName.G, defaultOctave, chordTime1, chordLength, defaultVelocity),
-                new NoteInfo(NoteName.C, defaultOctave, chordTime2, chordLength, defaultVelocity),
-                new NoteInfo(NoteName.G, defaultOctave, chordTime2, chordLength, defaultVelocity)
+                new NoteInfo(NoteName.C, defaultOctave.Number, chordTime1, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.G, defaultOctave.Number, chordTime1, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.C, defaultOctave.Number, chordTime2, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.G, defaultOctave.Number, chordTime2, chordLength, defaultVelocity)
             });
         }
 
