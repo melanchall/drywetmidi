@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Composing
 {
@@ -51,6 +54,70 @@ namespace Melanchall.DryWetMidi.Composing
                 return a;
             })
             .ToList());
+        }
+
+        public static IEnumerable<Pattern> SplitAtAnchor(this Pattern pattern, object anchor, bool removeEmptyPatterns = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(anchor), anchor);
+
+            return SplitAtActions(
+                pattern,
+                a => (a as AddAnchorAction)?.Anchor == anchor,
+                removeEmptyPatterns);
+        }
+
+        public static IEnumerable<Pattern> SplitAtAllAnchors(this Pattern pattern, bool removeEmptyPatterns = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+
+            return SplitAtActions(
+                pattern,
+                a => a is AddAnchorAction,
+                removeEmptyPatterns);
+        }
+
+        public static IEnumerable<Pattern> SplitAtMarker(this Pattern pattern, string marker, bool removeEmptyPatterns = true, StringComparison stringComparison = StringComparison.CurrentCulture)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(marker), marker);
+
+            return SplitAtActions(
+                pattern,
+                a => (a as AddTextEventAction<MarkerEvent>)?.Text.Equals(marker, stringComparison) == true,
+                removeEmptyPatterns);
+        }
+
+        public static IEnumerable<Pattern> SplitAtAllMarkers(this Pattern pattern, bool removeEmptyPatterns = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+
+            return SplitAtActions(
+                pattern,
+                a => a is AddTextEventAction<MarkerEvent>,
+                removeEmptyPatterns);
+        }
+
+        private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<IPatternAction> actionSelector, bool removeEmptyPatterns)
+        {
+            var part = new List<IPatternAction>();
+
+            foreach (var action in pattern.Actions)
+            {
+                if (!actionSelector(action))
+                {
+                    part.Add(action);
+                    continue;
+                }
+
+                if (part.Any() || !removeEmptyPatterns)
+                    yield return new Pattern(part.AsReadOnly());
+
+                part = new List<IPatternAction>();
+            }
+
+            if (part.Any())
+                yield return new Pattern(part.AsReadOnly());
         }
 
         #endregion
