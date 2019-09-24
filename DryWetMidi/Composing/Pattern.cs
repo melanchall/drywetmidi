@@ -112,30 +112,6 @@ namespace Melanchall.DryWetMidi.Composing
             return new Pattern(Actions.ToList());
         }
 
-        public IEnumerable<Pattern> SplitAtAnchor(object anchor, bool removeEmptyPatterns = true)
-        {
-            ThrowIfArgument.IsNull(nameof(anchor), anchor);
-
-            return SplitAtActions(a => (a as AddAnchorAction)?.Anchor == anchor, removeEmptyPatterns);
-        }
-
-        public IEnumerable<Pattern> SplitAtAllAnchors(bool removeEmptyPatterns = true)
-        {
-            return SplitAtActions(a => a is AddAnchorAction, removeEmptyPatterns);
-        }
-
-        public IEnumerable<Pattern> SplitAtMarker(string marker, bool removeEmptyPatterns = true, StringComparison stringComparison = StringComparison.CurrentCulture)
-        {
-            ThrowIfArgument.IsNull(nameof(marker), marker);
-
-            return SplitAtActions(a => (a as AddTextEventAction<MarkerEvent>)?.Text.Equals(marker, stringComparison) == true, removeEmptyPatterns);
-        }
-
-        public IEnumerable<Pattern> SplitAtAllMarkers(bool removeEmptyPatterns = true)
-        {
-            return SplitAtActions(a => a is AddTextEventAction<MarkerEvent>, removeEmptyPatterns);
-        }
-
         internal PatternActionResult InvokeActions(long time, PatternContext context)
         {
             var notes = new List<Note>();
@@ -159,28 +135,6 @@ namespace Melanchall.DryWetMidi.Composing
             }
 
             return new PatternActionResult(time, notes, events);
-        }
-
-        private IEnumerable<Pattern> SplitAtActions(Predicate<IPatternAction> actionSelector, bool removeEmptyPatterns)
-        {
-            var part = new List<IPatternAction>();
-
-            foreach (var action in Actions)
-            {
-                if (!actionSelector(action))
-                {
-                    part.Add(action);
-                    continue;
-                }
-
-                if (part.Any() || !removeEmptyPatterns)
-                    yield return new Pattern(part.AsReadOnly());
-
-                part = new List<IPatternAction>();
-            }
-
-            if (part.Any())
-                yield return new Pattern(part.AsReadOnly());
         }
 
         #endregion
