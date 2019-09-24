@@ -98,6 +98,34 @@ namespace Melanchall.DryWetMidi.Composing
                 removeEmptyPatterns);
         }
 
+        public static Pattern CombineInSequence(this IEnumerable<Pattern> patterns)
+        {
+            ThrowIfArgument.IsNull(nameof(patterns), patterns);
+
+            var patternBuilder = new PatternBuilder();
+
+            foreach (var pattern in patterns.Where(p => p != null))
+            {
+                patternBuilder.Pattern(pattern);
+            }
+
+            return patternBuilder.Build();
+        }
+
+        public static Pattern CombineInParallel(this IEnumerable<Pattern> patterns)
+        {
+            ThrowIfArgument.IsNull(nameof(patterns), patterns);
+
+            var patternBuilder = new PatternBuilder();
+
+            foreach (var pattern in patterns.Where(p => p != null))
+            {
+                patternBuilder.Pattern(pattern).MoveToPreviousTime();
+            }
+
+            return patternBuilder.Build();
+        }
+
         private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<IPatternAction> actionSelector, bool removeEmptyPatterns)
         {
             var part = new List<IPatternAction>();
