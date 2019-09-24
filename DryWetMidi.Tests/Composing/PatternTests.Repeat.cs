@@ -63,12 +63,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            TestNotes(pattern, new[]
+            PatternTestUtilities.TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A,
-                             4,
-                             3 * MusicalTimeSpan.Eighth,
-                             MusicalTimeSpan.Quarter)
+                new NoteInfo(NoteName.A, 4, 3 * MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter)
             });
         }
 

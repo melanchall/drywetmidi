@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .Pattern(pattern1)
                 .Build();
 
-            TestNotes(pattern2, new[]
+            PatternTestUtilities.TestNotes(pattern2, new[]
             {
                 new NoteInfo(NoteName.ASharp, 2, null, noteLength2),
                 new NoteInfo(NoteName.CSharp, 2, noteLength2, noteLength2),
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .Repeat(2)
                 .Build();
 
-            TestNotes(pattern2, new[]
+            PatternTestUtilities.TestNotes(pattern2, new[]
             {
                 new NoteInfo(NoteName.A, 0, null, noteLength1),
                 new NoteInfo(NoteName.C, 1, noteLength1, noteLength1),
