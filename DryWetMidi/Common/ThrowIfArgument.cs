@@ -143,6 +143,16 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentException(message, parameterName);
         }
 
+        internal static void ContainsInvalidEnumValue<TEnum>(string parameterName, IEnumerable<TEnum> argument)
+            where TEnum : struct
+        {
+            foreach (var value in argument)
+            {
+                if (!Enum.IsDefined(typeof(TEnum), value))
+                    throw new InvalidEnumArgumentException(parameterName, Convert.ToInt32(value), typeof(TEnum));
+            }
+        }
+
         #endregion
     }
 }
