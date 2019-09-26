@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        private static readonly TimeSpan ClockInterval = MidiClock.MinInterval;
+        private static readonly TimeSpan ClockInterval = TimeSpan.FromMilliseconds(1);
 
         #endregion
 
@@ -153,8 +153,9 @@ namespace Melanchall.DryWetMidi.Devices
 
             TempoMap = tempoMap;
 
-            _clock = new MidiClock(ClockInterval, false);
-            _clock.Tick += OnClockTick;
+            _clock = new MidiClock(false);
+            _clock.TickGenerator = new HighPrecisionTickGenerator(ClockInterval);
+            _clock.Ticked += OnClockTicked;
 
             Snapping = new PlaybackSnapping(playbackEvents, tempoMap);
         }
@@ -606,7 +607,7 @@ namespace Melanchall.DryWetMidi.Devices
             EventPlayed?.Invoke(this, new MidiEventPlayedEventArgs(midiEvent));
         }
 
-        private void OnClockTick(object sender, TickEventArgs e)
+        private void OnClockTicked(object sender, TickedEventArgs e)
         {
             var time = e.Time;
 
@@ -834,7 +835,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 Stop();
 
-                _clock.Tick -= OnClockTick;
+                _clock.Ticked -= OnClockTicked;
                 _clock.Dispose();
                 _eventsEnumerator.Dispose();
             }

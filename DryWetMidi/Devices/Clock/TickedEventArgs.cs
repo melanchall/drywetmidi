@@ -2,11 +2,11 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    public sealed class TickEventArgs : EventArgs
+    public sealed class TickedEventArgs : EventArgs
     {
         #region Constructor
 
-        public TickEventArgs(TimeSpan time)
+        public TickedEventArgs(TimeSpan time)
         {
             Time = time;
         }
