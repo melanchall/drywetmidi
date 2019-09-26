@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -10,17 +8,13 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        public static readonly TimeSpan MinInterval = TimeSpan.FromMilliseconds(1);
-        public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(uint.MaxValue);
-
         private const double DefaultSpeed = 1.0;
-        private const uint NoTimerId = 0;
 
         #endregion
 
         #region Events
 
-        public event EventHandler<TickEventArgs> Tick;
+        public event EventHandler<TickedEventArgs> Ticked;
 
         #endregion
 
@@ -28,30 +22,22 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private readonly uint _interval;
         private readonly bool _startImmediately;
         private readonly Stopwatch _stopwatch = new Stopwatch();
         private TimeSpan _startTime = TimeSpan.Zero;
 
-        private uint _resolution;
-        private MidiTimerWinApi.TimeProc _tickCallback;
-        private uint _timerId = NoTimerId;
-
         private double _speed = DefaultSpeed;
+
+        private bool _started;
+
+        private ITickGenerator _tickGenerator;
 
         #endregion
 
         #region Constructor
 
-        public MidiClock(TimeSpan interval, bool startImmediately)
+        public MidiClock(bool startImmediately)
         {
-            ThrowIfArgument.IsOutOfRange(nameof(interval),
-                                         interval,
-                                         MinInterval,
-                                         MaxInterval,
-                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
-
-            _interval = (uint)interval.TotalMilliseconds;
             _startImmediately = startImmediately;
         }
 
@@ -92,6 +78,18 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        public ITickGenerator TickGenerator
+        {
+            get { return _tickGenerator; }
+            set
+            {
+                if (_tickGenerator != null)
+                    throw new InvalidOperationException("Tick generator cannot be set after clock started.");
+
+                _tickGenerator = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -103,27 +101,23 @@ namespace Melanchall.DryWetMidi.Devices
             if (IsRunning)
                 return;
 
-            if (_timerId == NoTimerId)
+            if (!_started)
             {
-                var timeCaps = default(MidiTimerWinApi.TIMECAPS);
-                ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
+                _tickGenerator = TickGenerator;
 
-                _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
-                _tickCallback = OnTimerTick;
-
-                ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
-                _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
-                if (_timerId == 0)
+                if (_tickGenerator != null)
                 {
-                    var errorCode = Marshal.GetLastWin32Error();
-                    throw new MidiDeviceException("Unable to initialize MIDI clock.", new Win32Exception(errorCode));
+                    _tickGenerator.TickGenerated += OnTickGenerated;
+                    _tickGenerator.TryStart();
                 }
             }
 
             _stopwatch.Start();
 
             if (_startImmediately)
-                OnTick();
+                OnTicked();
+
+            _started = true;
         }
 
         public void Stop()
@@ -158,28 +152,23 @@ namespace Melanchall.DryWetMidi.Devices
             CurrentTime = time;
         }
 
-        private void OnTimerTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        public void Tick()
         {
             if (!IsRunning || _disposed)
                 return;
 
             CurrentTime = _startTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
-            OnTick();
+            OnTicked();
         }
 
-        private static void ProcessMmResult(uint mmResult)
+        private void OnTickGenerated(object sender, EventArgs e)
         {
-            switch (mmResult)
-            {
-                case MidiWinApi.MMSYSERR_ERROR:
-                case MidiWinApi.TIMERR_NOCANDO:
-                    throw new MidiDeviceException("Error occurred on MIDI clock.");
-            }
+            Tick();
         }
 
-        private void OnTick()
+        private void OnTicked()
         {
-            Tick?.Invoke(this, new TickEventArgs(CurrentTime));
+            Ticked?.Invoke(this, new TickedEventArgs(CurrentTime));
         }
 
         private void EnsureIsNotDisposed()
@@ -195,7 +184,6 @@ namespace Melanchall.DryWetMidi.Devices
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool disposing)
@@ -205,12 +193,11 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-            }
-
-            if (_timerId != NoTimerId)
-            {
-                MidiTimerWinApi.timeEndPeriod(_resolution);
-                MidiTimerWinApi.timeKillEvent(_timerId);
+                if (_tickGenerator != null)
+                {
+                    _tickGenerator.TickGenerated -= OnTickGenerated;
+                    _tickGenerator.Dispose();
+                }
             }
 
             _disposed = true;

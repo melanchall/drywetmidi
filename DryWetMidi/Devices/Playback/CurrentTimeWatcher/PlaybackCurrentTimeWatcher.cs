@@ -10,9 +10,6 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        public static readonly TimeSpan MinPollingInterval = MidiClock.MinInterval;
-        public static readonly TimeSpan MaxPollingInterval = MidiClock.MaxInterval;
-
         private static readonly TimeSpan DefaultPollingInterval = TimeSpan.FromMilliseconds(100);
 
         #endregion
@@ -55,12 +52,6 @@ namespace Melanchall.DryWetMidi.Devices
             get { return _pollingInterval; }
             set
             {
-                ThrowIfArgument.IsOutOfRange(nameof(value),
-                                             value,
-                                             MinPollingInterval,
-                                             MaxPollingInterval,
-                                             $"Polling interval is out of [{MinPollingInterval}, {MaxPollingInterval}] range.");
-
                 _pollingInterval = value;
 
                 RecreateClock();
@@ -136,7 +127,7 @@ namespace Melanchall.DryWetMidi.Devices
             RecreateClock();
         }
 
-        private void OnTick(object sender, TickEventArgs e)
+        private void OnTick(object sender, TickedEventArgs e)
         {
             if (_disposed || !IsWatching)
                 return;
@@ -173,14 +164,15 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             _clock.Stop();
-            _clock.Tick -= OnTick;
+            _clock.Ticked -= OnTick;
             _clock.Dispose();
         }
 
         private void CreateClock(TimeSpan pollingInterval)
         {
-            _clock = new MidiClock(pollingInterval, true);
-            _clock.Tick += OnTick;
+            _clock = new MidiClock(true);
+            _clock.TickGenerator = new HighPrecisionTickGenerator(pollingInterval);
+            _clock.Ticked += OnTick;
         }
 
         private void RecreateClock()

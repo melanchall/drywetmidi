@@ -54,9 +54,12 @@
     <Compile Include="Composing\PatternUtilities.cs" />
     <Compile Include="Composing\Transformations\ChordTransformation.cs" />
     <Compile Include="Composing\Transformations\NoteTransformation.cs" />
+    <Compile Include="Devices\Clock\TickGenerator\HighPrecisionTickGenerator.cs" />
+    <Compile Include="Devices\Clock\TickGenerator\ITickGenerator.cs" />
     <Compile Include="Devices\Clock\MidiClock.cs" />
     <Compile Include="Devices\Clock\MidiTimerWinApi.cs" />
-    <Compile Include="Devices\Clock\TickEventArgs.cs" />
+    <Compile Include="Devices\Clock\TickedEventArgs.cs" />
+    <Compile Include="Devices\Clock\TickGenerator\RegularPrecisionTickGenerator.cs" />
     <Compile Include="Devices\DevicesConnector\DevicesConnector.cs" />
     <Compile Include="Devices\DevicesConnector\DevicesConnectorUtilities.cs" />
     <Compile Include="Devices\ErrorOccurredEventArgs.cs" />
