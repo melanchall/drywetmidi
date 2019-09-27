@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf
             public const string UnknownFileFormat = "Unknown File Format";
         }
 
-        private const string InvalidFilesPath = @"..\..\..\Resources\MIDI files\Invalid";
+        private const string InvalidFilesPath = @"..\..\..\..\Resources\MIDI files\Invalid";
 
         #endregion
 

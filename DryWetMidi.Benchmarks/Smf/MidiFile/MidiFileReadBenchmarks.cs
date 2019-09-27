@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
 
         #region Constants
 
-        private const string FilesPath = @"..\..\..\Resources\MIDI files\Valid";
+        private const string FilesPath = @"..\..\..\..\Resources\MIDI files\Valid";
 
         #endregion
 
