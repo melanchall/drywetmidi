@@ -2,16 +2,17 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+  
   <PropertyGroup>
     <PackageId>Melanchall.DryWetMidi</PackageId>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>4.2.0</Version>
+    <Version>5.0.0</Version>
     <Authors>melanchall</Authors>
     <Owners>melanchall</Owners>
-    <licenseUrl>https://github.com/melanchall/drywetmidi/blob/develop/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/melanchall/drywetmidi/blob/master/LICENSE</licenseUrl>
     <PackageProjectUrl>https://github.com/melanchall/drywetmidi</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/NuGet/icon.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/master/Resources/NuGet/icon.png</PackageIconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
 DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
@@ -28,6 +29,7 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
     <copyright>Copyright © Melanchall 2019</copyright>
     <PackageTags>midi smf music composing notes chords device playback record</PackageTags>
   </PropertyGroup>
+  
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
