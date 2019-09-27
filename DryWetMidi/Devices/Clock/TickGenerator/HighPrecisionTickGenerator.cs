@@ -1,13 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
     public sealed class HighPrecisionTickGenerator : ITickGenerator
     {
         #region Constants
-        
+
+        public static readonly TimeSpan MinInterval = TimeSpan.FromMilliseconds(1);
+        public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(uint.MaxValue);
+
         private const uint NoTimerId = 0;
 
         #endregion
@@ -33,6 +37,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         public HighPrecisionTickGenerator(TimeSpan interval)
         {
+            ThrowIfArgument.IsOutOfRange(nameof(interval),
+                                         interval,
+                                         MinInterval,
+                                         MaxInterval,
+                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+
             _interval = (uint)interval.TotalMilliseconds;
         }
 
@@ -71,6 +81,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
         {
+            if (_timerId == NoTimerId || _disposed)
+                return;
+
             TickGenerated?.Invoke(this, EventArgs.Empty);
         }
 
@@ -80,7 +93,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 case MidiWinApi.MMSYSERR_ERROR:
                 case MidiWinApi.TIMERR_NOCANDO:
-                    throw new MidiDeviceException("Error occurred on MIDI clock.");
+                    throw new MidiDeviceException("Error occurred on high precision MIDI tick generator.");
             }
         }
 

@@ -6,7 +6,7 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    public sealed class PlaybackCurrentTimeWatcher : IDisposable
+    public sealed class PlaybackCurrentTimeWatcher : IDisposable, IClockDrivenObject
     {
         #region Constants
 
@@ -26,6 +26,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly Dictionary<Playback, TimeSpanType> _playbacks = new Dictionary<Playback, TimeSpanType>();
         private readonly object _playbacksLock = new object();
+        private readonly MidiClockSettings _clockSettings;
 
         private MidiClock _clock;
         private TimeSpan _pollingInterval = DefaultPollingInterval;
@@ -36,8 +37,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        private PlaybackCurrentTimeWatcher()
+        private PlaybackCurrentTimeWatcher(MidiClockSettings clockSettings = null)
         {
+            _clockSettings = clockSettings ?? new MidiClockSettings();
             PollingInterval = DefaultPollingInterval;
         }
 
@@ -170,8 +172,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void CreateClock(TimeSpan pollingInterval)
         {
-            _clock = new MidiClock(true);
-            _clock.TickGenerator = new HighPrecisionTickGenerator(pollingInterval);
+            _clock = new MidiClock(true, _clockSettings.CreateTickGeneratorCallback(pollingInterval));
             _clock.Ticked += OnTick;
         }
 
@@ -184,6 +185,17 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (isWatching)
                 Start();
+        }
+
+        #endregion
+
+        #region IClockDrivenObject
+
+        public void TickClock()
+        {
+            EnsureIsNotDisposed();
+
+            _clock?.Tick();
         }
 
         #endregion
