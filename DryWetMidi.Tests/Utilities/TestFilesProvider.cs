@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             };
         }
 
-        private const string ValidFilesPath = @"..\..\..\Resources\MIDI files\Valid";
+        private const string ValidFilesPath = @"..\..\..\..\Resources\MIDI files\Valid";
 
         #endregion
 
