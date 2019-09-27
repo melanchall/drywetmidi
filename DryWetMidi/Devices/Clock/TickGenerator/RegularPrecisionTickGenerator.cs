@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Timers;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
     public sealed class RegularPrecisionTickGenerator : ITickGenerator
     {
+        #region Constants
+
+        public static readonly TimeSpan MinInterval = TimeSpan.FromMilliseconds(1);
+        public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(int.MaxValue);
+
+        #endregion
+
         #region Events
 
         public event EventHandler TickGenerated;
@@ -24,6 +32,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         public RegularPrecisionTickGenerator(TimeSpan interval)
         {
+            ThrowIfArgument.IsOutOfRange(nameof(interval),
+                                         interval,
+                                         MinInterval,
+                                         MaxInterval,
+                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+
             _timer = new Timer(interval.TotalMilliseconds);
             _timer.Elapsed += OnElapsed;
         }
@@ -43,6 +57,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnElapsed(object sender, ElapsedEventArgs e)
         {
+            if (!_started || _disposed)
+                return;
+
             TickGenerated?.Invoke(this, EventArgs.Empty);
         }
 
@@ -62,8 +79,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                _timer.Elapsed -= OnElapsed;
                 _timer.Stop();
+                _timer.Elapsed -= OnElapsed;
                 _timer.Dispose();
             }
 

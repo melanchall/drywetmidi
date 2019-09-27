@@ -30,15 +30,19 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _started;
 
-        private ITickGenerator _tickGenerator;
+        private readonly ITickGenerator _tickGenerator;
 
         #endregion
 
         #region Constructor
 
-        public MidiClock(bool startImmediately)
+        public MidiClock(bool startImmediately, ITickGenerator tickGenerator)
         {
             _startImmediately = startImmediately;
+
+            _tickGenerator = tickGenerator;
+            if (_tickGenerator != null)
+                _tickGenerator.TickGenerated += OnTickGenerated;
         }
 
         #endregion
@@ -78,18 +82,6 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        public ITickGenerator TickGenerator
-        {
-            get { return _tickGenerator; }
-            set
-            {
-                if (_tickGenerator != null)
-                    throw new InvalidOperationException("Tick generator cannot be set after clock started.");
-
-                _tickGenerator = value;
-            }
-        }
-
         #endregion
 
         #region Methods
@@ -102,15 +94,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             if (!_started)
-            {
-                _tickGenerator = TickGenerator;
-
-                if (_tickGenerator != null)
-                {
-                    _tickGenerator.TickGenerated += OnTickGenerated;
-                    _tickGenerator.TryStart();
-                }
-            }
+                _tickGenerator?.TryStart();
 
             _stopwatch.Start();
 

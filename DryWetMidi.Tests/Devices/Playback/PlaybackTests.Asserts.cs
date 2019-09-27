@@ -372,7 +372,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             PlaybackAction startPlayback,
             PlaybackAction afterPlaybackStarted,
             PlaybackAction waiting,
-            PlaybackAction finalChecks)
+            PlaybackAction finalChecks,
+            CreateTickGeneratorCallback createTickGeneratorCallback = null)
         {
             var playbackContext = new PlaybackContext();
 
@@ -399,7 +400,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                var clockSettings = createTickGeneratorCallback != null
+                    ? new MidiClockSettings { CreateTickGeneratorCallback = createTickGeneratorCallback }
+                    : null;
+
+                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice, clockSettings))
                 {
                     playback.Speed = speed;
                     beforePlaybackStarted(playbackContext, playback);
