@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
@@ -8,17 +9,17 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constructor
 
-        public Chord(IEnumerable<NoteName> notes)
+        public Chord(IEnumerable<NoteName> notesNames)
         {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
-            ThrowIfArgument.ContainsInvalidEnumValue(nameof(notes), notes);
-            ThrowIfArgument.IsEmptyCollection(nameof(notes), notes, "Notes collection is empty.");
+            ThrowIfArgument.IsNull(nameof(notesNames), notesNames);
+            ThrowIfArgument.ContainsInvalidEnumValue(nameof(notesNames), notesNames);
+            ThrowIfArgument.IsEmptyCollection(nameof(notesNames), notesNames, "Notes names collection is empty.");
 
-            Notes = notes;
+            NotesNames = notesNames;
         }
 
-        public Chord(params NoteName[] notes)
-            : this(notes as IEnumerable<NoteName>)
+        public Chord(params NoteName[] notesNames)
+            : this(notesNames as IEnumerable<NoteName>)
         {
         }
 
@@ -26,7 +27,54 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Properties
 
-        public IEnumerable<NoteName> Notes { get; }
+        public IEnumerable<NoteName> NotesNames { get; }
+
+        public NoteName RootNoteName => NotesNames.First();
+
+        #endregion
+
+        #region Methods
+
+        public IEnumerable<Interval> GetIntervalsFromRootNote()
+        {
+            var lastNoteNumber = (int)NotesNames.First();
+            var lastInterval = SevenBitNumber.MinValue;
+
+            var result = new List<Interval>();
+
+            foreach (var noteName in NotesNames.Skip(1))
+            {
+                var offset = (int)noteName - lastNoteNumber;
+                if (offset <= 0)
+                    offset += Octave.OctaveSize;
+
+                if (lastInterval + (SevenBitNumber)offset > SevenBitNumber.MaxValue)
+                    throw new InvalidOperationException($"Some interval(s) are greater than {SevenBitNumber.MaxValue}.");
+
+                lastInterval += (SevenBitNumber)offset;
+                result.Add(Interval.GetUp(lastInterval));
+                lastNoteNumber = (int)noteName;
+            }
+
+            return result;
+        }
+
+        public Note ResolveRootNote(Octave octave)
+        {
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+
+            return octave.GetNote(RootNoteName);
+        }
+
+        public IEnumerable<Note> ResolveNotes(Octave octave)
+        {
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+
+            var rootNote = ResolveRootNote(octave);
+            var result = new List<Note> { rootNote };
+            result.AddRange(GetIntervalsFromRootNote().Select(i => rootNote + i));
+            return result;
+        }
 
         #endregion
 
@@ -40,7 +88,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (ReferenceEquals(null, chord1) || ReferenceEquals(null, chord2))
                 return false;
 
-            return chord1.Notes.SequenceEqual(chord2.Notes);
+            return chord1.NotesNames.SequenceEqual(chord2.NotesNames);
         }
 
         public static bool operator !=(Chord chord1, Chord chord2)
@@ -54,7 +102,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         public override string ToString()
         {
-            return string.Join(" ", Notes.Select(n => n.ToString().Replace(Note.SharpLongString, Note.SharpShortString)));
+            return string.Join(" ", NotesNames.Select(n => n.ToString().Replace(Note.SharpLongString, Note.SharpShortString)));
         }
 
         public override bool Equals(object obj)
@@ -68,7 +116,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             {
                 var result = 17;
 
-                foreach (var note in Notes)
+                foreach (var note in NotesNames)
                 {
                     result = result * 23 + note.GetHashCode();
                 }
