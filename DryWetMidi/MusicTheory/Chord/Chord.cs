@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
@@ -30,51 +29,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public IEnumerable<NoteName> NotesNames { get; }
 
         public NoteName RootNoteName => NotesNames.First();
-
-        #endregion
-
-        #region Methods
-
-        public IEnumerable<Interval> GetIntervalsFromRootNote()
-        {
-            var lastNoteNumber = (int)NotesNames.First();
-            var lastInterval = SevenBitNumber.MinValue;
-
-            var result = new List<Interval>();
-
-            foreach (var noteName in NotesNames.Skip(1))
-            {
-                var offset = (int)noteName - lastNoteNumber;
-                if (offset <= 0)
-                    offset += Octave.OctaveSize;
-
-                if (lastInterval + (SevenBitNumber)offset > SevenBitNumber.MaxValue)
-                    throw new InvalidOperationException($"Some interval(s) are greater than {SevenBitNumber.MaxValue}.");
-
-                lastInterval += (SevenBitNumber)offset;
-                result.Add(Interval.GetUp(lastInterval));
-                lastNoteNumber = (int)noteName;
-            }
-
-            return result;
-        }
-
-        public Note ResolveRootNote(Octave octave)
-        {
-            ThrowIfArgument.IsNull(nameof(octave), octave);
-
-            return octave.GetNote(RootNoteName);
-        }
-
-        public IEnumerable<Note> ResolveNotes(Octave octave)
-        {
-            ThrowIfArgument.IsNull(nameof(octave), octave);
-
-            var rootNote = ResolveRootNote(octave);
-            var result = new List<Note> { rootNote };
-            result.AddRange(GetIntervalsFromRootNote().Select(i => rootNote + i));
-            return result;
-        }
 
         #endregion
 
