@@ -42,43 +42,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreNotEqual(chord1, chord3, "Chords are equal.");
         }
 
-        [Test]
-        public void ResolveRootNote()
-        {
-            var chord = new Chord(NoteName.A, NoteName.ASharp, NoteName.D);
-            var rootNote = chord.ResolveRootNote(Octave.Get(4));
-            Assert.AreEqual(Notes.A4, rootNote, "Resolved root note is invalid.");
-        }
-
-        [Test]
-        public void GetIntervalsFromRootNote()
-        {
-            var chord = new Chord(NoteName.A, NoteName.ASharp, NoteName.D, NoteName.D);
-            var intervals = chord.GetIntervalsFromRootNote();
-            CollectionAssert.AreEqual(
-                new[] { Interval.FromHalfSteps(1), Interval.FromHalfSteps(5), Interval.FromHalfSteps(17) },
-                intervals,
-                "Intervals are invalid.");
-        }
-
-        [Test]
-        public void GetIntervalsFromRootNote_OutOfRange()
-        {
-            var chord = new Chord(NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A);
-            Assert.Throws<InvalidOperationException>(() => chord.GetIntervalsFromRootNote());
-        }
-
-        [Test]
-        public void ResolveNotes()
-        {
-            var chord = new Chord(NoteName.A, NoteName.ASharp, NoteName.D);
-            var notes = chord.ResolveNotes(Octave.Get(2));
-            CollectionAssert.AreEqual(
-                new[] { Notes.A2, Notes.ASharp2, Notes.D3 },
-                notes,
-                "Resolved notes are invalid.");
-        }
-
         #endregion
     }
 }
