@@ -295,6 +295,70 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Chord
 
+        public PatternBuilder Chord(MusicTheory.Chord chord)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+
+            return Chord(chord.ResolveNotes(Octave), NoteLength, Velocity);
+        }
+
+        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+
+            return Chord(chord.ResolveNotes(octave), NoteLength, Velocity);
+        }
+
+        public PatternBuilder Chord(MusicTheory.Chord chord, ITimeSpan length)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(chord.ResolveNotes(Octave), length, Velocity);
+        }
+
+        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, ITimeSpan length)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(chord.ResolveNotes(octave), length, Velocity);
+        }
+
+        public PatternBuilder Chord(MusicTheory.Chord chord, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+
+            return Chord(chord.ResolveNotes(Octave), NoteLength, velocity);
+        }
+
+        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+
+            return Chord(chord.ResolveNotes(octave), NoteLength, velocity);
+        }
+
+        public PatternBuilder Chord(MusicTheory.Chord chord, ITimeSpan length, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(chord.ResolveNotes(Octave), length, velocity);
+        }
+
+        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, ITimeSpan length, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(chord.ResolveNotes(octave), length, velocity);
+        }
+
         /// <summary>
         /// Adds a chord by the specified intervals and root note's name.
         /// </summary>
