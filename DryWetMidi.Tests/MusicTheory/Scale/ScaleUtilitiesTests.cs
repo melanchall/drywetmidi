@@ -193,6 +193,22 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(NoteName.F, scale.GetDegree(ScaleDegree.Subdominant));
         }
 
+        [Test]
+        public void GetNotesNames()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var notesNames = scale.GetNotesNames().Take(18);
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    NoteName.C, NoteName.D, NoteName.E, NoteName.F, NoteName.G, NoteName.A, NoteName.B,
+                    NoteName.C, NoteName.D, NoteName.E, NoteName.F, NoteName.G, NoteName.A, NoteName.B,
+                    NoteName.C, NoteName.D, NoteName.E, NoteName.F
+                },
+                notesNames,
+                "Notes names are invalid.");
+        }
+
         #endregion
 
         #region Private methods
