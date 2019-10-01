@@ -71,6 +71,25 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
         }
 
+        public static IEnumerable<NoteName> GetNotesNames(this Scale scale)
+        {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+
+            var lastNoteNumber = (int)scale.RootNote;
+            yield return scale.RootNote;
+
+            while (true)
+            {
+                foreach (var interval in scale.Intervals)
+                {
+                    var noteNumber = (lastNoteNumber + interval) % Octave.OctaveSize;
+                    yield return (NoteName)noteNumber;
+
+                    lastNoteNumber = noteNumber;
+                }
+            }
+        }
+
         /// <summary>
         /// Gets notes that belong to a musical scale in ascending order starting with the specified
         /// root note.
