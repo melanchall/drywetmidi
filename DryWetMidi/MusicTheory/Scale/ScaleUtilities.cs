@@ -42,6 +42,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         .NoteName;
         }
 
+        public static NoteName GetStep(this Scale scale, int step)
+        {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+            ThrowIfArgument.IsNegative(nameof(step), step, "Step is negative.");
+
+            return scale.GetNotesNames().Skip(step).First();
+        }
+
         /// <summary>
         /// Gets all notes that belong to a musical scale.
         /// </summary>
