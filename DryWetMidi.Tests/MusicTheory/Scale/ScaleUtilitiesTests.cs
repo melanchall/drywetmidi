@@ -209,6 +209,33 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 "Notes names are invalid.");
         }
 
+        [Test]
+        public void GetStep_Tonic()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var step = scale.GetStep(0);
+
+            Assert.AreEqual(NoteName.C, step, "Step is invalid.");
+        }
+
+        [Test]
+        public void GetStep_WithinOctave()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var step = scale.GetStep(3);
+
+            Assert.AreEqual(NoteName.F, step, "Step is invalid.");
+        }
+
+        [Test]
+        public void GetStep_NextOctave()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var step = scale.GetStep(9);
+
+            Assert.AreEqual(NoteName.E, step, "Step is invalid.");
+        }
+
         #endregion
 
         #region Private methods
