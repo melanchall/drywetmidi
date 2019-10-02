@@ -236,42 +236,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(NoteName.E, step, "Step is invalid.");
         }
 
-        [Test]
-        public void GetChord_Degree_Tonic()
-        {
-            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
-            var chord = scale.GetChord(ScaleDegree.Tonic);
-
-            CollectionAssert.AreEqual(
-                new[] { NoteName.C, NoteName.E, NoteName.G },
-                chord.NotesNames,
-                "Chord is invalid.");
-        }
-
-        [Test]
-        public void GetChord_Degree_Dominant()
-        {
-            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
-            var chord = scale.GetChord(ScaleDegree.Dominant);
-
-            CollectionAssert.AreEqual(
-                new[] { NoteName.G, NoteName.B, NoteName.D },
-                chord.NotesNames,
-                "Chord is invalid.");
-        }
-
-        [Test]
-        public void GetChord_Step()
-        {
-            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
-            var chord = scale.GetChord(4);
-
-            CollectionAssert.AreEqual(
-                new[] { NoteName.G, NoteName.B, NoteName.D },
-                chord.NotesNames,
-                "Chord is invalid.");
-        }
-
         #endregion
 
         #region Private methods
