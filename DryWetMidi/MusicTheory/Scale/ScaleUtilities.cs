@@ -29,17 +29,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsInvalidEnumValue(nameof(degree), degree);
+            ThrowIfDegreeIsOutOfRange(scale, degree);
 
-            var degreeNumber = (int)degree;
-            if (degreeNumber >= scale.Intervals.Count())
-                throw new ArgumentOutOfRangeException(nameof(degree),
-                                                      degree,
-                                                      "Degree is out of range for the scale.");
-
-            return scale.GetNotes()
-                        .Skip(degreeNumber)
-                        .First()
-                        .NoteName;
+            return scale.GetStep((int)degree);
         }
 
         public static NoteName GetStep(this Scale scale, int step)
@@ -192,6 +184,35 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return scale.GetDescendingNotes(note)
                         .Skip(1)
                         .FirstOrDefault();
+        }
+
+        public static Chord GetChord(this Scale scale, ScaleDegree degree)
+        {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(degree), degree);
+            ThrowIfDegreeIsOutOfRange(scale, degree);
+
+            return scale.GetChord((int)degree);
+        }
+
+        public static Chord GetChord(this Scale scale, int step)
+        {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+            ThrowIfArgument.IsNegative(nameof(step), step, "Step is negative.");
+
+            // TODO: get rid of multiple GetStep
+            return new Chord(scale.GetStep(step),
+                             scale.GetStep(step + 2),
+                             scale.GetStep(step + 4));
+        }
+
+        private static void ThrowIfDegreeIsOutOfRange(Scale scale, ScaleDegree degree)
+        {
+            var degreeNumber = (int)degree;
+            if (degreeNumber >= scale.Intervals.Count())
+                throw new ArgumentOutOfRangeException(nameof(degree),
+                                                      degree,
+                                                      "Degree is out of range for the scale.");
         }
 
         #endregion
