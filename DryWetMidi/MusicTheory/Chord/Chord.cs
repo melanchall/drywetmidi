@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constructor
 
-        public Chord(IEnumerable<NoteName> notesNames)
+        public Chord(ICollection<NoteName> notesNames)
         {
             ThrowIfArgument.IsNull(nameof(notesNames), notesNames);
             ThrowIfArgument.ContainsInvalidEnumValue(nameof(notesNames), notesNames);
@@ -17,8 +17,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
             NotesNames = notesNames;
         }
 
-        public Chord(params NoteName[] notesNames)
-            : this(notesNames as IEnumerable<NoteName>)
+        public Chord(NoteName rootNoteName, params NoteName[] notesNamesAboveRoot)
+            : this(new[] { rootNoteName }.Concat(notesNamesAboveRoot ?? Enumerable.Empty<NoteName>()).ToArray())
         {
         }
 
@@ -26,9 +26,26 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Properties
 
-        public IEnumerable<NoteName> NotesNames { get; }
+        public ICollection<NoteName> NotesNames { get; }
 
         public NoteName RootNoteName => NotesNames.First();
+
+        #endregion
+
+        #region Methods
+
+        public IEnumerable<Chord> GetInversions()
+        {
+            var notesNames = new Queue<NoteName>(NotesNames);
+
+            for (var i = 1; i < NotesNames.Count; i++)
+            {
+                var noteName = notesNames.Dequeue();
+                notesNames.Enqueue(noteName);
+
+                yield return new Chord(notesNames.ToArray());
+            }
+        }
 
         #endregion
 

@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Test]
         public void CreateWithEmptyNotesCollection()
         {
-            Assert.Throws<ArgumentException>(() => new Chord(Enumerable.Empty<NoteName>()));
+            Assert.Throws<ArgumentException>(() => new Chord(Enumerable.Empty<NoteName>().ToArray()));
         }
 
         [Test]
@@ -40,6 +40,30 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
 
             Assert.AreEqual(chord1, chord2, "Chords are not equal.");
             Assert.AreNotEqual(chord1, chord3, "Chords are equal.");
+        }
+
+        [Test]
+        public void GetInversions_OneNote()
+        {
+            var chord = new Chord(NoteName.C);
+            var inversions = chord.GetInversions();
+            CollectionAssert.IsEmpty(inversions, "There are inversions for one-note chord.");
+        }
+
+        [Test]
+        public void GetInversions()
+        {
+            var chord = new Chord(NoteName.C, NoteName.E, NoteName.G);
+            var inversions = chord.GetInversions().ToArray();
+            Assert.AreEqual(2, inversions.Length, "Invalid count of inversions.");
+            CollectionAssert.AreEqual(
+                new[] { NoteName.E, NoteName.G, NoteName.C },
+                inversions[0].NotesNames,
+                "First inversion is invalid.");
+            CollectionAssert.AreEqual(
+                new[] { NoteName.G, NoteName.C, NoteName.E },
+                inversions[1].NotesNames,
+                "Second inversion is invalid.");
         }
 
         #endregion
