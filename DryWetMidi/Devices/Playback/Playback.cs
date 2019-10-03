@@ -809,8 +809,9 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(events), events);
 
             return events.Where(e => e != null)
-                         .SelectMany(e => e.Where(midiEvent => midiEvent != null && !(midiEvent is MetaEvent))
+                         .SelectMany(e => e.Where(midiEvent => midiEvent != null)
                                            .GetTimedEvents()
+                                           .Where(timedEvent => !(timedEvent.Event is MetaEvent))
                                            .GetTimedEventsAndNotes());
         }
 
