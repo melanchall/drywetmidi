@@ -386,7 +386,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var expectedTimes = playbackContext.ExpectedTimes;
             var currentTime = TimeSpan.Zero;
 
-            foreach (var eventToSend in eventsToSend)
+            foreach (var eventToSend in eventsToSend.Where(e => !(e.Event is MetaEvent)))
             {
                 var midiEvent = eventToSend.Event.Clone();
                 midiEvent.DeltaTime = LengthConverter.ConvertFrom((MetricTimeSpan)eventToSend.Delay, (MetricTimeSpan)currentTime, tempoMap);

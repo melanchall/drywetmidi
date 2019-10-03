@@ -98,6 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             var eventsToSend = new[]
             {
+                new EventToSend(new InstrumentNameEvent("No Instrument"), TimeSpan.FromMilliseconds(200)),
                 new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
                 new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
                 new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
@@ -119,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = context.ExpectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length - 1, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
