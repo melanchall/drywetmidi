@@ -8,6 +8,49 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
     [TestFixture]
     public class IntervalTests
     {
+        #region Constants
+
+        private static readonly object[] ParametersForIsPerfectCheck =
+        {
+            new object[] { 1, true },
+            new object[] { 2, false },
+            new object[] { 3, false },
+            new object[] { 4, true },
+            new object[] { 5, true },
+            new object[] { 6, false },
+            new object[] { 7, false },
+            new object[] { 8, true },
+            new object[] { 9, false },
+            new object[] { 10, false },
+            new object[] { 11, true },
+            new object[] { 12, true },
+            new object[] { 13, false },
+            new object[] { 14, false },
+            new object[] { 15, true }
+        };
+
+        // Perfect, Minor, Major, Dim, Aug
+        private static readonly object[] ParametersForIntervalQualityApplicabilityCheck =
+        {
+            new object[] { 1, new[] { true, false, false, false, true } },
+            new object[] { 2, new[] { false, true, true, true, true } },
+            new object[] { 3, new[] { false, true, true, true, true } },
+            new object[] { 4, new[] { true, false, false, true, true } },
+            new object[] { 5, new[] { true, false, false, true, true } },
+            new object[] { 6, new[] { false, true, true, true, true } },
+            new object[] { 7, new[] { false, true, true, true, true } },
+            new object[] { 8, new[] { true, false, false, true, true } },
+            new object[] { 9, new[] { false, true, true, true, true } },
+            new object[] { 10, new[] { false, true, true, true, true } },
+            new object[] { 11, new[] { true, false, false, true, true } },
+            new object[] { 12, new[] { true, false, false, true, true } },
+            new object[] { 13, new[] { false, true, true, true, true } },
+            new object[] { 14, new[] { false, true, true, true, true } },
+            new object[] { 15, new[] { true, false, false, true, true } }
+        };
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -106,6 +149,41 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void Parse_Invalid_NotAnInterval()
         {
             ParseInvalid<FormatException>("abc");
+        }
+
+        [Test]
+        [TestCaseSource(nameof(ParametersForIsPerfectCheck))]
+        public void IsPerfect(int intervalNumber, bool expectedIsPerfect)
+        {
+            Assert.AreEqual(expectedIsPerfect, Interval.IsPerfect(intervalNumber), "Interval number 'is perfect' is invalid.");
+        }
+
+        [Test]
+        public void IsPerfect_OutOfRange()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Interval.IsPerfect(0));
+        }
+
+        [Test]
+        [TestCaseSource(nameof(ParametersForIntervalQualityApplicabilityCheck))]
+        public void IsQualityApplicable(int intervalNumber, bool[] expectedIsApplicable)
+        {
+            var qualities = new[]
+            {
+                IntervalQuality.Perfect,
+                IntervalQuality.Minor,
+                IntervalQuality.Major,
+                IntervalQuality.Diminished,
+                IntervalQuality.Augmented
+            };
+
+            for (var i = 0; i < qualities.Length; i++)
+            {
+                var quality = qualities[i];
+                var expected = expectedIsApplicable[i];
+
+                Assert.AreEqual(expected, Interval.IsQualityApplicable(quality, intervalNumber), "Interval number 'is quality applicable' is invalid.");
+            }
         }
 
         #endregion
