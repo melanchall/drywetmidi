@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -142,6 +143,35 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public Interval Down()
         {
             return Get(Size, IntervalDirection.Down);
+        }
+
+        public static bool IsPerfect(int intervalNumber)
+        {
+            ThrowIfArgument.IsLessThan(nameof(intervalNumber), intervalNumber, 1, "Interval number is less than 1.");
+
+            var remainder = intervalNumber % 7 - 1;
+            return remainder == 0 || remainder == 3 || remainder == 4;
+        }
+
+        public static bool IsQualityApplicable(IntervalQuality intervalQuality, int intervalNumber)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(intervalQuality), intervalQuality);
+            ThrowIfArgument.IsLessThan(nameof(intervalNumber), intervalNumber, 1, "Interval number is less than 1.");
+
+            switch (intervalQuality)
+            {
+                case IntervalQuality.Perfect:
+                    return IsPerfect(intervalNumber);
+                case IntervalQuality.Minor:
+                case IntervalQuality.Major:
+                    return !IsPerfect(intervalNumber);
+                case IntervalQuality.Diminished:
+                    return intervalNumber >= 2;
+                case IntervalQuality.Augmented:
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
