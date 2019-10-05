@@ -11,12 +11,23 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private const int OctaveSize = 12;
         private const int OctaveOffset = 1;
 
         #endregion
 
         #region Methods
+
+        public static NoteName Transpose(this NoteName noteName, Interval interval)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
+            ThrowIfArgument.IsNull(nameof(interval), interval);
+
+            var noteNumber = ((int)noteName + interval) % Octave.OctaveSize;
+            if (noteNumber < 0)
+                noteNumber += Octave.OctaveSize;
+
+            return (NoteName)noteNumber;
+        }
 
         /// <summary>
         /// Gets name of the note presented by note number.
@@ -25,7 +36,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>Name of the note presented by <paramref name="noteNumber"/>.</returns>
         public static NoteName GetNoteName(SevenBitNumber noteNumber)
         {
-            return (NoteName)(noteNumber % OctaveSize);
+            return (NoteName)(noteNumber % Octave.OctaveSize);
         }
 
         /// <summary>
@@ -39,7 +50,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </remarks>
         public static int GetNoteOctave(SevenBitNumber noteNumber)
         {
-            return noteNumber / OctaveSize - OctaveOffset;
+            return noteNumber / Octave.OctaveSize - OctaveOffset;
         }
 
         /// <summary>
@@ -79,7 +90,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static int CalculateNoteNumber(NoteName noteName, int octave)
         {
-            return (octave + OctaveOffset) * OctaveSize + (int)noteName;
+            return (octave + OctaveOffset) * Octave.OctaveSize + (int)noteName;
         }
 
         #endregion
