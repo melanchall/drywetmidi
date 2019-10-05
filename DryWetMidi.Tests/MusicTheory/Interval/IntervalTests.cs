@@ -78,6 +78,17 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             new object[] { 22, new int?[] { 36, null, null, 35, 37 } }
         };
 
+        private static readonly object[] ParametersForQualityNumberParsingCheck =
+        {
+            new object[] { "P5", IntervalQuality.Perfect, 5 },
+            new object[] { "m3", IntervalQuality.Minor, 3 },
+            new object[] { "M3", IntervalQuality.Major, 3 },
+            new object[] { "D21", IntervalQuality.Diminished, 21 },
+            new object[] { "d8", IntervalQuality.Diminished, 8 },
+            new object[] { "A7", IntervalQuality.Augmented, 7 },
+            new object[] { "a18", IntervalQuality.Augmented, 18 },
+        };
+
         #endregion
 
         #region Test methods
@@ -241,6 +252,15 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 var interval = Interval.Get(quality, intervalNumber);
                 Assert.AreEqual(Interval.FromHalfSteps(expected.Value), interval, "Interval is invalid.");
             }
+        }
+
+        [Test]
+        [TestCaseSource(nameof(ParametersForQualityNumberParsingCheck))]
+        public void Parse_QualityNumber(string input, IntervalQuality expectedIntervalQuality, int expectedIntervalNumber)
+        {
+            var parsedInterval = Interval.Parse(input);
+            var expectedInterval = Interval.Get(expectedIntervalQuality,expectedIntervalNumber);
+            Assert.AreEqual(expectedInterval, parsedInterval, "Parsed interval is invalid.");
         }
 
         #endregion
