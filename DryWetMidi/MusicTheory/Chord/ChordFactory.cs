@@ -7,12 +7,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private static readonly Dictionary<ChordQuality, int[]> IntervalsByQuality = new Dictionary<ChordQuality, int[]>
+        private static readonly Dictionary<ChordQuality, Interval[]> IntervalsByQuality = new Dictionary<ChordQuality, Interval[]>
         {
-            [ChordQuality.Major] = new[] { 0, 4, 7 },
-            [ChordQuality.Minor] = new[] { 0, 3, 7 },
-            [ChordQuality.Augmented] = new[] { 0, 4, 8 },
-            [ChordQuality.Diminished] = new[] { 0, 3, 6 }
+            [ChordQuality.Major] = new[] { Interval.Get(IntervalQuality.Major, 3), Interval.Get(IntervalQuality.Perfect, 5) },
+            [ChordQuality.Minor] = new[] { Interval.Get(IntervalQuality.Minor, 3), Interval.Get(IntervalQuality.Perfect, 5) },
+            [ChordQuality.Augmented] = new[] { Interval.Get(IntervalQuality.Major, 3), Interval.Get(IntervalQuality.Augmented, 5) },
+            [ChordQuality.Diminished] = new[] { Interval.Get(IntervalQuality.Minor, 3), Interval.Get(IntervalQuality.Diminished, 5) }
         };
 
         #endregion
@@ -25,14 +25,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsInvalidEnumValue(nameof(chordQuality), chordQuality);
 
             var intervals = IntervalsByQuality[chordQuality];
-            var notesNames = new NoteName[intervals.Length];
-
-            for (var i = 0; i < intervals.Length; i++)
-            {
-                notesNames[i] = (NoteName)(((int)rootNoteName + intervals[i]) % Octave.OctaveSize);
-            }
-
-            return new Chord(notesNames);
+            return new Chord(rootNoteName, intervals);
         }
 
         #endregion

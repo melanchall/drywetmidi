@@ -22,6 +22,22 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
         }
 
+        public Chord(NoteName rootNoteName, IEnumerable<Interval> intervalsFromRoot)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
+
+            NotesNames = new[] { Interval.Zero }.Concat(intervalsFromRoot)
+                .Where(i => i != null)
+                .OrderBy(i => i.HalfSteps)
+                .Select(i => rootNoteName.Transpose(i))
+                .ToArray();
+        }
+
+        public Chord(NoteName rootNoteName, params Interval[] intervalsFromRoot)
+            : this(rootNoteName, intervalsFromRoot as IEnumerable<Interval>)
+        {
+        }
+
         #endregion
 
         #region Properties
