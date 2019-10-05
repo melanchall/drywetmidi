@@ -85,6 +85,31 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         public static readonly Interval Twelve = FromHalfSteps(12);
 
+        private static readonly Dictionary<IntervalQuality, Dictionary<int, int>> IntervalsHalfTones =
+            new Dictionary<IntervalQuality, Dictionary<int, int>>
+            {
+                [IntervalQuality.Perfect] = new Dictionary<int, int>
+                {
+                    [1] = 0, [4] = 5, [5] = 7, [8] = 12
+                },
+                [IntervalQuality.Minor] = new Dictionary<int, int>
+                {
+                    [2] = 1, [3] = 3, [6] = 8, [7] = 10
+                },
+                [IntervalQuality.Major] = new Dictionary<int, int>
+                {
+                    [2] = 2, [3] = 4, [6] = 9, [7] = 11
+                },
+                [IntervalQuality.Diminished] = new Dictionary<int, int>
+                {
+                    [1] = -1, [2] = 0, [3] = 2, [4] = 4, [5] = 6, [6] = 7, [7] = 9, [8] = 11
+                },
+                [IntervalQuality.Augmented] = new Dictionary<int, int>
+                {
+                    [1] = 1, [2] = 3, [3] = 5, [4] = 6, [5] = 8, [6] = 10, [7] = 12
+                }
+            };
+
         #endregion
 
         #region Constructor
@@ -172,6 +197,32 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
 
             return false;
+        }
+
+        public static Interval Get(IntervalQuality intervalQuality, int intervalNumber)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(intervalQuality), intervalQuality);
+            ThrowIfArgument.IsLessThan(nameof(intervalNumber), intervalNumber, 1, "Interval number is less than 1.");
+
+            if (!IsQualityApplicable(intervalQuality, intervalNumber))
+                throw new ArgumentException($"{intervalQuality} quality is not applicable to interval number of {intervalNumber}.", nameof(intervalQuality));
+
+            var maxIntervalNumber = 8;
+            if (intervalQuality == IntervalQuality.Minor || intervalQuality == IntervalQuality.Major || intervalQuality == IntervalQuality.Augmented)
+                maxIntervalNumber = 7;
+
+            var result = intervalNumber > maxIntervalNumber
+                ? ((intervalNumber - 1) / 7) * Octave.OctaveSize
+                : 0;
+
+            var additionalNumber = intervalNumber;
+            if (intervalNumber > maxIntervalNumber)
+                additionalNumber = ((intervalNumber - 1) % 7) + 1;
+
+            var halfTones = IntervalsHalfTones[intervalQuality];
+            result += halfTones[additionalNumber];
+
+            return FromHalfSteps(result);
         }
 
         /// <summary>
