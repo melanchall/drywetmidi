@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Test]
         public void CreateWithInvalidNotes()
         {
-            Assert.Throws<InvalidEnumArgumentException>(() => new Chord((NoteName)100));
+            Assert.Throws<InvalidEnumArgumentException>(() => new Chord((NoteName)100, new NoteName[0]));
         }
 
         [Test]
@@ -29,6 +29,22 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var chord = new Chord(NoteName.A, NoteName.B);
             CollectionAssert.AreEqual(new[] { NoteName.A, NoteName.B }, chord.NotesNames, "Notes names are invalid.");
             Assert.AreEqual(NoteName.A, chord.RootNoteName, "Root note name is invalid.");
+        }
+
+        [Test]
+        public void CreateByIntervals()
+        {
+            var chord = new Chord(NoteName.A, Interval.FromHalfSteps(2), Interval.FromHalfSteps(5));
+            CollectionAssert.AreEqual(new[] { NoteName.A, NoteName.B, NoteName.D }, chord.NotesNames, "Notes names are invalid.");
+            Assert.AreEqual(NoteName.A, chord.RootNoteName, "Root note name is invalid.");
+        }
+
+        [Test]
+        public void CreateByIntervals_Negative()
+        {
+            var chord = new Chord(NoteName.A, Interval.FromHalfSteps(2), Interval.FromHalfSteps(-1), Interval.FromHalfSteps(5));
+            CollectionAssert.AreEqual(new[] { NoteName.GSharp, NoteName.A, NoteName.B, NoteName.D }, chord.NotesNames, "Notes names are invalid.");
+            Assert.AreEqual(NoteName.GSharp, chord.RootNoteName, "Root note name is invalid.");
         }
 
         [Test]
@@ -45,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Test]
         public void GetInversions_OneNote()
         {
-            var chord = new Chord(NoteName.C);
+            var chord = new Chord(NoteName.C, new NoteName[0]);
             var inversions = chord.GetInversions();
             CollectionAssert.IsEmpty(inversions, "There are inversions for one-note chord.");
         }
