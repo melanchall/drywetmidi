@@ -47,9 +47,9 @@ namespace Melanchall.DryWetMidi.Common
             return $@"(?<{groupName}>\d+(.\d+)?)";
         }
 
-        public static Match Match(string input, IEnumerable<string> patterns)
+        public static Match Match(string input, IEnumerable<string> patterns, bool ignoreCase = true)
         {
-            return patterns.Select(p => Regex.Match(input.Trim(), $"^{p}$", RegexOptions.IgnoreCase))
+            return patterns.Select(p => Regex.Match(input.Trim(), $"^{p}$", ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None))
                            .FirstOrDefault(m => m.Success);
         }
 
