@@ -75,6 +75,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
         }
 
+        public static bool TryParse(string input, out Chord interval)
+        {
+            return ParsingUtilities.TryParse(input, ChordParser.TryParse, out interval);
+        }
+
+        public static Chord Parse(string input)
+        {
+            return ParsingUtilities.Parse<Chord>(input, ChordParser.TryParse);
+        }
+
         public static Chord GetByTriad(NoteName rootNoteName, ChordQuality chordQuality, params Interval[] intervalsFromRoot)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);

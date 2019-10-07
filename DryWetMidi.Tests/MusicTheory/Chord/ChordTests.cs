@@ -104,6 +104,23 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             CollectionAssert.AreEqual(expectedNotesNames, chord.NotesNames, "Notes names are invalid.");
         }
 
+        [TestCase("C M3 P5", new[] { NoteName.C, NoteName.E, NoteName.G })]
+        [TestCase("C 4 7", new[] { NoteName.C, NoteName.E, NoteName.G })]
+        [TestCase("C 4 7 12", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.C })]
+        [TestCase("C 4 7 -1 12", new[] { NoteName.B, NoteName.C, NoteName.E, NoteName.G, NoteName.C })]
+        [TestCase("F M3 P5", new[] { NoteName.F, NoteName.A, NoteName.C })]
+        [TestCase("C m3 P5", new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
+        [TestCase("F m3 P5", new[] { NoteName.F, NoteName.GSharp, NoteName.C })]
+        [TestCase("C M3 A5", new[] { NoteName.C, NoteName.E, NoteName.GSharp })]
+        [TestCase("F M3 A5", new[] { NoteName.F, NoteName.A, NoteName.CSharp })]
+        [TestCase("C m3 d5", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp })]
+        [TestCase("F m3 d5", new[] { NoteName.F, NoteName.GSharp, NoteName.B })]
+        public void Parse(string input, NoteName[] expectedNotesNames)
+        {
+            var chord = Chord.Parse(input);
+            CollectionAssert.AreEqual(expectedNotesNames, chord.NotesNames, "Notes names are invalid.");
+        }
+
         #endregion
     }
 }
