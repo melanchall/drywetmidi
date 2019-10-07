@@ -82,6 +82,28 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 "Second inversion is invalid.");
         }
 
+        [TestCase(NoteName.C, ChordQuality.Major, new[] { NoteName.C, NoteName.E, NoteName.G })]
+        [TestCase(NoteName.F, ChordQuality.Major, new[] { NoteName.F, NoteName.A, NoteName.C })]
+        [TestCase(NoteName.C, ChordQuality.Minor, new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
+        [TestCase(NoteName.F, ChordQuality.Minor, new[] { NoteName.F, NoteName.GSharp, NoteName.C })]
+        [TestCase(NoteName.C, ChordQuality.Augmented, new[] { NoteName.C, NoteName.E, NoteName.GSharp })]
+        [TestCase(NoteName.F, ChordQuality.Augmented, new[] { NoteName.F, NoteName.A, NoteName.CSharp })]
+        [TestCase(NoteName.C, ChordQuality.Diminished, new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp })]
+        [TestCase(NoteName.F, ChordQuality.Diminished, new[] { NoteName.F, NoteName.GSharp, NoteName.B })]
+        public void GetByTriad(NoteName rootNoteName, ChordQuality chordQuality, NoteName[] expectedNotesNames)
+        {
+            var chord = Chord.GetByTriad(rootNoteName, chordQuality);
+            CollectionAssert.AreEqual(expectedNotesNames, chord.NotesNames, "Notes names are invalid.");
+        }
+
+        [TestCase(NoteName.C, ChordQuality.Major, new[] { "P8" }, new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.C })]
+        [TestCase(NoteName.C, ChordQuality.Major, new[] { "-1", "-3" }, new[] { NoteName.A, NoteName.B, NoteName.C, NoteName.E, NoteName.G })]
+        public void GetByTriad_AdditionalIntervals(NoteName rootNoteName, ChordQuality chordQuality, string[] intervals, NoteName[] expectedNotesNames)
+        {
+            var chord = Chord.GetByTriad(rootNoteName, chordQuality, intervals.Select(i => Interval.Parse(i)).ToArray());
+            CollectionAssert.AreEqual(expectedNotesNames, chord.NotesNames, "Notes names are invalid.");
+        }
+
         #endregion
     }
 }
