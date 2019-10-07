@@ -10,45 +10,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
     {
         #region Constants
 
-        private static readonly object[] ParametersForIsPerfectCheck =
-        {
-            new object[] { 1, true },
-            new object[] { 2, false },
-            new object[] { 3, false },
-            new object[] { 4, true },
-            new object[] { 5, true },
-            new object[] { 6, false },
-            new object[] { 7, false },
-            new object[] { 8, true },
-            new object[] { 9, false },
-            new object[] { 10, false },
-            new object[] { 11, true },
-            new object[] { 12, true },
-            new object[] { 13, false },
-            new object[] { 14, false },
-            new object[] { 15, true }
-        };
-
-        // Perfect, Minor, Major, Dim, Aug
-        private static readonly object[] ParametersForIntervalQualityApplicabilityCheck =
-        {
-            new object[] { 1, new[] { true, false, false, false, true } },
-            new object[] { 2, new[] { false, true, true, true, true } },
-            new object[] { 3, new[] { false, true, true, true, true } },
-            new object[] { 4, new[] { true, false, false, true, true } },
-            new object[] { 5, new[] { true, false, false, true, true } },
-            new object[] { 6, new[] { false, true, true, true, true } },
-            new object[] { 7, new[] { false, true, true, true, true } },
-            new object[] { 8, new[] { true, false, false, true, true } },
-            new object[] { 9, new[] { false, true, true, true, true } },
-            new object[] { 10, new[] { false, true, true, true, true } },
-            new object[] { 11, new[] { true, false, false, true, true } },
-            new object[] { 12, new[] { true, false, false, true, true } },
-            new object[] { 13, new[] { false, true, true, true, true } },
-            new object[] { 14, new[] { false, true, true, true, true } },
-            new object[] { 15, new[] { true, false, false, true, true } }
-        };
-
         // Perfect, Minor, Major, Dim, Aug
         private static readonly object[] ParametersForGetByQualityCheck =
         {
@@ -76,17 +37,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             new object[] { 20, new int?[] { null, 32, 33, 31, 34 } },
             new object[] { 21, new int?[] { null, 34, 35, 33, 36 } },
             new object[] { 22, new int?[] { 36, null, null, 35, 37 } }
-        };
-
-        private static readonly object[] ParametersForQualityNumberParsingCheck =
-        {
-            new object[] { "P5", IntervalQuality.Perfect, 5 },
-            new object[] { "m3", IntervalQuality.Minor, 3 },
-            new object[] { "M3", IntervalQuality.Major, 3 },
-            new object[] { "D21", IntervalQuality.Diminished, 21 },
-            new object[] { "d8", IntervalQuality.Diminished, 8 },
-            new object[] { "A7", IntervalQuality.Augmented, 7 },
-            new object[] { "a18", IntervalQuality.Augmented, 18 },
         };
 
         #endregion
@@ -191,8 +141,21 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             ParseInvalid<FormatException>("abc");
         }
 
-        [Test]
-        [TestCaseSource(nameof(ParametersForIsPerfectCheck))]
+        [TestCase(1, true)]
+        [TestCase(2, false)]
+        [TestCase(3, false)]
+        [TestCase(4, true)]
+        [TestCase(5, true)]
+        [TestCase(6, false)]
+        [TestCase(7, false)]
+        [TestCase(8, true)]
+        [TestCase(9, false)]
+        [TestCase(10, false)]
+        [TestCase(11, true)]
+        [TestCase(12, true)]
+        [TestCase(13, false)]
+        [TestCase(14, false)]
+        [TestCase(15, true)]
         public void IsPerfect(int intervalNumber, bool expectedIsPerfect)
         {
             Assert.AreEqual(expectedIsPerfect, Interval.IsPerfect(intervalNumber), "Interval number 'is perfect' is invalid.");
@@ -204,8 +167,21 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.Throws<ArgumentOutOfRangeException>(() => Interval.IsPerfect(0));
         }
 
-        [Test]
-        [TestCaseSource(nameof(ParametersForIntervalQualityApplicabilityCheck))]
+        [TestCase(1, new[] { true, false, false, false, true })]
+        [TestCase(2, new[] { false, true, true, true, true })]
+        [TestCase(3, new[] { false, true, true, true, true })]
+        [TestCase(4, new[] { true, false, false, true, true })]
+        [TestCase(5, new[] { true, false, false, true, true })]
+        [TestCase(6, new[] { false, true, true, true, true })]
+        [TestCase(7, new[] { false, true, true, true, true })]
+        [TestCase(8, new[] { true, false, false, true, true })]
+        [TestCase(9, new[] { false, true, true, true, true })]
+        [TestCase(10, new[] { false, true, true, true, true })]
+        [TestCase(11, new[] { true, false, false, true, true })]
+        [TestCase(12, new[] { true, false, false, true, true })]
+        [TestCase(13, new[] { false, true, true, true, true })]
+        [TestCase(14, new[] { false, true, true, true, true })]
+        [TestCase(15, new[] { true, false, false, true, true })]
         public void IsQualityApplicable(int intervalNumber, bool[] expectedIsApplicable)
         {
             var qualities = new[]
@@ -254,12 +230,17 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             }
         }
 
-        [Test]
-        [TestCaseSource(nameof(ParametersForQualityNumberParsingCheck))]
+        [TestCase("P5", IntervalQuality.Perfect, 5)]
+        [TestCase("m3", IntervalQuality.Minor, 3)]
+        [TestCase("M3", IntervalQuality.Major, 3)]
+        [TestCase("D21", IntervalQuality.Diminished, 21)]
+        [TestCase("d8", IntervalQuality.Diminished, 8)]
+        [TestCase("A7", IntervalQuality.Augmented, 7)]
+        [TestCase("a18", IntervalQuality.Augmented, 18)]
         public void Parse_QualityNumber(string input, IntervalQuality expectedIntervalQuality, int expectedIntervalNumber)
         {
             var parsedInterval = Interval.Parse(input);
-            var expectedInterval = Interval.Get(expectedIntervalQuality,expectedIntervalNumber);
+            var expectedInterval = Interval.Get(expectedIntervalQuality, expectedIntervalNumber);
             Assert.AreEqual(expectedInterval, parsedInterval, "Parsed interval is invalid.");
         }
 
