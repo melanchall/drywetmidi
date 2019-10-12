@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
 
@@ -115,6 +116,36 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase("F M3 A5", new[] { NoteName.F, NoteName.A, NoteName.CSharp })]
         [TestCase("C m3 d5", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp })]
         [TestCase("F m3 d5", new[] { NoteName.F, NoteName.GSharp, NoteName.B })]
+        [TestCase("C", new[] { NoteName.C, NoteName.E, NoteName.G })]
+        [TestCase("C6", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A })]
+        [TestCase("CM6", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A })]
+        [TestCase("Cmaj6", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A })]
+        [TestCase("C7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp })]
+        [TestCase("Cdom7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp })]
+        [TestCase("CM7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.B })]
+        [TestCase("Cmaj7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.B })]
+        [TestCase("C+", new[] { NoteName.C, NoteName.E, NoteName.GSharp })]
+        [TestCase("Caug", new[] { NoteName.C, NoteName.E, NoteName.GSharp })]
+        [TestCase("C+7", new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp })]
+        [TestCase("Caug7", new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp })]
+        [TestCase("Cm", new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
+        [TestCase("Am", new[] { NoteName.A, NoteName.C, NoteName.E })]
+        [TestCase("Cmin", new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
+        [TestCase("Cm6", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A })]
+        [TestCase("Cmin6", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A })]
+        [TestCase("Cm7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp })]
+        [TestCase("Cmin7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp })]
+        [TestCase("CmM7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
+        [TestCase("Cm/M7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
+        [TestCase("Cm(M7)", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
+        [TestCase("Cminmaj7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
+        [TestCase("Cmin/maj7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
+        [TestCase("Cmin(maj7)", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
+        [TestCase("Cdim", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp })]
+        [TestCase("Cdim7", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.A })]
+        [TestCase("Cø", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.ASharp })]
+        [TestCase("Cø7", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.ASharp })]
+        [TestCase("C5", new[] { NoteName.C, NoteName.G})]
         public void Parse(string input, NoteName[] expectedNotesNames)
         {
             var chord = Chord.Parse(input);
