@@ -145,7 +145,23 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase("Cdim7", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.A })]
         [TestCase("Cø", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.ASharp })]
         [TestCase("Cø7", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.ASharp })]
+        [TestCase("Cm7b5", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.ASharp })]
         [TestCase("C5", new[] { NoteName.C, NoteName.G})]
+        [TestCase("Csus4", new[] { NoteName.C, NoteName.F, NoteName.G })]
+        [TestCase("Csus2", new[] { NoteName.C, NoteName.D, NoteName.G })]
+        [TestCase("C9sus4", new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D })]
+        [TestCase("F/G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C })]
+        [TestCase("Cadd11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.F })]
+        [TestCase("C7+5", new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp })]
+        [TestCase("C7#5", new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp })]
+        [TestCase("C7-9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.CSharp })]
+        [TestCase("C7b9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.CSharp })]
+        [TestCase("C7+9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.DSharp })]
+        [TestCase("C7#9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.DSharp })]
+        [TestCase("C7+11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.FSharp })]
+        [TestCase("C7#11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.FSharp })]
+        [TestCase("C7-13", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F, NoteName.GSharp })]
+        [TestCase("C7b13", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F, NoteName.GSharp })]
         public void Parse(string input, NoteName[] expectedNotesNames)
         {
             var chord = Chord.Parse(input);
