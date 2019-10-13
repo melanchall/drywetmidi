@@ -50,6 +50,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string SuspendedNumberGroupName = "susn";
         private const string SuspendedGroupName = "sus";
 
+        private const string AddedToneNumberGroupName = "addn";
+        private const string AddedToneGroupName = "add";
+
+        private const string AlteredToneNumberGroupName = "altn";
+        private const string AlteredToneAccidentalGroupName = "alta";
+        private const string AlteredToneGroupName = "alt";
+
         private static readonly string IntervalGroup = $"(?<{IntervalGroupName}>({string.Join("|", IntervalParser.GetPatterns())})\\s*)+";
         private static readonly string RootNoteNameGroup = $"(?<{RootNoteNameGroupName}>{string.Join("|", NoteNameParser.GetPatterns())})";
         private static readonly string BassNoteNameGroup = $"(?<{BassNoteNameGroupName}>{string.Join("|", NoteNameParser.GetPatterns())})";
@@ -57,10 +64,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly string ChordExtensionQualityGroup = $@"(?<{ExtensionQualityGroupName}>(?<{ExtensionMajorQualityGroupName}>(?i:maj)|M)|(?<{ExtensionMinorQualityGroupName}>(?i:min)|m)|(?<{ExtensionAugmentedQualityGroupName}>(?i:(aug|a)))|(?<{ExtensionDiminishedQualityGroupName}>(?i:(dim|d))))";
         private static readonly string ChordExtensionGroup = $@"(?<{ExtensionGroupName}>{ChordExtensionQualityGroup}?\s*(?<{ExtensionNumberGroupName}>\d+))";
         private static readonly string SuspendedGroup = $@"(?<{SuspendedGroupName}>(?i:sus)(?<{SuspendedNumberGroupName}>\d))";
+        private static readonly string AddedToneGroup = $@"(?<{AddedToneGroupName}>(?i:add)(?<{AddedToneNumberGroupName}>\d+))";
+        private static readonly string AlteredToneGroup = $@"(?<{AlteredToneGroupName}>(?<{AlteredToneAccidentalGroupName}>#|\+|b|\-)(?<{AlteredToneNumberGroupName}>\d+))";
 
         private static readonly string[] Patterns = new[]
         {
-            $@"(?<{ChordNameGroupName}>(?i:{RootNoteNameGroup})\s*{ChordQualityGroup}?\s*({ChordExtensionGroup}|\(\s*{ChordExtensionGroup}\s*\)|/\s*{ChordExtensionGroup})?\s*{SuspendedGroup}?\s*(/(?i:{BassNoteNameGroup}))?)",
+            $@"(?<{ChordNameGroupName}>(?i:{RootNoteNameGroup})\s*{ChordQualityGroup}?\s*({ChordExtensionGroup}|\(\s*{ChordExtensionGroup}\s*\)|/\s*{ChordExtensionGroup})?\s*{AlteredToneGroup}?\s*{SuspendedGroup}?\s*{AddedToneGroup}?\s*(/(?i:{BassNoteNameGroup}))?)",
             $@"(?<{ChordIntervalsGroupName}>(?i:{RootNoteNameGroup})\s*(?i:{IntervalGroup}))"
         };
 
@@ -100,6 +109,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private const string ExtensionNumberIsOutOfRange = "Extension number is out of range.";
         private const string HalfDiminishedOrDominantIsNotSeventh = "Half-diminished or dominant chord is not seventh one.";
+        private const string SuspensionNumberIsOutOfRange = "Suspended chord is not sus2 or sus4.";
+        private const string AddedToneNumberIsOutOfRange = "Added tone number is out of range.";
+        private const string AlteredToneNumberIsOutOfRange = "Altered tone number is out of range.";
 
         #endregion
 
@@ -171,42 +183,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
 
             var extensionNotes = new List<NoteName>();
+            var extensionNumbers = new List<int>();
 
             if (extensionIntervalNumber >= 0)
             {
-                var intervalQualities = Enumerable
-                    .Range(0, extensionIntervalNumber + 1)
-                    .Select(i => i > 2 && Interval.IsPerfect(i) ? IntervalQuality.Perfect : IntervalQuality.Major)
-                    .ToArray();
-
-                if (extensionIntervalNumber >= 7)
-                {
-                    if (extensionIntervalQuality == null && quality == null)
-                        intervalQualities[7] = IntervalQuality.Minor;
-                    else if (extensionIntervalQuality != null)
-                    {
-                        intervalQualities[7] = extensionIntervalQuality.Value;
-                        intervalQualities[extensionIntervalNumber] = extensionIntervalQuality.Value;
-                    }
-                    else
-                    {
-                        intervalQualities[7] = quality == Quality.HalfDiminished || quality == Quality.Dominant || quality == Quality.Augmented
-                            ? IntervalQuality.Minor
-                            : ChordToIntervalQualities[quality.Value];
-                    }
-
-                    for (var i = 7; i <= extensionIntervalNumber; i += 2)
-                    {
-                        extensionNotes.Add(rootNoteName.Transpose(Interval.Get(intervalQualities[i], i)));
-                    }
-                }
-                else
-                {
-                    if (extensionIntervalQuality != null)
-                        intervalQualities[extensionIntervalNumber] = extensionIntervalQuality.Value;
-
-                    extensionNotes.Add(rootNoteName.Transpose(Interval.Get(intervalQualities[extensionIntervalNumber], extensionIntervalNumber)));
-                }
+                var extensionNotesDictionary = GetExtensionNotes(quality, rootNoteName, extensionIntervalNumber, extensionIntervalQuality);
+                extensionNotes.AddRange(extensionNotesDictionary.Keys);
+                extensionNumbers.AddRange(extensionNotesDictionary.Values);
             }
 
             if (quality == Quality.HalfDiminished)
@@ -219,15 +202,99 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             //
 
-            var notes = Chord.GetByTriad(rootNoteName, ChordQualities[quality.Value]).NotesNames.Concat(extensionNotes).ToArray();
+            var notes = new List<NoteName>(Chord.GetByTriad(rootNoteName, ChordQualities[quality.Value]).NotesNames);
+            notes.AddRange(extensionNotes);
+            extensionNumbers.InsertRange(0, new[] { 1, 3, 5 });
             if (extensionIntervalNumber == 5)
-                notes = new[] { rootNoteName, extensionNotes.First() };
+            {
+                notes.Clear();
+                notes.AddRange(new[] { rootNoteName, extensionNotes.First() });
+
+                extensionNumbers.Clear();
+                extensionNumbers.AddRange(new[] { 1, 5 });
+            }
 
             //
 
-            var bassNoteGroup = match.Groups[BassNoteNameGroupName];
-            if (bassNoteGroup.Success)
+            var alteredToneGroup = match.Groups[AlteredToneGroupName];
+            if (alteredToneGroup.Success)
             {
+                int alteredToneNumber;
+                if (!ParsingUtilities.ParseInt(match, AlteredToneNumberGroupName, -1, out alteredToneNumber))
+                    return ParsingResult.Error(AlteredToneNumberIsOutOfRange);
+
+                var transposeBy = 0;
+
+                var accidental = match.Groups[AlteredToneAccidentalGroupName].Value;
+                switch (accidental)
+                {
+                    case "#":
+                    case "+":
+                        transposeBy = 1;
+                        break;
+                    case "b":
+                    case "-":
+                        transposeBy = -1;
+                        break;
+                }
+
+                var maxExtensionNumber = extensionNumbers.Max();
+                if (maxExtensionNumber < alteredToneNumber)
+                {
+                    var extensionNotesDictionary = GetExtensionNotes(quality, rootNoteName, alteredToneNumber, null)
+                        .Where(kv => kv.Value > maxExtensionNumber);
+
+                    notes.AddRange(extensionNotesDictionary.Select(kv => kv.Key));
+                    extensionNumbers.AddRange(extensionNotesDictionary.Select(kv => kv.Value));
+                }
+
+                var index = extensionNumbers.IndexOf(alteredToneNumber);
+                if (index >= 0)
+                    notes[index] = notes[index].Transpose(Interval.FromHalfSteps(transposeBy));
+            }
+
+            //
+
+            var suspendedGroup = match.Groups[SuspendedGroupName];
+            if (suspendedGroup.Success)
+            {
+                int suspensionNumber;
+                if (!ParsingUtilities.ParseInt(match, SuspendedNumberGroupName, -1, out suspensionNumber) ||
+                    suspensionNumber != 2 && suspensionNumber != 4)
+                    return ParsingResult.Error(SuspensionNumberIsOutOfRange);
+
+                var interval = suspensionNumber == 2
+                    ? Interval.Get(IntervalQuality.Major, 2)
+                    : Interval.Get(IntervalQuality.Perfect, 4);
+                notes[1] = rootNoteName.Transpose(interval);
+            }
+
+            //
+
+            var addedToneGroup = match.Groups[AddedToneGroupName];
+            if (addedToneGroup.Success)
+            {
+                int addedToneNumber;
+                if (!ParsingUtilities.ParseInt(match, AddedToneNumberGroupName, -1, out addedToneNumber))
+                    return ParsingResult.Error(AddedToneNumberIsOutOfRange);
+
+                var interval = Interval.IsPerfect(addedToneNumber)
+                    ? Interval.Get(IntervalQuality.Perfect, addedToneNumber)
+                    : Interval.Get(IntervalQuality.Major, addedToneNumber);
+                notes.Add(rootNoteName.Transpose(interval));
+            }
+
+            //
+
+            var bassNoteNameGroup = match.Groups[BassNoteNameGroupName];
+            if (bassNoteNameGroup.Success)
+            {
+                NoteName bassNoteName;
+                var bassNoteNameParsingResult = NoteNameParser.TryParse(bassNoteNameGroup.Value, out bassNoteName);
+                if (bassNoteNameParsingResult.Status != ParsingStatus.Parsed)
+                    return bassNoteNameParsingResult;
+
+                notes.Insert(0, bassNoteName);
             }
 
             //
@@ -265,6 +332,53 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             chord = new Chord(rootNoteName, intervals);
             return ParsingResult.Parsed;
+        }
+
+        private static IDictionary<NoteName, int> GetExtensionNotes(
+            Quality? quality,
+            NoteName rootNoteName,
+            int extensionIntervalNumber,
+            IntervalQuality? extensionIntervalQuality)
+        {
+            var result = new Dictionary<NoteName, int>();
+
+            var intervalQualities = Enumerable
+                .Range(0, extensionIntervalNumber + 1)
+                .Select(i => i > 2 && Interval.IsPerfect(i) ? IntervalQuality.Perfect : IntervalQuality.Major)
+                .ToArray();
+
+            if (extensionIntervalNumber >= 7)
+            {
+                if (extensionIntervalQuality == null && quality == null)
+                    intervalQualities[7] = IntervalQuality.Minor;
+                else if (extensionIntervalQuality != null)
+                {
+                    intervalQualities[7] = extensionIntervalQuality.Value;
+                    intervalQualities[extensionIntervalNumber] = extensionIntervalQuality.Value;
+                }
+                else
+                {
+                    intervalQualities[7] = quality == Quality.HalfDiminished || quality == Quality.Dominant || quality == Quality.Augmented
+                        ? IntervalQuality.Minor
+                        : ChordToIntervalQualities[quality.Value];
+                }
+
+                for (var i = 7; i <= extensionIntervalNumber; i += 2)
+                {
+                    result.Add(rootNoteName.Transpose(Interval.Get(intervalQualities[i], i)), i);
+                }
+            }
+            else
+            {
+                if (extensionIntervalQuality != null)
+                    intervalQualities[extensionIntervalNumber] = extensionIntervalQuality.Value;
+
+                result.Add(
+                    rootNoteName.Transpose(Interval.Get(intervalQualities[extensionIntervalNumber], extensionIntervalNumber)),
+                    extensionIntervalNumber);
+            }
+
+            return result;
         }
 
         #endregion
