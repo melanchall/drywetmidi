@@ -67,9 +67,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly string AddedToneGroup = $@"(?<{AddedToneGroupName}>(?i:add)(?<{AddedToneNumberGroupName}>\d+))";
         private static readonly string AlteredToneGroup = $@"(?<{AlteredToneGroupName}>(?<{AlteredToneAccidentalGroupName}>#|\+|b|\-)(?<{AlteredToneNumberGroupName}>\d+))";
 
+        internal static readonly string ChordCharacteristicsGroup = $@"{ChordQualityGroup}?\s*({ChordExtensionGroup}|\(\s*{ChordExtensionGroup}\s*\)|/\s*{ChordExtensionGroup})?\s*{AlteredToneGroup}?\s*{SuspendedGroup}?\s*{AddedToneGroup}?\s*(/(?i:{BassNoteNameGroup}))?";
+
         private static readonly string[] Patterns = new[]
         {
-            $@"(?<{ChordNameGroupName}>(?i:{RootNoteNameGroup})\s*{ChordQualityGroup}?\s*({ChordExtensionGroup}|\(\s*{ChordExtensionGroup}\s*\)|/\s*{ChordExtensionGroup})?\s*{AlteredToneGroup}?\s*{SuspendedGroup}?\s*{AddedToneGroup}?\s*(/(?i:{BassNoteNameGroup}))?)",
+            $@"(?<{ChordNameGroupName}>(?i:{RootNoteNameGroup})\s*{ChordCharacteristicsGroup})",
             $@"(?<{ChordIntervalsGroupName}>(?i:{RootNoteNameGroup})\s*(?i:{IntervalGroup}))"
         };
 
@@ -143,7 +145,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return ParsingResult.Parsed;
         }
 
-        private static ParsingResult TryParseChordName(Match match, NoteName rootNoteName, out Chord chord)
+        internal static ParsingResult TryParseChordName(Match match, NoteName rootNoteName, out Chord chord)
         {
             chord = null;
 

@@ -75,9 +75,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
         }
 
-        public static bool TryParse(string input, out Chord interval)
+        public static bool TryParse(string input, out Chord chord)
         {
-            return ParsingUtilities.TryParse(input, ChordParser.TryParse, out interval);
+            return ParsingUtilities.TryParse(input, ChordParser.TryParse, out chord);
         }
 
         public static Chord Parse(string input)
