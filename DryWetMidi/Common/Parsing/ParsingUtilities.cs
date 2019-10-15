@@ -53,6 +53,12 @@ namespace Melanchall.DryWetMidi.Common
                            .FirstOrDefault(m => m.Success);
         }
 
+        public static Match[] Matches(string input, IEnumerable<string> patterns, bool ignoreCase = true)
+        {
+            return patterns.Select(p => Regex.Matches(input.Trim(), p, ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None).OfType<Match>().ToArray())
+                           .FirstOrDefault(m => m.Any());
+        }
+
         public static bool ParseNonnegativeInt(Match match, string groupName, int defaultValue, out int value)
         {
             return ParseInt(match, groupName, defaultValue, NonnegativeIntegerNumberStyle, out value);
