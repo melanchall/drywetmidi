@@ -25,6 +25,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
@@ -44,6 +45,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
@@ -63,6 +65,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
@@ -82,6 +85,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
@@ -100,6 +104,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to play.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
@@ -117,6 +122,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// the specified <see cref="MidiFile"/>.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to play.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
@@ -135,6 +141,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="channel">MIDI channel to play channel events on.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
@@ -155,6 +162,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="pattern"><see cref="Pattern"/> producing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="channel">MIDI channel to play channel events on.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
@@ -176,6 +184,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
@@ -202,6 +211,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
@@ -230,6 +240,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
@@ -255,6 +266,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public static void Play(this TrackChunk trackChunk, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
@@ -275,6 +287,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public static void Play(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
@@ -294,6 +307,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to play.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
         /// <paramref name="outputDevice"/> is null.</exception>
         public static void Play(this MidiFile midiFile, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
@@ -311,6 +325,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="channel">MIDI channel to play channel events on.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public static void Play(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
@@ -330,6 +345,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, OutputDevice outputDevice, SevenBitNumber programNumber, MidiClockSettings clockSettings = null)
@@ -353,6 +369,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidiProgram"/> specified an invalid value.</exception>
@@ -378,6 +395,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidi2Program"/> specified an invalid value.</exception>

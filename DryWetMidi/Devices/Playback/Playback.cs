@@ -77,6 +77,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="events">Collection of MIDI events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
         public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap, MidiClockSettings clockSettings = null)
@@ -92,6 +93,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="events">Collection of MIDI events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="events"/> through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
@@ -106,6 +108,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="events">Collection of MIDI events collections to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
         public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, MidiClockSettings clockSettings = null)
@@ -120,6 +123,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="events">Collection of MIDI events collections to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="events"/> through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
@@ -133,6 +137,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="timedObjects">Collection of timed objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null.</exception>
         public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, MidiClockSettings clockSettings = null)
@@ -167,6 +172,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="timedObjects">Collection of timed objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="timedObjects"/> through.</param>
+        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
         public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
