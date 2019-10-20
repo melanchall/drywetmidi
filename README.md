@@ -118,7 +118,7 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 {
     foreach (var setTempoEvent in trackChunk.Events.OfType<SetTempoEvent>())
     {
-        setTempoEvent.MicrosecondsPerBeat /= 2;
+        setTempoEvent.MicrosecondsPerQuarterNote /= 2;
     }
 }
 ```
