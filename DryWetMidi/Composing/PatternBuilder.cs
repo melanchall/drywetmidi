@@ -390,6 +390,26 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Chord
 
+        /// <summary>
+        /// Adds a chord.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -397,6 +417,24 @@ namespace Melanchall.DryWetMidi.Composing
             return Chord(chord.ResolveNotes(Octave), NoteLength, Velocity);
         }
 
+        /// <summary>
+        /// Adds a chord using the specified octave.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="octave"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -405,6 +443,24 @@ namespace Melanchall.DryWetMidi.Composing
             return Chord(chord.ResolveNotes(octave), NoteLength, Velocity);
         }
 
+        /// <summary>
+        /// Adds a chord with the specified length.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -413,6 +469,21 @@ namespace Melanchall.DryWetMidi.Composing
             return Chord(chord.ResolveNotes(Octave), length, Velocity);
         }
 
+        /// <summary>
+        /// Adds a chord using the specified octave and notes length.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="octave"/> is null. -or- <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -422,6 +493,23 @@ namespace Melanchall.DryWetMidi.Composing
             return Chord(chord.ResolveNotes(octave), length, Velocity);
         }
 
+        /// <summary>
+        /// Adds a chord with the specified velocity.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -429,6 +517,21 @@ namespace Melanchall.DryWetMidi.Composing
             return Chord(chord.ResolveNotes(Octave), NoteLength, velocity);
         }
 
+        /// <summary>
+        /// Adds a chord using the specified octave and velocity.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="octave"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -437,6 +540,21 @@ namespace Melanchall.DryWetMidi.Composing
             return Chord(chord.ResolveNotes(octave), NoteLength, velocity);
         }
 
+        /// <summary>
+        /// Adds a chord with the specified notes length and velocity.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -445,6 +563,16 @@ namespace Melanchall.DryWetMidi.Composing
             return Chord(chord.ResolveNotes(Octave), length, velocity);
         }
 
+        /// <summary>
+        /// Adds a chord using the specified octave, length and velocity.
+        /// </summary>
+        /// <param name="chord">Chord to add.</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="octave"/> is null. -or- <paramref name="length"/> is null.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -1110,11 +1238,22 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Program
 
+        /// <summary>
+        /// Inserts <see cref="ProgramChangeEvent"/> to specify an instrument that will be used by following notes.
+        /// </summary>
+        /// <param name="programNumber">The number of a MIDI program.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         public PatternBuilder ProgramChange(SevenBitNumber programNumber)
         {
             return AddAction(new SetProgramNumberAction(programNumber));
         }
 
+        /// <summary>
+        /// Inserts <see cref="ProgramChangeEvent"/> to specify an instrument that will be used by following notes.
+        /// </summary>
+        /// <param name="program">The General MIDI Level 1 program.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
         public PatternBuilder ProgramChange(GeneralMidiProgram program)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
@@ -1122,6 +1261,12 @@ namespace Melanchall.DryWetMidi.Composing
             return AddAction(new SetGeneralMidiProgramAction(program));
         }
 
+        /// <summary>
+        /// Inserts <see cref="ProgramChangeEvent"/> to specify an instrument that will be used by following notes.
+        /// </summary>
+        /// <param name="program">The General MIDI Level 2 program.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="program"/> specified an invalid value.</exception>
         public PatternBuilder ProgramChange(GeneralMidi2Program program)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(program), program);
@@ -1229,6 +1374,20 @@ namespace Melanchall.DryWetMidi.Composing
             return new Pattern(_actions.ToList());
         }
 
+        /// <summary>
+        /// Replays all actions contained in the specified pattern.
+        /// </summary>
+        /// <param name="pattern">Pattern to replay actions of.</param>
+        /// <remarks>
+        /// <para>
+        /// <see cref="ReplayPattern(Composing.Pattern)"/> inserts all actions from <paramref name="pattern"/>
+        /// that were added by using methods of <see cref="PatternBuilder"/> to produce the specified pattern.
+        /// These actions will be added as separate ones unlike <see cref="Pattern(Composing.Pattern)"/> which
+        /// adds pattern as one single action.
+        /// </para>
+        /// </remarks>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null.</exception>
         public PatternBuilder ReplayPattern(Pattern pattern)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);

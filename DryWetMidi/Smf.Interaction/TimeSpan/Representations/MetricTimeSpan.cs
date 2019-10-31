@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -376,10 +377,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// operation will be performed on.</param>
         /// <returns>Time span that is a sum of the <paramref name="timeSpan"/> and the
         /// current time span.</returns>
-        /// <exception cref="ArgumentException"><paramref name="mode"/> is invalid.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is invalid.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="mode"/> specified an invalid value.</exception>
         public ITimeSpan Add(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
             var metricTimeSpan = timeSpan as MetricTimeSpan;
             return metricTimeSpan != null
@@ -399,9 +402,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// operation will be performed on.</param>
         /// <returns>Time span that is a difference between the <paramref name="timeSpan"/> and the
         /// current time span.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is invalid.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="mode"/> specified an invalid value.</exception>
         public ITimeSpan Subtract(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
             var metricTimeSpan = timeSpan as MetricTimeSpan;
             return metricTimeSpan != null
@@ -414,6 +420,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="multiplier">Multiplier to stretch the time span by.</param>
         /// <returns>Time span that is the current time span stretched by the <paramref name="multiplier"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="multiplier"/> is negative.</exception>
         public ITimeSpan Multiply(double multiplier)
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
@@ -426,6 +433,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="divisor">Divisor to shrink the time span by.</param>
         /// <returns>Time span that is the current time span shrinked by the <paramref name="divisor"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero or negative.</exception>
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");

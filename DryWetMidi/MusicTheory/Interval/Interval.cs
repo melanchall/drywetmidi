@@ -170,6 +170,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Get(Size, IntervalDirection.Down);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the specified interval number (1 and greater) is perfect or not.
+        /// </summary>
+        /// <param name="intervalNumber">Interval number to determine whether it's perfect or not.</param>
+        /// <returns>true if <paramref name="intervalNumber"/> is perfect; otherwise, false.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
         public static bool IsPerfect(int intervalNumber)
         {
             ThrowIfArgument.IsLessThan(nameof(intervalNumber), intervalNumber, 1, "Interval number is less than 1.");
@@ -178,6 +184,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return remainder == 0 || remainder == 3 || remainder == 4;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether quality is applicable to the specified interval number (1 and greater) or not.
+        /// </summary>
+        /// <param name="intervalQuality">Interval quality to check whether it's applicable to
+        /// <paramref name="intervalNumber"/> or not.</param>
+        /// <param name="intervalNumber">Interval number to check whether <paramref name="intervalQuality"/> is
+        /// applicable to it or not.</param>
+        /// <returns>true if <paramref name="intervalQuality"/> is applicable to <paramref name="intervalNumber"/>;
+        /// otherwise, false.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="intervalQuality"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
         public static bool IsQualityApplicable(IntervalQuality intervalQuality, int intervalNumber)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(intervalQuality), intervalQuality);
@@ -199,6 +217,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return false;
         }
 
+        /// <summary>
+        /// Gets an instance of the <see cref="Interval"/> by the specified interval quality and number.
+        /// </summary>
+        /// <param name="intervalQuality">Interval quality.</param>
+        /// <param name="intervalNumber">Interval number.</param>
+        /// <returns>An instance of the <see cref="Interval"/> which represents <paramref name="intervalNumber"/>
+        /// along with <paramref name="intervalQuality"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="intervalQuality"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
+        /// <exception cref="ArgumentException"><paramref name="intervalQuality"/> is not applicable to
+        /// <paramref name="intervalNumber"/>.</exception>
         public static Interval Get(IntervalQuality intervalQuality, int intervalNumber)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(intervalQuality), intervalQuality);

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Holds current times of playbacks for <see cref="PlaybackCurrentTimeWatcher.CurrentTimeChanged"/>.
+    /// </summary>
     public sealed class PlaybackCurrentTimeChangedEventArgs : EventArgs
     {
         #region Constructor
@@ -16,6 +19,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets collection of current times of playbacks.
+        /// </summary>
         public IEnumerable<PlaybackCurrentTime> Times { get; }
 
         #endregion

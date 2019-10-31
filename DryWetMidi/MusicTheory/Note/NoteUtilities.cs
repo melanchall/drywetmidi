@@ -17,6 +17,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        /// <summary>
+        /// Transposes note name by the specified interval.
+        /// </summary>
+        /// <param name="noteName"><see cref="NoteName"/> to transpose.</param>
+        /// <param name="interval">Interval to transpose by.</param>
+        /// <returns>Note name which is <paramref name="noteName"/> transposed by <paramref name="interval"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
         public static NoteName Transpose(this NoteName noteName, Interval interval)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);

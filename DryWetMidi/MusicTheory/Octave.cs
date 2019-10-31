@@ -22,6 +22,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Constants
 
+        /// <summary>
+        /// The size of an octave, i.e. number of notes within an octave.
+        /// </summary>
         public const int OctaveSize = 12;
 
         /// <summary>

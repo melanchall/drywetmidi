@@ -5,10 +5,21 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
+    /// <summary>
+    /// Utilities for working with <see cref="Chord"/>.
+    /// </summary>
     public static class ChordUtilities
     {
         #region Methods
 
+        /// <summary>
+        /// Gets intervals from the root note of the specified chord. For example, +4 and +7 for C major
+        /// (+4 for C and E, +7 for C and G).
+        /// </summary>
+        /// <param name="chord">Chord to get intervals from root note.</param>
+        /// <returns>Intervals from the root note of the <paramref name="chord"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">Some intervals are greater than <see cref="SevenBitNumber.MaxValue"/>.</exception>
         public static IEnumerable<Interval> GetIntervalsFromRootNote(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -30,6 +41,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return result;
         }
 
+        /// <summary>
+        /// Gets intervals between notes of the specified chord. For example, +4 and +3 for C major
+        /// (+4 for C and E, +3 for E and G).
+        /// </summary>
+        /// <param name="chord">Chord to get intervals between notes.</param>
+        /// <returns>Intervals between notes of the <paramref name="chord"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
         public static IEnumerable<Interval> GetIntervalsBetweenNotes(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -37,6 +55,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return GetIntervals(chord).Select(i => Interval.FromHalfSteps(i)).ToList();
         }
 
+        /// <summary>
+        /// Resolves root note of the specified chord.
+        /// </summary>
+        /// <param name="chord">Chord to resolve root note.</param>
+        /// <param name="octave">Octave to resolve root note of the <paramref name="chord"/>.</param>
+        /// <returns>Root note of the chord regarding to <paramref name="octave"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="octave"/> is null.</exception>
         public static Note ResolveRootNote(this Chord chord, Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -45,6 +71,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return octave.GetNote(chord.RootNoteName);
         }
 
+        /// <summary>
+        /// Resolves notes of the specified chord.
+        /// </summary>
+        /// <param name="chord">Chord to resolve notes.</param>
+        /// <param name="octave">Octave to resolve notes of the <paramref name="chord"/>.</param>
+        /// <returns>Notes of the chord regarding to <paramref name="octave"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
+        /// <paramref name="octave"/> is null.</exception>
         public static IEnumerable<Note> ResolveNotes(this Chord chord, Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);

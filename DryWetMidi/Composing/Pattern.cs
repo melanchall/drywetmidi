@@ -107,6 +107,10 @@ namespace Melanchall.DryWetMidi.Composing
             return ToFile(tempoMap, FourBitNumber.MinValue);
         }
 
+        /// <summary>
+        /// Clones pattern by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the pattern containing all actions from original one.</returns>
         public Pattern Clone()
         {
             return new Pattern(Actions.ToList());

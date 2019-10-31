@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
@@ -93,7 +94,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// <param name="timeSpan">When this method returns, contains the <see cref="BarBeatTicksTimeSpan"/>
         /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
         /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
-        /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
+        /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out BarBeatTicksTimeSpan timeSpan)
@@ -311,10 +312,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// operation will be performed on.</param>
         /// <returns>Time span that is a sum of the <paramref name="timeSpan"/> and the
         /// current time span.</returns>
-        /// <exception cref="ArgumentException"><paramref name="mode"/> is invalid.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is invalid.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="mode"/> specified an invalid value.</exception>
         public ITimeSpan Add(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
             var barBeatTicksTimeSpan = timeSpan as BarBeatTicksTimeSpan;
             return barBeatTicksTimeSpan != null
@@ -334,9 +337,12 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// operation will be performed on.</param>
         /// <returns>Time span that is a difference between the <paramref name="timeSpan"/> and the
         /// current time span.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is invalid.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="mode"/> specified an invalid value.</exception>
         public ITimeSpan Subtract(ITimeSpan timeSpan, TimeSpanMode mode)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(mode), mode);
 
             var barBeatTicksTimeSpan = timeSpan as BarBeatTicksTimeSpan;
             return barBeatTicksTimeSpan != null
@@ -349,6 +355,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="multiplier">Multiplier to stretch the time span by.</param>
         /// <returns>Time span that is the current time span stretched by the <paramref name="multiplier"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="multiplier"/> is negative.</exception>
         public ITimeSpan Multiply(double multiplier)
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
@@ -363,6 +370,7 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
         /// </summary>
         /// <param name="divisor">Divisor to shrink the time span by.</param>
         /// <returns>Time span that is the current time span shrinked by the <paramref name="divisor"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero or negative.</exception>
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");

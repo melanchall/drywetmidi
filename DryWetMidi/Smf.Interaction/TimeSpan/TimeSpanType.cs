@@ -20,6 +20,9 @@
         /// </summary>
         BarBeatTicks,
 
+        /// <summary>
+        /// Bar/beat time span which represents bars and fractional beats (for example, 1.5 beats).
+        /// </summary>
         BarBeatFraction,
 
         /// <summary>

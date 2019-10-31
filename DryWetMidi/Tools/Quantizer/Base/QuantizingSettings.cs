@@ -64,6 +64,10 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Gets or sets a predicate to filter objects that should be quantized. Use null if
+        /// all objects should be processed.
+        /// </summary>
         public Predicate<TObject> Filter { get; set; }
 
         #endregion

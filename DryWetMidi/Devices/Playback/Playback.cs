@@ -50,6 +50,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler<NotesEventArgs> NotesPlaybackFinished;
 
+        /// <summary>
+        /// Occurs when MIDI event played.
+        /// </summary>
         public event EventHandler<MidiEventPlayedEventArgs> EventPlayed;
 
         #endregion
@@ -255,8 +258,14 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public PlaybackSnapping Snapping { get; }
 
+        /// <summary>
+        /// Gets or sets callback used to process note to be played.
+        /// </summary>
         public NoteCallback NoteCallback { get; set; }
 
+        /// <summary>
+        /// Gets or sets callback used to process MIDI event to be played.
+        /// </summary>
         public EventCallback EventCallback { get; set; }
 
         #endregion
@@ -666,7 +675,7 @@ namespace Melanchall.DryWetMidi.Devices
             }
 
             _clock.Stop();
-            _clock.Reset();
+            _clock.ResetCurrentTime();
             _eventsEnumerator.Reset();
             _eventsEnumerator.MoveNext();
             _clock.Start();
@@ -825,6 +834,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region IClockDrivenObject
 
+        /// <summary>
+        /// Ticks internal clock.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         public void TickClock()
         {
             EnsureIsNotDisposed();
