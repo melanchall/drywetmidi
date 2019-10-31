@@ -4,6 +4,9 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// MIDI clock used to drive playback or any timer-based object.
+    /// </summary>
     public sealed class MidiClock : IDisposable
     {
         #region Constants
@@ -14,6 +17,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Events
 
+        /// <summary>
+        /// Occurs when new tick generated.
+        /// </summary>
         public event EventHandler<TickedEventArgs> Ticked;
 
         #endregion
@@ -36,19 +42,42 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        public MidiClock(bool startImmediately, ITickGenerator tickGenerator)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiClock"/> with the specified
+        /// value indicating whether first tick should be generated immediately after clock started.
+        /// </summary>
+        /// <param name="startImmediately">A value indicating whether first tick should be generated
+        /// immediately after clock started.</param>
+        public MidiClock(bool startImmediately)
         {
             _startImmediately = startImmediately;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiClock"/> with the specified
+        /// value indicating whether first tick should be generated immediately after clock started, and
+        /// tick generator.
+        /// </summary>
+        /// <param name="startImmediately">A value indicating whether first tick should be generated
+        /// immediately after clock started.</param>
+        /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="tickGenerator"/> is null.</exception>
+        public MidiClock(bool startImmediately, ITickGenerator tickGenerator)
+            : this(startImmediately)
+        {
+            ThrowIfArgument.IsNull(nameof(tickGenerator), tickGenerator);
 
             _tickGenerator = tickGenerator;
-            if (_tickGenerator != null)
-                _tickGenerator.TickGenerated += OnTickGenerated;
+            _tickGenerator.TickGenerated += OnTickGenerated;
         }
 
         #endregion
 
         #region Finalizer
 
+        /// <summary>
+        /// Finalizes the current instance of the <see cref="MidiClock"/>.
+        /// </summary>
         ~MidiClock()
         {
             Dispose(false);
@@ -58,10 +87,21 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets a value indicating whether MIDI clock is currently running or not.
+        /// </summary>
         public bool IsRunning => _stopwatch.IsRunning;
 
+        /// <summary>
+        /// Gets the current time of clock as <see cref="TimeSpan"/>.
+        /// </summary>
         public TimeSpan CurrentTime { get; private set; } = TimeSpan.Zero;
 
+        /// <summary>
+        /// Gets or sets the speed of clock, i.e. the speed of current time changing.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public double Speed
         {
             get { return _speed; }
@@ -86,6 +126,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
+        /// <summary>
+        /// Starts/resumes the clock.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void Start()
         {
             EnsureIsNotDisposed();
@@ -104,6 +148,10 @@ namespace Melanchall.DryWetMidi.Devices
             _started = true;
         }
 
+        /// <summary>
+        /// Stops the clock.Current time will not be changed.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void Stop()
         {
             EnsureIsNotDisposed();
@@ -111,22 +159,35 @@ namespace Melanchall.DryWetMidi.Devices
             _stopwatch.Stop();
         }
 
+        /// <summary>
+        /// Stops, sets current time to zero and starts the clock.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void Restart()
         {
             EnsureIsNotDisposed();
 
             Stop();
-            Reset();
+            ResetCurrentTime();
             Start();
         }
 
-        public void Reset()
+        /// <summary>
+        /// Resets the current time of the clock setting it to zero.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
+        public void ResetCurrentTime()
         {
             EnsureIsNotDisposed();
 
             SetCurrentTime(TimeSpan.Zero);
         }
 
+        /// <summary>
+        /// Sets the current time of the clock.
+        /// </summary>
+        /// <param name="time">New current time of the clock.</param>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void SetCurrentTime(TimeSpan time)
         {
             EnsureIsNotDisposed();
@@ -136,6 +197,9 @@ namespace Melanchall.DryWetMidi.Devices
             CurrentTime = time;
         }
 
+        /// <summary>
+        /// Generates new clock's tick manually without pulse from tick generator.
+        /// </summary>
         public void Tick()
         {
             if (!IsRunning || _disposed)
@@ -165,6 +229,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region IDisposable
 
+        /// <summary>
+        /// Releases all resources used by the current <see cref="MidiClock"/>.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

@@ -2,6 +2,9 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Holds the current time of a playback.
+    /// </summary>
     public sealed class PlaybackCurrentTime
     {
         #region Constructor
@@ -16,8 +19,15 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets the playback which current <see cref="PlaybackCurrentTime"/> holds
+        /// current time for.
+        /// </summary>
         public Playback Playback { get; }
 
+        /// <summary>
+        /// Gets the current time of a playback.
+        /// </summary>
         public ITimeSpan Time { get; }
 
         #endregion

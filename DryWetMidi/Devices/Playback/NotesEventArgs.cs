@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Devices
 {
     /// <summary>
     /// Holds notes collection for <see cref="Playback.NotesPlaybackStarted"/> and
-    /// <see cref="Playback.NotesPlaybackFinished"/>
+    /// <see cref="Playback.NotesPlaybackFinished"/>.
     /// </summary>
     public sealed class NotesEventArgs : EventArgs
     {

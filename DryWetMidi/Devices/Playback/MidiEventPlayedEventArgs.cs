@@ -3,6 +3,9 @@ using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Holds an instance of <see cref="MidiEvent"/> for <see cref="Playback.EventPlayed"/> event.
+    /// </summary>
     public sealed class MidiEventPlayedEventArgs : EventArgs
     {
         #region Constructor
@@ -16,6 +19,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets a MIDI event played.
+        /// </summary>
         public MidiEvent Event { get; }
 
         #endregion

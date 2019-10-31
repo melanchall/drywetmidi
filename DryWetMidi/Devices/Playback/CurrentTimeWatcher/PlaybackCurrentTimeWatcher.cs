@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Provides notifications about playback's current time changed.
+    /// </summary>
     public sealed class PlaybackCurrentTimeWatcher : IDisposable, IClockDrivenObject
     {
         #region Constants
@@ -16,13 +20,16 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Events
 
+        /// <summary>
+        /// Occurs when current times of playbacks are changed.
+        /// </summary>
         public event EventHandler<PlaybackCurrentTimeChangedEventArgs> CurrentTimeChanged;
 
         #endregion
 
         #region Fields
 
-        private static readonly Lazy<PlaybackCurrentTimeWatcher> _lazy = new Lazy<PlaybackCurrentTimeWatcher>(() => new PlaybackCurrentTimeWatcher());
+        private static readonly Lazy<PlaybackCurrentTimeWatcher> _lazyInstance = new Lazy<PlaybackCurrentTimeWatcher>(() => new PlaybackCurrentTimeWatcher());
 
         private readonly Dictionary<Playback, TimeSpanType> _playbacks = new Dictionary<Playback, TimeSpanType>();
         private readonly object _playbacksLock = new object();
@@ -47,8 +54,14 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        public static PlaybackCurrentTimeWatcher Instance { get { return _lazy.Value; } }
+        /// <summary>
+        /// Gets the instance of <see cref="PlaybackCurrentTimeWatcher"/>.
+        /// </summary>
+        public static PlaybackCurrentTimeWatcher Instance { get { return _lazyInstance.Value; } }
 
+        /// <summary>
+        /// Gets or sets the interval of playbacks current times polling.
+        /// </summary>
         public TimeSpan PollingInterval
         {
             get { return _pollingInterval; }
@@ -60,6 +73,9 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Gets playbacks the watcher polls current time of.
+        /// </summary>
         public IEnumerable<Playback> Playbacks
         {
             get
@@ -71,12 +87,20 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the watcher polls playbacks current times or not.
+        /// </summary>
         public bool IsWatching => _clock?.IsRunning ?? false;
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Starts current times watching.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
         public void Start()
         {
             EnsureIsNotDisposed();
@@ -84,6 +108,11 @@ namespace Melanchall.DryWetMidi.Devices
             _clock.Start();
         }
 
+        /// <summary>
+        /// Stops current times watching.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
         public void Stop()
         {
             EnsureIsNotDisposed();
@@ -91,6 +120,15 @@ namespace Melanchall.DryWetMidi.Devices
             _clock.Stop();
         }
 
+        /// <summary>
+        /// Adds a playback to the list of ones to watch current times of.
+        /// </summary>
+        /// <param name="playback">Playback to watch current time of.</param>
+        /// <param name="timeType">Type of current time to convert to.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
         public void AddPlayback(Playback playback, TimeSpanType timeType)
         {
             ThrowIfArgument.IsNull(nameof(playback), playback);
@@ -103,6 +141,13 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Removes a playback from the list of ones to watch current times of.
+        /// </summary>
+        /// <param name="playback">Playback to exclude current time watching of.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is null.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
         public void RemovePlayback(Playback playback)
         {
             ThrowIfArgument.IsNull(nameof(playback), playback);
@@ -117,6 +162,11 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Removes all playbacks from the list of ones to watch current times of.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
         public void RemoveAllPlaybacks()
         {
             EnsureIsNotDisposed();
@@ -191,6 +241,11 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region IClockDrivenObject
 
+        /// <summary>
+        /// Ticks internal clock.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
         public void TickClock()
         {
             EnsureIsNotDisposed();
@@ -202,6 +257,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region IDisposable
 
+        /// <summary>
+        /// Releases all resources used by the current <see cref="PlaybackCurrentTimeWatcher"/>.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

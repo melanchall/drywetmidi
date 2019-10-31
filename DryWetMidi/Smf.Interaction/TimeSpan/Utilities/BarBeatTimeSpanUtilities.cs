@@ -3,10 +3,21 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Smf.Interaction
 {
-    public static class BarBeatTimeSpanUtilities
+    /// <summary>
+    /// Utilities for working with bars and beats.
+    /// </summary>
+    public static class BarBeatUtilities
     {
         #region Methods
 
+        /// <summary>
+        /// Gets the length of a bar (in ticks) that is started at distance of the specified bars.
+        /// </summary>
+        /// <param name="bars">Distance in bars where the bar is started.</param>
+        /// <param name="tempoMap">Tempo map used for calculations.</param>
+        /// <returns>Length of a bar in ticks.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
         public static int GetBarLength(long bars, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
@@ -17,6 +28,14 @@ namespace Melanchall.DryWetMidi.Smf.Interaction
                                 timeSignatureAndticksPerQuarterNote.Item2);
         }
 
+        /// <summary>
+        /// Gets the length of a beat (in ticks) of the bar that is started at distance of the specified bars.
+        /// </summary>
+        /// <param name="bars">Distance in bars where the bar is started.</param>
+        /// <param name="tempoMap">Tempo map used for calculations.</param>
+        /// <returns>Length of a beat in ticks.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
         public static int GetBeatLength(long bars, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");

@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             const short ticksPerQuarterNote = 100;
 
             var tempoMap = TempoMap.Create(new TicksPerQuarterNoteTimeDivision(ticksPerQuarterNote), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
-            var length = BarBeatTimeSpanUtilities.GetBarLength(bars, tempoMap);
+            var length = BarBeatUtilities.GetBarLength(bars, tempoMap);
             Assert.AreEqual(ticksPerQuarterNote * timeSignatureNumerator * 4 / timeSignatureDenominator, length, "Bar length is invalid.");
         }
 
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var length = BarBeatTimeSpanUtilities.GetBarLength(bars, tempoMap);
+            var length = BarBeatUtilities.GetBarLength(bars, tempoMap);
             Assert.AreEqual(ticksPerQuarterNote * timeSignatureNumerator * 4 / timeSignatureDenominator, length, "Bar length is invalid.");
         }
 
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
             const short ticksPerQuarterNote = 100;
 
             var tempoMap = TempoMap.Create(new TicksPerQuarterNoteTimeDivision(ticksPerQuarterNote), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
-            var length = BarBeatTimeSpanUtilities.GetBeatLength(bars, tempoMap);
+            var length = BarBeatUtilities.GetBeatLength(bars, tempoMap);
             Assert.AreEqual(ticksPerQuarterNote * 4 / timeSignatureDenominator, length, "Beat length is invalid.");
         }
 
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Smf.Interaction
                 tempoMap = tempoMapManager.TempoMap;
             }
 
-            var length = BarBeatTimeSpanUtilities.GetBeatLength(bars, tempoMap);
+            var length = BarBeatUtilities.GetBeatLength(bars, tempoMap);
             Assert.AreEqual(ticksPerQuarterNote * 4 / timeSignatureDenominator, length, "Beat length is invalid.");
         }
 

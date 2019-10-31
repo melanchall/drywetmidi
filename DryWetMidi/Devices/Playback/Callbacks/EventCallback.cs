@@ -3,5 +3,13 @@ using Melanchall.DryWetMidi.Smf;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    public delegate MidiEvent EventCallback(MidiEvent rawEventData, long rawTime, TimeSpan playbackTime);
+    /// <summary>
+    /// Callback used to process MIDI event to be played by <see cref="Playback"/>.
+    /// </summary>
+    /// <param name="rawEvent">MIDI event to process.</param>
+    /// <param name="rawTime">Absolute time of <paramref name="rawEvent"/>.</param>
+    /// <param name="playbackTime">Current time of the playback.</param>
+    /// <returns>New MIDI event which is <paramref name="rawEvent"/> processed by the callback;
+    /// or null if event should be ignored.</returns>
+    public delegate MidiEvent EventCallback(MidiEvent rawEvent, long rawTime, TimeSpan playbackTime);
 }
