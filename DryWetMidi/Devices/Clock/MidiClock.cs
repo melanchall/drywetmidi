@@ -44,31 +44,20 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MidiClock"/> with the specified
-        /// value indicating whether first tick should be generated immediately after clock started.
-        /// </summary>
-        /// <param name="startImmediately">A value indicating whether first tick should be generated
-        /// immediately after clock started.</param>
-        public MidiClock(bool startImmediately)
-        {
-            _startImmediately = startImmediately;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MidiClock"/> with the specified
         /// value indicating whether first tick should be generated immediately after clock started, and
         /// tick generator.
         /// </summary>
         /// <param name="startImmediately">A value indicating whether first tick should be generated
         /// immediately after clock started.</param>
-        /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="tickGenerator"/> is null.</exception>
+        /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval. Null for
+        /// no tick generator.</param>
         public MidiClock(bool startImmediately, ITickGenerator tickGenerator)
-            : this(startImmediately)
         {
-            ThrowIfArgument.IsNull(nameof(tickGenerator), tickGenerator);
+            _startImmediately = startImmediately;
 
             _tickGenerator = tickGenerator;
-            _tickGenerator.TickGenerated += OnTickGenerated;
+            if (_tickGenerator != null)
+                _tickGenerator.TickGenerated += OnTickGenerated;
         }
 
         #endregion
