@@ -2,7 +2,7 @@
 using BenchmarkDotNet.Attributes;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Devices

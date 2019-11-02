@@ -5,7 +5,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Standards;
 
 namespace Melanchall.DryWetMidi.Composing
@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// Default velocity that will be applied to all further notes and chords if it's not
         /// specified explicitly. Velocity can be altered with <see cref="SetVelocity(SevenBitNumber)"/>.
         /// </summary>
-        public static readonly SevenBitNumber DefaultVelocity = Smf.Interaction.Note.DefaultVelocity;
+        public static readonly SevenBitNumber DefaultVelocity = Interaction.Note.DefaultVelocity;
 
         /// <summary>
         /// Default length that will be applied to all further notes and chords if it's not

@@ -5,7 +5,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 var expectedTime = TimeConverter.ConvertFrom(i.Time ?? new MetricTimeSpan(), tempoMap);
                 var expectedLength = LengthConverter.ConvertFrom(i.Length, expectedTime, tempoMap);
 
-                return new DryWetMidi.Smf.Interaction.Note(i.NoteNumber, expectedLength, expectedTime)
+                return new DryWetMidi.Interaction.Note(i.NoteNumber, expectedLength, expectedTime)
                 {
                     Velocity = i.Velocity,
                     Channel = Channel
