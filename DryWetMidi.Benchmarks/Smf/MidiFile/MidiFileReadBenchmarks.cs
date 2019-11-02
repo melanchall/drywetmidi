@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf

@@ -1,7 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices

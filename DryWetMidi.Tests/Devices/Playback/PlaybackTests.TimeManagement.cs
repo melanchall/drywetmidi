@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 

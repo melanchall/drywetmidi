@@ -1,5 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 using System;
 
 namespace Melanchall.DryWetMidi.Interaction
