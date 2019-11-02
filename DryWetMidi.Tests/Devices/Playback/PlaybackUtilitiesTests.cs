@@ -5,7 +5,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Devices;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Standards;
 using Melanchall.DryWetMidi.Tests.Utilities;

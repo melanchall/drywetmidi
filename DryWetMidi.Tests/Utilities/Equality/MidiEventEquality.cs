@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {

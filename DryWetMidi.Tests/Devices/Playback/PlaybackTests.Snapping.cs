@@ -2,7 +2,7 @@
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 

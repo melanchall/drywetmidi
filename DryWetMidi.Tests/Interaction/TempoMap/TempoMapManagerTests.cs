@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 

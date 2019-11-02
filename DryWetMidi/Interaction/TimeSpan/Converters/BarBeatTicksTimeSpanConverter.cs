@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
