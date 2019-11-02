@@ -6,7 +6,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Standards;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;

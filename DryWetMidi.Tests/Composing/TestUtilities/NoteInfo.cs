@@ -1,6 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         #region Constructor
 
         public NoteInfo(NoteName noteName, int octave, ITimeSpan time, ITimeSpan length)
-            : this(noteName, octave, time, length, DryWetMidi.Smf.Interaction.Note.DefaultVelocity)
+            : this(noteName, octave, time, length, DryWetMidi.Interaction.Note.DefaultVelocity)
         {
         }
 

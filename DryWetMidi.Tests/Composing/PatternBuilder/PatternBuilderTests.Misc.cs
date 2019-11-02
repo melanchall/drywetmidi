@@ -2,7 +2,7 @@
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Standards;
 using NUnit.Framework;
 
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             PatternTestUtilities.TestTimedEventsWithExactOrder(pattern, new[]
             {
                 new TimedEventInfo(new ProgramChangeEvent(program1.AsSevenBitNumber()) { Channel = PatternTestUtilities.Channel }, new MidiTimeSpan()),
-                new TimedEventInfo(new NoteOnEvent(noteNumber, DryWetMidi.Smf.Interaction.Note.DefaultVelocity) { Channel = PatternTestUtilities.Channel }, new MidiTimeSpan()),
+                new TimedEventInfo(new NoteOnEvent(noteNumber, DryWetMidi.Interaction.Note.DefaultVelocity) { Channel = PatternTestUtilities.Channel }, new MidiTimeSpan()),
                 new TimedEventInfo(new ProgramChangeEvent(program2.AsSevenBitNumber()) { Channel = PatternTestUtilities.Channel }, eventTime),
                 new TimedEventInfo(new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = PatternTestUtilities.Channel }, eventTime)
             });

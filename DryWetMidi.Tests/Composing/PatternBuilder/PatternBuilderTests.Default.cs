@@ -1,7 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Test]
         public void SetVelocity()
         {
-            Assert.AreEqual(DryWetMidi.Smf.Interaction.Note.DefaultVelocity, PatternBuilder.DefaultVelocity, "Default velocity is invalid.");
+            Assert.AreEqual(DryWetMidi.Interaction.Note.DefaultVelocity, PatternBuilder.DefaultVelocity, "Default velocity is invalid.");
 
             var patternBuilder = new PatternBuilder();
             Assert.AreEqual(PatternBuilder.DefaultVelocity, patternBuilder.Velocity, "Invalid initial velocity.");

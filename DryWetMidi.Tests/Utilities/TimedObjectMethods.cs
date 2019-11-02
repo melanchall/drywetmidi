@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
