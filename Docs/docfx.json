@@ -27,12 +27,14 @@
     ],
     "resource": [
       {
-        "files": [ "examples/images/**"]
+        "files": [ "examples/images/**", "images/**" ]
       }
     ],
     "globalMetadata": {
       "_appTitle": "DryWetMIDI",
-      "_enableSearch": true
+      "_enableSearch": true,
+	  "_appLogoPath": "images/logo.png",
+	  "_appFaviconPath": "images/favicon.png"
     },
     "markdownEngineName": "markdig",
     "dest": "_site",
