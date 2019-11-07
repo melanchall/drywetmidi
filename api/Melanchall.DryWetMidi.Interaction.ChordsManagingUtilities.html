@@ -1,0 +1,1631 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ChordsManagingUtilities
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ChordsManagingUtilities
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities" class="text-break">Class ChordsManagingUtilities
+  </h1>
+  <div class="markdown level0 summary">
+Extension methods for chords managing.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">ChordsManagingUtilities</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class ChordsManagingUtilities</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.AddChords(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.Chord%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L364">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.AddChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.AddChords(Melanchall.DryWetMidi.Core.EventsCollection,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Chord})">AddChords(EventsCollection, IEnumerable&lt;Chord&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds collection of chords to the specified <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddChords(this EventsCollection eventsCollection, IEnumerable&lt;Chord&gt; chords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to add chords to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">chords</span></td>
+        <td>Chords to add to the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">chords</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.AddChords(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.Chord%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L382">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.AddChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.AddChords(Melanchall.DryWetMidi.Core.TrackChunk,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Chord})">AddChords(TrackChunk, IEnumerable&lt;Chord&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds collection of chords to the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddChords(this TrackChunk trackChunk, IEnumerable&lt;Chord&gt; chords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to add chords to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">chords</span></td>
+        <td>Chords to add to the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">chords</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L108">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.EventsCollection,System.Int64)">GetChords(EventsCollection, Int64)</h4>
+  <div class="markdown level1 summary">
+Gets chords contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Chord&gt; GetChords(this EventsCollection eventsCollection, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to search for chords.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td>Collection of chords contained in <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_MidiFile_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L162">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_MidiFile_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.MidiFile,System.Int64)">GetChords(MidiFile, Int64)</h4>
+  <div class="markdown level1 summary">
+Gets chords contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Chord&gt; GetChords(this MidiFile file, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to search for chords.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td>Collection of chords contained in <code data-dev-comment-type="paramref" class="paramref">file</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">file</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L125">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.TrackChunk,System.Int64)">GetChords(TrackChunk, Int64)</h4>
+  <div class="markdown level1 summary">
+Gets chords contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Chord&gt; GetChords(this TrackChunk trackChunk, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for chords.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td>Collection of chords contained in <code data-dev-comment-type="paramref" class="paramref">trackChunk</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.MidiEvent%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L88">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},System.Int64)">GetChords(IEnumerable&lt;MidiEvent&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Gets chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Chord&gt; GetChords(this IEnumerable&lt;MidiEvent&gt; events, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Collection of<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to search for chords.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td>Collection of chords contained in <code data-dev-comment-type="paramref" class="paramref">events</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L142">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int64)">GetChords(IEnumerable&lt;TrackChunk&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Gets chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Chord&gt; GetChords(this IEnumerable&lt;TrackChunk&gt; trackChunks, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Track chunks to search for chords.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td>Collection of chords contained in <code data-dev-comment-type="paramref" class="paramref">trackChunks</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.Note%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L179">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note},System.Int64)">GetChords(IEnumerable&lt;Note&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Creates chords from notes.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Chord&gt; GetChords(this IEnumerable&lt;Note&gt; notes, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
+        <td><span class="parametername">notes</span></td>
+        <td>Notes to create chords from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td>Collection of chords made up from <code data-dev-comment-type="paramref" class="paramref">notes</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notes</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ManageChords(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Int64%2CSystem.Comparison%7BMelanchall.DryWetMidi.Core.MidiEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L51">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ManageChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ManageChords(Melanchall.DryWetMidi.Core.EventsCollection,System.Int64,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">ManageChords(EventsCollection, Int64, Comparison&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a> initializing it with the
+specified events collection, notes tolerance and comparison delegate for events that have same time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ChordsManager ManageChords(this EventsCollection eventsCollection, long notesTolerance = 0L, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> that holds chords to manage.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.comparison-1">Comparison</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">sameTimeEventsComparison</span></td>
+        <td>Delegate to compare events with the same absolute time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a> that can be used to manage chords
+represented by the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ManageChords(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Int64%2CSystem.Comparison%7BMelanchall.DryWetMidi.Core.MidiEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L72">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ManageChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ManageChords(Melanchall.DryWetMidi.Core.TrackChunk,System.Int64,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">ManageChords(TrackChunk, Int64, Comparison&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a> initializing it with the
+events collection of the specified track chunk, notes tolerance and comparison delegate for events
+that have same time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ChordsManager ManageChords(this TrackChunk trackChunk, long notesTolerance = 0L, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> that holds chords to manage.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.comparison-1">Comparison</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">sameTimeEventsComparison</span></td>
+        <td>Delegate to compare events with the same absolute time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a> that can be used to manage
+chords represented by the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L201">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(Melanchall.DryWetMidi.Core.EventsCollection,System.Action{Melanchall.DryWetMidi.Interaction.Chord},System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">ProcessChords(EventsCollection, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessChords(this EventsCollection eventsCollection, Action&lt;Chord&gt; action, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to search for chords to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L274">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(Melanchall.DryWetMidi.Core.MidiFile,System.Action{Melanchall.DryWetMidi.Interaction.Chord},System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">ProcessChords(MidiFile, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessChords(this MidiFile file, Action&lt;Chord&gt; action, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to search for chords to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">file</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">file</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L228">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(Melanchall.DryWetMidi.Core.TrackChunk,System.Action{Melanchall.DryWetMidi.Interaction.Chord},System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">ProcessChords(TrackChunk, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessChords(this TrackChunk trackChunk, Action&lt;Chord&gt; action, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for chords to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L250">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ProcessChords(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Action{Melanchall.DryWetMidi.Interaction.Chord},System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">ProcessChords(IEnumerable&lt;TrackChunk&gt;, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the collection of
+<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessChords(this IEnumerable&lt;TrackChunk&gt; trackChunks, Action&lt;Chord&gt; action, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for chords to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L292">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(Melanchall.DryWetMidi.Core.EventsCollection,System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">RemoveChords(EventsCollection, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveChords(this EventsCollection eventsCollection, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to search for chords to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L349">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(Melanchall.DryWetMidi.Core.MidiFile,System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">RemoveChords(MidiFile, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveChords(this MidiFile file, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to search for chords to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">file</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L312">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(Melanchall.DryWetMidi.Core.TrackChunk,System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">RemoveChords(TrackChunk, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveChords(this TrackChunk trackChunk, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for chords to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Chord%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L329">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.RemoveChords(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Predicate{Melanchall.DryWetMidi.Interaction.Chord},System.Int64)">RemoveChords(IEnumerable&lt;TrackChunk&gt;, Predicate&lt;Chord&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveChords(this IEnumerable&lt;TrackChunk&gt; trackChunks, Predicate&lt;Chord&gt; match = null, long notesTolerance = 0L)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for chords to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_SetTimeAndLength_Melanchall_DryWetMidi_Interaction_Chord_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.SetTimeAndLength(Melanchall.DryWetMidi.Interaction.Chord%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L27">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_SetTimeAndLength_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.SetTimeAndLength*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_SetTimeAndLength_Melanchall_DryWetMidi_Interaction_Chord_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.SetTimeAndLength(Melanchall.DryWetMidi.Interaction.Chord,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SetTimeAndLength(Chord, ITimeSpan, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Sets time and length of the specified chord.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Chord SetTimeAndLength(this Chord chord, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>Chord to set time and length to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set to <code data-dev-comment-type="paramref" class="paramref">chord</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Length to set to <code data-dev-comment-type="paramref" class="paramref">chord</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map that will be used for time and length conversion.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a></td>
+        <td>An input <code data-dev-comment-type="paramref" class="paramref">chord</code> with new time and length.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ToFile(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.Chord%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L412">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ToFile_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ToFile*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Chord})">ToFile(IEnumerable&lt;Chord&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates a MIDI file with the specified chords.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiFile ToFile(this IEnumerable&lt;Chord&gt; chords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">chords</span></td>
+        <td>Collection of chords to create a MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> containing the specified chords.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chords</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.Chord%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L396">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ToTrackChunk_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ToTrackChunk*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Chord})">ToTrackChunk(IEnumerable&lt;Chord&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates a track chunk with the specified chords.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TrackChunk ToTrackChunk(this IEnumerable&lt;Chord&gt; chords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
+        <td><span class="parametername">chords</span></td>
+        <td>Collection of chords to create a track chunk.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing the specified chords.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chords</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Chords/ChordsManagingUtilities.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

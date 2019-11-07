@@ -1,0 +1,771 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TimeSignatureEvent
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TimeSignatureEvent
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent" class="text-break">Class TimeSignatureEvent
+  </h1>
+  <div class="markdown level0 summary">
+Represents a Time Signature meta event.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></div>
+    <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a></div>
+    <div class="level3"><span class="xref">TimeSignatureEvent</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_UnknownContentSize">MidiEvent.UnknownContentSize</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_EventType">MidiEvent.EventType</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_DeltaTime">MidiEvent.DeltaTime</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Clone">MidiEvent.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class TimeSignatureEvent : MetaEvent</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+The MIDI time signature meta message defines the musical time signature of a MIDI sequence.
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L49">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor">TimeSignatureEvent()</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.TimeSignatureEvent.html">TimeSignatureEvent</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSignatureEvent()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_System_Byte_System_Byte_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.%23ctor(System.Byte%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L60">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_System_Byte_System_Byte_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor(System.Byte,System.Byte)">TimeSignatureEvent(Byte, Byte)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.TimeSignatureEvent.html">TimeSignatureEvent</a> with the
+specified numerator and denominator.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSignatureEvent(byte numerator, byte denominator)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td><span class="parametername">numerator</span></td>
+        <td>Numerator of the time signature.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td><span class="parametername">denominator</span></td>
+        <td>Denominator of the time signature.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_System_Byte_System_Byte_System_Byte_System_Byte_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.%23ctor(System.Byte%2CSystem.Byte%2CSystem.Byte%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L74">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_System_Byte_System_Byte_System_Byte_System_Byte_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor(System.Byte,System.Byte,System.Byte,System.Byte)">TimeSignatureEvent(Byte, Byte, Byte, Byte)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.TimeSignatureEvent.html">TimeSignatureEvent</a> with the
+specified numerator, denominator, number of MIDI clocks per metronome click
+and number of 32nd notes per beat.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSignatureEvent(byte numerator, byte denominator, byte clocksPerClick, byte thirtySecondNotesPerBeat)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td><span class="parametername">numerator</span></td>
+        <td>Numerator of the time signature.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td><span class="parametername">denominator</span></td>
+        <td>Denominator of the time signature.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td><span class="parametername">clocksPerClick</span></td>
+        <td>Number of MIDI clocks per metronome click.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td><span class="parametername">thirtySecondNotesPerBeat</span></td>
+        <td>Number of 32nd notes per beat.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultClocksPerClick.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultClocksPerClick%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L29">View Source</a>
+  </span>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultClocksPerClick" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultClocksPerClick">DefaultClocksPerClick</h4>
+  <div class="markdown level1 summary">
+Default number of MIDI clock ticks per metronome click.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte DefaultClocksPerClick = 24</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultDenominator.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultDenominator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L24">View Source</a>
+  </span>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultDenominator" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultDenominator">DefaultDenominator</h4>
+  <div class="markdown level1 summary">
+Denominator of the default time signature.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte DefaultDenominator = 4</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultNumerator.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultNumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L19">View Source</a>
+  </span>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultNumerator" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultNumerator">DefaultNumerator</h4>
+  <div class="markdown level1 summary">
+Numerator of the default time signature.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte DefaultNumerator = 4</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultThirtySecondNotesPerBeat.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultThirtySecondNotesPerBeat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L34">View Source</a>
+  </span>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_DefaultThirtySecondNotesPerBeat" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.DefaultThirtySecondNotesPerBeat">DefaultThirtySecondNotesPerBeat</h4>
+  <div class="markdown level1 summary">
+Default number of 32nd notes per beat.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte DefaultThirtySecondNotesPerBeat = 8</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_ClocksPerClick.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.ClocksPerClick%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L114">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ClocksPerClick_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ClocksPerClick*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ClocksPerClick" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ClocksPerClick">ClocksPerClick</h4>
+  <div class="markdown level1 summary">
+Gets or sets number of MIDI clock ticks per metronome click.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ClocksPerClick { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_Denominator.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.Denominator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L97">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_Denominator_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.Denominator*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_Denominator" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.Denominator">Denominator</h4>
+  <div class="markdown level1 summary">
+Gets or sets denominator of the time signature.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte Denominator { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Denominator is zero or is not a
+power of two.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_Numerator.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.Numerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L90">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_Numerator_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.Numerator*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_Numerator" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.Numerator">Numerator</h4>
+  <div class="markdown level1 summary">
+Gets or sets numerator of the time signature.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte Numerator { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_ThirtySecondNotesPerBeat.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.ThirtySecondNotesPerBeat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L119">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ThirtySecondNotesPerBeat_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ThirtySecondNotesPerBeat*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ThirtySecondNotesPerBeat" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ThirtySecondNotesPerBeat">ThirtySecondNotesPerBeat</h4>
+  <div class="markdown level1 summary">
+Gets or sets number of 32nd notes per beat.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ThirtySecondNotesPerBeat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_CloneEvent.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.CloneEvent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L170">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_CloneEvent_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.CloneEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_CloneEvent" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.CloneEvent">CloneEvent()</h4>
+  <div class="markdown level1 summary">
+Clones event by creating a copy of it.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override MidiEvent CloneEvent()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td>Copy of the event.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_CloneEvent">MidiEvent.CloneEvent()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L161">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_GetContentSize_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.GetContentSize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)">GetContentSize(WritingSettings)</h4>
+  <div class="markdown level1 summary">
+Gets the size of the content of a MIDI meta event.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override int GetContentSize(WritingSettings settings)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the event&apos;s content must be written.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>Size of the event&apos;s content.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_">MetaEvent.GetContentSize(WritingSettings)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader%2CMelanchall.DryWetMidi.Core.ReadingSettings%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L131">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ReadContent_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ReadContent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32)">ReadContent(MidiReader, ReadingSettings, Int32)</h4>
+  <div class="markdown level1 summary">
+Reads content of a MIDI meta event.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiReader.html">MidiReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td>Reader to read the content with.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the event&apos;s content must be read.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">size</span></td>
+        <td>Size of the event&apos;s content.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_">MetaEvent.ReadContent(MidiReader, ReadingSettings, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_ToString.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L179">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ToString_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ToString*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_ToString" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.ToString">ToString()</h4>
+  <div class="markdown level1 summary">
+Returns a string that represents the current object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td>A string that represents the current object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter%2CMelanchall.DryWetMidi.Core.WritingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L148">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_WriteContent_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.WriteContent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)">WriteContent(MidiWriter, WritingSettings)</h4>
+  <div class="markdown level1 summary">
+Writes content of a MIDI meta event.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void WriteContent(MidiWriter writer, WritingSettings settings)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiWriter.html">MidiWriter</a></td>
+        <td><span class="parametername">writer</span></td>
+        <td>Writer to write the content with.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the event&apos;s content must be written.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_">MetaEvent.WriteContent(MidiWriter, WritingSettings)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TimeSignatureEvent.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TimeSignatureEvent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Events/Meta/TimeSignatureEvent.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

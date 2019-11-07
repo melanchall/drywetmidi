@@ -1,0 +1,1094 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MidiFile
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MidiFile
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.MidiFile">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Core_MidiFile" data-uid="Melanchall.DryWetMidi.Core.MidiFile" class="text-break">Class MidiFile
+  </h1>
+  <div class="markdown level0 summary">
+Class that represents a MIDI file.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">MidiFile</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiFile_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class MidiFile</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile__ctor.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L33">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile__ctor" data-uid="Melanchall.DryWetMidi.Core.MidiFile.#ctor">MidiFile()</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiFile()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile__ctor_Melanchall_DryWetMidi_Core_MidiChunk___.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.%23ctor(Melanchall.DryWetMidi.Core.MidiChunk%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L64">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile__ctor_Melanchall_DryWetMidi_Core_MidiChunk___" data-uid="Melanchall.DryWetMidi.Core.MidiFile.#ctor(Melanchall.DryWetMidi.Core.MidiChunk[])">MidiFile(MidiChunk[])</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> with the specified chunks.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiFile(params MidiChunk[] chunks)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>[]</td>
+        <td><span class="parametername">chunks</span></td>
+        <td>Chunks to add to the file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiFile__ctor_Melanchall_DryWetMidi_Core_MidiChunk____remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+Header chunk with appropriate information will be written to a file automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunks</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.%23ctor(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.MidiChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L47">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.MidiFile.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk})">MidiFile(IEnumerable&lt;MidiChunk&gt;)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> with the specified chunks.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiFile(IEnumerable&lt;MidiChunk&gt; chunks)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="parametername">chunks</span></td>
+        <td>Chunks to add to the file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiFile__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+Header chunk with appropriate information will be written to a file automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunks</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_Chunks.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.Chunks%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L92">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Chunks_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Chunks*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Chunks" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Chunks">Chunks</h4>
+  <div class="markdown level1 summary">
+Gets collection of chunks of a MIDI file.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ChunksCollection Chunks { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiFile_Chunks_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+MIDI Files are made up of chunks. Сollection returned by this property may contain chunks
+of the following types: <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>, <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a>, and any custom
+chunk types you&apos;ve defined.
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L100">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat" data-uid="Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat">OriginalFormat</h4>
+  <div class="markdown level1 summary">
+Gets original format of the file was read. This property returns null for the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>
+created by constructor.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiFileFormat OriginalFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileFormat.html">MidiFileFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatException.html">UnknownFileFormatException</a></td>
+        <td>File format is unknown.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get original format of the file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_TimeDivision.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.TimeDivision%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L82">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_TimeDivision_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.TimeDivision*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_TimeDivision" data-uid="Melanchall.DryWetMidi.Core.MidiFile.TimeDivision">TimeDivision</h4>
+  <div class="markdown level1 summary">
+Gets or sets a time division of a MIDI file.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeDivision TimeDivision { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TimeDivision.html">TimeDivision</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiFile_TimeDivision_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Time division specifies the meaning of the delta-times of events. There are two types of
+the time division: ticks per quarter note and SMPTE. The first type represented by
+<a class="xref" href="Melanchall.DryWetMidi.Core.TicksPerQuarterNoteTimeDivision.html">TicksPerQuarterNoteTimeDivision</a> class and the second one represented by
+<a class="xref" href="Melanchall.DryWetMidi.Core.SmpteTimeDivision.html">SmpteTimeDivision</a> class.
+</div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_Clone.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L416">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Clone_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Clone*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Clone" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Clone">Clone()</h4>
+  <div class="markdown level1 summary">
+Clones MIDI file by creating a copy of it.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiFile Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td>Copy of the MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_Read_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.Read(System.IO.Stream%2CMelanchall.DryWetMidi.Core.ReadingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L244">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Read_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Read*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Read_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Read(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings)">Read(Stream, ReadingSettings)</h4>
+  <div class="markdown level1 summary">
+Reads a MIDI file from the stream.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiFile Read(Stream stream, ReadingSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.stream">Stream</a></td>
+        <td><span class="parametername">stream</span></td>
+        <td>Stream to read file from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the file must be read.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> representing a MIDI file was read from the stream.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiFile_Read_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Stream must be readable, seekable and be able to provide its position and length via <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.stream.position#System_IO_Stream_Position">Position</a>
+and <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.stream.length#System_IO_Stream_Length">Length</a> properties.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> doesn&apos;t support reading. -or
+<code data-dev-comment-type="paramref" class="paramref">stream</code> doesn&apos;t support seeking. -or- <code data-dev-comment-type="paramref" class="paramref">stream</code> is already read.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred while reading from the stream.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is disposed. -or-
+    Underlying stream reader is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td>Unable to get position of the <code data-dev-comment-type="paramref" class="paramref">stream</code>. -or
+Unable to get length of the <code data-dev-comment-type="paramref" class="paramref">stream</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a></td>
+        <td>There is no header chunk in a file.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html">InvalidChunkSizeException</a></td>
+        <td>Actual header or track chunk&apos;s size differs from the one declared
+in its header and that should be treated as error according to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a></td>
+        <td>Chunk to be read has unknown ID and that
+should be treated as error accordng to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a></td>
+        <td>Actual track chunks
+count differs from the expected one and that should be treated as error according to
+the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatException.html">UnknownFileFormatException</a></td>
+        <td>The header chunk contains unknown file format and
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy">UnknownFileFormatPolicy</a> property of the <code data-dev-comment-type="paramref" class="paramref">settings</code> set to
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy.html#Melanchall_DryWetMidi_Core_UnknownFileFormatPolicy_Abort">Abort</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
+        <td>MIDI file cannot be read since the reader&apos;s underlying stream doesn&apos;t
+have enough bytes.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
+        <td>Unexpected running status is encountered.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a></td>
+        <td>Track chunk doesn&apos;t end with End Of Track event and that
+should be treated as error accordng to the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
+        <td>Value of a channel event&apos;s parameter
+just read is invalid.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
+        <td>Value of a meta event&apos;s parameter
+just read is invalid.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_Read_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.Read(System.String%2CMelanchall.DryWetMidi.Core.ReadingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L163">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Read_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Read*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Read_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Read(System.String,Melanchall.DryWetMidi.Core.ReadingSettings)">Read(String, ReadingSettings)</h4>
+  <div class="markdown level1 summary">
+Reads a MIDI file specified by its full path.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiFile Read(string filePath, ReadingSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">filePath</span></td>
+        <td>Path to the file to read.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the file must be read.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> representing a MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">filePath</code> is a zero-length string,
+    contains only white space, or contains one or more invalid characters as defined by
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.path.invalidpathchars">InvalidPathChars</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">filePath</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.pathtoolongexception">PathTooLongException</a></td>
+        <td>The specified path, file name, or both exceed the system-defined
+maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
+and file names must be less than 260 characters.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.directorynotfoundexception">DirectoryNotFoundException</a></td>
+        <td>The specified path is invalid, (for example,
+it is on an unmapped drive).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred while reading the file.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">filePath</code> is in an invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.unauthorizedaccessexception">UnauthorizedAccessException</a></td>
+        <td>This operation is not supported on the current platform. -or-
+<code data-dev-comment-type="paramref" class="paramref">filePath</code> specified a directory. -or- The caller does not have the required permission.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a></td>
+        <td>There is no header chunk in a file.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html">InvalidChunkSizeException</a></td>
+        <td>Actual header or track chunk&apos;s size differs from the one declared
+in its header and that should be treated as error according to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a></td>
+        <td>Chunk to be read has unknown ID and that
+should be treated as error accordng to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a></td>
+        <td>Actual track chunks
+count differs from the expected one and that should be treated as error according to
+the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatException.html">UnknownFileFormatException</a></td>
+        <td>The header chunk contains unknown file format and
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy">UnknownFileFormatPolicy</a> property of the <code data-dev-comment-type="paramref" class="paramref">settings</code> set to
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy.html#Melanchall_DryWetMidi_Core_UnknownFileFormatPolicy_Abort">Abort</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
+        <td>Value of a channel event&apos;s parameter
+just read is invalid.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
+        <td>Value of a meta event&apos;s parameter
+just read is invalid.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a></td>
+        <td>Reader has encountered an unknown channel event.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
+        <td>MIDI file cannot be read since the reader&apos;s underlying stream doesn&apos;t
+have enough bytes.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
+        <td>Unexpected running status is encountered.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a></td>
+        <td>Track chunk doesn&apos;t end with End Of Track event and that
+should be treated as error accordng to the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_Write_System_IO_Stream_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.Write(System.IO.Stream%2CMelanchall.DryWetMidi.Core.MidiFileFormat%2CMelanchall.DryWetMidi.Core.WritingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L367">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Write_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Write*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Write_System_IO_Stream_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Write(System.IO.Stream,Melanchall.DryWetMidi.Core.MidiFileFormat,Melanchall.DryWetMidi.Core.WritingSettings)">Write(Stream, MidiFileFormat, WritingSettings)</h4>
+  <div class="markdown level1 summary">
+Writes current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to the stream.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.stream">Stream</a></td>
+        <td><span class="parametername">stream</span></td>
+        <td>Stream to write file&apos;s data to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileFormat.html">MidiFileFormat</a></td>
+        <td><span class="parametername">format</span></td>
+        <td>Format of the file to be written.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the file must be written.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> doesn&apos;t support writing.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">format</code> specified an invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Time division is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred while writing to the stream.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is disposed. -or-
+    Underlying stream writer is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html">TooManyTrackChunksException</a></td>
+        <td>Count of track chunks presented in the file
+exceeds maximum value allowed for MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile.Write(System.String%2CSystem.Boolean%2CMelanchall.DryWetMidi.Core.MidiFileFormat%2CMelanchall.DryWetMidi.Core.WritingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L196">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Write_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Write*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Write(System.String,System.Boolean,Melanchall.DryWetMidi.Core.MidiFileFormat,Melanchall.DryWetMidi.Core.WritingSettings)">Write(String, Boolean, MidiFileFormat, WritingSettings)</h4>
+  <div class="markdown level1 summary">
+Writes the MIDI file to location specified by full path.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">filePath</span></td>
+        <td>Full path of the file to write to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">overwriteFile</span></td>
+        <td>If true and file specified by <code data-dev-comment-type="paramref" class="paramref">filePath</code> already
+exists it will be overwritten; if false and the file exists exception will be thrown.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileFormat.html">MidiFileFormat</a></td>
+        <td><span class="parametername">format</span></td>
+        <td>MIDI file format to write in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the file must be written.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">filePath</code> is a zero-length string,
+    contains only white space, or contains one or more invalid characters as defined by
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.path.invalidpathchars">InvalidPathChars</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">filePath</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">format</code> specified an invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.pathtoolongexception">PathTooLongException</a></td>
+        <td>The specified path, file name, or both exceed the system-defined
+maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
+and file names must be less than 260 characters.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.directorynotfoundexception">DirectoryNotFoundException</a></td>
+        <td>The specified path is invalid, (for example,
+it is on an unmapped drive).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred while writing the file.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">filePath</code> is in an invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.unauthorizedaccessexception">UnauthorizedAccessException</a></td>
+        <td>This operation is not supported on the current platform.-or-
+<code data-dev-comment-type="paramref" class="paramref">filePath</code> specified a directory.-or- The caller does not have the required permission.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Time division is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html">TooManyTrackChunksException</a></td>
+        <td>Count of track chunks presented in the file
+exceeds maximum value allowed for MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileUtilities.html#Melanchall_DryWetMidi_Core_MidiFileUtilities_GetChannels_Melanchall_DryWetMidi_Core_MidiFile_">MidiFileUtilities.GetChannels(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunkUtilities.html#Melanchall_DryWetMidi_Core_TrackChunkUtilities_GetTrackChunks_Melanchall_DryWetMidi_Core_MidiFile_">TrackChunkUtilities.GetTrackChunks(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_">PlaybackUtilities.GetPlayback(MidiFile, OutputDevice, MidiClockSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_MidiClockSettings_">PlaybackUtilities.GetPlayback(MidiFile, MidiClockSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_">PlaybackUtilities.Play(MidiFile, OutputDevice, MidiClockSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_MidiFile_System_Int64_">ChordsManagingUtilities.GetChords(MidiFile, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.ProcessChords(MidiFile, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.RemoveChords(MidiFile, Predicate&lt;Chord&gt;, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_MidiFile_">NotesManagingUtilities.GetNotes(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.ProcessNotes(MidiFile, Action&lt;Note&gt;, Predicate&lt;Note&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.RemoveNotes(MidiFile, Predicate&lt;Note&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetNotesAndRestsUtilities.html#Melanchall_DryWetMidi_Interaction_GetNotesAndRestsUtilities_GetNotesAndRests_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_">GetNotesAndRestsUtilities.GetNotesAndRests(MidiFile, RestSeparationPolicy)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetTimedEventsAndNotesUtilities.html#Melanchall_DryWetMidi_Interaction_GetTimedEventsAndNotesUtilities_GetTimedEventsAndNotes_Melanchall_DryWetMidi_Core_MidiFile_">GetTimedEventsAndNotesUtilities.GetTimedEventsAndNotes(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_ManageTempoMap_Melanchall_DryWetMidi_Core_MidiFile_">TempoMapManagingUtilities.ManageTempoMap(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_GetTempoMap_Melanchall_DryWetMidi_Core_MidiFile_">TempoMapManagingUtilities.GetTempoMap(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_ReplaceTempoMap_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_TempoMap_">TempoMapManagingUtilities.ReplaceTempoMap(MidiFile, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_">TimedEventsManagingUtilities.GetTimedEvents(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(MidiFile, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.RemoveTimedEvents(MidiFile, Predicate&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration__1_Melanchall_DryWetMidi_Core_MidiFile_">MidiFileUtilities.GetDuration&lt;TTimeSpan&gt;(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_TimeSpanType_">MidiFileUtilities.GetDuration(MidiFile, TimeSpanType)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_IsEmpty_Melanchall_DryWetMidi_Core_MidiFile_">MidiFileUtilities.IsEmpty(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_ShiftEvents_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_">MidiFileUtilities.ShiftEvents(MidiFile, ITimeSpan)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_">MidiFileUtilities.Resize(MidiFile, ITimeSpan)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_Melanchall_DryWetMidi_Core_MidiFile_System_Double_">MidiFileUtilities.Resize(MidiFile, Double)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Int64_">ChordsSplitterUtilities.SplitChordsByStep(MidiFile, ITimeSpan, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_System_Int64_">ChordsSplitterUtilities.SplitChordsByPartsNumber(MidiFile, Int32, TimeSpanType, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_System_Int64_">ChordsSplitterUtilities.SplitChordsByGrid(MidiFile, IGrid, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_System_Int64_">ChordsSplitterUtilities.SplitChordsAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_System_Int64_">ChordsSplitterUtilities.SplitChordsAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_">NotesSplitterUtilities.SplitNotesByStep(MidiFile, ITimeSpan)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_">NotesSplitterUtilities.SplitNotesByPartsNumber(MidiFile, Int32, TimeSpanType)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_">NotesSplitterUtilities.SplitNotesByGrid(MidiFile, IGrid)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_">NotesSplitterUtilities.SplitNotesAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_">NotesSplitterUtilities.SplitNotesAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_">MidiFileSplitter.SplitByChannel(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_">MidiFileSplitter.SplitByNotes(MidiFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_">MidiFileSplitter.SplitByGrid(MidiFile, IGrid, SliceMidiFileSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SkipPart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_">MidiFileSplitter.SkipPart(MidiFile, ITimeSpan, SliceMidiFileSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_TakePart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_">MidiFileSplitter.TakePart(MidiFile, ITimeSpan, SliceMidiFileSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_TakePart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_">MidiFileSplitter.TakePart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html#Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesMergerUtilities.MergeNotes(MidiFile, NotesMergingSettings, Predicate&lt;Note&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsQuantizerUtilities_QuantizeChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_System_Int64_Melanchall_DryWetMidi_Tools_ChordsQuantizingSettings_">ChordsQuantizerUtilities.QuantizeChords(MidiFile, IGrid, Int64, ChordsQuantizingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_NotesQuantizerUtilities_QuantizeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_NotesQuantizingSettings_">NotesQuantizerUtilities.QuantizeNotes(MidiFile, IGrid, NotesQuantizingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.TimedEventsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_TimedEventsQuantizerUtilities_QuantizeTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_TimedEventsQuantizingSettings_">TimedEventsQuantizerUtilities.QuantizeTimedEvents(MidiFile, IGrid, TimedEventsQuantizingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsRandomizerUtilities_RandomizeChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_IBounds_System_Int64_Melanchall_DryWetMidi_Tools_ChordsRandomizingSettings_">ChordsRandomizerUtilities.RandomizeChords(MidiFile, IBounds, Int64, ChordsRandomizingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_NotesRandomizerUtilities_RandomizeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Tools_NotesRandomizingSettings_">NotesRandomizerUtilities.RandomizeNotes(MidiFile, IBounds, NotesRandomizingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.TimedEventsRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_TimedEventsRandomizerUtilities_RandomizeTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Tools_TimedEventsRandomizingSettings_">TimedEventsRandomizerUtilities.RandomizeTimedEvents(MidiFile, IBounds, TimedEventsRandomizingSettings)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiFile.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiFile%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/MidiFile.cs/#L13" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,470 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MidiChunk
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MidiChunk
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.MidiChunk">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Core_MidiChunk" data-uid="Melanchall.DryWetMidi.Core.MidiChunk" class="text-break">Class MidiChunk
+  </h1>
+  <div class="markdown level0 summary">
+Represents a chunk of Standard MIDI file.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">MidiChunk</span></div>
+      <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></div>
+      <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiChunk_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class MidiChunk</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiChunk_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+MIDI Files are made up of chunks. Each chunk has a 4-character ASCII string ID and a 32-bit length,
+which is the number of bytes in the chunk. This structure allows future chunk types to be designed
+which may be easily be ignored if encountered by a program written before the chunk type is introduced.
+The length of the chunk refers to the number of bytes of data which follow (the eight bytes of ID and length
+are not included).Therefore, a chunk with a length of 6 would actually occupy 14 bytes in the file.
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk__ctor_System_String_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L41">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiChunk__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiChunk__ctor_System_String_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.#ctor(System.String)">MidiChunk(String)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> with the specified ID.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiChunk(string id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">id</span></td>
+        <td>The type of the chunk.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<code data-dev-comment-type="paramref" class="paramref">id</code> is null.
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>
+<code data-dev-comment-type="paramref" class="paramref">id</code> is empty, or consists only of white-space characters; or
+length of <code data-dev-comment-type="paramref" class="paramref">id</code> doesn&apos;t equal 4.
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk_IdLength.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk.IdLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L24">View Source</a>
+  </span>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiChunk_IdLength" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.IdLength">IdLength</h4>
+  <div class="markdown level1 summary">
+The length of a chunk&apos;s ID. This field is constant.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int IdLength = 4</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk_ChunkId.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk.ChunkId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L61">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiChunk_ChunkId_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.ChunkId*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiChunk_ChunkId" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.ChunkId">ChunkId</h4>
+  <div class="markdown level1 summary">
+Gets 4-character ID of the chunk which specifies its type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ChunkId { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk_Clone.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L71">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiChunk_Clone_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.Clone*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiChunk_Clone" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.Clone">Clone()</h4>
+  <div class="markdown level1 summary">
+Clones chunk by creating a copy of it.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract MidiChunk Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td>Copy of the chunk.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L148">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiChunk_GetContentSize_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiChunk_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)">GetContentSize(WritingSettings)</h4>
+  <div class="markdown level1 summary">
+Gets size of chunk&apos;s content as number of bytes required to write it according to specified
+<a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract uint GetContentSize(WritingSettings settings)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the chunk&apos;s content will be written.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
+        <td>Number of bytes required to write chunk&apos;s content.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_UInt32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk.ReadContent(Melanchall.DryWetMidi.Core.MidiReader%2CMelanchall.DryWetMidi.Core.ReadingSettings%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L133">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiChunk_ReadContent_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.ReadContent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiChunk_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_UInt32_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32)">ReadContent(MidiReader, ReadingSettings, UInt32)</h4>
+  <div class="markdown level1 summary">
+Reads content of a chunk. Content is a part of chunk&apos;s data without its header (ID and size).
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, uint size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiReader.html">MidiReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td>Reader to read the chunk&apos;s content with.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the chunk&apos;s content must be read.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
+        <td><span class="parametername">size</span></td>
+        <td>Expected size of the content taken from the chunk&apos;s header.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter%2CMelanchall.DryWetMidi.Core.WritingSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L140">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_MidiChunk_WriteContent_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.WriteContent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiChunk_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiChunk.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)">WriteContent(MidiWriter, WritingSettings)</h4>
+  <div class="markdown level1 summary">
+Writes content of a chunk. Content is a part of chunk&apos;s data without its header (ID and size).
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void WriteContent(MidiWriter writer, WritingSettings settings)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiWriter.html">MidiWriter</a></td>
+        <td><span class="parametername">writer</span></td>
+        <td>Writer to write the chunk&apos;s content with.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which the chunk&apos;s content must be written.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_MidiChunk.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.MidiChunk%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/MidiChunk.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

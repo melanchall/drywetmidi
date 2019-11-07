@@ -1,0 +1,807 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ScaleUtilities
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ScaleUtilities
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities" class="text-break">Class ScaleUtilities
+  </h1>
+  <div class="markdown level0 summary">
+Provides useful utilities for working with <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a>.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">ScaleUtilities</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.html">Melanchall.DryWetMidi.MusicTheory</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class ScaleUtilities</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetAscendingNotes_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetAscendingNotes(Melanchall.DryWetMidi.MusicTheory.Scale%2CMelanchall.DryWetMidi.MusicTheory.Note)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L117">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetAscendingNotes_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetAscendingNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetAscendingNotes_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetAscendingNotes(Melanchall.DryWetMidi.MusicTheory.Scale,Melanchall.DryWetMidi.MusicTheory.Note)">GetAscendingNotes(Scale, Note)</h4>
+  <div class="markdown level1 summary">
+Gets notes that belong to a musical scale in ascending order starting with the specified
+root note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Note&gt; GetAscendingNotes(this Scale scale, Note rootNote)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get notes of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
+        <td><span class="parametername">rootNote</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a> to start a sequence of scale&apos;s notes with.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a>&gt;</td>
+        <td>Notes that belong to the <code data-dev-comment-type="paramref" class="paramref">scale</code> in ascending order starting with
+the <code data-dev-comment-type="paramref" class="paramref">rootNote</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">rootNote</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetDegree_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_ScaleDegree_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetDegree(Melanchall.DryWetMidi.MusicTheory.Scale%2CMelanchall.DryWetMidi.MusicTheory.ScaleDegree)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L28">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetDegree_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetDegree*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetDegree_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_ScaleDegree_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetDegree(Melanchall.DryWetMidi.MusicTheory.Scale,Melanchall.DryWetMidi.MusicTheory.ScaleDegree)">GetDegree(Scale, ScaleDegree)</h4>
+  <div class="markdown level1 summary">
+Gets <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.NoteName.html">NoteName</a> corresponding to the specified degree of a musical scale.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteName GetDegree(this Scale scale, ScaleDegree degree)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get degree of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.ScaleDegree.html">ScaleDegree</a></td>
+        <td><span class="parametername">degree</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.ScaleDegree.html">ScaleDegree</a> representing a degree of the
+<code data-dev-comment-type="paramref" class="paramref">scale</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.NoteName.html">NoteName</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.NoteName.html">NoteName</a> which is the degree of the scale.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">degree</code> specified an
+    invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">degree</code> is out of
+    range for the <code data-dev-comment-type="paramref" class="paramref">scale</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetDescendingNotes_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetDescendingNotes(Melanchall.DryWetMidi.MusicTheory.Scale%2CMelanchall.DryWetMidi.MusicTheory.Note)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L136">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetDescendingNotes_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetDescendingNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetDescendingNotes_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetDescendingNotes(Melanchall.DryWetMidi.MusicTheory.Scale,Melanchall.DryWetMidi.MusicTheory.Note)">GetDescendingNotes(Scale, Note)</h4>
+  <div class="markdown level1 summary">
+Gets notes that belong to a musical scale in descending order starting with the specified
+root note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Note&gt; GetDescendingNotes(this Scale scale, Note rootNote)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get notes of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
+        <td><span class="parametername">rootNote</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a> to start a sequence of scale&apos;s notes with.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a>&gt;</td>
+        <td>Notes that belong to the <code data-dev-comment-type="paramref" class="paramref">scale</code> in descending order starting with
+the <code data-dev-comment-type="paramref" class="paramref">rootNote</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">rootNote</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNextNote_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNextNote(Melanchall.DryWetMidi.MusicTheory.Scale%2CMelanchall.DryWetMidi.MusicTheory.Note)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L174">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNextNote_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNextNote*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNextNote_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNextNote(Melanchall.DryWetMidi.MusicTheory.Scale,Melanchall.DryWetMidi.MusicTheory.Note)">GetNextNote(Scale, Note)</h4>
+  <div class="markdown level1 summary">
+Gets a note that belongs to a musical scale next to the specified note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Note GetNextNote(this Scale scale, Note note)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get the next note of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
+        <td><span class="parametername">note</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a> to get a note next to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
+        <td>A note next to the <code data-dev-comment-type="paramref" class="paramref">note</code> that belongs to the
+<code data-dev-comment-type="paramref" class="paramref">scale</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">note</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNotes_Melanchall_DryWetMidi_MusicTheory_Scale_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNotes(Melanchall.DryWetMidi.MusicTheory.Scale)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L59">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNotes_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNotes_Melanchall_DryWetMidi_MusicTheory_Scale_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNotes(Melanchall.DryWetMidi.MusicTheory.Scale)">GetNotes(Scale)</h4>
+  <div class="markdown level1 summary">
+Gets all MIDI notes that belong to the specified scale.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Note&gt; GetNotes(this Scale scale)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get notes of.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a>&gt;</td>
+        <td>Notes that belong to the <code data-dev-comment-type="paramref" class="paramref">scale</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNotesNames_Melanchall_DryWetMidi_MusicTheory_Scale_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNotesNames(Melanchall.DryWetMidi.MusicTheory.Scale)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L88">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNotesNames_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNotesNames*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNotesNames_Melanchall_DryWetMidi_MusicTheory_Scale_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetNotesNames(Melanchall.DryWetMidi.MusicTheory.Scale)">GetNotesNames(Scale)</h4>
+  <div class="markdown level1 summary">
+Returns infinite collection of note names that belong to the specified scale.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;NoteName&gt; GetNotesNames(this Scale scale)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get note names of.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.MusicTheory.NoteName.html">NoteName</a>&gt;</td>
+        <td>Note names that belong to the <code data-dev-comment-type="paramref" class="paramref">scale</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetPreviousNote_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetPreviousNote(Melanchall.DryWetMidi.MusicTheory.Scale%2CMelanchall.DryWetMidi.MusicTheory.Note)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L193">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetPreviousNote_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetPreviousNote*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetPreviousNote_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetPreviousNote(Melanchall.DryWetMidi.MusicTheory.Scale,Melanchall.DryWetMidi.MusicTheory.Note)">GetPreviousNote(Scale, Note)</h4>
+  <div class="markdown level1 summary">
+Gets a note that belongs to a musical scale previous to the specified note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Note GetPreviousNote(this Scale scale, Note note)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get the previous note of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
+        <td><span class="parametername">note</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a> to get a note previous to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
+        <td>A note previous to the <code data-dev-comment-type="paramref" class="paramref">note</code> that belongs to the
+<code data-dev-comment-type="paramref" class="paramref">scale</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">note</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetStep_Melanchall_DryWetMidi_MusicTheory_Scale_System_Int32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetStep(Melanchall.DryWetMidi.MusicTheory.Scale%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L45">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetStep_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetStep*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetStep_Melanchall_DryWetMidi_MusicTheory_Scale_System_Int32_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.GetStep(Melanchall.DryWetMidi.MusicTheory.Scale,System.Int32)">GetStep(Scale, Int32)</h4>
+  <div class="markdown level1 summary">
+Gets <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.NoteName.html">NoteName</a> corresponding to the specified step of a musical scale.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteName GetStep(this Scale scale, int step)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to get step of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Step of the scale.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.NoteName.html">NoteName</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.NoteName.html">NoteName</a> which is the step of the scale.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">step</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_IsNoteInScale_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.IsNoteInScale(Melanchall.DryWetMidi.MusicTheory.Scale%2CMelanchall.DryWetMidi.MusicTheory.Note)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L156">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_IsNoteInScale_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.IsNoteInScale*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_IsNoteInScale_Melanchall_DryWetMidi_MusicTheory_Scale_Melanchall_DryWetMidi_MusicTheory_Note_" data-uid="Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.IsNoteInScale(Melanchall.DryWetMidi.MusicTheory.Scale,Melanchall.DryWetMidi.MusicTheory.Note)">IsNoteInScale(Scale, Note)</h4>
+  <div class="markdown level1 summary">
+Checks if the specified note belongs to a scale or not.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsNoteInScale(this Scale scale, Note note)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a></td>
+        <td><span class="parametername">scale</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Scale.html">Scale</a> to check the note.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
+        <td><span class="parametername">note</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a> to check if it belongs to the <code data-dev-comment-type="paramref" class="paramref">scale</code>
+    or not.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if <code data-dev-comment-type="paramref" class="paramref">note</code> belongs to the <code data-dev-comment-type="paramref" class="paramref">scale</code>;
+otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">scale</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">note</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_MusicTheory_ScaleUtilities.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.MusicTheory.ScaleUtilities%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/MusicTheory/Scale/ScaleUtilities.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

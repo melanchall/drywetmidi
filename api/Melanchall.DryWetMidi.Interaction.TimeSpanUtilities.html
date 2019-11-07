@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TimeSpanUtilities
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TimeSpanUtilities
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities" class="text-break">Class TimeSpanUtilities
+  </h1>
+  <div class="markdown level0 summary">
+Provides useful utilities for working with <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">TimeSpanUtilities</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class TimeSpanUtilities</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetMaxTimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanType_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetMaxTimeSpan(Melanchall.DryWetMidi.Interaction.TimeSpanType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/TimeSpanUtilities.cs/#L122">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetMaxTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetMaxTimeSpan*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetMaxTimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanType_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetMaxTimeSpan(Melanchall.DryWetMidi.Interaction.TimeSpanType)">GetMaxTimeSpan(TimeSpanType)</h4>
+  <div class="markdown level1 summary">
+Gets an object that represents maximum value of time span defined by the specified
+time span type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ITimeSpan GetMaxTimeSpan(TimeSpanType timeSpanType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">timeSpanType</span></td>
+        <td>The type of time span to get maximum value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>An object that represents maximum value of time span defined by <code data-dev-comment-type="paramref" class="paramref">timeSpanType</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpanType</code> specified an
+    invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetZeroTimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanType_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetZeroTimeSpan(Melanchall.DryWetMidi.Interaction.TimeSpanType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/TimeSpanUtilities.cs/#L137">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetZeroTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetZeroTimeSpan*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetZeroTimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanType_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetZeroTimeSpan(Melanchall.DryWetMidi.Interaction.TimeSpanType)">GetZeroTimeSpan(TimeSpanType)</h4>
+  <div class="markdown level1 summary">
+Gets an object that represents zero value of time span defined by the specified
+time span type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ITimeSpan GetZeroTimeSpan(TimeSpanType timeSpanType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">timeSpanType</span></td>
+        <td>The type of time span to get zero value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>An object that represents zero value of time span defined by <code data-dev-comment-type="paramref" class="paramref">timeSpanType</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpanType</code> specified an
+    invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetZeroTimeSpan__1.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetZeroTimeSpan%60%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/TimeSpanUtilities.cs/#L150">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetZeroTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetZeroTimeSpan*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_GetZeroTimeSpan__1" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.GetZeroTimeSpan``1">GetZeroTimeSpan&lt;TTimeSpan&gt;()</h4>
+  <div class="markdown level1 summary">
+Gets an object that represents zero value of time span defined by the specified
+time span type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TTimeSpan GetZeroTimeSpan&lt;TTimeSpan&gt;()
+    where TTimeSpan : ITimeSpan</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TTimeSpan</span></td>
+        <td>An object that represents zero value of time span defined by <code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TTimeSpan</span></td>
+        <td>The type of time span to get zero value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Parse_System_String_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Parse(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/TimeSpanUtilities.cs/#L96">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Parse_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Parse*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Parse_System_String_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Parse(System.String)">Parse(String)</h4>
+  <div class="markdown level1 summary">
+Converts the string representation of a time span to its <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> equivalent.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ITimeSpan Parse(string input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">input</span></td>
+        <td>A string containing a time span to convert.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>A <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> equivalent to the time span contained in <code data-dev-comment-type="paramref" class="paramref">input</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">input</code> is null or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">input</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_TryParse_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.TryParse(System.String%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/TimeSpanUtilities.cs/#L59">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_TryParse_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.TryParse*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_TryParse_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.TryParse(System.String,Melanchall.DryWetMidi.Interaction.ITimeSpan@)">TryParse(String, out ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Converts the string representation of a time span to its <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> equivalent.
+A return value indicates whether the conversion succeeded.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryParse(string input, out ITimeSpan timeSpan)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">input</span></td>
+        <td>A string containing a time span to convert.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">timeSpan</span></td>
+        <td>When this method returns, contains the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>
+equivalent of the time span contained in <code data-dev-comment-type="paramref" class="paramref">input</code>, if the conversion succeeded, or
+null if the conversion failed. The conversion fails if the <code data-dev-comment-type="paramref" class="paramref">input</code> is null or
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string.empty">Empty</a>, or is not of the correct format. This parameter is passed uninitialized;
+any value originally supplied in result will be overwritten.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if <code data-dev-comment-type="paramref" class="paramref">input</code> was converted successfully; otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_TryParse_System_String_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ITimeSpan__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.TryParse(System.String%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/TimeSpanUtilities.cs/#L84">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_TryParse_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.TryParse*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_TryParse_System_String_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ITimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.TryParse(System.String,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ITimeSpan@)">TryParse(String, TimeSpanType, out ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Converts the string representation of a time span to its <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> equivalent using
+the specified type of time span. A return value indicates whether the conversion succeeded.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryParse(string input, TimeSpanType timeSpanType, out ITimeSpan timeSpan)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">input</span></td>
+        <td>A string containing a time span to convert.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">timeSpanType</span></td>
+        <td>the type of time span to convert <code data-dev-comment-type="paramref" class="paramref">input</code> to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">timeSpan</span></td>
+        <td>When this method returns, contains the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>
+equivalent of the time span contained in <code data-dev-comment-type="paramref" class="paramref">input</code>, if the conversion succeeded, or
+null if the conversion failed. The conversion fails if the <code data-dev-comment-type="paramref" class="paramref">input</code> is null or
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string.empty">Empty</a>, or is not of the correct format. This parameter is passed uninitialized;
+any value originally supplied in result will be overwritten.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if <code data-dev-comment-type="paramref" class="paramref">input</code> was converted successfully; otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimeSpanUtilities.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimeSpanUtilities%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/TimeSpanUtilities.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,549 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ChordDescriptor
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ChordDescriptor
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Composing_ChordDescriptor" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor" class="text-break">Class ChordDescriptor
+  </h1>
+  <div class="markdown level0 summary">
+Represents an object that describes a chord.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">ChordDescriptor</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Composing.html">Melanchall.DryWetMidi.Composing</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class ChordDescriptor</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_MusicTheory_Note__Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.%23ctor(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.MusicTheory.Note%7D%2CMelanchall.DryWetMidi.Common.SevenBitNumber%2CMelanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L25">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor__ctor_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_MusicTheory_Note__Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.MusicTheory.Note},Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Interaction.ITimeSpan)">ChordDescriptor(IEnumerable&lt;Note&gt;, SevenBitNumber, ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a> with the specified notes,
+velocity and length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ChordDescriptor(IEnumerable&lt;Note&gt; notes, SevenBitNumber velocity, ITimeSpan length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a>&gt;</td>
+        <td><span class="parametername">notes</span></td>
+        <td>Notes of the chord.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the chord&apos;s notes.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Length of the chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notes</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">length</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_Length.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.Length%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L52">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Length_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Length*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Length" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Length">Length</h4>
+  <div class="markdown level1 summary">
+Gets the length of the chord.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan Length { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_Notes.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.Notes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L42">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Notes_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Notes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Notes" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Notes">Notes</h4>
+  <div class="markdown level1 summary">
+Gets the notes of the chord.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Note&gt; Notes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_Velocity.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.Velocity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L47">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Velocity_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Velocity*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Velocity" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Velocity">Velocity</h4>
+  <div class="markdown level1 summary">
+Gets the velocity of the chord.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SevenBitNumber Velocity { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L106">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Equals_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_Equals_System_Object_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary">
+Determines whether the specified object is equal to the current object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td><span class="parametername">obj</span></td>
+        <td>The object to compare with the current object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if the specified object is equal to the current object; otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_GetHashCode.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L115">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_GetHashCode_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.GetHashCode*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_GetHashCode" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary">
+Serves as the default hash function.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>A hash code for the current object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_ToString.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L96">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_ToString_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.ToString*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_ToString" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.ToString">ToString()</h4>
+  <div class="markdown level1 summary">
+Returns a string that represents the current object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td>A string that represents the current object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_op_Equality_Melanchall_DryWetMidi_Composing_ChordDescriptor_Melanchall_DryWetMidi_Composing_ChordDescriptor_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.op_Equality(Melanchall.DryWetMidi.Composing.ChordDescriptor%2CMelanchall.DryWetMidi.Composing.ChordDescriptor)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L64">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_op_Equality_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.op_Equality*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_op_Equality_Melanchall_DryWetMidi_Composing_ChordDescriptor_Melanchall_DryWetMidi_Composing_ChordDescriptor_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.op_Equality(Melanchall.DryWetMidi.Composing.ChordDescriptor,Melanchall.DryWetMidi.Composing.ChordDescriptor)">Equality(ChordDescriptor, ChordDescriptor)</h4>
+  <div class="markdown level1 summary">
+Determines if two <a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a> objects are equal.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(ChordDescriptor chordDescriptor1, ChordDescriptor chordDescriptor2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a></td>
+        <td><span class="parametername">chordDescriptor1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a></td>
+        <td><span class="parametername">chordDescriptor2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if the descriptors are equal, false otherwise.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor_op_Inequality_Melanchall_DryWetMidi_Composing_ChordDescriptor_Melanchall_DryWetMidi_Composing_ChordDescriptor_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor.op_Inequality(Melanchall.DryWetMidi.Composing.ChordDescriptor%2CMelanchall.DryWetMidi.Composing.ChordDescriptor)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L83">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Composing_ChordDescriptor_op_Inequality_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.op_Inequality*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_ChordDescriptor_op_Inequality_Melanchall_DryWetMidi_Composing_ChordDescriptor_Melanchall_DryWetMidi_Composing_ChordDescriptor_" data-uid="Melanchall.DryWetMidi.Composing.ChordDescriptor.op_Inequality(Melanchall.DryWetMidi.Composing.ChordDescriptor,Melanchall.DryWetMidi.Composing.ChordDescriptor)">Inequality(ChordDescriptor, ChordDescriptor)</h4>
+  <div class="markdown level1 summary">
+Determines if two <a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a> objects are not equal.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(ChordDescriptor chordDescriptor1, ChordDescriptor chordDescriptor2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a></td>
+        <td><span class="parametername">chordDescriptor1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a></td>
+        <td><span class="parametername">chordDescriptor2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Composing.ChordDescriptor.html">ChordDescriptor</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>false if the descriptors are equal, true otherwise.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Composing_ChordDescriptor.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Composing.ChordDescriptor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Composing/Descriptors/ChordDescriptor.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

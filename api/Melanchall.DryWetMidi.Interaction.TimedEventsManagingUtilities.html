@@ -1,0 +1,1540 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TimedEventsManagingUtilities
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TimedEventsManagingUtilities
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities" class="text-break">Class TimedEventsManagingUtilities
+  </h1>
+  <div class="markdown level0 summary">
+Extension methods for managing MIDI events by their absolute time.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">TimedEventsManagingUtilities</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class TimedEventsManagingUtilities</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_Melanchall_DryWetMidi_Interaction_TimedEventsCollection_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent(Melanchall.DryWetMidi.Interaction.TimedEventsCollection%2CMelanchall.DryWetMidi.Core.MidiEvent%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L172">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_Melanchall_DryWetMidi_Interaction_TimedEventsCollection_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent(Melanchall.DryWetMidi.Interaction.TimedEventsCollection,Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">AddEvent(TimedEventsCollection, MidiEvent, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Adds a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> into a <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a> with the specified
+absolute time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a> to add an event into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>Event to add into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Absolute time that will be assigned to the <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>
+when it will be placed into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to place <code data-dev-comment-type="paramref" class="paramref">midiEvent</code> into the
+<code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> with the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_Melanchall_DryWetMidi_Interaction_TimedEventsCollection_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent(Melanchall.DryWetMidi.Interaction.TimedEventsCollection%2CMelanchall.DryWetMidi.Core.MidiEvent%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L150">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_Melanchall_DryWetMidi_Interaction_TimedEventsCollection_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent(Melanchall.DryWetMidi.Interaction.TimedEventsCollection,Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)">AddEvent(TimedEventsCollection, MidiEvent, Int64)</h4>
+  <div class="markdown level1 summary">
+Adds a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> into a <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a> with the specified
+absolute time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, long time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a> to add an event into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>Event to add into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Absolute time that will be assigned to the <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>
+when it will be placed into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L325">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.TimedEvent})">AddTimedEvents(EventsCollection, IEnumerable&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds collection of timed events to the specified <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddTimedEvents(this EventsCollection eventsCollection, IEnumerable&lt;TimedEvent&gt; events)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to add timed events to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Timed events to add to the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L343">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.TimedEvent})">AddTimedEvents(TrackChunk, IEnumerable&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds collection of timed events to the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddTimedEvents(this TrackChunk trackChunk, IEnumerable&lt;TimedEvent&gt; events)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to add timed events to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Timed events to add to the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L90">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection)">GetTimedEvents(EventsCollection)</h4>
+  <div class="markdown level1 summary">
+Gets timed events contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TimedEvent&gt; GetTimedEvents(this EventsCollection eventsCollection)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to search for events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td>Collection of timed events contained in <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.MidiFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L132">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.MidiFile)">GetTimedEvents(MidiFile)</h4>
+  <div class="markdown level1 summary">
+Gets timed events contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TimedEvent&gt; GetTimedEvents(this MidiFile file)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to search for events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td>Collection of timed events contained in <code data-dev-comment-type="paramref" class="paramref">file</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">file</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L103">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk)">GetTimedEvents(TrackChunk)</h4>
+  <div class="markdown level1 summary">
+Gets timed events contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TimedEvent&gt; GetTimedEvents(this TrackChunk trackChunk)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td>Collection of timed events contained in <code data-dev-comment-type="paramref" class="paramref">trackChunk</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.MidiEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L74">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent})">GetTimedEvents(IEnumerable&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Gets collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> as a collection of timed events.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TimedEvent&gt; GetTimedEvents(this IEnumerable&lt;MidiEvent&gt; events)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to get timed events for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td>Collection of timed events contained in <code data-dev-comment-type="paramref" class="paramref">events</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L116">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk})">GetTimedEvents(IEnumerable&lt;TrackChunk&gt;)</h4>
+  <div class="markdown level1 summary">
+Gets timed events contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TimedEvent&gt; GetTimedEvents(this IEnumerable&lt;TrackChunk&gt; trackChunks)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Track chunks to search for events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td>Collection of timed events contained in <code data-dev-comment-type="paramref" class="paramref">trackChunks</code> ordered by time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ManageTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Comparison%7BMelanchall.DryWetMidi.Core.MidiEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L44">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ManageTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ManageTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">ManageTimedEvents(EventsCollection, Comparison&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> initializing it with the
+specified events collection and comparison delegate for events that have same time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TimedEventsManager ManageTimedEvents(this EventsCollection eventsCollection, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> that holds events to manage.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.comparison-1">Comparison</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">sameTimeEventsComparison</span></td>
+        <td>Delegate to compare events with the same absolute time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> that can be used to manage
+events represented by the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ManageTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Comparison%7BMelanchall.DryWetMidi.Core.MidiEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L61">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ManageTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ManageTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">ManageTimedEvents(TrackChunk, Comparison&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> initializing it with the
+events collection of the specified track chunk and comparison delegate for events
+that have same time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TimedEventsManager ManageTimedEvents(this TrackChunk trackChunk, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> that holds events to manage.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.comparison-1">Comparison</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">sameTimeEventsComparison</span></td>
+        <td>Delegate to compare events with the same absolute time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> that can be used to manage
+events represented by the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L191">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection,System.Action{Melanchall.DryWetMidi.Interaction.TimedEvent},System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">ProcessTimedEvents(EventsCollection, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessTimedEvents(this EventsCollection eventsCollection, Action&lt;TimedEvent&gt; action, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to search for events to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to process.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L252">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(Melanchall.DryWetMidi.Core.MidiFile,System.Action{Melanchall.DryWetMidi.Interaction.TimedEvent},System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">ProcessTimedEvents(MidiFile, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessTimedEvents(this MidiFile file, Action&lt;TimedEvent&gt; action, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to search for events to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">file</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to process.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">file</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L214">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk,System.Action{Melanchall.DryWetMidi.Interaction.TimedEvent},System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">ProcessTimedEvents(TrackChunk, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessTimedEvents(this TrackChunk trackChunk, Action&lt;TimedEvent&gt; action, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for events to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to process.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Action%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L232">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ProcessTimedEvents(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Action{Melanchall.DryWetMidi.Interaction.TimedEvent},System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">ProcessTimedEvents(IEnumerable&lt;TrackChunk&gt;, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Performs the specified action on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the collection of
+<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessTimedEvents(this IEnumerable&lt;TrackChunk&gt; trackChunks, Action&lt;TimedEvent&gt; action, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for events to process.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">action</span></td>
+        <td>The action to perform on each <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> contained in the
+<code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to process.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">action</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L266">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection,System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">RemoveTimedEvents(EventsCollection, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveTimedEvents(this EventsCollection eventsCollection, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to search for events to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L311">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(Melanchall.DryWetMidi.Core.MidiFile,System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">RemoveTimedEvents(MidiFile, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveTimedEvents(this MidiFile file, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to search for events to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">file</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L282">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(Melanchall.DryWetMidi.Core.TrackChunk,System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">RemoveTimedEvents(TrackChunk, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveTimedEvents(this TrackChunk trackChunk, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for events to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L295">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.RemoveTimedEvents(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Predicate{Melanchall.DryWetMidi.Interaction.TimedEvent})">RemoveTimedEvents(IEnumerable&lt;TrackChunk&gt;, Predicate&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RemoveTimedEvents(this IEnumerable&lt;TrackChunk&gt; trackChunks, Predicate&lt;TimedEvent&gt; match = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to search for events to remove.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The predicate that defines the conditions of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_SetTime_Melanchall_DryWetMidi_Interaction_TimedEvent_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.SetTime(Melanchall.DryWetMidi.Interaction.TimedEvent%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L25">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_SetTime_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.SetTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_SetTime_Melanchall_DryWetMidi_Interaction_TimedEvent_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.SetTime(Melanchall.DryWetMidi.Interaction.TimedEvent,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SetTime(TimedEvent, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Sets time of the specified timed event.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
+        <td><span class="parametername">timedEvent</span></td>
+        <td>Timed event to set time to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set to <code data-dev-comment-type="paramref" class="paramref">timedEvent</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map that will be used for time conversion.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
+        <td>An input <code data-dev-comment-type="paramref" class="paramref">timedEvent</code> with new time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timedEvent</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ToFile(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L373">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToFile_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ToFile*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.TimedEvent})">ToFile(IEnumerable&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates a MIDI file with the specified timed events.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiFile ToFile(this IEnumerable&lt;TimedEvent&gt; events)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Collection of timed events to create a MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> containing the specified timed events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.TimedEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L357">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToTrackChunk_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ToTrackChunk*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.TimedEvent})">ToTrackChunk(IEnumerable&lt;TimedEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates a track chunk with the specified timed events.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TrackChunk ToTrackChunk(this IEnumerable&lt;TimedEvent&gt; events)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Collection of timed events to create a track chunk.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing the specified timed events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimedEvents/TimedEventsManagingUtilities.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

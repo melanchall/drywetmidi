@@ -1,0 +1,1109 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TempoMapManager
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TempoMapManager
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Interaction_TempoMapManager" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager" class="text-break">Class TempoMapManager
+  </h1>
+  <div class="markdown level0 summary">
+Provides a way to manage tempo map of a MIDI file.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">TempoMapManager</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class TempoMapManager : IDisposable</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+This manager is wrapper for the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> that provides easy manipulation
+of specific MIDI events: <a class="xref" href="Melanchall.DryWetMidi.Core.SetTempoEvent.html">SetTempoEvent</a> and <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a>. Also it
+provides <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap">TempoMap</a> that can be used to calculate custom representations of time
+and length of an object. To start manage tempo map you need to get an instance of the
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a>. To finish managing you need to call the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_SaveChanges">SaveChanges()</a>
+or <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_Dispose">Dispose()</a> method. Since the manager implements <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> it is
+recommended to manage tempo map within using block.
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L38">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.#ctor">TempoMapManager()</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> that can be used
+to manage new tempo map with the default time division (96 ticks per quarter note).
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TempoMapManager()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_Melanchall_DryWetMidi_Core_TimeDivision_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.%23ctor(Melanchall.DryWetMidi.Core.TimeDivision)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L49">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_Melanchall_DryWetMidi_Core_TimeDivision_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.#ctor(Melanchall.DryWetMidi.Core.TimeDivision)">TempoMapManager(TimeDivision)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> with the
+specified time division.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TempoMapManager(TimeDivision timeDivision)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TimeDivision.html">TimeDivision</a></td>
+        <td><span class="parametername">timeDivision</span></td>
+        <td>Time division of a new tempo that will be managed by this manager.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeDivision</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_Melanchall_DryWetMidi_Core_TimeDivision_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_EventsCollection__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.%23ctor(Melanchall.DryWetMidi.Core.TimeDivision%2CSystem.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.EventsCollection%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L67">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_Melanchall_DryWetMidi_Core_TimeDivision_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_EventsCollection__" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.#ctor(Melanchall.DryWetMidi.Core.TimeDivision,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.EventsCollection})">TempoMapManager(TimeDivision, IEnumerable&lt;EventsCollection&gt;)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> with the specified time division
+and events collections.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TempoMapManager(TimeDivision timeDivision, IEnumerable&lt;EventsCollection&gt; eventsCollections)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TimeDivision.html">TimeDivision</a></td>
+        <td><span class="parametername">timeDivision</span></td>
+        <td>MIDI file time division which specifies the meaning of the time
+used by events of the file.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>&gt;</td>
+        <td><span class="parametername">eventsCollections</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> which hold events that
+represent tempo map of a MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeDivision</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">eventsCollections</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollections</code> is empty.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.TempoMap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L94">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.TempoMap*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.TempoMap">TempoMap</h4>
+  <div class="markdown level1 summary">
+Gets current tempo map built by the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TempoMap TempoMap { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(Melanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L238">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(Melanchall.DryWetMidi.Interaction.ITimeSpan)">ClearTempo(ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of tempo that occured since the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTempo(ITimeSpan startTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Time to remove changes of tempo since.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L267">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan)">ClearTempo(ITimeSpan, ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of tempo that occured between the specified times.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTempo(ITimeSpan startTime, ITimeSpan endTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Start of time range to remove changes of tempo in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">endTime</span></td>
+        <td>End of time range to remove changes of tempo in.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">endTime</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L226">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(System.Int64)">ClearTempo(Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of tempo that occured since the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTempo(long startTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Time to remove changes of tempo since.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L252">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempo_System_Int64_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempo(System.Int64,System.Int64)">ClearTempo(Int64, Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of tempo that occured between the specified times.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTempo(long startTime, long endTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Start of time range to remove changes of tempo in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">endTime</span></td>
+        <td>End of time range to remove changes of tempo in.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is negative. -or-
+<code data-dev-comment-type="paramref" class="paramref">endTime</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempoMap.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempoMap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L279">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempoMap*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTempoMap" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTempoMap">ClearTempoMap()</h4>
+  <div class="markdown level1 summary">
+Clears current tempo map removing all changes of tempo and time signature.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTempoMap()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(Melanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L151">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(Melanchall.DryWetMidi.Interaction.ITimeSpan)">ClearTimeSignature(ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of time signature that occured since the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTimeSignature(ITimeSpan startTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Time to remove changes of time signature since.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L180">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan)">ClearTimeSignature(ITimeSpan, ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of time signature that occured between the specified times.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTimeSignature(ITimeSpan startTime, ITimeSpan endTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Start of time range to remove changes of time signature in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">endTime</span></td>
+        <td>End of time range to remove changes of time signature in.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">endTime</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L139">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(System.Int64)">ClearTimeSignature(Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of time signature that occured since the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTimeSignature(long startTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Time to remove changes of time signature since.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L165">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ClearTimeSignature_System_Int64_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ClearTimeSignature(System.Int64,System.Int64)">ClearTimeSignature(Int64, Int64)</h4>
+  <div class="markdown level1 summary">
+Removes all changes of time signature that occured between the specified times.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearTimeSignature(long startTime, long endTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">startTime</span></td>
+        <td>Start of time range to remove changes of time signature in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">endTime</span></td>
+        <td>End of time range to remove changes of time signature in.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">startTime</code> is negative. -or-
+<code data-dev-comment-type="paramref" class="paramref">endTime</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_Dispose.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L406">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_Dispose_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_Dispose" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary">
+Performs application-defined tasks associated with freeing, releasing, or resetting
+unmanaged resources.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_ReplaceTempoMap_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.ReplaceTempoMap(Melanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L290">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ReplaceTempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ReplaceTempoMap*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_ReplaceTempoMap_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.ReplaceTempoMap(Melanchall.DryWetMidi.Interaction.TempoMap)">ReplaceTempoMap(TempoMap)</h4>
+  <div class="markdown level1 summary">
+Replaces current tempo map with the specified one.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReplaceTempoMap(TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to replace the current one.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_SaveChanges.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.SaveChanges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L309">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SaveChanges_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SaveChanges*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SaveChanges" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SaveChanges">SaveChanges()</h4>
+  <div class="markdown level1 summary">
+Saves tempo map changes that were made with the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> updating
+underlying events collections.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SaveChanges()</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SaveChanges_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method will rewrite content of all events collections were used to construct the current
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> with events were managed by underlying <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a>
+objects of this manager. Also all delta-times of wrapped events will be recalculated according to
+the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html#Melanchall_DryWetMidi_Interaction_TimedEvent_Time">Time</a> of event wrappers.
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTempo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_Tempo_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTempo(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.Tempo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L213">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTempo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTempo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTempo(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.Tempo)">SetTempo(ITimeSpan, Tempo)</h4>
+  <div class="markdown level1 summary">
+Sets new tempo that will last from the specified time until next change of tempo.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetTempo(ITimeSpan time, Tempo tempo)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set the new tempo at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo</span></td>
+        <td>New tempo that will last from the specified time until next change
+of tempo.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempo</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTempo_System_Int64_Melanchall_DryWetMidi_Interaction_Tempo_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTempo(System.Int64%2CMelanchall.DryWetMidi.Interaction.Tempo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L197">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTempo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTempo_System_Int64_Melanchall_DryWetMidi_Interaction_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTempo(System.Int64,Melanchall.DryWetMidi.Interaction.Tempo)">SetTempo(Int64, Tempo)</h4>
+  <div class="markdown level1 summary">
+Sets new tempo that will last from the specified time until next change of tempo.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetTempo(long time, Tempo tempo)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set the new tempo at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo</span></td>
+        <td>New tempo that will last from the specified time until next change
+of tempo.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">tempo</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTimeSignature_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSignature_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTimeSignature(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TimeSignature)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L126">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTimeSignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTimeSignature_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTimeSignature(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSignature)">SetTimeSignature(ITimeSpan, TimeSignature)</h4>
+  <div class="markdown level1 summary">
+Sets new time signature that will last from the specified time until next change of
+time signature.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetTimeSignature(ITimeSpan time, TimeSignature timeSignature)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set the new time signature at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
+        <td><span class="parametername">timeSignature</span></td>
+        <td>New time signature that will last from the specified
+time until next change of time signature.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeSignature</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTimeSignature_System_Int64_Melanchall_DryWetMidi_Interaction_TimeSignature_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTimeSignature(System.Int64%2CMelanchall.DryWetMidi.Interaction.TimeSignature)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L109">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTimeSignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_SetTimeSignature_System_Int64_Melanchall_DryWetMidi_Interaction_TimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.SetTimeSignature(System.Int64,Melanchall.DryWetMidi.Interaction.TimeSignature)">SetTimeSignature(Int64, TimeSignature)</h4>
+  <div class="markdown level1 summary">
+Sets new time signature that will last from the specified time until next change of
+time signature.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetTimeSignature(long time, TimeSignature timeSignature)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set the new time signature at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
+        <td><span class="parametername">timeSignature</span></td>
+        <td>New time signature that will last from the specified
+time until next change of time signature.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSignature</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_TempoMapManager.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.TempoMapManager%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TempoMap/TempoMapManager.cs/#L22" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

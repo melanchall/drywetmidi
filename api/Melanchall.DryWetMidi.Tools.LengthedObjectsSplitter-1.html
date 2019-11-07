@@ -1,0 +1,726 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class LengthedObjectsSplitter&lt;TObject&gt;
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class LengthedObjectsSplitter&lt;TObject&gt;
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1" class="text-break">Class LengthedObjectsSplitter&lt;TObject&gt;
+  </h1>
+  <div class="markdown level0 summary">
+Provides methods for splitting lengthed objects.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">LengthedObjectsSplitter&lt;TObject&gt;</span></div>
+      <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitter.html">ChordsSplitter</a></div>
+      <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitter.html">NotesSplitter</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class LengthedObjectsSplitter&lt;TObject&gt;
+    where TObject : ILengthedObject</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td>The type of objects to split.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_CloneObject__0_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601.CloneObject(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L296">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_CloneObject_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.CloneObject*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_CloneObject__0_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.CloneObject(`0)">CloneObject(TObject)</h4>
+  <div class="markdown level1 summary">
+Clones an object by creating a copy of it.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract TObject CloneObject(TObject obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TObject</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td>Object to clone.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TObject</span></td>
+        <td>Copy of the <code data-dev-comment-type="paramref" class="paramref">obj</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601.SplitAtDistance(System.Collections.Generic.IEnumerable%7B%600%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L219">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitAtDistance(System.Collections.Generic.IEnumerable{`0},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitAtDistance(IEnumerable&lt;TObject&gt;, ITimeSpan, LengthedObjectTarget, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits objects at the specified distance from an object&apos;s start or end.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitAtDistance(IEnumerable&lt;TObject&gt; objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to split.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">distance</span></td>
+        <td>Distance to split objects at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of an object <code data-dev-comment-type="paramref" class="paramref">distance</code> should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>Objects that are result of splitting <code data-dev-comment-type="paramref" class="paramref">objects</code> going in the same
+order as elements of <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">distance</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_System_Collections_Generic_IEnumerable__0__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601.SplitAtDistance(System.Collections.Generic.IEnumerable%7B%600%7D%2CSystem.Double%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L260">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_System_Collections_Generic_IEnumerable__0__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitAtDistance(System.Collections.Generic.IEnumerable{`0},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitAtDistance(IEnumerable&lt;TObject&gt;, Double, TimeSpanType, LengthedObjectTarget, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits objects by the specified ratio of an object&apos;s length measuring it from
+the object&apos;s start or end. For example, 0.5 means splitting at the center of an object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitAtDistance(IEnumerable&lt;TObject&gt; objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to split.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">ratio</span></td>
+        <td>Ratio of an object&apos;s length to split by. Valid values are from 0 to 1.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>The type an object&apos;s length should be processed according to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of an object distance should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>Objects that are result of splitting <code data-dev-comment-type="paramref" class="paramref">objects</code> going in the same
+order as elements of <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is out of valid range.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value. -or-
+<code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByGrid_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601.SplitByGrid(System.Collections.Generic.IEnumerable%7B%600%7D%2CMelanchall.DryWetMidi.Interaction.IGrid%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L165">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByGrid_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitByGrid*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByGrid_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitByGrid(System.Collections.Generic.IEnumerable{`0},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitByGrid(IEnumerable&lt;TObject&gt;, IGrid, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits objects by the specified grid.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitByGrid(IEnumerable&lt;TObject&gt; objects, IGrid grid, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to split.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></td>
+        <td><span class="parametername">grid</span></td>
+        <td>Grid to split objects by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>Objects that are result of splitting <code data-dev-comment-type="paramref" class="paramref">objects</code> going in the same
+order as elements of <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByGrid_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Nulls will not be splitted and will be returned as nulls.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">grid</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByPartsNumber_System_Collections_Generic_IEnumerable__0__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601.SplitByPartsNumber(System.Collections.Generic.IEnumerable%7B%600%7D%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L100">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitByPartsNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByPartsNumber_System_Collections_Generic_IEnumerable__0__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitByPartsNumber(System.Collections.Generic.IEnumerable{`0},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitByPartsNumber(IEnumerable&lt;TObject&gt;, Int32, TimeSpanType, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits objects into the specified number of parts of the equal length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitByPartsNumber(IEnumerable&lt;TObject&gt; objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to split.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">partsNumber</span></td>
+        <td>The number of parts to split objects into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>Type of a part&apos;s length.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>Objects that are result of splitting <code data-dev-comment-type="paramref" class="paramref">objects</code> going in the same
+order as elements of <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByPartsNumber_System_Collections_Generic_IEnumerable__0__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Nulls will not be splitted and will be returned as nulls. If an object has zero length,
+it will be splitted into the specified number of parts of zero length.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">partsNumber</code> is zero or negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByStep_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601.SplitByStep(System.Collections.Generic.IEnumerable%7B%600%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L41">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByStep_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitByStep*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByStep_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitByStep(System.Collections.Generic.IEnumerable{`0},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitByStep(IEnumerable&lt;TObject&gt;, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits objects by the specified step so every object will be splitted at points
+equally distanced from each other starting from the object&apos;s start time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitByStep(IEnumerable&lt;TObject&gt; objects, ITimeSpan step, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to split.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Step to split objects by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>Objects that are result of splitting <code data-dev-comment-type="paramref" class="paramref">objects</code> going in the same
+order as elements of <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitByStep_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Nulls, objects with zero length and objects with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
+will not be splitted and will be returned as clones of the input objects.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">step</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitObject__0_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601.SplitObject(%600%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L304">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitObject_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitObject*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitObject__0_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitObject(`0,System.Int64)">SplitObject(TObject, Int64)</h4>
+  <div class="markdown level1 summary">
+Splits an object by the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract SplittedLengthedObject&lt;TObject&gt; SplitObject(TObject obj, long time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TObject</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td>Object to split.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to split <code data-dev-comment-type="paramref" class="paramref">obj</code> by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.SplittedLengthedObject-1.html">SplittedLengthedObject</a>&lt;TObject&gt;</td>
+        <td>An object containing left and right parts of the splitted object.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Base/LengthedObjectsSplitter.cs/#L14" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

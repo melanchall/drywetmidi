@@ -1,0 +1,919 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MathTimeSpan
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MathTimeSpan
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan" class="text-break">Class MathTimeSpan
+  </h1>
+  <div class="markdown level0 summary">
+Represents a result of summation or subtraction of two <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">MathTimeSpan</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable">IComparable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class MathTimeSpan : ITimeSpan, IComparable</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Mode.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Mode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L60">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Mode_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Mode*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Mode" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Mode">Mode</h4>
+  <div class="markdown level1 summary">
+Get the mode of the mathematical operation represented by the current <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpanMode Mode { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanMode.html">TimeSpanMode</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Operation.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Operation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L55">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Operation_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Operation*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Operation" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Operation">Operation</h4>
+  <div class="markdown level1 summary">
+Gets the mathematical operation between <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html#Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan1">TimeSpan1</a> and <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html#Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan2">TimeSpan2</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MathOperation Operation { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MathOperation.html">MathOperation</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan1.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.TimeSpan1%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L45">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan1_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.TimeSpan1*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan1" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.TimeSpan1">TimeSpan1</h4>
+  <div class="markdown level1 summary">
+Gets the first <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan TimeSpan1 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan2.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.TimeSpan2%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L50">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan2_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.TimeSpan2*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_TimeSpan2" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.TimeSpan2">TimeSpan2</h4>
+  <div class="markdown level1 summary">
+Gets the second <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan TimeSpan2 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Add_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanMode_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Add(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TimeSpanMode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L161">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Add_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Add*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Add_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanMode_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Add(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSpanMode)">Add(ITimeSpan, TimeSpanMode)</h4>
+  <div class="markdown level1 summary">
+Adds a time span to the current one.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan Add(ITimeSpan timeSpan, TimeSpanMode mode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">timeSpan</span></td>
+        <td>Time span to add to the current one.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanMode.html">TimeSpanMode</a></td>
+        <td><span class="parametername">mode</span></td>
+        <td>Mode of the operation that defines meaning of time spans the
+operation will be performed on.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>Time span that is a sum of the <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> and the
+current time span.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Add_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanMode__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+If <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> and the current time span have the same type,
+the result time span will be of this type too; otherwise - of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> is invalid.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">mode</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Clone.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L227">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Clone_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Clone*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Clone" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Clone">Clone()</h4>
+  <div class="markdown level1 summary">
+Clones the current time span.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>Copy of the current time span.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_CompareTo_System_Object_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.CompareTo(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L243">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_CompareTo_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.CompareTo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_CompareTo_System_Object_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.CompareTo(System.Object)">CompareTo(Object)</h4>
+  <div class="markdown level1 summary">
+Compares the current instance with another object of the same type and returns an integer
+that indicates whether the current instance precedes, follows, or occurs in the same
+position in the sort order as the other object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CompareTo(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td><span class="parametername">obj</span></td>
+        <td>An object to compare with this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>A value that indicates the relative order of the objects being compared. The
+return value has these meanings: Value Meaning Less than zero This instance precedes obj
+in the sort order. Zero This instance occurs in the same position in the sort order as obj.
+Greater than zero This instance follows obj in the sort order.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">obj</code> is not the same type as this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Divide_System_Double_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Divide(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L213">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Divide_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Divide*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Divide_System_Double_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Divide(System.Double)">Divide(Double)</h4>
+  <div class="markdown level1 summary">
+Shrinks the current time span by dividing its length by the specified divisor.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan Divide(double divisor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">divisor</span></td>
+        <td>Divisor to shrink the time span by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>Time span that is the current time span shrinked by the <code data-dev-comment-type="paramref" class="paramref">divisor</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">divisor</code> is zero or negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L121">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Equals_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Equals_System_Object_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary">
+Determines whether the specified object is equal to the current object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td><span class="parametername">obj</span></td>
+        <td>The object to compare with the current object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if the specified object is equal to the current object; otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_GetHashCode.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L130">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_GetHashCode_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.GetHashCode*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_GetHashCode" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary">
+Returns the hash code for this instance.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>A 32-bit signed integer hash code.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Multiply_System_Double_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Multiply(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L197">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Multiply_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Multiply*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Multiply_System_Double_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Multiply(System.Double)">Multiply(Double)</h4>
+  <div class="markdown level1 summary">
+Stretches the current time span by multiplying its length by the specified multiplier.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan Multiply(double multiplier)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">multiplier</span></td>
+        <td>Multiplier to stretch the time span by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>Time span that is the current time span stretched by the <code data-dev-comment-type="paramref" class="paramref">multiplier</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">multiplier</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_Subtract_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanMode_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.Subtract(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TimeSpanMode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L183">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Subtract_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Subtract*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Subtract_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanMode_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.Subtract(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSpanMode)">Subtract(ITimeSpan, TimeSpanMode)</h4>
+  <div class="markdown level1 summary">
+Subtracts a time span from the current one.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan Subtract(ITimeSpan timeSpan, TimeSpanMode mode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">timeSpan</span></td>
+        <td>Time span to subtract from the current one.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanMode.html">TimeSpanMode</a></td>
+        <td><span class="parametername">mode</span></td>
+        <td>Mode of the operation that defines meaning of time spans the
+operation will be performed on.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>Time span that is a difference between the <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> and the
+current time span.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_Subtract_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanMode__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+If <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> and the current time span have the same type,
+the result time span will be of this type too; otherwise - of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> is invalid.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">mode</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_ToString.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L105">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_ToString_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.ToString*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_ToString" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.ToString">ToString()</h4>
+  <div class="markdown level1 summary">
+Returns a string that represents the current object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td>A string that represents the current object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_op_Equality_Melanchall_DryWetMidi_Interaction_MathTimeSpan_Melanchall_DryWetMidi_Interaction_MathTimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.op_Equality(Melanchall.DryWetMidi.Interaction.MathTimeSpan%2CMelanchall.DryWetMidi.Interaction.MathTimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L72">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_op_Equality_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.op_Equality*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_op_Equality_Melanchall_DryWetMidi_Interaction_MathTimeSpan_Melanchall_DryWetMidi_Interaction_MathTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.op_Equality(Melanchall.DryWetMidi.Interaction.MathTimeSpan,Melanchall.DryWetMidi.Interaction.MathTimeSpan)">Equality(MathTimeSpan, MathTimeSpan)</h4>
+  <div class="markdown level1 summary">
+Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> objects are equal.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a></td>
+        <td><span class="parametername">timeSpan1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a></td>
+        <td><span class="parametername">timeSpan2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if time spans are equal, false otherwise.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan_op_Inequality_Melanchall_DryWetMidi_Interaction_MathTimeSpan_Melanchall_DryWetMidi_Interaction_MathTimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan.op_Inequality(Melanchall.DryWetMidi.Interaction.MathTimeSpan%2CMelanchall.DryWetMidi.Interaction.MathTimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L92">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_op_Inequality_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.op_Inequality*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MathTimeSpan_op_Inequality_Melanchall_DryWetMidi_Interaction_MathTimeSpan_Melanchall_DryWetMidi_Interaction_MathTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MathTimeSpan.op_Inequality(Melanchall.DryWetMidi.Interaction.MathTimeSpan,Melanchall.DryWetMidi.Interaction.MathTimeSpan)">Inequality(MathTimeSpan, MathTimeSpan)</h4>
+  <div class="markdown level1 summary">
+Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> objects are not equal.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a></td>
+        <td><span class="parametername">timeSpan1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a></td>
+        <td><span class="parametername">timeSpan2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>false if time spans are equal, true otherwise.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>
+  </div>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable">System.IComparable</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_MathTimeSpan.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.MathTimeSpan%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Representations/MathTimeSpan.cs/#L11" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

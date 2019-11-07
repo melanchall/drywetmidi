@@ -1,0 +1,1209 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class NotesSplitterUtilities
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class NotesSplitterUtilities
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities" class="text-break">Class NotesSplitterUtilities
+  </h1>
+  <div class="markdown level0 summary">
+Provides methods for splitting notes.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">NotesSplitterUtilities</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class NotesSplitterUtilities</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L276">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget)">SplitNotesAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> at the specified distance
+from a note&apos;s start or end.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">distance</span></td>
+        <td>Distance to split notes at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a note <code data-dev-comment-type="paramref" class="paramref">distance</code> should be measured from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">distance</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Double%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L363">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget)">SplitNotesAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified ratio of a
+note&apos;s length measuring it from the note&apos;s start or end. For example, 0.5 means splitting
+at the center of a note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">ratio</span></td>
+        <td>Ratio of a note&apos;s length to split by. Valid values are from 0 to 1.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>The type a note&apos;s length should be processed according to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a note distance should be measured from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is out of valid range.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value. -or-
+<code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L232">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> at the specified distance
+from a note&apos;s start or end.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">distance</span></td>
+        <td>Distance to split notes at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a note <code data-dev-comment-type="paramref" class="paramref">distance</code> should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">distance</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Double%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L302">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified ratio of a
+note&apos;s length measuring it from the note&apos;s start or end. For example, 0.5 means splitting
+at the center of a note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">ratio</span></td>
+        <td>Ratio of a note&apos;s length to split by. Valid values are from 0 to 1.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>The type a note&apos;s length should be processed according to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a note distance should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is out of valid range.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value. -or-
+<code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L253">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesAtDistance(IEnumerable&lt;TrackChunk&gt;, ITimeSpan, LengthedObjectTarget, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> at the specified
+distance from a note&apos;s start or end.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">distance</span></td>
+        <td>Distance to split notes at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a note <code data-dev-comment-type="paramref" class="paramref">distance</code> should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">distance</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Double%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L332">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesAtDistance(IEnumerable&lt;TrackChunk&gt;, Double, TimeSpanType, LengthedObjectTarget, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
+specified ratio of a note&apos;s length measuring it from the note&apos;s start or end.
+For example, 0.5 means splitting at the center of a note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">ratio</span></td>
+        <td>Ratio of a note&apos;s length to split by. Valid values are from 0 to 1.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>The type a note&apos;s length should be processed according to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a note distance should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is out of valid range.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value. -or-
+<code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Interaction.IGrid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L211">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.IGrid)">SplitNotesByGrid(MidiFile, IGrid)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified grid.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByGrid(this MidiFile midiFile, IGrid grid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></td>
+        <td><span class="parametername">grid</span></td>
+        <td>Grid to split notes by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">grid</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.IGrid%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L175">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByGrid(TrackChunk, IGrid, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified grid.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></td>
+        <td><span class="parametername">grid</span></td>
+        <td>Grid to split notes by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">grid</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.IGrid%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L193">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByGrid(IEnumerable&lt;TrackChunk&gt;, IGrid, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
+specified grid.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByGrid(this IEnumerable&lt;TrackChunk&gt; trackChunks, IGrid grid, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></td>
+        <td><span class="parametername">grid</span></td>
+        <td>Grid to split notes by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">grid</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L156">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType)">SplitNotesByPartsNumber(MidiFile, Int32, TimeSpanType)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> into the specified number of
+parts of the equal length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">partsNumber</span></td>
+        <td>The number of parts to split notes into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>Type of a part&apos;s length.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+If a note has zero length, it will be splitted into the specified number of parts of zero length.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">partsNumber</code> is zero or negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L105">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> into the specified number
+of parts of the equal length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">partsNumber</span></td>
+        <td>The number of parts to split notes into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>Type of a part&apos;s length.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+If a note has zero length, it will be splitted into the specified number of parts of zero length.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">partsNumber</code> is zero or negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L130">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByPartsNumber(IEnumerable&lt;TrackChunk&gt;, Int32, TimeSpanType, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> into the
+specified number of parts of the equal length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByPartsNumber(this IEnumerable&lt;TrackChunk&gt; trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">partsNumber</span></td>
+        <td>The number of parts to split notes into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>Type of a part&apos;s length.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+If a note has zero length, it will be splitted into the specified number of parts of zero length.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">partsNumber</code> is zero or negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L80">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)">SplitNotesByStep(MidiFile, ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified
+step so every note will be splitted at points equally distanced from each other
+starting from the note&apos;s start time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByStep(this MidiFile midiFile, ITimeSpan step)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Step to split notes by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Notes with zero length and notes with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
+will not be splitted.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">step</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L32">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByStep(TrackChunk, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified step so
+every note will be splitted at points equally distanced from each other starting from
+the note&apos;s start time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Step to split notes by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Notes with zero length and notes with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
+will not be splitted.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">step</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L55">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByStep(IEnumerable&lt;TrackChunk&gt;, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Splits notes contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
+specified step so every note will be splitted at points equally distanced from each
+other starting from the note&apos;s start time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByStep(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan step, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Step to split notes by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Notes with zero length and notes with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
+will not be splitted.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">step</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesSplitterUtilities.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesSplitterUtilities%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/NotesSplitterUtilities.cs/#L14" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

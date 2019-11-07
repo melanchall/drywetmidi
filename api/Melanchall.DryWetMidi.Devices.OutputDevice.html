@@ -1,0 +1,980 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class OutputDevice
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class OutputDevice
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Devices_OutputDevice" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice" class="text-break">Class OutputDevice
+  </h1>
+  <div class="markdown level0 summary">
+Represents an output MIDI device.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html">MidiDevice</a></div>
+    <div class="level2"><span class="xref">OutputDevice</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ErrorOccurred">MidiDevice.ErrorOccurred</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice__handle">MidiDevice._handle</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice__disposed">MidiDevice._disposed</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_Id">MidiDevice.Id</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_Name">MidiDevice.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_DriverManufacturer">MidiDevice.DriverManufacturer</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ProductIdentifier">MidiDevice.ProductIdentifier</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_DriverVersion">MidiDevice.DriverVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_SetBasicDeviceInformation_System_UInt16_System_UInt16_System_UInt32_System_String_">MidiDevice.SetBasicDeviceInformation(UInt16, UInt16, UInt32, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_EnsureDeviceIsNotDisposed">MidiDevice.EnsureDeviceIsNotDisposed()</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ProcessMmResult_System_UInt32_">MidiDevice.ProcessMmResult(UInt32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_OnError_System_Exception_">MidiDevice.OnError(Exception)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_System_IO_MemoryStream_System_Byte___">MidiDevice.WriteBytesToStream(MemoryStream, Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ToString">MidiDevice.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_Dispose">MidiDevice.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Devices_OutputDevice_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class OutputDevice : MidiDevice, IDisposable</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_Channels.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.Channels%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L90">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_Channels_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Channels*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_Channels" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Channels">Channels</h4>
+  <div class="markdown level1 summary">
+Gets the channels that an internal synthesizer device responds to.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;FourBitNumber&gt; Channels { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_DeviceType.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.DeviceType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L73">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_DeviceType_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.DeviceType*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_DeviceType" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.DeviceType">DeviceType</h4>
+  <div class="markdown level1 summary">
+Gets the type of the current <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public OutputDeviceType DeviceType { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDeviceType.html">OutputDeviceType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_NotesNumber.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.NotesNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L85">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_NotesNumber_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.NotesNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_NotesNumber" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.NotesNumber">NotesNumber</h4>
+  <div class="markdown level1 summary">
+Gets the maximum number of simultaneous notes that can be played by an internal synthesizer device.
+If the device is a port, this member is not meaningful and will be 0.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int NotesNumber { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_SupportsLeftRightVolumeControl.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.SupportsLeftRightVolumeControl%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L100">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_SupportsLeftRightVolumeControl_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SupportsLeftRightVolumeControl*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_SupportsLeftRightVolumeControl" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SupportsLeftRightVolumeControl">SupportsLeftRightVolumeControl</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether device supports separate left and right volume control or not.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool SupportsLeftRightVolumeControl { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_SupportsPatchCaching.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.SupportsPatchCaching%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L95">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_SupportsPatchCaching_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SupportsPatchCaching*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_SupportsPatchCaching" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SupportsPatchCaching">SupportsPatchCaching</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether device supports patch caching.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool SupportsPatchCaching { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_SupportsVolumeControl.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.SupportsVolumeControl%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L105">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_SupportsVolumeControl_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SupportsVolumeControl*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_SupportsVolumeControl" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SupportsVolumeControl">SupportsVolumeControl</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether device supports volume control.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool SupportsVolumeControl { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_VoicesNumber.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.VoicesNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L79">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_VoicesNumber_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.VoicesNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_VoicesNumber" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.VoicesNumber">VoicesNumber</h4>
+  <div class="markdown level1 summary">
+Gets the number of voices supported by an internal synthesizer device. If the device is a port,
+this member is not meaningful and will be 0.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int VoicesNumber { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_Volume.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.Volume%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L114">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_Volume_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Volume*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_Volume" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Volume">Volume</h4>
+  <div class="markdown level1 summary">
+Gets or sets the volume of the output MIDI device.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Volume Volume { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Volume.html">Volume</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Device doesn&apos;t support volume control.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>Device doesn&apos;t support separate volume control for each channel.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L429">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_Dispose_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_Dispose_System_Boolean_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary">
+Releases the unmanaged resources used by the MIDI device class and optionally releases
+the managed resources.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">disposing</span></td>
+        <td>true to release both managed and unmanaged resources; false to
+release only unmanaged resources.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_Dispose_System_Boolean_">MidiDevice.Dispose(Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_Finalize.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.Finalize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L61">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_Finalize_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Finalize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_Finalize" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.Finalize">Finalize()</h4>
+  <div class="markdown level1 summary">
+Finalizes the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Finalize()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_GetAll.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.GetAll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L230">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_GetAll_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetAll*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_GetAll" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetAll">GetAll()</h4>
+  <div class="markdown level1 summary">
+Retrieves all output MIDI devices presented in the system.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;OutputDevice&gt; GetAll()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>&gt;</td>
+        <td>All output MIDI devices presented in the system.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_GetById_System_Int32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.GetById(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L263">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_GetById_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetById*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_GetById_System_Int32_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetById(System.Int32)">GetById(Int32)</h4>
+  <div class="markdown level1 summary">
+Retrieves output MIDI device with the specified ID.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static OutputDevice GetById(int id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">id</span></td>
+        <td>Device ID which is number from 0 to <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_GetDevicesCount">GetDevicesCount()</a> minus 1.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a></td>
+        <td>Output MIDI device with the specified ID.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">id</code> is out of valid range.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_GetByName_System_String_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.GetByName(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L246">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_GetByName_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetByName*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_GetByName_System_String_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetByName(System.String)">GetByName(String)</h4>
+  <div class="markdown level1 summary">
+Retrieves a first output MIDI device with the specified name.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static OutputDevice GetByName(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">name</span></td>
+        <td>The name of an output MIDI device to retrieve.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a></td>
+        <td>Output MIDI device with the specified name.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">name</code> is null or contains white-spaces only. -or-
+<code data-dev-comment-type="paramref" class="paramref">name</code> specifies an output MIDI device which is not presented in the system.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_GetDevicesCount.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.GetDevicesCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L221">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_GetDevicesCount_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetDevicesCount*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_GetDevicesCount" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetDevicesCount">GetDevicesCount()</h4>
+  <div class="markdown level1 summary">
+Retrieves the number of output MIDI devices presented in the system.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetDevicesCount()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>Number of output MIDI devices presented in the system.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.GetErrorText(System.UInt32%2CSystem.Text.StringBuilder%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L277">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_GetErrorText_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetErrorText*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.GetErrorText(System.UInt32,System.Text.StringBuilder,System.UInt32)">GetErrorText(UInt32, StringBuilder, UInt32)</h4>
+  <div class="markdown level1 summary">
+Gets error description for the specified MMRESULT which is return value of winmm function.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
+        <td><span class="parametername">mmrError</span></td>
+        <td>MMRESULT which is return value of winmm function.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></td>
+        <td><span class="parametername">pszText</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a> to write error description to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
+        <td><span class="parametername">cchText</span></td>
+        <td>Size of <code data-dev-comment-type="paramref" class="paramref">pszText</code> buffer.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
+        <td>Return value of winmm function which gets error description.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_">MidiDevice.GetErrorText(UInt32, StringBuilder, UInt32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_PrepareForEventsSending.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.PrepareForEventsSending%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L212">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_PrepareForEventsSending_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.PrepareForEventsSending*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_PrepareForEventsSending" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.PrepareForEventsSending">PrepareForEventsSending()</h4>
+  <div class="markdown level1 summary">
+Prepares output MIDI device for sending events to it allocating necessary
+resources.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PrepareForEventsSending()</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Devices_OutputDevice_PrepareForEventsSending_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">It is not needed to call this method before actual MIDI data
+sending since first call of <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_SendEvent_Melanchall_DryWetMidi_Core_MidiEvent_">SendEvent(MidiEvent)</a> will prepare
+the device automatically. But it can take some time so you may decide
+to call <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_PrepareForEventsSending">PrepareForEventsSending()</a> before working with device.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_SendEvent_Melanchall_DryWetMidi_Core_MidiEvent_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(Melanchall.DryWetMidi.Core.MidiEvent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L162">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_SendEvent_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_SendEvent_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(Melanchall.DryWetMidi.Core.MidiEvent)">SendEvent(MidiEvent)</h4>
+  <div class="markdown level1 summary">
+Send a MIDI event to the current <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SendEvent(MidiEvent midiEvent)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>MIDI event to send.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_TurnAllNotesOff.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.TurnAllNotesOff%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L188">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_OutputDevice_TurnAllNotesOff_" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.TurnAllNotesOff*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_TurnAllNotesOff" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.TurnAllNotesOff">TurnAllNotesOff()</h4>
+  <div class="markdown level1 summary">
+Turns off all notes that were turned on by sending Note On events, and which haven&apos;t
+yet been turned off by respective Note Off events.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void TurnAllNotesOff()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice_EventSent.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice.EventSent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L29">View Source</a>
+  </span>
+  <h4 id="Melanchall_DryWetMidi_Devices_OutputDevice_EventSent" data-uid="Melanchall.DryWetMidi.Devices.OutputDevice.EventSent">EventSent</h4>
+  <div class="markdown level1 summary">
+Occurs when a MIDI event is sent.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;MidiEventSentEventArgs&gt; EventSent</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.html">MidiEventSentEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_OutputDevice.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.OutputDevice%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/OutputDevice/OutputDevice.cs/#L15" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on November 7, 2019 14:35:23
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
