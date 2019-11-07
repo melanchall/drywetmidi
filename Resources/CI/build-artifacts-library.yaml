@@ -8,9 +8,11 @@ trigger:
     exclude:
     - DryWetMidi.Benchmarks
     - DryWetMidi.Tests
+    - Docs/*
     - README.md
-    - build-develop-win.yaml
-    - benchmarks-develop-win.yaml
+    - Resources/CI/build-develop-win.yaml
+    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/build-artifacts-docs.yaml
 
 pool:
   vmImage: 'windows-latest'
@@ -21,7 +23,7 @@ variables:
   buildConfiguration: 'Release'
   version: '5.0.0'
 
-name: $(TeamProject)_$(SourceBranchName)_BuildArtifacts_Windows_$(version)$(Rev:.r)
+name: $(TeamProject)_$(SourceBranchName)_BuildLibrary_$(version)$(Rev:.r)
 
 steps:
 - task: NuGetToolInstaller@1
@@ -51,20 +53,6 @@ steps:
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
     artifact: NuGetPackage
-
-- task: PowerShell@2
-  displayName: Build docs
-  inputs:
-    targetType: 'inline'
-    script: |
-      choco install docfx -y
-      docfx Docs/docfx.json
-
-- task: PublishPipelineArtifact@1
-  displayName: Publish 'Docs' artifact
-  inputs:
-    targetPath: Docs\_site
-    artifact: Docs
 
 - task: PowerShell@2
   displayName: Delete pdb files
