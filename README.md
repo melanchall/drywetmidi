@@ -1,4 +1,4 @@
-![DryWetMIDI Logo](https://github.com/melanchall/drywetmidi/blob/develop/Resources/Images/dwm-logo.png)
+![DryWetMIDI Logo](https://github.com/melanchall/drywetmidi/blob/develop/Resources/Images/dwm-logo.png?raw=true)
 
 [![NuGet](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg)](https://www.nuget.org/packages/Melanchall.DryWetMidi/) [![Build Status](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Windows/%5BWindows%5D%20Build%20and%20test?branchName=develop)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=1&branchName=develop)
 

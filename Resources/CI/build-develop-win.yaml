@@ -8,7 +8,9 @@ trigger:
     exclude:
     - DryWetMidi.Benchmarks
     - README.md
-    - benchmarks-develop-win.yaml
+    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/build-artifacts-library.yaml
+    - Resources/CI/build-artifacts-docs.yaml
     - Docs/*
 
 pool:

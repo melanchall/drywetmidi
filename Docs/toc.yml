@@ -1,7 +1,5 @@
 - name: Overview
   href: index.md
-- name: Examples
-  href: examples/
-  homepage: examples/home.md
+  homepage: index.md
 - name: API Documentation
   href: obj/api/
