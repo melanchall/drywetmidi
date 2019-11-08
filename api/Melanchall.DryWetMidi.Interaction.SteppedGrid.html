@@ -97,38 +97,55 @@ collection of steps.
     <h5>Implements</h5>
     <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class SteppedGrid : IGrid</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class SteppedGrid : object, IGrid</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.SteppedGrid.%23ctor(IEnumerable%7BMelanchall.DryWetMidi.Interaction.ITimeSpan%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Grid/SteppedGrid.cs/#L58">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor(IEnumerable{Melanchall.DryWetMidi.Interaction.ITimeSpan})">SteppedGrid(IEnumerable&lt;ITimeSpan&gt;)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.SteppedGrid.html">SteppedGrid</a> with the specified
+steps so all grid&apos;s times will be stepped according to those steps.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SteppedGrid(IEnumerable&lt;ITimeSpan&gt; steps)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
+        <td><span class="parametername">steps</span></td>
+        <td>Collection of grid&apos;s steps.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Grid&apos;s times will be distributed according to provided steps. So distance between first
+adjacent times will be equal to first step, distance between second adjacent times will
+be equal to second step and so on. When last step reached, steps will go from the first one.
+</div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.SteppedGrid.%23ctor(Melanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -165,21 +182,52 @@ starting from zero.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.SteppedGrid.%23ctor(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CIEnumerable%7BMelanchall.DryWetMidi.Interaction.ITimeSpan%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Grid/SteppedGrid.cs/#L77">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor(Melanchall.DryWetMidi.Interaction.ITimeSpan,IEnumerable{Melanchall.DryWetMidi.Interaction.ITimeSpan})">SteppedGrid(ITimeSpan, IEnumerable&lt;ITimeSpan&gt;)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.SteppedGrid.html">SteppedGrid</a> with the specified
+start time and steps so all grid&apos;s times will be stepped according to those steps.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SteppedGrid(ITimeSpan start, IEnumerable&lt;ITimeSpan&gt; steps)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Condition</th>
+        <th>Name</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">step</code> is null.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">start</span></td>
+        <td>Start time of the grid.</td>
+      </tr>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
+        <td><span class="parametername">steps</span></td>
+        <td>Collection of grid&apos;s steps.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Grid&apos;s times will be distributed according to provided steps. So distance between first
+adjacent times will be equal to first step, distance between second adjacent times will
+be equal to second step and so on. When last step reached steps will go from the first one.
+</div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.SteppedGrid.%23ctor(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.ITimeSpan)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -218,148 +266,6 @@ between adjacent ones starting from the specified start time.
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td><span class="parametername">step</span></td>
         <td>Distance between adjacent times.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">start</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">step</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.SteppedGrid.%23ctor(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CSystem.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.ITimeSpan%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Grid/SteppedGrid.cs/#L77">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor(Melanchall.DryWetMidi.Interaction.ITimeSpan,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimeSpan})">SteppedGrid(ITimeSpan, IEnumerable&lt;ITimeSpan&gt;)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.SteppedGrid.html">SteppedGrid</a> with the specified
-start time and steps so all grid&apos;s times will be stepped according to those steps.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SteppedGrid(ITimeSpan start, IEnumerable&lt;ITimeSpan&gt; steps)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
-        <td><span class="parametername">start</span></td>
-        <td>Start time of the grid.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
-        <td><span class="parametername">steps</span></td>
-        <td>Collection of grid&apos;s steps.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan___remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-Grid&apos;s times will be distributed according to provided steps. So distance between first
-adjacent times will be equal to first step, distance between second adjacent times will
-be equal to second step and so on. When last step reached steps will go from the first one.
-</div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">start</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">steps</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">steps</code> contains null.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.SteppedGrid.%23ctor(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Interaction.ITimeSpan%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/Grid/SteppedGrid.cs/#L58">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.SteppedGrid.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimeSpan})">SteppedGrid(IEnumerable&lt;ITimeSpan&gt;)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.SteppedGrid.html">SteppedGrid</a> with the specified
-steps so all grid&apos;s times will be stepped according to those steps.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SteppedGrid(IEnumerable&lt;ITimeSpan&gt; steps)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
-        <td><span class="parametername">steps</span></td>
-        <td>Collection of grid&apos;s steps.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan___remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-Grid&apos;s times will be distributed according to provided steps. So distance between first
-adjacent times will be equal to first step, distance between second adjacent times will
-be equal to second step and so on. When last step reached, steps will go from the first one.
-</div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">steps</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">steps</code> contains null.</td>
       </tr>
     </tbody>
   </table>
@@ -424,7 +330,7 @@ Steps of the current grid.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -475,23 +381,8 @@ Gets points in time of the current grid.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>&gt;</td>
         <td>Collection of points in time of the current grid.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -529,7 +420,7 @@ Gets points in time of the current grid.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

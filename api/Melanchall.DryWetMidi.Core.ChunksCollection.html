@@ -92,40 +92,11 @@ Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">M
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">ChunksCollection</span></div>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</div>
-    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class ChunksCollection : IEnumerable&lt;MidiChunk&gt;, IEnumerable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class ChunksCollection : IEnumerable&lt;MidiChunk&gt;</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -210,28 +181,6 @@ Gets or sets the chunk at the specified index.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td>
-<code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0; or <code data-dev-comment-type="paramref" class="paramref">index</code> is equal to or greater than
-<a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td>value is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
@@ -274,30 +223,15 @@ Note that header chunks cannot be added into the collection since it may cause i
 Header chunk with appropriate information will be written to a file automatically on
 <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.AddRange(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.MidiChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.AddRange(IEnumerable%7BMelanchall.DryWetMidi.Core.MidiChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Collections/ChunksCollection.cs/#L85">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.AddRange*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.AddRange(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk})">AddRange(IEnumerable&lt;MidiChunk&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.AddRange(IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk})">AddRange(IEnumerable&lt;MidiChunk&gt;)</h4>
   <div class="markdown level1 summary">
 Adds chunks the end of the collection.
 </div>
@@ -317,33 +251,18 @@ Adds chunks the end of the collection.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
         <td><span class="parametername">chunks</span></td>
         <td>Chunks to add to the collection.</td>
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
 Header chunk with appropriate information will be written to a file automatically on
 <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">chunks</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_Clear.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -388,7 +307,7 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="xref">IEnumerator</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
         <td>An enumerator for the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
       </tr>
     </tbody>
@@ -444,21 +363,6 @@ occurrence within the entire <a class="xref" href="Melanchall.DryWetMidi.Core.Ch
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_Insert_System_Int32_Melanchall_DryWetMidi_Core_MidiChunk_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.Insert(System.Int32%2CMelanchall.DryWetMidi.Core.MidiChunk)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -504,35 +408,15 @@ Note that header chunks cannot be inserted into the collection since it may caus
 Header chunk with appropriate information will be written to a file automatically on
 <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0. -or-
-<code data-dev-comment-type="paramref" class="paramref">index</code> is greater than <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.InsertRange(System.Int32%2CSystem.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.MidiChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.InsertRange(System.Int32%2CIEnumerable%7BMelanchall.DryWetMidi.Core.MidiChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Collections/ChunksCollection.cs/#L126">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.InsertRange*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.InsertRange(System.Int32,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk})">InsertRange(Int32, IEnumerable&lt;MidiChunk&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.InsertRange(System.Int32,IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk})">InsertRange(Int32, IEnumerable&lt;MidiChunk&gt;)</h4>
   <div class="markdown level1 summary">
 Inserts a set of chunks into the collection at the specified index.
 </div>
@@ -557,38 +441,18 @@ Inserts a set of chunks into the collection at the specified index.
         <td>The zero-based index at which the chunk should be inserted.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
         <td><span class="parametername">chunks</span></td>
         <td>The chunk to insert.</td>
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
 Header chunk with appropriate information will be written to a file automatically on
 <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">chunks</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0. -or-
-<code data-dev-comment-type="paramref" class="paramref">index</code> is greater than <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_Remove_Melanchall_DryWetMidi_Core_MidiChunk_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.Remove(Melanchall.DryWetMidi.Core.MidiChunk)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -639,30 +503,15 @@ false if chunk was not found in the collection.</td>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAll_System_Predicate_Melanchall_DryWetMidi_Core_MidiChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAll(System.Predicate%7BMelanchall.DryWetMidi.Core.MidiChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAll_Predicate_Melanchall_DryWetMidi_Core_MidiChunk__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAll(Predicate%7BMelanchall.DryWetMidi.Core.MidiChunk%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Collections/ChunksCollection.cs/#L168">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAll_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAll*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAll_System_Predicate_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAll(System.Predicate{Melanchall.DryWetMidi.Core.MidiChunk})">RemoveAll(Predicate&lt;MidiChunk&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAll_Predicate_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAll(Predicate{Melanchall.DryWetMidi.Core.MidiChunk})">RemoveAll(Predicate&lt;MidiChunk&gt;)</h4>
   <div class="markdown level1 summary">
 Removes all the chunks that match the conditions defined by the specified predicate.
 </div>
@@ -682,9 +531,9 @@ Removes all the chunks that match the conditions defined by the specified predic
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="xref">Predicate</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
         <td><span class="parametername">match</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate&lt;T&gt;</a> delegate that defines the conditions
+        <td>The <see cref="!:Predicate&lt;T>"></see> delegate that defines the conditions
 of the chunks to remove.</td>
       </tr>
     </tbody>
@@ -701,21 +550,6 @@ of the chunks to remove.</td>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td>The number of chunks removed from the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">match</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -753,63 +587,6 @@ Removes the chunk at the specified index of the collection.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0; or <code data-dev-comment-type="paramref" class="paramref">index</code>
-    is equal to or greater than <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="eii">Explicit Interface Implementations
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_ChunksCollection_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.ChunksCollection.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Collections/ChunksCollection.cs/#L215">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_System_Collections_IEnumerable_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.System#Collections#IEnumerable#GetEnumerator*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_System_Collections_IEnumerable_GetEnumerator" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
-  <div class="markdown level1 summary">
-Returns an enumerator that iterates through the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerator">IEnumerator</a></td>
-        <td>An enumerator for the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">System.Collections.Generic.IEnumerable&lt;T&gt;</a>
-  </div>
-  <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">System.Collections.IEnumerable</a>
-  </div>
 </article>
           </div>
           
@@ -840,7 +617,7 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

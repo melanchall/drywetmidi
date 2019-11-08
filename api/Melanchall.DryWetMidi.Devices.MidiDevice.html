@@ -94,31 +94,6 @@ Represents a MIDI device.
       <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a></div>
       <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a></div>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Devices_MidiDevice_syntax">Syntax</h5>
@@ -184,7 +159,7 @@ Device handle.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.intptr">IntPtr</a></td>
+        <td><span class="xref">IntPtr</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -250,7 +225,7 @@ Gets the version of MIDI device driver.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.version">Version</a></td>
+        <td><span class="xref">Version</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -417,28 +392,13 @@ release only unmanaged resources.</td>
   <h4 id="Melanchall_DryWetMidi_Devices_MidiDevice_EnsureDeviceIsNotDisposed" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.EnsureDeviceIsNotDisposed">EnsureDeviceIsNotDisposed()</h4>
   <div class="markdown level1 summary">
 Checks that current instance of MIDI device class is not disposed and throws
-<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a> if not.
+<see cref="!:ObjectDisposedException"></see> if not.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected void EnsureDeviceIsNotDisposed()</code></pre>
   </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td>Current instance of MIDI device class is disposed.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_MidiDevice_Finalize.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.MidiDevice.Finalize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -458,13 +418,13 @@ Finalizes the current instance of the MIDI device class.
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.MidiDevice.GetErrorText(System.UInt32%2CSystem.Text.StringBuilder%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_System_UInt32_StringBuilder_System_UInt32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.MidiDevice.GetErrorText(System.UInt32%2CStringBuilder%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/MidiDevice.cs/#L153">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.GetErrorText*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.GetErrorText(System.UInt32,System.Text.StringBuilder,System.UInt32)">GetErrorText(UInt32, StringBuilder, UInt32)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_System_UInt32_StringBuilder_System_UInt32_" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.GetErrorText(System.UInt32,StringBuilder,System.UInt32)">GetErrorText(UInt32, StringBuilder, UInt32)</h4>
   <div class="markdown level1 summary">
 Gets error description for the specified MMRESULT which is return value of winmm function.
 </div>
@@ -489,9 +449,9 @@ Gets error description for the specified MMRESULT which is return value of winmm
         <td>MMRESULT which is return value of winmm function.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></td>
+        <td><span class="xref">StringBuilder</span></td>
         <td><span class="parametername">pszText</span></td>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a> to write error description to.</td>
+        <td><see cref="!:StringBuilder"></see> to write error description to.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
@@ -517,13 +477,13 @@ Gets error description for the specified MMRESULT which is return value of winmm
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_MidiDevice_OnError_System_Exception_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.MidiDevice.OnError(System.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_MidiDevice_OnError_Exception_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.MidiDevice.OnError(Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/MidiDevice.cs/#L141">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_MidiDevice_OnError_" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.OnError*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_MidiDevice_OnError_System_Exception_" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.OnError(System.Exception)">OnError(Exception)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_MidiDevice_OnError_Exception_" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.OnError(Exception)">OnError(Exception)</h4>
   <div class="markdown level1 summary">
 Raises <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ErrorOccurred">ErrorOccurred</a> event.
 </div>
@@ -543,7 +503,7 @@ Raises <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melan
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception">Exception</a></td>
+        <td><span class="xref">Exception</span></td>
         <td><span class="parametername">exception</span></td>
         <td>An exception that represents error occurred.</td>
       </tr>
@@ -679,19 +639,17 @@ Returns a string that represents the current object.
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_System_IO_MemoryStream_System_Byte___.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(System.IO.MemoryStream%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_MemoryStream_System_Byte___.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(MemoryStream%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/MidiDevice.cs/#L160">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_System_IO_MemoryStream_System_Byte___" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(System.IO.MemoryStream,System.Byte[])">WriteBytesToStream(MemoryStream, Byte[])</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_MemoryStream_System_Byte___" data-uid="Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(MemoryStream,System.Byte[])">WriteBytesToStream(MemoryStream, Byte[])</h4>
   <div class="markdown level1 summary">
-Writes bytes to <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memorystream">MemoryStream</a> and returns position of the stream to its beginning.
+Writes bytes to <see cref="!:MemoryStream"></see> and returns position of the stream to its beginning.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -709,9 +667,9 @@ Writes bytes to <a class="xref" href="https://docs.microsoft.com/dotnet/api/syst
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memorystream">MemoryStream</a></td>
+        <td><span class="xref">MemoryStream</span></td>
         <td><span class="parametername">memoryStream</span></td>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memorystream">MemoryStream</a> to write bytes to.</td>
+        <td><see cref="!:MemoryStream"></see> to write bytes to.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
@@ -748,15 +706,11 @@ Occurs when an error occurred on device (for example, during MIDI events parsing
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.ErrorOccurredEventArgs.html">ErrorOccurredEventArgs</a>&gt;</td>
+        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.ErrorOccurredEventArgs.html">ErrorOccurredEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
-  </div>
 </article>
           </div>
           
@@ -787,7 +741,7 @@ Occurs when an error occurred on device (for example, during MIDI events parsing
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

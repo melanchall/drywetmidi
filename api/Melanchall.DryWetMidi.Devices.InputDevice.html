@@ -93,10 +93,6 @@ Represents an input MIDI device.
     <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html">MidiDevice</a></div>
     <div class="level2"><span class="xref">InputDevice</span></div>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
-  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -133,10 +129,10 @@ Represents an input MIDI device.
       <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ProcessMmResult_System_UInt32_">MidiDevice.ProcessMmResult(UInt32)</a>
     </div>
     <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_OnError_System_Exception_">MidiDevice.OnError(Exception)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_OnError_Exception_">MidiDevice.OnError(Exception)</a>
     </div>
     <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_System_IO_MemoryStream_System_Byte___">MidiDevice.WriteBytesToStream(MemoryStream, Byte[])</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_MemoryStream_System_Byte___">MidiDevice.WriteBytesToStream(MemoryStream, Byte[])</a>
     </div>
     <div>
       <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ToString">MidiDevice.ToString()</a>
@@ -144,30 +140,12 @@ Represents an input MIDI device.
     <div>
       <a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_Dispose">MidiDevice.Dispose()</a>
     </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Devices_InputDevice_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class InputDevice : MidiDevice, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class InputDevice : MidiDevice</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -320,7 +298,7 @@ Retrieves all input MIDI devices presented in the system.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a>&gt;</td>
         <td>All input MIDI devices presented in the system.</td>
       </tr>
     </tbody>
@@ -374,21 +352,6 @@ Retrieves input MIDI device with the specified ID.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">id</code> is out of valid range.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_InputDevice_GetByName_System_String_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.InputDevice.GetByName(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -438,22 +401,6 @@ Retrieves a first input MIDI device with the specified name.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">name</code> is null or contains white-spaces only. -or-
-<code data-dev-comment-type="paramref" class="paramref">name</code> specifies an input MIDI device which is not presented in the system.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_InputDevice_GetDevicesCount.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.InputDevice.GetDevicesCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -488,13 +435,13 @@ Retrieves the number of input MIDI devices presented in the system.
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_InputDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.InputDevice.GetErrorText(System.UInt32%2CSystem.Text.StringBuilder%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_InputDevice_GetErrorText_System_UInt32_StringBuilder_System_UInt32_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.InputDevice.GetErrorText(System.UInt32%2CStringBuilder%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/InputDevice/InputDevice.cs/#L216">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_InputDevice_GetErrorText_" data-uid="Melanchall.DryWetMidi.Devices.InputDevice.GetErrorText*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_InputDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_" data-uid="Melanchall.DryWetMidi.Devices.InputDevice.GetErrorText(System.UInt32,System.Text.StringBuilder,System.UInt32)">GetErrorText(UInt32, StringBuilder, UInt32)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_InputDevice_GetErrorText_System_UInt32_StringBuilder_System_UInt32_" data-uid="Melanchall.DryWetMidi.Devices.InputDevice.GetErrorText(System.UInt32,StringBuilder,System.UInt32)">GetErrorText(UInt32, StringBuilder, UInt32)</h4>
   <div class="markdown level1 summary">
 Gets error description for the specified MMRESULT which is return value of winmm function.
 </div>
@@ -519,9 +466,9 @@ Gets error description for the specified MMRESULT which is return value of winmm
         <td>MMRESULT which is return value of winmm function.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></td>
+        <td><span class="xref">StringBuilder</span></td>
         <td><span class="parametername">pszText</span></td>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a> to write error description to.</td>
+        <td><see cref="!:StringBuilder"></see> to write error description to.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
@@ -546,7 +493,7 @@ Gets error description for the specified MMRESULT which is return value of winmm
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_System_UInt32_System_Text_StringBuilder_System_UInt32_">MidiDevice.GetErrorText(UInt32, StringBuilder, UInt32)</a></div>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_GetErrorText_System_UInt32_StringBuilder_System_UInt32_">MidiDevice.GetErrorText(UInt32, StringBuilder, UInt32)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_InputDevice_Reset.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.InputDevice.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -574,10 +521,6 @@ all pending data.
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a> is disposed.</td>
-      </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
         <td>An error occurred on device.</td>
@@ -611,10 +554,6 @@ Starts listening for incoming MIDI events on the current <a class="xref" href="M
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a> is disposed.</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
         <td>An error occurred on device.</td>
       </tr>
@@ -646,10 +585,6 @@ Stops listening for incoming MIDI events on the current <a class="xref" href="Me
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a> is disposed.</td>
-      </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
         <td>An error occurred on device.</td>
@@ -684,7 +619,7 @@ Occurs when a MIDI event is received.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html">MidiEventReceivedEventArgs</a>&gt;</td>
+        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html">MidiEventReceivedEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -715,7 +650,7 @@ Occurs when invalid channel, system common or system real-time event received.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.InvalidShortEventReceivedEventArgs.html">InvalidShortEventReceivedEventArgs</a>&gt;</td>
+        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.InvalidShortEventReceivedEventArgs.html">InvalidShortEventReceivedEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -746,7 +681,7 @@ Occurs when invalid system exclusive event is received.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.InvalidSysExEventReceivedEventArgs.html">InvalidSysExEventReceivedEventArgs</a>&gt;</td>
+        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.InvalidSysExEventReceivedEventArgs.html">InvalidSysExEventReceivedEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -777,7 +712,7 @@ Occurs when MIDI time code received, i.e. all MIDI events to complete MIDI time 
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.MidiTimeCodeReceivedEventArgs.html">MidiTimeCodeReceivedEventArgs</a>&gt;</td>
+        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.MidiTimeCodeReceivedEventArgs.html">MidiTimeCodeReceivedEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -786,10 +721,6 @@ Occurs when MIDI time code received, i.e. all MIDI events to complete MIDI time 
   <div class="markdown level1 remarks">
 This event will be raised only if <a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html#Melanchall_DryWetMidi_Devices_InputDevice_RaiseMidiTimeCodeReceived">RaiseMidiTimeCodeReceived</a> is set to true.
 </div>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
-  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.html#Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities_Connect_Melanchall_DryWetMidi_Devices_InputDevice_Melanchall_DryWetMidi_Devices_OutputDevice___">DevicesConnectorUtilities.Connect(InputDevice, OutputDevice[])</a>
@@ -824,7 +755,7 @@ This event will be raised only if <a class="xref" href="Melanchall.DryWetMidi.De
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

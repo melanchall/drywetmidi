@@ -92,47 +92,72 @@ Provides methods to merge nearby notes.
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">NotesMergerUtilities</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class NotesMergerUtilities</code></pre>
+    <pre><code class="lang-csharp hljs">public static class NotesMergerUtilities : object</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Tools.NotesMergingSettings%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Note%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_Predicate_Melanchall_DryWetMidi_Interaction_Note__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Tools.NotesMergingSettings%2CPredicate%7BMelanchall.DryWetMidi.Interaction.Note%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/NotesMerger/NotesMergerUtilities.cs/#L56">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_Predicate_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NotesMergingSettings,Predicate{Melanchall.DryWetMidi.Interaction.Note})">MergeNotes(IEnumerable&lt;TrackChunk&gt;, TempoMap, NotesMergingSettings, Predicate&lt;Note&gt;)</h4>
+  <div class="markdown level1 summary">
+Merges nearby notes in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void MergeNotes(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, NotesMergingSettings settings = null, Predicate&lt;Note&gt; filter = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to merge nearby notes in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate distances between notes.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergingSettings.html">NotesMergingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which notes should be merged.</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Predicate</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Filter for notes to merge.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_NotesMergingSettings_Predicate_Melanchall_DryWetMidi_Interaction_Note__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Tools.NotesMergingSettings%2CPredicate%7BMelanchall.DryWetMidi.Interaction.Note%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/NotesMerger/NotesMergerUtilities.cs/#L77">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Tools.NotesMergingSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.Note})">MergeNotes(MidiFile, NotesMergingSettings, Predicate&lt;Note&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_NotesMergingSettings_Predicate_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Tools.NotesMergingSettings,Predicate{Melanchall.DryWetMidi.Interaction.Note})">MergeNotes(MidiFile, NotesMergingSettings, Predicate&lt;Note&gt;)</h4>
   <div class="markdown level1 summary">
 Merges nearby notes in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
 </div>
@@ -162,36 +187,21 @@ Merges nearby notes in the specified <a class="xref" href="Melanchall.DryWetMidi
         <td>Settings according to which notes should be merged.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
+        <td><span class="xref">Predicate</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
         <td><span class="parametername">filter</span></td>
         <td>Filter for notes to merge.</td>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Tools.NotesMergingSettings%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Note%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_Predicate_Melanchall_DryWetMidi_Interaction_Note__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Tools.NotesMergingSettings%2CPredicate%7BMelanchall.DryWetMidi.Interaction.Note%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/NotesMerger/NotesMergerUtilities.cs/#L26">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NotesMergingSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.Note})">MergeNotes(TrackChunk, TempoMap, NotesMergingSettings, Predicate&lt;Note&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_Predicate_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NotesMergingSettings,Predicate{Melanchall.DryWetMidi.Interaction.Note})">MergeNotes(TrackChunk, TempoMap, NotesMergingSettings, Predicate&lt;Note&gt;)</h4>
   <div class="markdown level1 summary">
 Merges nearby notes in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
 </div>
@@ -226,90 +236,9 @@ Merges nearby notes in the specified <a class="xref" href="Melanchall.DryWetMidi
         <td>Settings according to which notes should be merged.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
+        <td><span class="xref">Predicate</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
         <td><span class="parametername">filter</span></td>
         <td>Filter for notes to merge.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Tools.NotesMergingSettings%2CSystem.Predicate%7BMelanchall.DryWetMidi.Interaction.Note%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/NotesMerger/NotesMergerUtilities.cs/#L56">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.MergeNotes(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NotesMergingSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.Note})">MergeNotes(IEnumerable&lt;TrackChunk&gt;, TempoMap, NotesMergingSettings, Predicate&lt;Note&gt;)</h4>
-  <div class="markdown level1 summary">
-Merges nearby notes in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void MergeNotes(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, NotesMergingSettings settings = null, Predicate&lt;Note&gt; filter = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
-        <td><span class="parametername">trackChunks</span></td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to merge nearby notes in.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used to calculate distances between notes.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergingSettings.html">NotesMergingSettings</a></td>
-        <td><span class="parametername">settings</span></td>
-        <td>Settings according to which notes should be merged.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
-        <td><span class="parametername">filter</span></td>
-        <td>Filter for notes to merge.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -343,7 +272,7 @@ Merges nearby notes in the specified collection of <a class="xref" href="Melanch
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

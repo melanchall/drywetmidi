@@ -92,38 +92,132 @@ Provides methods for splitting chords.
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">ChordsSplitterUtilities</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class ChordsSplitterUtilities</code></pre>
+    <pre><code class="lang-csharp hljs">public static class ChordsSplitterUtilities : object</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L296">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsAtDistance(IEnumerable&lt;TrackChunk&gt;, ITimeSpan, LengthedObjectTarget, TempoMap, Int64)</h4>
+  <div class="markdown level1 summary">
+Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> at the specified
+distance from a chord&apos;s start or end.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split chords in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">distance</span></td>
+        <td>Distance to split chords at.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a chord <code data-dev-comment-type="paramref" class="paramref">distance</code> should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Double%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L387">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsAtDistance(IEnumerable&lt;TrackChunk&gt;, Double, TimeSpanType, LengthedObjectTarget, TempoMap, Int64)</h4>
+  <div class="markdown level1 summary">
+Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
+specified ratio of a chord&apos;s length measuring it from the chord&apos;s start or end.
+For example, 0.5 means splitting at the center of a chord.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split chords in.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">ratio</span></td>
+        <td>Ratio of a chord&apos;s length to split by. Valid values are from 0 to 1.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>The type a chord&apos;s length should be processed according to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
+        <td><span class="parametername">from</span></td>
+        <td>Point of a chord distance should be measured from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used for distances calculations.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">notesTolerance</span></td>
+        <td>Notes tolerance that defines maximum distance of notes from the
+start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -140,7 +234,7 @@ from a chord&apos;s start or end.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -172,30 +266,6 @@ from a chord&apos;s start or end.
         <td><span class="parametername">notesTolerance</span></td>
         <td>Notes tolerance that defines maximum distance of notes from the
 start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">distance</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
       </tr>
     </tbody>
   </table>
@@ -216,7 +286,7 @@ at the center of a chord.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -256,31 +326,6 @@ start of the first note of a chord. Notes within this tolerance will be consider
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is out of valid range. -or-
-<code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value. -or-
-<code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -297,7 +342,7 @@ from a chord&apos;s start or end.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -334,30 +379,6 @@ from a chord&apos;s start or end.
         <td><span class="parametername">notesTolerance</span></td>
         <td>Notes tolerance that defines maximum distance of notes from the
 start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">distance</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
       </tr>
     </tbody>
   </table>
@@ -378,7 +399,7 @@ at the center of a chord.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -423,130 +444,23 @@ start of the first note of a chord. Notes within this tolerance will be consider
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is out of valid range. -or-
-<code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value. -or-
-<code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByGrid(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.IGrid%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L296">View Source</a>
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L224">View Source</a>
   </span>
-  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsAtDistance(IEnumerable&lt;TrackChunk&gt;, ITimeSpan, LengthedObjectTarget, TempoMap, Int64)</h4>
-  <div class="markdown level1 summary">
-Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> at the specified
-distance from a chord&apos;s start or end.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
-        <td><span class="parametername">trackChunks</span></td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split chords in.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
-        <td><span class="parametername">distance</span></td>
-        <td>Distance to split chords at.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
-        <td><span class="parametername">from</span></td>
-        <td>Point of a chord <code data-dev-comment-type="paramref" class="paramref">distance</code> should be measured from.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used for distances calculations.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">notesTolerance</span></td>
-        <td>Notes tolerance that defines maximum distance of notes from the
-start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">distance</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Double%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Tools.LengthedObjectTarget%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L387">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsAtDistance(IEnumerable&lt;TrackChunk&gt;, Double, TimeSpanType, LengthedObjectTarget, TempoMap, Int64)</h4>
+  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByGrid*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByGrid(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsByGrid(IEnumerable&lt;TrackChunk&gt;, IGrid, TempoMap, Int64)</h4>
   <div class="markdown level1 summary">
 Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
-specified ratio of a chord&apos;s length measuring it from the chord&apos;s start or end.
-For example, 0.5 means splitting at the center of a chord.
+specified grid.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this IEnumerable&lt;TrackChunk&gt; trackChunks, IGrid grid, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -559,61 +473,25 @@ For example, 0.5 means splitting at the center of a chord.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
         <td><span class="parametername">trackChunks</span></td>
         <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split chords in.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
-        <td><span class="parametername">ratio</span></td>
-        <td>Ratio of a chord&apos;s length to split by. Valid values are from 0 to 1.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
-        <td><span class="parametername">lengthType</span></td>
-        <td>The type a chord&apos;s length should be processed according to.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
-        <td><span class="parametername">from</span></td>
-        <td>Point of a chord distance should be measured from.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></td>
+        <td><span class="parametername">grid</span></td>
+        <td>Grid to split chords by.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
         <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used for distances calculations.</td>
+        <td>Tempo map used to calculate times to split by.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td><span class="parametername">notesTolerance</span></td>
         <td>Notes tolerance that defines maximum distance of notes from the
 start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is out of valid range. -or-
-<code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value. -or-
-<code data-dev-comment-type="paramref" class="paramref">from</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>
@@ -632,7 +510,7 @@ Splits chords contained in the specified <a class="xref" href="Melanchall.DryWet
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this MidiFile midiFile, IGrid grid, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this MidiFile midiFile, IGrid grid, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -662,25 +540,6 @@ start of the first note of a chord. Notes within this tolerance will be consider
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">grid</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByGrid(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.IGrid%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -696,7 +555,7 @@ Splits chords contained in the specified <a class="xref" href="Melanchall.DryWet
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -731,43 +590,23 @@ start of the first note of a chord. Notes within this tolerance will be consider
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">grid</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByGrid(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.IGrid%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L224">View Source</a>
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L149">View Source</a>
   </span>
-  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByGrid*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsByGrid(IEnumerable&lt;TrackChunk&gt;, IGrid, TempoMap, Int64)</h4>
+  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsByPartsNumber(IEnumerable&lt;TrackChunk&gt;, Int32, TimeSpanType, TempoMap, Int64)</h4>
   <div class="markdown level1 summary">
-Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
-specified grid.
+Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> into the
+specified number of parts of the equal length.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this IEnumerable&lt;TrackChunk&gt; trackChunks, IGrid grid, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this IEnumerable&lt;TrackChunk&gt; trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -780,14 +619,19 @@ specified grid.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
         <td><span class="parametername">trackChunks</span></td>
         <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split chords in.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></td>
-        <td><span class="parametername">grid</span></td>
-        <td>Grid to split chords by.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">partsNumber</span></td>
+        <td>The number of parts to split chords into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">lengthType</span></td>
+        <td>Type of a part&apos;s length.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
@@ -802,26 +646,10 @@ start of the first note of a chord. Notes within this tolerance will be consider
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">grid</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-    </tbody>
-  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+If a chord has zero length, it will be splitted into the specified number of parts of zero length.
+</div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -838,7 +666,7 @@ parts of the equal length.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -877,30 +705,6 @@ start of the first note of a chord. Notes within this tolerance will be consider
   <div class="markdown level1 remarks">
 If a chord has zero length, it will be splitted into the specified number of parts of zero length.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">partsNumber</code> is zero or negative. -or-
-<code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -917,7 +721,7 @@ of parts of the equal length.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -961,48 +765,24 @@ start of the first note of a chord. Notes within this tolerance will be consider
   <div class="markdown level1 remarks">
 If a chord has zero length, it will be splitted into the specified number of parts of zero length.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">partsNumber</code> is zero or negative. -or-
-<code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CSystem.Int32%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L149">View Source</a>
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L62">View Source</a>
   </span>
-  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsByPartsNumber(IEnumerable&lt;TrackChunk&gt;, Int32, TimeSpanType, TempoMap, Int64)</h4>
+  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsByStep(IEnumerable&lt;TrackChunk&gt;, ITimeSpan, TempoMap, Int64)</h4>
   <div class="markdown level1 summary">
-Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> into the
-specified number of parts of the equal length.
+Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
+specified step so every chord will be splitted at points equally distanced from each
+other starting from the chord&apos;s start time.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this IEnumerable&lt;TrackChunk&gt; trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan step, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1015,19 +795,14 @@ specified number of parts of the equal length.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
         <td><span class="parametername">trackChunks</span></td>
         <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split chords in.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">partsNumber</span></td>
-        <td>The number of parts to split chords into.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
-        <td><span class="parametername">lengthType</span></td>
-        <td>Type of a part&apos;s length.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Step to split chords by.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
@@ -1042,35 +817,11 @@ start of the first note of a chord. Notes within this tolerance will be consider
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If a chord has zero length, it will be splitted into the specified number of parts of zero length.
+Chords with zero length and chords with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
+will not be splitted.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">partsNumber</code> is zero or negative. -or-
-<code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -1088,7 +839,7 @@ starting from the chord&apos;s start time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1123,26 +874,6 @@ start of the first note of a chord. Notes within this tolerance will be consider
 Chords with zero length and chords with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
 will not be splitted.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">step</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -1160,7 +891,7 @@ the chord&apos;s start time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, long notesTolerance = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1200,103 +931,6 @@ start of the first note of a chord. Notes within this tolerance will be consider
 Chords with zero length and chords with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
 will not be splitted.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">step</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Tools/LengthedObjectsSplitter/Utilities/ChordsSplitterUtilities.cs/#L62">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.SplitChordsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,System.Int64)">SplitChordsByStep(IEnumerable&lt;TrackChunk&gt;, ITimeSpan, TempoMap, Int64)</h4>
-  <div class="markdown level1 summary">
-Splits chords contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
-specified step so every chord will be splitted at points equally distanced from each
-other starting from the chord&apos;s start time.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan step, TempoMap tempoMap, long notesTolerance = 0L)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
-        <td><span class="parametername">trackChunks</span></td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to split chords in.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
-        <td><span class="parametername">step</span></td>
-        <td>Step to split chords by.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used to calculate times to split by.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">notesTolerance</span></td>
-        <td>Notes tolerance that defines maximum distance of notes from the
-start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64__remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-Chords with zero length and chords with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
-will not be splitted.
-</div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">step</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
-      </tr>
-    </tbody>
-  </table>
 </article>
           </div>
           
@@ -1327,7 +961,7 @@ will not be splitted.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

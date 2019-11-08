@@ -93,38 +93,141 @@ which provides advanced features for MIDI data playing.
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">PlaybackUtilities</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class PlaybackUtilities</code></pre>
+    <pre><code class="lang-csharp hljs">public static class PlaybackUtilities : object</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L93">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, MidiClockSettings)</h4>
+  <div class="markdown level1 summary">
+Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
+the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, MidiClockSettings clockSettings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing events to play.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate events times.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
+        <td><span class="parametername">clockSettings</span></td>
+        <td>Settings of the internal playback&apos;s clock.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
+the <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L73">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, OutputDevice, MidiClockSettings)</h4>
+  <div class="markdown level1 summary">
+Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
+the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing events to play.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate events times.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a></td>
+        <td><span class="parametername">outputDevice</span></td>
+        <td>Output MIDI device to play events through.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
+        <td><span class="parametername">clockSettings</span></td>
+        <td>Settings of the internal playback&apos;s clock.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
+the <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Common.FourBitNumber%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -188,22 +291,6 @@ produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Patt
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
         <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events that will be
 produced by the <code data-dev-comment-type="paramref" class="paramref">pattern</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -278,22 +365,6 @@ produced by the <code data-dev-comment-type="paramref" class="paramref">pattern<
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -347,21 +418,6 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">Mi
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
         <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the <code data-dev-comment-type="paramref" class="paramref">midiFile</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -426,22 +482,6 @@ the <code data-dev-comment-type="paramref" class="paramref">midiFile</code>.</td
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -500,22 +540,6 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
         <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -585,190 +609,15 @@ the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L93">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, MidiClockSettings)</h4>
-  <div class="markdown level1 summary">
-Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
-the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, MidiClockSettings clockSettings = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
-        <td><span class="parametername">trackChunks</span></td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing events to play.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used to calculate events times.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
-        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
-the <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L73">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, OutputDevice, MidiClockSettings)</h4>
-  <div class="markdown level1 summary">
-Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
-the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
-        <td><span class="parametername">trackChunks</span></td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing events to play.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used to calculate events times.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a></td>
-        <td><span class="parametername">outputDevice</span></td>
-        <td>Output MIDI device to play events through.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
-        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
-the <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Common.SevenBitNumber%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback%60%601(IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Common.SevenBitNumber%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L191">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, SevenBitNumber, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, SevenBitNumber, MidiClockSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing musical objects using
 the specified program.
@@ -790,7 +639,7 @@ the specified program.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;TObject&gt;</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to play.</td>
       </tr>
@@ -846,31 +695,15 @@ the specified program.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidi2Program%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback%60%601(IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidi2Program%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L248">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidi2Program, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidi2Program, MidiClockSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing musical objects using
 the specified General MIDI 2 program.
@@ -892,7 +725,7 @@ the specified General MIDI 2 program.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;TObject&gt;</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to play.</td>
       </tr>
@@ -948,35 +781,15 @@ the specified General MIDI 2 program.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">generalMidi2Program</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidiProgram%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback%60%601(IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidiProgram%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L219">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidiProgram, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidiProgram, MidiClockSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing musical objects using
 the specified General MIDI 1 program.
@@ -998,7 +811,7 @@ the specified General MIDI 1 program.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;TObject&gt;</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to play.</td>
       </tr>
@@ -1054,23 +867,52 @@ the specified General MIDI 1 program.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L293">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play(IEnumerable&lt;TrackChunk&gt;, TempoMap, OutputDevice, MidiClockSettings)</h4>
+  <div class="markdown level1 summary">
+Plays MIDI events contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Play(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Condition</th>
+        <th>Name</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing events to play.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">generalMidiProgram</code> specified an invalid value.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate events times.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a></td>
+        <td><span class="parametername">outputDevice</span></td>
+        <td>Output MIDI device to play events through.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
+        <td><span class="parametername">clockSettings</span></td>
+        <td>Settings of the internal playback&apos;s clock.</td>
       </tr>
     </tbody>
   </table>
@@ -1128,22 +970,6 @@ Plays MIDI events that will be produced by specified <a class="xref" href="Melan
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -1185,22 +1011,6 @@ Plays MIDI events contained in the specified <a class="xref" href="Melanchall.Dr
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
         <td><span class="parametername">clockSettings</span></td>
         <td>Settings of the internal playback&apos;s clock.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -1253,96 +1063,15 @@ Plays MIDI events contained in the specified <a class="xref" href="Melanchall.Dr
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.TrackChunk%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L293">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play(IEnumerable&lt;TrackChunk&gt;, TempoMap, OutputDevice, MidiClockSettings)</h4>
-  <div class="markdown level1 summary">
-Plays MIDI events contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
-        <td><span class="parametername">trackChunks</span></td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing events to play.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used to calculate events times.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a></td>
-        <td><span class="parametername">outputDevice</span></td>
-        <td>Output MIDI device to play events through.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Common.SevenBitNumber%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play%60%601(IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Common.SevenBitNumber%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L351">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, SevenBitNumber, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, SevenBitNumber, MidiClockSettings)</h4>
   <div class="markdown level1 summary">
 Plays musical objects using the specified program.
 </div>
@@ -1363,7 +1092,7 @@ Plays musical objects using the specified program.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;TObject&gt;</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to play.</td>
       </tr>
@@ -1404,31 +1133,15 @@ Plays musical objects using the specified program.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidi2Program%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play%60%601(IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidi2Program%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L402">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidi2Program, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidi2Program, MidiClockSettings)</h4>
   <div class="markdown level1 summary">
 Plays musical objects using the specified General MIDI 2 program.
 </div>
@@ -1449,7 +1162,7 @@ Plays musical objects using the specified General MIDI 2 program.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;TObject&gt;</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to play.</td>
       </tr>
@@ -1490,35 +1203,15 @@ Plays musical objects using the specified General MIDI 2 program.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">generalMidi2Program</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidiProgram%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play%60%601(IEnumerable%7B%60%600%7D%2CMelanchall.DryWetMidi.Interaction.TempoMap%2CMelanchall.DryWetMidi.Devices.OutputDevice%2CMelanchall.DryWetMidi.Standards.GeneralMidiProgram%2CMelanchall.DryWetMidi.Devices.MidiClockSettings)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Devices/Playback/PlaybackUtilities.cs/#L376">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidiProgram, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.OutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, OutputDevice, GeneralMidiProgram, MidiClockSettings)</h4>
   <div class="markdown level1 summary">
 Plays musical objects using the specified General MIDI 1 program.
 </div>
@@ -1539,7 +1232,7 @@ Plays musical objects using the specified General MIDI 1 program.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;TObject&gt;</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to play.</td>
       </tr>
@@ -1580,26 +1273,6 @@ Plays musical objects using the specified General MIDI 1 program.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">objects</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">generalMidiProgram</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
 </article>
           </div>
           
@@ -1630,7 +1303,7 @@ Plays musical objects using the specified General MIDI 1 program.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

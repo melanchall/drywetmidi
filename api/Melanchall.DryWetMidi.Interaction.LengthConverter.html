@@ -92,35 +92,11 @@ Provides a way to convert the length of an object from one representation to ano
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">LengthConverter</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_LengthConverter_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class LengthConverter</code></pre>
+    <pre><code class="lang-csharp hljs">public static class LengthConverter : object</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
@@ -134,7 +110,7 @@ Provides a way to convert the length of an object from one representation to ano
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertFrom_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertFrom*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertFrom_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertFrom(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertFrom(ITimeSpan, ITimeSpan, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts length from the specified length type to <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>.
+Converts length from the specified length type to <see cref="!:System.Int64"></see>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -179,23 +155,7 @@ Converts length from the specified length type to <a class="xref" href="https://
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td>Length as <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+        <td>Length as <see cref="!:System.Int64"></see>.</td>
       </tr>
     </tbody>
   </table>
@@ -209,7 +169,7 @@ Converts length from the specified length type to <a class="xref" href="https://
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertFrom_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertFrom*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertFrom_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertFrom(Melanchall.DryWetMidi.Interaction.ITimeSpan,System.Int64,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertFrom(ITimeSpan, Int64, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts length from the specified length type to <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>.
+Converts length from the specified length type to <see cref="!:System.Int64"></see>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -254,27 +214,7 @@ Converts length from the specified length type to <a class="xref" href="https://
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td>Length as <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+        <td>Length as <see cref="!:System.Int64"></see>.</td>
       </tr>
     </tbody>
   </table>
@@ -342,26 +282,6 @@ Converts length from one length type to another one.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanType_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CSystem.Int64%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -426,39 +346,15 @@ Converts length from one length type to another one.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Type_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CSystem.Type%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Type_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CType%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Converters/LengthConverter.cs/#L222">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Type_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan,System.Type,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(ITimeSpan, Type, ITimeSpan, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Type_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan,Type,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(ITimeSpan, Type, ITimeSpan, TempoMap)</h4>
   <div class="markdown level1 summary">
 Converts length from one length type to another one.
 </div>
@@ -483,7 +379,7 @@ Converts length from one length type to another one.
         <td>Length to convert.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a></td>
+        <td><span class="xref">Type</span></td>
         <td><span class="parametername">lengthType</span></td>
         <td>Type to convert <code data-dev-comment-type="paramref" class="paramref">length</code> to.</td>
       </tr>
@@ -514,36 +410,15 @@ Converts length from one length type to another one.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">lengthType</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> is not supported.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Type_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CSystem.Type%2CSystem.Int64%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Type_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CType%2CSystem.Int64%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Interaction/TimeSpan/Converters/LengthConverter.cs/#L200">View Source</a>
   </span>
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Type_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan,System.Type,System.Int64,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(ITimeSpan, Type, Int64, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Type_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan,Type,System.Int64,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(ITimeSpan, Type, Int64, TempoMap)</h4>
   <div class="markdown level1 summary">
 Converts length from one length type to another one.
 </div>
@@ -568,7 +443,7 @@ Converts length from one length type to another one.
         <td>Length to convert.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a></td>
+        <td><span class="xref">Type</span></td>
         <td><span class="parametername">lengthType</span></td>
         <td>Type to convert <code data-dev-comment-type="paramref" class="paramref">length</code> to.</td>
       </tr>
@@ -599,30 +474,6 @@ Converts length from one length type to another one.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">lengthType</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> is not supported.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_System_Int64_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(System.Int64%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -633,7 +484,7 @@ Converts length from one length type to another one.
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_System_Int64_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(System.Int64,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(Int64, TimeSpanType, ITimeSpan, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a> to the specified length type.
+Converts length from <see cref="!:System.Int64"></see> to the specified length type.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -687,30 +538,6 @@ Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_System_Int64_Melanchall_DryWetMidi_Interaction_TimeSpanType_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(System.Int64%2CMelanchall.DryWetMidi.Interaction.TimeSpanType%2CSystem.Int64%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -721,7 +548,7 @@ Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_System_Int64_Melanchall_DryWetMidi_Interaction_TimeSpanType_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo(System.Int64,Melanchall.DryWetMidi.Interaction.TimeSpanType,System.Int64,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(Int64, TimeSpanType, Int64, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a> to the specified length type.
+Converts length from <see cref="!:System.Int64"></see> to the specified length type.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -772,30 +599,6 @@ Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td>Length as an instance of time span defined by <code data-dev-comment-type="paramref" class="paramref">lengthType</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is negative. -or-
-<code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">lengthType</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>
@@ -874,26 +677,6 @@ Converts length from one length type to another one.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
-        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo__1_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo%60%601(Melanchall.DryWetMidi.Interaction.ITimeSpan%2CSystem.Int64%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -969,30 +752,6 @@ Converts length from one length type to another one.
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
-        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo__1_System_Int64_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo%60%601(System.Int64%2CMelanchall.DryWetMidi.Interaction.ITimeSpan%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -1003,7 +762,7 @@ Converts length from one length type to another one.
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo__1_System_Int64_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo``1(System.Int64,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo&lt;TTimeSpan&gt;(Int64, ITimeSpan, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a> to the specified length type.
+Converts length from <see cref="!:System.Int64"></see> to the specified length type.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1068,30 +827,6 @@ Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
-<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
-        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo__1_System_Int64_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo%60%601(System.Int64%2CSystem.Int64%2CMelanchall.DryWetMidi.Interaction.TempoMap)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -1102,7 +837,7 @@ Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api
   <a id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_LengthConverter_ConvertTo__1_System_Int64_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthConverter.ConvertTo``1(System.Int64,System.Int64,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo&lt;TTimeSpan&gt;(Int64, Int64, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a> to the specified length type.
+Converts length from <see cref="!:System.Int64"></see> to the specified length type.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1167,30 +902,6 @@ Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is negative. -or-
-<code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
-        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
-      </tr>
-    </tbody>
-  </table>
 </article>
           </div>
           
@@ -1221,7 +932,7 @@ Converts length from <a class="xref" href="https://docs.microsoft.com/dotnet/api
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>

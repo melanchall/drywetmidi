@@ -101,27 +101,6 @@ Represents a track chunk of a standard MIDI file.
     <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_ChunkId">MidiChunk.ChunkId</a>
     </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -152,6 +131,46 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Co
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public TrackChunk()</code></pre>
   </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TrackChunk__ctor_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TrackChunk.%23ctor(IEnumerable%7BMelanchall.DryWetMidi.Core.MidiEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/TrackChunk.cs/#L46">View Source</a>
+  </span>
+  <a id="Melanchall_DryWetMidi_Core_TrackChunk__ctor_" data-uid="Melanchall.DryWetMidi.Core.TrackChunk.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_TrackChunk__ctor_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Core.TrackChunk.#ctor(IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent})">TrackChunk(IEnumerable&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> with the specified events.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TrackChunk(IEnumerable&lt;MidiEvent&gt; events)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Events to add to the track chunk.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_TrackChunk__ctor_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+track chunk structure. End Of Track event will be written to the track chunk automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TrackChunk__ctor_Melanchall_DryWetMidi_Core_MidiEvent___.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TrackChunk.%23ctor(Melanchall.DryWetMidi.Core.MidiEvent%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -192,82 +211,6 @@ Note that End Of Track events cannot be added into the collection since it may c
 track chunk structure. End Of Track event will be written to the track chunk automatically on
 <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">events</code> contain an instance of <span class="xref">Melanchall.DryWetMidi.Core.EndOfTrackEvent</span>; or
-<code data-dev-comment-type="paramref" class="paramref">events</code> contain null.
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/melanchall/drywetmidi/new/develop/apiSpec/new?filename=Melanchall_DryWetMidi_Core_TrackChunk__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__.md&amp;value=---%0Auid%3A%20Melanchall.DryWetMidi.Core.TrackChunk.%23ctor(System.Collections.Generic.IEnumerable%7BMelanchall.DryWetMidi.Core.MidiEvent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/melanchall/drywetmidi/blob/develop/DryWetMidi/Core/Chunks/TrackChunk.cs/#L46">View Source</a>
-  </span>
-  <a id="Melanchall_DryWetMidi_Core_TrackChunk__ctor_" data-uid="Melanchall.DryWetMidi.Core.TrackChunk.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_TrackChunk__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Core.TrackChunk.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent})">TrackChunk(IEnumerable&lt;MidiEvent&gt;)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> with the specified events.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TrackChunk(IEnumerable&lt;MidiEvent&gt; events)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
-        <td><span class="parametername">events</span></td>
-        <td>Events to add to the track chunk.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Core_TrackChunk__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent___remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
-track chunk structure. End Of Track event will be written to the track chunk automatically on
-<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
-</div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">events</code> is null.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="fields">Fields
   </h3>
   <span class="small pull-right mobile-hide">
@@ -284,7 +227,7 @@ ID of the track chunk. This field is constsnt.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const string Id = &quot;MTrk&quot;</code></pre>
+    <pre><code class="lang-csharp hljs">public const string Id = null</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -483,15 +426,6 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td>Method was called after the writer&apos;s underlying stream
-was disposed.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
-        <td>An I/O error occurred on the writer&apos;s underlying stream.</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
         <td>Unexpected running status is encountered.</td>
       </tr>
@@ -559,25 +493,6 @@ Writes content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.
   <div class="markdown level1 remarks">
 Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> is collection of MIDI events.
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td>Method was called after the writer&apos;s underlying stream was disposed.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
-        <td>An I/O error occurred on the writer&apos;s underlying stream.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunkUtilities.html#Melanchall_DryWetMidi_Core_TrackChunkUtilities_Explode_Melanchall_DryWetMidi_Core_TrackChunk_">TrackChunkUtilities.Explode(TrackChunk)</a>
@@ -595,34 +510,34 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
       <a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_OutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_">PlaybackUtilities.Play(TrackChunk, TempoMap, OutputDevice, MidiClockSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">ChordsManagingUtilities.ManageChords(TrackChunk, Int64, Comparison&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">ChordsManagingUtilities.ManageChords(TrackChunk, Int64, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_">ChordsManagingUtilities.GetChords(TrackChunk, Int64)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.ProcessChords(TrackChunk, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_TrackChunk_Action_Melanchall_DryWetMidi_Interaction_Chord__Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.ProcessChords(TrackChunk, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.RemoveChords(TrackChunk, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_TrackChunk_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.RemoveChords(TrackChunk, Predicate&lt;Chord&gt;, Int64)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__">ChordsManagingUtilities.AddChords(TrackChunk, IEnumerable&lt;Chord&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_TrackChunk_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__">ChordsManagingUtilities.AddChords(TrackChunk, IEnumerable&lt;Chord&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ManageNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">NotesManagingUtilities.ManageNotes(TrackChunk, Comparison&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ManageNotes_Melanchall_DryWetMidi_Core_TrackChunk_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">NotesManagingUtilities.ManageNotes(TrackChunk, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_TrackChunk_">NotesManagingUtilities.GetNotes(TrackChunk)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.ProcessNotes(TrackChunk, Action&lt;Note&gt;, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_TrackChunk_Action_Melanchall_DryWetMidi_Interaction_Note__Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.ProcessNotes(TrackChunk, Action&lt;Note&gt;, Predicate&lt;Note&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.RemoveNotes(TrackChunk, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_TrackChunk_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.RemoveNotes(TrackChunk, Predicate&lt;Note&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_AddNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.AddNotes(TrackChunk, IEnumerable&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_AddNotes_Melanchall_DryWetMidi_Core_TrackChunk_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.AddNotes(TrackChunk, IEnumerable&lt;Note&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetNotesAndRestsUtilities.html#Melanchall_DryWetMidi_Interaction_GetNotesAndRestsUtilities_GetNotesAndRests_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_">GetNotesAndRestsUtilities.GetNotesAndRests(TrackChunk, RestSeparationPolicy)</a>
@@ -631,19 +546,19 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetTimedEventsAndNotesUtilities.html#Melanchall_DryWetMidi_Interaction_GetTimedEventsAndNotesUtilities_GetTimedEventsAndNotes_Melanchall_DryWetMidi_Core_TrackChunk_">GetTimedEventsAndNotesUtilities.GetTimedEventsAndNotes(TrackChunk)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">TimedEventsManagingUtilities.ManageTimedEvents(TrackChunk, Comparison&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">TimedEventsManagingUtilities.ManageTimedEvents(TrackChunk, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_">TimedEventsManagingUtilities.GetTimedEvents(TrackChunk)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(TrackChunk, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(TrackChunk, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.RemoveTimedEvents(TrackChunk, Predicate&lt;TimedEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.RemoveTimedEvents(TrackChunk, Predicate&lt;TimedEvent&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.AddTimedEvents(TrackChunk, IEnumerable&lt;TimedEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.AddTimedEvents(TrackChunk, IEnumerable&lt;TimedEvent&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TrackChunkUtilities.html#Melanchall_DryWetMidi_Interaction_TrackChunkUtilities_ShiftEvents_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">TrackChunkUtilities.ShiftEvents(TrackChunk, ITimeSpan, TempoMap)</a>
@@ -679,7 +594,7 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
       <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_">NotesSplitterUtilities.SplitNotesAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html#Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesMergerUtilities.MergeNotes(TrackChunk, TempoMap, NotesMergingSettings, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html#Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesMergerUtilities.MergeNotes(TrackChunk, TempoMap, NotesMergingSettings, Predicate&lt;Note&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsQuantizerUtilities_QuantizeChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_Melanchall_DryWetMidi_Tools_ChordsQuantizingSettings_">ChordsQuantizerUtilities.QuantizeChords(TrackChunk, IGrid, TempoMap, Int64, ChordsQuantizingSettings)</a>
@@ -729,7 +644,7 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 7, 2019 15:25:32
+            Generated by <b>DocFX</b> on November 8, 2019 20:09:22
             
           </div>
         </div>
