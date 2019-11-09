@@ -98,11 +98,32 @@ Represents a musical chord.
     <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a></div>
     <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.IMusicalObject.html">IMusicalObject</a></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_Chord_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class Chord : object, ILengthedObject, ITimedObject, IMusicalObject</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class Chord : ILengthedObject, ITimedObject, IMusicalObject</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -116,67 +137,6 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.In
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Chord()</code></pre>
   </div>
-  <a id="Melanchall_DryWetMidi_Interaction_Chord__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_Chord__ctor_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor(IEnumerable{Melanchall.DryWetMidi.Interaction.Note})">Chord(IEnumerable&lt;Note&gt;)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> with the specified
-collection of notes.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Chord(IEnumerable&lt;Note&gt; notes)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
-        <td><span class="parametername">notes</span></td>
-        <td>Notes to combine into a chord.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_Chord__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_Chord__ctor_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor(IEnumerable{Melanchall.DryWetMidi.Interaction.Note},System.Int64)">Chord(IEnumerable&lt;Note&gt;, Int64)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> with the specified
-collection of notes and chord time.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Chord(IEnumerable&lt;Note&gt; notes, long time)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
-        <td><span class="parametername">notes</span></td>
-        <td>Notes to combine into a chord.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">time</span></td>
-        <td>Time of the chord which is time of the earliest note of the <code data-dev-comment-type="paramref" class="paramref">notes</code>.</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Chord__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Chord__ctor_Melanchall_DryWetMidi_Interaction_Note___" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor(Melanchall.DryWetMidi.Interaction.Note[])">Chord(Note[])</h4>
   <div class="markdown level1 summary">
@@ -205,6 +165,116 @@ collection of notes.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notes</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Chord__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Chord__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note})">Chord(IEnumerable&lt;Note&gt;)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> with the specified
+collection of notes.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Chord(IEnumerable&lt;Note&gt; notes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
+        <td><span class="parametername">notes</span></td>
+        <td>Notes to combine into a chord.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notes</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Chord__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Chord__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note},System.Int64)">Chord(IEnumerable&lt;Note&gt;, Int64)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a> with the specified
+collection of notes and chord time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Chord(IEnumerable&lt;Note&gt; notes, long time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
+        <td><span class="parametername">notes</span></td>
+        <td>Notes to combine into a chord.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time of the chord which is time of the earliest note of the <code data-dev-comment-type="paramref" class="paramref">notes</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notes</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_Chord_Channel_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.Channel*"></a>
@@ -229,6 +299,22 @@ Gets or sets channel to play the chord on.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get channel since a chord doesn&apos;t contain notes.
+-or- Unable to get channel since chord&apos;s notes have different <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Velocity">Velocity</a>.</td>
       </tr>
     </tbody>
   </table>
@@ -307,6 +393,22 @@ Gets or sets velocity of the underlying <a class="xref" href="Melanchall.DryWetM
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get off velocity since a chord doesn&apos;t contain notes.
+-or- Unable to get off velocity since chord&apos;s notes have different <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_OffVelocity">OffVelocity</a>.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Chord_Time_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.Time*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Chord_Time" data-uid="Melanchall.DryWetMidi.Interaction.Chord.Time">Time</h4>
   <div class="markdown level1 summary">
@@ -332,6 +434,21 @@ Gets absolute time of the chord in units defined by the time division of a MIDI 
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Time is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Chord_Velocity_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.Velocity*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Chord_Velocity" data-uid="Melanchall.DryWetMidi.Interaction.Chord.Velocity">Velocity</h4>
   <div class="markdown level1 summary">
@@ -354,6 +471,22 @@ Gets or sets velocity of the underlying <a class="xref" href="Melanchall.DryWetM
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get velocity since a chord doesn&apos;t contain notes.
+-or- Unable to get velocity since chord&apos;s notes have different <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Velocity">Velocity</a>.</td>
       </tr>
     </tbody>
   </table>
@@ -433,6 +566,21 @@ If <code data-dev-comment-type="paramref" class="paramref">time</code> is less t
 If <code data-dev-comment-type="paramref" class="paramref">time</code> is greater than end time of the chord, the right part
 will be null.
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Chord_ToString_" data-uid="Melanchall.DryWetMidi.Interaction.Chord.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Chord_ToString" data-uid="Melanchall.DryWetMidi.Interaction.Chord.ToString">ToString()</h4>
   <div class="markdown level1 summary">
@@ -458,6 +606,8 @@ Returns a string that represents the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
   <h3 id="events">Events
   </h3>
   <h4 id="Melanchall_DryWetMidi_Interaction_Chord_NotesCollectionChanged" data-uid="Melanchall.DryWetMidi.Interaction.Chord.NotesCollectionChanged">NotesCollectionChanged</h4>
@@ -498,6 +648,24 @@ Occurs when notes collection changes.
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_SetTimeAndLength_Melanchall_DryWetMidi_Interaction_Chord_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">ChordsManagingUtilities.SetTimeAndLength(Chord, ITimeSpan, ITimeSpan, TempoMap)</a>
   </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_LengthAs__1_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.LengthAs&lt;TLength&gt;(ILengthedObject, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_LengthAs_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.LengthAs(ILengthedObject, TimeSpanType, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndTimeAs__1_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.EndTimeAs&lt;TTime&gt;(ILengthedObject, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndTimeAs_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.EndTimeAs(ILengthedObject, TimeSpanType, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs__1_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.TimeAs&lt;TTime&gt;(ITimedObject, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.TimeAs(ITimedObject, TimeSpanType, TempoMap)</a>
+  </div>
 </article>
           </div>
           
@@ -518,7 +686,7 @@ Occurs when notes collection changes.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

@@ -92,18 +92,42 @@ Provides a way to convert the time of an object from one representation to anoth
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">TimeConverter</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_TimeConverter_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class TimeConverter : object</code></pre>
+    <pre><code class="lang-csharp hljs">public static class TimeConverter</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertFrom_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertFrom*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertFrom_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertFrom(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertFrom(ITimeSpan, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts time from the specified time type to <see cref="!:System.Int64"></see>.
+Converts time from the specified time type to <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -143,7 +167,23 @@ Converts time from the specified time type to <see cref="!:System.Int64"></see>.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td>Time as <see cref="!:System.Int64"></see>.</td>
+        <td>Time as <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -199,8 +239,28 @@ Converts time from one time type to another one.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertTo*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_Type_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan,Type,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(ITimeSpan, Type, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertTo_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Type_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertTo(Melanchall.DryWetMidi.Interaction.ITimeSpan,System.Type,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(ITimeSpan, Type, TempoMap)</h4>
   <div class="markdown level1 summary">
 Converts time from one time type to another one.
 </div>
@@ -225,7 +285,7 @@ Converts time from one time type to another one.
         <td>Time to convert.</td>
       </tr>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a></td>
         <td><span class="parametername">timeType</span></td>
         <td>Type to convert time to.</td>
       </tr>
@@ -251,10 +311,30 @@ Converts time from one time type to another one.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeType</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeType</code> is not supported.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertTo*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertTo_System_Int64_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertTo(System.Int64,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo(Int64, TimeSpanType, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts time from <see cref="!:System.Int64"></see> to the specified time type.
+Converts time from <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a> to the specified time type.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -300,6 +380,29 @@ Converts time from <see cref="!:System.Int64"></see> to the specified time type.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td>Time as an instance of time span defined by <code data-dev-comment-type="paramref" class="paramref">timeType</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeType</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>
@@ -366,10 +469,30 @@ Converts time from one time type to another one.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertTo_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertTo*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimeConverter_ConvertTo__1_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimeConverter.ConvertTo``1(System.Int64,Melanchall.DryWetMidi.Interaction.TempoMap)">ConvertTo&lt;TTimeSpan&gt;(Int64, TempoMap)</h4>
   <div class="markdown level1 summary">
-Converts time from <see cref="!:System.Int64"></see> to the specified time type.
+Converts time from <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a> to the specified time type.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -429,6 +552,29 @@ Converts time from <see cref="!:System.Int64"></see> to the specified time type.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -449,7 +595,7 @@ Converts time from <see cref="!:System.Int64"></see> to the specified time type.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

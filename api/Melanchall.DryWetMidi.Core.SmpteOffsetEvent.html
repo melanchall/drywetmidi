@@ -108,6 +108,24 @@ Represents a SMPTE Offset meta event.
     <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Clone">MidiEvent.Clone()</a>
     </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -186,6 +204,27 @@ specified SMPE format, hours, minutes, seconds, number of frames and sub-frames.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">format</code> specified an invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Hours number is out of valid range. -or-
+Minutes number is out of valid range. -or- Seconds number is out of valid range. -or-
+Frames number is out of valid range. -or- Sub-frames number is out of valid range.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Format_" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.Format*"></a>
@@ -244,6 +283,21 @@ Maximum valid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.Smp
 <a class="xref" href="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Format">Format</a>: 23 for <a class="xref" href="Melanchall.DryWetMidi.Common.SmpteFormat.html#Melanchall_DryWetMidi_Common_SmpteFormat_TwentyFour">TwentyFour</a>, 24 for <a class="xref" href="Melanchall.DryWetMidi.Common.SmpteFormat.html#Melanchall_DryWetMidi_Common_SmpteFormat_TwentyFive">TwentyFive</a>,
 28 for <a class="xref" href="Melanchall.DryWetMidi.Common.SmpteFormat.html#Melanchall_DryWetMidi_Common_SmpteFormat_ThirtyDrop">ThirtyDrop</a> and 29 for <a class="xref" href="Melanchall.DryWetMidi.Common.SmpteFormat.html#Melanchall_DryWetMidi_Common_SmpteFormat_Thirty">Thirty</a>.
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Frames number is out of valid range.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Hours_" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.Hours*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Hours" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.Hours">Hours</h4>
   <div class="markdown level1 summary">
@@ -266,6 +320,21 @@ Gets or sets number of hours.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Hours number is out of valid range (0-23).</td>
       </tr>
     </tbody>
   </table>
@@ -294,6 +363,21 @@ Gets or sets number of minutes.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Minutes number is out of valid range (0-59).</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Seconds_" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.Seconds*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Seconds" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.Seconds">Seconds</h4>
   <div class="markdown level1 summary">
@@ -319,6 +403,21 @@ Gets or sets number of seconds.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Seconds number is out of valid range (0-59).</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_SubFrames_" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.SubFrames*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_SubFrames" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.SubFrames">SubFrames</h4>
   <div class="markdown level1 summary">
@@ -341,6 +440,21 @@ Gets or sets number of sub-frames.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Sub-frames number is out of valid range (0-99).</td>
       </tr>
     </tbody>
   </table>
@@ -481,6 +595,8 @@ Returns a string that represents the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
   <a id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_WriteContent_" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.WriteContent*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_SmpteOffsetEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.SmpteOffsetEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)">WriteContent(MidiWriter, WritingSettings)</h4>
   <div class="markdown level1 summary">
@@ -535,7 +651,7 @@ Writes content of a MIDI meta event.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

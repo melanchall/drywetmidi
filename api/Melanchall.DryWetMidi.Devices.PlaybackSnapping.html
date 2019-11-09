@@ -92,11 +92,35 @@ Provides a way to manage snap points for <a class="xref" href="Melanchall.DryWet
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">PlaybackSnapping</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class PlaybackSnapping : object</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class PlaybackSnapping</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -120,7 +144,7 @@ Gets all snap points.
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint.html">SnapPoint</a>&gt;</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint.html">SnapPoint</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -164,9 +188,24 @@ Adds a snap point at the specified time.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint-1.html">SnapPoint</a>&lt;<span class="xref">Guid</span>&gt;</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint-1.html">SnapPoint</a>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a>&gt;</td>
         <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint-1.html">SnapPoint&lt;TData&gt;</a> representing a snap point
 at <code data-dev-comment-type="paramref" class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -233,6 +272,21 @@ with <code data-dev-comment-type="paramref" class="paramref">data</code> at <cod
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_RemoveSnapPoint_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.RemoveSnapPoint*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_RemoveSnapPoint__1_Melanchall_DryWetMidi_Devices_SnapPoint___0__" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.RemoveSnapPoint``1(Melanchall.DryWetMidi.Devices.SnapPoint{``0})">RemoveSnapPoint&lt;TData&gt;(SnapPoint&lt;TData&gt;)</h4>
   <div class="markdown level1 summary">
@@ -275,8 +329,23 @@ Removes a snap point.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">snapPoint</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_RemoveSnapPointsByData_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.RemoveSnapPointsByData*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_RemoveSnapPointsByData__1_Predicate___0__" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.RemoveSnapPointsByData``1(Predicate{``0})">RemoveSnapPointsByData&lt;TData&gt;(Predicate&lt;TData&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_RemoveSnapPointsByData__1_System_Predicate___0__" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.RemoveSnapPointsByData``1(System.Predicate{``0})">RemoveSnapPointsByData&lt;TData&gt;(Predicate&lt;TData&gt;)</h4>
   <div class="markdown level1 summary">
 Removes all snap points that match the conditions defined by the specified predicate.
 </div>
@@ -296,9 +365,9 @@ Removes all snap points that match the conditions defined by the specified predi
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Predicate</span>&lt;TData&gt;</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;TData&gt;</td>
         <td><span class="parametername">predicate</span></td>
-        <td>The <see cref="!:Predicate&lt;TData>"></see> delegate that defines the conditions
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate&lt;T&gt;</a> delegate that defines the conditions
 of snap points to remove.</td>
       </tr>
     </tbody>
@@ -315,6 +384,21 @@ of snap points to remove.</td>
       <tr>
         <td><span class="parametername">TData</span></td>
         <td>Type of data attached to snap points to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">predicate</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -357,6 +441,21 @@ Adds snap points at times defined by the specified grid.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPointsGroup.html">SnapPointsGroup</a></td>
         <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPointsGroup.html">SnapPointsGroup</a> added snap points belong to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">grid</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -430,7 +529,7 @@ Adds snap points at start times of notes.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

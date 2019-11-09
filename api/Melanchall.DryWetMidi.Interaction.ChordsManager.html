@@ -92,6 +92,34 @@ Provides a way to manage chords of a MIDI file.
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">ChordsManager</span></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_ChordsManager_syntax">Syntax</h5>
@@ -104,13 +132,13 @@ This manager is wrapper for the <a class="xref" href="Melanchall.DryWetMidi.Inte
 of sets of <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> and <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> events through the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>
 objects. To start manage chords you need to get an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a>. To
 finish managing you need to call the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html#Melanchall_DryWetMidi_Interaction_ChordsManager_SaveChanges">SaveChanges()</a> or <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html#Melanchall_DryWetMidi_Interaction_ChordsManager_Dispose">Dispose()</a> method.
-Since the manager implements <see cref="!:IDisposable"></see> it is recommended to manage chords within
+Since the manager implements <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> it is recommended to manage chords within
 using block.
 </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_ChordsManager__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManager__ctor_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.#ctor(Melanchall.DryWetMidi.Core.EventsCollection,System.Int64,Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">ChordsManager(EventsCollection, Int64, Comparison&lt;MidiEvent&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManager__ctor_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.#ctor(Melanchall.DryWetMidi.Core.EventsCollection,System.Int64,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">ChordsManager(EventsCollection, Int64, Comparison&lt;MidiEvent&gt;)</h4>
   <div class="markdown level1 summary">
 Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a> with the specified events
 collection, notes tolerance and comparison delegate for events that have same time.
@@ -118,7 +146,7 @@ collection, notes tolerance and comparison delegate for events that have same ti
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ChordsManager(EventsCollection eventsCollection, long notesTolerance = null, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public ChordsManager(EventsCollection eventsCollection, long notesTolerance = 0L, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -142,9 +170,28 @@ collection, notes tolerance and comparison delegate for events that have same ti
 start of the first note of a chord. Notes within this tolerance will be considered as a chord.</td>
       </tr>
       <tr>
-        <td><span class="xref">Comparison</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.comparison-1">Comparison</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
         <td><span class="parametername">sameTimeEventsComparison</span></td>
         <td>Delegate to compare events with the same absolute time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">notesTolerance</code> is negative.</td>
       </tr>
     </tbody>
   </table>
@@ -206,6 +253,10 @@ This method will rewrite content of the events collection was used to construct 
 of wrapped events will be recalculated according to the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Time">Time</a> and
 <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Length">Length</a> of chords notes.
 </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
 </article>
           </div>
           
@@ -226,7 +277,7 @@ of wrapped events will be recalculated according to the <a class="xref" href="Me
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

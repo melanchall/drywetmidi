@@ -89,8 +89,20 @@ Type that is used to represent a four-bit number (0-15).
   <div class="markdown level0 conceptual"></div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><span class="xref">IComparable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>&gt;</div>
-    <div><span class="xref">IConvertible</span></div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable-1">IComparable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>&gt;</div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iconvertible">IConvertible</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Common.html">Melanchall.DryWetMidi.Common</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -131,6 +143,22 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Co
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td><span class="parametername">value</span></td>
         <td>Value representing four-bit number.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html#Melanchall_DryWetMidi_Common_FourBitNumber_MinValue">MinValue</a>; <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html#Melanchall_DryWetMidi_Common_FourBitNumber_MaxValue">MaxValue</a>] range.</td>
       </tr>
     </tbody>
   </table>
@@ -300,6 +328,8 @@ Determines whether the specified object is equal to the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.valuetype.equals#System_ValueType_Equals_System_Object_">ValueType.Equals(Object)</a></div>
   <a id="Melanchall_DryWetMidi_Common_FourBitNumber_GetHashCode_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.GetHashCode*"></a>
   <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_GetHashCode" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.GetHashCode">GetHashCode()</h4>
   <div class="markdown level1 summary">
@@ -325,10 +355,12 @@ Serves as the default hash function.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.valuetype.gethashcode#System_ValueType_GetHashCode">ValueType.GetHashCode()</a></div>
   <a id="Melanchall_DryWetMidi_Common_FourBitNumber_GetTypeCode_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.GetTypeCode*"></a>
   <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_GetTypeCode" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.GetTypeCode">GetTypeCode()</h4>
   <div class="markdown level1 summary">
-Returns the <see cref="!:TypeCode"></see> for value type <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>.
+Returns the <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.typecode">TypeCode</a> for value type <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -345,8 +377,8 @@ Returns the <see cref="!:TypeCode"></see> for value type <a class="xref" href="M
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">TypeCode</span></td>
-        <td>The enumerated constant, <see cref="!:TypeCode.Byte"></see>.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.typecode">TypeCode</a></td>
+        <td>The enumerated constant, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.typecode#System_TypeCode_Byte">Byte</a>.</td>
       </tr>
     </tbody>
   </table>
@@ -393,6 +425,25 @@ Converts the string representation of a four-bit number to its <a class="xref" h
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">input</code> is null or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">input</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Common_FourBitNumber_ToString_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_ToString" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.ToString">ToString()</h4>
   <div class="markdown level1 summary">
@@ -418,6 +469,8 @@ Returns a string that represents the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.valuetype.tostring#System_ValueType_ToString">ValueType.ToString()</a></div>
   <a id="Melanchall_DryWetMidi_Common_FourBitNumber_TryParse_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.TryParse*"></a>
   <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_TryParse_System_String_Melanchall_DryWetMidi_Common_FourBitNumber__" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.TryParse(System.String,Melanchall.DryWetMidi.Common.FourBitNumber@)">TryParse(String, out FourBitNumber)</h4>
   <div class="markdown level1 summary">
@@ -450,7 +503,7 @@ A return value indicates whether the conversion succeeded.
         <td>When this method returns, contains the <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>
 equivalent of the four-bit number contained in <code data-dev-comment-type="paramref" class="paramref">input</code>, if the conversion succeeded,
 or zero if the conversion failed. The conversion fails if the <code data-dev-comment-type="paramref" class="paramref">input</code> is null or
-<see cref="!:string.Empty"></see>, or is not of the correct format. This parameter is passed uninitialized;
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string.empty">Empty</a>, or is not of the correct format. This parameter is passed uninitialized;
 any value originally supplied in result will be overwritten.</td>
       </tr>
     </tbody>
@@ -475,7 +528,7 @@ any value originally supplied in result will be overwritten.</td>
   <a id="Melanchall_DryWetMidi_Common_FourBitNumber_op_Explicit_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.op_Explicit*"></a>
   <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_op_Explicit_System_Byte__Melanchall_DryWetMidi_Common_FourBitNumber" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.op_Explicit(System.Byte)~Melanchall.DryWetMidi.Common.FourBitNumber">Explicit(Byte to FourBitNumber)</h4>
   <div class="markdown level1 summary">
-Converts the value of a <see cref="!:System.Byte"></see> to a <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>.
+Converts the value of a <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a> to a <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -517,7 +570,7 @@ Converts the value of a <see cref="!:System.Byte"></see> to a <a class="xref" hr
   <a id="Melanchall_DryWetMidi_Common_FourBitNumber_op_Implicit_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.op_Implicit*"></a>
   <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_op_Implicit_Melanchall_DryWetMidi_Common_FourBitNumber__System_Byte" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.op_Implicit(Melanchall.DryWetMidi.Common.FourBitNumber)~System.Byte">Implicit(FourBitNumber to Byte)</h4>
   <div class="markdown level1 summary">
-Converts the value of a <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a> to a <see cref="!:System.Byte"></see>.
+Converts the value of a <a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a> to a <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -556,12 +609,725 @@ Converts the value of a <a class="xref" href="Melanchall.DryWetMidi.Common.FourB
       </tr>
     </tbody>
   </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToBoolean_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToBoolean*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToBoolean_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToBoolean(System.IFormatProvider)">IConvertible.ToBoolean(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a> value using the
+specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IConvertible.ToBoolean(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>A <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a> value equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToByte_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToByte*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToByte_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToByte(System.IFormatProvider)">IConvertible.ToByte(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 8-bit unsigned integer using
+the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">byte IConvertible.ToByte(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td>An 8-bit unsigned integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToChar_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToChar*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToChar_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToChar(System.IFormatProvider)">IConvertible.ToChar(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent Unicode character using
+the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">char IConvertible.ToChar(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.char">Char</a></td>
+        <td>A Unicode character equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToDateTime_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToDateTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToDateTime_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToDateTime(System.IFormatProvider)">IConvertible.ToDateTime(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.datetime">DateTime</a> using the
+specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">DateTime IConvertible.ToDateTime(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.datetime">DateTime</a></td>
+        <td>A <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.datetime">DateTime</a> instance equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToDecimal_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToDecimal*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToDecimal_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToDecimal(System.IFormatProvider)">IConvertible.ToDecimal(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.decimal">Decimal</a> number using
+the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">decimal IConvertible.ToDecimal(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.decimal">Decimal</a></td>
+        <td>A <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.decimal">Decimal</a> number equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToDouble_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToDouble*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToDouble_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToDouble(System.IFormatProvider)">IConvertible.ToDouble(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent double-precision floating-point
+number using the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double IConvertible.ToDouble(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td>A double-precision floating-point number equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToInt16_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToInt16*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToInt16_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToInt16(System.IFormatProvider)">IConvertible.ToInt16(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 16-bit signed integer using
+the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">short IConvertible.ToInt16(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int16">Int16</a></td>
+        <td>An 16-bit signed integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToInt32_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToInt32*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToInt32_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToInt32(System.IFormatProvider)">IConvertible.ToInt32(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 32-bit signed integer using
+the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int IConvertible.ToInt32(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>An 32-bit signed integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToInt64_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToInt64*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToInt64_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToInt64(System.IFormatProvider)">IConvertible.ToInt64(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 64-bit signed integer using
+the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">long IConvertible.ToInt64(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td>An 64-bit signed integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToSByte_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToSByte*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToSByte_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToSByte(System.IFormatProvider)">IConvertible.ToSByte(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 8-bit signed integer using
+the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">sbyte IConvertible.ToSByte(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.sbyte">SByte</a></td>
+        <td>An 8-bit signed integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToSingle_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToSingle*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToSingle_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToSingle(System.IFormatProvider)">IConvertible.ToSingle(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent single-precision floating-point
+number using the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">float IConvertible.ToSingle(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.single">Single</a></td>
+        <td>A single-precision floating-point number equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToString_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToString*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToString_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToString(System.IFormatProvider)">IConvertible.ToString(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a> using the
+specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">string IConvertible.ToString(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td>A <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a> instance equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToType_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToType*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToType_System_Type_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToType(System.Type,System.IFormatProvider)">IConvertible.ToType(Type, IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an System.Object of the specified <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a>
+that has an equivalent value, using the specified culture-specific formatting
+information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">object IConvertible.ToType(Type conversionType, IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a></td>
+        <td><span class="parametername">conversionType</span></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a> to which the value of this instance is converted.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a> instance of type conversionType whose value is equivalent to
+the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToUInt16_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToUInt16*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToUInt16_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToUInt16(System.IFormatProvider)">IConvertible.ToUInt16(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 16-bit unsigned integer
+using the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ushort IConvertible.ToUInt16(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
+        <td>An 16-bit unsigned integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToUInt32_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToUInt32*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToUInt32_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToUInt32(System.IFormatProvider)">IConvertible.ToUInt32(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 32-bit unsigned integer
+using the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">uint IConvertible.ToUInt32(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint32">UInt32</a></td>
+        <td>An 32-bit unsigned integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToUInt64_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToUInt64*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_System_IConvertible_ToUInt64_System_IFormatProvider_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.System#IConvertible#ToUInt64(System.IFormatProvider)">IConvertible.ToUInt64(IFormatProvider)</h4>
+  <div class="markdown level1 summary">
+Converts the value of this instance to an equivalent 64-bit unsigned integer
+using the specified culture-specific formatting information.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ulong IConvertible.ToUInt64(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a></td>
+        <td><span class="parametername">provider</span></td>
+        <td>An <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iformatprovider">IFormatProvider</a> interface implementation that
+supplies culture-specific formatting information.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint64">UInt64</a></td>
+        <td>An 64-bit unsigned integer equivalent to the value of this instance.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <span class="xref">IComparable&lt;&gt;</span>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable-1">System.IComparable&lt;T&gt;</a>
   </div>
   <div>
-      <span class="xref">IConvertible</span>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iconvertible">System.IConvertible</a>
   </div>
 </article>
           </div>
@@ -583,7 +1349,7 @@ Converts the value of a <a class="xref" href="Melanchall.DryWetMidi.Common.FourB
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

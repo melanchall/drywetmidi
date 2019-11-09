@@ -95,15 +95,30 @@ Represents metric time span which represents hours, minutes and seconds.
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></div>
-    <div><span class="xref">IComparable</span></div>
-    <div><span class="xref">IComparable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>&gt;</div>
-    <div><span class="xref">IEquatable</span>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>&gt;</div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable">IComparable</a></div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable-1">IComparable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>&gt;</div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class MetricTimeSpan : object, ITimeSpan, IComparable, IComparable&lt;MetricTimeSpan&gt;, IEquatable&lt;MetricTimeSpan&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class MetricTimeSpan : ITimeSpan, IComparable, IComparable&lt;MetricTimeSpan&gt;, IEquatable&lt;MetricTimeSpan&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -155,6 +170,22 @@ numbers of hours, minutes and seconds.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">hours</code> is negative. -or-
+<code data-dev-comment-type="paramref" class="paramref">minutes</code> is negative. -or- <code data-dev-comment-type="paramref" class="paramref">seconds</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan__ctor_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">MetricTimeSpan(Int32, Int32, Int32, Int32)</h4>
   <div class="markdown level1 summary">
@@ -198,6 +229,23 @@ numbers of hours, minutes, seconds and milliseconds.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">hours</code> is negative. -or-
+<code data-dev-comment-type="paramref" class="paramref">minutes</code> is negative. -or- <code data-dev-comment-type="paramref" class="paramref">seconds</code> is negative. -or-
+<code data-dev-comment-type="paramref" class="paramref">milliseconds</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan__ctor_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.#ctor(System.Int64)">MetricTimeSpan(Int64)</h4>
   <div class="markdown level1 summary">
@@ -226,11 +274,26 @@ number of microseconds.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">totalMicroseconds</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan__ctor_TimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.#ctor(TimeSpan)">MetricTimeSpan(TimeSpan)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan__ctor_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.#ctor(System.TimeSpan)">MetricTimeSpan(TimeSpan)</h4>
   <div class="markdown level1 summary">
 Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a> with the specified
-<see cref="!:TimeSpan"></see> object.
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a> object.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -248,7 +311,7 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.In
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">TimeSpan</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
         <td><span class="parametername">timeSpan</span></td>
         <td>Time interval to initialize the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>.</td>
       </tr>
@@ -437,6 +500,25 @@ current time span.</td>
 If <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> and the current time span have the same type,
 the result time span will be of this type too; otherwise - of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a>.
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> is invalid.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">mode</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Clone_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Clone*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Clone" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Clone">Clone()</h4>
   <div class="markdown level1 summary">
@@ -556,6 +638,21 @@ Greater than zero This instance follows obj in the sort order.</td>
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">obj</code> is not the same type as this instance.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Divide_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Divide*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Divide_Melanchall_DryWetMidi_Interaction_MetricTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Divide(Melanchall.DryWetMidi.Interaction.MetricTimeSpan)">Divide(MetricTimeSpan)</h4>
   <div class="markdown level1 summary">
@@ -599,6 +696,25 @@ between them.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.dividebyzeroexception">DivideByZeroException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> represents a time span of zero length.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Divide_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Divide*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Divide_System_Double_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Divide(System.Double)">Divide(Double)</h4>
   <div class="markdown level1 summary">
@@ -638,6 +754,21 @@ Shrinks the current time span by dividing its length by the specified divisor.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td>Time span that is the current time span shrinked by the <code data-dev-comment-type="paramref" class="paramref">divisor</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">divisor</code> is zero or negative.</td>
       </tr>
     </tbody>
   </table>
@@ -725,6 +856,8 @@ Determines whether the specified object is equal to the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_GetHashCode_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.GetHashCode*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_GetHashCode" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.GetHashCode">GetHashCode()</h4>
   <div class="markdown level1 summary">
@@ -750,6 +883,8 @@ Returns the hash code for this instance.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Multiply_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Multiply*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Multiply_System_Double_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.Multiply(System.Double)">Multiply(Double)</h4>
   <div class="markdown level1 summary">
@@ -789,6 +924,21 @@ Stretches the current time span by multiplying its length by the specified multi
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td>Time span that is the current time span stretched by the <code data-dev-comment-type="paramref" class="paramref">multiplier</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">multiplier</code> is negative.</td>
       </tr>
     </tbody>
   </table>
@@ -833,6 +983,25 @@ equivalent.
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a></td>
         <td>A <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a> equivalent to the time span contained in
 <code data-dev-comment-type="paramref" class="paramref">input</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">input</code> is null or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">input</code> has invalid format.</td>
       </tr>
     </tbody>
   </table>
@@ -890,6 +1059,25 @@ current time span.</td>
 If <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> and the current time span have the same type,
 the result time span will be of this type too; otherwise - of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a>.
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> is invalid.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">mode</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_ToString_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_ToString" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.ToString">ToString()</h4>
   <div class="markdown level1 summary">
@@ -915,6 +1103,8 @@ Returns a string that represents the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_TryParse_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.TryParse*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_TryParse_System_String_Melanchall_DryWetMidi_Interaction_MetricTimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.TryParse(System.String,Melanchall.DryWetMidi.Interaction.MetricTimeSpan@)">TryParse(String, out MetricTimeSpan)</h4>
   <div class="markdown level1 summary">
@@ -947,7 +1137,7 @@ equivalent. A return value indicates whether the conversion succeeded.
         <td>When this method returns, contains the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>
 equivalent of the time span contained in <code data-dev-comment-type="paramref" class="paramref">input</code>, if the conversion succeeded, or
 null if the conversion failed. The conversion fails if the <code data-dev-comment-type="paramref" class="paramref">input</code> is null or
-<see cref="!:String.Empty"></see>, or is not of the correct format. This parameter is passed uninitialized;
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string.empty">Empty</a>, or is not of the correct format. This parameter is passed uninitialized;
 any value originally supplied in result will be overwritten.</td>
       </tr>
     </tbody>
@@ -1014,6 +1204,22 @@ Adds two specified <a class="xref" href="Melanchall.DryWetMidi.Interaction.Metri
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a></td>
         <td>An object whose value is the sum of the values of <code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> and
 <code data-dev-comment-type="paramref" class="paramref">timeSpan2</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -1112,6 +1318,22 @@ Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Intera
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_GreaterThanOrEqual_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_GreaterThanOrEqual*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_GreaterThanOrEqual_Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Melanchall_DryWetMidi_Interaction_MetricTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_GreaterThanOrEqual(Melanchall.DryWetMidi.Interaction.MetricTimeSpan,Melanchall.DryWetMidi.Interaction.MetricTimeSpan)">GreaterThanOrEqual(MetricTimeSpan, MetricTimeSpan)</h4>
   <div class="markdown level1 summary">
@@ -1161,10 +1383,26 @@ another one.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_Implicit_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_Implicit*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_Implicit_Melanchall_DryWetMidi_Interaction_MetricTimeSpan__TimeSpan" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_Implicit(Melanchall.DryWetMidi.Interaction.MetricTimeSpan)~TimeSpan">Implicit(MetricTimeSpan to TimeSpan)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_Implicit_Melanchall_DryWetMidi_Interaction_MetricTimeSpan__System_TimeSpan" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_Implicit(Melanchall.DryWetMidi.Interaction.MetricTimeSpan)~System.TimeSpan">Implicit(MetricTimeSpan to TimeSpan)</h4>
   <div class="markdown level1 summary">
-Converts <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a> to <see cref="!:TimeSpan"></see>.
+Converts <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a> to <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1184,7 +1422,7 @@ Converts <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a></td>
         <td><span class="parametername">timeSpan</span></td>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a> to convert to <see cref="!:TimeSpan"></see>.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a> to convert to <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a>.</td>
       </tr>
     </tbody>
   </table>
@@ -1198,15 +1436,15 @@ Converts <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">TimeSpan</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_Implicit_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_Implicit*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_Implicit_TimeSpan__Melanchall_DryWetMidi_Interaction_MetricTimeSpan" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_Implicit(TimeSpan)~Melanchall.DryWetMidi.Interaction.MetricTimeSpan">Implicit(TimeSpan to MetricTimeSpan)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_Implicit_System_TimeSpan__Melanchall_DryWetMidi_Interaction_MetricTimeSpan" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_Implicit(System.TimeSpan)~Melanchall.DryWetMidi.Interaction.MetricTimeSpan">Implicit(TimeSpan to MetricTimeSpan)</h4>
   <div class="markdown level1 summary">
-Converts <see cref="!:TimeSpan"></see> to <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>.
+Converts <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a> to <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1224,9 +1462,9 @@ Converts <see cref="!:TimeSpan"></see> to <a class="xref" href="Melanchall.DryWe
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">TimeSpan</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
         <td><span class="parametername">timeSpan</span></td>
-        <td><see cref="!:TimeSpan"></see> to convert to <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a>.</td>
       </tr>
     </tbody>
   </table>
@@ -1340,6 +1578,22 @@ Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Intera
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_LessThanOrEqual_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_LessThanOrEqual*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MetricTimeSpan_op_LessThanOrEqual_Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Melanchall_DryWetMidi_Interaction_MetricTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MetricTimeSpan.op_LessThanOrEqual(Melanchall.DryWetMidi.Interaction.MetricTimeSpan,Melanchall.DryWetMidi.Interaction.MetricTimeSpan)">LessThanOrEqual(MetricTimeSpan, MetricTimeSpan)</h4>
   <div class="markdown level1 summary">
@@ -1386,6 +1640,22 @@ another one.
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td>true if the value of <code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is less than or equal to the value of
 <code data-dev-comment-type="paramref" class="paramref">timeSpan2</code>; otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -1437,18 +1707,38 @@ the value of <code data-dev-comment-type="paramref" class="paramref">timeSpan2</
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is less than <code data-dev-comment-type="paramref" class="paramref">timeSpan2</code>.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>
   </div>
   <div>
-      <span class="xref">IComparable</span>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable">System.IComparable</a>
   </div>
   <div>
-      <span class="xref">IComparable&lt;&gt;</span>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.icomparable-1">System.IComparable&lt;T&gt;</a>
   </div>
   <div>
-      <span class="xref">IEquatable&lt;&gt;</span>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.iequatable-1">System.IEquatable&lt;T&gt;</a>
   </div>
 </article>
           </div>
@@ -1470,7 +1760,7 @@ the value of <code data-dev-comment-type="paramref" class="paramref">timeSpan2</
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

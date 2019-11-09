@@ -92,6 +92,34 @@ Reader of the MIDI data types.
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">MidiReader</span></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_MidiReader_syntax">Syntax</h5>
@@ -101,7 +129,7 @@ Reader of the MIDI data types.
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiReader__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_MidiReader__ctor_Stream_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.#ctor(Stream)">MidiReader(Stream)</h4>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiReader__ctor_System_IO_Stream_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream)">MidiReader(Stream)</h4>
   <div class="markdown level1 summary">
 Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiReader.html">MidiReader</a> with the specified stream.
 </div>
@@ -121,9 +149,29 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Co
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Stream</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.stream">Stream</a></td>
         <td><span class="parametername">stream</span></td>
         <td>Stream to read MIDI file from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> does not support reading,
+    or is already closed.</td>
       </tr>
     </tbody>
   </table>
@@ -154,6 +202,25 @@ Gets a value indicating whether end of the underlying stream is reached.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Property was called after the reader was disposed.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_MidiReader_Length_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.Length*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiReader_Length" data-uid="Melanchall.DryWetMidi.Core.MidiReader.Length">Length</h4>
   <div class="markdown level1 summary">
@@ -179,6 +246,25 @@ Gets length of the underlying stream.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Property was called after the reader was disposed.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_MidiReader_Position_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.Position*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiReader_Position" data-uid="Melanchall.DryWetMidi.Core.MidiReader.Position">Position</h4>
   <div class="markdown level1 summary">
@@ -201,6 +287,25 @@ Gets or sets the position within the underlying stream.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Property was called after the reader was disposed.</td>
       </tr>
     </tbody>
   </table>
@@ -252,6 +357,14 @@ stream and advances the current position by three bytes.
     </thead>
     <tbody>
       <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+      <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
         <td>Not enough bytes in the stream to read a 3-byte DWORD.</td>
       </tr>
@@ -283,6 +396,29 @@ to the stream&apos;s end.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.endofstreamexception">EndOfStreamException</a></td>
+        <td>The end of the underlying stream is reached.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_MidiReader_ReadByte_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.ReadByte*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiReader_ReadByte" data-uid="Melanchall.DryWetMidi.Core.MidiReader.ReadByte">ReadByte()</h4>
   <div class="markdown level1 summary">
@@ -305,6 +441,29 @@ Reads a byte from the underlying stream and advances the current position by one
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td>The next byte read from the underlying stream.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.endofstreamexception">EndOfStreamException</a></td>
+        <td>The end of the underlying stream is reached.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
       </tr>
     </tbody>
   </table>
@@ -353,6 +512,29 @@ than the number of bytes requested if the end of the stream is reached.</td>
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">count</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_MidiReader_ReadDword_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.ReadDword*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiReader_ReadDword" data-uid="Melanchall.DryWetMidi.Core.MidiReader.ReadDword">ReadDword()</h4>
   <div class="markdown level1 summary">
@@ -388,6 +570,14 @@ advances the current position by four bytes.
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
         <td>Not enough bytes in the stream to read a DWORD.</td>
@@ -430,6 +620,14 @@ advances the current position by two bytes.
     </thead>
     <tbody>
       <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+      <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
         <td>Not enough bytes in the stream to read a INT16.</td>
       </tr>
@@ -457,6 +655,29 @@ Reads a signed byte from the underlying stream and advances the current position
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.sbyte">SByte</a></td>
         <td>A signed byte read from the underlying stream.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.endofstreamexception">EndOfStreamException</a></td>
+        <td>The end of the underlying stream is reached.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
       </tr>
     </tbody>
   </table>
@@ -500,6 +721,29 @@ data as string, and advances the current position by that number of characters.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td>The string being read.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">count</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
       </tr>
     </tbody>
   </table>
@@ -549,6 +793,14 @@ number is between 0 and 127, it is thus represented exactly as one byte.
         <td>Not enough bytes in the stream to read a variable-length quantity
 number.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Core_MidiReader_ReadVlqNumber_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.ReadVlqNumber*"></a>
@@ -597,6 +849,14 @@ number is between 0 and 127, it is thus represented exactly as one byte.
         <td>Not enough bytes in the stream to read a variable-length quantity
 number.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Core_MidiReader_ReadWord_" data-uid="Melanchall.DryWetMidi.Core.MidiReader.ReadWord*"></a>
@@ -635,11 +895,23 @@ advances the current position by two bytes.
     </thead>
     <tbody>
       <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>Method was called after the reader was disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred on the underlying stream.</td>
+      </tr>
+      <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
         <td>Not enough bytes in the stream to read a WORD.</td>
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
 </article>
           </div>
           
@@ -660,7 +932,7 @@ advances the current position by two bytes.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

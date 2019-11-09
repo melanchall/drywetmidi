@@ -92,11 +92,26 @@ Represents an octave defined by its number.
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">Octave</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.html">Melanchall.DryWetMidi.MusicTheory</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_MusicTheory_Octave_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class Octave : object</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class Octave</code></pre>
   </div>
   <h3 id="fields">Fields
   </h3>
@@ -179,7 +194,7 @@ The size of an octave, i.e. number of notes within an octave.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const int OctaveSize = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const int OctaveSize = 12</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -223,6 +238,21 @@ Gets the A note of an octave defined by the current <a class="xref" href="Melanc
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_ASharp_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.ASharp*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_ASharp" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.ASharp">ASharp</h4>
   <div class="markdown level1 summary">
@@ -245,6 +275,21 @@ Gets the A# note of an octave defined by the current <a class="xref" href="Melan
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
       </tr>
     </tbody>
   </table>
@@ -273,6 +318,21 @@ Gets the B note of an octave defined by the current <a class="xref" href="Melanc
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_C_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.C*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_C" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.C">C</h4>
   <div class="markdown level1 summary">
@@ -295,6 +355,21 @@ Gets the C note of an octave defined by the current <a class="xref" href="Melanc
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
       </tr>
     </tbody>
   </table>
@@ -323,6 +398,21 @@ Gets the C# note of an octave defined by the current <a class="xref" href="Melan
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_D_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.D*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_D" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.D">D</h4>
   <div class="markdown level1 summary">
@@ -345,6 +435,21 @@ Gets the D note of an octave defined by the current <a class="xref" href="Melanc
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
       </tr>
     </tbody>
   </table>
@@ -373,6 +478,21 @@ Gets the D# note of an octave defined by the current <a class="xref" href="Melan
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_E_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.E*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_E" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.E">E</h4>
   <div class="markdown level1 summary">
@@ -395,6 +515,21 @@ Gets the E note of an octave defined by the current <a class="xref" href="Melanc
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
       </tr>
     </tbody>
   </table>
@@ -423,6 +558,21 @@ Gets the F note of an octave defined by the current <a class="xref" href="Melanc
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_FSharp_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.FSharp*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_FSharp" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.FSharp">FSharp</h4>
   <div class="markdown level1 summary">
@@ -445,6 +595,21 @@ Gets the F# note of an octave defined by the current <a class="xref" href="Melan
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
       </tr>
     </tbody>
   </table>
@@ -473,6 +638,21 @@ Gets the G note of an octave defined by the current <a class="xref" href="Melanc
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_GSharp_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.GSharp*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_GSharp" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.GSharp">GSharp</h4>
   <div class="markdown level1 summary">
@@ -495,6 +675,21 @@ Gets the G# note of an octave defined by the current <a class="xref" href="Melan
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note.</td>
       </tr>
     </tbody>
   </table>
@@ -567,6 +762,8 @@ Determines whether the specified object is equal to the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_Get_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.Get*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_Get_System_Int32_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.Get(System.Int32)">Get(Int32)</h4>
   <div class="markdown level1 summary">
@@ -609,6 +806,21 @@ Gets an octave by the specified octave number.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">octaveNumber</code> is out of valid range.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_GetHashCode_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.GetHashCode*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_GetHashCode" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.GetHashCode">GetHashCode()</h4>
   <div class="markdown level1 summary">
@@ -634,6 +846,8 @@ Serves as the default hash function.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_GetNote_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.GetNote*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_GetNote_Melanchall_DryWetMidi_MusicTheory_NoteName_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.GetNote(Melanchall.DryWetMidi.MusicTheory.NoteName)">GetNote(NoteName)</h4>
   <div class="markdown level1 summary">
@@ -676,6 +890,25 @@ Gets a note by the specified note name using current octave.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">noteName</code> specified an invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Unable to get a note for the <code data-dev-comment-type="paramref" class="paramref">noteName</code>.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_ToString_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_Octave_ToString" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.ToString">ToString()</h4>
   <div class="markdown level1 summary">
@@ -701,6 +934,8 @@ Returns a string that represents the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
   <h3 id="operators">Operators
   </h3>
   <a id="Melanchall_DryWetMidi_MusicTheory_Octave_op_Equality_" data-uid="Melanchall.DryWetMidi.MusicTheory.Octave.op_Equality*"></a>
@@ -817,7 +1052,7 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Octave
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>

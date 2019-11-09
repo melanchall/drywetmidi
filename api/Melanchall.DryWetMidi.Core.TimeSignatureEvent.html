@@ -108,6 +108,24 @@ Represents a Time Signature meta event.
     <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Clone">MidiEvent.Clone()</a>
     </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -217,7 +235,7 @@ Default number of MIDI clock ticks per metronome click.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte DefaultClocksPerClick = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte DefaultClocksPerClick = 24</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -241,7 +259,7 @@ Denominator of the default time signature.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte DefaultDenominator = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte DefaultDenominator = 4</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -265,7 +283,7 @@ Numerator of the default time signature.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte DefaultNumerator = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte DefaultNumerator = 4</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -289,7 +307,7 @@ Default number of 32nd notes per beat.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte DefaultThirtySecondNotesPerBeat = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte DefaultThirtySecondNotesPerBeat = 8</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -355,6 +373,22 @@ Gets or sets denominator of the time signature.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>Denominator is zero or is not a
+power of two.</td>
       </tr>
     </tbody>
   </table>
@@ -545,6 +579,8 @@ Returns a string that represents the current object.
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
   <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_WriteContent_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.WriteContent*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)">WriteContent(MidiWriter, WritingSettings)</h4>
   <div class="markdown level1 summary">
@@ -599,7 +635,7 @@ Writes content of a MIDI meta event.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 9, 2019 16:58:41
+            Generated by <b>DocFX</b> on November 9, 2019 18:02:06
             
           </div>
         </div>
