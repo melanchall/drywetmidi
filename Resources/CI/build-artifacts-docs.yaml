@@ -70,3 +70,9 @@ steps:
   inputs:
     targetPath: Docs\_site
     artifact: Docs
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'LatestReleaseNotes' artifact
+  inputs:
+    targetPath: Docs\latest-release-notes.md
+    artifact: LatestReleaseNotes
