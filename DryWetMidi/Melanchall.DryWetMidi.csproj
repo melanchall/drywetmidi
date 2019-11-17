@@ -14,8 +14,10 @@
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/master/LICENSE</licenseUrl>
     <PackageProjectUrl>https://github.com/melanchall/drywetmidi</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/master/Resources/NuGet/icon.png</PackageIconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>
+    <RepositoryUrl>https://github.com/melanchall/drywetmidi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>
 DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
 
 * Read, write and create Standard MIDI Files (SMF). It is also possible to read RMID files where SMF wrapped to RIFF chunk.
@@ -25,9 +27,8 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
 * Manage MIDI data either with low-level objects, like event, or high-level ones, like note.
 * Build musical compositions.
 * Perform complex musical tasks like quantizing, notes splitting or converting MIDI files to CSV.
-    </description>
-    <summary>.NET library to work with MIDI files and MIDI devices</summary>
-    <copyright>Copyright © Melanchall 2019</copyright>
+    </Description>
+    <Copyright>Copyright © Melanchall 2019</Copyright>
     <PackageTags>midi smf music composing notes chords device playback record</PackageTags>
   </PropertyGroup>
   
