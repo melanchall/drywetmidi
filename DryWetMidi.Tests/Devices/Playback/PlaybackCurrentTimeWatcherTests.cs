@@ -40,6 +40,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Retry(RetriesNumber)]
         public void PlaybackNotStarted()
         {
+            var waitingTime = TimeSpan.FromMilliseconds(500);
+            var epsilon = TimeSpan.FromMilliseconds(10);
+
             var events = new MidiEvent[]
             {
                 new NoteOnEvent(),
@@ -47,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             };
 
             var times = new List<ITimeSpan>();
-            var expectedTimes = Enumerable.Range(0, 6).Select(i => new MetricTimeSpan()).ToArray();
+            var expectedTimes = Enumerable.Range(0, (int)(waitingTime.TotalMilliseconds / PlaybackCurrentTimeWatcher.Instance.PollingInterval.TotalMilliseconds) + 1).Select(i => new MetricTimeSpan()).ToArray();
 
             using (var playback = new Playback(events, TempoMap.Default))
             {
@@ -55,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
 
                 PlaybackCurrentTimeWatcher.Instance.Start();
-                Thread.Sleep(500);
+                Thread.Sleep(waitingTime + epsilon);
                 PlaybackCurrentTimeWatcher.Instance.Stop();
 
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
@@ -69,10 +72,15 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Retry(RetriesNumber)]
         public void PlaybackFinished()
         {
+            var waitingTime = TimeSpan.FromMilliseconds(500);
+            var epsilon = TimeSpan.FromMilliseconds(10);
+
+            var lastTime = 500L;
+
             var events = new MidiEvent[]
             {
                 new NoteOnEvent(),
-                new NoteOffEvent { DeltaTime = 500 }
+                new NoteOffEvent { DeltaTime = lastTime }
             };
 
             var playback = new Playback(events, TempoMap.Default);
@@ -89,10 +97,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var times = new List<ITimeSpan>();
             PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
 
-            Thread.Sleep(500);
+            Thread.Sleep(waitingTime + epsilon);
+            PlaybackCurrentTimeWatcher.Instance.Stop();
 
             CheckTimes(
-                Enumerable.Range(0, 5).Select(i => new MidiTimeSpan(500)).ToArray(),
+                Enumerable.Range(0, (int)(waitingTime.TotalMilliseconds / PlaybackCurrentTimeWatcher.Instance.PollingInterval.TotalMilliseconds)).Select(i => new MidiTimeSpan(lastTime)).ToArray(),
                 times);
 
             PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
