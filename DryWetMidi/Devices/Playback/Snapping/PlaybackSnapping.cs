@@ -167,6 +167,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>The snap point following the specified time.</returns>
         public SnapPoint GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
+            ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
+
             return GetActiveSnapPoints(snapPointsGroup).SkipWhile(p => p.Time <= time).FirstOrDefault();
         }
 
@@ -188,6 +190,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>The snap point prior the specified time.</returns>
         public SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
+            ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
+
             return GetActiveSnapPoints(snapPointsGroup).TakeWhile(p => p.Time < time).LastOrDefault();
         }
 

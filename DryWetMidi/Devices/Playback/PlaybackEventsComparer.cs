@@ -25,6 +25,15 @@ namespace Melanchall.DryWetMidi.Devices
         /// <paramref name="y">y</paramref>.</returns>
         public int Compare(PlaybackEvent x, PlaybackEvent y)
         {
+            if (x == null && y == null)
+                return 0;
+
+            if (x == null)
+                return -1;
+
+            if (y == null)
+                return 1;
+
             var timeDifference = x.RawTime - y.RawTime;
             if (timeDifference != 0)
                 return Math.Sign(timeDifference);

@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Core;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -16,6 +17,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The ID of the specific note.</returns>
         public static NoteId GetNoteId(this Note note)
         {
+            ThrowIfArgument.IsNull(nameof(note), note);
+
             return new NoteId(note.Channel, note.NoteNumber);
         }
 
@@ -26,6 +29,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The ID of the specified note event.</returns>
         public static NoteId GetNoteId(this NoteEvent noteEvent)
         {
+            ThrowIfArgument.IsNull(nameof(noteEvent), noteEvent);
+
             return new NoteId(noteEvent.Channel, noteEvent.NoteNumber);
         }
 

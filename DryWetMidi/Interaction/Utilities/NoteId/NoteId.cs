@@ -45,11 +45,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the specified object is equal to the current object; <c>false</c> otherwise.</returns>
         public override bool Equals(object obj)
         {
+            if (ReferenceEquals(obj, null))
+                return false;
+
             if (ReferenceEquals(obj, this))
                 return true;
 
             var noteId = obj as NoteId;
-            if (ReferenceEquals(obj, null))
+            if (ReferenceEquals(noteId, null))
                 return false;
 
             return Channel == noteId.Channel &&

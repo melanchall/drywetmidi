@@ -1,4 +1,5 @@
 ﻿using System;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -90,6 +91,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="notePlaybackData">The custom musical note playback data to set.</param>
         public void SetCustomNotePlaybackData(NotePlaybackData notePlaybackData)
         {
+            ThrowIfArgument.IsNull(nameof(notePlaybackData), notePlaybackData);
+
             NotePlaybackData = notePlaybackData;
             IsCustomNotePlaybackDataSet = true;
         }
