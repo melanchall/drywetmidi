@@ -122,6 +122,40 @@ Provides a way to manage snap points for <a class="xref" href="Melanchall.DryWet
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class PlaybackSnapping</code></pre>
   </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping__ctor_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Devices_PlaybackEvent__Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Devices.PlaybackEvent},Melanchall.DryWetMidi.Interaction.TempoMap)">PlaybackSnapping(IEnumerable&lt;PlaybackEvent&gt;, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSnapping.html">PlaybackSnapping</a> class.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PlaybackSnapping(IEnumerable&lt;PlaybackEvent&gt; playbackEvents, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackEvent.html">PlaybackEvent</a>&gt;</td>
+        <td><span class="parametername">playbackEvents</span></td>
+        <td>The collection of playback events.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>The tempo map.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_SnapPoints_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.SnapPoints*"></a>
@@ -284,6 +318,184 @@ with <code data-dev-comment-type="paramref" class="paramref">data</code> at <cod
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td><code data-dev-comment-type="paramref" class="paramref">time</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetNextSnapPoint_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetNextSnapPoint_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan)">GetNextSnapPoint(TimeSpan)</h4>
+  <div class="markdown level1 summary">
+Gets the snap point following the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint GetNextSnapPoint(TimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>The time associated with the desired snap points.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint.html">SnapPoint</a></td>
+        <td>The snap point following the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetNextSnapPoint_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetNextSnapPoint_System_TimeSpan_Melanchall_DryWetMidi_Devices_SnapPointsGroup_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan,Melanchall.DryWetMidi.Devices.SnapPointsGroup)">GetNextSnapPoint(TimeSpan, SnapPointsGroup)</h4>
+  <div class="markdown level1 summary">
+Gets the snap point following the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>The time associated with the desired snap points.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td><span class="parametername">snapPointsGroup</span></td>
+        <td>The <a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPointsGroup.html">SnapPointsGroup</a> from which to get the next snap point.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint.html">SnapPoint</a></td>
+        <td>The snap point following the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetPreviousSnapPoint_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetPreviousSnapPoint_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan)">GetPreviousSnapPoint(TimeSpan)</h4>
+  <div class="markdown level1 summary">
+Gets the snap point prior to the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint GetPreviousSnapPoint(TimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>The time associated with the desired snap points.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint.html">SnapPoint</a></td>
+        <td>The snap point prior the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetPreviousSnapPoint_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetPreviousSnapPoint_System_TimeSpan_Melanchall_DryWetMidi_Devices_SnapPointsGroup_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan,Melanchall.DryWetMidi.Devices.SnapPointsGroup)">GetPreviousSnapPoint(TimeSpan, SnapPointsGroup)</h4>
+  <div class="markdown level1 summary">
+Gets the snap point prior to the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>The time associated with the desired snap points.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td><span class="parametername">snapPointsGroup</span></td>
+        <td>The <a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPointsGroup.html">SnapPointsGroup</a> from which to get the previous snap point.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.SnapPoint.html">SnapPoint</a></td>
+        <td>The snap point prior the specified time.</td>
       </tr>
     </tbody>
   </table>
@@ -529,7 +741,7 @@ Adds snap points at start times of notes.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 17, 2019 22:37:57
+            Generated by <b>DocFX</b> on November 18, 2019 15:58:04
             
           </div>
         </div>
