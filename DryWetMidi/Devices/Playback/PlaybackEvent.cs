@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// Initializes a new instance of the <see cref="PlaybackEvent"/> class.
         /// </summary>
         /// <param name="midiEvent">The underlying MIDI event.</param>
-        /// <param name="time">The time between the start of playback and the current event time.</param>
+        /// <param name="time">The duration between the start of the playback and the current time.</param>
         /// <param name="rawTime">The raw timestamp at which the event occurred.</param>
         public PlaybackEvent(MidiEvent midiEvent, TimeSpan time, long rawTime)
         {
@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Devices
         public MidiEvent Event { get; }
 
         /// <summary>
-        /// Gets the time between the start of playback and the current event time.
+        /// Gets the duration between the start of the playback and the current time.
         /// </summary>
         public TimeSpan Time { get; }
 

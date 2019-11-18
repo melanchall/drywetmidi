@@ -5,7 +5,7 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Devices
 {
     /// <summary>
-    /// A class encapsulating metadata related to the playback of an event.
+    /// A class encapsulating metadata related to the playback of a musical note.
     /// </summary>
     public sealed class NotePlaybackEventMetadata
     {
@@ -54,6 +54,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets the playback data associated with the musical note.
         /// </summary>
+        /// <remarks>This value may be <c>null</c>, even if <c>IsCustomNotePlaybackDataSet</c> is set to <c>true</c>.</remarks>
         public NotePlaybackData NotePlaybackData { get; private set; }
 
         /// <summary>
@@ -88,11 +89,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Sets the custom musical note playback data.
         /// </summary>
-        /// <param name="notePlaybackData">The custom musical note playback data to set.</param>
+        /// <param name="notePlaybackData">The custom musical note playback data to set. This value may be <c>null</c>.</param>
         public void SetCustomNotePlaybackData(NotePlaybackData notePlaybackData)
         {
-            ThrowIfArgument.IsNull(nameof(notePlaybackData), notePlaybackData);
-
             NotePlaybackData = notePlaybackData;
             IsCustomNotePlaybackDataSet = true;
         }
