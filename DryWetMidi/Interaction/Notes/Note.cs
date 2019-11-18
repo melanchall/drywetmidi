@@ -226,12 +226,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets Note On timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent());
+        public TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent());
 
         /// <summary>
         /// Gets Note Off timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
+        public TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
 
         #endregion
 

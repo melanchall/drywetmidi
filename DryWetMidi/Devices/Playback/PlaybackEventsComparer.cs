@@ -4,10 +4,25 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal sealed class PlaybackEventsComparer : IComparer<PlaybackEvent>
+    /// <summary>
+    /// A comparer for playback events.
+    /// </summary>
+    /// <seealso cref="IComparer{T}"/>
+    /// <seealso cref="PlaybackEvent"/>
+    public sealed class PlaybackEventsComparer : IComparer<PlaybackEvent>
     {
         #region IComparer<PlaybackEvent>
 
+        /// <summary>
+        /// Compares two playback events and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>A signed integer that indicates the relative values of <paramref name="x">x</paramref> and
+        /// <paramref name="y">y</paramref>. If less than 0, <paramref name="x">x</paramref> is less than
+        /// <paramref name="y">y</paramref>. If 0, <paramref name="x">x</paramref> equals
+        /// <paramref name="y">y</paramref>. If greater than 0, <paramref name="x">x</paramref> is greater than
+        /// <paramref name="y">y</paramref>.</returns>
         public int Compare(PlaybackEvent x, PlaybackEvent y)
         {
             var timeDifference = x.RawTime - y.RawTime;

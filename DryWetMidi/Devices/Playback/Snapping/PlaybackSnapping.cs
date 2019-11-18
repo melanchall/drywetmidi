@@ -27,7 +27,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal PlaybackSnapping(IEnumerable<PlaybackEvent> playbackEvents, TempoMap tempoMap)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaybackSnapping"/> class.
+        /// </summary>
+        /// <param name="playbackEvents">The collection of playback events.</param>
+        /// <param name="tempoMap">The tempo map.</param>
+        public PlaybackSnapping(IEnumerable<PlaybackEvent> playbackEvents, TempoMap tempoMap)
         {
             _playbackEvents = playbackEvents;
             _tempoMap = tempoMap;
@@ -154,22 +159,44 @@ namespace Melanchall.DryWetMidi.Devices
             return _noteEndSnapPointsGroup ?? (_noteEndSnapPointsGroup = SnapToNoteEvents(snapToNoteOn: false));
         }
 
-        internal SnapPoint GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
+        /// <summary>
+        /// Gets the snap point following the specified time.
+        /// </summary>
+        /// <param name="time">The time associated with the desired snap points.</param>
+        /// <param name="snapPointsGroup">The <see cref="SnapPointsGroup"/> from which to get the next snap point.</param>
+        /// <returns>The snap point following the specified time.</returns>
+        public SnapPoint GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
             return GetActiveSnapPoints(snapPointsGroup).SkipWhile(p => p.Time <= time).FirstOrDefault();
         }
 
-        internal SnapPoint GetNextSnapPoint(TimeSpan time)
+        /// <summary>
+        /// Gets the snap point following the specified time.
+        /// </summary>
+        /// <param name="time">The time associated with the desired snap points.</param>
+        /// <returns>The snap point following the specified time.</returns>
+        public SnapPoint GetNextSnapPoint(TimeSpan time)
         {
             return GetActiveSnapPoints().SkipWhile(p => p.Time <= time).FirstOrDefault();
         }
 
-        internal SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
+        /// <summary>
+        /// Gets the snap point prior to the specified time.
+        /// </summary>
+        /// <param name="time">The time associated with the desired snap points.</param>
+        /// <param name="snapPointsGroup">The <see cref="SnapPointsGroup"/> from which to get the previous snap point.</param>
+        /// <returns>The snap point prior the specified time.</returns>
+        public SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
             return GetActiveSnapPoints(snapPointsGroup).TakeWhile(p => p.Time < time).LastOrDefault();
         }
 
-        internal SnapPoint GetPreviousSnapPoint(TimeSpan time)
+        /// <summary>
+        /// Gets the snap point prior to the specified time.
+        /// </summary>
+        /// <param name="time">The time associated with the desired snap points.</param>
+        /// <returns>The snap point prior the specified time.</returns>
+        public SnapPoint GetPreviousSnapPoint(TimeSpan time)
         {
             return GetActiveSnapPoints().TakeWhile(p => p.Time < time).LastOrDefault();
         }

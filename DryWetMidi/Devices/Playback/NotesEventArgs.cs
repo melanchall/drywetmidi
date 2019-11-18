@@ -12,7 +12,11 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
-        internal NotesEventArgs(params Note[] notes)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotesEventArgs"/> class.
+        /// </summary>
+        /// <param name="notes">The collection of notes that started or finished playing using a <see cref="Playback"/> object.</param>
+        public NotesEventArgs(params Note[] notes)
         {
             Notes = notes;
         }
