@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -15,6 +16,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="note">The musical note for which to get the ID.</param>
         /// <returns>The ID of the specified musical note.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
         public static NoteId GetNoteId(this Note note)
         {
             ThrowIfArgument.IsNull(nameof(note), note);
@@ -27,6 +29,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="noteEvent">The musical note event for which to get the ID.</param>
         /// <returns>The ID of the specified musical note event.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
         public static NoteId GetNoteId(this NoteEvent noteEvent)
         {
             ThrowIfArgument.IsNull(nameof(noteEvent), noteEvent);
