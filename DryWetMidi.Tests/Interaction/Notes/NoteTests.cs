@@ -130,16 +130,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region GetTimedNoteOnEvent
 
         [Test]
-        [Description("Check that a different clone of the event is return each time.")]
         public void GetTimedNoteOnEvent()
         {
             var note = new Note(new SevenBitNumber(1));
             var timedNoteOnEvent1 = note.GetTimedNoteOnEvent();
             var timedNoteOnEvent2 = note.GetTimedNoteOnEvent();
-
-            Assert.IsNotNull(timedNoteOnEvent1);
-            Assert.IsNotNull(timedNoteOnEvent2);
-            Assert.AreNotEqual(timedNoteOnEvent1, timedNoteOnEvent2, "Events must be cloned.");
+            Assert.IsNotNull(timedNoteOnEvent1, "1st event is null.");
+            Assert.IsNotNull(timedNoteOnEvent2, "2nd event is null.");
+            Assert.AreNotEqual(timedNoteOnEvent1, timedNoteOnEvent2, "Events have not been cloned.");
         }
 
         #endregion
@@ -147,16 +145,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region GetTimedNoteOffEvent
 
         [Test]
-        [Description("Check that a different clone of the event is return each time.")]
         public void GetTimedNoteOffEvent()
         {
             var note = new Note(new SevenBitNumber(1));
             var timedNoteOffEvent1 = note.GetTimedNoteOffEvent();
             var timedNoteOffEvent2 = note.GetTimedNoteOffEvent();
-
-            Assert.IsNotNull(timedNoteOffEvent1);
-            Assert.IsNotNull(timedNoteOffEvent2);
-            Assert.AreNotEqual(timedNoteOffEvent1, timedNoteOffEvent2, "Events must be cloned.");
+            Assert.IsNotNull(timedNoteOffEvent1, "1st event is null.");
+            Assert.IsNotNull(timedNoteOffEvent2, "2nd event is null.");
+            Assert.AreNotEqual(timedNoteOffEvent1, timedNoteOffEvent2, "Events have not been cloned.");
         }
 
         #endregion
