@@ -238,6 +238,24 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Methods
 
         /// <summary>
+        /// Gets the 'Note On' timed event of the current note.
+        /// </summary>
+        /// <returns>The 'Note On' timed event of the current note.</returns>
+        public TimedEvent GetTimedNoteOnEvent()
+        {
+            return TimedNoteOnEvent.Clone();
+        }
+
+        /// <summary>
+        /// Gets the 'Note Off' timed event of the current note.
+        /// </summary>
+        /// <returns>The 'Note Off' timed event of the current note.</returns>
+        public TimedEvent GetTimedNoteOffEvent()
+        {
+            return TimedNoteOffEvent.Clone();
+        }
+
+        /// <summary>
         /// Sets note name and octave for current <see cref="Note"/>.
         /// </summary>
         /// <param name="noteName">Name of the note.</param>
