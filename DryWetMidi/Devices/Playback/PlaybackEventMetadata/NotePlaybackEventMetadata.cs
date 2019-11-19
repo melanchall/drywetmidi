@@ -1,22 +1,12 @@
 ﻿using System;
-using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    /// <summary>
-    /// A class encapsulating metadata related to the playback of a musical note.
-    /// </summary>
-    public sealed class NotePlaybackEventMetadata
+    internal sealed class NotePlaybackEventMetadata
     {
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NotePlaybackEventMetadata"/> class.
-        /// </summary>
-        /// <param name="note">The current musical note.</param>
-        /// <param name="startTime">The start time of the note.</param>
-        /// <param name="endTime">The end time of the node.</param>
         public NotePlaybackEventMetadata(Note note, TimeSpan startTime, TimeSpan endTime)
         {
             RawNote = note;
@@ -31,45 +21,22 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        /// <summary>
-        /// Gets the raw musical note.
-        /// </summary>
         public Note RawNote { get; }
 
-        /// <summary>
-        /// Gets the start time of the note.
-        /// </summary>
         public TimeSpan StartTime { get; }
 
-        /// <summary>
-        /// Gets the end time of the note.
-        /// </summary>
         public TimeSpan EndTime { get; }
 
-        /// <summary>
-        /// Gets the playback data associated with the raw musical note.
-        /// </summary>
         public NotePlaybackData RawNotePlaybackData { get; }
 
-        /// <summary>
-        /// Gets the playback data associated with the musical note.
-        /// </summary>
-        /// <remarks>This value may be <c>null</c>, even if <c>IsCustomNotePlaybackDataSet</c> is set to <c>true</c>.</remarks>
         public NotePlaybackData NotePlaybackData { get; private set; }
 
-        /// <summary>
-        /// Gets a value indicating whether the custom musical note playback data has been set.
-        /// </summary>
         public bool IsCustomNotePlaybackDataSet { get; private set; }
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Gets the effective musical note.
-        /// </summary>
-        /// <returns>The effective musical note.</returns>
         public Note GetEffectiveNote()
         {
             var notePlaybackData = NotePlaybackData;
@@ -86,10 +53,6 @@ namespace Melanchall.DryWetMidi.Devices
             return note;
         }
 
-        /// <summary>
-        /// Sets the custom musical note playback data.
-        /// </summary>
-        /// <param name="notePlaybackData">The custom musical note playback data to set. This value may be <c>null</c>.</param>
         public void SetCustomNotePlaybackData(NotePlaybackData notePlaybackData)
         {
             NotePlaybackData = notePlaybackData;

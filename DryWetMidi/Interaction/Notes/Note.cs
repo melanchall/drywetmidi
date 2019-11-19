@@ -226,16 +226,34 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets Note On timed event of the note.
         /// </summary>
-        public TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent());
+        internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent());
 
         /// <summary>
         /// Gets Note Off timed event of the note.
         /// </summary>
-        public TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
+        internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Gets the 'Note On' timed event of the current note.
+        /// </summary>
+        /// <returns>The 'Note On' timed event of the current note.</returns>
+        public TimedEvent GetTimedNoteOnEvent()
+        {
+            return TimedNoteOnEvent;
+        }
+
+        /// <summary>
+        /// Gets the 'Note Off' timed event of the current note.
+        /// </summary>
+        /// <returns>The 'Note Off' timed event of the current note.</returns>
+        public TimedEvent GetTimedNoteOffEvent()
+        {
+            return TimedNoteOffEvent;
+        }
 
         /// <summary>
         /// Sets note name and octave for current <see cref="Note"/>.
