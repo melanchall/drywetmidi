@@ -15,52 +15,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void Equals_NullObject()
         {
             var noteId = new NoteId(new FourBitNumber(), new SevenBitNumber());
-            var isEqual = noteId.Equals(null);
-            Assert.IsFalse(isEqual);
+            Assert.AreNotEqual(noteId, null, "A null and non-null object are equal.");
         }
 
         [Test]
         public void Equals_SameObject()
         {
             var noteId = new NoteId(new FourBitNumber(), new SevenBitNumber());
-            var isEqual = noteId.Equals(noteId);
-            Assert.IsTrue(isEqual);
+            Assert.AreEqual(noteId, noteId, "An object is not equal to itself.");
         }
 
         [Test]
         public void Equals_DifferentObjectType()
         {
-            var noteId = new NoteId(new FourBitNumber(), new SevenBitNumber());
-            var obj = new object();
-            var isEqual = noteId.Equals(obj);
-            Assert.IsFalse(isEqual);
+            var noteId1 = new NoteId(new FourBitNumber(), new SevenBitNumber());
+            var noteId2 = new object();
+            Assert.AreNotEqual(noteId1, noteId2, "Objects of different types are equal.");
         }
 
         [Test]
         public void Equals_SameValues()
         {
-            var noteId = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
-            var obj = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
-            var isEqual = noteId.Equals(obj);
-            Assert.IsTrue(isEqual);
+            var noteId1 = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
+            var noteId2 = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
+            Assert.AreEqual(noteId1, noteId2, "Identical objects are not equal.");
         }
 
         [Test]
         public void Equals_DifferentChannelValues()
         {
-            var noteId = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
-            var obj = new NoteId(new FourBitNumber(2), new SevenBitNumber(2));
-            var isEqual = noteId.Equals(obj);
-            Assert.IsFalse(isEqual);
+            var noteId1 = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
+            var noteId2 = new NoteId(new FourBitNumber(2), new SevenBitNumber(2));
+            Assert.AreNotEqual(noteId1, noteId2, "Objects with mismatched channel values are equal.");
         }
 
         [Test]
         public void Equals_DifferentNoteNumberValues()
         {
-            var noteId = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
-            var obj = new NoteId(new FourBitNumber(1), new SevenBitNumber(3));
-            var isEqual = noteId.Equals(obj);
-            Assert.IsFalse(isEqual);
+            var noteId1 = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
+            var noteId2 = new NoteId(new FourBitNumber(1), new SevenBitNumber(3));
+            Assert.AreNotEqual(noteId1, noteId2, "Objects with mismatched note number values are equal.");
         }
 
         #endregion
@@ -72,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var noteId1 = new NoteId(new FourBitNumber(), new SevenBitNumber());
             var noteId2 = new NoteId(new FourBitNumber(), new SevenBitNumber());
-            Assert.AreEqual(noteId1.GetHashCode(), noteId2.GetHashCode(), "Hash codes must be consistent.");
+            Assert.AreEqual(noteId1.GetHashCode(), noteId2.GetHashCode(), "Hash codes for identical empty objects are different.");
         }
 
         [Test]
@@ -80,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var noteId1 = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
             var noteId2 = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
-            Assert.AreEqual(noteId1.GetHashCode(), noteId2.GetHashCode(), "Hash codes must be consistent.");
+            Assert.AreEqual(noteId1.GetHashCode(), noteId2.GetHashCode(), "Hash codes for identical objects are different.");
         }
 
         [Test]
@@ -88,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var noteId1 = new NoteId(new FourBitNumber(1), new SevenBitNumber(2));
             var noteId2 = new NoteId(new FourBitNumber(2), new SevenBitNumber(1));
-            Assert.AreNotEqual(noteId1.GetHashCode(), noteId2.GetHashCode(), "Hash codes must be consistent.");
+            Assert.AreNotEqual(noteId1.GetHashCode(), noteId2.GetHashCode(), "Hash codes for different objects are the same.");
         }
 
         #endregion
