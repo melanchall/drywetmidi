@@ -635,56 +635,6 @@ Gets absolute time of the note in units defined by the time division of a MIDI f
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Interaction_Note_TimedNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_Note_TimedNoteOffEvent" data-uid="Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent">TimedNoteOffEvent</h4>
-  <div class="markdown level1 summary">
-Gets Note Off timed event of the note.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimedEvent TimedNoteOffEvent { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_Note_TimedNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_Note_TimedNoteOnEvent" data-uid="Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent">TimedNoteOnEvent</h4>
-  <div class="markdown level1 summary">
-Gets Note On timed event of the note.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimedEvent TimedNoteOnEvent { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Note_Velocity_" data-uid="Melanchall.DryWetMidi.Interaction.Note.Velocity*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Note_Velocity" data-uid="Melanchall.DryWetMidi.Interaction.Note.Velocity">Velocity</h4>
   <div class="markdown level1 summary">
@@ -734,6 +684,56 @@ Clones note by creating a copy of it.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a></td>
         <td>Copy of the note.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOffEvent" data-uid="Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent">GetTimedNoteOffEvent()</h4>
+  <div class="markdown level1 summary">
+Gets the &apos;Note Off&apos; timed event of the current note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimedEvent GetTimedNoteOffEvent()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
+        <td>The &apos;Note Off&apos; timed event of the current note.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOnEvent" data-uid="Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent">GetTimedNoteOnEvent()</h4>
+  <div class="markdown level1 summary">
+Gets the &apos;Note On&apos; timed event of the current note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimedEvent GetTimedNoteOnEvent()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
+        <td>The &apos;Note On&apos; timed event of the current note.</td>
       </tr>
     </tbody>
   </table>
@@ -941,7 +941,7 @@ Returns a string that represents the current object.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on November 18, 2019 16:24:18
+            Generated by <b>DocFX</b> on November 19, 2019 13:28:46
             
           </div>
         </div>

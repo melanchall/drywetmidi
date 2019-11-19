@@ -10933,151 +10933,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.NotePlaybackData.Velocity
   nameWithType: NotePlaybackData.Velocity
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata
-  name: NotePlaybackEventMetadata
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html
-  commentId: T:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata
-  nameWithType: NotePlaybackEventMetadata
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.#ctor(Melanchall.DryWetMidi.Interaction.Note,System.TimeSpan,System.TimeSpan)
-  name: NotePlaybackEventMetadata(Note, TimeSpan, TimeSpan)
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata__ctor_Melanchall_DryWetMidi_Interaction_Note_System_TimeSpan_System_TimeSpan_
-  commentId: M:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.#ctor(Melanchall.DryWetMidi.Interaction.Note,System.TimeSpan,System.TimeSpan)
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackEventMetadata(Melanchall.DryWetMidi.Interaction.Note, System.TimeSpan, System.TimeSpan)
-  nameWithType: NotePlaybackEventMetadata.NotePlaybackEventMetadata(Note, TimeSpan, TimeSpan)
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.#ctor*
-  name: NotePlaybackEventMetadata
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackEventMetadata
-  nameWithType: NotePlaybackEventMetadata.NotePlaybackEventMetadata
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.EndTime
-  name: EndTime
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_EndTime
-  commentId: P:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.EndTime
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.EndTime
-  nameWithType: NotePlaybackEventMetadata.EndTime
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.EndTime*
-  name: EndTime
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_EndTime_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.EndTime
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.EndTime
-  nameWithType: NotePlaybackEventMetadata.EndTime
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.GetEffectiveNote
-  name: GetEffectiveNote()
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_GetEffectiveNote
-  commentId: M:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.GetEffectiveNote
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.GetEffectiveNote()
-  nameWithType: NotePlaybackEventMetadata.GetEffectiveNote()
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.GetEffectiveNote*
-  name: GetEffectiveNote
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_GetEffectiveNote_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.GetEffectiveNote
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.GetEffectiveNote
-  nameWithType: NotePlaybackEventMetadata.GetEffectiveNote
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet
-  name: IsCustomNotePlaybackDataSet
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_IsCustomNotePlaybackDataSet
-  commentId: P:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet
-  nameWithType: NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet*
-  name: IsCustomNotePlaybackDataSet
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_IsCustomNotePlaybackDataSet_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet
-  nameWithType: NotePlaybackEventMetadata.IsCustomNotePlaybackDataSet
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackData
-  name: NotePlaybackData
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_NotePlaybackData
-  commentId: P:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackData
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackData
-  nameWithType: NotePlaybackEventMetadata.NotePlaybackData
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackData*
-  name: NotePlaybackData
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_NotePlaybackData_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.NotePlaybackData
-  nameWithType: NotePlaybackEventMetadata.NotePlaybackData
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNote
-  name: RawNote
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_RawNote
-  commentId: P:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNote
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNote
-  nameWithType: NotePlaybackEventMetadata.RawNote
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNote*
-  name: RawNote
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_RawNote_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNote
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNote
-  nameWithType: NotePlaybackEventMetadata.RawNote
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNotePlaybackData
-  name: RawNotePlaybackData
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_RawNotePlaybackData
-  commentId: P:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNotePlaybackData
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNotePlaybackData
-  nameWithType: NotePlaybackEventMetadata.RawNotePlaybackData
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNotePlaybackData*
-  name: RawNotePlaybackData
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_RawNotePlaybackData_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNotePlaybackData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.RawNotePlaybackData
-  nameWithType: NotePlaybackEventMetadata.RawNotePlaybackData
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.SetCustomNotePlaybackData(Melanchall.DryWetMidi.Devices.NotePlaybackData)
-  name: SetCustomNotePlaybackData(NotePlaybackData)
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_SetCustomNotePlaybackData_Melanchall_DryWetMidi_Devices_NotePlaybackData_
-  commentId: M:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.SetCustomNotePlaybackData(Melanchall.DryWetMidi.Devices.NotePlaybackData)
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.SetCustomNotePlaybackData(Melanchall.DryWetMidi.Devices.NotePlaybackData)
-  nameWithType: NotePlaybackEventMetadata.SetCustomNotePlaybackData(NotePlaybackData)
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.SetCustomNotePlaybackData*
-  name: SetCustomNotePlaybackData
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_SetCustomNotePlaybackData_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.SetCustomNotePlaybackData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.SetCustomNotePlaybackData
-  nameWithType: NotePlaybackEventMetadata.SetCustomNotePlaybackData
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.StartTime
-  name: StartTime
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_StartTime
-  commentId: P:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.StartTime
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.StartTime
-  nameWithType: NotePlaybackEventMetadata.StartTime
-- uid: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.StartTime*
-  name: StartTime
-  href: api/Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_NotePlaybackEventMetadata_StartTime_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.StartTime
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotePlaybackEventMetadata.StartTime
-  nameWithType: NotePlaybackEventMetadata.StartTime
 - uid: Melanchall.DryWetMidi.Devices.NotesEventArgs
   name: NotesEventArgs
   href: api/Melanchall.DryWetMidi.Devices.NotesEventArgs.html
   commentId: T:Melanchall.DryWetMidi.Devices.NotesEventArgs
   fullName: Melanchall.DryWetMidi.Devices.NotesEventArgs
   nameWithType: NotesEventArgs
-- uid: Melanchall.DryWetMidi.Devices.NotesEventArgs.#ctor(Melanchall.DryWetMidi.Interaction.Note[])
-  name: NotesEventArgs(Note[])
-  href: api/Melanchall.DryWetMidi.Devices.NotesEventArgs.html#Melanchall_DryWetMidi_Devices_NotesEventArgs__ctor_Melanchall_DryWetMidi_Interaction_Note___
-  commentId: M:Melanchall.DryWetMidi.Devices.NotesEventArgs.#ctor(Melanchall.DryWetMidi.Interaction.Note[])
-  name.vb: NotesEventArgs(Note())
-  fullName: Melanchall.DryWetMidi.Devices.NotesEventArgs.NotesEventArgs(Melanchall.DryWetMidi.Interaction.Note[])
-  fullName.vb: Melanchall.DryWetMidi.Devices.NotesEventArgs.NotesEventArgs(Melanchall.DryWetMidi.Interaction.Note())
-  nameWithType: NotesEventArgs.NotesEventArgs(Note[])
-  nameWithType.vb: NotesEventArgs.NotesEventArgs(Note())
-- uid: Melanchall.DryWetMidi.Devices.NotesEventArgs.#ctor*
-  name: NotesEventArgs
-  href: api/Melanchall.DryWetMidi.Devices.NotesEventArgs.html#Melanchall_DryWetMidi_Devices_NotesEventArgs__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.NotesEventArgs.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.NotesEventArgs.NotesEventArgs
-  nameWithType: NotesEventArgs.NotesEventArgs
 - uid: Melanchall.DryWetMidi.Devices.NotesEventArgs.Notes
   name: Notes
   href: api/Melanchall.DryWetMidi.Devices.NotesEventArgs.html#Melanchall_DryWetMidi_Devices_NotesEventArgs_Notes
@@ -12049,143 +11910,18 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.PlaybackCurrentTimeWatcher.TickClock
   nameWithType: PlaybackCurrentTimeWatcher.TickClock
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent
-  name: PlaybackEvent
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html
-  commentId: T:Melanchall.DryWetMidi.Devices.PlaybackEvent
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent
-  nameWithType: PlaybackEvent
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.#ctor(Melanchall.DryWetMidi.Core.MidiEvent,System.TimeSpan,System.Int64)
-  name: PlaybackEvent(MidiEvent, TimeSpan, Int64)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent__ctor_Melanchall_DryWetMidi_Core_MidiEvent_System_TimeSpan_System_Int64_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackEvent.#ctor(Melanchall.DryWetMidi.Core.MidiEvent,System.TimeSpan,System.Int64)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.PlaybackEvent(Melanchall.DryWetMidi.Core.MidiEvent, System.TimeSpan, System.Int64)
-  nameWithType: PlaybackEvent.PlaybackEvent(MidiEvent, TimeSpan, Int64)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.#ctor*
-  name: PlaybackEvent
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackEvent.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.PlaybackEvent
-  nameWithType: PlaybackEvent.PlaybackEvent
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.Event
-  name: Event
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_Event
-  commentId: P:Melanchall.DryWetMidi.Devices.PlaybackEvent.Event
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.Event
-  nameWithType: PlaybackEvent.Event
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.Event*
-  name: Event
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_Event_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackEvent.Event
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.Event
-  nameWithType: PlaybackEvent.Event
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.Metadata
-  name: Metadata
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_Metadata
-  commentId: P:Melanchall.DryWetMidi.Devices.PlaybackEvent.Metadata
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.Metadata
-  nameWithType: PlaybackEvent.Metadata
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.Metadata*
-  name: Metadata
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_Metadata_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackEvent.Metadata
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.Metadata
-  nameWithType: PlaybackEvent.Metadata
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.RawTime
-  name: RawTime
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_RawTime
-  commentId: P:Melanchall.DryWetMidi.Devices.PlaybackEvent.RawTime
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.RawTime
-  nameWithType: PlaybackEvent.RawTime
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.RawTime*
-  name: RawTime
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_RawTime_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackEvent.RawTime
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.RawTime
-  nameWithType: PlaybackEvent.RawTime
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.Time
-  name: Time
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_Time
-  commentId: P:Melanchall.DryWetMidi.Devices.PlaybackEvent.Time
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.Time
-  nameWithType: PlaybackEvent.Time
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEvent.Time*
-  name: Time
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEvent.html#Melanchall_DryWetMidi_Devices_PlaybackEvent_Time_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackEvent.Time
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEvent.Time
-  nameWithType: PlaybackEvent.Time
 - uid: Melanchall.DryWetMidi.Devices.PlaybackEventCallback
   name: PlaybackEventCallback
   href: api/Melanchall.DryWetMidi.Devices.PlaybackEventCallback.html
   commentId: T:Melanchall.DryWetMidi.Devices.PlaybackEventCallback
   fullName: Melanchall.DryWetMidi.Devices.PlaybackEventCallback
   nameWithType: PlaybackEventCallback
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEventMetadata
-  name: PlaybackEventMetadata
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.html
-  commentId: T:Melanchall.DryWetMidi.Devices.PlaybackEventMetadata
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEventMetadata
-  nameWithType: PlaybackEventMetadata
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.Note
-  name: Note
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_PlaybackEventMetadata_Note
-  commentId: P:Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.Note
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.Note
-  nameWithType: PlaybackEventMetadata.Note
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.Note*
-  name: Note
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.html#Melanchall_DryWetMidi_Devices_PlaybackEventMetadata_Note_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.Note
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEventMetadata.Note
-  nameWithType: PlaybackEventMetadata.Note
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEventsComparer
-  name: PlaybackEventsComparer
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.html
-  commentId: T:Melanchall.DryWetMidi.Devices.PlaybackEventsComparer
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEventsComparer
-  nameWithType: PlaybackEventsComparer
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.Compare(Melanchall.DryWetMidi.Devices.PlaybackEvent,Melanchall.DryWetMidi.Devices.PlaybackEvent)
-  name: Compare(PlaybackEvent, PlaybackEvent)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.html#Melanchall_DryWetMidi_Devices_PlaybackEventsComparer_Compare_Melanchall_DryWetMidi_Devices_PlaybackEvent_Melanchall_DryWetMidi_Devices_PlaybackEvent_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.Compare(Melanchall.DryWetMidi.Devices.PlaybackEvent,Melanchall.DryWetMidi.Devices.PlaybackEvent)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.Compare(Melanchall.DryWetMidi.Devices.PlaybackEvent, Melanchall.DryWetMidi.Devices.PlaybackEvent)
-  nameWithType: PlaybackEventsComparer.Compare(PlaybackEvent, PlaybackEvent)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.Compare*
-  name: Compare
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.html#Melanchall_DryWetMidi_Devices_PlaybackEventsComparer_Compare_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.Compare
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackEventsComparer.Compare
-  nameWithType: PlaybackEventsComparer.Compare
 - uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping
   name: PlaybackSnapping
   href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html
   commentId: T:Melanchall.DryWetMidi.Devices.PlaybackSnapping
   fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping
   nameWithType: PlaybackSnapping
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Devices.PlaybackEvent},Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: PlaybackSnapping(IEnumerable<PlaybackEvent>, TempoMap)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Devices_PlaybackEvent__Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackSnapping.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Devices.PlaybackEvent},Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: PlaybackSnapping(IEnumerable(Of PlaybackEvent), TempoMap)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.PlaybackSnapping(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Devices.PlaybackEvent>, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackSnapping.PlaybackSnapping(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Devices.PlaybackEvent), Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: PlaybackSnapping.PlaybackSnapping(IEnumerable<PlaybackEvent>, TempoMap)
-  nameWithType.vb: PlaybackSnapping.PlaybackSnapping(IEnumerable(Of PlaybackEvent), TempoMap)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.#ctor*
-  name: PlaybackSnapping
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackSnapping.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.PlaybackSnapping
-  nameWithType: PlaybackSnapping.PlaybackSnapping
 - uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.AddSnapPoint(Melanchall.DryWetMidi.Interaction.ITimeSpan)
   name: AddSnapPoint(ITimeSpan)
   href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_AddSnapPoint_Melanchall_DryWetMidi_Interaction_ITimeSpan_
@@ -12208,44 +11944,6 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackSnapping.AddSnapPoint(Of TData)(Melanchall.DryWetMidi.Interaction.ITimeSpan, TData)
   nameWithType: PlaybackSnapping.AddSnapPoint<TData>(ITimeSpan, TData)
   nameWithType.vb: PlaybackSnapping.AddSnapPoint(Of TData)(ITimeSpan, TData)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan)
-  name: GetNextSnapPoint(TimeSpan)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetNextSnapPoint_System_TimeSpan_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan)
-  nameWithType: PlaybackSnapping.GetNextSnapPoint(TimeSpan)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan,Melanchall.DryWetMidi.Devices.SnapPointsGroup)
-  name: GetNextSnapPoint(TimeSpan, SnapPointsGroup)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetNextSnapPoint_System_TimeSpan_Melanchall_DryWetMidi_Devices_SnapPointsGroup_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan,Melanchall.DryWetMidi.Devices.SnapPointsGroup)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint(System.TimeSpan, Melanchall.DryWetMidi.Devices.SnapPointsGroup)
-  nameWithType: PlaybackSnapping.GetNextSnapPoint(TimeSpan, SnapPointsGroup)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint*
-  name: GetNextSnapPoint
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetNextSnapPoint_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetNextSnapPoint
-  nameWithType: PlaybackSnapping.GetNextSnapPoint
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan)
-  name: GetPreviousSnapPoint(TimeSpan)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetPreviousSnapPoint_System_TimeSpan_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan)
-  nameWithType: PlaybackSnapping.GetPreviousSnapPoint(TimeSpan)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan,Melanchall.DryWetMidi.Devices.SnapPointsGroup)
-  name: GetPreviousSnapPoint(TimeSpan, SnapPointsGroup)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetPreviousSnapPoint_System_TimeSpan_Melanchall_DryWetMidi_Devices_SnapPointsGroup_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan,Melanchall.DryWetMidi.Devices.SnapPointsGroup)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint(System.TimeSpan, Melanchall.DryWetMidi.Devices.SnapPointsGroup)
-  nameWithType: PlaybackSnapping.GetPreviousSnapPoint(TimeSpan, SnapPointsGroup)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint*
-  name: GetPreviousSnapPoint
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_GetPreviousSnapPoint_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackSnapping.GetPreviousSnapPoint
-  nameWithType: PlaybackSnapping.GetPreviousSnapPoint
 - uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping.RemoveSnapPoint*
   name: RemoveSnapPoint
   href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_RemoveSnapPoint_
@@ -16383,6 +16081,32 @@ references:
   commentId: F:Melanchall.DryWetMidi.Interaction.Note.DefaultVelocity
   fullName: Melanchall.DryWetMidi.Interaction.Note.DefaultVelocity
   nameWithType: Note.DefaultVelocity
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  name: GetTimedNoteOffEvent()
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOffEvent
+  commentId: M:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent()
+  nameWithType: Note.GetTimedNoteOffEvent()
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent*
+  name: GetTimedNoteOffEvent
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOffEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  nameWithType: Note.GetTimedNoteOffEvent
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  name: GetTimedNoteOnEvent()
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOnEvent
+  commentId: M:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent()
+  nameWithType: Note.GetTimedNoteOnEvent()
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent*
+  name: GetTimedNoteOnEvent
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOnEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  nameWithType: Note.GetTimedNoteOnEvent
 - uid: Melanchall.DryWetMidi.Interaction.Note.Length
   name: Length
   href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Length
@@ -16487,32 +16211,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Note.Time
   nameWithType: Note.Time
-- uid: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent
-  name: TimedNoteOffEvent
-  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_TimedNoteOffEvent
-  commentId: P:Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent
-  fullName: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent
-  nameWithType: Note.TimedNoteOffEvent
-- uid: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent*
-  name: TimedNoteOffEvent
-  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_TimedNoteOffEvent_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOffEvent
-  nameWithType: Note.TimedNoteOffEvent
-- uid: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent
-  name: TimedNoteOnEvent
-  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_TimedNoteOnEvent
-  commentId: P:Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent
-  fullName: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent
-  nameWithType: Note.TimedNoteOnEvent
-- uid: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent*
-  name: TimedNoteOnEvent
-  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_TimedNoteOnEvent_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.Note.TimedNoteOnEvent
-  nameWithType: Note.TimedNoteOnEvent
 - uid: Melanchall.DryWetMidi.Interaction.Note.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_ToString
