@@ -16081,6 +16081,32 @@ references:
   commentId: F:Melanchall.DryWetMidi.Interaction.Note.DefaultVelocity
   fullName: Melanchall.DryWetMidi.Interaction.Note.DefaultVelocity
   nameWithType: Note.DefaultVelocity
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  name: GetTimedNoteOffEvent()
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOffEvent
+  commentId: M:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent()
+  nameWithType: Note.GetTimedNoteOffEvent()
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent*
+  name: GetTimedNoteOffEvent
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOffEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
+  nameWithType: Note.GetTimedNoteOffEvent
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  name: GetTimedNoteOnEvent()
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOnEvent
+  commentId: M:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent()
+  nameWithType: Note.GetTimedNoteOnEvent()
+- uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent*
+  name: GetTimedNoteOnEvent
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOnEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOnEvent
+  nameWithType: Note.GetTimedNoteOnEvent
 - uid: Melanchall.DryWetMidi.Interaction.Note.Length
   name: Length
   href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Length
