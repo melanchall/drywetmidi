@@ -23,6 +23,8 @@ Here the list of noticeable projects that use DryWetMIDI:
 
 * [Clone Hero](https://clonehero.net)  
   Free rhythm game, which can be played with any 5 or 6 button guitar controller, game controllers, or just your standard computer keyboard. The game is a clone of Guitar Hero.
+* [SOUNDSTORM VR](https://kyokogames.itch.io/beatmasters-vr)  
+  VR rhythm shooter game.
 
 ## Getting Started
 
