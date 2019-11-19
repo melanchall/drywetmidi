@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class ArbitraryGrid
+    <title>Class NoteId
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class ArbitraryGrid
+    <meta name="title" content="Class NoteId
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.47.0.0">
     
@@ -78,35 +78,24 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.NoteId">
   
   
-  <h1 id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid" class="text-break">Class ArbitraryGrid
+  <h1 id="Melanchall_DryWetMidi_Interaction_NoteId" data-uid="Melanchall.DryWetMidi.Interaction.NoteId" class="text-break">Class NoteId
   </h1>
   <div class="markdown level0 summary">
-Grid where points in time are distributed arbitrarily according to provided collection
-of times.
+A class representing the ID of a musical note.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">ArbitraryGrid</span></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></div>
+    <div class="level1"><span class="xref">NoteId</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
     </div>
     <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
@@ -123,22 +112,21 @@ of times.
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Interaction_NoteId_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class ArbitraryGrid : IGrid</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class NoteId</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan___" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.#ctor(Melanchall.DryWetMidi.Interaction.ITimeSpan[])">ArbitraryGrid(ITimeSpan[])</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_NoteId__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NoteId__ctor_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.#ctor(Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Common.SevenBitNumber)">NoteId(FourBitNumber, SevenBitNumber)</h4>
   <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.html">ArbitraryGrid</a> with the specified
-collection of times.
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteId.html">NoteId</a> class.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ArbitraryGrid(params ITimeSpan[] times)</code></pre>
+    <pre><code class="lang-csharp hljs">public NoteId(FourBitNumber channel, SevenBitNumber noteNumber)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -151,89 +139,28 @@ collection of times.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>[]</td>
-        <td><span class="parametername">times</span></td>
-        <td>Grid&apos;s times.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">times</code> is null.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>The audio channel associated with the musical note.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">times</code> contains null.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan__" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimeSpan})">ArbitraryGrid(IEnumerable&lt;ITimeSpan&gt;)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.html">ArbitraryGrid</a> with the specified
-collection of times.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ArbitraryGrid(IEnumerable&lt;ITimeSpan&gt; times)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
-        <td><span class="parametername">times</span></td>
-        <td>Grid&apos;s times.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">times</code> is null.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">times</code> contains null.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">noteNumber</span></td>
+        <td>The identification number associated with the musical note.</td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid_Times_" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.Times*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid_Times" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.Times">Times</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_NoteId_Channel_" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.Channel*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NoteId_Channel" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.Channel">Channel</h4>
   <div class="markdown level1 summary">
-Times of the current grid.
+Gets the audio channel associated with the musical note.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ITimeSpan&gt; Times { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public FourBitNumber Channel { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -245,22 +172,47 @@ Times of the current grid.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a>&gt;</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_NoteId_NoteNumber_" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NoteId_NoteNumber" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber">NoteNumber</h4>
+  <div class="markdown level1 summary">
+Gets the identification number associated with the musical note.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SevenBitNumber NoteNumber { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid_GetTimes_" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.GetTimes*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_ArbitraryGrid_GetTimes_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.ArbitraryGrid.GetTimes(Melanchall.DryWetMidi.Interaction.TempoMap)">GetTimes(TempoMap)</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_NoteId_Equals_" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NoteId_Equals_System_Object_" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.Equals(System.Object)">Equals(Object)</h4>
   <div class="markdown level1 summary">
-Gets points in time of the current grid.
+Determines whether the specified object is equal to the current object.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;long&gt; GetTimes(TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -273,9 +225,9 @@ Gets points in time of the current grid.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used to get grid&apos;s times.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td><span class="parametername">obj</span></td>
+        <td>The object against which to compare the current object.</td>
       </tr>
     </tbody>
   </table>
@@ -289,30 +241,40 @@ Gets points in time of the current grid.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a>&gt;</td>
-        <td>Collection of points in time of the current grid.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if the specified object is equal to the current object; <code>false</code> otherwise.</td>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
+  <a id="Melanchall_DryWetMidi_Interaction_NoteId_GetHashCode_" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NoteId_GetHashCode" data-uid="Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary">
+Gets a hash code for the current object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Condition</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is null.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>A hash code for the current object.</td>
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a>
-  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
 </article>
           </div>
           
