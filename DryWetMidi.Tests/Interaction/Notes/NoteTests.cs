@@ -127,6 +127,36 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region GetTimedNoteOnEvent
+
+        [Test]
+        public void GetTimedNoteOnEvent()
+        {
+            var note = new Note(new SevenBitNumber(1));
+            var timedNoteOnEvent1 = note.GetTimedNoteOnEvent();
+            var timedNoteOnEvent2 = note.GetTimedNoteOnEvent();
+            Assert.IsNotNull(timedNoteOnEvent1, "1st event is null.");
+            Assert.IsNotNull(timedNoteOnEvent2, "2nd event is null.");
+            Assert.AreNotEqual(timedNoteOnEvent1, timedNoteOnEvent2, "Events have not been cloned.");
+        }
+
+        #endregion
+
+        #region GetTimedNoteOffEvent
+
+        [Test]
+        public void GetTimedNoteOffEvent()
+        {
+            var note = new Note(new SevenBitNumber(1));
+            var timedNoteOffEvent1 = note.GetTimedNoteOffEvent();
+            var timedNoteOffEvent2 = note.GetTimedNoteOffEvent();
+            Assert.IsNotNull(timedNoteOffEvent1, "1st event is null.");
+            Assert.IsNotNull(timedNoteOffEvent2, "2nd event is null.");
+            Assert.AreNotEqual(timedNoteOffEvent1, timedNoteOffEvent2, "Events have not been cloned.");
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
