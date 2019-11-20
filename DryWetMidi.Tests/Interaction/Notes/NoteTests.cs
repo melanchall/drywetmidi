@@ -1,5 +1,6 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
@@ -140,6 +141,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotEqual(timedNoteOnEvent1, timedNoteOnEvent2, "Events have not been cloned.");
         }
 
+        [Test]
+        public void GetTimedNoteOnEvent_NoteChanged()
+        {
+            var note = new Note(new SevenBitNumber(1));
+
+            note.NoteNumber = (SevenBitNumber)45;
+            note.Velocity = (SevenBitNumber)12;
+            note.OffVelocity = (SevenBitNumber)122;
+            note.Channel = (FourBitNumber)9;
+
+            note.Time = 20;
+            note.Length = 200;
+
+            var timedNoteOnEvent = note.GetTimedNoteOnEvent();
+            Assert.IsInstanceOf(typeof(NoteOnEvent), timedNoteOnEvent.Event, "Events is not Note On.");
+            Assert.AreEqual(20, timedNoteOnEvent.Time, "Time is invalid");
+
+            var noteOnEvent = (NoteOnEvent)timedNoteOnEvent.Event;
+            Assert.AreEqual((SevenBitNumber)45, noteOnEvent.NoteNumber, "Note number is invalid.");
+            Assert.AreEqual((SevenBitNumber)12, noteOnEvent.Velocity, "Velocity is invalid.");
+            Assert.AreEqual((FourBitNumber)9, noteOnEvent.Channel, "Channel is invalid.");
+        }
+
         #endregion
 
         #region GetTimedNoteOffEvent
@@ -153,6 +177,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsNotNull(timedNoteOffEvent1, "1st event is null.");
             Assert.IsNotNull(timedNoteOffEvent2, "2nd event is null.");
             Assert.AreNotEqual(timedNoteOffEvent1, timedNoteOffEvent2, "Events have not been cloned.");
+        }
+
+        [Test]
+        public void GetTimedNoteOffEvent_NoteChanged()
+        {
+            var note = new Note(new SevenBitNumber(1));
+
+            note.NoteNumber = (SevenBitNumber)45;
+            note.Velocity = (SevenBitNumber)12;
+            note.OffVelocity = (SevenBitNumber)122;
+            note.Channel = (FourBitNumber)9;
+
+            note.Time = 20;
+            note.Length = 200;
+
+            var timedNoteOffEvent = note.GetTimedNoteOffEvent();
+            Assert.IsInstanceOf(typeof(NoteOffEvent), timedNoteOffEvent.Event, "Events is not Note On.");
+            Assert.AreEqual(220, timedNoteOffEvent.Time, "Time is invalid");
+
+            var noteOffEvent = (NoteOffEvent)timedNoteOffEvent.Event;
+            Assert.AreEqual((SevenBitNumber)45, noteOffEvent.NoteNumber, "Note number is invalid.");
+            Assert.AreEqual((SevenBitNumber)122, noteOffEvent.Velocity, "Velocity is invalid.");
+            Assert.AreEqual((FourBitNumber)9, noteOffEvent.Channel, "Channel is invalid.");
         }
 
         #endregion

@@ -243,7 +243,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note On' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOnEvent()
         {
-            return TimedNoteOnEvent.Clone();
+            return new TimedEvent(
+                new NoteOnEvent(NoteNumber, Velocity) { Channel = Channel },
+                Time);
         }
 
         /// <summary>
@@ -252,7 +254,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note Off' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOffEvent()
         {
-            return TimedNoteOffEvent.Clone();
+            return new TimedEvent(
+                new NoteOffEvent(NoteNumber, OffVelocity) { Channel = Channel },
+                Time + Length);
         }
 
         /// <summary>
