@@ -9,19 +9,17 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private const string NoteNameGroupName = "n";
+        private const string NoteLetterGroupName = "n";
         private const string AccidentalGroupName = "a";
 
-        private static readonly string NoteNameGroup = $"(?<{NoteNameGroupName}>C|D|E|F|G|A|B)";
-        private static readonly string AccidentalGroup = $"(?<{AccidentalGroupName}>{Regex.Escape(Note.SharpShortString)}|{Note.SharpLongString})";
+        private static readonly string NoteNameGroup = $"(?<{NoteLetterGroupName}>C|D|E|F|G|A|B)";
+        private static readonly string AccidentalGroup = $"((?<{AccidentalGroupName}>{Regex.Escape(Note.SharpShortString)}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})\\s*)+?";
 
         private static readonly string[] Patterns = new[]
         {
             $@"{NoteNameGroup}\s*{AccidentalGroup}",
             $@"{NoteNameGroup}",
         };
-
-        private const string NoteNameIsInvalid = "Note's name is invalid.";
 
         #endregion
 
@@ -43,21 +41,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            var noteNameGroup = match.Groups[NoteNameGroupName];
-            var noteNameString = noteNameGroup.Value;
+            var noteLetterGroup = match.Groups[NoteLetterGroupName];
+            var noteBaseNumber = (int)(NoteName)Enum.Parse(typeof(NoteName), noteLetterGroup.Value);
 
             var accidentalGroup = match.Groups[AccidentalGroupName];
             if (accidentalGroup.Success)
             {
-                var accidental = accidentalGroup.Value;
-                accidental = accidental.Replace(Note.SharpShortString, Note.SharpLongString);
-                accidental = char.ToUpper(accidental[0]) + accidental.Substring(1);
-                noteNameString += accidental;
+                foreach (Capture capture in accidentalGroup.Captures)
+                {
+                    var accidental = capture.Value;
+                    if (string.Equals(accidental, Note.SharpShortString, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(accidental, Note.SharpLongString, StringComparison.OrdinalIgnoreCase))
+                        noteBaseNumber++;
+                    else if (string.Equals(accidental, Note.FlatShortString, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(accidental, Note.FlatLongString, StringComparison.OrdinalIgnoreCase))
+                        noteBaseNumber--;
+                }
             }
 
-            if (!Enum.TryParse(noteNameString, out noteName))
-                return ParsingResult.Error(NoteNameIsInvalid);
+            noteBaseNumber %= Octave.OctaveSize;
+            if (noteBaseNumber < 0)
+                noteBaseNumber = Octave.OctaveSize + noteBaseNumber;
 
+            noteName = (NoteName)noteBaseNumber;
             return ParsingResult.Parsed;
         }
 

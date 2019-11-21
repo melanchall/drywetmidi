@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public abstract class LengthedObjectsRandomizerTests<TObject, TSettings> : LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
-        where TSettings : LengthedObjectsRandomizingSettings, new()
+        where TSettings : LengthedObjectsRandomizingSettings<TObject>, new()
     {
         #region Nested classes
 
@@ -157,27 +158,60 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 tempoMap);
         }
 
+        [Test]
+        public void Randomize_Start_Filter()
+        {
+            var tempoMap = TempoMap.Default;
+
+            Randomize_Start(
+                new[]
+                {
+                    ObjectMethods.Create(1000, 1000),
+                    ObjectMethods.Create(0, 10000),
+                    ObjectMethods.Create(20, 30)
+                },
+                new ConstantBounds((MidiTimeSpan)10000),
+                new[]
+                {
+                    new TimeBounds((MidiTimeSpan)0, (MidiTimeSpan)11000),
+                    new TimeBounds((MidiTimeSpan)0, (MidiTimeSpan)10000),
+                    new TimeBounds((MidiTimeSpan)20, (MidiTimeSpan)20)
+                },
+                tempoMap,
+                filter: o => o.Time != 20);
+        }
+
         #endregion
 
         #region Private methods
 
-        private void Randomize_Start(IEnumerable<TObject> actualObjects, IBounds bounds, IEnumerable<TimeBounds> expectedBounds, TempoMap tempoMap)
+        private void Randomize_Start(IEnumerable<TObject> actualObjects,
+                                     IBounds bounds,
+                                     IEnumerable<TimeBounds> expectedBounds,
+                                     TempoMap tempoMap,
+                                     Predicate<TObject> filter = null)
         {
             for (int i = 0; i < RepeatRandomizationCount; i++)
             {
                 var clonedActualObjects = actualObjects.Select(o => o != null ? ObjectMethods.Clone(o) : default(TObject)).ToList();
-                Randomize(LengthedObjectTarget.Start, clonedActualObjects, bounds, expectedBounds, tempoMap);
+                Randomize(LengthedObjectTarget.Start, clonedActualObjects, bounds, expectedBounds, tempoMap, filter);
             }
         }
 
-        private void Randomize(LengthedObjectTarget target, IEnumerable<TObject> actualObjects, IBounds bounds, IEnumerable<TimeBounds> expectedBounds, TempoMap tempoMap)
+        private void Randomize(LengthedObjectTarget target,
+                               IEnumerable<TObject> actualObjects,
+                               IBounds bounds,
+                               IEnumerable<TimeBounds> expectedBounds,
+                               TempoMap tempoMap,
+                               Predicate<TObject> filter = null)
         {
             Randomizer.Randomize(actualObjects,
                                  bounds,
                                  tempoMap,
                                  new TSettings
                                  {
-                                     RandomizingTarget = target
+                                     RandomizingTarget = target,
+                                     Filter = filter
                                  });
 
             var objectsBounds = actualObjects.Zip(expectedBounds, (o, b) => new { Object = o, Bounds = b });

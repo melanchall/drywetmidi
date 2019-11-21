@@ -112,17 +112,70 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         }
 
         [Test]
-        [Description("Parse invalid note where note name is invalid.")]
-        public void Parse_Invalid_NoteNameIsInvalid()
-        {
-            ParseInvalid<FormatException>("ESharp4");
-        }
-
-        [Test]
         [Description("Parse invalid note where an input string is empty.")]
         public void Parse_Invalid_EmptyInputString()
         {
             ParseInvalid<ArgumentException>(string.Empty);
+        }
+
+        [Test]
+        public void Parse_LetterOnly()
+        {
+            Parse("D3", Octave.Get(3).D);
+        }
+
+        [Test]
+        public void Parse_Sharps_1()
+        {
+            Parse("F##3", Octave.Get(3).G);
+        }
+
+        [Test]
+        public void Parse_Sharps_2()
+        {
+            Parse("F#sharp #### 3", Octave.Get(3).B);
+        }
+
+        [Test]
+        public void Parse_Sharps_3()
+        {
+            Parse("F# # # ### # # # ### 1", Octave.Get(1).F);
+        }
+
+        [Test]
+        public void Parse_Flats_1()
+        {
+            Parse("Fb 1", Octave.Get(1).E);
+        }
+
+        [Test]
+        public void Parse_Flats_2()
+        {
+            Parse("Fb flat flat 1", Octave.Get(1).D);
+        }
+
+        [Test]
+        public void Parse_Flats_3()
+        {
+            Parse("Fbbbb bbbb bbbb flat 1", Octave.Get(1).E);
+        }
+
+        [Test]
+        public void Parse_Sharps_Flats_1()
+        {
+            Parse("C#b4", Octave.Get(4).C);
+        }
+
+        [Test]
+        public void Parse_Sharps_Flats_2()
+        {
+            Parse("C#b##4", Octave.Get(4).D);
+        }
+
+        [Test]
+        public void Parse_Sharps_Flats_3()
+        {
+            Parse("C#bbb4", Octave.Get(4).ASharp);
         }
 
         #endregion

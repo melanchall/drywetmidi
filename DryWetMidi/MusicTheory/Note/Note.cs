@@ -15,6 +15,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
         internal const string SharpLongString = "Sharp";
         internal const string SharpShortString = "#";
 
+        internal const string FlatLongString = "Flat";
+        internal const string FlatShortString = "b";
+
         #endregion
 
         #region Fields
@@ -118,24 +121,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out Note note)
         {
-            return NoteParser.TryParse(input, out note).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, NoteParser.TryParse, out note);
         }
 
         /// <summary>
-        /// Converts the string representation of a musical note to its <see cref="Scale"/> equivalent.
+        /// Converts the string representation of a musical note to its <see cref="Note"/> equivalent.
         /// </summary>
         /// <param name="input">A string containing a note to convert.</param>
-        /// <returns>A <see cref="Scale"/> equivalent to the musical note contained in <paramref name="input"/>.</returns>
+        /// <returns>A <see cref="Note"/> equivalent to the musical note contained in <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Note Parse(string input)
         {
-            Note note;
-            var parsingResult = NoteParser.TryParse(input, out note);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return note;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<Note>(input, NoteParser.TryParse);
         }
 
         #endregion

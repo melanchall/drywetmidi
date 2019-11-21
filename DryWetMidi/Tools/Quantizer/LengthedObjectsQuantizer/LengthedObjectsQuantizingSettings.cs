@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which lengthed objects should be quantized.
     /// </summary>
-    public abstract class LengthedObjectsQuantizingSettings : QuantizingSettings
+    public abstract class LengthedObjectsQuantizingSettings<TObject> : QuantizingSettings<TObject>
+        where TObject : ILengthedObject
     {
         #region Fields
 

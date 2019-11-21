@@ -23,6 +23,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
         #region Constants
 
         /// <summary>
+        /// The size of an octave, i.e. number of notes within an octave.
+        /// </summary>
+        public const int OctaveSize = 12;
+
+        /// <summary>
         /// The smalles possible value of an octave's number.
         /// </summary>
         public static readonly int MinOctaveNumber = NoteUtilities.GetNoteOctave(SevenBitNumber.MinValue);

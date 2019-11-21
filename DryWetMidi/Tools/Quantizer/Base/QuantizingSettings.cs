@@ -1,13 +1,13 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which quantizing should be performed.
     /// </summary>
-    public abstract class QuantizingSettings
+    public abstract class QuantizingSettings<TObject>
     {
         #region Constants
 
@@ -63,6 +63,12 @@ namespace Melanchall.DryWetMidi.Tools
                 _quantizingLevel = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a predicate to filter objects that should be quantized. Use null if
+        /// all objects should be processed.
+        /// </summary>
+        public Predicate<TObject> Filter { get; set; }
 
         #endregion
     }

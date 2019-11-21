@@ -1,5 +1,5 @@
 ﻿using System;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -7,28 +7,57 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
-        public NotePlaybackEventMetadata(Note note, bool isNoteOnEvent, TimeSpan startTime, TimeSpan endTime)
+        public NotePlaybackEventMetadata(Note note, TimeSpan startTime, TimeSpan endTime)
         {
-            Note = note;
-            IsNoteOnEvent = isNoteOnEvent;
+            RawNote = note;
             StartTime = startTime;
             EndTime = endTime;
-            NoteId = note.GetNoteId();
+
+            RawNotePlaybackData = new NotePlaybackData(RawNote.NoteNumber, RawNote.Velocity, RawNote.OffVelocity, RawNote.Channel);
+            NotePlaybackData = RawNotePlaybackData;
         }
 
         #endregion
 
         #region Properties
 
-        public Note Note { get; }
+        public Note RawNote { get; }
 
         public TimeSpan StartTime { get; }
 
         public TimeSpan EndTime { get; }
 
-        public bool IsNoteOnEvent { get; }
+        public NotePlaybackData RawNotePlaybackData { get; }
 
-        public NoteId NoteId { get; }
+        public NotePlaybackData NotePlaybackData { get; private set; }
+
+        public bool IsCustomNotePlaybackDataSet { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        public Note GetEffectiveNote()
+        {
+            var notePlaybackData = NotePlaybackData;
+            if (notePlaybackData == null)
+                return null;
+
+            var note = RawNote.Clone();
+
+            note.NoteNumber = notePlaybackData.NoteNumber;
+            note.Velocity = notePlaybackData.Velocity;
+            note.OffVelocity = notePlaybackData.OffVelocity;
+            note.Channel = notePlaybackData.Channel;
+
+            return note;
+        }
+
+        public void SetCustomNotePlaybackData(NotePlaybackData notePlaybackData)
+        {
+            NotePlaybackData = notePlaybackData;
+            IsCustomNotePlaybackDataSet = true;
+        }
 
         #endregion
     }

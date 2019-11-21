@@ -1,11 +1,11 @@
-﻿using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which chords should be randomized.
     /// </summary>
-    public sealed class ChordsRandomizingSettings : LengthedObjectsRandomizingSettings
+    public sealed class ChordsRandomizingSettings : LengthedObjectsRandomizingSettings<Chord>
     {
     }
 

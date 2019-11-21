@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -84,6 +85,31 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         public static readonly Interval Twelve = FromHalfSteps(12);
 
+        private static readonly Dictionary<IntervalQuality, Dictionary<int, int>> IntervalsHalfTones =
+            new Dictionary<IntervalQuality, Dictionary<int, int>>
+            {
+                [IntervalQuality.Perfect] = new Dictionary<int, int>
+                {
+                    [1] = 0, [4] = 5, [5] = 7, [8] = 12
+                },
+                [IntervalQuality.Minor] = new Dictionary<int, int>
+                {
+                    [2] = 1, [3] = 3, [6] = 8, [7] = 10
+                },
+                [IntervalQuality.Major] = new Dictionary<int, int>
+                {
+                    [2] = 2, [3] = 4, [6] = 9, [7] = 11
+                },
+                [IntervalQuality.Diminished] = new Dictionary<int, int>
+                {
+                    [1] = -1, [2] = 0, [3] = 2, [4] = 4, [5] = 6, [6] = 7, [7] = 9, [8] = 11
+                },
+                [IntervalQuality.Augmented] = new Dictionary<int, int>
+                {
+                    [1] = 1, [2] = 3, [3] = 5, [4] = 6, [5] = 8, [6] = 10, [7] = 12
+                }
+            };
+
         #endregion
 
         #region Constructor
@@ -142,6 +168,91 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public Interval Down()
         {
             return Get(Size, IntervalDirection.Down);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the specified interval number (1 and greater) is perfect or not.
+        /// </summary>
+        /// <param name="intervalNumber">Interval number to determine whether it's perfect or not.</param>
+        /// <returns>true if <paramref name="intervalNumber"/> is perfect; otherwise, false.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
+        public static bool IsPerfect(int intervalNumber)
+        {
+            ThrowIfArgument.IsLessThan(nameof(intervalNumber), intervalNumber, 1, "Interval number is less than 1.");
+
+            var remainder = intervalNumber % 7 - 1;
+            return remainder == 0 || remainder == 3 || remainder == 4;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether quality is applicable to the specified interval number (1 and greater) or not.
+        /// </summary>
+        /// <param name="intervalQuality">Interval quality to check whether it's applicable to
+        /// <paramref name="intervalNumber"/> or not.</param>
+        /// <param name="intervalNumber">Interval number to check whether <paramref name="intervalQuality"/> is
+        /// applicable to it or not.</param>
+        /// <returns>true if <paramref name="intervalQuality"/> is applicable to <paramref name="intervalNumber"/>;
+        /// otherwise, false.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="intervalQuality"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
+        public static bool IsQualityApplicable(IntervalQuality intervalQuality, int intervalNumber)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(intervalQuality), intervalQuality);
+            ThrowIfArgument.IsLessThan(nameof(intervalNumber), intervalNumber, 1, "Interval number is less than 1.");
+
+            switch (intervalQuality)
+            {
+                case IntervalQuality.Perfect:
+                    return IsPerfect(intervalNumber);
+                case IntervalQuality.Minor:
+                case IntervalQuality.Major:
+                    return !IsPerfect(intervalNumber);
+                case IntervalQuality.Diminished:
+                    return intervalNumber >= 2;
+                case IntervalQuality.Augmented:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets an instance of the <see cref="Interval"/> by the specified interval quality and number.
+        /// </summary>
+        /// <param name="intervalQuality">Interval quality.</param>
+        /// <param name="intervalNumber">Interval number.</param>
+        /// <returns>An instance of the <see cref="Interval"/> which represents <paramref name="intervalNumber"/>
+        /// along with <paramref name="intervalQuality"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="intervalQuality"/> specified an
+        /// invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
+        /// <exception cref="ArgumentException"><paramref name="intervalQuality"/> is not applicable to
+        /// <paramref name="intervalNumber"/>.</exception>
+        public static Interval Get(IntervalQuality intervalQuality, int intervalNumber)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(intervalQuality), intervalQuality);
+            ThrowIfArgument.IsLessThan(nameof(intervalNumber), intervalNumber, 1, "Interval number is less than 1.");
+
+            if (!IsQualityApplicable(intervalQuality, intervalNumber))
+                throw new ArgumentException($"{intervalQuality} quality is not applicable to interval number of {intervalNumber}.", nameof(intervalQuality));
+
+            var maxIntervalNumber = 8;
+            if (intervalQuality == IntervalQuality.Minor || intervalQuality == IntervalQuality.Major || intervalQuality == IntervalQuality.Augmented)
+                maxIntervalNumber = 7;
+
+            var result = intervalNumber > maxIntervalNumber
+                ? ((intervalNumber - 1) / 7) * Octave.OctaveSize
+                : 0;
+
+            var additionalNumber = intervalNumber;
+            if (intervalNumber > maxIntervalNumber)
+                additionalNumber = ((intervalNumber - 1) % 7) + 1;
+
+            var halfTones = IntervalsHalfTones[intervalQuality];
+            result += halfTones[additionalNumber];
+
+            return FromHalfSteps(result);
         }
 
         /// <summary>
@@ -221,7 +332,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out Interval interval)
         {
-            return IntervalParser.TryParse(input, out interval).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, IntervalParser.TryParse, out interval);
         }
 
         /// <summary>
@@ -233,12 +344,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Interval Parse(string input)
         {
-            Interval interval;
-            var parsingResult = IntervalParser.TryParse(input, out interval);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return interval;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<Interval>(input, IntervalParser.TryParse);
         }
 
         #endregion

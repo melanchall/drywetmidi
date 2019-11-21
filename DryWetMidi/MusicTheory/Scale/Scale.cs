@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
         public static bool TryParse(string input, out Scale scale)
         {
-            return ScaleParser.TryParse(input, out scale).Status == ParsingStatus.Parsed;
+            return ParsingUtilities.TryParse(input, ScaleParser.TryParse, out scale);
         }
 
         /// <summary>
@@ -74,12 +74,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Scale Parse(string input)
         {
-            Scale scale;
-            var parsingResult = ScaleParser.TryParse(input, out scale);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return scale;
-
-            throw parsingResult.Exception;
+            return ParsingUtilities.Parse<Scale>(input, ScaleParser.TryParse);
         }
 
         #endregion
@@ -144,7 +139,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return RootNote.GetHashCode() ^ Intervals.GetHashCode();
+            unchecked
+            {
+                var result = 17;
+                result = result * 23 + RootNote.GetHashCode();
+                result = result * 23 + Intervals.GetHashCode();
+                return result;
+            }
         }
 
         #endregion

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <typeparam name="TObject">The type of objects to quantize.</typeparam>
     /// <typeparam name="TSettings">The type of quantizer's settings.</typeparam>
     public abstract class Randomizer<TObject, TSettings>
-        where TSettings : RandomizingSettings, new()
+        where TSettings : RandomizingSettings<TObject>, new()
     {
         #region Fields
 
@@ -32,7 +32,9 @@ namespace Melanchall.DryWetMidi.Tools
         {
             settings = settings ?? new TSettings();
 
-            foreach (var obj in objects.Where(o => o != null))
+            Func<TObject, bool> filter = o => o != null && settings.Filter?.Invoke(o) != false;
+
+            foreach (var obj in objects.Where(filter))
             {
                 var time = GetObjectTime(obj, settings);
 

@@ -1,0 +1,136 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    exclude:
+    - DryWetMidi.Tests
+    - README.md
+    - Resources/CI/build-develop-win.yaml
+    - Resources/CI/build-artifacts-library.yaml
+    - Resources/CI/build-artifacts-docs.yaml
+    - Docs/*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  version: '5.0.0'
+
+name: $(TeamProject)_$(SourceBranchName)_RunBenchmarks_Windows_$(version)$(Rev:.r)
+
+steps:
+- task: PowerShell@2
+  displayName: Create directories for results
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "PreviousResults" -ItemType "Directory"
+      New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "CurrentResults" -ItemType "Directory"
+
+- task: DownloadPipelineArtifact@2
+  displayName: Download previous results
+  inputs:
+    buildType: 'specific'
+    project: 'd286d31e-d5f6-443f-b126-d81074c91872'
+    definition: '3'
+    buildVersionToDownload: 'latest'
+    artifactName: 'BenchmarksResults'
+    targetPath: $(Build.ArtifactStagingDirectory)\PreviousResults
+
+- task: NuGetToolInstaller@1
+  displayName: Install NuGet tools
+
+- task: NuGetCommand@2
+  displayName: Restore packages
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  displayName: Build solution
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    
+- task: PowerShell@2
+  displayName: Setup MIDI ports for devices API benchmarks
+  inputs:
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+
+- task: VSTest@2
+  displayName: Run benchmarks
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    testSelector: testAssemblies
+    testAssemblyVer2:
+      '**/*.Benchmarks.dll'
+
+- task: CopyFiles@2
+  displayName: Copy results
+  inputs:
+    contents: '**/BenchmarkDotNet.Artifacts/**/*.*'
+    targetFolder: $(Build.ArtifactStagingDirectory)\CurrentResults
+
+- task: PowerShell@2
+  displayName: Print results
+  inputs:
+    targetType: 'inline'
+    script: |
+      $previousDirectory = "$(Build.ArtifactStagingDirectory)\PreviousResults"
+      $currentDirectory = "$(Build.ArtifactStagingDirectory)\CurrentResults"
+      $currentFiles = Get-ChildItem -Path "$currentDirectory" -Recurse -Name -Include *.json
+      
+      foreach ($fileName in $currentFiles)
+      {
+        $fileNameWithoutExtension = [System.IO.Path]::GetFileNameWithoutExtension($fileName)
+        $className = $fileNameWithoutExtension.Split('.')[-1].Replace("+", " -> ") -Replace "\-report\-brief",""
+
+        Write-Host "========================================"
+        Write-Host $className
+        
+        $currentJson = Get-Content "$currentDirectory\$fileName" | Out-String | ConvertFrom-Json
+
+        For ($i=0; $i -lt $currentJson.Benchmarks.Length; $i++)
+        {
+          Write-Host "----------------------------------------"
+          Write-Host $currentJson.Benchmarks[$i].MethodTitle
+  
+          $currentMean = [math]::Round($currentJson.Benchmarks[$i].Statistics.Mean / 1000000, 3)
+          
+          $previousFileExists = Test-Path -Path "$previousDirectory\$fileName"
+          If (-Not $previousFileExists)
+          {
+            Write-Host "    $currentMean"
+            continue
+          }
+          
+          $previousJson = Get-Content "$previousDirectory\$fileName" | Out-String | ConvertFrom-Json
+          $previousMean = [math]::Round($previousJson.Benchmarks[$i].Statistics.Mean / 1000000, 3)
+          
+          $delta = $currentMean - $previousMean
+          
+          $resultString = "    $previousMean ms -> $currentMean ms | $delta ms"
+          If ($currentMean -le $previousMean)
+          {
+            Write-Host $resultString
+          }
+          Else
+          {
+            Write-Host "##vso[task.logissue type=warning]$resultString"
+          }
+        }
+      }
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish results
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)\CurrentResults
+    artifact: BenchmarksResults

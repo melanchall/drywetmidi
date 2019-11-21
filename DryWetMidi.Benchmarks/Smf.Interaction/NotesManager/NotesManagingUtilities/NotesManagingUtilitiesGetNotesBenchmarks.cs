@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
+using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
@@ -14,27 +13,20 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Nested classes
 
-        [ClrJob]
-        public class Benchmarks
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_GetNotes
         {
-            private static readonly IEnumerable<Note> _midiFileNotes = CreateTestFile().GetNotes();
+            private static readonly MidiFile _midiFile = CreateTestFile();
 
             [Benchmark]
             public void GetNotes_MidiFile()
             {
-                const int iterationsNumber = 10;
-
-                for (int i = 0; i < iterationsNumber; i++)
-                {
-                    foreach (var note in _midiFileNotes)
-                    {
-                    }
-                }
+                var note = _midiFile.GetNotes();
             }
 
             private static MidiFile CreateTestFile()
             {
-                const int trackChunksNumber = 100;
+                const int trackChunksNumber = 50;
                 const int notesPerTrackChunk = 1000;
                 const int noteLength = 100;
 
@@ -65,7 +57,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark NotesManagingUtilities.GetNotes method.")]
         public void GetNotes()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_GetNotes>();
         }
 
         #endregion

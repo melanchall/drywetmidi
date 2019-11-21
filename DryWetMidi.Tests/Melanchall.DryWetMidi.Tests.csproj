@@ -1,143 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props')" />
-  <Import Project="..\packages\NUnit.3.11.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59309BC6-E1C3-40E8-AC58-C3793A5988B8}</ProjectGuid>
+    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Melanchall.DryWetMidi.Tests</RootNamespace>
-    <AssemblyName>Melanchall.DryWetMidi.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Common\DataTypes\FourBitNumberTests.cs" />
-    <Compile Include="Common\DataTypes\SevenBitNumberTests.cs" />
-    <Compile Include="Devices\DevicesConnector\DevicesConnectorTests.cs" />
-    <Compile Include="Devices\InpurDevice\InputDeviceTests.cs" />
-    <Compile Include="Devices\OutputDevice\OutputDeviceTests.cs" />
-    <Compile Include="Devices\Playback\PlaybackUtilitiesTests.cs" />
-    <Compile Include="Devices\Playback\PlaybackTests.cs" />
-    <Compile Include="Devices\Recording\RecordingTests.cs" />
-    <Compile Include="Devices\SendReceiveTests.cs" />
-    <Compile Include="Devices\Utilities\EventToSend.cs" />
-    <Compile Include="Devices\Utilities\MidiDevicesNames.cs" />
-    <Compile Include="Devices\Utilities\ReceivedEvent.cs" />
-    <Compile Include="Devices\Utilities\SendReceiveUtilities.cs" />
-    <Compile Include="Devices\Utilities\SentEvent.cs" />
-    <Compile Include="Smf.Interaction\Chords\ChordsManagingUtilitiesTests.cs" />
-    <Compile Include="Smf.Interaction\Notes\NotesManagingUtilitiesTests.cs" />
-    <Compile Include="Smf.Interaction\TimedEvents\TimedEventsManagingUtilitiesTests.cs" />
-    <Compile Include="Smf.Interaction\Utilities\MidiFileUtilitiesTests.cs" />
-    <Compile Include="Smf\MidiEventTests.cs" />
-    <Compile Include="Smf\Utilities\MidiFileUtilitiesTests.cs" />
-    <Compile Include="Smf\Utilities\TrackChunkUtilitiesTests.cs" />
-    <Compile Include="Utilities\ChordMethods.cs" />
-    <Compile Include="Utilities\LengthedObjectMethods.cs" />
-    <Compile Include="Utilities\TimedObjectMethods.cs" />
-    <Compile Include="Utilities\NoteMethods.cs" />
-    <Compile Include="MusicTheory\Scale\ScaleTests.cs" />
-    <Compile Include="MusicTheory\Scale\ScaleUtilitiesTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Smf.Interaction\Chords\ChordsManagerTests.cs" />
-    <Compile Include="Smf.Interaction\Chords\ChordTests.cs" />
-    <Compile Include="Smf.Interaction\Chords\ChordTestUtilities.cs" />
-    <Compile Include="Smf.Interaction\Notes\NotesManagerTests.cs" />
-    <Compile Include="Smf.Interaction\Notes\NoteTests.cs" />
-    <Compile Include="Smf.Interaction\Notes\NoteTestUtilities.cs" />
-    <Compile Include="MusicTheory\Interval\IntervalTests.cs" />
-    <Compile Include="MusicTheory\Note\NoteTests.cs" />
-    <Compile Include="Smf.Interaction\Notes\Utilities\GetNotesAndRestsUtilitiesTests.cs" />
-    <Compile Include="Smf.Interaction\Notes\Utilities\GetTimedEventsAndNotesUtilitiesTests.cs" />
-    <Compile Include="Smf.Interaction\Notes\Utilities\ResizeNotesUtilitiesTests.cs" />
-    <Compile Include="Smf.Interaction\Pattern\PatternTests.cs" />
-    <Compile Include="Smf.Interaction\TempoMap\TempoMapManagerTests.cs" />
-    <Compile Include="Smf.Interaction\TempoMap\TempoMapTests.cs" />
-    <Compile Include="Smf.Interaction\TimedEvents\TimedEventsManagerTests.cs" />
-    <Compile Include="Smf.Interaction\TimedEvents\TimedEventTests.cs" />
-    <Compile Include="Smf.Interaction\TimedObject\TimedObjectsCollectionTestUtilities.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\BarBeatTimeSpanTests.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\MetricTimeSpanTests.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\MidiTimeSpanTests.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\MusicalTimeSpanTests.cs" />
-    <Compile Include="Smf.Interaction\TimeSpan\TimeSpanTestUtilities.cs" />
-    <Compile Include="Smf\MidiFileTests.cs" />
-    <Compile Include="Tools\CsvConverter\CsvConverterTests.cs" />
-    <Compile Include="Tools\LengthedObjectsSplitter\ChordsSplitterTests.cs" />
-    <Compile Include="Tools\LengthedObjectsSplitter\LengthedObjectsSplitterTests.cs" />
-    <Compile Include="Tools\LengthedObjectsToolTests.cs" />
-    <Compile Include="Tools\LengthedObjectsSplitter\NotesSplitterTests.cs" />
-    <Compile Include="Tools\MidiFileSplitter\MidiFileSplitterTests.cs" />
-    <Compile Include="Tools\NotesMerger\NotesMergerTests.cs" />
-    <Compile Include="Tools\Quantizer\ChordsQuantizerTests.cs" />
-    <Compile Include="Tools\Quantizer\LengthedObjectsQuantizerTests.cs" />
-    <Compile Include="Tools\Quantizer\NotesQuantizerTests.cs" />
-    <Compile Include="Tools\Randomizer\ChordsRandomizerTests.cs" />
-    <Compile Include="Tools\Randomizer\LengthedObjectsRandomizerTests.cs" />
-    <Compile Include="Tools\Randomizer\NotesRandomizerTests.cs" />
-    <Compile Include="Utilities\TimeAndLength.cs" />
-    <Compile Include="Tools\TimeAndMidiEvent.cs" />
-    <Compile Include="Utilities\Equality\ArrayEquality.cs" />
-    <Compile Include="Utilities\Equality\ChordEquality.cs" />
-    <Compile Include="Utilities\Equality\MidiEventEquality.cs" />
-    <Compile Include="Utilities\Equality\MidiChunkEquality.cs" />
-    <Compile Include="Utilities\Equality\MidiFileEquality.cs" />
-    <Compile Include="Utilities\Equality\NoteEquality.cs" />
-    <Compile Include="Utilities\Equality\TimedEventEquality.cs" />
-    <Compile Include="Utilities\Equality\TimedObjectEquality.cs" />
-    <Compile Include="Utilities\TestFilesProvider.cs" />
+    <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj">
-      <Project>{499fdd77-17e3-4249-aae5-50941a47d35e}</Project>
-      <Name>Melanchall.DryWetMidi</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.11.0\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props'))" />
-  </Target>
+
 </Project>

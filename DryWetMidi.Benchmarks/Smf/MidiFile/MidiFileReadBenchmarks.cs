@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
-using Melanchall.DryWetMidi.Smf;
+using BenchmarkDotNet.Engines;
+using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf
@@ -9,95 +12,161 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf
     [TestFixture]
     public class MidiFileReadBenchmarks : BenchmarkTest
     {
+        #region Enums
+
+        public enum MidiFileSize
+        {
+            Small,
+            Middle,
+            Large
+        }
+
+        #endregion
+
+        #region Constants
+
+        private const string FilesPath = @"..\..\..\..\Resources\MIDI files\Valid";
+
+        #endregion
+
         #region Nested classes
 
-        [ClrJob]
-        public class Benchmarks
+        public abstract class Benchmarks
         {
-            private const string SmallFilesDirectoryName = "Small";
-            private const string MiddleFilesDirectoryName = "Middle";
-            private const string LargeFilesDirectoryName = "Large";
+            public abstract MidiFileFormat FileFormat { get; }
 
-            [Params(@"..\..\..\Resources\MIDI files\Valid")]
-            public string FilesPath { get; set; }
+            public abstract MidiFileSize FileSize { get; }
 
             [Benchmark]
-            public void Read_SingleTrack_Small()
+            public void Read()
             {
-                Read(MidiFileFormat.SingleTrack, SmallFilesDirectoryName);
+                MidiFileReadBenchmarks.Read(FileFormat, FileSize);
             }
+        }
 
-            [Benchmark]
-            public void Read_SingleTrack_Middle()
-            {
-                Read(MidiFileFormat.SingleTrack, MiddleFilesDirectoryName);
-            }
+        [InProcessSimpleJob(RunStrategy.Throughput)]
+        public class Benchmarks_SingleTrack_Small : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.SingleTrack;
 
-            [Benchmark]
-            public void Read_SingleTrack_Large()
-            {
-                Read(MidiFileFormat.SingleTrack, LargeFilesDirectoryName);
-            }
+            public override MidiFileSize FileSize => MidiFileSize.Small;
+        }
 
-            [Benchmark]
-            public void Read_MultiTrack_Small()
-            {
-                Read(MidiFileFormat.MultiTrack, SmallFilesDirectoryName);
-            }
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_SingleTrack_Middle : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.SingleTrack;
 
-            [Benchmark]
-            public void Read_MultiTrack_Middle()
-            {
-                Read(MidiFileFormat.MultiTrack, MiddleFilesDirectoryName);
-            }
+            public override MidiFileSize FileSize => MidiFileSize.Middle;
+        }
 
-            [Benchmark]
-            public void Read_MultiTrack_Large()
-            {
-                Read(MidiFileFormat.MultiTrack, LargeFilesDirectoryName);
-            }
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_SingleTrack_Large : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.SingleTrack;
 
-            [Benchmark]
-            public void Read_MultiSequence_Small()
-            {
-                Read(MidiFileFormat.MultiSequence, SmallFilesDirectoryName);
-            }
+            public override MidiFileSize FileSize => MidiFileSize.Large;
+        }
 
-            [Benchmark]
-            public void Read_MultiSequence_Middle()
-            {
-                Read(MidiFileFormat.MultiSequence, MiddleFilesDirectoryName);
-            }
+        [InProcessSimpleJob(RunStrategy.Throughput)]
+        public class Benchmarks_MultiTrack_Small : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.MultiTrack;
 
-            [Benchmark]
-            public void Read_MultiSequence_Large()
-            {
-                Read(MidiFileFormat.MultiSequence, LargeFilesDirectoryName);
-            }
+            public override MidiFileSize FileSize => MidiFileSize.Small;
+        }
 
-            private void Read(MidiFileFormat midiFileFormat, string directoryName)
-            {
-                Read(Path.Combine(FilesPath, midiFileFormat.ToString(), directoryName));
-            }
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_MultiTrack_Middle : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.MultiTrack;
 
-            private static void Read(string directoryPath)
-            {
-                foreach (var filePath in Directory.GetFiles(directoryPath))
-                {
-                    MidiFile.Read(filePath);
-                }
-            }
+            public override MidiFileSize FileSize => MidiFileSize.Middle;
+        }
+
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_MultiTrack_Large : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.MultiTrack;
+
+            public override MidiFileSize FileSize => MidiFileSize.Large;
+        }
+
+        [InProcessSimpleJob(RunStrategy.Throughput)]
+        public class Benchmarks_MultiSequence_Small : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.MultiSequence;
+
+            public override MidiFileSize FileSize => MidiFileSize.Small;
+        }
+
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_MultiSequence_Middle : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.MultiSequence;
+
+            public override MidiFileSize FileSize => MidiFileSize.Middle;
+        }
+
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_MultiSequence_Large : Benchmarks
+        {
+            public override MidiFileFormat FileFormat => MidiFileFormat.MultiSequence;
+
+            public override MidiFileSize FileSize => MidiFileSize.Large;
         }
 
         #endregion
 
         #region Test methods
 
-        [Test]
-        [Description("Benchmark MidiFile.Read method.")]
-        public void Read()
+        [TestCase(typeof(Benchmarks_SingleTrack_Small))]
+        [TestCase(typeof(Benchmarks_SingleTrack_Middle))]
+        [TestCase(typeof(Benchmarks_SingleTrack_Large))]
+        [TestCase(typeof(Benchmarks_MultiTrack_Small))]
+        [TestCase(typeof(Benchmarks_MultiTrack_Middle))]
+        [TestCase(typeof(Benchmarks_MultiTrack_Large))]
+        [TestCase(typeof(Benchmarks_MultiSequence_Small))]
+        [TestCase(typeof(Benchmarks_MultiSequence_Middle))]
+        [TestCase(typeof(Benchmarks_MultiSequence_Large))]
+        public void Read(Type type)
         {
-            RunBenchmarks<Benchmarks>();
+            var instance = Activator.CreateInstance(type);
+            var fileFormat = (MidiFileFormat)type.GetProperty(nameof(Benchmarks.FileFormat)).GetValue(instance);
+            var fileSize = (MidiFileSize)type.GetProperty(nameof(Benchmarks.FileSize)).GetValue(instance);
+
+            var eventsCount = GetEventsCount(fileFormat, fileSize);
+            RunBenchmarks(type, new MidiFileEventsCountsColumn(eventsCount));
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private int[] GetEventsCount(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize)
+        {
+            var result = new List<int>();
+
+            foreach (var midiFile in GetFiles(midiFileFormat, midiFileSize))
+            {
+                var events = midiFile.GetTrackChunks().SelectMany(c => c.Events).ToList();
+                result.Add(events.Count);
+            }
+
+            return result.ToArray();
+        }
+
+        protected static void Read(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize)
+        {
+            GetFiles(midiFileFormat, midiFileSize).ToList();
+        }
+
+        private static IEnumerable<MidiFile> GetFiles(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize)
+        {
+            foreach (var filePath in Directory.GetFiles(Path.Combine(FilesPath, midiFileFormat.ToString(), midiFileSize.ToString())))
+            {
+                yield return MidiFile.Read(filePath);
+            }
         }
 
         #endregion

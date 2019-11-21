@@ -1,0 +1,78 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    exclude:
+    - DryWetMidi.Benchmarks
+    - DryWetMidi.Tests
+    - Resources/CI/build-develop-win.yaml
+    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/build-artifacts-library.yaml
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  version: '5.0.0'
+
+name: $(TeamProject)_$(SourceBranchName)_BuildDocs_$(version)$(Rev:.r)
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: Install NuGet tools
+
+- task: NuGetCommand@2
+  displayName: Restore packages
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  displayName: Build solution
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PowerShell@2
+  displayName: Setup docs pages
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Writing build datetime to site footer..."
+      $content = Get-Content -Path Docs\docfx.json -Raw
+      $currentDateTime = Get-Date -Format "MMMM d, yyyy HH:mm:ss"
+      $content = $content -Replace "{BUILD_DATETIME}",$currentDateTime
+      Set-Content -Path Docs\docfx.json -Value $content
+      
+      Write-Host "Copying README.md as index.md to Docs folder..."
+      Copy-Item README.md -Destination Docs\index.md
+
+- task: PowerShell@2
+  displayName: Install docfx
+  inputs:
+    targetType: 'inline'
+    script: choco install docfx -y
+      
+- task: PowerShell@2
+  displayName: Build docs
+  inputs:
+    targetType: 'inline'
+    script: docfx Docs/docfx.json
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'Docs' artifact
+  inputs:
+    targetPath: Docs\_site
+    artifact: Docs
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'LatestReleaseNotes' artifact
+  inputs:
+    targetPath: Docs\latest-release-notes.md
+    artifact: LatestReleaseNotes

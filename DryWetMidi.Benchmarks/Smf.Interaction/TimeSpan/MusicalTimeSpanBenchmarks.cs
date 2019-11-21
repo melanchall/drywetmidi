@@ -1,6 +1,6 @@
 ﻿using System;
-using BenchmarkDotNet.Attributes.Jobs;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using BenchmarkDotNet.Engines;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
@@ -10,8 +10,8 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Nested classes
 
-        [ClrJob]
-        public class Benchmarks : TimeSpanBenchmarks<MusicalTimeSpan>
+        [InProcessSimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 5, targetCount: 5, invocationCount: 5)]
+        public class Benchmarks_Musical : TimeSpanBenchmarks<MusicalTimeSpan>
         {
             #region Constants
 
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark musical time/length conversion.")]
         public void ConvertMusicalTimeSpan()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_Musical>();
         }
 
         #endregion

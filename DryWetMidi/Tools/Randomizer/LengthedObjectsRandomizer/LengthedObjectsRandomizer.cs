@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <typeparam name="TSettings">The type of quantizer's settings.</typeparam>
     public abstract class LengthedObjectsRandomizer<TObject, TSettings> : Randomizer<TObject, TSettings>
         where TObject : ILengthedObject
-        where TSettings : LengthedObjectsRandomizingSettings, new()
+        where TSettings : LengthedObjectsRandomizingSettings<TObject>, new()
     {
         #region Methods
 

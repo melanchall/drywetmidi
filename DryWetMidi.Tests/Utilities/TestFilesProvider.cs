@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             };
         }
 
-        private const string ValidFilesPath = @"..\..\..\Resources\MIDI files\Valid";
+        private const string ValidFilesPath = @"..\..\..\..\Resources\MIDI files\Valid";
 
         #endregion
 

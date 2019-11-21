@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which lengthed objects should be randomized.
     /// </summary>
-    public abstract class LengthedObjectsRandomizingSettings : RandomizingSettings
+    public abstract class LengthedObjectsRandomizingSettings<TObject> : RandomizingSettings<TObject>
+        where TObject : ILengthedObject
     {
         #region Fields
 

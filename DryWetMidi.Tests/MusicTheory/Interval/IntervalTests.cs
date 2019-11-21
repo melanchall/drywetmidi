@@ -8,6 +8,39 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
     [TestFixture]
     public class IntervalTests
     {
+        #region Constants
+
+        // Perfect, Minor, Major, Dim, Aug
+        private static readonly object[] ParametersForGetByQualityCheck =
+        {
+            new object[] { 1, new int?[] { 0, null, null, null, 1 } },
+            new object[] { 2, new int?[] { null, 1, 2, 0, 3 } },
+            new object[] { 3, new int?[] { null, 3, 4, 2, 5 } },
+            new object[] { 4, new int?[] { 5, null, null, 4, 6 } },
+            new object[] { 5, new int?[] { 7, null, null, 6, 8 } },
+            new object[] { 6, new int?[] { null, 8, 9, 7, 10 } },
+            new object[] { 7, new int?[] { null, 10, 11, 9, 12 } },
+            new object[] { 8, new int?[] { 12, null, null, 11, 13 } },
+
+            new object[] { 9, new int?[] { null, 13, 14, 12, 15 } },
+            new object[] { 10, new int?[] { null, 15, 16, 14, 17 } },
+            new object[] { 11, new int?[] { 17, null, null, 16, 18 } },
+            new object[] { 12, new int?[] { 19, null, null, 18, 20 } },
+            new object[] { 13, new int?[] { null, 20, 21, 19, 22 } },
+            new object[] { 14, new int?[] { null, 22, 23, 21, 24 } },
+            new object[] { 15, new int?[] { 24, null, null, 23, 25 } },
+
+            new object[] { 16, new int?[] { null, 25, 26, 24, 27 } },
+            new object[] { 17, new int?[] { null, 27, 28, 26, 29 } },
+            new object[] { 18, new int?[] { 29, null, null, 28, 30 } },
+            new object[] { 19, new int?[] { 31, null, null, 30, 32 } },
+            new object[] { 20, new int?[] { null, 32, 33, 31, 34 } },
+            new object[] { 21, new int?[] { null, 34, 35, 33, 36 } },
+            new object[] { 22, new int?[] { 36, null, null, 35, 37 } }
+        };
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -106,6 +139,109 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void Parse_Invalid_NotAnInterval()
         {
             ParseInvalid<FormatException>("abc");
+        }
+
+        [TestCase(1, true)]
+        [TestCase(2, false)]
+        [TestCase(3, false)]
+        [TestCase(4, true)]
+        [TestCase(5, true)]
+        [TestCase(6, false)]
+        [TestCase(7, false)]
+        [TestCase(8, true)]
+        [TestCase(9, false)]
+        [TestCase(10, false)]
+        [TestCase(11, true)]
+        [TestCase(12, true)]
+        [TestCase(13, false)]
+        [TestCase(14, false)]
+        [TestCase(15, true)]
+        public void IsPerfect(int intervalNumber, bool expectedIsPerfect)
+        {
+            Assert.AreEqual(expectedIsPerfect, Interval.IsPerfect(intervalNumber), "Interval number 'is perfect' is invalid.");
+        }
+
+        [Test]
+        public void IsPerfect_OutOfRange()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Interval.IsPerfect(0));
+        }
+
+        [TestCase(1, new[] { true, false, false, false, true })]
+        [TestCase(2, new[] { false, true, true, true, true })]
+        [TestCase(3, new[] { false, true, true, true, true })]
+        [TestCase(4, new[] { true, false, false, true, true })]
+        [TestCase(5, new[] { true, false, false, true, true })]
+        [TestCase(6, new[] { false, true, true, true, true })]
+        [TestCase(7, new[] { false, true, true, true, true })]
+        [TestCase(8, new[] { true, false, false, true, true })]
+        [TestCase(9, new[] { false, true, true, true, true })]
+        [TestCase(10, new[] { false, true, true, true, true })]
+        [TestCase(11, new[] { true, false, false, true, true })]
+        [TestCase(12, new[] { true, false, false, true, true })]
+        [TestCase(13, new[] { false, true, true, true, true })]
+        [TestCase(14, new[] { false, true, true, true, true })]
+        [TestCase(15, new[] { true, false, false, true, true })]
+        public void IsQualityApplicable(int intervalNumber, bool[] expectedIsApplicable)
+        {
+            var qualities = new[]
+            {
+                IntervalQuality.Perfect,
+                IntervalQuality.Minor,
+                IntervalQuality.Major,
+                IntervalQuality.Diminished,
+                IntervalQuality.Augmented
+            };
+
+            for (var i = 0; i < qualities.Length; i++)
+            {
+                var quality = qualities[i];
+                var expected = expectedIsApplicable[i];
+
+                Assert.AreEqual(expected, Interval.IsQualityApplicable(quality, intervalNumber), "Interval number 'is quality applicable' is invalid.");
+            }
+        }
+
+        [Test]
+        [TestCaseSource(nameof(ParametersForGetByQualityCheck))]
+        public void Get_ByQuality(int intervalNumber, int?[] expectedHalfTones)
+        {
+            var qualities = new[]
+            {
+                IntervalQuality.Perfect,
+                IntervalQuality.Minor,
+                IntervalQuality.Major,
+                IntervalQuality.Diminished,
+                IntervalQuality.Augmented
+            };
+
+            for (var i = 0; i < qualities.Length; i++)
+            {
+                var quality = qualities[i];
+                var expected = expectedHalfTones[i];
+                if (expected == null)
+                {
+                    Assert.IsFalse(Interval.IsQualityApplicable(quality, intervalNumber), "Interval applicability is invalid.");
+                    continue;
+                }
+
+                var interval = Interval.Get(quality, intervalNumber);
+                Assert.AreEqual(Interval.FromHalfSteps(expected.Value), interval, "Interval is invalid.");
+            }
+        }
+
+        [TestCase("P5", IntervalQuality.Perfect, 5)]
+        [TestCase("m3", IntervalQuality.Minor, 3)]
+        [TestCase("M3", IntervalQuality.Major, 3)]
+        [TestCase("D21", IntervalQuality.Diminished, 21)]
+        [TestCase("d8", IntervalQuality.Diminished, 8)]
+        [TestCase("A7", IntervalQuality.Augmented, 7)]
+        [TestCase("a18", IntervalQuality.Augmented, 18)]
+        public void Parse_QualityNumber(string input, IntervalQuality expectedIntervalQuality, int expectedIntervalNumber)
+        {
+            var parsedInterval = Interval.Parse(input);
+            var expectedInterval = Interval.Get(expectedIntervalQuality, expectedIntervalNumber);
+            Assert.AreEqual(expectedInterval, parsedInterval, "Parsed interval is invalid.");
         }
 
         #endregion

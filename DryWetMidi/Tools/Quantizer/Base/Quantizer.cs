@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <typeparam name="TObject">The type of objects to quantize.</typeparam>
     /// <typeparam name="TSettings">The type of quantizer's settings.</typeparam>
     public abstract class Quantizer<TObject, TSettings>
-        where TSettings : QuantizingSettings, new()
+        where TSettings : QuantizingSettings<TObject>, new()
     {
         #region Methods
 
@@ -26,13 +26,15 @@ namespace Melanchall.DryWetMidi.Tools
         {
             settings = settings ?? new TSettings();
 
-            var lastTime = objects.Where(o => o != null)
+            Func<TObject, bool> filter = o => o != null && settings.Filter?.Invoke(o) != false;
+
+            var lastTime = objects.Where(filter)
                                   .Select(o => GetObjectTime(o, settings))
                                   .DefaultIfEmpty()
                                   .Max();
             var times = GetGridTimes(grid, lastTime, tempoMap).ToList();
 
-            foreach (var obj in objects.Where(o => o != null))
+            foreach (var obj in objects.Where(filter))
             {
                 var oldTime = GetObjectTime(obj, settings);
                 var quantizedTime = FindNearestTime(times,

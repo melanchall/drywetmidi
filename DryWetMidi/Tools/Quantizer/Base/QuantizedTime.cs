@@ -1,4 +1,4 @@
-﻿using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets the distance between an object's current time and the nearest grid time as time span
-        /// of the type specified by <see cref="QuantizingSettings.DistanceCalculationType"/>.
+        /// of the type specified by <see cref="QuantizingSettings{TObject}.DistanceCalculationType"/>.
         /// </summary>
         public ITimeSpan ConvertedDistanceToGridTime { get; }
 

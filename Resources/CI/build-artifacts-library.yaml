@@ -1,0 +1,84 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    exclude:
+    - DryWetMidi.Benchmarks
+    - DryWetMidi.Tests
+    - Docs/*
+    - README.md
+    - Resources/CI/build-develop-win.yaml
+    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/build-artifacts-docs.yaml
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  version: '5.0.0'
+
+name: $(TeamProject)_$(SourceBranchName)_BuildLibrary_$(version)$(Rev:.r)
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: Install NuGet tools
+
+- task: NuGetCommand@2
+  displayName: Restore packages
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  displayName: Build solution
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Create NuGet package
+  inputs: 
+    command: 'pack'
+    projects: '**/Melanchall.DryWetMidi.csproj'
+    outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'NuGetPackage' artifact
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+    artifact: NuGetPackage
+
+- task: PowerShell@2
+  displayName: Delete pdb files
+  inputs:
+    targetType: 'inline'
+    script: |
+      Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
+
+- task: ArchiveFiles@2
+  displayName: Archive .NET Framework binaries
+  inputs:
+    rootFolderOrFile: 'DryWetMidi\bin\$(buildConfiguration)\net45'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(version)-bin-net45.zip'
+
+- task: ArchiveFiles@2
+  displayName: Archive .NET Standard binaries
+  inputs:
+    rootFolderOrFile: 'DryWetMidi\bin\$(buildConfiguration)\netstandard2.0'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(version)-bin-netstandard20.zip'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'Binaries' artifact
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)\Binaries
+    artifact: Binaries

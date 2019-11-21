@@ -193,6 +193,49 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreEqual(NoteName.F, scale.GetDegree(ScaleDegree.Subdominant));
         }
 
+        [Test]
+        public void GetNotesNames()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var notesNames = scale.GetNotesNames().Take(18);
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    NoteName.C, NoteName.D, NoteName.E, NoteName.F, NoteName.G, NoteName.A, NoteName.B,
+                    NoteName.C, NoteName.D, NoteName.E, NoteName.F, NoteName.G, NoteName.A, NoteName.B,
+                    NoteName.C, NoteName.D, NoteName.E, NoteName.F
+                },
+                notesNames,
+                "Notes names are invalid.");
+        }
+
+        [Test]
+        public void GetStep_Tonic()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var step = scale.GetStep(0);
+
+            Assert.AreEqual(NoteName.C, step, "Step is invalid.");
+        }
+
+        [Test]
+        public void GetStep_WithinOctave()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var step = scale.GetStep(3);
+
+            Assert.AreEqual(NoteName.F, step, "Step is invalid.");
+        }
+
+        [Test]
+        public void GetStep_NextOctave()
+        {
+            var scale = new Scale(ScaleIntervals.Major, NoteName.C);
+            var step = scale.GetStep(9);
+
+            Assert.AreEqual(NoteName.E, step, "Step is invalid.");
+        }
+
         #endregion
 
         #region Private methods

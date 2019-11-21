@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
-using Melanchall.DryWetMidi.Smf;
-using Melanchall.DryWetMidi.Smf.Interaction;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Engines;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
@@ -12,27 +11,20 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Nested classes
 
-        [ClrJob]
-        public class Benchmarks
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_GetTimedEvents
         {
-            private static readonly IEnumerable<TimedEvent> _midiFileTimedEvents = CreateTestFile().GetTimedEvents();
+            private static readonly MidiFile _midiFile = CreateTestFile();
 
             [Benchmark]
             public void GetTimedEvents_MidiFile()
             {
-                const int iterationsNumber = 10;
-
-                for (int i = 0; i < iterationsNumber; i++)
-                {
-                    foreach (var timedEvent in _midiFileTimedEvents)
-                    {
-                    }
-                }
+                var timedEvents = _midiFile.GetTimedEvents();
             }
 
             private static MidiFile CreateTestFile()
             {
-                const int trackChunksNumber = 100;
+                const int trackChunksNumber = 10;
                 const int eventsPerTrackChunk = 10000;
 
                 var midiFile = new MidiFile();
@@ -64,7 +56,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         [Description("Benchmark TimedEventsManagingUtilities.GetTimedEvents method.")]
         public void GetTimedEvents()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_GetTimedEvents>();
         }
 
         #endregion

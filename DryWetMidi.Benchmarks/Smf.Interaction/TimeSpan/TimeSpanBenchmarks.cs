@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 {
@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
     {
         #region Constants
 
-        protected const int TimesCount = 5000;
+        protected const int TimesCount = 2000;
         protected const long TimeOffset = 10;
         protected const long Length = 100;
 

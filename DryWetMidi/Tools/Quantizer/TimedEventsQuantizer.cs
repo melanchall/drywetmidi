@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which timed events should be quantized.
     /// </summary>
-    public class TimedEventsQuantizingSettings : QuantizingSettings
+    public class TimedEventsQuantizingSettings : QuantizingSettings<TimedEvent>
     {
     }
 

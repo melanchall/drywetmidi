@@ -38,13 +38,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         }
 
         [Test]
-        [Description("Parse invalid scale where root note's name is invalid.")]
-        public void Parse_Invalid_RootNoteNameIsInvalid()
-        {
-            ParseInvalid<FormatException>("E# major");
-        }
-
-        [Test]
         [Description("Parse invalid scale where a negative interval is out of range.")]
         public void Parse_Invalid_IntervalIsOutOfRange_Negative()
         {

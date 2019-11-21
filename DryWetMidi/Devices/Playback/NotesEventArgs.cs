@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Devices
 {
     /// <summary>
     /// Holds notes collection for <see cref="Playback.NotesPlaybackStarted"/> and
-    /// <see cref="Playback.NotesPlaybackFinished"/>
+    /// <see cref="Playback.NotesPlaybackFinished"/>.
     /// </summary>
     public sealed class NotesEventArgs : EventArgs
     {

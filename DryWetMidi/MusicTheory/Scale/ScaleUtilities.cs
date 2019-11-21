@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale"><see cref="Scale"/> to get degree of.</param>
         /// <param name="degree"><see cref="ScaleDegree"/> representing a degree of the
         /// <paramref name="scale"/>.</param>
-        /// <returns>The degree of the scale.</returns>
+        /// <returns><see cref="NoteName"/> which is the degree of the scale.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="degree"/> specified an
         /// invalid value.</exception>
@@ -29,21 +29,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsInvalidEnumValue(nameof(degree), degree);
+            ThrowIfDegreeIsOutOfRange(scale, degree);
 
-            var degreeNumber = (int)degree;
-            if (degreeNumber >= scale.Intervals.Count())
-                throw new ArgumentOutOfRangeException(nameof(degree),
-                                                      degree,
-                                                      "Degree is out of range for the scale.");
-
-            return scale.GetNotes()
-                        .Skip(degreeNumber)
-                        .First()
-                        .NoteName;
+            return scale.GetStep((int)degree);
         }
 
         /// <summary>
-        /// Gets all notes that belong to a musical scale.
+        /// Gets <see cref="NoteName"/> corresponding to the specified step of a musical scale.
+        /// </summary>
+        /// <param name="scale"><see cref="Scale"/> to get step of.</param>
+        /// <param name="step">Step of the scale.</param>
+        /// <returns><see cref="NoteName"/> which is the step of the scale.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="step"/> is negative.</exception>
+        public static NoteName GetStep(this Scale scale, int step)
+        {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+            ThrowIfArgument.IsNegative(nameof(step), step, "Step is negative.");
+
+            return scale.GetNotesNames().Skip(step).First();
+        }
+
+        /// <summary>
+        /// Gets all MIDI notes that belong to the specified scale.
         /// </summary>
         /// <param name="scale"><see cref="Scale"/> to get notes of.</param>
         /// <returns>Notes that belong to the <paramref name="scale"/>.</returns>
@@ -67,6 +75,31 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         yield break;
 
                     yield return Note.Get((SevenBitNumber)noteNumber);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns infinite collection of note names that belong to the specified scale.
+        /// </summary>
+        /// <param name="scale"><see cref="Scale"/> to get note names of.</param>
+        /// <returns>Note names that belong to the <paramref name="scale"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
+        public static IEnumerable<NoteName> GetNotesNames(this Scale scale)
+        {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+
+            var lastNoteNumber = (int)scale.RootNote;
+            yield return scale.RootNote;
+
+            while (true)
+            {
+                foreach (var interval in scale.Intervals)
+                {
+                    var noteNumber = (lastNoteNumber + interval) % Octave.OctaveSize;
+                    yield return (NoteName)noteNumber;
+
+                    lastNoteNumber = noteNumber;
                 }
             }
         }
@@ -165,6 +198,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return scale.GetDescendingNotes(note)
                         .Skip(1)
                         .FirstOrDefault();
+        }
+
+        private static void ThrowIfDegreeIsOutOfRange(Scale scale, ScaleDegree degree)
+        {
+            var degreeNumber = (int)degree;
+            if (degreeNumber >= scale.Intervals.Count())
+                throw new ArgumentOutOfRangeException(nameof(degree),
+                                                      degree,
+                                                      "Degree is out of range for the scale.");
         }
 
         #endregion

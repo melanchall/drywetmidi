@@ -1,23 +1,26 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal sealed class MidiClock : IDisposable
+    /// <summary>
+    /// MIDI clock used to drive playback or any timer-based object.
+    /// </summary>
+    public sealed class MidiClock : IDisposable
     {
         #region Constants
 
         private const double DefaultSpeed = 1.0;
-        private const uint NoTimerId = 0;
 
         #endregion
 
         #region Events
 
-        public event EventHandler<TickEventArgs> Tick;
+        /// <summary>
+        /// Occurs when new tick generated.
+        /// </summary>
+        public event EventHandler<TickedEventArgs> Ticked;
 
         #endregion
 
@@ -25,28 +28,45 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private readonly uint _interval;
+        private readonly bool _startImmediately;
         private readonly Stopwatch _stopwatch = new Stopwatch();
-
-        private uint _resolution;
-        private MidiTimerWinApi.TimeProc _tickCallback;
-        private uint _timerId = NoTimerId;
+        private TimeSpan _startTime = TimeSpan.Zero;
 
         private double _speed = DefaultSpeed;
+
+        private bool _started;
+
+        private readonly ITickGenerator _tickGenerator;
 
         #endregion
 
         #region Constructor
 
-        public MidiClock(uint interval)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiClock"/> with the specified
+        /// value indicating whether first tick should be generated immediately after clock started, and
+        /// tick generator.
+        /// </summary>
+        /// <param name="startImmediately">A value indicating whether first tick should be generated
+        /// immediately after clock started.</param>
+        /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval. Null for
+        /// no tick generator.</param>
+        public MidiClock(bool startImmediately, ITickGenerator tickGenerator)
         {
-            _interval = interval;
+            _startImmediately = startImmediately;
+
+            _tickGenerator = tickGenerator;
+            if (_tickGenerator != null)
+                _tickGenerator.TickGenerated += OnTickGenerated;
         }
 
         #endregion
 
         #region Finalizer
 
+        /// <summary>
+        /// Finalizes the current instance of the <see cref="MidiClock"/>.
+        /// </summary>
         ~MidiClock()
         {
             Dispose(false);
@@ -56,22 +76,34 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets a value indicating whether MIDI clock is currently running or not.
+        /// </summary>
         public bool IsRunning => _stopwatch.IsRunning;
 
-        public TimeSpan StartTime { get; set; } = TimeSpan.Zero;
+        /// <summary>
+        /// Gets the current time of clock as <see cref="TimeSpan"/>.
+        /// </summary>
+        public TimeSpan CurrentTime { get; private set; } = TimeSpan.Zero;
 
-        public TimeSpan CurrentTime { get; set; } = TimeSpan.Zero;
-
+        /// <summary>
+        /// Gets or sets the speed of clock, i.e. the speed of current time changing.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public double Speed
         {
             get { return _speed; }
             set
             {
+                EnsureIsNotDisposed();
+                ThrowIfArgument.IsNegative(nameof(value), value, "Speed is negative.");
+
                 var start = IsRunning;
 
                 Stop();
 
-                StartTime = _stopwatch.Elapsed;
+                _startTime = _stopwatch.Elapsed;
                 _speed = value;
 
                 if (start)
@@ -83,78 +115,115 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
+        /// <summary>
+        /// Starts/resumes the clock.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void Start()
         {
+            EnsureIsNotDisposed();
+
             if (IsRunning)
                 return;
 
-            if (_timerId == NoTimerId)
-            {
-
-                var timeCaps = default(MidiTimerWinApi.TIMECAPS);
-                ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
-
-                _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
-                _tickCallback = OnTick;
-
-                ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
-                _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
-                if (_timerId == 0)
-                {
-                    var errorCode = Marshal.GetLastWin32Error();
-                    throw new MidiDeviceException("Unable to initialize MIDI clock.", new Win32Exception(errorCode));
-                }
-            }
+            if (!_started)
+                _tickGenerator?.TryStart();
 
             _stopwatch.Start();
+
+            if (_startImmediately)
+                OnTicked();
+
+            _started = true;
         }
 
+        /// <summary>
+        /// Stops the clock.Current time will not be changed.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void Stop()
         {
+            EnsureIsNotDisposed();
+
             _stopwatch.Stop();
         }
 
+        /// <summary>
+        /// Stops, sets current time to zero and starts the clock.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void Restart()
         {
+            EnsureIsNotDisposed();
+
             Stop();
-            Reset();
+            ResetCurrentTime();
             Start();
         }
 
-        public void Reset()
+        /// <summary>
+        /// Resets the current time of the clock setting it to zero.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
+        public void ResetCurrentTime()
         {
-            _stopwatch.Reset();
-            StartTime = TimeSpan.Zero;
-            CurrentTime = TimeSpan.Zero;
+            EnsureIsNotDisposed();
+
+            SetCurrentTime(TimeSpan.Zero);
         }
 
-        private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        /// <summary>
+        /// Sets the current time of the clock.
+        /// </summary>
+        /// <param name="time">New current time of the clock.</param>
+        /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
+        public void SetCurrentTime(TimeSpan time)
         {
-            if (!IsRunning)
+            EnsureIsNotDisposed();
+
+            _stopwatch.Reset();
+            _startTime = time;
+            CurrentTime = time;
+        }
+
+        /// <summary>
+        /// Generates new clock's tick manually without pulse from tick generator.
+        /// </summary>
+        public void Tick()
+        {
+            if (!IsRunning || _disposed)
                 return;
 
-            CurrentTime = StartTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
-            Tick?.Invoke(this, new TickEventArgs(CurrentTime));
+            CurrentTime = _startTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
+            OnTicked();
         }
 
-        private static void ProcessMmResult(uint mmResult)
+        private void OnTickGenerated(object sender, EventArgs e)
         {
-            switch (mmResult)
-            {
-                case MidiWinApi.MMSYSERR_ERROR:
-                case MidiWinApi.TIMERR_NOCANDO:
-                    throw new MidiDeviceException("Error occurred on MIDI clock.");
-            }
+            Tick();
+        }
+
+        private void OnTicked()
+        {
+            Ticked?.Invoke(this, new TickedEventArgs(CurrentTime));
+        }
+
+        private void EnsureIsNotDisposed()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException("MIDI clock is disposed.");
         }
 
         #endregion
 
         #region IDisposable
 
+        /// <summary>
+        /// Releases all resources used by the current <see cref="MidiClock"/>.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool disposing)
@@ -164,12 +233,11 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-            }
-
-            if (_timerId != NoTimerId)
-            {
-                MidiTimerWinApi.timeEndPeriod(_resolution);
-                MidiTimerWinApi.timeKillEvent(_timerId);
+                if (_tickGenerator != null)
+                {
+                    _tickGenerator.TickGenerated -= OnTickGenerated;
+                    _tickGenerator.Dispose();
+                }
             }
 
             _disposed = true;

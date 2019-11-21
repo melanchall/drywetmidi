@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Text;
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Json;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using NUnit.Framework;
 
@@ -29,8 +32,16 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
         protected void RunBenchmarks<TBenchmarks>()
         {
-            var summary = BenchmarkRunner.Run<TBenchmarks>(ManualConfig.Create(DefaultConfig.Instance)
-                                                                       .With(JsonExporter.Brief));
+            RunBenchmarks(typeof(TBenchmarks));
+        }
+
+        protected void RunBenchmarks(Type type, params IColumn[] columns)
+        {
+            var summary = BenchmarkRunner.Run(
+                type,
+                ManualConfig.Create(DefaultConfig.Instance)
+                            .With(AsciiDocExporter.Default, JsonExporter.Brief)
+                            .With(columns));
 
             // Assert validation errors
 
@@ -38,16 +49,39 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
             foreach (var error in summary.ValidationErrors)
             {
-                var benchmarkDisplayInfo = error.Benchmark?.DisplayInfo;
-                var isCritical = error.IsCritical;
-                var message = error.Message;
-
-                validationErrorsStringBuilder.AppendLine($"[{benchmarkDisplayInfo} | Critical={isCritical}]: {message}. ");
+                validationErrorsStringBuilder.AppendLine($"Validation error (critical={error.IsCritical}): {error.Message}");
             }
 
             var validationError = validationErrorsStringBuilder.ToString().Trim();
+            if (!string.IsNullOrEmpty(validationError))
+                Assert.Inconclusive(validationError);
 
-            Assert.IsEmpty(validationError, validationError);
+            // Assert build/generate/execute errors
+
+            var buildErrorsStringBuilder = new StringBuilder();
+
+            foreach (var report in summary.Reports)
+            {
+                var buildResult = report.BuildResult;
+
+                if (!buildResult.IsBuildSuccess)
+                    buildErrorsStringBuilder.AppendLine($"Build exception={buildResult.BuildException.Message}");
+
+                if (!buildResult.IsGenerateSuccess)
+                    buildErrorsStringBuilder.AppendLine($"Generate exception={buildResult.GenerateException.Message}");
+
+                foreach (var executeResult in report.ExecuteResults)
+                {
+                    if (executeResult.ExitCode == 0)
+                        continue;
+
+                    buildErrorsStringBuilder.AppendLine($"Execute result: exit code is not 0");
+                }
+            }
+
+            var buildError = buildErrorsStringBuilder.ToString().Trim();
+            if (!string.IsNullOrEmpty(buildError))
+                Assert.Inconclusive(buildError);
         }
 
         #endregion
