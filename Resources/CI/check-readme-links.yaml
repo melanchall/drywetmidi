@@ -1,0 +1,50 @@
+schedules:
+- cron: "0 8,14,19,23 * * *"
+  displayName: Check README links schedule
+  branches:
+    include:
+    - master
+    - develop
+  always: true
+
+pool:
+  vmImage: 'windows-latest'
+
+name: $(TeamProject)_$(SourceBranchName)_CheckReadmeLinks_$(Rev:r)
+
+steps:
+- task: PowerShell@2
+  displayName: Check links
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Finding links..."
+      $matches = Select-String -Path README.md -Pattern '\[(.+?)\]\((.+?)\)' -AllMatches | Foreach-Object { $_.Matches }
+      
+      Write-Host "Checking links..."
+      foreach ($match in $matches)
+      {
+        try
+        {
+          $linkName = $match.Groups[1].Value
+          $linkUrl = $match.Groups[2].Value
+          Write-Host "Checking '$linkName' ($linkUrl)"
+          
+          $HTTP_Request = [System.Net.WebRequest]::Create($linkUrl)
+          $HTTP_Response = $HTTP_Request.GetResponse()
+          $HTTP_Status = [int]$HTTP_Response.StatusCode
+          
+          If ($HTTP_Status -eq 200) {
+            Write-Host "OK"
+          }
+          Else {
+            Write-Host "##vso[task.logissue type=error]FAILED with status $$HTTP_Status"
+          }
+          
+          $HTTP_Response.Close()
+        }
+        catch
+        {
+          Write-Host "##vso[task.logissue type=error]FAILED by exception"
+        }
+      }
