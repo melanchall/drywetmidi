@@ -1,11 +1,11 @@
 schedules:
-- cron: "0 8,14,19,23 * * *"
+- cron: '0 0,9,15,20 * * *'
   displayName: Check README links schedule
   branches:
     include:
     - master
     - develop
-  always: true
+  always: 'true'
 
 pool:
   vmImage: 'windows-latest'
