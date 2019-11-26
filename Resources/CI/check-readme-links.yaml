@@ -1,3 +1,20 @@
+trigger:
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - README.md
+
+pr:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - README.md
+
 schedules:
 - cron: '0 0,9,15,20 * * *'
   displayName: Check README links schedule

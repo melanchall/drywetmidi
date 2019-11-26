@@ -8,8 +8,8 @@ trigger:
     exclude:
     - DryWetMidi.Benchmarks
     - DryWetMidi.Tests
-    - Docs/*
-    - README.md
+    - Docs
+    - **/*.md
     - Resources/CI/build-develop-win.yaml
     - Resources/CI/benchmarks-develop-win.yaml
     - Resources/CI/build-artifacts-docs.yaml

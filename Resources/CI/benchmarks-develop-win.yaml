@@ -7,12 +7,12 @@ trigger:
   paths:
     exclude:
     - DryWetMidi.Tests
-    - README.md
+    - Docs
+    - **/*.md
     - Resources/CI/build-develop-win.yaml
     - Resources/CI/build-artifacts-library.yaml
     - Resources/CI/build-artifacts-docs.yaml
     - Resources/CI/check-readme-links.yaml
-    - Docs/*
 
 pool:
   vmImage: 'windows-latest'
