@@ -77,3 +77,24 @@ steps:
   inputs:
     targetPath: Docs\latest-release-notes.md
     artifact: LatestReleaseNotes
+
+- task: PowerShell@2
+  displayName: Prepare release notes for midi.org
+  inputs:
+    targetType: 'inline'
+    script: |
+      $content = Get-Content Docs\latest-release-notes.md
+      $content = $content `
+        -Replace '\[`?(.+?)`?\]\(.+?\)', '[i]$1[/i]' `
+        -Replace '# (.+?)$', '[u]$1[/u]' `
+        -Replace '\*\*(.+?)\*\*', '[b]$1[/b]' `
+        -Replace '`(.+?)`', '[i]$1[/i]' `
+        -Replace '^\*', '[*]' `
+        -Replace '^  \*', '  -'
+      Set-Content -Path "Docs\latest-release-notes-midi-org.txt" -Value $content
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'LatestReleaseNotesMidiOrg' artifact
+  inputs:
+    targetPath: Docs\latest-release-notes-midi-org.txt
+    artifact: LatestReleaseNotesMidiOrg
