@@ -212,7 +212,7 @@ Pattern pattern = new PatternBuilder()
 
     // Set default note length to triplet eighth and default octave to 5
     .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
-    .SetOctave(5)
+    .SetOctave(Octave.Get(5))
 
     // Now we can add triplet eighth notes of the 5th octave in a simple way
     .Note(NoteName.A)
@@ -230,7 +230,7 @@ DryWetMIDI provides [devices API](https://github.com/melanchall/drywetmidi/wiki/
 ```csharp
 using System;
 using Melanchall.DryWetMidi.Devices;
-using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Core;
 
 // ...
 
