@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Represents an input MIDI device.
     /// </summary>
-    public sealed class InputDevice : MidiDevice
+    public sealed class InputDevice : MidiDevice, IInputDevice
     {
         #region Constants
 

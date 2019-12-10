@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="inputDevice">Input MIDI device to capture MIDI data from.</param>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null. -or-
         /// <paramref name="inputDevice"/> is null.</exception>
-        public Recording(TempoMap tempoMap, InputDevice inputDevice)
+        public Recording(TempoMap tempoMap, IInputDevice inputDevice)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets the input MIDI device to record MIDI data from.
         /// </summary>
-        public InputDevice InputDevice { get; }
+        public IInputDevice InputDevice { get; }
 
         /// <summary>
         /// Gets a value indicating whether recording is currently running or not.
