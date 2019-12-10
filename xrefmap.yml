@@ -9576,6 +9576,57 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.IClockDrivenObject.TickClock
   nameWithType: IClockDrivenObject.TickClock
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice
+  name: IInputDevice
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html
+  commentId: T:Melanchall.DryWetMidi.Devices.IInputDevice
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice
+  nameWithType: IInputDevice
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice.EventReceived
+  name: EventReceived
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html#Melanchall_DryWetMidi_Devices_IInputDevice_EventReceived
+  commentId: E:Melanchall.DryWetMidi.Devices.IInputDevice.EventReceived
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice.EventReceived
+  nameWithType: IInputDevice.EventReceived
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents
+  name: IsListeningForEvents
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html#Melanchall_DryWetMidi_Devices_IInputDevice_IsListeningForEvents
+  commentId: P:Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents
+  nameWithType: IInputDevice.IsListeningForEvents
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents*
+  name: IsListeningForEvents
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html#Melanchall_DryWetMidi_Devices_IInputDevice_IsListeningForEvents_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents
+  nameWithType: IInputDevice.IsListeningForEvents
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening
+  name: StartEventsListening()
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html#Melanchall_DryWetMidi_Devices_IInputDevice_StartEventsListening
+  commentId: M:Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening()
+  nameWithType: IInputDevice.StartEventsListening()
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening*
+  name: StartEventsListening
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html#Melanchall_DryWetMidi_Devices_IInputDevice_StartEventsListening_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening
+  nameWithType: IInputDevice.StartEventsListening
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening
+  name: StopEventsListening()
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html#Melanchall_DryWetMidi_Devices_IInputDevice_StopEventsListening
+  commentId: M:Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening()
+  nameWithType: IInputDevice.StopEventsListening()
+- uid: Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening*
+  name: StopEventsListening
+  href: api/Melanchall.DryWetMidi.Devices.IInputDevice.html#Melanchall_DryWetMidi_Devices_IInputDevice_StopEventsListening_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening
+  nameWithType: IInputDevice.StopEventsListening
 - uid: Melanchall.DryWetMidi.Devices.InputDevice
   name: InputDevice
   href: api/Melanchall.DryWetMidi.Devices.InputDevice.html
@@ -12189,12 +12240,12 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.Recording
   fullName: Melanchall.DryWetMidi.Devices.Recording
   nameWithType: Recording
-- uid: Melanchall.DryWetMidi.Devices.Recording.#ctor(Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.InputDevice)
-  name: Recording(TempoMap, InputDevice)
-  href: api/Melanchall.DryWetMidi.Devices.Recording.html#Melanchall_DryWetMidi_Devices_Recording__ctor_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_InputDevice_
-  commentId: M:Melanchall.DryWetMidi.Devices.Recording.#ctor(Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.InputDevice)
-  fullName: Melanchall.DryWetMidi.Devices.Recording.Recording(Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.InputDevice)
-  nameWithType: Recording.Recording(TempoMap, InputDevice)
+- uid: Melanchall.DryWetMidi.Devices.Recording.#ctor(Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IInputDevice)
+  name: Recording(TempoMap, IInputDevice)
+  href: api/Melanchall.DryWetMidi.Devices.Recording.html#Melanchall_DryWetMidi_Devices_Recording__ctor_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IInputDevice_
+  commentId: M:Melanchall.DryWetMidi.Devices.Recording.#ctor(Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IInputDevice)
+  fullName: Melanchall.DryWetMidi.Devices.Recording.Recording(Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IInputDevice)
+  nameWithType: Recording.Recording(TempoMap, IInputDevice)
 - uid: Melanchall.DryWetMidi.Devices.Recording.#ctor*
   name: Recording
   href: api/Melanchall.DryWetMidi.Devices.Recording.html#Melanchall_DryWetMidi_Devices_Recording__ctor_
