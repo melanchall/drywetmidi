@@ -129,7 +129,7 @@ Provides a way to connect an input MIDI device to an output MIDI device.
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_Melanchall_DryWetMidi_Devices_InputDevice_Melanchall_DryWetMidi_Devices_OutputDevice___" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor(Melanchall.DryWetMidi.Devices.InputDevice,Melanchall.DryWetMidi.Devices.OutputDevice[])">DevicesConnector(InputDevice, OutputDevice[])</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_Melanchall_DryWetMidi_Devices_InputDevice_Melanchall_DryWetMidi_Devices_IOutputDevice___" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor(Melanchall.DryWetMidi.Devices.InputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])">DevicesConnector(InputDevice, IOutputDevice[])</h4>
   <div class="markdown level1 summary">
 Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html">DevicesConnector</a> with the specified
 input and output MIDI devices.
@@ -137,7 +137,7 @@ input and output MIDI devices.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DevicesConnector(InputDevice inputDevice, params OutputDevice[] outputDevices)</code></pre>
+    <pre><code class="lang-csharp hljs">public DevicesConnector(InputDevice inputDevice, params IOutputDevice[] outputDevices)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -155,13 +155,13 @@ input and output MIDI devices.
         <td>Input MIDI device to connect to <code data-dev-comment-type="paramref" class="paramref">outputDevices</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>[]</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a>[]</td>
         <td><span class="parametername">outputDevices</span></td>
         <td>Output MIDI devices to connect <code data-dev-comment-type="paramref" class="paramref">inputDevice</code> to.</td>
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_Melanchall_DryWetMidi_Devices_InputDevice_Melanchall_DryWetMidi_Devices_OutputDevice____remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_Melanchall_DryWetMidi_Devices_InputDevice_Melanchall_DryWetMidi_Devices_IOutputDevice____remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 <code data-dev-comment-type="paramref" class="paramref">inputDevice</code> will not be actually connected to <code data-dev-comment-type="paramref" class="paramref">outputDevices</code> after
 an instance of <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html">DevicesConnector</a> is created. You must call <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_Connect">Connect()</a> method
@@ -192,7 +192,7 @@ to establish connection between devices.
   <a id="Melanchall_DryWetMidi_Devices_DevicesConnector_InputDevice_" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnector.InputDevice*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_DevicesConnector_InputDevice" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnector.InputDevice">InputDevice</h4>
   <div class="markdown level1 summary">
-Gets an input MIDI device to connect to <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>.
+Gets an input MIDI device to connect to <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_OutputDevices">OutputDevices</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -222,7 +222,7 @@ Gets output MIDI devices to connect <a class="xref" href="Melanchall.DryWetMidi.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IReadOnlyCollection&lt;OutputDevice&gt; OutputDevices { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IReadOnlyCollection&lt;IOutputDevice&gt; OutputDevices { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -234,7 +234,7 @@ Gets output MIDI devices to connect <a class="xref" href="Melanchall.DryWetMidi.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlycollection-1">IReadOnlyCollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>&gt;</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlycollection-1">IReadOnlyCollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -254,7 +254,7 @@ Connects <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.ht
   <a id="Melanchall_DryWetMidi_Devices_DevicesConnector_Disconnect_" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnector.Disconnect*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_DevicesConnector_Disconnect" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnector.Disconnect">Disconnect()</h4>
   <div class="markdown level1 summary">
-Disconnects <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_InputDevice">InputDevice</a> from <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>.
+Disconnects <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_InputDevice">InputDevice</a> from <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_OutputDevices">OutputDevices</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -305,7 +305,7 @@ Finalizes the current instance of the <a class="xref" href="Melanchall.DryWetMid
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on December 10, 2019 17:33:47
+            Generated by <b>DocFX</b> on December 11, 2019 18:07:33
             
           </div>
         </div>
