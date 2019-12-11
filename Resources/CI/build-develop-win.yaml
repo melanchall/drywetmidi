@@ -26,13 +26,10 @@ variables:
 name: $(TeamProject)_$(SourceBranchName)_BuildAndTest_Windows_$(version)$(Rev:.r)
 
 steps:
-- task: NuGetToolInstaller@1
-  displayName: Install NuGet tools
-
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   displayName: Restore packages
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'restore'
 
 - task: VSBuild@1
   displayName: Build solution
