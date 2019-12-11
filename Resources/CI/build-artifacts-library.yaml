@@ -27,9 +27,6 @@ variables:
 name: $(TeamProject)_$(SourceBranchName)_BuildLibrary_$(version)$(Rev:.r)
 
 steps:
-- task: NuGetToolInstaller@1
-  displayName: Install NuGet tools
-
 - task: NuGetCommand@2
   displayName: Restore packages
   inputs:
