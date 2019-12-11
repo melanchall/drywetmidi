@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Devices
 {
     /// <summary>
-    /// Provides data for the <see cref="OutputDevice.EventSent"/> event.
+    /// Provides data for the <see cref="IOutputDevice.EventSent"/> event.
     /// </summary>
     public sealed class MidiEventSentEventArgs : EventArgs
     {
@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Properties
 
         /// <summary>
-        /// Gets MIDI event sent to <see cref="OutputDevice"/>.
+        /// Gets MIDI event sent to <see cref="IOutputDevice"/>.
         /// </summary>
         public MidiEvent Event { get; }
 

@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
-        public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
+        public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
             : this(new[] { events }, tempoMap, outputDevice, clockSettings)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
-        public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
+        public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
             : this(GetTimedObjects(events), tempoMap, outputDevice, clockSettings)
         {
         }
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null. -or-
         /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
-        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, OutputDevice outputDevice, MidiClockSettings clockSettings = null)
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
             : this(timedObjects, tempoMap, clockSettings)
         {
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
@@ -210,7 +210,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets or sets the output MIDI device to play MIDI data through.
         /// </summary>
-        public OutputDevice OutputDevice { get; set; }
+        public IOutputDevice OutputDevice { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
