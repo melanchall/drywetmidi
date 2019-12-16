@@ -19,6 +19,16 @@ namespace Melanchall.DryWetMidi.Core
             var channelEvent = (ChannelEvent)Activator.CreateInstance(eventType);
             channelEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
             channelEvent.Channel = channel;
+
+            var noteOnEvent = channelEvent as NoteOnEvent;
+            if (noteOnEvent != null && settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff && noteOnEvent.Velocity == 0)
+                channelEvent = new NoteOffEvent
+                {
+                    DeltaTime = noteOnEvent.DeltaTime,
+                    Channel = noteOnEvent.Channel,
+                    NoteNumber = noteOnEvent.NoteNumber
+                };
+
             return channelEvent;
         }
 

@@ -219,22 +219,6 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            if (settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff)
-            {
-                var noteOnEvent = midiEvent as NoteOnEvent;
-                if (noteOnEvent?.Velocity == 0)
-                {
-                    midiEvent = new NoteOffEvent
-                    {
-                        DeltaTime = noteOnEvent.DeltaTime,
-                        Channel = noteOnEvent.Channel,
-                        NoteNumber = noteOnEvent.NoteNumber
-                    };
-                }
-            }
-
-            //
-
             if (midiEvent is ChannelEvent)
                 channelEventStatusByte = statusByte;
 

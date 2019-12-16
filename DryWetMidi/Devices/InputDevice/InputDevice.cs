@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -18,7 +17,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         private const int SysExBufferLength = 2048;
         private const int ChannelParametersBufferSize = 2;
-        private static readonly ReadingSettings ReadingSettings = new ReadingSettings();
         private static readonly int MidiTimeCodeComponentsCount = Enum.GetValues(typeof(MidiTimeCodeComponent)).Length;
 
         #endregion
@@ -52,8 +50,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private readonly MemoryStream _channelMessageMemoryStream = new MemoryStream(ChannelParametersBufferSize);
-        private readonly MidiReader _channelEventReader;
+        private readonly MidiEventReader _channelEventReader = new MidiEventReader(ChannelParametersBufferSize);
 
         private IntPtr _sysExHeaderPointer = IntPtr.Zero;
 
@@ -68,8 +65,7 @@ namespace Melanchall.DryWetMidi.Devices
         private InputDevice(int id)
             : base(id)
         {
-            _channelEventReader = new MidiReader(_channelMessageMemoryStream);
-
+            _channelEventReader.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
             SetDeviceInformation();
         }
 
@@ -327,11 +323,7 @@ namespace Melanchall.DryWetMidi.Devices
                 byte statusByte, firstDataByte, secondDataByte;
                 MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
 
-                WriteBytesToStream(_channelMessageMemoryStream, firstDataByte, secondDataByte);
-
-                var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
-                var midiEvent = eventReader.Read(_channelEventReader, ReadingSettings, statusByte);
-
+                var midiEvent = _channelEventReader.Read(statusByte, new[] { firstDataByte, secondDataByte });
                 OnEventReceived(midiEvent);
 
                 if (RaiseMidiTimeCodeReceived)
@@ -414,7 +406,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                _channelMessageMemoryStream.Dispose();
                 _channelEventReader.Dispose();
             }
 
