@@ -5097,6 +5097,91 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.MidiEvent.UnknownContentSize
   fullName: Melanchall.DryWetMidi.Core.MidiEvent.UnknownContentSize
   nameWithType: MidiEvent.UnknownContentSize
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader
+  name: MidiEventReader
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiEventReader
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader
+  nameWithType: MidiEventReader
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.#ctor
+  name: MidiEventReader()
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader__ctor
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventReader.#ctor
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.MidiEventReader()
+  nameWithType: MidiEventReader.MidiEventReader()
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.#ctor(System.Int32)
+  name: MidiEventReader(Int32)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader__ctor_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventReader.#ctor(System.Int32)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.MidiEventReader(System.Int32)
+  nameWithType: MidiEventReader.MidiEventReader(Int32)
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.#ctor*
+  name: MidiEventReader
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventReader.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.MidiEventReader
+  nameWithType: MidiEventReader.MidiEventReader
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.Dispose
+  name: Dispose()
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_Dispose
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventReader.Dispose
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.Dispose()
+  nameWithType: MidiEventReader.Dispose()
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.Dispose*
+  name: Dispose
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_Dispose_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventReader.Dispose
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.Dispose
+  nameWithType: MidiEventReader.Dispose
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte,System.Byte[])
+  name: Read(Byte, Byte[])
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_Read_System_Byte_System_Byte___
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte,System.Byte[])
+  name.vb: Read(Byte, Byte())
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte, System.Byte[])
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte, System.Byte())
+  nameWithType: MidiEventReader.Read(Byte, Byte[])
+  nameWithType.vb: MidiEventReader.Read(Byte, Byte())
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte[])
+  name: Read(Byte[])
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_Read_System_Byte___
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte[])
+  name.vb: Read(Byte())
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte[])
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte())
+  nameWithType: MidiEventReader.Read(Byte[])
+  nameWithType.vb: MidiEventReader.Read(Byte())
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte[],System.Int32,System.Int32)
+  name: Read(Byte[], Int32, Int32)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_Read_System_Byte___System_Int32_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte[],System.Int32,System.Int32)
+  name.vb: Read(Byte(), Int32, Int32)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte[], System.Int32, System.Int32)
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiEventReader.Read(System.Byte(), System.Int32, System.Int32)
+  nameWithType: MidiEventReader.Read(Byte[], Int32, Int32)
+  nameWithType.vb: MidiEventReader.Read(Byte(), Int32, Int32)
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.Read*
+  name: Read
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_Read_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventReader.Read
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.Read
+  nameWithType: MidiEventReader.Read
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.ReadingSettings
+  name: ReadingSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_ReadingSettings
+  commentId: P:Melanchall.DryWetMidi.Core.MidiEventReader.ReadingSettings
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.ReadingSettings
+  nameWithType: MidiEventReader.ReadingSettings
+- uid: Melanchall.DryWetMidi.Core.MidiEventReader.ReadingSettings*
+  name: ReadingSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiEventReader.html#Melanchall_DryWetMidi_Core_MidiEventReader_ReadingSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventReader.ReadingSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventReader.ReadingSettings
+  nameWithType: MidiEventReader.ReadingSettings
 - uid: Melanchall.DryWetMidi.Core.MidiEventType
   name: MidiEventType
   href: api/Melanchall.DryWetMidi.Core.MidiEventType.html
