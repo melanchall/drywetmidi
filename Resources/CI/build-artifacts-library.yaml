@@ -28,16 +28,10 @@ name: $(TeamProject)_$(SourceBranchName)_BuildLibrary_$(version)$(Rev:.r)
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: Restore packages
-  inputs:
-    command: 'restore'
-
-- task: VSBuild@1
   displayName: Build solution
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Create NuGet package
