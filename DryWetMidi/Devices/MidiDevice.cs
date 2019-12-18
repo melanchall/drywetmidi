@@ -152,18 +152,6 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>Return value of winmm function which gets error description.</returns>
         protected abstract uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText);
 
-        /// <summary>
-        /// Writes bytes to <see cref="MemoryStream"/> and returns position of the stream to its beginning.
-        /// </summary>
-        /// <param name="memoryStream"><see cref="MemoryStream"/> to write bytes to.</param>
-        /// <param name="bytes">Bytes to write to <paramref name="memoryStream"/>.</param>
-        protected static void WriteBytesToStream(MemoryStream memoryStream, params byte[] bytes)
-        {
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            memoryStream.Write(bytes, 0, bytes.Length);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-        }
-
         internal abstract IntPtr GetHandle();
 
         #endregion

@@ -13,98 +13,106 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void Read_StatusByte_DataBytes()
         {
-            var midiEventReader = new MidiEventReader();
-            Read_StatusByte_DataBytes(
-                midiEventReader,
-                0x92,
-                new byte[] { 0x12, 0x56 },
-                new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
-                {
-                    Channel = (FourBitNumber)0x2
-                });
-            Read_StatusByte_DataBytes(
-                midiEventReader,
-                0xB3,
-                new byte[] { 0x23, 0x7F },
-                new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
-                {
-                    Channel = (FourBitNumber)0x3
-                });
+            using (var midiEventReader = new MidiEventReader())
+            {
+                Read_StatusByte_DataBytes(
+                    midiEventReader,
+                    0x92,
+                    new byte[] { 0x12, 0x56 },
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                    {
+                        Channel = (FourBitNumber)0x2
+                    });
+                Read_StatusByte_DataBytes(
+                    midiEventReader,
+                    0xB3,
+                    new byte[] { 0x23, 0x7F },
+                    new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
+                    {
+                        Channel = (FourBitNumber)0x3
+                    });
+            }
         }
 
         [Test]
         public void Read_Bytes()
         {
-            var midiEventReader = new MidiEventReader();
-            Read_Bytes(
-                midiEventReader,
-                new byte[] { 0x92, 0x12, 0x56 },
-                new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
-                {
-                    Channel = (FourBitNumber)0x2
-                });
-            Read_Bytes(
-                midiEventReader,
-                new byte[] { 0x90, 0x12, 0x00 },
-                new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
-                {
-                    Channel = (FourBitNumber)0x0
-                });
-            Read_Bytes(
-                midiEventReader,
-                new byte[] { 0xB3, 0x23, 0x7F },
-                new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
-                {
-                    Channel = (FourBitNumber)0x3
-                });
+            using (var midiEventReader = new MidiEventReader())
+            {
+                Read_Bytes(
+                    midiEventReader,
+                    new byte[] { 0x92, 0x12, 0x56 },
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                    {
+                        Channel = (FourBitNumber)0x2
+                    });
+                Read_Bytes(
+                    midiEventReader,
+                    new byte[] { 0x90, 0x12, 0x00 },
+                    new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
+                    {
+                        Channel = (FourBitNumber)0x0
+                    });
+                Read_Bytes(
+                    midiEventReader,
+                    new byte[] { 0xB3, 0x23, 0x7F },
+                    new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
+                    {
+                        Channel = (FourBitNumber)0x3
+                    });
+            }
         }
 
         [Test]
         public void Read_Bytes_SilentNoteOnAsNoteOn()
         {
-            var midiEventReader = new MidiEventReader();
-            midiEventReader.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
+            using (var midiEventReader = new MidiEventReader())
+            {
+                midiEventReader.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
 
-            Read_Bytes(
-                midiEventReader,
-                new byte[] { 0x92, 0x12, 0x00 },
-                new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
-                {
-                    Channel = (FourBitNumber)0x2
-                });
-            Read_Bytes(
-                midiEventReader,
-                new byte[] { 0xB3, 0x23, 0x7F },
-                new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
-                {
-                    Channel = (FourBitNumber)0x3
-                });
+                Read_Bytes(
+                    midiEventReader,
+                    new byte[] { 0x92, 0x12, 0x00 },
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
+                    {
+                        Channel = (FourBitNumber)0x2
+                    });
+                Read_Bytes(
+                    midiEventReader,
+                    new byte[] { 0xB3, 0x23, 0x7F },
+                    new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
+                    {
+                        Channel = (FourBitNumber)0x3
+                    });
+            }
         }
 
         [Test]
         public void Read_Bytes_Offset_Length()
         {
-            var midiEventReader = new MidiEventReader();
-            var bytes = new byte[] { 0x92, 0x12, 0x56, 0xB3, 0x23, 0x7F };
+            using (var midiEventReader = new MidiEventReader())
+            {
+                var bytes = new byte[] { 0x92, 0x12, 0x56, 0xB3, 0x23, 0x7F };
 
-            Read_Bytes_Offset_Length(
-                midiEventReader,
-                bytes,
-                0,
-                3,
-                new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
-                {
-                    Channel = (FourBitNumber)0x2
-                });
-            Read_Bytes_Offset_Length(
-                midiEventReader,
-                bytes,
-                3,
-                3,
-                new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
-                {
-                    Channel = (FourBitNumber)0x3
-                });
+                Read_Bytes_Offset_Length(
+                    midiEventReader,
+                    bytes,
+                    0,
+                    3,
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                    {
+                        Channel = (FourBitNumber)0x2
+                    });
+                Read_Bytes_Offset_Length(
+                    midiEventReader,
+                    bytes,
+                    3,
+                    3,
+                    new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
+                    {
+                        Channel = (FourBitNumber)0x3
+                    });
+            }
         }
 
         #endregion
