@@ -13,5 +13,7 @@ namespace Melanchall.DryWetMidi.Devices
         void PrepareForEventsSending();
 
         void SendEvent(MidiEvent midiEvent);
+
+        void SendEvent(byte[] bytes, int offset, int length);
     }
 }

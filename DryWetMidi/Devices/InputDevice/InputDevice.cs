@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private readonly BytesToMidiEventConverter _channelEventReader = new BytesToMidiEventConverter(ChannelParametersBufferSize);
+        private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize);
 
         private IntPtr _sysExHeaderPointer = IntPtr.Zero;
 
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Devices
         private InputDevice(int id)
             : base(id)
         {
-            _channelEventReader.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
+            _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
             SetDeviceInformation();
         }
 
@@ -323,7 +323,7 @@ namespace Melanchall.DryWetMidi.Devices
                 byte statusByte, firstDataByte, secondDataByte;
                 MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
 
-                var midiEvent = _channelEventReader.Convert(statusByte, new[] { firstDataByte, secondDataByte });
+                var midiEvent = _bytesToMidiEventConverter.Convert(statusByte, new[] { firstDataByte, secondDataByte });
                 OnEventReceived(midiEvent);
 
                 if (RaiseMidiTimeCodeReceived)
@@ -406,7 +406,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                _channelEventReader.Dispose();
+                _bytesToMidiEventConverter.Dispose();
             }
 
             StopEventsListening();

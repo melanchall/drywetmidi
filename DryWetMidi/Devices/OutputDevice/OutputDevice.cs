@@ -31,7 +31,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private readonly MidiEventToBytesConverter _midiEventToBytesWriter = new MidiEventToBytesConverter(ChannelEventBufferSize);
+        private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ChannelEventBufferSize);
+        private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter();
+
         private MidiWinApi.MidiMessageCallback _callback;
 
         private readonly HashSet<IntPtr> _sysExHeadersPointers = new HashSet<IntPtr>();
@@ -172,6 +174,17 @@ namespace Melanchall.DryWetMidi.Devices
                 if (sysExEvent != null)
                     SendSysExEvent(sysExEvent);
             }
+        }
+
+        public void SendEvent(byte[] bytes, int offset, int length)
+        {
+            ThrowIfArgument.IsNull(nameof(bytes), bytes);
+            ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
+            ThrowIfArgument.IsOutOfRange(nameof(offset), offset, 0, bytes.Length - 1, "Offset is out of range.");
+            ThrowIfArgument.IsOutOfRange(nameof(length), length, 0, bytes.Length - offset, "Length is out of range.");
+
+            var midiEvent = _bytesToMidiEventConverter.Convert(bytes, offset, length);
+            SendEvent(midiEvent);
         }
 
         /// <summary>
@@ -332,7 +345,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private int PackShortEvent(MidiEvent midiEvent)
         {
-            var bytes = _midiEventToBytesWriter.Convert(midiEvent, ChannelEventBufferSize);
+            var bytes = _midiEventToBytesConverter.Convert(midiEvent, ChannelEventBufferSize);
             return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);
         }
 
@@ -423,7 +436,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                _midiEventToBytesWriter.Dispose();
+                _midiEventToBytesConverter.Dispose();
+                _bytesToMidiEventConverter.Dispose();
             }
 
             DestroyHandle();
