@@ -176,17 +176,6 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        public void SendEvent(byte[] bytes, int offset, int length)
-        {
-            ThrowIfArgument.IsNull(nameof(bytes), bytes);
-            ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
-            ThrowIfArgument.IsOutOfRange(nameof(offset), offset, 0, bytes.Length - 1, "Offset is out of range.");
-            ThrowIfArgument.IsOutOfRange(nameof(length), length, 0, bytes.Length - offset, "Length is out of range.");
-
-            var midiEvent = _bytesToMidiEventConverter.Convert(bytes, offset, length);
-            SendEvent(midiEvent);
-        }
-
         /// <summary>
         /// Turns off all notes that were turned on by sending Note On events, and which haven't
         /// yet been turned off by respective Note Off events.

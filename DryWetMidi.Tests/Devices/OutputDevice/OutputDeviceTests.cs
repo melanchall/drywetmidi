@@ -78,54 +78,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
-        [Retry(RetriesNumber)]
-        [Test]
-        public void SendEvent_Bytes()
-        {
-            var midiEvent = new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
-            {
-                Channel = (FourBitNumber)0x2
-            };
-            var bytes = new byte[] { 0x92, 0x12, 0x56 };
-
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
-            {
-                MidiEvent eventSent = null;
-                outputDevice.EventSent += (_, e) => eventSent = e.Event;
-
-                using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
-                {
-                    MidiEvent eventReceived = null;
-                    inputDevice.EventReceived += (_, e) => eventReceived = e.Event;
-
-                    inputDevice.StartEventsListening();
-
-                    outputDevice.PrepareForEventsSending();
-                    outputDevice.SendEvent(bytes, 0, bytes.Length);
-
-                    var timeout = TimeSpan.FromMilliseconds(15);
-                    var isEventSentReceived = SpinWait.SpinUntil(() => eventSent != null && eventReceived != null, timeout);
-                    Assert.IsTrue(isEventSentReceived, "Event either not sent ot not received.");
-
-                    Assert.IsTrue(MidiEventEquality.AreEqual(midiEvent, eventSent, false), "Sent event is invalid.");
-                    Assert.IsTrue(MidiEventEquality.AreEqual(eventSent, eventReceived, false), "Received event is invalid.");
-                }
-            }
-        }
-
-        [Test]
-        public void SendEvent_Bytes_Invalid()
-        {
-            var bytes = new byte[] { 0xF9, 0x11, 0x22, 0x33, 0x44, 0x55 };
-
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
-            {
-                Assert.Throws<UnknownChannelEventException>(
-                    () => outputDevice.SendEvent(bytes, 0, bytes.Length),
-                    "Invalid event sending doesn't throw exception.");
-            }
-        }
-
         #endregion
     }
 }
