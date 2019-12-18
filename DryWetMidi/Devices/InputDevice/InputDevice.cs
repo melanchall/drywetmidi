@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private readonly MidiEventReader _channelEventReader = new MidiEventReader(ChannelParametersBufferSize);
+        private readonly BytesToMidiEventConverter _channelEventReader = new BytesToMidiEventConverter(ChannelParametersBufferSize);
 
         private IntPtr _sysExHeaderPointer = IntPtr.Zero;
 
@@ -323,7 +323,7 @@ namespace Melanchall.DryWetMidi.Devices
                 byte statusByte, firstDataByte, secondDataByte;
                 MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
 
-                var midiEvent = _channelEventReader.Read(statusByte, new[] { firstDataByte, secondDataByte });
+                var midiEvent = _channelEventReader.Convert(statusByte, new[] { firstDataByte, secondDataByte });
                 OnEventReceived(midiEvent);
 
                 if (RaiseMidiTimeCodeReceived)

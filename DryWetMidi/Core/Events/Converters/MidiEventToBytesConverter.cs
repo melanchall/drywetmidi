@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
-    public sealed class MidiEventWriter : IDisposable
+    public sealed class MidiEventToBytesConverter : IDisposable
     {
         #region Fields
 
@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Constructor
 
-        public MidiEventWriter(int capacity)
+        public MidiEventToBytesConverter(int capacity)
         {
             ThrowIfArgument.IsNegative(nameof(capacity), capacity, "Capacity is negative.");
 
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Core
             _midiWriter = new MidiWriter(_dataBytesStream);
         }
 
-        public MidiEventWriter()
+        public MidiEventToBytesConverter()
             : this(0)
         {
         }
@@ -34,29 +34,28 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        public WritingSettings WritingSettings { get; set; } = new WritingSettings();
+        public WritingSettings WritingSettings { get; } = new WritingSettings();
 
         #endregion
 
         #region Methods
 
-        public byte[] Write(MidiEvent midiEvent)
+        public byte[] Convert(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
-            return Write(midiEvent, 0);
+            return Convert(midiEvent, 0);
         }
 
-        public byte[] Write(MidiEvent midiEvent, int minSize)
+        public byte[] Convert(MidiEvent midiEvent, int minSize)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
             ThrowIfArgument.IsNegative(nameof(minSize), minSize, "Min size is negative.");
 
             _dataBytesStream.Seek(0, SeekOrigin.Begin);
 
-            var settings = WritingSettings ?? new WritingSettings();
             var eventWriter = EventWriterFactory.GetWriter(midiEvent);
-            eventWriter.Write(midiEvent, _midiWriter, settings, true);
+            eventWriter.Write(midiEvent, _midiWriter, WritingSettings, true);
 
             var buffer = _dataBytesStream.GetBuffer();
             var dataSize = _dataBytesStream.Position;
@@ -71,7 +70,7 @@ namespace Melanchall.DryWetMidi.Core
         #region IDisposable
 
         /// <summary>
-        /// Releases all resources used by the current instance of the <see cref="MidiEventReader"/> class.
+        /// Releases all resources used by the current instance of the <see cref="BytesToMidiEventConverter"/> class.
         /// </summary>
         public void Dispose()
         {

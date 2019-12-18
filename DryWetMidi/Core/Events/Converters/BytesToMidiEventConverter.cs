@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
-    public sealed class MidiEventReader : IDisposable
+    public sealed class BytesToMidiEventConverter : IDisposable
     {
         #region Fields
 
@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Constructor
 
-        public MidiEventReader(int capacity)
+        public BytesToMidiEventConverter(int capacity)
         {
             ThrowIfArgument.IsNegative(nameof(capacity), capacity, "Capacity is negative.");
 
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Core
             _midiReader = new MidiReader(_dataBytesStream);
         }
 
-        public MidiEventReader()
+        public BytesToMidiEventConverter()
             : this(0)
         {
         }
@@ -34,33 +34,32 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        public ReadingSettings ReadingSettings { get; set; } = new ReadingSettings();
+        public ReadingSettings ReadingSettings { get; } = new ReadingSettings();
 
         #endregion
 
         #region Methods
 
-        public MidiEvent Read(byte statusByte, byte[] dataBytes)
+        public MidiEvent Convert(byte statusByte, byte[] dataBytes)
         {
             _dataBytesStream.Seek(0, SeekOrigin.Begin);
             if (dataBytes != null)
                 _dataBytesStream.Write(dataBytes, 0, dataBytes.Length);
             _dataBytesStream.Seek(0, SeekOrigin.Begin);
 
-            var settings = ReadingSettings ?? new ReadingSettings();
             var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
-            return eventReader.Read(_midiReader, settings, statusByte);
+            return eventReader.Read(_midiReader, ReadingSettings, statusByte);
         }
 
-        public MidiEvent Read(byte[] bytes)
+        public MidiEvent Convert(byte[] bytes)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
             ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
 
-            return Read(bytes, 0, bytes.Length);
+            return Convert(bytes, 0, bytes.Length);
         }
 
-        public MidiEvent Read(byte[] bytes, int offset, int length)
+        public MidiEvent Convert(byte[] bytes, int offset, int length)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
             ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
@@ -70,7 +69,7 @@ namespace Melanchall.DryWetMidi.Core
             var dataBytes = new byte[bytes.Length - 1 - offset];
             Array.Copy(bytes, offset + 1, dataBytes, 0, dataBytes.Length);
 
-            return Read(bytes[offset], dataBytes);
+            return Convert(bytes[offset], dataBytes);
         }
 
         #endregion
@@ -78,7 +77,7 @@ namespace Melanchall.DryWetMidi.Core
         #region IDisposable
 
         /// <summary>
-        /// Releases all resources used by the current instance of the <see cref="MidiEventReader"/> class.
+        /// Releases all resources used by the current instance of the <see cref="BytesToMidiEventConverter"/> class.
         /// </summary>
         public void Dispose()
         {

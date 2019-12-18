@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private readonly MidiEventWriter _midiEventWriter = new MidiEventWriter(ChannelEventBufferSize);
+        private readonly MidiEventToBytesConverter _midiEventToBytesWriter = new MidiEventToBytesConverter(ChannelEventBufferSize);
         private MidiWinApi.MidiMessageCallback _callback;
 
         private readonly HashSet<IntPtr> _sysExHeadersPointers = new HashSet<IntPtr>();
@@ -332,7 +332,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private int PackShortEvent(MidiEvent midiEvent)
         {
-            var bytes = _midiEventWriter.Write(midiEvent, ChannelEventBufferSize);
+            var bytes = _midiEventToBytesWriter.Convert(midiEvent, ChannelEventBufferSize);
             return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);
         }
 
@@ -423,7 +423,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                _midiEventWriter.Dispose();
+                _midiEventToBytesWriter.Dispose();
             }
 
             DestroyHandle();
