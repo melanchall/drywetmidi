@@ -5422,6 +5422,76 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.MidiEventType.UnknownMeta
   fullName: Melanchall.DryWetMidi.Core.MidiEventType.UnknownMeta
   nameWithType: MidiEventType.UnknownMeta
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter
+  name: MidiEventWriter
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiEventWriter
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter
+  nameWithType: MidiEventWriter
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor
+  name: MidiEventWriter()
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter__ctor
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.MidiEventWriter()
+  nameWithType: MidiEventWriter.MidiEventWriter()
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor(System.Int32)
+  name: MidiEventWriter(Int32)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter__ctor_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor(System.Int32)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.MidiEventWriter(System.Int32)
+  nameWithType: MidiEventWriter.MidiEventWriter(Int32)
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor*
+  name: MidiEventWriter
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.MidiEventWriter
+  nameWithType: MidiEventWriter.MidiEventWriter
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose
+  name: Dispose()
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter_Dispose
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose()
+  nameWithType: MidiEventWriter.Dispose()
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose*
+  name: Dispose
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter_Dispose_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose
+  nameWithType: MidiEventWriter.Dispose
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent)
+  name: Write(MidiEvent)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter_Write_Melanchall_DryWetMidi_Core_MidiEvent_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent)
+  nameWithType: MidiEventWriter.Write(MidiEvent)
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent,System.Int32)
+  name: Write(MidiEvent, Int32)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter_Write_Melanchall_DryWetMidi_Core_MidiEvent_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent,System.Int32)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent, System.Int32)
+  nameWithType: MidiEventWriter.Write(MidiEvent, Int32)
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.Write*
+  name: Write
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter_Write_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventWriter.Write
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.Write
+  nameWithType: MidiEventWriter.Write
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings
+  name: WritingSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter_WritingSettings
+  commentId: P:Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings
+  nameWithType: MidiEventWriter.WritingSettings
+- uid: Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings*
+  name: WritingSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiEventWriter.html#Melanchall_DryWetMidi_Core_MidiEventWriter_WritingSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings
+  nameWithType: MidiEventWriter.WritingSettings
 - uid: Melanchall.DryWetMidi.Core.MidiException
   name: MidiException
   href: api/Melanchall.DryWetMidi.Core.MidiException.html
@@ -10849,22 +10919,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.MidiDevice.ToString
   nameWithType: MidiDevice.ToString
-- uid: Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(System.IO.MemoryStream,System.Byte[])
-  name: WriteBytesToStream(MemoryStream, Byte[])
-  href: api/Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_System_IO_MemoryStream_System_Byte___
-  commentId: M:Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(System.IO.MemoryStream,System.Byte[])
-  name.vb: WriteBytesToStream(MemoryStream, Byte())
-  fullName: Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(System.IO.MemoryStream, System.Byte[])
-  fullName.vb: Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream(System.IO.MemoryStream, System.Byte())
-  nameWithType: MidiDevice.WriteBytesToStream(MemoryStream, Byte[])
-  nameWithType.vb: MidiDevice.WriteBytesToStream(MemoryStream, Byte())
-- uid: Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream*
-  name: WriteBytesToStream
-  href: api/Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_WriteBytesToStream_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.MidiDevice.WriteBytesToStream
-  nameWithType: MidiDevice.WriteBytesToStream
 - uid: Melanchall.DryWetMidi.Devices.MidiDeviceException
   name: MidiDeviceException
   href: api/Melanchall.DryWetMidi.Devices.MidiDeviceException.html

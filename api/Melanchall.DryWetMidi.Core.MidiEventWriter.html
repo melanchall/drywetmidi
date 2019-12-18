@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class NotesMerger
+    <title>Class MidiEventWriter
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class NotesMerger
+    <meta name="title" content="Class MidiEventWriter
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.48.0.0">
     
@@ -78,19 +78,21 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.NotesMerger">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_NotesMerger" data-uid="Melanchall.DryWetMidi.Tools.NotesMerger" class="text-break">Class NotesMerger
+  <h1 id="Melanchall_DryWetMidi_Core_MidiEventWriter" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter" class="text-break">Class MidiEventWriter
   </h1>
-  <div class="markdown level0 summary">
-Provides methods to merge nearby notes.
-</div>
+  <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">NotesMerger</span></div>
+    <div class="level1"><span class="xref">MidiEventWriter</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -116,23 +118,29 @@ Provides methods to merge nearby notes.
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_NotesMerger_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiEventWriter_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class NotesMerger</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class MidiEventWriter : IDisposable</code></pre>
   </div>
-  <h3 id="methods">Methods
+  <h3 id="constructors">Constructors
   </h3>
-  <a id="Melanchall_DryWetMidi_Tools_NotesMerger_Merge_" data-uid="Melanchall.DryWetMidi.Tools.NotesMerger.Merge*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesMerger_Merge_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_" data-uid="Melanchall.DryWetMidi.Tools.NotesMerger.Merge(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NotesMergingSettings)">Merge(IEnumerable&lt;Note&gt;, TempoMap, NotesMergingSettings)</h4>
-  <div class="markdown level1 summary">
-Merges nearby notes in the specified collection of notes.
-</div>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventWriter__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventWriter__ctor" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor">MidiEventWriter()</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Note&gt; Merge(IEnumerable&lt;Note&gt; notes, TempoMap tempoMap, NotesMergingSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public MidiEventWriter()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventWriter__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventWriter__ctor_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.#ctor(System.Int32)">MidiEventWriter(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiEventWriter(int capacity)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -145,19 +153,71 @@ Merges nearby notes in the specified collection of notes.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
-        <td><span class="parametername">notes</span></td>
-        <td>Collection of notes to merge notes in.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">capacity</span></td>
+        <td></td>
       </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventWriter_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventWriter_WritingSettings" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.WritingSettings">WritingSettings</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public WritingSettings WritingSettings { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
-        <td><span class="parametername">tempoMap</span></td>
-        <td>Tempo map used to calculate distances between notes.</td>
+        <th>Type</th>
+        <th>Description</th>
       </tr>
+    </thead>
+    <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergingSettings.html">NotesMergingSettings</a></td>
-        <td><span class="parametername">settings</span></td>
-        <td>Settings according to which notes should be merged.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventWriter_Dispose_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventWriter_Dispose" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary">
+Releases all resources used by the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventReader.html">MidiEventReader</a> class.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventWriter_Write_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.Write*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventWriter_Write_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent)">Write(MidiEvent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] Write(MidiEvent midiEvent)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -171,26 +231,60 @@ Merges nearby notes in the specified collection of notes.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
-        <td>Collection of notes which produced from the input one by merging nearby notes.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventWriter_Write_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.Write*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventWriter_Write_Melanchall_DryWetMidi_Core_MidiEvent_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.MidiEventWriter.Write(Melanchall.DryWetMidi.Core.MidiEvent,System.Int32)">Write(MidiEvent, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] Write(MidiEvent midiEvent, int minSize)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Condition</th>
+        <th>Name</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">notes</code> is null.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">minSize</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
 </article>
           </div>
           
