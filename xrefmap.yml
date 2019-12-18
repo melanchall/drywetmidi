@@ -10063,6 +10063,15 @@ references:
   commentId: M:Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent(Melanchall.DryWetMidi.Core.MidiEvent)
   fullName: Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent(Melanchall.DryWetMidi.Core.MidiEvent)
   nameWithType: IOutputDevice.SendEvent(MidiEvent)
+- uid: Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent(System.Byte[],System.Int32,System.Int32)
+  name: SendEvent(Byte[], Int32, Int32)
+  href: api/Melanchall.DryWetMidi.Devices.IOutputDevice.html#Melanchall_DryWetMidi_Devices_IOutputDevice_SendEvent_System_Byte___System_Int32_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent(System.Byte[],System.Int32,System.Int32)
+  name.vb: SendEvent(Byte(), Int32, Int32)
+  fullName: Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent(System.Byte[], System.Int32, System.Int32)
+  fullName.vb: Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent(System.Byte(), System.Int32, System.Int32)
+  nameWithType: IOutputDevice.SendEvent(Byte[], Int32, Int32)
+  nameWithType.vb: IOutputDevice.SendEvent(Byte(), Int32, Int32)
 - uid: Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent*
   name: SendEvent
   href: api/Melanchall.DryWetMidi.Devices.IOutputDevice.html#Melanchall_DryWetMidi_Devices_IOutputDevice_SendEvent_
@@ -11341,6 +11350,15 @@ references:
   commentId: M:Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(Melanchall.DryWetMidi.Core.MidiEvent)
   fullName: Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(Melanchall.DryWetMidi.Core.MidiEvent)
   nameWithType: OutputDevice.SendEvent(MidiEvent)
+- uid: Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(System.Byte[],System.Int32,System.Int32)
+  name: SendEvent(Byte[], Int32, Int32)
+  href: api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_SendEvent_System_Byte___System_Int32_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(System.Byte[],System.Int32,System.Int32)
+  name.vb: SendEvent(Byte(), Int32, Int32)
+  fullName: Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(System.Byte[], System.Int32, System.Int32)
+  fullName.vb: Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent(System.Byte(), System.Int32, System.Int32)
+  nameWithType: OutputDevice.SendEvent(Byte[], Int32, Int32)
+  nameWithType.vb: OutputDevice.SendEvent(Byte(), Int32, Int32)
 - uid: Melanchall.DryWetMidi.Devices.OutputDevice.SendEvent*
   name: SendEvent
   href: api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_SendEvent_
