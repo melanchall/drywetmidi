@@ -622,12 +622,12 @@ namespace Melanchall.DryWetMidi.Devices
             EventPlayed?.Invoke(this, new MidiEventPlayedEventArgs(midiEvent));
         }
 
-        private void OnClockTicked(object sender, TickedEventArgs e)
+        private void OnClockTicked(object sender, EventArgs e)
         {
-            var time = e.Time;
-
             do
             {
+                var time = _clock.CurrentTime;
+
                 var playbackEvent = _eventsEnumerator.Current;
                 if (playbackEvent == null)
                     continue;
