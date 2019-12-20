@@ -12740,25 +12740,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.SnapPointsGroup.IsEnabled
   nameWithType: SnapPointsGroup.IsEnabled
-- uid: Melanchall.DryWetMidi.Devices.TickedEventArgs
-  name: TickedEventArgs
-  href: api/Melanchall.DryWetMidi.Devices.TickedEventArgs.html
-  commentId: T:Melanchall.DryWetMidi.Devices.TickedEventArgs
-  fullName: Melanchall.DryWetMidi.Devices.TickedEventArgs
-  nameWithType: TickedEventArgs
-- uid: Melanchall.DryWetMidi.Devices.TickedEventArgs.Time
-  name: Time
-  href: api/Melanchall.DryWetMidi.Devices.TickedEventArgs.html#Melanchall_DryWetMidi_Devices_TickedEventArgs_Time
-  commentId: P:Melanchall.DryWetMidi.Devices.TickedEventArgs.Time
-  fullName: Melanchall.DryWetMidi.Devices.TickedEventArgs.Time
-  nameWithType: TickedEventArgs.Time
-- uid: Melanchall.DryWetMidi.Devices.TickedEventArgs.Time*
-  name: Time
-  href: api/Melanchall.DryWetMidi.Devices.TickedEventArgs.html#Melanchall_DryWetMidi_Devices_TickedEventArgs_Time_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.TickedEventArgs.Time
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.TickedEventArgs.Time
-  nameWithType: TickedEventArgs.Time
 - uid: Melanchall.DryWetMidi.Devices.Volume
   name: Volume
   href: api/Melanchall.DryWetMidi.Devices.Volume.html
