@@ -16745,6 +16745,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.AddNotes
   nameWithType: NotesManagingUtilities.AddNotes
+- uid: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetMusicTheoryNote(Melanchall.DryWetMidi.Interaction.Note)
+  name: GetMusicTheoryNote(Note)
+  href: api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetMusicTheoryNote_Melanchall_DryWetMidi_Interaction_Note_
+  commentId: M:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetMusicTheoryNote(Melanchall.DryWetMidi.Interaction.Note)
+  fullName: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetMusicTheoryNote(Melanchall.DryWetMidi.Interaction.Note)
+  nameWithType: NotesManagingUtilities.GetMusicTheoryNote(Note)
+- uid: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetMusicTheoryNote*
+  name: GetMusicTheoryNote
+  href: api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetMusicTheoryNote_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetMusicTheoryNote
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetMusicTheoryNote
+  nameWithType: NotesManagingUtilities.GetMusicTheoryNote
 - uid: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.EventsCollection)
   name: GetNotes(EventsCollection)
   href: api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_EventsCollection_
