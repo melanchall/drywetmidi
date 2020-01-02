@@ -338,6 +338,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MidiFile(notes.ToTrackChunk());
         }
 
+        public static MusicTheory.Note GetMusicTheoryNote(this Note note)
+        {
+            ThrowIfArgument.IsNull(nameof(note), note);
+
+            return note.UnderlyingNote;
+        }
+
         #endregion
     }
 }

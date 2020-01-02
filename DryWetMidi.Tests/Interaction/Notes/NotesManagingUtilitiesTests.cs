@@ -67,6 +67,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region GetMusicTheoryNote
+
+        [Test]
+        public void GetMusicTheoryNote()
+        {
+            var note = new Note(DryWetMidi.MusicTheory.NoteName.A, 1);
+
+            Assert.AreEqual(
+                DryWetMidi.MusicTheory.Note.Get(DryWetMidi.MusicTheory.NoteName.A, 1),
+                note.GetMusicTheoryNote(),
+                "Note is invalid.");
+        }
+
+        #endregion
+
         #endregion
     }
 }
