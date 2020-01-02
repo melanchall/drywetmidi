@@ -14037,6 +14037,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords
   nameWithType: ChordsManagingUtilities.GetChords
+- uid: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetMusicTheoryChord(Melanchall.DryWetMidi.Interaction.Chord)
+  name: GetMusicTheoryChord(Chord)
+  href: api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetMusicTheoryChord_Melanchall_DryWetMidi_Interaction_Chord_
+  commentId: M:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetMusicTheoryChord(Melanchall.DryWetMidi.Interaction.Chord)
+  fullName: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetMusicTheoryChord(Melanchall.DryWetMidi.Interaction.Chord)
+  nameWithType: ChordsManagingUtilities.GetMusicTheoryChord(Chord)
+- uid: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetMusicTheoryChord*
+  name: GetMusicTheoryChord
+  href: api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetMusicTheoryChord_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetMusicTheoryChord
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetMusicTheoryChord
+  nameWithType: ChordsManagingUtilities.GetMusicTheoryChord
 - uid: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.ManageChords(Melanchall.DryWetMidi.Core.EventsCollection,System.Int64,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})
   name: ManageChords(EventsCollection, Int64, Comparison<MidiEvent>)
   href: api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__
