@@ -416,6 +416,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MidiFile(chords.ToTrackChunk());
         }
 
+        public static MusicTheory.Chord GetMusicTheoryChord(this Chord chord)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+
+            return new MusicTheory.Chord(chord.Notes.Select(n => n.NoteName).ToArray());
+        }
+
         #endregion
     }
 }
