@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
@@ -242,6 +243,47 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var parsedInterval = Interval.Parse(input);
             var expectedInterval = Interval.Get(expectedIntervalQuality, expectedIntervalNumber);
             Assert.AreEqual(expectedInterval, parsedInterval, "Parsed interval is invalid.");
+        }
+
+        [TestCase(0, new object[] { new object[] { 1, IntervalQuality.Perfect }, new object[] { 2, IntervalQuality.Diminished } })]
+        [TestCase(1, new object[] { new object[] { 2, IntervalQuality.Minor }, new object[] { 1, IntervalQuality.Augmented } })]
+        [TestCase(2, new object[] { new object[] { 2, IntervalQuality.Major }, new object[] { 3, IntervalQuality.Diminished } })]
+        [TestCase(3, new object[] { new object[] { 3, IntervalQuality.Minor }, new object[] { 2, IntervalQuality.Augmented } })]
+        [TestCase(4, new object[] { new object[] { 3, IntervalQuality.Major }, new object[] { 4, IntervalQuality.Diminished } })]
+        [TestCase(5, new object[] { new object[] { 4, IntervalQuality.Perfect }, new object[] { 3, IntervalQuality.Augmented } })]
+        [TestCase(6, new object[] { new object[] { 5, IntervalQuality.Diminished }, new object[] { 4, IntervalQuality.Augmented } })]
+        [TestCase(7, new object[] { new object[] { 5, IntervalQuality.Perfect }, new object[] { 6, IntervalQuality.Diminished } })]
+        [TestCase(8, new object[] { new object[] { 6, IntervalQuality.Minor }, new object[] { 5, IntervalQuality.Augmented } })]
+        [TestCase(9, new object[] { new object[] { 6, IntervalQuality.Major }, new object[] { 7, IntervalQuality.Diminished } })]
+        [TestCase(10, new object[] { new object[] { 7, IntervalQuality.Minor }, new object[] { 6, IntervalQuality.Augmented } })]
+        [TestCase(11, new object[] { new object[] { 7, IntervalQuality.Major }, new object[] { 8, IntervalQuality.Diminished } })]
+        [TestCase(12, new object[] { new object[] { 8, IntervalQuality.Perfect }, new object[] { 7, IntervalQuality.Augmented }, new object[] { 9, IntervalQuality.Diminished } })]
+        [TestCase(13, new object[] { new object[] { 9, IntervalQuality.Minor }, new object[] { 8, IntervalQuality.Augmented } })]
+        [TestCase(14, new object[] { new object[] { 9, IntervalQuality.Major }, new object[] { 10, IntervalQuality.Diminished } })]
+        [TestCase(15, new object[] { new object[] { 10, IntervalQuality.Minor }, new object[] { 9, IntervalQuality.Augmented } })]
+        [TestCase(16, new object[] { new object[] { 10, IntervalQuality.Major }, new object[] { 11, IntervalQuality.Diminished } })]
+        [TestCase(17, new object[] { new object[] { 11, IntervalQuality.Perfect }, new object[] { 10, IntervalQuality.Augmented } })]
+        [TestCase(18, new object[] { new object[] { 12, IntervalQuality.Diminished }, new object[] { 11, IntervalQuality.Augmented } })]
+        [TestCase(19, new object[] { new object[] { 12, IntervalQuality.Perfect }, new object[] { 13, IntervalQuality.Diminished } })]
+        [TestCase(20, new object[] { new object[] { 13, IntervalQuality.Minor }, new object[] { 12, IntervalQuality.Augmented } })]
+        [TestCase(21, new object[] { new object[] { 13, IntervalQuality.Major }, new object[] { 14, IntervalQuality.Diminished } })]
+        [TestCase(22, new object[] { new object[] { 14, IntervalQuality.Minor }, new object[] { 13, IntervalQuality.Augmented } })]
+        [TestCase(23, new object[] { new object[] { 14, IntervalQuality.Major }, new object[] { 15, IntervalQuality.Diminished } })]
+        [TestCase(24, new object[] { new object[] { 15, IntervalQuality.Perfect }, new object[] { 14, IntervalQuality.Augmented }, new object[] { 16, IntervalQuality.Diminished } })]
+        [TestCase(25, new object[] { new object[] { 16, IntervalQuality.Minor }, new object[] { 15, IntervalQuality.Augmented } })]
+        public void GetIntervalDefinitions(int halfSteps, object[] expectedIntervalDefinitions)
+        {
+            var interval = Interval.FromHalfSteps(halfSteps);
+            var intervalDefinitions = interval.GetIntervalDefinitions().ToArray();
+
+            CollectionAssert.AreEqual(
+                expectedIntervalDefinitions.OfType<object[]>()
+                                           .Select(intervalNumberAndQuality => new IntervalDefinition(
+                                               (int)intervalNumberAndQuality[0],
+                                               (IntervalQuality)intervalNumberAndQuality[1]))
+                                           .ToArray(),
+                intervalDefinitions,
+                "Interval definitions are invalid.");
         }
 
         #endregion

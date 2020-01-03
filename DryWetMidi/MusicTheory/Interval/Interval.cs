@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -110,6 +109,31 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 }
             };
 
+        private static readonly IntervalQuality?[] QualitiesPattern = new IntervalQuality?[]
+        {
+            IntervalQuality.Perfect,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+            IntervalQuality.Perfect,
+            null,
+            IntervalQuality.Perfect,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+        };
+
+        private static readonly Dictionary<int, IntervalQuality> AdditionalQualitiesPattern = new Dictionary<int, IntervalQuality>
+        {
+            [1] = IntervalQuality.Augmented,
+            [4] = IntervalQuality.Augmented,
+            [5] = IntervalQuality.Diminished
+        };
+
+        private static readonly int[] IntervalNumbersOffsets = new[] { 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7 };
+
         #endregion
 
         #region Constructor
@@ -168,6 +192,59 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public Interval Down()
         {
             return Get(Size, IntervalDirection.Down);
+        }
+
+        public IEnumerable<IntervalDefinition> GetIntervalDefinitions()
+        {
+            var quality = QualitiesPattern[Size % Octave.OctaveSize];
+            var number = 7 * (Size / Octave.OctaveSize) + IntervalNumbersOffsets[Size % Octave.OctaveSize];
+
+            if (quality != null)
+            {
+                yield return new IntervalDefinition(number, quality.Value);
+
+                var additionalQuality = IntervalQuality.Augmented;
+
+                switch (quality.Value)
+                {
+                    case IntervalQuality.Perfect:
+                        if (number == 1)
+                            additionalQuality = IntervalQuality.Diminished;
+                        else
+                            additionalQuality = AdditionalQualitiesPattern[number % 7];
+
+                        if (number % 7 == 1)
+                        {
+                            if (number > 1)
+                                yield return new IntervalDefinition(number - 1, IntervalQuality.Augmented);
+                            yield return new IntervalDefinition(number + 1, IntervalQuality.Diminished);
+                            yield break;
+                        }
+
+                        break;
+                    case IntervalQuality.Minor:
+                        additionalQuality = IntervalQuality.Augmented;
+                        break;
+                    case IntervalQuality.Major:
+                        additionalQuality = IntervalQuality.Diminished;
+                        break;
+                }
+
+                switch (additionalQuality)
+                {
+                    case IntervalQuality.Augmented:
+                        yield return new IntervalDefinition(number - 1, IntervalQuality.Augmented);
+                        break;
+                    case IntervalQuality.Diminished:
+                        yield return new IntervalDefinition(number + 1, IntervalQuality.Diminished);
+                        break;
+                }
+            }
+            else
+            {
+                yield return new IntervalDefinition(number, IntervalQuality.Diminished);
+                yield return new IntervalDefinition(number - 1, IntervalQuality.Augmented);
+            }
         }
 
         /// <summary>
