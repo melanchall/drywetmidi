@@ -19569,6 +19569,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.Interval.GetHashCode
   nameWithType: Interval.GetHashCode
+- uid: Melanchall.DryWetMidi.MusicTheory.Interval.GetIntervalDefinitions
+  name: GetIntervalDefinitions()
+  href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_GetIntervalDefinitions
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.Interval.GetIntervalDefinitions
+  fullName: Melanchall.DryWetMidi.MusicTheory.Interval.GetIntervalDefinitions()
+  nameWithType: Interval.GetIntervalDefinitions()
+- uid: Melanchall.DryWetMidi.MusicTheory.Interval.GetIntervalDefinitions*
+  name: GetIntervalDefinitions
+  href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_GetIntervalDefinitions_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.Interval.GetIntervalDefinitions
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.Interval.GetIntervalDefinitions
+  nameWithType: Interval.GetIntervalDefinitions
 - uid: Melanchall.DryWetMidi.MusicTheory.Interval.GetUp(Melanchall.DryWetMidi.Common.SevenBitNumber)
   name: GetUp(SevenBitNumber)
   href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_GetUp_Melanchall_DryWetMidi_Common_SevenBitNumber_
@@ -19875,6 +19888,116 @@ references:
   commentId: F:Melanchall.DryWetMidi.MusicTheory.Interval.Zero
   fullName: Melanchall.DryWetMidi.MusicTheory.Interval.Zero
   nameWithType: Interval.Zero
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition
+  name: IntervalDefinition
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html
+  commentId: T:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition
+  nameWithType: IntervalDefinition
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.#ctor(System.Int32,Melanchall.DryWetMidi.MusicTheory.IntervalQuality)
+  name: IntervalDefinition(Int32, IntervalQuality)
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition__ctor_System_Int32_Melanchall_DryWetMidi_MusicTheory_IntervalQuality_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.#ctor(System.Int32,Melanchall.DryWetMidi.MusicTheory.IntervalQuality)
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.IntervalDefinition(System.Int32, Melanchall.DryWetMidi.MusicTheory.IntervalQuality)
+  nameWithType: IntervalDefinition.IntervalDefinition(Int32, IntervalQuality)
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.#ctor*
+  name: IntervalDefinition
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.IntervalDefinition
+  nameWithType: IntervalDefinition.IntervalDefinition
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals(System.Object)
+  name: Equals(Object)
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Equals_System_Object_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals(System.Object)
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals(System.Object)
+  nameWithType: IntervalDefinition.Equals(Object)
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals
+  nameWithType: IntervalDefinition.Equals
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode
+  name: GetHashCode()
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_GetHashCode
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode()
+  nameWithType: IntervalDefinition.GetHashCode()
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode*
+  name: GetHashCode
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_GetHashCode_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode
+  nameWithType: IntervalDefinition.GetHashCode
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number
+  name: Number
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Number
+  commentId: P:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number
+  nameWithType: IntervalDefinition.Number
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number*
+  name: Number
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Number_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number
+  nameWithType: IntervalDefinition.Number
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Equality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition,Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  name: Equality(IntervalDefinition, IntervalDefinition)
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Equality_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Equality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition,Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition, Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  nameWithType: IntervalDefinition.Equality(IntervalDefinition, IntervalDefinition)
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Equality*
+  name: Equality
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Equality_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Equality
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equality
+  nameWithType: IntervalDefinition.Equality
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Inequality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition,Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  name: Inequality(IntervalDefinition, IntervalDefinition)
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Inequality_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Inequality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition,Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Inequality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition, Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  nameWithType: IntervalDefinition.Inequality(IntervalDefinition, IntervalDefinition)
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Inequality*
+  name: Inequality
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Inequality_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Inequality
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Inequality
+  nameWithType: IntervalDefinition.Inequality
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality
+  name: Quality
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Quality
+  commentId: P:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality
+  nameWithType: IntervalDefinition.Quality
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality*
+  name: Quality
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Quality_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality
+  nameWithType: IntervalDefinition.Quality
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString
+  name: ToString()
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_ToString
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString()
+  nameWithType: IntervalDefinition.ToString()
+- uid: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString*
+  name: ToString
+  href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html#Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_ToString_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString
+  nameWithType: IntervalDefinition.ToString
 - uid: Melanchall.DryWetMidi.MusicTheory.IntervalDirection
   name: IntervalDirection
   href: api/Melanchall.DryWetMidi.MusicTheory.IntervalDirection.html
