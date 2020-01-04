@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     /// <summary>
     /// Represents a musical interval in terms of half steps number.
     /// </summary>
-    public sealed class Interval
+    public sealed class Interval : IComparable<Interval>
     {
         #region Fields
 
@@ -574,6 +574,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsNull(nameof(interval), interval);
 
             return interval.Down();
+        }
+
+        #endregion
+
+        #region IComparable<Interval>
+
+        public int CompareTo(Interval other)
+        {
+            return HalfSteps.CompareTo(other.HalfSteps);
         }
 
         #endregion

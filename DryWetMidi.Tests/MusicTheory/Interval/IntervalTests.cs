@@ -286,6 +286,37 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 "Interval definitions are invalid.");
         }
 
+        [Test]
+        public void SortIntervals()
+        {
+            var intervals = new[]
+            {
+                Interval.FromHalfSteps(100),
+                Interval.FromHalfSteps(0),
+                Interval.FromHalfSteps(-100),
+                Interval.FromHalfSteps(10),
+                Interval.FromHalfSteps(2),
+                Interval.FromHalfSteps(-10),
+                Interval.FromHalfSteps(-2)
+            };
+
+            var sortedIntervals = intervals.OrderBy(i => i).ToArray();
+
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    Interval.FromHalfSteps(-100),
+                    Interval.FromHalfSteps(-10),
+                    Interval.FromHalfSteps(-2),
+                    Interval.FromHalfSteps(0),
+                    Interval.FromHalfSteps(2),
+                    Interval.FromHalfSteps(10),
+                    Interval.FromHalfSteps(100)
+                },
+                sortedIntervals,
+                "Intervals are sorted incorrectly.");
+        }
+
         #endregion
 
         #region Private methods
