@@ -20071,6 +20071,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.MusicTheory.Note
   fullName: Melanchall.DryWetMidi.MusicTheory.Note
   nameWithType: Note
+- uid: Melanchall.DryWetMidi.MusicTheory.Note.CompareTo(Melanchall.DryWetMidi.MusicTheory.Note)
+  name: CompareTo(Note)
+  href: api/Melanchall.DryWetMidi.MusicTheory.Note.html#Melanchall_DryWetMidi_MusicTheory_Note_CompareTo_Melanchall_DryWetMidi_MusicTheory_Note_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.Note.CompareTo(Melanchall.DryWetMidi.MusicTheory.Note)
+  fullName: Melanchall.DryWetMidi.MusicTheory.Note.CompareTo(Melanchall.DryWetMidi.MusicTheory.Note)
+  nameWithType: Note.CompareTo(Note)
+- uid: Melanchall.DryWetMidi.MusicTheory.Note.CompareTo*
+  name: CompareTo
+  href: api/Melanchall.DryWetMidi.MusicTheory.Note.html#Melanchall_DryWetMidi_MusicTheory_Note_CompareTo_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.Note.CompareTo
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.Note.CompareTo
+  nameWithType: Note.CompareTo
 - uid: Melanchall.DryWetMidi.MusicTheory.Note.Equals(System.Object)
   name: Equals(Object)
   href: api/Melanchall.DryWetMidi.MusicTheory.Note.html#Melanchall_DryWetMidi_MusicTheory_Note_Equals_System_Object_
