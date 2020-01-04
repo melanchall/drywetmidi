@@ -19448,6 +19448,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.MusicTheory.Interval
   fullName: Melanchall.DryWetMidi.MusicTheory.Interval
   nameWithType: Interval
+- uid: Melanchall.DryWetMidi.MusicTheory.Interval.CompareTo(Melanchall.DryWetMidi.MusicTheory.Interval)
+  name: CompareTo(Interval)
+  href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_CompareTo_Melanchall_DryWetMidi_MusicTheory_Interval_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.Interval.CompareTo(Melanchall.DryWetMidi.MusicTheory.Interval)
+  fullName: Melanchall.DryWetMidi.MusicTheory.Interval.CompareTo(Melanchall.DryWetMidi.MusicTheory.Interval)
+  nameWithType: Interval.CompareTo(Interval)
+- uid: Melanchall.DryWetMidi.MusicTheory.Interval.CompareTo*
+  name: CompareTo
+  href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_CompareTo_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.Interval.CompareTo
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.Interval.CompareTo
+  nameWithType: Interval.CompareTo
 - uid: Melanchall.DryWetMidi.MusicTheory.Interval.Direction
   name: Direction
   href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_Direction
