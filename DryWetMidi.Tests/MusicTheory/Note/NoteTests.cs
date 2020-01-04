@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
@@ -176,6 +177,35 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void Parse_Sharps_Flats_3()
         {
             Parse("C#bbb4", Octave.Get(4).ASharp);
+        }
+
+        [Test]
+        public void SortNotes()
+        {
+            var notes = new[]
+            {
+                Notes.A2,
+                Notes.B0,
+                Notes.ASharp2,
+                Notes.CSharp3,
+                Notes.G2,
+                Notes.G1
+            };
+
+            var sortedNotes = notes.OrderBy(i => i).ToArray();
+
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    Notes.B0,
+                    Notes.G1,
+                    Notes.G2,
+                    Notes.A2,
+                    Notes.ASharp2,
+                    Notes.CSharp3
+                },
+                sortedNotes,
+                "Notes are sorted incorrectly.");
         }
 
         #endregion

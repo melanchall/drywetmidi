@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     /// <summary>
     /// Represents a note, i.e. note name and octave.
     /// </summary>
-    public sealed class Note
+    public sealed class Note : IComparable<Note>
     {
         #region Constants
 
@@ -196,6 +196,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public static Note operator -(Note note, int halfSteps)
         {
             return note + (-halfSteps);
+        }
+
+        #endregion
+
+        #region IComparable<Note>
+
+        public int CompareTo(Note other)
+        {
+            return NoteNumber.CompareTo(other.NoteNumber);
         }
 
         #endregion
