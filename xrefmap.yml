@@ -19524,6 +19524,19 @@ references:
   commentId: F:Melanchall.DryWetMidi.MusicTheory.Interval.Four
   fullName: Melanchall.DryWetMidi.MusicTheory.Interval.Four
   nameWithType: Interval.Four
+- uid: Melanchall.DryWetMidi.MusicTheory.Interval.FromDefinition(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  name: FromDefinition(IntervalDefinition)
+  href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_FromDefinition_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.Interval.FromDefinition(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  fullName: Melanchall.DryWetMidi.MusicTheory.Interval.FromDefinition(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)
+  nameWithType: Interval.FromDefinition(IntervalDefinition)
+- uid: Melanchall.DryWetMidi.MusicTheory.Interval.FromDefinition*
+  name: FromDefinition
+  href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_FromDefinition_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.Interval.FromDefinition
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.Interval.FromDefinition
+  nameWithType: Interval.FromDefinition
 - uid: Melanchall.DryWetMidi.MusicTheory.Interval.FromHalfSteps(System.Int32)
   name: FromHalfSteps(Int32)
   href: api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_FromHalfSteps_System_Int32_
