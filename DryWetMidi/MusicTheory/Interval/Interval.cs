@@ -396,6 +396,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
                        Math.Sign(halfSteps) < 0 ? IntervalDirection.Down : IntervalDirection.Up);
         }
 
+        public static Interval FromDefinition(IntervalDefinition intervalDefinition)
+        {
+            ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
+
+            return Get(intervalDefinition.Quality, intervalDefinition.Number);
+        }
+
         /// <summary>
         /// Converts the string representation of a musical interval to its <see cref="Interval"/> equivalent.
         /// A return value indicates whether the conversion succeeded.
