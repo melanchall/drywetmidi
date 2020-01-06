@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
@@ -14,6 +15,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static readonly Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>> _cache =
             new Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>>();
+
+        private IReadOnlyCollection<IntervalDefinition> _intervalDefinitions;
 
         #endregion
 
@@ -194,14 +197,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Get(Size, IntervalDirection.Down);
         }
 
-        public IEnumerable<IntervalDefinition> GetIntervalDefinitions()
+        public IReadOnlyCollection<IntervalDefinition> GetIntervalDefinitions()
         {
+            if (_intervalDefinitions != null)
+                return _intervalDefinitions;
+
+            var result = new List<IntervalDefinition>();
+
             var quality = QualitiesPattern[Size % Octave.OctaveSize];
             var number = 7 * (Size / Octave.OctaveSize) + IntervalNumbersOffsets[Size % Octave.OctaveSize];
 
             if (quality != null)
             {
-                yield return new IntervalDefinition(number, quality.Value);
+                result.Add(new IntervalDefinition(number, quality.Value));
 
                 var additionalQuality = IntervalQuality.Augmented;
 
@@ -216,9 +224,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         if (number % 7 == 1)
                         {
                             if (number > 1)
-                                yield return new IntervalDefinition(number - 1, IntervalQuality.Augmented);
-                            yield return new IntervalDefinition(number + 1, IntervalQuality.Diminished);
-                            yield break;
+                                result.Add(new IntervalDefinition(number - 1, IntervalQuality.Augmented));
+
+                            result.Add(new IntervalDefinition(number + 1, IntervalQuality.Diminished));
+                            return _intervalDefinitions = new ReadOnlyCollection<IntervalDefinition>(result);
                         }
 
                         break;
@@ -233,18 +242,20 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 switch (additionalQuality)
                 {
                     case IntervalQuality.Augmented:
-                        yield return new IntervalDefinition(number - 1, IntervalQuality.Augmented);
+                        result.Add(new IntervalDefinition(number - 1, IntervalQuality.Augmented));
                         break;
                     case IntervalQuality.Diminished:
-                        yield return new IntervalDefinition(number + 1, IntervalQuality.Diminished);
+                        result.Add(new IntervalDefinition(number + 1, IntervalQuality.Diminished));
                         break;
                 }
             }
             else
             {
-                yield return new IntervalDefinition(number, IntervalQuality.Diminished);
-                yield return new IntervalDefinition(number - 1, IntervalQuality.Augmented);
+                result.Add(new IntervalDefinition(number, IntervalQuality.Diminished));
+                result.Add(new IntervalDefinition(number - 1, IntervalQuality.Augmented));
             }
+
+            return _intervalDefinitions = new ReadOnlyCollection<IntervalDefinition>(result);
         }
 
         /// <summary>
