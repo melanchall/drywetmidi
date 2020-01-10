@@ -59,6 +59,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentOutOfRangeException(parameterName, value, message);
         }
 
+        internal static void IsOutOfRange(string parameterName, int value, string message, params int[] values)
+        {
+            if (Array.IndexOf(values, value) < 0)
+                throw new ArgumentOutOfRangeException(parameterName, value, message);
+        }
+
         internal static void DoesntSatisfyCondition(string parameterName, int value, Predicate<int> condition, string message)
         {
             if (!condition(value))

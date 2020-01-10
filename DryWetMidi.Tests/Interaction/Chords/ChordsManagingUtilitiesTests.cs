@@ -73,8 +73,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetMusicTheoryChord()
         {
             var chord = new Chord(
-                new Note(DryWetMidi.MusicTheory.NoteName.A, 1),
                 new Note(DryWetMidi.MusicTheory.NoteName.C, 2),
+                new Note(DryWetMidi.MusicTheory.NoteName.A, 1),
                 new Note(DryWetMidi.MusicTheory.NoteName.DSharp, 2));
 
             Assert.AreEqual(

@@ -420,7 +420,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
-            return new MusicTheory.Chord(chord.Notes.Select(n => n.NoteName).ToArray());
+            return new MusicTheory.Chord(chord.Notes.OrderBy(n => n.NoteNumber).Select(n => n.NoteName).ToArray());
         }
 
         #endregion
