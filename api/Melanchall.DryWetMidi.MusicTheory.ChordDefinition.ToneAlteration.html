@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TimeSignature
+    <title>Class ChordDefinition.ToneAlteration
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TimeSignature
+    <meta name="title" content="Class ChordDefinition.ToneAlteration
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.48.1.0">
     
@@ -78,19 +78,17 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration">
   
   
-  <h1 id="Melanchall_DryWetMidi_Interaction_TimeSignature" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature" class="text-break">Class TimeSignature
+  <h1 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration" class="text-break">Class ChordDefinition.ToneAlteration
   </h1>
-  <div class="markdown level0 summary">
-Represents time signature which is number of beats of specified length.
-</div>
+  <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">TimeSignature</span></div>
+    <div class="level1"><span class="xref">ChordDefinition.ToneAlteration</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -107,24 +105,21 @@ Represents time signature which is number of beats of specified length.
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.html">Melanchall.DryWetMidi.MusicTheory</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Interaction_TimeSignature_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class TimeSignature</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class ToneAlteration</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature__ctor_System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.#ctor(System.Int32,System.Int32)">TimeSignature(Int32, Int32)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a> with the specified
-numerator and denominator.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration__ctor_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration__ctor_System_Int32_System_Boolean_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.#ctor(System.Int32,System.Boolean)">ToneAlteration(Int32, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimeSignature(int numerator, int denominator)</code></pre>
+    <pre><code class="lang-csharp hljs">public ToneAlteration(int toneNumber, bool alterBySharp)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -138,70 +133,25 @@ numerator and denominator.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">numerator</span></td>
-        <td>Numerator of the time signature which defines number of beats.</td>
+        <td><span class="parametername">toneNumber</span></td>
+        <td></td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">denominator</span></td>
-        <td>Denominator of the time signature which defines beat length.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">numerator</code> is zero or negative. -or-
-<code data-dev-comment-type="paramref" class="paramref">denominator</code> is zero or negative. -or- <code data-dev-comment-type="paramref" class="paramref">denominator</code> is not a
-power of two.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="fields">Fields
-  </h3>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_Default" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.Default">Default</h4>
-  <div class="markdown level1 summary">
-Default time signature which is 4/4.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static readonly TimeSignature Default</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">alterBySharp</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature_Denominator_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.Denominator*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_Denominator" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.Denominator">Denominator</h4>
-  <div class="markdown level1 summary">
-Gets denominator of the time signature which defines beat length.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_AlterBySharp_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_AlterBySharp" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp">AlterBySharp</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int Denominator { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public bool AlterBySharp { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -213,20 +163,18 @@ Gets denominator of the time signature which defines beat length.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature_Numerator_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.Numerator*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_Numerator" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.Numerator">Numerator</h4>
-  <div class="markdown level1 summary">
-Gets numerator of the time signature which defines number of beats.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToneNumber_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToneNumber" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber">ToneNumber</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int Numerator { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int ToneNumber { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -245,11 +193,9 @@ Gets numerator of the time signature which defines number of beats.
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature_Equals_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.Equals*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_Equals_System_Object_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.Equals(System.Object)">Equals(Object)</h4>
-  <div class="markdown level1 summary">
-Determines whether the specified object is equal to the current object.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Equals_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Equals_System_Object_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -268,7 +214,7 @@ Determines whether the specified object is equal to the current object.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
         <td><span class="parametername">obj</span></td>
-        <td>The object to compare with the current object.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -283,17 +229,15 @@ Determines whether the specified object is equal to the current object.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td>true if the specified object is equal to the current object; otherwise, false.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature_GetHashCode_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.GetHashCode*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_GetHashCode" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.GetHashCode">GetHashCode()</h4>
-  <div class="markdown level1 summary">
-Returns the hash code for this instance.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_GetHashCode_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_GetHashCode" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -310,17 +254,15 @@ Returns the hash code for this instance.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td>A 32-bit signed integer hash code.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature_ToString_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.ToString*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_ToString" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.ToString">ToString()</h4>
-  <div class="markdown level1 summary">
-Returns a string that represents the current object.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToString_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToString" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -337,7 +279,7 @@ Returns a string that represents the current object.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td>A string that represents the current object.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -345,15 +287,13 @@ Returns a string that represents the current object.
   <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
   <h3 id="operators">Operators
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature_op_Equality_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.op_Equality*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_op_Equality_Melanchall_DryWetMidi_Interaction_TimeSignature_Melanchall_DryWetMidi_Interaction_TimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.op_Equality(Melanchall.DryWetMidi.Interaction.TimeSignature,Melanchall.DryWetMidi.Interaction.TimeSignature)">Equality(TimeSignature, TimeSignature)</h4>
-  <div class="markdown level1 summary">
-Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a> objects are equal.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Equality_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Equality*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Equality_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)">Equality(ChordDefinition.ToneAlteration, ChordDefinition.ToneAlteration)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator ==(TimeSignature timeSignature1, TimeSignature timeSignature2)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator ==(ChordDefinition.ToneAlteration toneAlteration1, ChordDefinition.ToneAlteration toneAlteration2)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -366,14 +306,14 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSi
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
-        <td><span class="parametername">timeSignature1</span></td>
-        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a> to compare.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html">ChordDefinition.ToneAlteration</a></td>
+        <td><span class="parametername">toneAlteration1</span></td>
+        <td></td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
-        <td><span class="parametername">timeSignature2</span></td>
-        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a> to compare.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html">ChordDefinition.ToneAlteration</a></td>
+        <td><span class="parametername">toneAlteration2</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -388,19 +328,17 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSi
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td>true if the time signatures are equal, false otherwise.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Interaction_TimeSignature_op_Inequality_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.op_Inequality*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimeSignature_op_Inequality_Melanchall_DryWetMidi_Interaction_TimeSignature_Melanchall_DryWetMidi_Interaction_TimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSignature.op_Inequality(Melanchall.DryWetMidi.Interaction.TimeSignature,Melanchall.DryWetMidi.Interaction.TimeSignature)">Inequality(TimeSignature, TimeSignature)</h4>
-  <div class="markdown level1 summary">
-Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a> objects are not equal.
-</div>
+  <a id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Inequality_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Inequality*"></a>
+  <h4 id="Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Inequality_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_" data-uid="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Inequality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)">Inequality(ChordDefinition.ToneAlteration, ChordDefinition.ToneAlteration)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator !=(TimeSignature timeSignature1, TimeSignature timeSignature2)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator !=(ChordDefinition.ToneAlteration toneAlteration1, ChordDefinition.ToneAlteration toneAlteration2)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -413,14 +351,14 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSi
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
-        <td><span class="parametername">timeSignature1</span></td>
-        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a> to compare.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html">ChordDefinition.ToneAlteration</a></td>
+        <td><span class="parametername">toneAlteration1</span></td>
+        <td></td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
-        <td><span class="parametername">timeSignature2</span></td>
-        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a> to compare.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html">ChordDefinition.ToneAlteration</a></td>
+        <td><span class="parametername">toneAlteration2</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -435,7 +373,7 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSi
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td>false if the time signatures are equal, true otherwise.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
