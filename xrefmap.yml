@@ -19018,6 +19018,24 @@ references:
   commentId: N:Melanchall.DryWetMidi.MusicTheory
   fullName: Melanchall.DryWetMidi.MusicTheory
   nameWithType: Melanchall.DryWetMidi.MusicTheory
+- uid: Melanchall.DryWetMidi.MusicTheory.Accidental
+  name: Accidental
+  href: api/Melanchall.DryWetMidi.MusicTheory.Accidental.html
+  commentId: T:Melanchall.DryWetMidi.MusicTheory.Accidental
+  fullName: Melanchall.DryWetMidi.MusicTheory.Accidental
+  nameWithType: Accidental
+- uid: Melanchall.DryWetMidi.MusicTheory.Accidental.Flat
+  name: Flat
+  href: api/Melanchall.DryWetMidi.MusicTheory.Accidental.html#Melanchall_DryWetMidi_MusicTheory_Accidental_Flat
+  commentId: F:Melanchall.DryWetMidi.MusicTheory.Accidental.Flat
+  fullName: Melanchall.DryWetMidi.MusicTheory.Accidental.Flat
+  nameWithType: Accidental.Flat
+- uid: Melanchall.DryWetMidi.MusicTheory.Accidental.Sharp
+  name: Sharp
+  href: api/Melanchall.DryWetMidi.MusicTheory.Accidental.html#Melanchall_DryWetMidi_MusicTheory_Accidental_Sharp
+  commentId: F:Melanchall.DryWetMidi.MusicTheory.Accidental.Sharp
+  fullName: Melanchall.DryWetMidi.MusicTheory.Accidental.Sharp
+  nameWithType: Accidental.Sharp
 - uid: Melanchall.DryWetMidi.MusicTheory.Chord
   name: Chord
   href: api/Melanchall.DryWetMidi.MusicTheory.Chord.html
@@ -19261,19 +19279,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AddedToneIntervals
   nameWithType: ChordDefinition.AddedToneIntervals
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredTones
-  name: AlteredTones
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_AlteredTones
-  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredTones
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredTones
-  nameWithType: ChordDefinition.AlteredTones
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredTones*
-  name: AlteredTones
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_AlteredTones_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredTones
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredIntervals
+  name: AlteredIntervals
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_AlteredIntervals
+  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredIntervals
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredIntervals
+  nameWithType: ChordDefinition.AlteredIntervals
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredIntervals*
+  name: AlteredIntervals
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_AlteredIntervals_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredIntervals
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredTones
-  nameWithType: ChordDefinition.AlteredTones
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.AlteredIntervals
+  nameWithType: ChordDefinition.AlteredIntervals
 - uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.BassNoteName
   name: BassNoteName
   href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_BassNoteName
@@ -19300,6 +19318,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.Equals
   nameWithType: ChordDefinition.Equals
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ExtensionAlteration
+  name: ExtensionAlteration
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ExtensionAlteration
+  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ExtensionAlteration
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ExtensionAlteration
+  nameWithType: ChordDefinition.ExtensionAlteration
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ExtensionAlteration*
+  name: ExtensionAlteration
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ExtensionAlteration_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ExtensionAlteration
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ExtensionAlteration
+  nameWithType: ChordDefinition.ExtensionAlteration
 - uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ExtensionInterval
   name: ExtensionInterval
   href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ExtensionInterval
@@ -19326,6 +19357,116 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.GetHashCode
   nameWithType: ChordDefinition.GetHashCode
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration
+  name: ChordDefinition.IntervalAlteration
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html
+  commentId: T:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration
+  nameWithType: ChordDefinition.IntervalAlteration
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.#ctor(System.Int32,Melanchall.DryWetMidi.MusicTheory.Accidental)
+  name: IntervalAlteration(Int32, Accidental)
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration__ctor_System_Int32_Melanchall_DryWetMidi_MusicTheory_Accidental_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.#ctor(System.Int32,Melanchall.DryWetMidi.MusicTheory.Accidental)
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalAlteration(System.Int32, Melanchall.DryWetMidi.MusicTheory.Accidental)
+  nameWithType: ChordDefinition.IntervalAlteration.IntervalAlteration(Int32, Accidental)
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.#ctor*
+  name: IntervalAlteration
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalAlteration
+  nameWithType: ChordDefinition.IntervalAlteration.IntervalAlteration
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Alteration
+  name: Alteration
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_Alteration
+  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Alteration
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Alteration
+  nameWithType: ChordDefinition.IntervalAlteration.Alteration
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Alteration*
+  name: Alteration
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_Alteration_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Alteration
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Alteration
+  nameWithType: ChordDefinition.IntervalAlteration.Alteration
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equals(System.Object)
+  name: Equals(Object)
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_Equals_System_Object_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equals(System.Object)
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equals(System.Object)
+  nameWithType: ChordDefinition.IntervalAlteration.Equals(Object)
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equals
+  nameWithType: ChordDefinition.IntervalAlteration.Equals
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.GetHashCode
+  name: GetHashCode()
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_GetHashCode
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.GetHashCode
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.GetHashCode()
+  nameWithType: ChordDefinition.IntervalAlteration.GetHashCode()
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.GetHashCode*
+  name: GetHashCode
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_GetHashCode_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.GetHashCode
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.GetHashCode
+  nameWithType: ChordDefinition.IntervalAlteration.GetHashCode
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalNumber
+  name: IntervalNumber
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_IntervalNumber
+  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalNumber
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalNumber
+  nameWithType: ChordDefinition.IntervalAlteration.IntervalNumber
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalNumber*
+  name: IntervalNumber
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_IntervalNumber_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalNumber
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.IntervalNumber
+  nameWithType: ChordDefinition.IntervalAlteration.IntervalNumber
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration)
+  name: Equality(ChordDefinition.IntervalAlteration, ChordDefinition.IntervalAlteration)
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_op_Equality_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration)
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration, Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration)
+  nameWithType: ChordDefinition.IntervalAlteration.Equality(ChordDefinition.IntervalAlteration, ChordDefinition.IntervalAlteration)
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Equality*
+  name: Equality
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_op_Equality_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Equality
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Equality
+  nameWithType: ChordDefinition.IntervalAlteration.Equality
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Inequality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration)
+  name: Inequality(ChordDefinition.IntervalAlteration, ChordDefinition.IntervalAlteration)
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_op_Inequality_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Inequality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration)
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Inequality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration, Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration)
+  nameWithType: ChordDefinition.IntervalAlteration.Inequality(ChordDefinition.IntervalAlteration, ChordDefinition.IntervalAlteration)
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Inequality*
+  name: Inequality
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_op_Inequality_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.op_Inequality
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.Inequality
+  nameWithType: ChordDefinition.IntervalAlteration.Inequality
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.ToString
+  name: ToString()
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_ToString
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.ToString
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.ToString()
+  nameWithType: ChordDefinition.IntervalAlteration.ToString()
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.ToString*
+  name: ToString
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_IntervalAlteration_ToString_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.ToString
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.IntervalAlteration.ToString
+  nameWithType: ChordDefinition.IntervalAlteration.ToString
 - uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.op_Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition,Melanchall.DryWetMidi.MusicTheory.ChordDefinition)
   name: Equality(ChordDefinition, ChordDefinition)
   href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_op_Equality_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_
@@ -19378,6 +19519,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.RootNoteName
   nameWithType: ChordDefinition.RootNoteName
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SeventhQuality
+  name: SeventhQuality
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_SeventhQuality
+  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SeventhQuality
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SeventhQuality
+  nameWithType: ChordDefinition.SeventhQuality
+- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SeventhQuality*
+  name: SeventhQuality
+  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_SeventhQuality_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SeventhQuality
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SeventhQuality
+  nameWithType: ChordDefinition.SeventhQuality
 - uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SuspensionIntervalNumber
   name: SuspensionIntervalNumber
   href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_SuspensionIntervalNumber
@@ -19391,116 +19545,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.SuspensionIntervalNumber
   nameWithType: ChordDefinition.SuspensionIntervalNumber
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration
-  name: ChordDefinition.ToneAlteration
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html
-  commentId: T:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration
-  nameWithType: ChordDefinition.ToneAlteration
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.#ctor(System.Int32,System.Boolean)
-  name: ToneAlteration(Int32, Boolean)
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration__ctor_System_Int32_System_Boolean_
-  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.#ctor(System.Int32,System.Boolean)
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneAlteration(System.Int32, System.Boolean)
-  nameWithType: ChordDefinition.ToneAlteration.ToneAlteration(Int32, Boolean)
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.#ctor*
-  name: ToneAlteration
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneAlteration
-  nameWithType: ChordDefinition.ToneAlteration.ToneAlteration
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp
-  name: AlterBySharp
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_AlterBySharp
-  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp
-  nameWithType: ChordDefinition.ToneAlteration.AlterBySharp
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp*
-  name: AlterBySharp
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_AlterBySharp_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.AlterBySharp
-  nameWithType: ChordDefinition.ToneAlteration.AlterBySharp
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals(System.Object)
-  name: Equals(Object)
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Equals_System_Object_
-  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals(System.Object)
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals(System.Object)
-  nameWithType: ChordDefinition.ToneAlteration.Equals(Object)
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals*
-  name: Equals
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Equals_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equals
-  nameWithType: ChordDefinition.ToneAlteration.Equals
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode
-  name: GetHashCode()
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_GetHashCode
-  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode()
-  nameWithType: ChordDefinition.ToneAlteration.GetHashCode()
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode*
-  name: GetHashCode
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_GetHashCode_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.GetHashCode
-  nameWithType: ChordDefinition.ToneAlteration.GetHashCode
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)
-  name: Equality(ChordDefinition.ToneAlteration, ChordDefinition.ToneAlteration)
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Equality_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_
-  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration, Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)
-  nameWithType: ChordDefinition.ToneAlteration.Equality(ChordDefinition.ToneAlteration, ChordDefinition.ToneAlteration)
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Equality*
-  name: Equality
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Equality_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Equality
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Equality
-  nameWithType: ChordDefinition.ToneAlteration.Equality
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Inequality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)
-  name: Inequality(ChordDefinition.ToneAlteration, ChordDefinition.ToneAlteration)
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Inequality_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_
-  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Inequality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration,Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Inequality(Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration, Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration)
-  nameWithType: ChordDefinition.ToneAlteration.Inequality(ChordDefinition.ToneAlteration, ChordDefinition.ToneAlteration)
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Inequality*
-  name: Inequality
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_op_Inequality_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.op_Inequality
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.Inequality
-  nameWithType: ChordDefinition.ToneAlteration.Inequality
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber
-  name: ToneNumber
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToneNumber
-  commentId: P:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber
-  nameWithType: ChordDefinition.ToneAlteration.ToneNumber
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber*
-  name: ToneNumber
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToneNumber_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToneNumber
-  nameWithType: ChordDefinition.ToneAlteration.ToneNumber
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString
-  name: ToString()
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToString
-  commentId: M:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString()
-  nameWithType: ChordDefinition.ToneAlteration.ToString()
-- uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString*
-  name: ToString
-  href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToneAlteration_ToString_
-  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToneAlteration.ToString
-  nameWithType: ChordDefinition.ToneAlteration.ToString
 - uid: Melanchall.DryWetMidi.MusicTheory.ChordDefinition.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.MusicTheory.ChordDefinition.html#Melanchall_DryWetMidi_MusicTheory_ChordDefinition_ToString
