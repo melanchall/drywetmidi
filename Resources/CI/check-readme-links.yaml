@@ -55,13 +55,13 @@ steps:
             Write-Host "OK"
           }
           Else {
-            Write-Host "##vso[task.logissue type=error]FAILED with status $$HTTP_Status"
+            Write-Host "##vso[task.logissue type=error]FAILED with status $HTTP_Status"
           }
           
           $HTTP_Response.Close()
         }
         catch
         {
-          Write-Host "##vso[task.logissue type=error]FAILED by exception"
+          Write-Host "##vso[task.logissue type=error]FAILED by exception $_.Exception.Message"
         }
       }
