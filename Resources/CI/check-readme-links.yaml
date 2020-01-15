@@ -62,6 +62,7 @@ steps:
         }
         catch
         {
-          Write-Host "##vso[task.logissue type=error]FAILED by exception $_.Exception.Message"
+          $error = $_.Exception
+          Write-Host "##vso[task.logissue type=error]FAILED by exception $error"
         }
       }
