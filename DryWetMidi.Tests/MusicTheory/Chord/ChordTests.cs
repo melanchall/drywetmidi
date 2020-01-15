@@ -187,6 +187,12 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase(new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C }, "F/G")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.F }, "Cadd11")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp }, "C7#5")]
+        [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.CSharp }, "C7b9")]
+        [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.DSharp }, "C7#9")]
+        [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.FSharp }, "C7#11")]
+        [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.B, NoteName.D }, "C9")]
+        [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.B, NoteName.D, NoteName.F }, "C11")]
+        [TestCase(new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F }, "Cm11")]
         public void GetChordDefinitions(NoteName[] notesNames, string expectedChordName)
         {
             var chord = new Chord(notesNames);

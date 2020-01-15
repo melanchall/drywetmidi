@@ -24,16 +24,20 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static readonly IEnumerable<Tuple<IEnumerable<IntervalDefinition>, Func<NoteName, ChordDefinition>>> KnownChordsDefinitionsCreators = IntervalsByQuality
             .SelectMany(definitions => new[] { 1, 6, 7, 9, 11, 13 }
-                .SelectMany(extensionNumber => ((IntervalQuality[])Enum.GetValues(typeof(IntervalQuality)))
-                    .SelectMany(extensionQuality => new int?[] { null, 2, 4 }
-                        .Select(suspensionNumber => Tuple.Create<IEnumerable<IntervalDefinition>, Func<NoteName, ChordDefinition>>(
-                            GetChordIntervalsDefinitions(definitions.Value, new IntervalDefinition(extensionNumber, extensionQuality), suspensionNumber),
-                            rootNoteName => new ChordDefinition(rootNoteName)
-                                            {
-                                                Quality = definitions.Key,
-                                                ExtensionInterval = extensionNumber > 1 ? new IntervalDefinition(extensionNumber, extensionQuality) : null,
-                                                SuspensionIntervalNumber = suspensionNumber
-                                            })))))
+                .SelectMany(extensionNumber => new[] { IntervalQuality.Minor, IntervalQuality.Major }
+                    .SelectMany(seventhQuality => ((IntervalQuality[])Enum.GetValues(typeof(IntervalQuality)))
+                        .SelectMany(extensionQuality => new int?[] { null, 2, 4 }
+                            .SelectMany(suspensionNumber => new Accidental?[] { null, Accidental.Sharp, Accidental.Flat }
+                                .Select(extensionAlteration => Tuple.Create<IEnumerable<IntervalDefinition>, Func<NoteName, ChordDefinition>>(
+                                    GetChordIntervalsDefinitions(definitions.Value, new IntervalDefinition(extensionNumber, extensionQuality), extensionAlteration, suspensionNumber, seventhQuality),
+                                    rootNoteName => new ChordDefinition(rootNoteName)
+                                                    {
+                                                        Quality = definitions.Key,
+                                                        ExtensionInterval = extensionNumber > 1 ? new IntervalDefinition(extensionNumber, extensionQuality) : null,
+                                                        ExtensionAlteration = extensionAlteration,
+                                                        SuspensionIntervalNumber = suspensionNumber,
+                                                        SeventhQuality = seventhQuality
+                                                    })))))))
             .Where(chordDefinitionCreator => chordDefinitionCreator.Item1 != null)
             .ToArray();
 
@@ -158,7 +162,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 definitions.Add(chordDefinition);
             }
 
-            return _chordDefinitions = new ReadOnlyCollection<ChordDefinition>(definitions.Distinct().OrderBy(d => d.ToString().Length).ToList());
+            return _chordDefinitions = new ReadOnlyCollection<ChordDefinition>(definitions
+                .Distinct()
+                .Where(d => !d.AlteredIntervals.Any(i => i.IntervalNumber == d.ExtensionInterval?.Number ||
+                                                         i.IntervalNumber == d.SuspensionIntervalNumber))
+                .OrderBy(d => d.ToString().Length)
+                .Take(10)
+                .ToList());
         }
 
         /// <summary>
@@ -274,7 +284,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     continue;
 
                 if (Math.Abs(offset) == 1)
-                    chordDefinition.AlteredTones.Add(new ChordDefinition.ToneAlteration(intervalDefinition.Number, offset > 0));
+                    chordDefinition.AlteredIntervals.Add(new ChordDefinition.IntervalAlteration(intervalDefinition.Number, offset > 0 ? Accidental.Sharp : Accidental.Flat));
 
                 referenceIntervalsDefinitionsList.Remove(intervalDefinition);
                 intervalsList.Remove(nearestInterval);
@@ -293,13 +303,20 @@ namespace Melanchall.DryWetMidi.MusicTheory
         }
 
         private static IEnumerable<IntervalDefinition> GetChordIntervalsDefinitions(
-            IEnumerable<IntervalDefinition> baseIntervalsDefinitions, IntervalDefinition extensionIntervalDefinition, int? suspensionNumber)
+            IEnumerable<IntervalDefinition> baseIntervalsDefinitions,
+            IntervalDefinition extensionIntervalDefinition,
+            Accidental? extensionAlteration,
+            int? suspensionNumber,
+            IntervalQuality seventhQuality)
         {
+            if (!Interval.IsQualityApplicable(extensionIntervalDefinition.Quality, extensionIntervalDefinition.Number))
+                return null;
+
             var result = new List<IntervalDefinition>(baseIntervalsDefinitions);
 
             if (extensionIntervalDefinition.Number > 7)
             {
-                result.Add(new IntervalDefinition(7, IntervalQuality.Minor));
+                result.Add(new IntervalDefinition(7, seventhQuality));
 
                 for (var i = 9; i < extensionIntervalDefinition.Number; i += 2)
                 {
@@ -308,7 +325,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
 
             if (extensionIntervalDefinition.Number > 1)
-                result.Add(extensionIntervalDefinition);
+            {
+                if (extensionAlteration == null)
+                    result.Add(extensionIntervalDefinition);
+                else
+                    result.Add((Interval.FromDefinition(extensionIntervalDefinition) + (extensionAlteration == Accidental.Sharp ? 1 : -1)).GetIntervalDefinitions().First());
+            }
 
             if (suspensionNumber != null)
                 result[0] = suspensionNumber.Value == 2

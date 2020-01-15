@@ -9,43 +9,43 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Nested classes
 
-        public sealed class ToneAlteration
+        public sealed class IntervalAlteration
         {
             #region Constructor
 
-            public ToneAlteration(int toneNumber, bool alterBySharp)
+            public IntervalAlteration(int intervalNumber, Accidental alteration)
             {
-                ToneNumber = toneNumber;
-                AlterBySharp = alterBySharp;
+                IntervalNumber = intervalNumber;
+                Alteration = alteration;
             }
 
             #endregion
 
             #region Properties
 
-            public int ToneNumber { get; }
+            public int IntervalNumber { get; }
 
-            public bool AlterBySharp { get; }
+            public Accidental Alteration { get; }
 
             #endregion
 
             #region Operators
 
-            public static bool operator ==(ToneAlteration toneAlteration1, ToneAlteration toneAlteration2)
+            public static bool operator ==(IntervalAlteration intervalAlteration1, IntervalAlteration intervalAlteration2)
             {
-                if (ReferenceEquals(toneAlteration1, toneAlteration2))
+                if (ReferenceEquals(intervalAlteration1, intervalAlteration2))
                     return true;
 
-                if (ReferenceEquals(null, toneAlteration1) || ReferenceEquals(null, toneAlteration2))
+                if (ReferenceEquals(null, intervalAlteration1) || ReferenceEquals(null, intervalAlteration2))
                     return false;
 
-                return toneAlteration1.ToneNumber == toneAlteration2.ToneNumber &&
-                       toneAlteration1.AlterBySharp == toneAlteration2.AlterBySharp;
+                return intervalAlteration1.IntervalNumber == intervalAlteration2.IntervalNumber &&
+                       intervalAlteration1.Alteration == intervalAlteration2.Alteration;
             }
 
-            public static bool operator !=(ToneAlteration toneAlteration1, ToneAlteration toneAlteration2)
+            public static bool operator !=(IntervalAlteration intervalAlteration1, IntervalAlteration intervalAlteration2)
             {
-                return !(toneAlteration1 == toneAlteration2);
+                return !(intervalAlteration1 == intervalAlteration2);
             }
 
             #endregion
@@ -54,12 +54,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             public override string ToString()
             {
-                return $"{(AlterBySharp ? Note.SharpShortString : Note.FlatShortString)}{ToneNumber}";
+                return $"{(Alteration == Accidental.Sharp ? Note.SharpShortString : Note.FlatShortString)}{IntervalNumber}";
             }
 
             public override bool Equals(object obj)
             {
-                return this == (obj as ToneAlteration);
+                return this == (obj as IntervalAlteration);
             }
 
             public override int GetHashCode()
@@ -67,8 +67,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 unchecked
                 {
                     var result = 17;
-                    result = result * 23 + ToneNumber.GetHashCode();
-                    result = result * 23 + AlterBySharp.GetHashCode();
+                    result = result * 23 + IntervalNumber.GetHashCode();
+                    result = result * 23 + Alteration.GetHashCode();
                     return result;
                 }
             }
@@ -124,9 +124,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         public IntervalDefinition ExtensionInterval { get; set; }
 
+        public Accidental? ExtensionAlteration { get; set; }
+
         public ICollection<IntervalDefinition> AddedToneIntervals { get; private set; } = new List<IntervalDefinition>();
 
-        public ICollection<ToneAlteration> AlteredTones { get; private set; } = new List<ToneAlteration>();
+        public ICollection<IntervalAlteration> AlteredIntervals { get; private set; } = new List<IntervalAlteration>();
+
+        public IntervalQuality SeventhQuality { get; set; }
 
         public int? SuspensionIntervalNumber
         {
@@ -157,8 +161,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
                    chordDefinition1.BassNoteName == chordDefinition2.BassNoteName &&
                    chordDefinition1.ExtensionInterval == chordDefinition2.ExtensionInterval &&
                    chordDefinition1.AddedToneIntervals.SequenceEqual(chordDefinition2.AddedToneIntervals) &&
-                   chordDefinition1.AlteredTones.SequenceEqual(chordDefinition2.AlteredTones) &&
-                   chordDefinition1.SuspensionIntervalNumber == chordDefinition2.SuspensionIntervalNumber;
+                   chordDefinition1.AlteredIntervals.SequenceEqual(chordDefinition2.AlteredIntervals) &&
+                   chordDefinition1.SuspensionIntervalNumber == chordDefinition2.SuspensionIntervalNumber &&
+                   chordDefinition1.SeventhQuality == chordDefinition2.SeventhQuality;
         }
 
         public static bool operator !=(ChordDefinition chordDefinition1, ChordDefinition chordDefinition2)
@@ -186,18 +191,27 @@ namespace Melanchall.DryWetMidi.MusicTheory
             {
                 var extensionQuality = extensionInterval.Quality;
                 var extensionNumber = extensionInterval.Number;
-                var printQuality = (extensionNumber != 7 && extensionQuality != IntervalQuality.Major) ||
-                    (extensionNumber == 7 && extensionQuality != IntervalQuality.Minor);
-                stringBuilder.Append($"{(printQuality ? IntervalQualitiesSymbols[extensionQuality] : string.Empty)}{extensionNumber}");
+                var extensionAlteration = ExtensionAlteration;
+
+                if (extensionAlteration == null)
+                {
+                    var printQuality = (extensionNumber != 7 && extensionQuality != IntervalQuality.Major) ||
+                                       (extensionNumber == 7 && extensionQuality != IntervalQuality.Minor);
+                    stringBuilder.Append($"{(printQuality ? IntervalQualitiesSymbols[extensionQuality] : string.Empty)}{extensionNumber}");
+                }
+                else
+                {
+                    stringBuilder.Append($"7{(extensionAlteration == Accidental.Sharp ? Note.SharpShortString : Note.FlatShortString)}{extensionNumber}");
+                }
             }
 
             var suspensionIntervalNumber = SuspensionIntervalNumber;
             if (suspensionIntervalNumber != null)
                 stringBuilder.Append($"sus{suspensionIntervalNumber}");
 
-            stringBuilder.Append(string.Join(string.Empty, AddedToneIntervals.Where(i => !AlteredTones.Any(t => t.ToneNumber == i.Number)).Select(i => $"add{i.Number}")));
+            stringBuilder.Append(string.Join(string.Empty, AddedToneIntervals.Where(i => !AlteredIntervals.Any(t => t.IntervalNumber == i.Number)).Select(i => $"add{i.Number}")));
 
-            stringBuilder.Append(string.Join(string.Empty, AlteredTones));
+            stringBuilder.Append(string.Join(string.Empty, AlteredIntervals));
 
             var bassNoteName = BassNoteName;
             if (bassNoteName != null)
@@ -221,8 +235,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 result = result * 23 + (BassNoteName?.GetHashCode() ?? 0);
                 result = result * 23 + (ExtensionInterval?.GetHashCode() ?? 0);
                 result = result * 23 + (AddedToneIntervals.FirstOrDefault()?.GetHashCode() ?? 0);
-                result = result * 23 + (AlteredTones.FirstOrDefault()?.GetHashCode() ?? 0);
+                result = result * 23 + (AlteredIntervals.FirstOrDefault()?.GetHashCode() ?? 0);
                 result = result * 23 + (SuspensionIntervalNumber?.GetHashCode() ?? 0);
+                result = result * 23 + SeventhQuality.GetHashCode();
                 return result;
             }
         }
