@@ -7,7 +7,7 @@ using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Benchmarks.Smf
+namespace Melanchall.DryWetMidi.Benchmarks.Core
 {
     [TestFixture]
     public class MidiFileReadBenchmarks : BenchmarkTest

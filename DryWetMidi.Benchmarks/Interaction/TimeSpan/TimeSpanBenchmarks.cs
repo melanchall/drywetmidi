@@ -4,7 +4,7 @@ using System.Linq;
 using BenchmarkDotNet.Attributes;
 using Melanchall.DryWetMidi.Interaction;
 
-namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
+namespace Melanchall.DryWetMidi.Benchmarks.Interaction
 {
     public abstract class TimeSpanBenchmarks<TTimeSpan>
         where TTimeSpan : ITimeSpan

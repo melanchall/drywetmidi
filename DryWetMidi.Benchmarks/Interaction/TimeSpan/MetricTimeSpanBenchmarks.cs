@@ -3,20 +3,20 @@ using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
+namespace Melanchall.DryWetMidi.Benchmarks.Interaction
 {
     [TestFixture]
-    public sealed class BarBeatFractionTimeSpanBenchmarks : BenchmarkTest
+    public sealed class MetricTimeSpanBenchmarks : BenchmarkTest
     {
         #region Nested classes
 
         [InProcessSimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 5, targetCount: 5, invocationCount: 5)]
-        public class Benchmarks_BarBeatFraction : TimeSpanBenchmarks<BarBeatFractionTimeSpan>
+        public class Benchmarks_Metric : TimeSpanBenchmarks<MetricTimeSpan>
         {
             #region Constants
 
-            private static readonly TimeSignature FirstTimeSignature = new TimeSignature(3, 4);
-            private static readonly TimeSignature SecondTimeSignature = new TimeSignature(5, 8);
+            private static readonly Tempo FirstTempo = Tempo.FromBeatsPerMinute(130);
+            private static readonly Tempo SecondTempo = Tempo.FromBeatsPerMinute(90);
 
             #endregion
 
@@ -30,10 +30,10 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 
             private static TempoMap GetTempoMap()
             {
-                var timeSignatureChangeOffset = 5 * TimeOffset - 1;
+                var changeTempoOffset = 5 * TimeOffset - 1;
                 var maxTime = Math.Max((TimesCount - 1) * TimeOffset, (TimesCount - 1) * TimeOffset + Length);
 
-                bool firstTimeSignature = true;
+                bool firstTempo = true;
 
                 using (var tempoMapManager = new TempoMapManager())
                 {
@@ -41,10 +41,10 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
 
                     while (time < maxTime)
                     {
-                        tempoMapManager.SetTimeSignature(time, firstTimeSignature ? FirstTimeSignature : SecondTimeSignature);
+                        tempoMapManager.SetTempo(time, firstTempo ? FirstTempo : SecondTempo);
 
-                        firstTimeSignature = !firstTimeSignature;
-                        time += timeSignatureChangeOffset;
+                        firstTempo = !firstTempo;
+                        time += changeTempoOffset;
                     }
 
                     return tempoMapManager.TempoMap;
@@ -59,10 +59,10 @@ namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
         #region Test methods
 
         [Test]
-        [Description("Benchmark bar_beat.fraction time/length conversion.")]
-        public void ConvertBarBeatFractionTimeSpan()
+        [Description("Benchmark metric time/length conversion.")]
+        public void ConvertMetricTimeSpan()
         {
-            RunBenchmarks<Benchmarks_BarBeatFraction>();
+            RunBenchmarks<Benchmarks_Metric>();
         }
 
         #endregion

@@ -6,7 +6,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
+namespace Melanchall.DryWetMidi.Benchmarks.Interaction
 {
     [TestFixture]
     public class NotesManagingUtilitiesGetNotesBenchmarks : BenchmarkTest

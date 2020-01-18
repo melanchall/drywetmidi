@@ -3,7 +3,7 @@ using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Benchmarks.Smf.Interaction
+namespace Melanchall.DryWetMidi.Benchmarks.Interaction
 {
     [TestFixture]
     public sealed class BarBeatTicksTimeSpanBenchmarks : BenchmarkTest
