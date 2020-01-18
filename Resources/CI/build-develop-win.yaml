@@ -21,7 +21,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '5.0.0'
+  version: '5.1.0'
 
 name: $(TeamProject)_$(SourceBranchName)_BuildAndTest_Windows_$(version)$(Rev:.r)
 
