@@ -3,20 +3,34 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class ChordNameProvider
+    internal static class ChordsNamesTable
     {
+        #region Nested classes
+
         private sealed class NameDefinition
         {
+            #region Constructor
+
             public NameDefinition(int[][] intervals, params string[] names)
             {
                 Intervals = intervals;
                 Names = names;
             }
 
+            #endregion
+
+            #region Properties
+
             public int[][] Intervals { get; }
 
             public string[] Names { get; }
+
+            #endregion
         }
+
+        #endregion
+
+        #region Constants
 
         private static readonly NameDefinition[] NamesDefinitions = new[]
         {
@@ -59,11 +73,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
             new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17 } }, "11")
         };
 
+        #endregion
+
+        #region Methods
+
         public static IList<string> GetChordName(ICollection<NoteName> notesNames)
         {
-            var firstNoteName = notesNames.First();
+            var result = new List<string>();
+            if (!notesNames.Any())
+                return result;
 
-            var result = GetChordNameInternal(notesNames);
+            result.AddRange(GetChordNameInternal(notesNames));
+
+            var firstNoteName = notesNames.First();
             result.AddRange(GetChordNameInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName}"));
 
             result.Sort((x, y) => x.Length - y.Length);
@@ -72,9 +94,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static List<string> GetChordNameInternal(ICollection<NoteName> notesNames)
         {
-            var rootNoteName = notesNames.First();
-
             var result = new List<string>();
+            if (!notesNames.Any())
+                return result;
+
+            var rootNoteName = notesNames.First();
             var intervals = ChordUtilities.GetIntervalsFromRootNote(notesNames).Select(i => i.HalfSteps).ToArray();
 
             foreach (var nameDefinition in NamesDefinitions)
@@ -122,5 +146,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             return result;
         }
+
+        #endregion
     }
 }

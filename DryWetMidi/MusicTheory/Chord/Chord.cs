@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (_chordNames != null)
                 return _chordNames;
 
-            var names = ChordNameProvider.GetChordName(NotesNames);
+            var names = ChordsNamesTable.GetChordName(NotesNames);
             return _chordNames = new ReadOnlyCollection<string>(names);
         }
 
