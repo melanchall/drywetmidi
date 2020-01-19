@@ -188,7 +188,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase(new[] { NoteName.C, NoteName.D, NoteName.G }, "Csus2")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D }, "C9")]
         [TestCase(new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D }, "C9sus4")]
-        // [TestCase(new[] { NoteName.C, NoteName.D, NoteName.G, NoteName.ASharp, NoteName.D }, "C9sus2")]
+        [TestCase(new[] { NoteName.C, NoteName.D, NoteName.G, NoteName.ASharp, NoteName.D }, "C9sus2")]
         [TestCase(new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C }, "F/G")]
         // [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.F }, "Cadd11")]
         // [TestCase(new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp }, "C7#5")]

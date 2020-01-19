@@ -20,8 +20,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static readonly NameDefinition[] NamesDefinitions = new[]
         {
-            new NameDefinition(new[] { new[] { 0, 2, 7, 10, 14 } }, "9sus2"),
-
             new NameDefinition(new[] { new[] { 0, 4, 7 } }, "maj", "M", string.Empty),
             new NameDefinition(new[] { new[] { 0, 3, 7 } }, "min", "m"),
             new NameDefinition(new[] { new[] { 0, 5, 7 } }, "sus4"),
@@ -56,9 +54,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
             new NameDefinition(new[] { new[] { 0, 4, 7, 9, 14 }, new[] { 4, 7, 9, 14 }, new[] { 0, 4, 9, 14 }, new[] { 4, 9, 14 } }, "maj6(9)", "6(9)", "6/9", "M6/9", "M6(9)"),
             new NameDefinition(new[] { new[] { 0, 3, 7, 9, 14 }, new[] { 3, 7, 9, 14 }, new[] { 0, 3, 9, 14 }, new[] { 3, 9, 14 } }, "min6(9)", "m6(9)", "m6/9", "min6/9"),
             new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14 } }, "9"),
-            //new NameDefinition(new[] { new[] { 0, 2, 7, 10, 14 } }, "9sus2"),
+            new NameDefinition(new[] { new[] { 0, 2, 7, 10, 14 } }, "9sus2"),
             new NameDefinition(new[] { new[] { 0, 5, 7, 10, 14 } }, "9sus4"),
-            new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17 } }, "11"),
+            new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17 } }, "11")
         };
 
         public static IList<string> GetChordName(ICollection<NoteName> notesNames)
@@ -74,11 +72,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static List<string> GetChordNameInternal(ICollection<NoteName> notesNames)
         {
-            var uniqueNotesNames = new HashSet<NoteName>(notesNames);
-            var rootNoteName = uniqueNotesNames.First();
+            var rootNoteName = notesNames.First();
 
             var result = new List<string>();
-            var intervals = ChordUtilities.GetIntervalsFromRootNote(uniqueNotesNames).Select(i => i.HalfSteps).ToArray();
+            var intervals = ChordUtilities.GetIntervalsFromRootNote(notesNames).Select(i => i.HalfSteps).ToArray();
 
             foreach (var nameDefinition in NamesDefinitions)
             {
@@ -98,16 +95,23 @@ namespace Melanchall.DryWetMidi.MusicTheory
                         intervalsX = new[] { 0 }.Concat(intervals).ToArray();
                     }
 
-                    var subMatched = intervalsX.Length == definitionIntervals.Length;
+                    var subMatched = intervalsX.Length >= definitionIntervals.Length;
+                    var j = 0;
 
-                    for (int i = 0; i < definitionIntervals.Length && subMatched; i++)
+                    for (int i = 0; i < definitionIntervals.Length && i < intervalsX.Length && subMatched; i++, j++)
                     {
                         var interval = definitionIntervals[i];
-                        if (intervalsX[i] != interval)
+                        if (intervalsX[i] != interval && !intervalsX.Contains(interval - 12) && !intervalsX.Contains(interval - 24))
                             subMatched = false;
                     }
 
-                    matched |= subMatched;
+                    for (; j < intervalsX.Length && subMatched; j++)
+                    {
+                        if (!intervalsX.Contains(intervalsX[j] - 12) && !intervalsX.Contains(intervalsX[j] - 24))
+                            subMatched = false;
+                    }
+
+                    matched |= subMatched && j >= intervalsX.Length;
                     if (matched)
                         break;
                 }
