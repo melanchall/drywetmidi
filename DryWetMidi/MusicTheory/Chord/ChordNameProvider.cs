@@ -20,6 +20,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static readonly NameDefinition[] NamesDefinitions = new[]
         {
+            new NameDefinition(new[] { new[] { 0, 2, 7, 10, 14 } }, "9sus2"),
+
             new NameDefinition(new[] { new[] { 0, 4, 7 } }, "maj", "M", string.Empty),
             new NameDefinition(new[] { new[] { 0, 3, 7 } }, "min", "m"),
             new NameDefinition(new[] { new[] { 0, 5, 7 } }, "sus4"),
@@ -45,6 +47,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
             new NameDefinition(new[] { new[] { 0, 3, 7, 11 } }, "minMaj7", "mM7"),
             new NameDefinition(new[] { new[] { 0, 3, 7, 11, 14 }, new[] { 0, 3, 11, 14 }, new[] { 3, 11, 14 }, new[] { 3, 7, 11, 14 } }, "minMaj7(9)", "mM7(9)"),
             new NameDefinition(new[] { new[] { 0, 7 } }, "5"),
+            new NameDefinition(new[] { new[] { 0, 4, 6, 10 } }, "7b5", "dom7dim5", "7dim5"),
+            new NameDefinition(new[] { new[] { 0, 3, 6, 10 } }, "ø", "ø7", "m7b5", "min7dim5", "m7dim5", "min7b5", "m7b5"),
+            new NameDefinition(new[] { new[] { 0, 4, 8, 10 } }, "aug7"),
+            new NameDefinition(new[] { new[] { 0, 3, 6, 9 } }, "dim7"),
+            new NameDefinition(new[] { new[] { 0, 4, 7, 14 } }, "add9"),
+            new NameDefinition(new[] { new[] { 0, 3, 7, 14 } }, "minAdd9", "mAdd9"),
+            new NameDefinition(new[] { new[] { 0, 4, 7, 9, 14 }, new[] { 4, 7, 9, 14 }, new[] { 0, 4, 9, 14 }, new[] { 4, 9, 14 } }, "maj6(9)", "6(9)", "6/9", "M6/9", "M6(9)"),
+            new NameDefinition(new[] { new[] { 0, 3, 7, 9, 14 }, new[] { 3, 7, 9, 14 }, new[] { 0, 3, 9, 14 }, new[] { 3, 9, 14 } }, "min6(9)", "m6(9)", "m6/9", "min6/9"),
+            new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14 } }, "9"),
+            //new NameDefinition(new[] { new[] { 0, 2, 7, 10, 14 } }, "9sus2"),
+            new NameDefinition(new[] { new[] { 0, 5, 7, 10, 14 } }, "9sus4"),
+            new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17 } }, "11"),
         };
 
         public static IList<string> GetChordName(ICollection<NoteName> notesNames)
@@ -77,6 +91,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     if (definitionIntervals[0] != 0)
                     {
                         // TODO: process omitted root
+                        continue;
                     }
                     else
                     {
