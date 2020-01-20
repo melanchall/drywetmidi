@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private bool[] _channelEnabled = new bool[16] {  true, true, true, true, true, true, true, true,
+        private bool[] channelEnabled = new bool[16] {  true, true, true, true, true, true, true, true,
                                                         true, true, true, true, true, true, true, true };
 
         #endregion
@@ -269,14 +269,11 @@ namespace Melanchall.DryWetMidi.Devices
         {
             get
             {
-                return _channelEnabled;
+                return channelEnabled;
             }
             set
             {
-                if (value.Length != 16)
-                    throw new Exception("Array-Length must be 16");
-
-                _channelEnabled = value;
+                channelEnabled = value;
             }
         }
 
@@ -716,7 +713,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 int channel = ((NoteOnEvent)midiEvent).Channel;
 
-                if (!_channelEnabled[channel])
+                if (!channelEnabled[channel])
                     return;
             }
 
