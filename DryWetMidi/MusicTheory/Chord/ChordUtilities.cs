@@ -76,6 +76,23 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return result;
         }
 
+        /// <summary>
+        /// Gets the collection of chord's inversions.
+        /// </summary>
+        /// <returns>Collection of chord's inversions.</returns>
+        public static IEnumerable<Chord> GetInversions(this Chord chord)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+
+            foreach (var permutation in MathUtilities.GetPermutations(chord.NotesNames.ToArray()))
+            {
+                if (permutation[0] == chord.RootNoteName)
+                    continue;
+
+                yield return new Chord(permutation.ToArray());
+            }
+        }
+
         internal static IEnumerable<Interval> GetIntervalsFromRootNote(ICollection<NoteName> notesNames)
         {
             var lastNoteNumber = (int)notesNames.First();

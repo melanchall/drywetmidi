@@ -122,23 +122,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
         }
 
         /// <summary>
-        /// Gets the collection of chord's inversions.
-        /// </summary>
-        /// <returns>Collection of chord's inversions.</returns>
-        public IEnumerable<Chord> GetInversions()
-        {
-            var notesNames = new Queue<NoteName>(NotesNames);
-
-            for (var i = 1; i < NotesNames.Count; i++)
-            {
-                var noteName = notesNames.Dequeue();
-                notesNames.Enqueue(noteName);
-
-                yield return new Chord(notesNames.ToArray());
-            }
-        }
-
-        /// <summary>
         /// Converts the string representation of a musical chord to its <see cref="Chord"/> equivalent.
         /// A return value indicates whether the conversion succeeded.
         /// </summary>

@@ -58,30 +58,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             Assert.AreNotEqual(chord1, chord3, "Chords are equal.");
         }
 
-        [Test]
-        public void GetInversions_OneNote()
-        {
-            var chord = new Chord(NoteName.C, new NoteName[0]);
-            var inversions = chord.GetInversions();
-            CollectionAssert.IsEmpty(inversions, "There are inversions for one-note chord.");
-        }
-
-        [Test]
-        public void GetInversions()
-        {
-            var chord = new Chord(NoteName.C, NoteName.E, NoteName.G);
-            var inversions = chord.GetInversions().ToArray();
-            Assert.AreEqual(2, inversions.Length, "Invalid count of inversions.");
-            CollectionAssert.AreEqual(
-                new[] { NoteName.E, NoteName.G, NoteName.C },
-                inversions[0].NotesNames,
-                "First inversion is invalid.");
-            CollectionAssert.AreEqual(
-                new[] { NoteName.G, NoteName.C, NoteName.E },
-                inversions[1].NotesNames,
-                "Second inversion is invalid.");
-        }
-
         [TestCase(NoteName.C, ChordQuality.Major, new[] { NoteName.C, NoteName.E, NoteName.G })]
         [TestCase(NoteName.F, ChordQuality.Major, new[] { NoteName.F, NoteName.A, NoteName.C })]
         [TestCase(NoteName.C, ChordQuality.Minor, new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
