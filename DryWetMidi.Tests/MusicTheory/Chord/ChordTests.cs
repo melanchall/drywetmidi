@@ -144,6 +144,11 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         }
 
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G }, "C")]
+        [TestCase(new[] { NoteName.C, NoteName.G, NoteName.E }, "C")]
+        [TestCase(new[] { NoteName.E, NoteName.G, NoteName.C }, "C")]
+        [TestCase(new[] { NoteName.E, NoteName.C, NoteName.G }, "C")]
+        [TestCase(new[] { NoteName.G, NoteName.E, NoteName.C }, "C")]
+        [TestCase(new[] { NoteName.G, NoteName.C, NoteName.E }, "C")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.C, NoteName.E }, "C")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A }, "C6")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp }, "C7")]

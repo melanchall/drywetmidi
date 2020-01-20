@@ -16,9 +16,19 @@ namespace Melanchall.DryWetMidi.Benchmarks.MusicTheory
             [Benchmark]
             public void GetNames_CMajor()
             {
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < 100; i++)
                 {
                     var chord = new Chord(NoteName.C, NoteName.E, NoteName.G);
+                    var names = chord.GetNames();
+                }
+            }
+
+            [Benchmark]
+            public void GetNames_CMajorExtended()
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    var chord = new Chord(NoteName.C, NoteName.E, NoteName.G, NoteName.C, NoteName.C);
                     var names = chord.GetNames();
                 }
             }
