@@ -67,9 +67,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private bool[] channelEnabled = new bool[16] {  true, true, true, true, true, true, true, true,
-                                                        true, true, true, true, true, true, true, true };
-
         #endregion
 
         #region Constructor
@@ -261,21 +258,6 @@ namespace Melanchall.DryWetMidi.Devices
         public NoteCallback NoteCallback { get; set; }
 
         public EventCallback EventCallback { get; set; }
-
-        /// <summary>
-        /// Enable or Disable the 16 Midi-Channels while Playback
-        /// </summary>
-        public bool[] ChannelEnabled
-        {
-            get
-            {
-                return channelEnabled;
-            }
-            set
-            {
-                channelEnabled = value;
-            }
-        }
 
         #endregion
 
@@ -708,15 +690,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void SendEvent(MidiEvent midiEvent)
         {
-            // Realization for muting midi-Channels
-            if (midiEvent is NoteOnEvent)
-            {
-                int channel = ((NoteOnEvent)midiEvent).Channel;
-
-                if (!channelEnabled[channel])
-                    return;
-            }
-
             OutputDevice?.SendEvent(midiEvent);
             OnEventPlayed(midiEvent);
         }
