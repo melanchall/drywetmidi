@@ -7,6 +7,8 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public class WritingSettings
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets compression rules for the writing engine. The default is
         /// <see cref="CompressionPolicy.NoCompression"/>.
@@ -25,5 +27,7 @@ namespace Melanchall.DryWetMidi.Core
         /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
         public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
+
+        #endregion
     }
 }

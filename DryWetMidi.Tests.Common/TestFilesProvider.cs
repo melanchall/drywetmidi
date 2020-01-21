@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Tests.Utilities
+namespace Melanchall.DryWetMidi.Tests.Common
 {
-    internal static class TestFilesProvider
+    public static class TestFilesProvider
     {
         #region Constants
-
-        public static class Filters
-        {
-            public static Predicate<MidiFile> SimpleTempoMap = f =>
-            {
-                var tempoMap = f.GetTempoMap();
-                return tempoMap.Tempo.Count() <= 3 && tempoMap.TimeSignature.Count() <= 3;
-            };
-        }
 
         private const string ValidFilesPath = @"..\..\..\..\Resources\MIDI files\Valid";
 
         #endregion
 
         #region Methods
+
+        public static string GetMiscFile(string fileName)
+        {
+            return Path.Combine(ValidFilesPath, "Misc", fileName);
+        }
 
         public static IEnumerable<MidiFile> GetValidFiles(params Predicate<MidiFile>[] filters)
         {

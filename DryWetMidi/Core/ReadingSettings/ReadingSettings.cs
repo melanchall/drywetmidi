@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -7,6 +9,8 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public class ReadingSettings
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets reaction of the reading engine on unexpected track chunks count. The default is
         /// <see cref="UnexpectedTrackChunksCountPolicy.Ignore"/>.
@@ -164,5 +168,30 @@ namespace Melanchall.DryWetMidi.Core
         /// meta event. The default is null.
         /// </summary>
         public DecodeTextCallback DecodeTextCallback { get; set; }
+
+        public ICollection<ReadingHandler> ReadingHandlers { get; } = new List<ReadingHandler>();
+
+        internal bool UseReadingHandlers { get; private set; }
+
+        internal ICollection<ReadingHandler> FileReadingHandlers { get; private set; }
+
+        internal ICollection<ReadingHandler> TrackChunkReadingHandlers { get; private set; }
+
+        internal ICollection<ReadingHandler> EventReadingHandlers { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        internal void PrepareReadingHandlers()
+        {
+            UseReadingHandlers = ReadingHandlers.Any();
+
+            FileReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.File)).ToArray();
+            TrackChunkReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.TrackChunk)).ToArray();
+            EventReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.Event)).ToArray();
+        }
+
+        #endregion
     }
 }

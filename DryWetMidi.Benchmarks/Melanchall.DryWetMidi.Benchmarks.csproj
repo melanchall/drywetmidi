@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DryWetMidi.Tests.Common\Melanchall.DryWetMidi.Tests.Common.csproj" />
     <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj" />
   </ItemGroup>
 

@@ -112,10 +112,22 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
+            var useReadingHandlers = settings.UseReadingHandlers;
+            if (useReadingHandlers)
+            {
+                foreach (var handler in settings.TrackChunkReadingHandlers)
+                {
+                    handler.OnStartTrackChunkContentReading(this);
+                }
+            }
+
+            //
+
             var endReaderPosition = reader.Position + size;
             var endOfTrackPresented = false;
 
             byte? currentChannelEventStatusByte = null;
+            long absoluteTime = 0;
 
             //
 
@@ -126,6 +138,16 @@ namespace Melanchall.DryWetMidi.Core
                 {
                     endOfTrackPresented = true;
                     break;
+                }
+
+                absoluteTime += midiEvent.DeltaTime;
+
+                if (useReadingHandlers)
+                {
+                    foreach (var handler in settings.EventReadingHandlers)
+                    {
+                        handler.OnFinishEventReading(midiEvent, absoluteTime);
+                    }
                 }
 
                 Events.Add(midiEvent);
