@@ -97,8 +97,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 result.AddRange(GetChordNameByPermutation(permutation));
             }
 
-            result.Sort((x, y) => x.Length - y.Length);
-            return result;
+            return result.Distinct().OrderBy(n => n.Length).ToArray();
         }
 
         private static IList<string> GetChordNameByPermutation(NoteName[] notesNames)
