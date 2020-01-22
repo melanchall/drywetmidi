@@ -1,5 +1,4 @@
-﻿using System;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -12,11 +11,35 @@ namespace Melanchall.DryWetMidi.Core
             var statusByte = currentStatusByte.GetHead();
             var channel = currentStatusByte.GetTail();
 
-            Type eventType;
-            if (!StandardEventTypes.Channel.TryGetType(statusByte, out eventType))
-                throw new UnknownChannelEventException(statusByte, channel);
+            ChannelEvent channelEvent = null;
 
-            var channelEvent = (ChannelEvent)Activator.CreateInstance(eventType);
+            switch (statusByte)
+            {
+                case EventStatusBytes.Channel.ChannelAftertouch:
+                    channelEvent = new ChannelAftertouchEvent();
+                    break;
+                case EventStatusBytes.Channel.ControlChange:
+                    channelEvent = new ControlChangeEvent();
+                    break;
+                case EventStatusBytes.Channel.NoteAftertouch:
+                    channelEvent = new NoteAftertouchEvent();
+                    break;
+                case EventStatusBytes.Channel.NoteOff:
+                    channelEvent = new NoteOffEvent();
+                    break;
+                case EventStatusBytes.Channel.NoteOn:
+                    channelEvent = new NoteOnEvent();
+                    break;
+                case EventStatusBytes.Channel.PitchBend:
+                    channelEvent = new PitchBendEvent();
+                    break;
+                case EventStatusBytes.Channel.ProgramChange:
+                    channelEvent = new ProgramChangeEvent();
+                    break;
+                default:
+                    throw new UnknownChannelEventException(statusByte, channel);
+            }
+
             channelEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
             channelEvent.Channel = channel;
 

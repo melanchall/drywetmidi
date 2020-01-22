@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,18 +12,25 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            Type eventType;
-            var midiEvent = StandardEventTypes.SysEx.TryGetType(currentStatusByte, out eventType)
-                ? (SysExEvent)Activator.CreateInstance(eventType)
-                : null;
+            SysExEvent sysExEvent = null;
 
-            if (midiEvent == null)
+            switch (currentStatusByte)
+            {
+                case EventStatusBytes.Global.EscapeSysEx:
+                    sysExEvent = new EscapeSysExEvent();
+                    break;
+                case EventStatusBytes.Global.NormalSysEx:
+                    sysExEvent = new NormalSysExEvent();
+                    break;
+            }
+
+            if (sysExEvent == null)
                 Debug.Fail("Unknown SysEx event.");
 
             //
 
-            midiEvent.Read(reader, settings, size);
-            return midiEvent;
+            sysExEvent.Read(reader, settings, size);
+            return sysExEvent;
         }
 
         #endregion

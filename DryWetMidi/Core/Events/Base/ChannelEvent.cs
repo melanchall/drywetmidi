@@ -118,6 +118,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected sealed override MidiEvent CloneEvent()
         {
+            // TODO: get rid of Activator.CreateInstance
             var eventType = GetType();
             var channelEvent = (ChannelEvent)Activator.CreateInstance(eventType);
 
