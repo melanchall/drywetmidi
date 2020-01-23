@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             [Benchmark]
             public void Read_WithoutHandlers()
             {
-                var midiFile = MidiFile.Read(TestFilesProvider.GetMiscFile("Misc_14000_events.mid"));
+                var midiFile = MidiFile.Read(TestFilesProvider.GetMiscFile_14000events());
             }
 
             [Benchmark]
@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
                 var settings = new ReadingSettings();
                 settings.ReadingHandlers.Add(handler);
 
-                var midiFile = MidiFile.Read(TestFilesProvider.GetMiscFile("Misc_14000_events.mid"), settings);
+                var midiFile = MidiFile.Read(TestFilesProvider.GetMiscFile_14000events(), settings);
             }
         }
 

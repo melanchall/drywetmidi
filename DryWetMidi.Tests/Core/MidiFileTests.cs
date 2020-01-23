@@ -683,7 +683,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var timeDivision = new TicksPerQuarterNoteTimeDivision(1000);
             var handler = new FileReadingHandler();
 
-            WriteReadUsingHandlers(new MidiFile { TimeDivision = timeDivision }, handler);
+            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile { TimeDivision = timeDivision }, handler);
             Assert.AreEqual(1, handler.StartHandledCount, "Start Handled Count is invalid.");
             Assert.AreEqual(1, handler.EndHandledCount, "End Handled Count is invalid.");
             Assert.AreEqual(timeDivision, handler.TimeDivision, "Time division is invalid.");
@@ -695,7 +695,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new TrackChunkReadingHandler();
 
-            WriteReadUsingHandlers(new MidiFile(new TrackChunk(), new TrackChunk()), handler);
+            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk(), new TrackChunk()), handler);
             Assert.AreEqual(2, handler.StartHandledCount, "Start Handled Count is invalid.");
             Assert.AreEqual(2, handler.ContentStartHandledCount, "Content Start Handled Count is invalid.");
             Assert.AreEqual(2, handler.EndHandledCount, "End Handled Count is invalid.");
@@ -707,7 +707,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new EventReadingHandler();
 
-            WriteReadUsingHandlers(new MidiFile(), handler);
+            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(), handler);
             Assert.AreEqual(0, handler.HandledCount, "Handled Count is invalid.");
             Assert.AreEqual(0, handler.BadHandledCount, "Scope wasn't used correctly.");
         }
@@ -717,7 +717,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new EventReadingHandler();
 
-            WriteReadUsingHandlers(new MidiFile(new TrackChunk()), handler);
+            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk()), handler);
             Assert.AreEqual(0, handler.HandledCount, "Handled Count is invalid.");
             Assert.AreEqual(0, handler.BadHandledCount, "Scope wasn't used correctly.");
         }
@@ -727,7 +727,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new EventReadingHandler();
 
-            WriteReadUsingHandlers(new MidiFile(new TrackChunk(new TextEvent("test"), new TextEvent("test 2")), new TrackChunk(), new TrackChunk(new SetTempoEvent(100000))), handler);
+            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk(new TextEvent("test"), new TextEvent("test 2")), new TrackChunk(), new TrackChunk(new SetTempoEvent(100000))), handler);
             Assert.AreEqual(3, handler.HandledCount, "Handled Count is invalid.");
             Assert.AreEqual(0, handler.BadHandledCount, "Scope wasn't used correctly.");
         }
@@ -741,7 +741,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var trackChunkReadingHandler = new TrackChunkReadingHandler();
             var eventReadingHandler = new EventReadingHandler();
 
-            WriteReadUsingHandlers(
+            MidiFileReadingUtilities.ReadUsingHandlers(
                 new MidiFile(
                     new TrackChunk(new TextEvent("test"), new TextEvent("test 2")),
                     new TrackChunk(),
@@ -772,7 +772,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var handler = new MixedReadingHandler();
 
-            WriteReadUsingHandlers(
+            MidiFileReadingUtilities.ReadUsingHandlers(
                 new MidiFile(
                     new TrackChunk(new TextEvent("test"), new TextEvent("test 2")),
                     new TrackChunk(),
@@ -795,29 +795,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Private methods
-
-        private void WriteReadUsingHandlers(MidiFile midiFile, params ReadingHandler[] handlers)
-        {
-            var filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.mid");
-
-            midiFile.Write(filePath);
-
-            try
-            {
-                var settings = new ReadingSettings();
-
-                foreach (var handler in handlers)
-                {
-                    settings.ReadingHandlers.Add(handler);
-                }
-
-                midiFile = MidiFile.Read(filePath, settings);
-            }
-            finally
-            {
-                File.Delete(filePath);
-            }
-        }
 
         private MidiFile WriteRead(MidiFile midiFile, WritingSettings writingSettings = null, ReadingSettings readingSettings = null)
         {

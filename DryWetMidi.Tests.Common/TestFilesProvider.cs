@@ -17,6 +17,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         #region Methods
 
+        public static string GetMiscFile_14000events()
+        {
+            return GetMiscFile("Misc_14000_events.mid");
+        }
+
         public static string GetMiscFile(string fileName)
         {
             return Path.Combine(ValidFilesPath, "Misc", fileName);

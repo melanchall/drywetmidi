@@ -33,6 +33,10 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
+        public virtual void Initialize()
+        {
+        }
+
         public virtual void OnStartFileReading()
         {
         }

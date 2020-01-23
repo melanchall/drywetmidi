@@ -187,6 +187,11 @@ namespace Melanchall.DryWetMidi.Core
         {
             UseReadingHandlers = ReadingHandlers.Any();
 
+            foreach (var handler in ReadingHandlers)
+            {
+                handler.Initialize();
+            }
+
             FileReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.File)).ToArray();
             TrackChunkReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.TrackChunk)).ToArray();
             EventReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.Event)).ToArray();
