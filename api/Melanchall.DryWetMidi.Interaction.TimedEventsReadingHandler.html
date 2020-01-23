@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class SongSelectEvent
+    <title>Class TimedEventsReadingHandler
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class SongSelectEvent
+    <meta name="title" content="Class TimedEventsReadingHandler
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.48.1.0">
     
@@ -78,35 +78,41 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler">
   
   
-  <h1 id="Melanchall_DryWetMidi_Core_SongSelectEvent" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent" class="text-break">Class SongSelectEvent
+  <h1 id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler" class="text-break">Class TimedEventsReadingHandler
   </h1>
-  <div class="markdown level0 summary">
-Represents Song Select event.
-</div>
+  <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></div>
-    <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Core.SystemCommonEvent.html">SystemCommonEvent</a></div>
-    <div class="level3"><span class="xref">SongSelectEvent</span></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html">ReadingHandler</a></div>
+    <div class="level2"><span class="xref">TimedEventsReadingHandler</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_UnknownContentSize">MidiEvent.UnknownContentSize</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Scope">ReadingHandler.Scope</a>
     </div>
     <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_EventType">MidiEvent.EventType</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnStartFileReading">ReadingHandler.OnStartFileReading()</a>
     </div>
     <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_DeltaTime">MidiEvent.DeltaTime</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_">ReadingHandler.OnFinishFileReading(MidiFile)</a>
     </div>
     <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Clone">MidiEvent.Clone()</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishHeaderChunkReading_Melanchall_DryWetMidi_Core_TimeDivision_">ReadingHandler.OnFinishHeaderChunkReading(TimeDivision)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkReading">ReadingHandler.OnStartTrackChunkReading()</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkContentReading_Melanchall_DryWetMidi_Core_TrackChunk_">ReadingHandler.OnStartTrackChunkContentReading(TrackChunk)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishTrackChunkReading_Melanchall_DryWetMidi_Core_TrackChunk_">ReadingHandler.OnFinishTrackChunkReading(TrackChunk)</a>
     </div>
     <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
@@ -126,40 +132,25 @@ Represents Song Select event.
     <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
     </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Core_SongSelectEvent_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class SongSelectEvent : SystemCommonEvent</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class TimedEventsReadingHandler : ReadingHandler</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Core_SongSelectEvent_remarks"><strong>Remarks</strong></h5>
-  <div class="markdown level0 remarks">
-A MIDI event that carries the MIDI song request message (also known as a &quot;song select message&quot;)
-tells a MIDI device to select a sequence for playback.
-</div>
   <h3 id="constructors">Constructors
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_SongSelectEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_SongSelectEvent__ctor" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.#ctor">SongSelectEvent()</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.SongSelectEvent.html">SongSelectEvent</a>.
-</div>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler__ctor_System_Boolean_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.#ctor(System.Boolean)">TimedEventsReadingHandler(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SongSelectEvent()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Core_SongSelectEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_SongSelectEvent__ctor_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.#ctor(Melanchall.DryWetMidi.Common.SevenBitNumber)">SongSelectEvent(SevenBitNumber)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.SongSelectEvent.html">SongSelectEvent</a> with the specified
-song number.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SongSelectEvent(SevenBitNumber number)</code></pre>
+    <pre><code class="lang-csharp hljs">public TimedEventsReadingHandler(bool sortEvents)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -172,23 +163,21 @@ song number.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
-        <td><span class="parametername">number</span></td>
-        <td>Number of the song to be chosen.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">sortEvents</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_SongSelectEvent_Number_" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.Number*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_SongSelectEvent_Number" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.Number">Number</h4>
-  <div class="markdown level1 summary">
-Gets or sets number of the song to be chosen.
-</div>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_TimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_TimedEvents" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents">TimedEvents</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SevenBitNumber Number { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TimedEvent&gt; TimedEvents { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -200,67 +189,55 @@ Gets or sets number of the song to be chosen.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_SongSelectEvent_CloneEvent_" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.CloneEvent*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_SongSelectEvent_CloneEvent" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.CloneEvent">CloneEvent()</h4>
-  <div class="markdown level1 summary">
-Clones event by creating a copy of it.
-</div>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_Initialize_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_Initialize" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize">Initialize()</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override MidiEvent CloneEvent()</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Initialize()</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Initialize">ReadingHandler.Initialize()</a></div>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_OnFinishEventReading_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)">OnFinishEventReading(MidiEvent, Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnFinishEventReading(MidiEvent midiEvent, long absoluteTime)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
-        <td>Copy of the event.</td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">absoluteTime</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_CloneEvent">MidiEvent.CloneEvent()</a></div>
-  <a id="Melanchall_DryWetMidi_Core_SongSelectEvent_ToString_" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.ToString*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_SongSelectEvent_ToString" data-uid="Melanchall.DryWetMidi.Core.SongSelectEvent.ToString">ToString()</h4>
-  <div class="markdown level1 summary">
-Returns a string that represents the current object.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td>A string that represents the current object.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_">ReadingHandler.OnFinishEventReading(MidiEvent, Int64)</a></div>
 </article>
           </div>
           

@@ -6984,6 +6984,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReadingHandler.ReadingHandler
   nameWithType: ReadingHandler.ReadingHandler
+- uid: Melanchall.DryWetMidi.Core.ReadingHandler.Initialize
+  name: Initialize()
+  href: api/Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Initialize
+  commentId: M:Melanchall.DryWetMidi.Core.ReadingHandler.Initialize
+  fullName: Melanchall.DryWetMidi.Core.ReadingHandler.Initialize()
+  nameWithType: ReadingHandler.Initialize()
+- uid: Melanchall.DryWetMidi.Core.ReadingHandler.Initialize*
+  name: Initialize
+  href: api/Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Initialize_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReadingHandler.Initialize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReadingHandler.Initialize
+  nameWithType: ReadingHandler.Initialize
 - uid: Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)
   name: OnFinishEventReading(MidiEvent, Int64)
   href: api/Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_
@@ -18447,6 +18460,64 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.ToTrackChunk
   nameWithType: TimedEventsManagingUtilities.ToTrackChunk
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler
+  name: TimedEventsReadingHandler
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler
+  nameWithType: TimedEventsReadingHandler
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.#ctor(System.Boolean)
+  name: TimedEventsReadingHandler(Boolean)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler__ctor_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.#ctor(System.Boolean)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEventsReadingHandler(System.Boolean)
+  nameWithType: TimedEventsReadingHandler.TimedEventsReadingHandler(Boolean)
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.#ctor*
+  name: TimedEventsReadingHandler
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEventsReadingHandler
+  nameWithType: TimedEventsReadingHandler.TimedEventsReadingHandler
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize
+  name: Initialize()
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_Initialize
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize()
+  nameWithType: TimedEventsReadingHandler.Initialize()
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize*
+  name: Initialize
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_Initialize_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.Initialize
+  nameWithType: TimedEventsReadingHandler.Initialize
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)
+  name: OnFinishEventReading(MidiEvent, Int64)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent, System.Int64)
+  nameWithType: TimedEventsReadingHandler.OnFinishEventReading(MidiEvent, Int64)
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading*
+  name: OnFinishEventReading
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_OnFinishEventReading_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.OnFinishEventReading
+  nameWithType: TimedEventsReadingHandler.OnFinishEventReading
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents
+  name: TimedEvents
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_TimedEvents
+  commentId: P:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents
+  nameWithType: TimedEventsReadingHandler.TimedEvents
+- uid: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents*
+  name: TimedEvents
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.html#Melanchall_DryWetMidi_Interaction_TimedEventsReadingHandler_TimedEvents_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEventsReadingHandler.TimedEvents
+  nameWithType: TimedEventsReadingHandler.TimedEvents
 - uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1
   name: TimedObjectsCollection<TObject>
   href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html
