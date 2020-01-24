@@ -15,26 +15,26 @@ namespace Melanchall.DryWetMidi.Core
 
             switch (statusByte)
             {
-                case EventStatusBytes.Channel.ChannelAftertouch:
-                    channelEvent = new ChannelAftertouchEvent();
-                    break;
-                case EventStatusBytes.Channel.ControlChange:
-                    channelEvent = new ControlChangeEvent();
-                    break;
-                case EventStatusBytes.Channel.NoteAftertouch:
-                    channelEvent = new NoteAftertouchEvent();
-                    break;
                 case EventStatusBytes.Channel.NoteOff:
                     channelEvent = new NoteOffEvent();
                     break;
                 case EventStatusBytes.Channel.NoteOn:
                     channelEvent = new NoteOnEvent();
                     break;
+                case EventStatusBytes.Channel.ControlChange:
+                    channelEvent = new ControlChangeEvent();
+                    break;
                 case EventStatusBytes.Channel.PitchBend:
                     channelEvent = new PitchBendEvent();
                     break;
+                case EventStatusBytes.Channel.ChannelAftertouch:
+                    channelEvent = new ChannelAftertouchEvent();
+                    break;
                 case EventStatusBytes.Channel.ProgramChange:
                     channelEvent = new ProgramChangeEvent();
+                    break;
+                case EventStatusBytes.Channel.NoteAftertouch:
+                    channelEvent = new NoteAftertouchEvent();
                     break;
                 default:
                     throw new UnknownChannelEventException(statusByte, channel);

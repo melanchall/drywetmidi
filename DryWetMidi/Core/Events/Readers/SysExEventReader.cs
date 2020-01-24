@@ -16,11 +16,11 @@ namespace Melanchall.DryWetMidi.Core
 
             switch (currentStatusByte)
             {
-                case EventStatusBytes.Global.EscapeSysEx:
-                    sysExEvent = new EscapeSysExEvent();
-                    break;
                 case EventStatusBytes.Global.NormalSysEx:
                     sysExEvent = new NormalSysExEvent();
+                    break;
+                case EventStatusBytes.Global.EscapeSysEx:
+                    sysExEvent = new EscapeSysExEvent();
                     break;
             }
 
