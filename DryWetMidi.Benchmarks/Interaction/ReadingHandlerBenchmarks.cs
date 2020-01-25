@@ -45,6 +45,28 @@ namespace Melanchall.DryWetMidi.Benchmarks.Interaction
             }
         }
 
+        [InProcessSimpleJob(RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        public class Benchmarks_ReadFileWithTempoMapReadingHandler
+        {
+            [Benchmark]
+            public void ReadFileWithoutTempoMapReadingHandler()
+            {
+                var midiFile = MidiFile.Read(TestFilesProvider.GetMiscFile_14000events());
+                var timedEvents = midiFile.GetTimedEvents();
+            }
+
+            [Benchmark]
+            public void ReadFileWithTempoMapReadingHandler()
+            {
+                var handler = new TempoMapReadingHandler();
+                var settings = new ReadingSettings();
+                settings.ReadingHandlers.Add(handler);
+
+                var midiFile = MidiFile.Read(TestFilesProvider.GetMiscFile_14000events(), settings);
+                var tempoMap = handler.TempoMap;
+            }
+        }
+
         #endregion
 
         #region Test methods
@@ -53,6 +75,12 @@ namespace Melanchall.DryWetMidi.Benchmarks.Interaction
         public void ReadFileWithTimedEventsReadingHandler()
         {
             RunBenchmarks<Benchmarks_ReadFileWithTimedEventsReadingHandler>();
+        }
+
+        [Test]
+        public void ReadFileWithTempoMapReadingHandler()
+        {
+            RunBenchmarks<Benchmarks_ReadFileWithTempoMapReadingHandler>();
         }
 
         #endregion
