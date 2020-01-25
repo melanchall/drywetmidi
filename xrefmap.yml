@@ -17992,6 +17992,90 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.ReplaceTempoMap
   nameWithType: TempoMapManagingUtilities.ReplaceTempoMap
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler
+  name: TempoMapReadingHandler
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler
+  nameWithType: TempoMapReadingHandler
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.#ctor
+  name: TempoMapReadingHandler()
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler__ctor
+  commentId: M:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.#ctor
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMapReadingHandler()
+  nameWithType: TempoMapReadingHandler.TempoMapReadingHandler()
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.#ctor*
+  name: TempoMapReadingHandler
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMapReadingHandler
+  nameWithType: TempoMapReadingHandler.TempoMapReadingHandler
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize
+  name: Initialize()
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_Initialize
+  commentId: M:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize()
+  nameWithType: TempoMapReadingHandler.Initialize()
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize*
+  name: Initialize
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_Initialize_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize
+  nameWithType: TempoMapReadingHandler.Initialize
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)
+  name: OnFinishEventReading(MidiEvent, Int64)
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent, System.Int64)
+  nameWithType: TempoMapReadingHandler.OnFinishEventReading(MidiEvent, Int64)
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading*
+  name: OnFinishEventReading
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishEventReading_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading
+  nameWithType: TempoMapReadingHandler.OnFinishEventReading
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)
+  name: OnFinishFileReading(MidiFile)
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)
+  nameWithType: TempoMapReadingHandler.OnFinishFileReading(MidiFile)
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading*
+  name: OnFinishFileReading
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishFileReading_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading
+  nameWithType: TempoMapReadingHandler.OnFinishFileReading
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading(Melanchall.DryWetMidi.Core.TimeDivision)
+  name: OnFinishHeaderChunkReading(TimeDivision)
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishHeaderChunkReading_Melanchall_DryWetMidi_Core_TimeDivision_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading(Melanchall.DryWetMidi.Core.TimeDivision)
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading(Melanchall.DryWetMidi.Core.TimeDivision)
+  nameWithType: TempoMapReadingHandler.OnFinishHeaderChunkReading(TimeDivision)
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading*
+  name: OnFinishHeaderChunkReading
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishHeaderChunkReading_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading
+  nameWithType: TempoMapReadingHandler.OnFinishHeaderChunkReading
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap
+  name: TempoMap
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_TempoMap
+  commentId: P:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap
+  nameWithType: TempoMapReadingHandler.TempoMap
+- uid: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap*
+  name: TempoMap
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html#Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_TempoMap_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap
+  nameWithType: TempoMapReadingHandler.TempoMap
 - uid: Melanchall.DryWetMidi.Interaction.TimeConverter
   name: TimeConverter
   href: api/Melanchall.DryWetMidi.Interaction.TimeConverter.html
