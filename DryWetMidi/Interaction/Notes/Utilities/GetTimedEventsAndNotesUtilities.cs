@@ -94,12 +94,54 @@ namespace Melanchall.DryWetMidi.Interaction
             var noteEventsDescriptors = new List<NoteEventsDescriptor>();
             List<TimedEvent> eventsTail = null;
 
+            // TODO: refactor
             foreach (var timedEvent in timedEvents)
             {
-                foreach (var timedObject in GetTimedEventsAndNotes(timedEvent, noteEventsDescriptors, eventsTail))
+                var midiEvent = timedEvent?.Event;
+
+                var noteOnEvent = midiEvent as NoteOnEvent;
+                if (noteOnEvent != null)
                 {
-                    yield return timedObject;
+                    noteEventsDescriptors.Add(new NoteEventsDescriptor(timedEvent, eventsTail = new List<TimedEvent>()));
+                    continue;
                 }
+
+                var noteOffEvent = midiEvent as NoteOffEvent;
+                if (noteOffEvent != null)
+                {
+                    var noteEventsDescriptor = noteEventsDescriptors.FirstOrDefault(d => d.IsCorrespondingNoteOffEvent(noteOffEvent));
+                    if (noteEventsDescriptor != null)
+                    {
+                        noteEventsDescriptor.CompleteNote(timedEvent);
+                        if (noteEventsDescriptors.First() != noteEventsDescriptor)
+                            continue;
+
+                        for (int i = 0; i < noteEventsDescriptors.Count; i++)
+                        {
+                            var descriptor = noteEventsDescriptors[i];
+                            if (!descriptor.IsNoteCompleted)
+                                break;
+
+                            foreach (var timedObject in descriptor.GetTimedObjects())
+                            {
+                                yield return timedObject;
+                            }
+
+                            noteEventsDescriptors.RemoveAt(i);
+                            i--;
+                        }
+
+                        if (!noteEventsDescriptors.Any())
+                            eventsTail = null;
+
+                        continue;
+                    }
+                }
+
+                if (eventsTail != null)
+                    eventsTail.Add(timedEvent);
+                else
+                    yield return timedEvent;
             }
 
             foreach (var timedObject in noteEventsDescriptors.SelectMany(d => d.GetTimedObjects()))

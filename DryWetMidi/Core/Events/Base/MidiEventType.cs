@@ -3,7 +3,7 @@
     /// <summary>
     /// The type of a MIDI event.
     /// </summary>
-    public enum MidiEventType : byte
+    public enum MidiEventType
     {
         /// <summary>
         /// Normal system exclusive event.
