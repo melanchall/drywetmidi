@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class BytesToMidiEventConverter
+    <title>Class NotesReadingHandler
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class BytesToMidiEventConverter
+    <meta name="title" content="Class NotesReadingHandler
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.48.1.0">
     
@@ -78,24 +78,39 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler">
   
   
-  <h1 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter" class="text-break">Class BytesToMidiEventConverter
+  <h1 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler" class="text-break">Class NotesReadingHandler
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">BytesToMidiEventConverter</span></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html">ReadingHandler</a></div>
+    <div class="level2"><span class="xref">NotesReadingHandler</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Scope">ReadingHandler.Scope</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnStartFileReading">ReadingHandler.OnStartFileReading()</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishHeaderChunkReading_Melanchall_DryWetMidi_Core_TimeDivision_">ReadingHandler.OnFinishHeaderChunkReading(TimeDivision)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkReading">ReadingHandler.OnStartTrackChunkReading()</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkContentReading_Melanchall_DryWetMidi_Core_TrackChunk_">ReadingHandler.OnStartTrackChunkContentReading(TrackChunk)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishTrackChunkReading_Melanchall_DryWetMidi_Core_TrackChunk_">ReadingHandler.OnFinishTrackChunkReading(TrackChunk)</a>
+    </div>
     <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
     </div>
@@ -118,29 +133,21 @@
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class BytesToMidiEventConverter : IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class NotesReadingHandler : ReadingHandler</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor">BytesToMidiEventConverter()</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler__ctor_System_Boolean_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor(System.Boolean)">NotesReadingHandler(Boolean)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public BytesToMidiEventConverter()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor(System.Int32)">BytesToMidiEventConverter(Int32)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public BytesToMidiEventConverter(int capacity)</code></pre>
+    <pre><code class="lang-csharp hljs">public NotesReadingHandler(bool sortNotes)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -153,21 +160,21 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">capacity</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">sortNotes</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ReadingSettings_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ReadingSettings*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ReadingSettings" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ReadingSettings">ReadingSettings</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes">Notes</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ReadingSettings ReadingSettings { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Note&gt; Notes { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -179,20 +186,30 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte_System_Byte___" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert(System.Byte,System.Byte[])">Convert(Byte, Byte[])</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Initialize_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Initialize" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize">Initialize()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MidiEvent Convert(byte statusByte, byte[] dataBytes)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Initialize()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Initialize">ReadingHandler.Initialize()</a></div>
+  <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishEventReading_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)">OnFinishEventReading(MidiEvent, Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnFinishEventReading(MidiEvent midiEvent, long absoluteTime)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -205,39 +222,26 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
-        <td><span class="parametername">statusByte</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
-        <td><span class="parametername">dataBytes</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">absoluteTime</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte___" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert(System.Byte[])">Convert(Byte[])</h4>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_">ReadingHandler.OnFinishEventReading(MidiEvent, Int64)</a></div>
+  <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishFileReading_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)">OnFinishFileReading(MidiFile)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MidiEvent Convert(byte[] bytes)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void OnFinishFileReading(MidiFile midiFile)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -250,91 +254,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
-        <td><span class="parametername">bytes</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte___System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert(System.Byte[],System.Int32,System.Int32)">Convert(Byte[], Int32, Int32)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MidiEvent Convert(byte[] bytes, int offset, int length)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
-        <td><span class="parametername">bytes</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">offset</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">length</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Dispose_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Dispose*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Dispose" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary">
-Releases all resources used by the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html">BytesToMidiEventConverter</a> class.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
-  </div>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
-  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_">ReadingHandler.OnFinishFileReading(MidiFile)</a></div>
 </article>
           </div>
           

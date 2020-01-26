@@ -17130,6 +17130,77 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.ToTrackChunk
   nameWithType: NotesManagingUtilities.ToTrackChunk
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler
+  name: NotesReadingHandler
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.NotesReadingHandler
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler
+  nameWithType: NotesReadingHandler
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor(System.Boolean)
+  name: NotesReadingHandler(Boolean)
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler__ctor_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor(System.Boolean)
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.NotesReadingHandler(System.Boolean)
+  nameWithType: NotesReadingHandler.NotesReadingHandler(Boolean)
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor*
+  name: NotesReadingHandler
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.NotesReadingHandler
+  nameWithType: NotesReadingHandler.NotesReadingHandler
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize
+  name: Initialize()
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Initialize
+  commentId: M:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize()
+  nameWithType: NotesReadingHandler.Initialize()
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize*
+  name: Initialize
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Initialize_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize
+  nameWithType: NotesReadingHandler.Initialize
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes
+  name: Notes
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes
+  commentId: P:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes
+  nameWithType: NotesReadingHandler.Notes
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes*
+  name: Notes
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes
+  nameWithType: NotesReadingHandler.Notes
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)
+  name: OnFinishEventReading(MidiEvent, Int64)
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_
+  commentId: M:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent, System.Int64)
+  nameWithType: NotesReadingHandler.OnFinishEventReading(MidiEvent, Int64)
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading*
+  name: OnFinishEventReading
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishEventReading_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading
+  nameWithType: NotesReadingHandler.OnFinishEventReading
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)
+  name: OnFinishFileReading(MidiFile)
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_
+  commentId: M:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)
+  nameWithType: NotesReadingHandler.OnFinishFileReading(MidiFile)
+- uid: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading*
+  name: OnFinishFileReading
+  href: api/Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishFileReading_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading
+  nameWithType: NotesReadingHandler.OnFinishFileReading
 - uid: Melanchall.DryWetMidi.Interaction.ResizeNotesUtilities
   name: ResizeNotesUtilities
   href: api/Melanchall.DryWetMidi.Interaction.ResizeNotesUtilities.html
