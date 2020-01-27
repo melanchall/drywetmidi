@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using static Melanchall.DryWetMidi.Interaction.GetTimedEventsAndNotesUtilities;
 
@@ -15,7 +16,7 @@ namespace Melanchall.DryWetMidi.Interaction
         private IEnumerable<Note> _notesProcessed;
 
         private readonly List<NoteEventsDescriptor> _noteEventsDescriptors = new List<NoteEventsDescriptor>();
-        private List<TimedEvent> _eventsTail;
+        private readonly ObjectWrapper<List<TimedEvent>> _eventsTail = new ObjectWrapper<List<TimedEvent>>();
 
         #endregion
 
@@ -41,7 +42,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public override void Initialize()
         {
             _noteEventsDescriptors.Clear();
-            _eventsTail = null;
+            _eventsTail.Object = null;
 
             _notes.Clear();
             _notesProcessed = null;
