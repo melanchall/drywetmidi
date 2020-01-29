@@ -4245,6 +4245,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.EventTypesCollection.GetEnumerator
   nameWithType: EventTypesCollection.GetEnumerator
+- uid: Melanchall.DryWetMidi.Core.EventTypesCollection.StatusBytes
+  name: StatusBytes
+  href: api/Melanchall.DryWetMidi.Core.EventTypesCollection.html#Melanchall_DryWetMidi_Core_EventTypesCollection_StatusBytes
+  commentId: P:Melanchall.DryWetMidi.Core.EventTypesCollection.StatusBytes
+  fullName: Melanchall.DryWetMidi.Core.EventTypesCollection.StatusBytes
+  nameWithType: EventTypesCollection.StatusBytes
+- uid: Melanchall.DryWetMidi.Core.EventTypesCollection.StatusBytes*
+  name: StatusBytes
+  href: api/Melanchall.DryWetMidi.Core.EventTypesCollection.html#Melanchall_DryWetMidi_Core_EventTypesCollection_StatusBytes_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EventTypesCollection.StatusBytes
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EventTypesCollection.StatusBytes
+  nameWithType: EventTypesCollection.StatusBytes
 - uid: Melanchall.DryWetMidi.Core.EventTypesCollection.System#Collections#IEnumerable#GetEnumerator
   name: IEnumerable.GetEnumerator()
   href: api/Melanchall.DryWetMidi.Core.EventTypesCollection.html#Melanchall_DryWetMidi_Core_EventTypesCollection_System_Collections_IEnumerable_GetEnumerator
