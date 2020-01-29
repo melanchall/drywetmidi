@@ -346,6 +346,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         #endregion
 
+        #region Set up
+
+        [SetUp]
+        public void SetupTest()
+        {
+            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+        }
+
+        #endregion
+
         #region Test methods
 
         [Test]
