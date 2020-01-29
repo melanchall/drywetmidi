@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -245,6 +246,71 @@ namespace Melanchall.DryWetMidi.Tests.Core
             public override void OnStartTrackChunkReading()
             {
                 TrackChunkStartHandledCount++;
+            }
+
+            #endregion
+        }
+
+        private sealed class CustomMetaEvent : MetaEvent
+        {
+            #region Constructor
+
+            public CustomMetaEvent()
+                : base(MidiEventType.CustomMeta)
+            {
+            }
+
+            public CustomMetaEvent(int a, string b, byte c)
+                : this()
+            {
+                A = a;
+                B = b;
+                C = c;
+            }
+
+            #endregion
+
+            #region Properties
+
+            public int A { get; private set; }
+
+            public string B { get; private set; }
+
+            public byte C { get; private set; }
+
+            #endregion
+
+            #region Overrides
+
+            protected override MidiEvent CloneEvent()
+            {
+                return new CustomMetaEvent(A, B, C);
+            }
+
+            protected override int GetContentSize(WritingSettings settings)
+            {
+                return DataTypesUtilities.GetVlqLength(A) +
+                       DataTypesUtilities.GetVlqLength(B?.Length ?? 0) +
+                       (B?.Length ?? 0) +
+                       1;
+            }
+
+            protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+            {
+                A = reader.ReadVlqNumber();
+
+                var bLength = reader.ReadVlqNumber();
+                B = reader.ReadString(bLength);
+
+                C = reader.ReadByte();
+            }
+
+            protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+            {
+                writer.WriteVlqNumber(A);
+                writer.WriteVlqNumber(B?.Length ?? 0);
+                writer.WriteString(B);
+                writer.WriteByte(C);
             }
 
             #endregion
@@ -790,6 +856,77 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.AreEqual(4, handler.TrackChunkEndHandledCount, "Track chunk: End Handled Count is invalid.");
 
             Assert.AreEqual(3, handler.EventHandledCount, "Event: Handled Count is invalid.");
+        }
+
+        [Test]
+        public void ReadWriteCustomMetaEvent()
+        {
+            const int expectedA = 1234567;
+            const string expectedB = "Test";
+            const byte expectedC = 45;
+
+            var customMetaEventTypes = new EventTypesCollection
+            {
+                { typeof(CustomMetaEvent), 0x5A }
+            };
+
+            var writingSettings = new WritingSettings { CustomMetaEventTypes = customMetaEventTypes };
+            var readingSettings = new ReadingSettings { CustomMetaEventTypes = customMetaEventTypes };
+
+            var midiFile = MidiFileReadingUtilities.Read(
+                new MidiFile(
+                    new TrackChunk(
+                        new CustomMetaEvent(expectedA, expectedB, expectedC) { DeltaTime = 100 },
+                        new TextEvent("foo"),
+                        new MarkerEvent("bar"))),
+                writingSettings,
+                readingSettings);
+
+            var customMetaEvents = midiFile.GetEvents().OfType<CustomMetaEvent>().ToArray();
+            Assert.AreEqual(1, customMetaEvents.Length, "Custom meta events count is invalid.");
+
+            var customMetaEvent = customMetaEvents.First();
+            Assert.AreEqual(100, customMetaEvent.DeltaTime, "Delta-time is invalid.");
+            Assert.AreEqual(expectedA, customMetaEvent.A, "A value is invalid");
+            Assert.AreEqual(expectedB, customMetaEvent.B, "B value is invalid");
+            Assert.AreEqual(expectedC, customMetaEvent.C, "C value is invalid");
+        }
+
+        [Test]
+        public void WriteCustomMetaEvent_InvalidStatusBytes()
+        {
+            var customMetaEventTypes = new EventTypesCollection
+            {
+                { typeof(CustomMetaEvent), 0x54 }
+            };
+
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                new MidiFile(
+                    new TrackChunk(
+                        new CustomMetaEvent(1234567, "Test", 45) { DeltaTime = 100 },
+                        new TextEvent("foo"),
+                        new MarkerEvent("bar")))
+                .Write(Path.GetRandomFileName(), settings: new WritingSettings { CustomMetaEventTypes = customMetaEventTypes }));
+
+            var error = exception.Message;
+            StringAssert.Contains(0x54.ToString(), error, "Exception message doesn't contain invalid status byte.");
+            StringAssert.Contains(typeof(SmpteOffsetEvent).Name, error, "Exception message doesn't contain standard event's type name.");
+        }
+
+        [Test]
+        public void ReadCustomMetaEvent_InvalidStatusBytes()
+        {
+            var customMetaEventTypes = new EventTypesCollection
+            {
+                { typeof(CustomMetaEvent), 0x54 }
+            };
+
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                MidiFile.Read(TestFilesProvider.GetMiscFile_14000events(), new ReadingSettings { CustomMetaEventTypes = customMetaEventTypes }));
+
+            var error = exception.Message;
+            StringAssert.Contains(0x54.ToString(), error, "Exception message doesn't contain invalid status byte.");
+            StringAssert.Contains(typeof(SmpteOffsetEvent).Name, error, "Exception message doesn't contain standard event's type name.");
         }
 
         #endregion

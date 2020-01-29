@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -259,6 +260,8 @@ namespace Melanchall.DryWetMidi.Core
             if (settings == null)
                 settings = new ReadingSettings();
 
+            ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
+
             settings.PrepareReadingHandlers();
 
             var useReadingHandlers = settings.UseReadingHandlers;
@@ -411,6 +414,8 @@ namespace Melanchall.DryWetMidi.Core
 
             if (settings == null)
                 settings = new WritingSettings();
+
+            ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
 
             using (var writer = new MidiWriter(stream))
             {
@@ -659,6 +664,25 @@ namespace Melanchall.DryWetMidi.Core
             return type != null &&
                    type.IsSubclassOf(typeof(MidiChunk)) &&
                    type.GetConstructor(Type.EmptyTypes) != null;
+        }
+
+        private static void ValidateCustomMetaEventsStatusBytes(EventTypesCollection customMetaEventTypesCollection)
+        {
+            if (customMetaEventTypesCollection == null)
+                return;
+
+            var invalidTypes = new List<EventType>();
+            Type eventType;
+
+            foreach (var statusByte in customMetaEventTypesCollection.StatusBytes)
+            {
+                if (StandardEventTypes.Meta.TryGetType(statusByte, out eventType))
+                    invalidTypes.Add(new EventType(eventType, statusByte));
+            }
+
+            if (invalidTypes.Any())
+                throw new InvalidOperationException("Following custom meta events status bytes corresponds to standard ones: " +
+                    string.Join(", ", invalidTypes.Select(t => $"{t.StatusByte} -> {t.Type.Name}")));
         }
 
         #endregion

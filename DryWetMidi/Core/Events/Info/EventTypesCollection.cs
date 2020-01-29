@@ -17,6 +17,12 @@ namespace Melanchall.DryWetMidi.Core
 
         #endregion
 
+        #region Properties
+
+        public IEnumerable<byte> StatusBytes => _statusBytes.Values;
+
+        #endregion
+
         #region Methods
 
         /// <summary>

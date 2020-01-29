@@ -8,22 +8,27 @@ namespace Melanchall.DryWetMidi.Tests.Common
     {
         #region Methods
 
-        public static void ReadUsingHandlers(MidiFile midiFile, params ReadingHandler[] handlers)
+        public static MidiFile ReadUsingHandlers(MidiFile midiFile, params ReadingHandler[] handlers)
+        {
+            var settings = new ReadingSettings();
+
+            foreach (var handler in handlers)
+            {
+                settings.ReadingHandlers.Add(handler);
+            }
+
+            return Read(midiFile, null, settings);
+        }
+
+        public static MidiFile Read(MidiFile midiFile, WritingSettings writingSettings, ReadingSettings readingSettings)
         {
             var filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.mid");
 
-            midiFile.Write(filePath);
+            midiFile.Write(filePath, settings: writingSettings);
 
             try
             {
-                var settings = new ReadingSettings();
-
-                foreach (var handler in handlers)
-                {
-                    settings.ReadingHandlers.Add(handler);
-                }
-
-                midiFile = MidiFile.Read(filePath, settings);
+                return MidiFile.Read(filePath, readingSettings);
             }
             finally
             {
