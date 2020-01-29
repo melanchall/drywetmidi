@@ -261,6 +261,7 @@ namespace Melanchall.DryWetMidi.Core
                 settings = new ReadingSettings();
 
             ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
+            ValidateCustomChunksIds(settings.CustomChunkTypes);
 
             settings.PrepareReadingHandlers();
 
@@ -416,6 +417,7 @@ namespace Melanchall.DryWetMidi.Core
                 settings = new WritingSettings();
 
             ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
+            ValidateCustomChunksIds(Chunks.Where(c => !(c is TrackChunk) && !(c is HeaderChunk)));
 
             using (var writer = new MidiWriter(stream))
             {
@@ -674,15 +676,50 @@ namespace Melanchall.DryWetMidi.Core
             var invalidTypes = new List<EventType>();
             Type eventType;
 
-            foreach (var statusByte in customMetaEventTypesCollection.StatusBytes)
+            foreach (var statusByte in customMetaEventTypesCollection.Select(t => t.StatusByte))
             {
                 if (StandardEventTypes.Meta.TryGetType(statusByte, out eventType))
                     invalidTypes.Add(new EventType(eventType, statusByte));
             }
 
             if (invalidTypes.Any())
-                throw new InvalidOperationException("Following custom meta events status bytes corresponds to standard ones: " +
+                throw new InvalidOperationException("Following custom meta events status bytes correspond to standard ones: " +
                     string.Join(", ", invalidTypes.Select(t => $"{t.StatusByte} -> {t.Type.Name}")));
+        }
+
+        private static void ValidateCustomChunksIds(ChunkTypesCollection customChunkTypesCollection)
+        {
+            if (customChunkTypesCollection == null)
+                return;
+
+            ValidateCustomChunksIds(customChunkTypesCollection.Select(t => t.Id));
+        }
+
+        private static void ValidateCustomChunksIds(IEnumerable<MidiChunk> customChunks)
+        {
+            ValidateCustomChunksIds(customChunks.Select(t => t.ChunkId));
+        }
+
+        private static void ValidateCustomChunksIds(IEnumerable<string> customChunksIds)
+        {
+            var invalidTypes = new List<ChunkType>();
+
+            foreach (var chunkId in customChunksIds)
+            {
+                switch (chunkId)
+                {
+                    case TrackChunk.Id:
+                        invalidTypes.Add(new ChunkType(typeof(TrackChunk), chunkId));
+                        break;
+                    case HeaderChunk.Id:
+                        invalidTypes.Add(new ChunkType(typeof(HeaderChunk), chunkId));
+                        break;
+                }
+            }
+
+            if (invalidTypes.Any())
+                throw new InvalidOperationException("Following custom chunks IDs correspond to standard ones: " +
+                    string.Join(", ", invalidTypes.Select(t => $"{t.Id} -> {t.Type.Name}")));
         }
 
         #endregion

@@ -316,6 +316,117 @@ namespace Melanchall.DryWetMidi.Tests.Core
             #endregion
         }
 
+        private sealed class CustomChunk : MidiChunk
+        {
+            #region Constants
+
+            public const string Id = "Cstm";
+
+            #endregion
+
+            #region Constructor
+
+            public CustomChunk()
+                : base(Id)
+            {
+            }
+
+            public CustomChunk(int a, string b, byte c)
+                : this()
+            {
+                A = a;
+                B = b;
+                C = c;
+            }
+
+            #endregion
+
+            #region Properties
+
+            public int A { get; private set; }
+
+            public string B { get; private set; }
+
+            public byte C { get; private set; }
+
+            #endregion
+
+            #region Overrides
+
+            public override MidiChunk Clone()
+            {
+                return new CustomChunk(A, B, C);
+            }
+
+            protected override uint GetContentSize(WritingSettings settings)
+            {
+                return (uint)(DataTypesUtilities.GetVlqLength(A) +
+                              DataTypesUtilities.GetVlqLength(B?.Length ?? 0) +
+                              (B?.Length ?? 0) +
+                              1);
+            }
+
+            protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+            {
+                A = reader.ReadVlqNumber();
+
+                var bLength = reader.ReadVlqNumber();
+                B = reader.ReadString(bLength);
+
+                C = reader.ReadByte();
+            }
+
+            protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+            {
+                writer.WriteVlqNumber(A);
+                writer.WriteVlqNumber(B?.Length ?? 0);
+                writer.WriteString(B);
+                writer.WriteByte(C);
+            }
+
+            #endregion
+        }
+
+        private sealed class CustomChunkWithInvalidId : MidiChunk
+        {
+            #region Constants
+
+            public const string Id = "MTrk";
+
+            #endregion
+
+            #region Constructor
+
+            public CustomChunkWithInvalidId()
+                : base(Id)
+            {
+            }
+
+            #endregion
+
+            #region Overrides
+
+            public override MidiChunk Clone()
+            {
+                return new CustomChunkWithInvalidId();
+            }
+
+            protected override uint GetContentSize(WritingSettings settings)
+            {
+                return 0;
+            }
+
+            protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+            {
+            }
+
+            protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+            {
+            }
+
+            #endregion
+        }
+
         #endregion
 
         #region Constants
@@ -937,6 +1048,70 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var error = exception.Message;
             StringAssert.Contains(0x54.ToString(), error, "Exception message doesn't contain invalid status byte.");
             StringAssert.Contains(typeof(SmpteOffsetEvent).Name, error, "Exception message doesn't contain standard event's type name.");
+        }
+
+        [Test]
+        public void ReadWriteCustomChunk()
+        {
+            const int expectedA = 1234567;
+            const string expectedB = "Test";
+            const byte expectedC = 45;
+
+            var customChunkTypes = new ChunkTypesCollection
+            {
+                { typeof(CustomChunk), CustomChunk.Id }
+            };
+
+            var readingSettings = new ReadingSettings { CustomChunkTypes = customChunkTypes };
+
+            var midiFile = MidiFileReadingUtilities.Read(
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("foo"),
+                        new MarkerEvent("bar")),
+                    new CustomChunk(expectedA, expectedB, expectedC)),
+                null,
+                readingSettings);
+
+            var customChunks = midiFile.Chunks.OfType<CustomChunk>().ToArray();
+            Assert.AreEqual(1, customChunks.Length, "Custom chunks count is invalid.");
+
+            var customChunk = customChunks.First();
+            Assert.AreEqual(expectedA, customChunk.A, "A value is invalid");
+            Assert.AreEqual(expectedB, customChunk.B, "B value is invalid");
+            Assert.AreEqual(expectedC, customChunk.C, "C value is invalid");
+        }
+
+        [Test]
+        public void WriteCustomChunk_InvalidId()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("foo"),
+                        new MarkerEvent("bar")),
+                    new CustomChunkWithInvalidId())
+                .Write(Path.GetRandomFileName()));
+
+            var error = exception.Message;
+            StringAssert.Contains(CustomChunkWithInvalidId.Id.ToString(), error, "Exception message doesn't contain invalid ID.");
+            StringAssert.Contains(typeof(TrackChunk).Name, error, "Exception message doesn't contain standard chunk's type name.");
+        }
+
+        [Test]
+        public void ReadCustomChunk_InvalidId()
+        {
+            var customChunkTypes = new ChunkTypesCollection
+            {
+                { typeof(CustomChunkWithInvalidId), CustomChunkWithInvalidId.Id }
+            };
+
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                MidiFile.Read(TestFilesProvider.GetMiscFile_14000events(), new ReadingSettings { CustomChunkTypes = customChunkTypes }));
+
+            var error = exception.Message;
+            StringAssert.Contains(CustomChunkWithInvalidId.Id.ToString(), error, "Exception message doesn't contain invalid ID.");
+            StringAssert.Contains(typeof(TrackChunk).Name, error, "Exception message doesn't contain standard chunk's type name.");
         }
 
         #endregion
