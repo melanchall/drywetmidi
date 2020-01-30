@@ -7326,6 +7326,32 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReadingSettings.UnexpectedTrackChunksCountPolicy
   nameWithType: ReadingSettings.UnexpectedTrackChunksCountPolicy
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventCallback
+  name: UnknownChannelEventCallback
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventCallback
+  commentId: P:Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventCallback
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventCallback
+  nameWithType: ReadingSettings.UnknownChannelEventCallback
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventCallback*
+  name: UnknownChannelEventCallback
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventCallback_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventCallback
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventCallback
+  nameWithType: ReadingSettings.UnknownChannelEventCallback
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventPolicy
+  name: UnknownChannelEventPolicy
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventPolicy
+  commentId: P:Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventPolicy
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventPolicy
+  nameWithType: ReadingSettings.UnknownChannelEventPolicy
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventPolicy*
+  name: UnknownChannelEventPolicy
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventPolicy_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventPolicy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChannelEventPolicy
+  nameWithType: ReadingSettings.UnknownChannelEventPolicy
 - uid: Melanchall.DryWetMidi.Core.ReadingSettings.UnknownChunkIdPolicy
   name: UnknownChunkIdPolicy
   href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChunkIdPolicy
@@ -9198,6 +9224,63 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy.Ignore
   fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy.Ignore
   nameWithType: UnexpectedTrackChunksCountPolicy.Ignore
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction
+  name: UnknownChannelEventAction
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html
+  commentId: T:Melanchall.DryWetMidi.Core.UnknownChannelEventAction
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction
+  nameWithType: UnknownChannelEventAction
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Abort
+  name: Abort
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_Abort
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Abort
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Abort
+  nameWithType: UnknownChannelEventAction.Abort
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
+  name: DataBytesToSkip
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkip
+  commentId: P:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
+  nameWithType: UnknownChannelEventAction.DataBytesToSkip
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip*
+  name: DataBytesToSkip
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkip_
+  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
+  nameWithType: UnknownChannelEventAction.DataBytesToSkip
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction
+  name: Instruction
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_Instruction
+  commentId: P:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction
+  nameWithType: UnknownChannelEventAction.Instruction
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction*
+  name: Instruction
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_Instruction_
+  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction
+  nameWithType: UnknownChannelEventAction.Instruction
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData(System.Int32)
+  name: SkipData(Int32)
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_SkipData_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData(System.Int32)
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData(System.Int32)
+  nameWithType: UnknownChannelEventAction.SkipData(Int32)
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData*
+  name: SkipData
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_SkipData_
+  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData
+  nameWithType: UnknownChannelEventAction.SkipData
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventCallback
+  name: UnknownChannelEventCallback
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventCallback.html
+  commentId: T:Melanchall.DryWetMidi.Core.UnknownChannelEventCallback
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventCallback
+  nameWithType: UnknownChannelEventCallback
 - uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException
   name: UnknownChannelEventException
   href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html
@@ -9262,6 +9345,60 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException.StatusByte
   nameWithType: UnknownChannelEventException.StatusByte
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction
+  name: UnknownChannelEventInstruction
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.html
+  commentId: T:Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction
+  nameWithType: UnknownChannelEventInstruction
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.Abort
+  name: Abort
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventInstruction_Abort
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.Abort
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.Abort
+  nameWithType: UnknownChannelEventInstruction.Abort
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.SkipData
+  name: SkipData
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventInstruction_SkipData
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.SkipData
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.SkipData
+  nameWithType: UnknownChannelEventInstruction.SkipData
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy
+  name: UnknownChannelEventPolicy
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html
+  commentId: T:Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy
+  nameWithType: UnknownChannelEventPolicy
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.Abort
+  name: Abort
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_Abort
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.Abort
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.Abort
+  nameWithType: UnknownChannelEventPolicy.Abort
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByte
+  name: SkipStatusByte
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_SkipStatusByte
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByte
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByte
+  nameWithType: UnknownChannelEventPolicy.SkipStatusByte
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte
+  name: SkipStatusByteAndOneDataByte
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_SkipStatusByteAndOneDataByte
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte
+  nameWithType: UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByteAndTwoDataBytes
+  name: SkipStatusByteAndTwoDataBytes
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_SkipStatusByteAndTwoDataBytes
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByteAndTwoDataBytes
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.SkipStatusByteAndTwoDataBytes
+  nameWithType: UnknownChannelEventPolicy.SkipStatusByteAndTwoDataBytes
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.UseCallback
+  name: UseCallback
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_UseCallback
+  commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.UseCallback
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.UseCallback
+  nameWithType: UnknownChannelEventPolicy.UseCallback
 - uid: Melanchall.DryWetMidi.Core.UnknownChunk
   name: UnknownChunk
   href: api/Melanchall.DryWetMidi.Core.UnknownChunk.html
