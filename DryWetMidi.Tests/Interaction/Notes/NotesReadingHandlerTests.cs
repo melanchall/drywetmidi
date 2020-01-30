@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private NotesReadingHandler ReadWithNotesReadingHandler(MidiFile midiFile, bool sortNotes)
         {
             var notesReadingHandler = new NotesReadingHandler(sortNotes);
-            MidiFileReadingUtilities.ReadUsingHandlers(midiFile, notesReadingHandler);
+            MidiFileTestUtilities.ReadUsingHandlers(midiFile, notesReadingHandler);
             return notesReadingHandler;
         }
 

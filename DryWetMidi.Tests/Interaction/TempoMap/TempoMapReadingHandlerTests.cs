@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
             thread.Start();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(
+            MidiFileTestUtilities.ReadUsingHandlers(
                 new MidiFile(
                     new TrackChunk(
                         new NoteOnEvent(),
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
             thread.Start();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(
+            MidiFileTestUtilities.ReadUsingHandlers(
                 new MidiFile(
                     new TrackChunk(
                         new NoteOnEvent(),
@@ -186,7 +186,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private TempoMapReadingHandler ReadWithTempoMapReadingHandler(MidiFile midiFile)
         {
             var tempoMapReadingHandler = new TempoMapReadingHandler();
-            MidiFileReadingUtilities.ReadUsingHandlers(midiFile, tempoMapReadingHandler);
+            MidiFileTestUtilities.ReadUsingHandlers(midiFile, tempoMapReadingHandler);
             return tempoMapReadingHandler;
         }
 

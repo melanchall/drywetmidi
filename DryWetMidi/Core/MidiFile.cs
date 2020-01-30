@@ -260,8 +260,7 @@ namespace Melanchall.DryWetMidi.Core
             if (settings == null)
                 settings = new ReadingSettings();
 
-            ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
-            ValidateCustomChunksIds(settings.CustomChunkTypes);
+            ValidateReadingSettings(settings);
 
             settings.PrepareReadingHandlers();
 
@@ -666,6 +665,15 @@ namespace Melanchall.DryWetMidi.Core
             return type != null &&
                    type.IsSubclassOf(typeof(MidiChunk)) &&
                    type.GetConstructor(Type.EmptyTypes) != null;
+        }
+
+        private static void ValidateReadingSettings(ReadingSettings settings)
+        {
+            ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
+            ValidateCustomChunksIds(settings.CustomChunkTypes);
+
+            if (settings.UnknownChannelEventPolicy == UnknownChannelEventPolicy.UseCallback && settings.UnknownChannelEventCallback == null)
+                throw new InvalidOperationException("Unknown channel event callback is not set.");
         }
 
         private static void ValidateCustomMetaEventsStatusBytes(EventTypesCollection customMetaEventTypesCollection)

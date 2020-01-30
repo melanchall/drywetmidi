@@ -434,6 +434,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         private static class DirectoriesNames
         {
             public const string InvalidChannelEventParameterValue = "Invalid Channel Event Parameter Value";
+            public const string InvalidChannelEvent = "Invalid Channel Event";
             public const string InvalidChunkSize = "Invalid Chunk Size";
             public const string InvalidKeySignatureKey = "Invalid Key Signature Key";
             public const string InvalidKeySignatureScale = "Invalid Key Signature Scale";
@@ -502,6 +503,89 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new ReadingSettings
                 {
                     InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits
+                });
+        }
+
+        [Test]
+        public void Read_InvalidChannelEvent_Abort()
+        {
+            ReadFilesWithException<UnknownChannelEventException>(
+                DirectoriesNames.InvalidChannelEvent,
+                new ReadingSettings
+                {
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.Abort
+                });
+        }
+
+        [Test]
+        public void Read_InvalidChannelEvent_SkipStatusByte()
+        {
+            ReadInvalidFiles(
+                DirectoriesNames.InvalidChannelEvent,
+                new ReadingSettings
+                {
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByte,
+                    InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.ReadValid
+                });
+        }
+
+        [Test]
+        public void Read_InvalidChannelEvent_SkipStatusByteAndOneDataByte()
+        {
+            ReadInvalidFiles(
+                DirectoriesNames.InvalidChannelEvent,
+                new ReadingSettings
+                {
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte,
+                    InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.ReadValid
+                });
+        }
+
+        [Test]
+        public void Read_InvalidChannelEvent_SkipStatusByteAndTwoDataBytes()
+        {
+            ReadInvalidFiles(
+                DirectoriesNames.InvalidChannelEvent,
+                new ReadingSettings
+                {
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByteAndTwoDataBytes,
+                    InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.ReadValid
+                });
+        }
+
+        [Test]
+        public void Read_InvalidChannelEvent_UseCallback_NoCallback()
+        {
+            ReadFilesWithException<InvalidOperationException>(
+                DirectoriesNames.InvalidChannelEvent,
+                new ReadingSettings
+                {
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.UseCallback
+                });
+        }
+
+        [Test]
+        public void Read_InvalidChannelEvent_UseCallback_Abort()
+        {
+            ReadFilesWithException<UnknownChannelEventException>(
+                DirectoriesNames.InvalidChannelEvent,
+                new ReadingSettings
+                {
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.UseCallback,
+                    UnknownChannelEventCallback = (statusByte, channel) => UnknownChannelEventAction.Abort
+                });
+        }
+
+        [Test]
+        public void Read_InvalidChannelEvent_UseCallback_SkipData()
+        {
+            ReadInvalidFiles(
+                DirectoriesNames.InvalidChannelEvent,
+                new ReadingSettings
+                {
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.UseCallback,
+                    UnknownChannelEventCallback = (statusByte, channel) => UnknownChannelEventAction.SkipData(0),
+                    InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.ReadValid
                 });
         }
 
@@ -870,7 +954,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var timeDivision = new TicksPerQuarterNoteTimeDivision(1000);
             var handler = new FileReadingHandler();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile { TimeDivision = timeDivision }, handler);
+            MidiFileTestUtilities.ReadUsingHandlers(new MidiFile { TimeDivision = timeDivision }, handler);
             Assert.AreEqual(1, handler.StartHandledCount, "Start Handled Count is invalid.");
             Assert.AreEqual(1, handler.EndHandledCount, "End Handled Count is invalid.");
             Assert.AreEqual(timeDivision, handler.TimeDivision, "Time division is invalid.");
@@ -882,7 +966,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new TrackChunkReadingHandler();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk(), new TrackChunk()), handler);
+            MidiFileTestUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk(), new TrackChunk()), handler);
             Assert.AreEqual(2, handler.StartHandledCount, "Start Handled Count is invalid.");
             Assert.AreEqual(2, handler.ContentStartHandledCount, "Content Start Handled Count is invalid.");
             Assert.AreEqual(2, handler.EndHandledCount, "End Handled Count is invalid.");
@@ -894,7 +978,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new EventReadingHandler();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(), handler);
+            MidiFileTestUtilities.ReadUsingHandlers(new MidiFile(), handler);
             Assert.AreEqual(0, handler.HandledCount, "Handled Count is invalid.");
             Assert.AreEqual(0, handler.BadHandledCount, "Scope wasn't used correctly.");
         }
@@ -904,7 +988,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new EventReadingHandler();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk()), handler);
+            MidiFileTestUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk()), handler);
             Assert.AreEqual(0, handler.HandledCount, "Handled Count is invalid.");
             Assert.AreEqual(0, handler.BadHandledCount, "Scope wasn't used correctly.");
         }
@@ -914,7 +998,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var handler = new EventReadingHandler();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk(new TextEvent("test"), new TextEvent("test 2")), new TrackChunk(), new TrackChunk(new SetTempoEvent(100000))), handler);
+            MidiFileTestUtilities.ReadUsingHandlers(new MidiFile(new TrackChunk(new TextEvent("test"), new TextEvent("test 2")), new TrackChunk(), new TrackChunk(new SetTempoEvent(100000))), handler);
             Assert.AreEqual(3, handler.HandledCount, "Handled Count is invalid.");
             Assert.AreEqual(0, handler.BadHandledCount, "Scope wasn't used correctly.");
         }
@@ -928,7 +1012,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var trackChunkReadingHandler = new TrackChunkReadingHandler();
             var eventReadingHandler = new EventReadingHandler();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(
+            MidiFileTestUtilities.ReadUsingHandlers(
                 new MidiFile(
                     new TrackChunk(new TextEvent("test"), new TextEvent("test 2")),
                     new TrackChunk(),
@@ -959,7 +1043,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var handler = new MixedReadingHandler();
 
-            MidiFileReadingUtilities.ReadUsingHandlers(
+            MidiFileTestUtilities.ReadUsingHandlers(
                 new MidiFile(
                     new TrackChunk(new TextEvent("test"), new TextEvent("test 2")),
                     new TrackChunk(),
@@ -994,7 +1078,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var writingSettings = new WritingSettings { CustomMetaEventTypes = customMetaEventTypes };
             var readingSettings = new ReadingSettings { CustomMetaEventTypes = customMetaEventTypes };
 
-            var midiFile = MidiFileReadingUtilities.Read(
+            var midiFile = MidiFileTestUtilities.Read(
                 new MidiFile(
                     new TrackChunk(
                         new CustomMetaEvent(expectedA, expectedB, expectedC) { DeltaTime = 100 },
@@ -1021,17 +1105,26 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 { typeof(CustomMetaEvent), 0x54 }
             };
 
-            var exception = Assert.Throws<InvalidOperationException>(() =>
-                new MidiFile(
-                    new TrackChunk(
-                        new CustomMetaEvent(1234567, "Test", 45) { DeltaTime = 100 },
-                        new TextEvent("foo"),
-                        new MarkerEvent("bar")))
-                .Write(Path.GetRandomFileName(), settings: new WritingSettings { CustomMetaEventTypes = customMetaEventTypes }));
+            var filePath = Path.GetRandomFileName();
 
-            var error = exception.Message;
-            StringAssert.Contains(0x54.ToString(), error, "Exception message doesn't contain invalid status byte.");
-            StringAssert.Contains(typeof(SmpteOffsetEvent).Name, error, "Exception message doesn't contain standard event's type name.");
+            try
+            {
+                var exception = Assert.Throws<InvalidOperationException>(() =>
+                    new MidiFile(
+                        new TrackChunk(
+                            new CustomMetaEvent(1234567, "Test", 45) { DeltaTime = 100 },
+                            new TextEvent("foo"),
+                            new MarkerEvent("bar")))
+                    .Write(filePath, settings: new WritingSettings { CustomMetaEventTypes = customMetaEventTypes }));
+
+                var error = exception.Message;
+                StringAssert.Contains(0x54.ToString(), error, "Exception message doesn't contain invalid status byte.");
+                StringAssert.Contains(typeof(SmpteOffsetEvent).Name, error, "Exception message doesn't contain standard event's type name.");
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
         }
 
         [Test]
@@ -1064,7 +1157,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var readingSettings = new ReadingSettings { CustomChunkTypes = customChunkTypes };
 
-            var midiFile = MidiFileReadingUtilities.Read(
+            var midiFile = MidiFileTestUtilities.Read(
                 new MidiFile(
                     new TrackChunk(
                         new TextEvent("foo"),
@@ -1085,17 +1178,26 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void WriteCustomChunk_InvalidId()
         {
-            var exception = Assert.Throws<InvalidOperationException>(() =>
-                new MidiFile(
-                    new TrackChunk(
-                        new TextEvent("foo"),
-                        new MarkerEvent("bar")),
-                    new CustomChunkWithInvalidId())
-                .Write(Path.GetRandomFileName()));
+            var filePath = Path.GetRandomFileName();
 
-            var error = exception.Message;
-            StringAssert.Contains(CustomChunkWithInvalidId.Id.ToString(), error, "Exception message doesn't contain invalid ID.");
-            StringAssert.Contains(typeof(TrackChunk).Name, error, "Exception message doesn't contain standard chunk's type name.");
+            try
+            {
+                var exception = Assert.Throws<InvalidOperationException>(() =>
+                    new MidiFile(
+                        new TrackChunk(
+                            new TextEvent("foo"),
+                            new MarkerEvent("bar")),
+                        new CustomChunkWithInvalidId())
+                    .Write(filePath));
+
+                var error = exception.Message;
+                StringAssert.Contains(CustomChunkWithInvalidId.Id.ToString(), error, "Exception message doesn't contain invalid ID.");
+                StringAssert.Contains(typeof(TrackChunk).Name, error, "Exception message doesn't contain standard chunk's type name.");
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
         }
 
         [Test]
@@ -1112,6 +1214,20 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var error = exception.Message;
             StringAssert.Contains(CustomChunkWithInvalidId.Id.ToString(), error, "Exception message doesn't contain invalid ID.");
             StringAssert.Contains(typeof(TrackChunk).Name, error, "Exception message doesn't contain standard chunk's type name.");
+        }
+
+        [Test]
+        public void ReadWriteRead()
+        {
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
+            {
+                Assert.DoesNotThrow(() =>
+                    {
+                        var midiFile = MidiFile.Read(filePath);
+                        MidiFileTestUtilities.Read(midiFile, null, null);
+                    },
+                    $"Read/Write/Read failed for '{filePath}'.");
+            }
         }
 
         #endregion

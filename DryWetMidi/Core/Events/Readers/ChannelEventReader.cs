@@ -37,7 +37,8 @@ namespace Melanchall.DryWetMidi.Core
                     channelEvent = new NoteAftertouchEvent();
                     break;
                 default:
-                    throw new UnknownChannelEventException(statusByte, channel);
+                    ReactOnUnknownChannelEvent(statusByte, channel, reader, settings);
+                    return null;
             }
 
             channelEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
@@ -53,6 +54,39 @@ namespace Melanchall.DryWetMidi.Core
                 };
 
             return channelEvent;
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void ReactOnUnknownChannelEvent(FourBitNumber statusByte, FourBitNumber channel, MidiReader reader, ReadingSettings settings)
+        {
+            switch (settings.UnknownChannelEventPolicy)
+            {
+                case UnknownChannelEventPolicy.Abort:
+                    throw new UnknownChannelEventException(statusByte, channel);
+                case UnknownChannelEventPolicy.SkipStatusByte:
+                    return;
+                case UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte:
+                    reader.Position += 1;
+                    return;
+                case UnknownChannelEventPolicy.SkipStatusByteAndTwoDataBytes:
+                    reader.Position += 2;
+                    return;
+                case UnknownChannelEventPolicy.UseCallback:
+                    var callback = settings.UnknownChannelEventCallback;
+                    var action = callback(statusByte, channel);
+                    switch (action.Instruction)
+                    {
+                        case UnknownChannelEventInstruction.Abort:
+                            throw new UnknownChannelEventException(statusByte, channel);
+                        case UnknownChannelEventInstruction.SkipData:
+                            reader.Position += action.DataBytesToSkip;
+                            return;
+                    }
+                    break;
+            }
         }
 
         #endregion

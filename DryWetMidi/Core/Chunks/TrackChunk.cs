@@ -133,14 +133,19 @@ namespace Melanchall.DryWetMidi.Core
 
             while (reader.Position < endReaderPosition && !reader.EndReached)
             {
-                var midiEvent = ReadEvent(reader, settings, ref currentChannelEventStatusByte);
+                long deltaTime;
+
+                var midiEvent = ReadEvent(reader, settings, ref currentChannelEventStatusByte, out deltaTime);
                 if (midiEvent is EndOfTrackEvent)
                 {
                     endOfTrackPresented = true;
                     break;
                 }
 
-                absoluteTime += midiEvent.DeltaTime;
+                absoluteTime += deltaTime;
+
+                if (midiEvent == null)
+                    continue;
 
                 if (useReadingHandlers)
                 {
@@ -216,9 +221,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="NotEnoughBytesException">Not enough bytes to read an event.</exception>
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter just
         /// read is invalid.</exception>
-        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
+        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte, out long deltaTime)
         {
-            var deltaTime = reader.ReadVlqLongNumber();
+            deltaTime = reader.ReadVlqLongNumber();
             if (deltaTime < 0)
                 deltaTime = 0;
 
@@ -246,7 +251,9 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            midiEvent.DeltaTime = deltaTime;
+            if (midiEvent != null)
+                midiEvent.DeltaTime = deltaTime;
+
             return midiEvent;
         }
 

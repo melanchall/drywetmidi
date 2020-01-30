@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private TimedEventsReadingHandler ReadWithTimedEventsReadingHandler(MidiFile midiFile, bool sortEvents)
         {
             var timedEventsReadingHandler = new TimedEventsReadingHandler(sortEvents);
-            MidiFileReadingUtilities.ReadUsingHandlers(midiFile, timedEventsReadingHandler);
+            MidiFileTestUtilities.ReadUsingHandlers(midiFile, timedEventsReadingHandler);
             return timedEventsReadingHandler;
         }
 

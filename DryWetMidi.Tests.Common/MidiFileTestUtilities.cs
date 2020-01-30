@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
-    public static class MidiFileReadingUtilities
+    public static class MidiFileTestUtilities
     {
         #region Methods
 
@@ -22,12 +22,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         public static MidiFile Read(MidiFile midiFile, WritingSettings writingSettings, ReadingSettings readingSettings)
         {
-            var filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.mid");
-
-            midiFile.Write(filePath, settings: writingSettings);
+            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
             try
             {
+                midiFile.Write(filePath, settings: writingSettings);
                 return MidiFile.Read(filePath, readingSettings);
             }
             finally

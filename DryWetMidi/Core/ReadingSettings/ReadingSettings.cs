@@ -82,6 +82,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public UnknownFileFormatPolicy UnknownFileFormatPolicy { get; set; }
 
+        public UnknownChannelEventPolicy UnknownChannelEventPolicy { get; set; }
+
+        public UnknownChannelEventCallback UnknownChannelEventCallback { get; set; }
+
         /// <summary>
         /// Gets or sets reaction of the reading engine on invalid value of a channel event's
         /// parameter value. Valid values are 0-127 so, for example, 128 is the invalid one
