@@ -45,6 +45,7 @@ namespace Melanchall.DryWetMidi.Standards
         #region Constants
 
         private const byte MelodyChannelBankMsb = 0x79;
+        private const byte RhythmChannelBankMsb = 0x78;
 
         private static readonly Dictionary<GeneralMidi2Program, GeneralMidi2ProgramData> ProgramsData = new[]
         {
@@ -509,6 +510,221 @@ namespace Melanchall.DryWetMidi.Standards
             };
         }
 
+        public static IEnumerable<MidiEvent> GetPercussionSetEvents(this GeneralMidi2PercussionSet percussionSet, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussionSet), percussionSet);
+
+            return new MidiEvent[]
+            {
+                ControlName.BankSelect.GetControlChangeEvent((SevenBitNumber)RhythmChannelBankMsb, channel),
+                ControlName.LsbForBankSelect.GetControlChangeEvent((SevenBitNumber)0, channel),
+                percussionSet.GetProgramEvent(channel)
+            };
+        }
+
+        public static MidiEvent GetProgramEvent(this GeneralMidi2PercussionSet percussionSet, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussionSet), percussionSet);
+
+            return new ProgramChangeEvent(percussionSet.AsSevenBitNumber()) { Channel = channel };
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2PercussionSet percussionSet)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussionSet), percussionSet);
+
+            return (SevenBitNumber)(byte)percussionSet;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2AnalogPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2BrushPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2ElectronicPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2JazzPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2OrchestraPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2PowerPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2RoomPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2SfxPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static SevenBitNumber AsSevenBitNumber(this GeneralMidi2StandardPercussion percussion)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return (SevenBitNumber)(byte)percussion;
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2AnalogPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2BrushPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2ElectronicPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2JazzPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2OrchestraPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2PowerPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2RoomPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2SfxPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOnEvent GetNoteOnEvent(this GeneralMidi2StandardPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOnEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2AnalogPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2BrushPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2ElectronicPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2JazzPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2OrchestraPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2PowerPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2RoomPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2SfxPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
+        public static NoteOffEvent GetNoteOffEvent(this GeneralMidi2StandardPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(percussion), percussion);
+
+            return new NoteOffEvent(percussion.AsSevenBitNumber(), velocity) { Channel = channel };
+        }
+
         private static IEnumerable<GeneralMidi2ProgramData> GetProgramsData(GeneralMidiProgram generalMidiProgram, params GeneralMidi2Program[] programs)
         {
             return programs.Select((p, i) => GetProgramData(p, generalMidiProgram, MelodyChannelBankMsb, (byte)i));
@@ -516,10 +732,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         private static GeneralMidi2ProgramData GetProgramData(GeneralMidi2Program generalMidi2Program, GeneralMidiProgram generalMidiProgram, byte bankMsb, byte bankLsb)
         {
-            return new GeneralMidi2ProgramData(generalMidi2Program,
-                                               generalMidiProgram,
-                                               (SevenBitNumber)bankMsb,
-                                               (SevenBitNumber)bankLsb);
+            return new GeneralMidi2ProgramData(generalMidi2Program, generalMidiProgram, (SevenBitNumber)bankMsb, (SevenBitNumber)bankLsb);
         }
 
         #endregion

@@ -125,6 +125,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
                 foreach (var definitionIntervals in nameDefinition.Intervals)
                 {
+                    // TODO: rename
                     var intervalsX = intervals;
 
                     if (definitionIntervals[0] != 0)
