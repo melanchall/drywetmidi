@@ -14,6 +14,7 @@ trigger:
     - Resources/CI/benchmarks-develop-win.yaml
     - Resources/CI/build-artifacts-docs.yaml
     - Resources/CI/check-readme-links.yaml
+    - .github/**/*
 
 pool:
   vmImage: 'windows-latest'

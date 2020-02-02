@@ -13,6 +13,7 @@ trigger:
     - Resources/CI/build-artifacts-library.yaml
     - Resources/CI/build-artifacts-docs.yaml
     - Resources/CI/check-readme-links.yaml
+    - .github/**/*
 
 pool:
   vmImage: 'windows-latest'
