@@ -249,12 +249,6 @@ namespace Melanchall.DryWetMidi.Core
             if (!stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            if (!stream.CanSeek)
-                throw new ArgumentException("Stream doesn't support seeking.", nameof(stream));
-
-            if (stream.Position >= stream.Length)
-                throw new ArgumentException("Stream is already read.", nameof(stream));
-
             //
 
             if (settings == null)
@@ -290,6 +284,9 @@ namespace Melanchall.DryWetMidi.Core
             {
                 using (var reader = new MidiReader(stream))
                 {
+                    if (reader.EndReached)
+                        throw new ArgumentException("Stream is already read.", nameof(stream));
+
                     // Read RIFF header
 
                     long? smfEndPosition = null;

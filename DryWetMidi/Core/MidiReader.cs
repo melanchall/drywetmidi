@@ -12,6 +12,8 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         private readonly BinaryReader _binaryReader;
+        private readonly bool _isStreamWrapped;
+
         private bool _disposed;
 
         #endregion
@@ -28,6 +30,12 @@ namespace Melanchall.DryWetMidi.Core
         public MidiReader(Stream stream)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
+
+            if (!stream.CanSeek)
+            {
+                stream = new StreamWrapper(stream, 1024);
+                _isStreamWrapped = true;
+            }
 
             _binaryReader = new BinaryReader(stream, SmfConstants.DefaultTextEncoding, leaveOpen: true);
         }
@@ -59,7 +67,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
-        public bool EndReached => Position >= Length;
+        public bool EndReached => Position >= Length || (_isStreamWrapped && ((StreamWrapper)_binaryReader.BaseStream).IsEndReached());
 
         #endregion
 

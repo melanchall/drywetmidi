@@ -11,11 +11,26 @@ namespace Melanchall.DryWetMidi.Tests.Common
     {
         #region Constants
 
-        private const string ValidFilesPath = @"..\..\..\..\Resources\MIDI files\Valid";
+        public const string FilesBasePath = @"Resources\MIDI files";
+        public const string FilesTestPath = @"..\..\..\..\" + FilesBasePath;
+
+        public const string ValidFilesPath = FilesTestPath + @"\Valid";
+        public const string InvalidFilesPath = FilesTestPath + @"\Invalid";
 
         #endregion
 
         #region Methods
+
+        public static string GetFileBasePath(string filePath)
+        {
+            var index = filePath.IndexOf(FilesBasePath);
+            return filePath.Substring(index);
+        }
+
+        public static string GetRemoteFileAddress(string fileBasePath)
+        {
+            return $"https://raw.githubusercontent.com/melanchall/drywetmidi/develop/{fileBasePath.Replace("\\", "/")}";
+        }
 
         public static string GetMiscFile_14000events()
         {

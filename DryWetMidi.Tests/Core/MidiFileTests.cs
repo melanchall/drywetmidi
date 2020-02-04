@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -448,8 +449,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             public const string UnknownFileFormat = "Unknown File Format";
         }
 
-        private const string InvalidFilesPath = @"..\..\..\..\Resources\MIDI files\Invalid";
-
         #endregion
 
         #region Properties
@@ -882,6 +881,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public void Read_NonSeekableStream()
+        {
+            var request = WebRequest.Create(TestFilesProvider.GetRemoteFileAddress(TestFilesProvider.GetFileBasePath(TestFilesProvider.GetMiscFile_14000events())));
+
+            using (var response = request.GetResponse())
+            using (var responseStream = response.GetResponseStream())
+            {
+                Assert.DoesNotThrow(() => MidiFile.Read(responseStream));
+            }
+        }
+
+        [Test]
         public void Read_DecodeTextCallback_NoCallback()
         {
             const string text = "Just text";
@@ -1258,7 +1269,24 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             foreach (var filePath in GetInvalidFiles(directoryName))
             {
-                Assert.DoesNotThrow(() => MidiFile.Read(filePath, readingSettings));
+                MidiFile midiFile = null;
+                Assert.DoesNotThrow(() => midiFile = MidiFile.Read(filePath, readingSettings));
+
+                // TODO: uncomment
+                //var fileBasePath = TestFilesProvider.GetFileBasePath(filePath);
+                //var remoteFileAddress = TestFilesProvider.GetRemoteFileAddress(fileBasePath);
+
+                //MidiFile remoteMidiFile = null;
+
+                //var request = WebRequest.Create(remoteFileAddress);
+
+                //using (var response = request.GetResponse())
+                //using (var responseStream = response.GetResponseStream())
+                //{
+                //    Assert.DoesNotThrow(() => remoteMidiFile = MidiFile.Read(responseStream, readingSettings));
+                //}
+
+                //Assert.IsTrue(MidiFileEquality.AreEqual(midiFile, remoteMidiFile, false), $"Remote MIDI file '{fileBasePath}' is invalid.");
             }
         }
 
@@ -1269,7 +1297,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private string GetInvalidFilesDirectory(string directoryName)
         {
-            return Path.Combine(TestContext.CurrentContext.TestDirectory, InvalidFilesPath, directoryName);
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, TestFilesProvider.InvalidFilesPath, directoryName);
         }
 
         #endregion

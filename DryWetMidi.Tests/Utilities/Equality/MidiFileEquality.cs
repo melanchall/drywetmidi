@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             if (compareOriginalFormat && file1.OriginalFormat != file2.OriginalFormat)
                 return false;
 
-            if (!file1.TimeDivision.Equals(file2.TimeDivision))
+            if (!ReferenceEquals(file1.TimeDivision, file2.TimeDivision) && !file1.TimeDivision.Equals(file2.TimeDivision))
                 return false;
 
             var chunks1 = file1.Chunks;
