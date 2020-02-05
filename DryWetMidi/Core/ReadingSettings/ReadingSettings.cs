@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Melanchall.DryWetMidi.Core
 {
+    // TODO: add values checks
     /// <summary>
     /// Settings of the reading engine.
     /// </summary>
@@ -174,6 +175,8 @@ namespace Melanchall.DryWetMidi.Core
         public DecodeTextCallback DecodeTextCallback { get; set; }
 
         public ICollection<ReadingHandler> ReadingHandlers { get; } = new List<ReadingHandler>();
+
+        public int NonSeekableStreamBufferSize { get; set; } = 1024;
 
         internal bool UseReadingHandlers { get; private set; }
 

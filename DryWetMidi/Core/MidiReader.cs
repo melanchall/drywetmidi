@@ -28,13 +28,14 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
         /// or is already closed.</exception>
-        public MidiReader(Stream stream)
+        public MidiReader(Stream stream, int nonSeekableStreamBufferSize)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNegative(nameof(nonSeekableStreamBufferSize), nonSeekableStreamBufferSize, "Non-seekable stream buffer size is negative.");
 
             if (!stream.CanSeek)
             {
-                stream = new StreamWrapper(stream, 1024);
+                stream = new StreamWrapper(stream, nonSeekableStreamBufferSize);
                 _isStreamWrapped = true;
             }
 

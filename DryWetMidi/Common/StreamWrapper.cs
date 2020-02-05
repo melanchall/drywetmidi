@@ -80,10 +80,7 @@ namespace Melanchall.DryWetMidi.Common
         public override int Read(byte[] buffer, int offset, int count)
         {
             var bufferedData = _buffer.MovePositionForward(count);
-            for (int i = 0; i < bufferedData.Length; i++)
-            {
-                buffer[offset + i] = bufferedData[i];
-            }
+            Buffer.BlockCopy(bufferedData, 0, buffer, offset, bufferedData.Length);
 
             offset += bufferedData.Length;
             var readBytesCount = _stream.Read(buffer, offset, count - bufferedData.Length);
