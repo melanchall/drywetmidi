@@ -5705,12 +5705,12 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.MidiReader
   fullName: Melanchall.DryWetMidi.Core.MidiReader
   nameWithType: MidiReader
-- uid: Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream)
-  name: MidiReader(Stream)
-  href: api/Melanchall.DryWetMidi.Core.MidiReader.html#Melanchall_DryWetMidi_Core_MidiReader__ctor_System_IO_Stream_
-  commentId: M:Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream)
-  fullName: Melanchall.DryWetMidi.Core.MidiReader.MidiReader(System.IO.Stream)
-  nameWithType: MidiReader.MidiReader(Stream)
+- uid: Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream,System.Int32)
+  name: MidiReader(Stream, Int32)
+  href: api/Melanchall.DryWetMidi.Core.MidiReader.html#Melanchall_DryWetMidi_Core_MidiReader__ctor_System_IO_Stream_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream,System.Int32)
+  fullName: Melanchall.DryWetMidi.Core.MidiReader.MidiReader(System.IO.Stream, System.Int32)
+  nameWithType: MidiReader.MidiReader(Stream, Int32)
 - uid: Melanchall.DryWetMidi.Core.MidiReader.#ctor*
   name: MidiReader
   href: api/Melanchall.DryWetMidi.Core.MidiReader.html#Melanchall_DryWetMidi_Core_MidiReader__ctor_
@@ -7261,6 +7261,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReadingSettings.NoHeaderChunkPolicy
   nameWithType: ReadingSettings.NoHeaderChunkPolicy
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
+  name: NonSeekableStreamBufferSize
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NonSeekableStreamBufferSize
+  commentId: P:Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
+  nameWithType: ReadingSettings.NonSeekableStreamBufferSize
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize*
+  name: NonSeekableStreamBufferSize
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NonSeekableStreamBufferSize_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
+  nameWithType: ReadingSettings.NonSeekableStreamBufferSize
 - uid: Melanchall.DryWetMidi.Core.ReadingSettings.NotEnoughBytesPolicy
   name: NotEnoughBytesPolicy
   href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy
