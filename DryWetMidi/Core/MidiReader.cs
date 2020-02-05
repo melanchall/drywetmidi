@@ -13,6 +13,7 @@ namespace Melanchall.DryWetMidi.Core
 
         private readonly BinaryReader _binaryReader;
         private readonly bool _isStreamWrapped;
+        private readonly long _length;
 
         private bool _disposed;
 
@@ -37,6 +38,8 @@ namespace Melanchall.DryWetMidi.Core
                 _isStreamWrapped = true;
             }
 
+            Length = stream.Length;
+
             _binaryReader = new BinaryReader(stream, SmfConstants.DefaultTextEncoding, leaveOpen: true);
         }
 
@@ -58,9 +61,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets length of the underlying stream.
         /// </summary>
-        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
-        public long Length => _binaryReader.BaseStream.Length;
+        public long Length { get; }
 
         /// <summary>
         /// Gets a value indicating whether end of the underlying stream is reached.
