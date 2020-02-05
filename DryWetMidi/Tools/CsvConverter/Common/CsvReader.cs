@@ -52,6 +52,8 @@ namespace Melanchall.DryWetMidi.Tools
                 if (values.All(IsValueClosed))
                     break;
 
+                // TODO: Detect exact line ending
+
                 var nextLine = GetNextLine();
                 if (nextLine == null)
                     break;

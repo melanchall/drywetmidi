@@ -83,9 +83,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #region Convert MIDI files to/from CSV
 
-        [TestCase(MidiFileCsvLayout.DryWetMidi)]
-        [TestCase(MidiFileCsvLayout.MidiCsv)]
-        public void ConvertMidiFileToFromCsv(MidiFileCsvLayout layout)
+        [Test]
+        public void ConvertMidiFileToFromCsv([Values] MidiFileCsvLayout layout)
         {
             var settings = new MidiFileCsvConversionSettings
             {
@@ -818,7 +817,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
                     var csvConverter = new CsvConverter();
                     csvConverter.ConvertMidiFileToCsv(midiFile, outputFilePath, true, settings);
-                    csvConverter.ConvertCsvToMidiFile(outputFilePath, settings);
+                    var convertedFile = csvConverter.ConvertCsvToMidiFile(outputFilePath, settings);
+
+                    // TODO: uncomment when line ending bug fixed
+                    // MidiFileEquality.AssertAreEqual(midiFile, convertedFile, true);
                 }
             }
             finally

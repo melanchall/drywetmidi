@@ -854,8 +854,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var midiFile = MidiFile.Read(filePath);
                 var clonedMidiFile = midiFile.Clone();
 
-                Assert.IsTrue(MidiFileEquality.AreEqual(clonedMidiFile, midiFile, true),
-                              $"Clone of the '{filePath}' doesn't equal to the original file.");
+                MidiFileEquality.AssertAreEqual(clonedMidiFile, midiFile, true, $"Clone of the '{filePath}' doesn't equal to the original file.");
             }
         }
 
@@ -1287,7 +1286,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         Assert.Throws<TException>(() => remoteMidiFile = MidiFile.Read(responseStream, readingSettings), $"Exception not thrown for file '{filePath}'.");
                     }
 
-                    Assert.IsTrue(MidiFileEquality.AreEqual(midiFile, remoteMidiFile, false), $"Remote MIDI file '{fileBasePath}' is invalid.");
+                    MidiFileEquality.AssertAreEqual(midiFile, remoteMidiFile, true, $"Remote MIDI file '{fileBasePath}' is invalid.");
                 }
             }
         }
@@ -1314,7 +1313,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         Assert.DoesNotThrow(() => remoteMidiFile = MidiFile.Read(responseStream, readingSettings), $"Exception thrown for file '{filePath}'.");
                     }
 
-                    Assert.IsTrue(MidiFileEquality.AreEqual(midiFile, remoteMidiFile, false), $"Remote MIDI file '{fileBasePath}' is invalid.");
+                    MidiFileEquality.AssertAreEqual(midiFile, remoteMidiFile, false, $"Remote MIDI file '{fileBasePath}' is invalid.");
                 }
             }
         }
