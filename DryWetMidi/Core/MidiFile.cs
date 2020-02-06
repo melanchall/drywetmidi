@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Core
 
             try
             {
-                using (var reader = new MidiReader(stream, settings.NonSeekableStreamBufferSize))
+                using (var reader = new MidiReader(stream, settings))
                 {
                     if (reader.EndReached)
                         throw new ArgumentException("Stream is already read.", nameof(stream));

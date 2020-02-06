@@ -1248,6 +1248,17 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [Test]
+        public void Read_PutDataInMemoryBeforeReading()
+        {
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
+            {
+                var expectedMidiFile = MidiFile.Read(filePath);
+                var midiFile = MidiFile.Read(filePath, new ReadingSettings { PutDataInMemoryBeforeReading = true });
+                MidiFileEquality.AssertAreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+            }
+        }
+
         #endregion
 
         #region Private methods

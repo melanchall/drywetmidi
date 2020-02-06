@@ -178,6 +178,8 @@ namespace Melanchall.DryWetMidi.Core
 
         public int NonSeekableStreamBufferSize { get; set; } = 1024;
 
+        public bool PutDataInMemoryBeforeReading { get; set; }
+
         internal bool UseReadingHandlers { get; private set; }
 
         internal ICollection<ReadingHandler> FileReadingHandlers { get; private set; }

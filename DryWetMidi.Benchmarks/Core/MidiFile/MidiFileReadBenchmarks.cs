@@ -40,7 +40,13 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             [Benchmark]
             public void Read()
             {
-                MidiFileReadBenchmarks.Read(FileFormat, FileSize);
+                MidiFileReadBenchmarks.Read(FileFormat, FileSize, new ReadingSettings());
+            }
+
+            [Benchmark]
+            public void Read_BufferEntireDataBeforeReading()
+            {
+                MidiFileReadBenchmarks.Read(FileFormat, FileSize, new ReadingSettings { PutDataInMemoryBeforeReading = true });
             }
         }
 
@@ -135,7 +141,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             var fileFormat = (MidiFileFormat)type.GetProperty(nameof(Benchmarks.FileFormat)).GetValue(instance);
             var fileSize = (MidiFileSize)type.GetProperty(nameof(Benchmarks.FileSize)).GetValue(instance);
 
-            var eventsCount = GetEventsCount(fileFormat, fileSize);
+            var eventsCount = GetEventsCount(fileFormat, fileSize, new ReadingSettings());
             RunBenchmarks(type, new MidiFileEventsCountsColumn(eventsCount));
         }
 
@@ -143,11 +149,11 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
 
         #region Private methods
 
-        private int[] GetEventsCount(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize)
+        private int[] GetEventsCount(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize, ReadingSettings settings)
         {
             var result = new List<int>();
 
-            foreach (var midiFile in GetFiles(midiFileFormat, midiFileSize))
+            foreach (var midiFile in GetFiles(midiFileFormat, midiFileSize, settings))
             {
                 var events = midiFile.GetTrackChunks().SelectMany(c => c.Events).ToList();
                 result.Add(events.Count);
@@ -156,16 +162,16 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             return result.ToArray();
         }
 
-        protected static void Read(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize)
+        protected static void Read(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize, ReadingSettings settings)
         {
-            GetFiles(midiFileFormat, midiFileSize).ToList();
+            GetFiles(midiFileFormat, midiFileSize, settings).ToList();
         }
 
-        private static IEnumerable<MidiFile> GetFiles(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize)
+        private static IEnumerable<MidiFile> GetFiles(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize, ReadingSettings settings)
         {
             foreach (var filePath in Directory.GetFiles(Path.Combine(FilesPath, midiFileFormat.ToString(), midiFileSize.ToString())))
             {
-                yield return MidiFile.Read(filePath);
+                yield return MidiFile.Read(filePath, settings);
             }
         }
 

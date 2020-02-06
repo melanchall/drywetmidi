@@ -14,6 +14,7 @@ namespace Melanchall.DryWetMidi.Core
         private readonly BinaryReader _binaryReader;
         private readonly bool _isStreamWrapped;
         private readonly long _length;
+        private readonly MemoryStream _allDataBuffer;
 
         private bool _disposed;
 
@@ -28,18 +29,25 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
         /// or is already closed.</exception>
-        public MidiReader(Stream stream, int nonSeekableStreamBufferSize)
+        public MidiReader(Stream stream, ReadingSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
-            ThrowIfArgument.IsNegative(nameof(nonSeekableStreamBufferSize), nonSeekableStreamBufferSize, "Non-seekable stream buffer size is negative.");
 
             if (!stream.CanSeek)
             {
-                stream = new StreamWrapper(stream, nonSeekableStreamBufferSize);
+                stream = new StreamWrapper(stream, settings.NonSeekableStreamBufferSize);
                 _isStreamWrapped = true;
             }
 
             Length = stream.Length;
+
+            if (settings.PutDataInMemoryBeforeReading)
+            {
+                _allDataBuffer = new MemoryStream();
+                stream.CopyTo(_allDataBuffer);
+                _allDataBuffer.Position = 0;
+                stream = _allDataBuffer;
+            }
 
             _binaryReader = new BinaryReader(stream, SmfConstants.DefaultTextEncoding, leaveOpen: true);
         }
@@ -321,7 +329,10 @@ namespace Melanchall.DryWetMidi.Core
                 return;
 
             if (disposing)
+            {
+                _allDataBuffer?.Dispose();
                 _binaryReader.Dispose();
+            }
 
             _disposed = true;
         }
