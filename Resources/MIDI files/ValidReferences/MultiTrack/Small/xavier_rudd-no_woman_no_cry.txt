@@ -1,0 +1,1 @@
+new MidiFile() { TimeDivision=new TicksPerQuarterNoteTimeDivision(480) }

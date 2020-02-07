@@ -1,0 +1,1 @@
+new MidiFile(new TrackChunk(new SequenceTrackNameEvent { Text="New MIDI Track",DeltaTime=0,}),new TrackChunk(new SequenceTrackNameEvent { Text="New MIDI Track",DeltaTime=0,})) { TimeDivision=new TicksPerQuarterNoteTimeDivision(24576) }

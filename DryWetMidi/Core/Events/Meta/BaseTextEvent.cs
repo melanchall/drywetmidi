@@ -63,7 +63,10 @@ namespace Melanchall.DryWetMidi.Core
                                        "Text event cannot be read since the size is negative number.");
 
             if (size == 0)
+            {
+                Text = string.Empty;
                 return;
+            }
 
             var bytes = reader.ReadBytes(size);
             var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;

@@ -1259,6 +1259,20 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [Test]
+        public void CheckValidFilesReadingByReferences()
+        {
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
+            {
+                var referenceMidiFile = TestFilesProvider.GetValidFileReference(filePath, out var noFile);
+                if (noFile)
+                    continue;
+
+                var midiFile = MidiFile.Read(filePath);
+                MidiFileEquality.AssertAreEqual(midiFile, referenceMidiFile, false, $"File '{filePath}' read wrong.");
+            }
+        }
+
         #endregion
 
         #region Private methods

@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Common
@@ -16,10 +20,31 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         public const string ValidFilesPath = FilesTestPath + @"\Valid";
         public const string InvalidFilesPath = FilesTestPath + @"\Invalid";
+        public const string ValidFilesReferencesPath = FilesTestPath + @"\ValidReferences";
 
         #endregion
 
         #region Methods
+
+        public static MidiFile GetValidFileReference(string midiFilePath, out bool noFile)
+        {
+            var referencePath = midiFilePath.Replace("Valid", "ValidReferences").Replace(".mid", ".txt");
+            noFile = !File.Exists(referencePath);
+            if (noFile)
+                return null;
+
+            var constructionCode = File.ReadAllText(referencePath);
+
+            var scriptOptions = ScriptOptions.Default
+                .WithReferences(
+                    Assembly.GetAssembly(typeof(MidiFile)),
+                    Assembly.GetAssembly(typeof(FourBitNumber)))
+                .WithImports(
+                    "Melanchall.DryWetMidi.Common",
+                    "Melanchall.DryWetMidi.Core");
+
+            return CSharpScript.EvaluateAsync<MidiFile>(constructionCode, scriptOptions).Result;
+        }
 
         public static string GetFileBasePath(string filePath)
         {
