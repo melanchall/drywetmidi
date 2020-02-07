@@ -40,8 +40,17 @@ steps:
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
 
 - task: DotNetCoreCLI@2
+  displayName: "Publish tests assemblies"
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: '**/*.Tests.csproj'
+    arguments: --output $(Build.ArtifactStagingDirectory)
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
   displayName: Run unit tests
   inputs:
     command: test
-    projects: '**/*.Tests.dll'
+    projects: '$(Build.ArtifactStagingDirectory)/**/*.Tests.dll'
     arguments: '--configuration $(buildConfiguration) --list-tests -v d'
