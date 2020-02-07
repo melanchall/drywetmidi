@@ -45,7 +45,7 @@ steps:
     command: publish
     publishWebProjects: false
     projects: '**/*.Tests.csproj'
-    arguments: --output $(Build.ArtifactStagingDirectory)
+    arguments: '--output $(Build.ArtifactStagingDirectory) -f netcoreapp2.1'
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
