@@ -39,12 +39,9 @@ steps:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
   displayName: Run unit tests
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testSelector: testAssemblies
-    testAssemblyVer2:
-      '**/*.Tests.dll'
-    rerunMaxAttempts: '3'
+    command: test
+    projects: '**/*.Tests.dll'
+    arguments: '--configuration $(buildConfiguration)'
