@@ -13,7 +13,6 @@ namespace Melanchall.DryWetMidi.Core
 
         private readonly BinaryReader _binaryReader;
         private readonly bool _isStreamWrapped;
-        private readonly long _length;
         private readonly MemoryStream _allDataBuffer;
 
         private bool _disposed;
@@ -166,10 +165,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < wordSize)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a WORD.", wordSize, bytes.Length);
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
-
-            return BitConverter.ToUInt16(bytes, 0);
+            return (ushort)((bytes[0] << 8) + bytes[1]);
         }
 
         /// <summary>
@@ -188,10 +184,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < dwordSize)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a DWORD.", dwordSize, bytes.Length);
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
-
-            return BitConverter.ToUInt32(bytes, 0);
+            return (uint)((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]);
         }
 
         /// <summary>
@@ -210,10 +203,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < int16Size)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a INT16.", int16Size, bytes.Length);
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
-
-            return BitConverter.ToInt16(bytes, 0);
+            return (short)((bytes[0] << 8) + bytes[1]);
         }
 
         /// <summary>
@@ -302,13 +292,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < dwordSize)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a 3-byte DWORD.", dwordSize, bytes.Length);
 
-            var bytesForInt = new byte[sizeof(uint)];
-            Array.Copy(bytes, 0, bytesForInt, bytesForInt.Length - bytes.Length, bytes.Length);
-
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytesForInt);
-
-            return BitConverter.ToUInt32(bytesForInt, 0);
+            return (uint)((bytes[0] << 16) + (bytes[1] << 8) + bytes[2]);
         }
 
         #endregion
