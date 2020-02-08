@@ -26,12 +26,12 @@ namespace Melanchall.DryWetMidi.Core
             [SmpteFormat.Thirty] = 29
         };
 
-        private static readonly Dictionary<int, SmpteFormat> Formats = new Dictionary<int, SmpteFormat>
+        private static readonly SmpteFormat[] Formats = new SmpteFormat[]
         {
-            [0] = SmpteFormat.TwentyFour,
-            [1] = SmpteFormat.TwentyFive,
-            [2] = SmpteFormat.ThirtyDrop,
-            [3] = SmpteFormat.Thirty
+            SmpteFormat.TwentyFour,
+            SmpteFormat.TwentyFive,
+            SmpteFormat.ThirtyDrop,
+            SmpteFormat.Thirty
         };
 
         #endregion
@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Core
 
         internal static byte GetFormatAndHours(SmpteFormat smpteFormat, byte hours)
         {
-            var format = Formats.First(f => f.Value == smpteFormat).Key << FormatOffset;
+            var format = Array.IndexOf(Formats, smpteFormat) << FormatOffset;
             return (byte)(format & hours);
         }
 

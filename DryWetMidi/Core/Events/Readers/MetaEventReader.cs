@@ -72,10 +72,14 @@ namespace Melanchall.DryWetMidi.Core
                     metaEvent = new EndOfTrackEvent();
                     break;
                 default:
-                    Type eventType = null;
-                    metaEvent = settings.CustomMetaEventTypes?.TryGetType(statusByte, out eventType) == true && IsMetaEventType(eventType)
-                        ? (MetaEvent)Activator.CreateInstance(eventType)
-                        : new UnknownMetaEvent(statusByte);
+                    {
+                        EventSettingsValidator.ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
+
+                        Type eventType = null;
+                        metaEvent = settings.CustomMetaEventTypes?.TryGetType(statusByte, out eventType) == true && IsMetaEventType(eventType)
+                            ? (MetaEvent)Activator.CreateInstance(eventType)
+                            : new UnknownMetaEvent(statusByte);
+                    }
                     break;
             }
 
@@ -95,12 +99,6 @@ namespace Melanchall.DryWetMidi.Core
         #endregion
 
         #region Methods
-
-        private static bool TryGetEventType(EventTypesCollection customMetaEventTypes, byte statusByte, out Type eventType)
-        {
-            return StandardEventTypes.Meta.TryGetType(statusByte, out eventType) ||
-                   (customMetaEventTypes?.TryGetType(statusByte, out eventType) == true && IsMetaEventType(eventType));
-        }
 
         private static bool IsMetaEventType(Type type)
         {

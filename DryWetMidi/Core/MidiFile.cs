@@ -254,8 +254,6 @@ namespace Melanchall.DryWetMidi.Core
             if (settings == null)
                 settings = new ReadingSettings();
 
-            ValidateReadingSettings(settings);
-
             settings.PrepareReadingHandlers();
 
             var useReadingHandlers = settings.UseReadingHandlers;
@@ -412,7 +410,6 @@ namespace Melanchall.DryWetMidi.Core
             if (settings == null)
                 settings = new WritingSettings();
 
-            ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
             ValidateCustomChunksIds(Chunks.Where(c => !(c is TrackChunk) && !(c is HeaderChunk)));
 
             using (var writer = new MidiWriter(stream))
@@ -526,6 +523,7 @@ namespace Melanchall.DryWetMidi.Core
                         chunk = new TrackChunk();
                         break;
                     default:
+                        ValidateCustomChunksIds(settings.CustomChunkTypes);
                         chunk = TryCreateChunk(chunkId, settings.CustomChunkTypes);
                         break;
                 }
@@ -662,34 +660,6 @@ namespace Melanchall.DryWetMidi.Core
             return type != null &&
                    type.IsSubclassOf(typeof(MidiChunk)) &&
                    type.GetConstructor(Type.EmptyTypes) != null;
-        }
-
-        private static void ValidateReadingSettings(ReadingSettings settings)
-        {
-            ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
-            ValidateCustomChunksIds(settings.CustomChunkTypes);
-
-            if (settings.UnknownChannelEventPolicy == UnknownChannelEventPolicy.UseCallback && settings.UnknownChannelEventCallback == null)
-                throw new InvalidOperationException("Unknown channel event callback is not set.");
-        }
-
-        private static void ValidateCustomMetaEventsStatusBytes(EventTypesCollection customMetaEventTypesCollection)
-        {
-            if (customMetaEventTypesCollection == null)
-                return;
-
-            var invalidTypes = new List<EventType>();
-            Type eventType;
-
-            foreach (var statusByte in customMetaEventTypesCollection.Select(t => t.StatusByte))
-            {
-                if (StandardEventTypes.Meta.TryGetType(statusByte, out eventType))
-                    invalidTypes.Add(new EventType(eventType, statusByte));
-            }
-
-            if (invalidTypes.Any())
-                throw new InvalidOperationException("Following custom meta events status bytes correspond to standard ones: " +
-                    string.Join(", ", invalidTypes.Select(t => $"{t.StatusByte} -> {t.Type.Name}")));
         }
 
         private static void ValidateCustomChunksIds(ChunkTypesCollection customChunkTypesCollection)

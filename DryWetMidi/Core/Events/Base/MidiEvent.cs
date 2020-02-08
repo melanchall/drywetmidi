@@ -30,11 +30,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="MidiEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         public MidiEvent(MidiEventType eventType)
         {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(eventType), eventType);
-
             EventType = eventType;
         }
 

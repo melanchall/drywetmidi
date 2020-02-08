@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -44,14 +45,17 @@ namespace Melanchall.DryWetMidi.Core
             channelEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
             channelEvent.Channel = channel;
 
-            var noteOnEvent = channelEvent as NoteOnEvent;
-            if (noteOnEvent != null && settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff && noteOnEvent.Velocity == 0)
-                channelEvent = new NoteOffEvent
-                {
-                    DeltaTime = noteOnEvent.DeltaTime,
-                    Channel = noteOnEvent.Channel,
-                    NoteNumber = noteOnEvent.NoteNumber
-                };
+            if (channelEvent.EventType == MidiEventType.NoteOn)
+            {
+                var noteOnEvent = (NoteOnEvent)channelEvent;
+                if (noteOnEvent != null && settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff && noteOnEvent.Velocity == 0)
+                    channelEvent = new NoteOffEvent
+                    {
+                        DeltaTime = noteOnEvent.DeltaTime,
+                        Channel = noteOnEvent.Channel,
+                        NoteNumber = noteOnEvent.NoteNumber
+                    };
+            }
 
             return channelEvent;
         }
@@ -76,6 +80,9 @@ namespace Melanchall.DryWetMidi.Core
                     return;
                 case UnknownChannelEventPolicy.UseCallback:
                     var callback = settings.UnknownChannelEventCallback;
+                    if (callback == null)
+                        throw new InvalidOperationException("Unknown channel event callback is not set.");
+
                     var action = callback(statusByte, channel);
                     switch (action.Instruction)
                     {

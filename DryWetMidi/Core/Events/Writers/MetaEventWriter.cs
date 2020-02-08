@@ -22,8 +22,13 @@ namespace Melanchall.DryWetMidi.Core
             else
             {
                 var eventType = midiEvent.GetType();
-                if (!StandardEventTypes.Meta.TryGetStatusByte(eventType, out statusByte) && settings.CustomMetaEventTypes?.TryGetStatusByte(eventType, out statusByte) != true)
-                    Debug.Fail($"Unable to write the {eventType} event.");
+                if (!StandardEventTypes.Meta.TryGetStatusByte(eventType, out statusByte))
+                {
+                    EventSettingsValidator.ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
+
+                    if (settings.CustomMetaEventTypes?.TryGetStatusByte(eventType, out statusByte) != true)
+                        Debug.Fail($"Unable to write the {eventType} event.");
+                }
             }
 
             writer.WriteByte(statusByte);

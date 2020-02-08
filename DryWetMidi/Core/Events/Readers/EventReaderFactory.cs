@@ -36,10 +36,18 @@ namespace Melanchall.DryWetMidi.Core
 
             if (!smfOnly)
             {
-                if (EventStatusBytes.SystemRealTime.StatusBytes.Contains(statusByte))
+                if (statusByte == EventStatusBytes.SystemRealTime.ActiveSensing ||
+                    statusByte == EventStatusBytes.SystemRealTime.Continue ||
+                    statusByte == EventStatusBytes.SystemRealTime.Reset ||
+                    statusByte == EventStatusBytes.SystemRealTime.Start ||
+                    statusByte == EventStatusBytes.SystemRealTime.Stop ||
+                    statusByte == EventStatusBytes.SystemRealTime.TimingClock)
                     return _systemRealTimeEventReader;
 
-                if (EventStatusBytes.SystemCommon.StatusBytes.Contains(statusByte))
+                if (statusByte == EventStatusBytes.SystemCommon.MtcQuarterFrame ||
+                    statusByte == EventStatusBytes.SystemCommon.SongPositionPointer ||
+                    statusByte == EventStatusBytes.SystemCommon.SongSelect ||
+                    statusByte == EventStatusBytes.SystemCommon.TuneRequest)
                     return _systemCommonEventReader;
             }
 
