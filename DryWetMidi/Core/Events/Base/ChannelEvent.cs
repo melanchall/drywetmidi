@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Parameters of the MIDI channel event.
         /// </summary>
-        private readonly SevenBitNumber[] _parameters;
+        private readonly byte[] _parameters;
 
         #endregion
 
@@ -28,9 +28,7 @@ namespace Melanchall.DryWetMidi.Core
         protected ChannelEvent(MidiEventType eventType, int parametersCount)
             : base(eventType)
         {
-            ThrowIfArgument.IsNegative(nameof(parametersCount), parametersCount, "Parameters count is negative.");
-
-            _parameters = new SevenBitNumber[parametersCount];
+            _parameters = new byte[parametersCount];
         }
 
         #endregion
@@ -49,7 +47,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Value of parameter at the specified index.</returns>
         protected SevenBitNumber this[int index]
         {
-            get { return _parameters[index]; }
+            get { return (SevenBitNumber)_parameters[index]; }
             set { _parameters[index] = value; }
         }
 
@@ -85,7 +83,7 @@ namespace Melanchall.DryWetMidi.Core
                     }
                 }
 
-                _parameters[i] = (SevenBitNumber)parameter;
+                _parameters[i] = parameter;
             }
         }
 
