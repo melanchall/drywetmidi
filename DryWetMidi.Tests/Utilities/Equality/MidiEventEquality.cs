@@ -131,8 +131,8 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             if (event1 is ChannelEvent)
             {
                 var parametersField = typeof(ChannelEvent).GetField("_parameters", BindingFlags.Instance | BindingFlags.NonPublic);
-                var e1Parameters = (SevenBitNumber[])parametersField.GetValue(event1);
-                var e2Parameters = (SevenBitNumber[])parametersField.GetValue(event2);
+                var e1Parameters = (byte[])parametersField.GetValue(event1);
+                var e2Parameters = (byte[])parametersField.GetValue(event2);
                 return e1Parameters.SequenceEqual(e2Parameters) && ((ChannelEvent)event1).Channel == ((ChannelEvent)event2).Channel;
             }
 

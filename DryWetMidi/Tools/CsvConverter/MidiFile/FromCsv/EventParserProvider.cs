@@ -263,11 +263,11 @@ namespace Melanchall.DryWetMidi.Tools
                     channelEvent.Channel = (FourBitNumber)x[0];
 
                     var parametersField = typeof(ChannelEvent).GetField("_parameters", BindingFlags.Instance | BindingFlags.NonPublic);
-                    var parameters = (SevenBitNumber[])parametersField.GetValue(channelEvent);
+                    var parameters = (byte[])parametersField.GetValue(channelEvent);
 
                     for (int i = 0; i < parametersParsers.Length; i++)
                     {
-                        parameters[i] = (SevenBitNumber)x[i + 1];
+                        parameters[i] = Convert.ToByte(x[i + 1]);
                     }
 
                     return channelEvent;
