@@ -63,27 +63,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreSame(tempoMap, handler.TempoMap, "Tempo map object is changed on second get.");
         }
 
-        // TODO: ucomment
-        //[Test]
+        [Test]
         public void CheckTempoMapReadingHandler_SingleTrackChunk_DontAllowTempoMapUsageDuringReading_AccessDuringReading()
         {
             var timeDivision = new TicksPerQuarterNoteTimeDivision(100);
             var handler = new TempoMapReadingHandler();
 
             var exceptionThrown = false;
-            var thread = new Thread(() =>
+
+            try
             {
-                Thread.Sleep(TimeSpan.FromMilliseconds(10));
-                try
-                {
-                    var tempoMap = handler.TempoMap;
-                }
-                catch (InvalidOperationException)
-                {
-                    exceptionThrown = true;
-                }
-            });
-            thread.Start();
+                var tempoMap = handler.TempoMap;
+            }
+            catch (InvalidOperationException)
+            {
+                exceptionThrown = true;
+            }
 
             MidiFileTestUtilities.ReadUsingHandlers(
                 new MidiFile(
@@ -139,27 +134,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreSame(tempoMap, handler.TempoMap, "Tempo map object is changed on second get.");
         }
 
-        // TODO: ucomment
-        //[Test]
+        [Test]
         public void CheckTempoMapReadingHandler_MultipleTrackChunks_DontAllowTempoMapUsageDuringReading_AccessDuringReading()
         {
             var timeDivision = new TicksPerQuarterNoteTimeDivision(100);
             var handler = new TempoMapReadingHandler();
 
             var exceptionThrown = false;
-            var thread = new Thread(() =>
+
+            try
             {
-                Thread.Sleep(TimeSpan.FromMilliseconds(20));
-                try
-                {
-                    var tempoMap = handler.TempoMap;
-                }
-                catch (InvalidOperationException)
-                {
-                    exceptionThrown = true;
-                }
-            });
-            thread.Start();
+                var tempoMap = handler.TempoMap;
+            }
+            catch (InvalidOperationException)
+            {
+                exceptionThrown = true;
+            }
 
             MidiFileTestUtilities.ReadUsingHandlers(
                 new MidiFile(
