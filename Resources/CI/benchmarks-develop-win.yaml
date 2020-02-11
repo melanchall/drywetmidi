@@ -87,21 +87,21 @@ steps:
         $className = $fileNameWithoutExtension.Split('.')[-1].Replace("+", " -> ") -Replace "\-report\-brief",""
 
         Write-Host "========================================"
-        Write-Host $className
+        Write-Host "$className -> " -NoNewline
         
         $currentJson = Get-Content "$currentDirectory\$fileName" | Out-String | ConvertFrom-Json
 
         For ($i=0; $i -lt $currentJson.Benchmarks.Length; $i++)
         {
-          Write-Host "----------------------------------------"
-          Write-Host $currentJson.Benchmarks[$i].MethodTitle
+          $methodName = $currentJson.Benchmarks[$i].MethodTitle
+          Write-Host "$methodName :: " -NoNewline
   
           $currentMean = [math]::Round($currentJson.Benchmarks[$i].Statistics.Mean / 1000000, 3)
           
           $previousFileExists = Test-Path -Path "$previousDirectory\$fileName"
           If (-Not $previousFileExists)
           {
-            Write-Host "    $currentMean"
+            Write-Host "$currentMean"
             continue
           }
           
@@ -110,7 +110,7 @@ steps:
           
           $delta = $currentMean - $previousMean
           
-          $resultString = "    $previousMean ms -> $currentMean ms | $delta ms"
+          $resultString = "$previousMean ms -> $currentMean ms => $delta ms"
           If ($currentMean -le $previousMean)
           {
             Write-Host $resultString
