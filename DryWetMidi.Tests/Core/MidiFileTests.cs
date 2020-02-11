@@ -252,16 +252,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             #endregion
         }
 
-        private sealed class CustomMetaEvent : MetaEvent
+        private sealed class TestCustomMetaEvent : CustomMetaEvent
         {
             #region Constructor
 
-            public CustomMetaEvent()
-                : base(MidiEventType.CustomMeta)
+            public TestCustomMetaEvent()
+                : base()
             {
             }
 
-            public CustomMetaEvent(int a, string b, byte c)
+            public TestCustomMetaEvent(int a, string b, byte c)
                 : this()
             {
                 A = a;
@@ -285,7 +285,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             protected override MidiEvent CloneEvent()
             {
-                return new CustomMetaEvent(A, B, C);
+                return new TestCustomMetaEvent(A, B, C);
             }
 
             protected override int GetContentSize(WritingSettings settings)
@@ -1090,7 +1090,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var customMetaEventTypes = new EventTypesCollection
             {
-                { typeof(CustomMetaEvent), 0x5A }
+                { typeof(TestCustomMetaEvent), 0x5A }
             };
 
             var writingSettings = new WritingSettings { CustomMetaEventTypes = customMetaEventTypes };
@@ -1099,13 +1099,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var midiFile = MidiFileTestUtilities.Read(
                 new MidiFile(
                     new TrackChunk(
-                        new CustomMetaEvent(expectedA, expectedB, expectedC) { DeltaTime = 100 },
+                        new TestCustomMetaEvent(expectedA, expectedB, expectedC) { DeltaTime = 100 },
                         new TextEvent("foo"),
                         new MarkerEvent("bar"))),
                 writingSettings,
                 readingSettings);
 
-            var customMetaEvents = midiFile.GetEvents().OfType<CustomMetaEvent>().ToArray();
+            var customMetaEvents = midiFile.GetEvents().OfType<TestCustomMetaEvent>().ToArray();
             Assert.AreEqual(1, customMetaEvents.Length, "Custom meta events count is invalid.");
 
             var customMetaEvent = customMetaEvents.First();
@@ -1120,7 +1120,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var customMetaEventTypes = new EventTypesCollection
             {
-                { typeof(CustomMetaEvent), 0x54 }
+                { typeof(TestCustomMetaEvent), 0x54 }
             };
 
             var filePath = Path.GetRandomFileName();
@@ -1130,7 +1130,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var exception = Assert.Throws<InvalidOperationException>(() =>
                     new MidiFile(
                         new TrackChunk(
-                            new CustomMetaEvent(1234567, "Test", 45) { DeltaTime = 100 },
+                            new TestCustomMetaEvent(1234567, "Test", 45) { DeltaTime = 100 },
                             new TextEvent("foo"),
                             new MarkerEvent("bar")))
                     .Write(filePath, settings: new WritingSettings { CustomMetaEventTypes = customMetaEventTypes }));
@@ -1151,7 +1151,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var customMetaEventTypes = new EventTypesCollection
             {
-                { typeof(CustomMetaEvent), 0x54 }
+                { typeof(TestCustomMetaEvent), 0x54 }
             };
 
             var exception = Assert.Throws<InvalidOperationException>(() =>
