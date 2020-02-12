@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Core;
+﻿using System;
+using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
@@ -16,7 +17,15 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 Assert.Fail($"One of file is null.{additionalMessage}");
 
             if (compareOriginalFormat)
-                Assert.AreEqual(file1.OriginalFormat, file2.OriginalFormat, $"Original format is invalid.{additionalMessage}");
+            {
+                MidiFileFormat? originalFormat1 = null;
+                MidiFileFormat? originalFormat2 = null;
+
+                try { originalFormat1 = file1.OriginalFormat; } catch { }
+                try { originalFormat2 = file2.OriginalFormat; } catch { }
+
+                Assert.AreEqual(originalFormat1, originalFormat2, $"Original format is invalid.{additionalMessage}");
+            }
 
             Assert.AreEqual(file1.TimeDivision, file2.TimeDivision, $"Time division is invalid.{additionalMessage}");
 

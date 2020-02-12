@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Core
 
             var bytesUnread = size - bytesRead;
             if (bytesUnread > 0)
-                reader.Position += bytesUnread;
+                reader.Position += Math.Min(bytesUnread, reader.Length);
         }
 
         /// <summary>
