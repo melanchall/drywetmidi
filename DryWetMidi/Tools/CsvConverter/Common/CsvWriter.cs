@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -17,7 +18,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         public CsvWriter(Stream stream, char delimiter)
         {
-            _streamWriter = new StreamWriter(stream);
+            _streamWriter = new StreamWriter(stream, new UTF8Encoding(false, true), 1024, true);
             _delimiter = delimiter;
         }
 

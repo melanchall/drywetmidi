@@ -28,7 +28,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         public CsvReader(Stream stream, char delimiter)
         {
-            _streamReader = new StreamReader(stream);
+            // TODO: provide settings
+            _streamReader = new StreamReader(stream, Encoding.UTF8, true, 1024, true);
             _delimiter = delimiter;
         }
 

@@ -98,6 +98,28 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #region CsvToMidiFile
 
+        [Test]
+        public void ConvertCsvToMidiFile_StreamIsNotDisposed([Values] MidiFileCsvLayout layout)
+        {
+            var settings = new MidiFileCsvConversionSettings
+            {
+                CsvLayout = layout
+            };
+
+            var csvConverter = new CsvConverter();
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                csvConverter.ConvertMidiFileToCsv(new MidiFile(), streamToWrite, settings);
+
+                using (var streamToRead = new MemoryStream())
+                {
+                    var midiFile = csvConverter.ConvertCsvToMidiFile(streamToRead, settings);
+                    Assert.DoesNotThrow(() => { var l = streamToRead.Length; });
+                }
+            }
+        }
+
         [TestCase(MidiFileCsvLayout.DryWetMidi, new[] { ",,Header,MultiTrack,1000" })]
         [TestCase(MidiFileCsvLayout.MidiCsv, new[] { ",,Header,1,0,1000" })]
         public void ConvertCsvToMidiFile_NoEvents(MidiFileCsvLayout layout, string[] csvLines)
@@ -391,6 +413,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #endregion
 
         #region MidiFileToCsv
+
+        [Test]
+        public void ConvertMidiFileToCsv_StreamIsNotDisposed([Values] MidiFileCsvLayout layout)
+        {
+            var settings = new MidiFileCsvConversionSettings
+            {
+                CsvLayout = layout
+            };
+
+            var csvConverter = new CsvConverter();
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                csvConverter.ConvertMidiFileToCsv(new MidiFile(), streamToWrite, settings);
+                Assert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+            }
+        }
 
         [TestCase(MidiFileCsvLayout.DryWetMidi, new[] { ",,header,,96" })]
         [TestCase(MidiFileCsvLayout.MidiCsv, new[]
