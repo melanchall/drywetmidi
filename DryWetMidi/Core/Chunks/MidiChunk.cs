@@ -70,6 +70,22 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the chunk.</returns>
         public abstract MidiChunk Clone();
 
+        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2)
+        {
+            string message;
+            return Equals(chunk1, chunk2, out message);
+        }
+
+        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, out string message)
+        {
+            return Equals(chunk1, chunk2, null, out message);
+        }
+
+        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, MidiChunkEqualityCheckSettings settings, out string message)
+        {
+            return MidiChunkEquality.Equals(chunk1, chunk2, settings ?? new MidiChunkEqualityCheckSettings(), out message);
+        }
+
         /// <summary>
         /// Reads chunk from the <see cref="MidiReader"/>'s underlying stream according to
         /// specified <see cref="ReadingSettings"/>.

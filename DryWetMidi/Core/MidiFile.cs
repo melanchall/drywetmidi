@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Fields
 
-        private ushort? _originalFormat;
+        internal ushort? _originalFormat;
 
         #endregion
 
@@ -456,8 +456,24 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
+        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2)
+        {
+            string message;
+            return Equals(midiFile1, midiFile2, out message);
+        }
+
+        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, out string message)
+        {
+            return Equals(midiFile1, midiFile2, null, out message);
+        }
+
+        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings, out string message)
+        {
+            return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);
+        }
+
         /// <summary>
-        /// Reads a chunk from a MIDI-file.
+        /// Reads a chunk from a MIDI file.
         /// </summary>
         /// <param name="reader">Reader to read a chunk with.</param>
         /// <param name="settings">Settings according to which a chunk must be read.</param>

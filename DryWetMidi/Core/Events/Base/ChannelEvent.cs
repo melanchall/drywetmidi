@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Parameters of the MIDI channel event.
         /// </summary>
-        private readonly byte[] _parameters;
+        internal readonly byte[] _parameters;
 
         #endregion
 

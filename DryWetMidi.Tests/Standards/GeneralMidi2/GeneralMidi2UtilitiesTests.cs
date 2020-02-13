@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Standards
                     new ControlChangeEvent(ControlName.LsbForBankSelect.AsSevenBitNumber(), (SevenBitNumber)0x02) { Channel = channel },
                     new ProgramChangeEvent((SevenBitNumber)0x00) { Channel = channel }
                 })
-                .Using(new MidiEventEquality.EqualityComparer(true)));
+                .Using(new MidiEventEqualityComparer()));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Standards
                     new ControlChangeEvent(ControlName.LsbForBankSelect.AsSevenBitNumber(), (SevenBitNumber)0x00) { Channel = channel },
                     new ProgramChangeEvent((SevenBitNumber)(byte)percussionSet) { Channel = channel }
                 })
-                .Using(new MidiEventEquality.EqualityComparer(true)));
+                .Using(new MidiEventEqualityComparer()));
         }
 
         #endregion

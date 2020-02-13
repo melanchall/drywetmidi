@@ -72,8 +72,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     var isEventSentReceived = SpinWait.SpinUntil(() => eventSent != null && eventReceived != null, timeout);
                     Assert.IsTrue(isEventSentReceived, "Event either not sent ot not received.");
 
-                    Assert.IsTrue(MidiEventEquality.AreEqual(midiEvent, eventSent, false), "Sent event is invalid.");
-                    Assert.IsTrue(MidiEventEquality.AreEqual(eventSent, eventReceived, false), "Received event is invalid.");
+                    MidiAsserts.AreEventsEqual(midiEvent, eventSent, false, "Sent event is invalid.");
+                    MidiAsserts.AreEventsEqual(eventSent, eventReceived, false, "Received event is invalid.");
                 }
             }
         }

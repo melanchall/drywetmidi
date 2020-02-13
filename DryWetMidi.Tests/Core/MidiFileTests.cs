@@ -854,7 +854,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var midiFile = MidiFile.Read(filePath);
                 var clonedMidiFile = midiFile.Clone();
 
-                MidiFileEquality.AssertAreEqual(clonedMidiFile, midiFile, true, $"Clone of the '{filePath}' doesn't equal to the original file.");
+                MidiAsserts.AreFilesEqual(clonedMidiFile, midiFile, true, $"Clone of the '{filePath}' doesn't equal to the original file.");
             }
         }
 
@@ -1257,7 +1257,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var expectedMidiFile = MidiFile.Read(filePath);
                 var midiFile = MidiFile.Read(filePath, new ReadingSettings { PutDataInMemoryBeforeReading = true });
-                MidiFileEquality.AssertAreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
             }
         }
 
@@ -1271,7 +1271,32 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     continue;
 
                 var midiFile = MidiFile.Read(filePath);
-                MidiFileEquality.AssertAreEqual(midiFile, referenceMidiFile, false, $"File '{filePath}' read wrong.");
+                MidiAsserts.AreFilesEqual(midiFile, referenceMidiFile, false, $"File '{filePath}' read wrong.");
+            }
+        }
+
+        [Test]
+        public void CheckValidFilesAreEqualToSelf()
+        {
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
+            {
+                var midiFile1 = MidiFile.Read(filePath);
+                var midiFile2 = MidiFile.Read(filePath);
+                MidiAsserts.AreFilesEqual(midiFile1, midiFile2, true, $"File '{filePath}' isn't equal to self.");
+            }
+        }
+
+        [Test]
+        public void CheckValidFilesAreNotEqualToAnother()
+        {
+            var filesPaths = TestFilesProvider.GetValidFilesPaths().ToArray();
+            var random = new Random();
+
+            foreach (var filePath in filesPaths)
+            {
+                var midiFile1 = MidiFile.Read(filePath);
+                var midiFile2 = MidiFile.Read(filesPaths.Where(p => p != filePath).ToArray()[random.Next(filesPaths.Length - 1)]);
+                MidiAsserts.AreFilesNotEqual(midiFile1, midiFile2, true, $"File '{filePath}' equals to another one.");
             }
         }
 
@@ -1313,7 +1338,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         Assert.Throws<TException>(() => remoteMidiFile = MidiFile.Read(responseStream, readingSettings), $"Exception not thrown for file '{filePath}'.");
                     }
 
-                    MidiFileEquality.AssertAreEqual(midiFile, remoteMidiFile, true, $"Remote MIDI file '{fileBasePath}' is invalid.");
+                    MidiAsserts.AreFilesEqual(midiFile, remoteMidiFile, true, $"Remote MIDI file '{fileBasePath}' is invalid.");
                 }
 
                 if (readWithPuttingInMemory)
@@ -1323,7 +1348,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     MidiFile inMemoryMidiFile = null;
                     Assert.Throws<TException>(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}'.");
 
-                    MidiFileEquality.AssertAreEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
+                    MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
                     readingSettings.PutDataInMemoryBeforeReading = false;
                 }
@@ -1352,7 +1377,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         Assert.DoesNotThrow(() => remoteMidiFile = MidiFile.Read(responseStream, readingSettings), $"Exception thrown for file '{filePath}'.");
                     }
 
-                    MidiFileEquality.AssertAreEqual(midiFile, remoteMidiFile, true, $"Remote MIDI file '{fileBasePath}' is invalid.");
+                    MidiAsserts.AreFilesEqual(midiFile, remoteMidiFile, true, $"Remote MIDI file '{fileBasePath}' is invalid.");
                 }
 
                 if (readWithPuttingInMemory)
@@ -1362,7 +1387,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     MidiFile inMemoryMidiFile = null;
                     Assert.DoesNotThrow(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception thrown for file '{filePath}'.");
 
-                    MidiFileEquality.AssertAreEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
+                    MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
                     readingSettings.PutDataInMemoryBeforeReading = false;
                 }

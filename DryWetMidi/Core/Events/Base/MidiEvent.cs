@@ -108,6 +108,22 @@ namespace Melanchall.DryWetMidi.Core
             return midiEvent;
         }
 
+        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2)
+        {
+            string message;
+            return Equals(midiEvent1, midiEvent2, out message);
+        }
+
+        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, out string message)
+        {
+            return Equals(midiEvent1, midiEvent2, null, out message);
+        }
+
+        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, MidiEventEqualityCheckSettings settings, out string message)
+        {
+            return MidiEventEquality.Equals(midiEvent1, midiEvent2, settings ?? new MidiEventEqualityCheckSettings(), out message);
+        }
+
         #endregion
     }
 }

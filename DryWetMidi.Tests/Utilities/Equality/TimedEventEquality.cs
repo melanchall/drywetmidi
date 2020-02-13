@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
@@ -35,8 +36,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 if (ReferenceEquals(null, timedEvent1) || ReferenceEquals(null, timedEvent2))
                     return false;
 
+                string message;
                 return timedEvent1.Time == timedEvent2.Time &&
-                       MidiEventEquality.AreEqual(timedEvent1.Event, timedEvent2.Event, _compareDeltaTimes);
+                       MidiEvent.Equals(timedEvent1.Event, timedEvent2.Event, new MidiEventEqualityCheckSettings { CompareDeltaTimes = _compareDeltaTimes }, out message);
             }
 
             public int GetHashCode(TimedEvent timedEvent)

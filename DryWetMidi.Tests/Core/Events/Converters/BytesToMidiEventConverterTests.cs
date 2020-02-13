@@ -139,11 +139,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private static void CompareEvents(MidiEvent expectedMidiEvent, MidiEvent actualMidiEvent)
         {
-            var isMidiEventCorrect = MidiEventEquality.AreEqual(
+            MidiAsserts.AreEventsEqual(
                 expectedMidiEvent,
                 actualMidiEvent,
-                false);
-            Assert.IsTrue(isMidiEventCorrect, "MIDI event read incorrectly.");
+                false,
+                "MIDI event read incorrectly.");
         }
 
         #endregion
