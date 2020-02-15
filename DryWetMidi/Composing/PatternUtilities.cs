@@ -12,6 +12,12 @@ namespace Melanchall.DryWetMidi.Composing
     /// </summary>
     public static class PatternUtilities
     {
+        #region Constants
+
+        private static readonly NoteSelection AllNoteSelection = d => true;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -29,10 +35,19 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
 
+            return TransformNotes(pattern, AllNoteSelection, noteTransformation, recursive);
+        }
+
+        public static Pattern TransformNotes(this Pattern pattern, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(noteSelection), noteSelection);
+            ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
+
             return new Pattern(pattern.Actions.Select(a =>
             {
                 var addNoteAction = a as AddNoteAction;
-                if (addNoteAction != null)
+                if (addNoteAction != null && noteSelection(addNoteAction.NoteDescriptor))
                 {
                     var noteDescriptor = noteTransformation(addNoteAction.NoteDescriptor);
                     return new AddNoteAction(noteDescriptor);
@@ -40,7 +55,7 @@ namespace Melanchall.DryWetMidi.Composing
 
                 var addPatternAction = a as AddPatternAction;
                 if (addPatternAction != null && recursive)
-                    return new AddPatternAction(addPatternAction.Pattern.TransformNotes(noteTransformation));
+                    return new AddPatternAction(addPatternAction.Pattern.TransformNotes(noteSelection, noteTransformation, recursive));
 
                 return a;
             })
