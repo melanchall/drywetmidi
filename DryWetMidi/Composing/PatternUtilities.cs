@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Composing
     {
         #region Constants
 
-        private static readonly NoteSelection AllNoteSelection = d => true;
+        private static readonly NoteSelection AllNoteSelection = (i, d) => true;
 
         #endregion
 
@@ -44,22 +44,9 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(noteSelection), noteSelection);
             ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
 
-            return new Pattern(pattern.Actions.Select(a =>
-            {
-                var addNoteAction = a as AddNoteAction;
-                if (addNoteAction != null && noteSelection(addNoteAction.NoteDescriptor))
-                {
-                    var noteDescriptor = noteTransformation(addNoteAction.NoteDescriptor);
-                    return new AddNoteAction(noteDescriptor);
-                }
+            var noteIndexWrapper = new ObjectWrapper<int>();
 
-                var addPatternAction = a as AddPatternAction;
-                if (addPatternAction != null && recursive)
-                    return new AddPatternAction(addPatternAction.Pattern.TransformNotes(noteSelection, noteTransformation, recursive));
-
-                return a;
-            })
-            .ToList());
+            return TransformNotes(pattern, noteIndexWrapper, noteSelection, noteTransformation, recursive);
         }
 
         /// <summary>
@@ -240,6 +227,30 @@ namespace Melanchall.DryWetMidi.Composing
 
             if (part.Any())
                 yield return new Pattern(part.AsReadOnly());
+        }
+
+        private static Pattern TransformNotes(Pattern pattern, ObjectWrapper<int> noteIndexWrapper, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(noteSelection), noteSelection);
+            ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
+
+            return new Pattern(pattern.Actions.Select(a =>
+            {
+                var addNoteAction = a as AddNoteAction;
+                if (addNoteAction != null && noteSelection(noteIndexWrapper.Object++, addNoteAction.NoteDescriptor))
+                {
+                    var noteDescriptor = noteTransformation(addNoteAction.NoteDescriptor);
+                    return new AddNoteAction(noteDescriptor);
+                }
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    return new AddPatternAction(TransformNotes(addPatternAction.Pattern, noteIndexWrapper, noteSelection, noteTransformation, recursive));
+
+                return a;
+            })
+            .ToList());
         }
 
         #endregion
