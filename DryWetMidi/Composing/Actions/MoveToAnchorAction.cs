@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Composing
         Nth
     }
 
-    internal sealed class MoveToAnchorAction : IPatternAction
+    internal sealed class MoveToAnchorAction : PatternAction
     {
         #region Constructor
 
@@ -48,9 +48,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
             var anchorTimes = context.GetAnchorTimes(Anchor);
             var newTime = 0L;

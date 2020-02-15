@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Fields
 
-        private readonly List<IPatternAction> _actions = new List<IPatternAction>();
+        private readonly List<PatternAction> _actions = new List<PatternAction>();
 
         private readonly Dictionary<object, int> _anchorCounters = new Dictionary<object, int>();
         private int _globalAnchorsCounter = 0;
@@ -1400,7 +1400,7 @@ namespace Melanchall.DryWetMidi.Composing
             return this;
         }
 
-        private PatternBuilder AddAction(IPatternAction patternAction)
+        private PatternBuilder AddAction(PatternAction patternAction)
         {
             var addAnchorAction = patternAction as AddAnchorAction;
             if (addAnchorAction != null)

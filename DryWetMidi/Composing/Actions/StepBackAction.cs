@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
         public override PatternActionResult Invoke(long time, PatternContext context)
         {

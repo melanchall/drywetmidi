@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddTextEventAction<TEvent> : IPatternAction
+    internal sealed class AddTextEventAction<TEvent> : PatternAction
         where TEvent : BaseTextEvent
     {
         #region Constructor
@@ -22,9 +22,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
             var textEvent = (BaseTextEvent)Activator.CreateInstance(typeof(TEvent), Text);
             var timedEvent = new TimedEvent(textEvent, time);

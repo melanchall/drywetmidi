@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Standards;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class SetGeneralMidiProgramAction : IPatternAction
+    internal sealed class SetGeneralMidiProgramAction : PatternAction
     {
         #region Constructor
 
@@ -20,9 +20,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
             var programEvent = Program.GetProgramEvent(context.Channel);
             var timedEvent = new TimedEvent(programEvent, time);

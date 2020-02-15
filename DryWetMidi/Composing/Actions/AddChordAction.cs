@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddChordAction : IPatternAction
+    internal sealed class AddChordAction : PatternAction
     {
         #region Constructor
 
@@ -20,9 +20,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
             context.SaveTime(time);
 

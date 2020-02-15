@@ -205,9 +205,9 @@ namespace Melanchall.DryWetMidi.Composing
             return patternBuilder.Build();
         }
 
-        private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<IPatternAction> actionSelector, bool removeEmptyPatterns)
+        private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<PatternAction> actionSelector, bool removeEmptyPatterns)
         {
-            var part = new List<IPatternAction>();
+            var part = new List<PatternAction>();
 
             foreach (var action in pattern.Actions)
             {
@@ -220,7 +220,7 @@ namespace Melanchall.DryWetMidi.Composing
                 if (part.Any() || !removeEmptyPatterns)
                     yield return new Pattern(part.AsReadOnly());
 
-                part = new List<IPatternAction>();
+                part = new List<PatternAction>();
             }
 
             if (part.Any())

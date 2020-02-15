@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddNoteAction : IPatternAction
+    internal sealed class AddNoteAction : PatternAction
     {
         #region Constructor
 
@@ -19,9 +19,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
             context.SaveTime(time);
 

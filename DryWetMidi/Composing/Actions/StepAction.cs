@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal abstract class StepAction : IPatternAction
+    internal abstract class StepAction : PatternAction
     {
         #region Constructor
 
@@ -16,12 +16,6 @@ namespace Melanchall.DryWetMidi.Composing
         #region Properties
 
         public ITimeSpan Step { get; }
-
-        #endregion
-
-        #region IPatternAction
-
-        public abstract PatternActionResult Invoke(long time, PatternContext context);
 
         #endregion
     }

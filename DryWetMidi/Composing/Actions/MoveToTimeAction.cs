@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class MoveToTimeAction : IPatternAction
+    internal sealed class MoveToTimeAction : PatternAction
     {
         #region Constructor
 
@@ -24,9 +24,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
             if (Time != null)
                 context.SaveTime(time);
