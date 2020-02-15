@@ -45,7 +45,6 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
 
             var noteIndexWrapper = new ObjectWrapper<int>();
-
             return TransformNotes(pattern, noteIndexWrapper, noteSelection, noteTransformation, recursive);
         }
 
@@ -207,6 +206,16 @@ namespace Melanchall.DryWetMidi.Composing
             return patternBuilder.Build();
         }
 
+        public static void SetNotesState(this Pattern pattern, NoteSelection noteSelection, PatternActionState state, bool recursive = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(noteSelection), noteSelection);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(state), state);
+
+            var noteIndexWrapper = new ObjectWrapper<int>();
+            SetNotesState(pattern, noteIndexWrapper, noteSelection, state, recursive);
+        }
+
         private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<PatternAction> actionSelector, bool removeEmptyPatterns)
         {
             var part = new List<PatternAction>();
@@ -231,10 +240,6 @@ namespace Melanchall.DryWetMidi.Composing
 
         private static Pattern TransformNotes(Pattern pattern, ObjectWrapper<int> noteIndexWrapper, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive)
         {
-            ThrowIfArgument.IsNull(nameof(pattern), pattern);
-            ThrowIfArgument.IsNull(nameof(noteSelection), noteSelection);
-            ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
-
             return new Pattern(pattern.Actions.Select(a =>
             {
                 var addNoteAction = a as AddNoteAction;
@@ -251,6 +256,20 @@ namespace Melanchall.DryWetMidi.Composing
                 return a;
             })
             .ToList());
+        }
+
+        private static void SetNotesState(Pattern pattern, ObjectWrapper<int> noteIndexWrapper, NoteSelection noteSelection, PatternActionState state, bool recursive)
+        {
+            foreach (var a in pattern.Actions)
+            {
+                var addNoteAction = a as AddNoteAction;
+                if (addNoteAction != null && noteSelection(noteIndexWrapper.Object++, addNoteAction.NoteDescriptor))
+                    addNoteAction.State = state;
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    SetNotesState(addPatternAction.Pattern, noteIndexWrapper, noteSelection, state, recursive);
+            }
         }
 
         #endregion
