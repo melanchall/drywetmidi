@@ -12,6 +12,8 @@
 
         public abstract PatternActionResult Invoke(long time, PatternContext context);
 
+        public abstract PatternAction Clone();
+
         #endregion
     }
 }

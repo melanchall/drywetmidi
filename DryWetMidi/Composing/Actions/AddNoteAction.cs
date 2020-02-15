@@ -41,6 +41,11 @@ namespace Melanchall.DryWetMidi.Composing
             return new PatternActionResult(time + noteLength, new[] { note });
         }
 
+        public override PatternAction Clone()
+        {
+            return new AddNoteAction(new NoteDescriptor(NoteDescriptor.Note, NoteDescriptor.Velocity, NoteDescriptor.Length.Clone()));
+        }
+
         #endregion
     }
 }

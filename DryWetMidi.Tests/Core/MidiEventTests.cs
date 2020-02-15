@@ -9,6 +9,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
     [TestFixture]
     public sealed class MidiEventTests
     {
+        #region Test methods
+
         [Test]
         public void AllEventTypesAreCorrect()
         {
@@ -38,6 +40,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [Test]
+        public void CloneEvent_TypeIsCorrect()
+        {
+            foreach (var type in GetAllEventTypes())
+            {
+                var midiEvent = type == typeof(UnknownMetaEvent)
+                    ? new UnknownMetaEvent(1)
+                    : (MidiEvent)Activator.CreateInstance(type);
+                var midiEventClone = midiEvent.Clone();
+                Assert.AreEqual(type, midiEventClone.GetType(), $"Clone of {type} is of invalid type.");
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+
         private static IEnumerable<Type> GetAllEventTypes()
         {
             var midiEventType = typeof(MidiEvent);
@@ -47,5 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 .Where(t => !t.IsAbstract && t.IsSubclassOf(midiEventType))
                 .ToList();
         }
+
+        #endregion
     }
 }

@@ -36,6 +36,11 @@ namespace Melanchall.DryWetMidi.Composing
                 : context.RestoreTime());
         }
 
+        public override PatternAction Clone()
+        {
+            return new MoveToTimeAction(Time?.Clone());
+        }
+
         #endregion
     }
 }

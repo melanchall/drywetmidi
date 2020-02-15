@@ -30,6 +30,11 @@
             return PatternActionResult.DoNothing;
         }
 
+        public override PatternAction Clone()
+        {
+            return new AddAnchorAction(Anchor);
+        }
+
         #endregion
     }
 }

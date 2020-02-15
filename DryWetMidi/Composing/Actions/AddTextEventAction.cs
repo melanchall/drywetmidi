@@ -32,6 +32,11 @@ namespace Melanchall.DryWetMidi.Composing
             return new PatternActionResult(time, new[] { timedEvent });
         }
 
+        public override PatternAction Clone()
+        {
+            return new AddTextEventAction<TEvent>(Text);
+        }
+
         #endregion
     }
 }

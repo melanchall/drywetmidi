@@ -36,6 +36,11 @@ namespace Melanchall.DryWetMidi.Composing
                                            }));
         }
 
+        public override PatternAction Clone()
+        {
+            return new AddChordAction(new ChordDescriptor(ChordDescriptor.Notes, ChordDescriptor.Velocity, ChordDescriptor.Length.Clone()));
+        }
+
         #endregion
     }
 }

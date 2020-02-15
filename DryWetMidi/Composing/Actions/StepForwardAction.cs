@@ -21,6 +21,11 @@ namespace Melanchall.DryWetMidi.Composing
             return new PatternActionResult(time + LengthConverter.ConvertFrom(Step, time, context.TempoMap));
         }
 
+        public override PatternAction Clone()
+        {
+            return new StepForwardAction(Step.Clone());
+        }
+
         #endregion
     }
 }

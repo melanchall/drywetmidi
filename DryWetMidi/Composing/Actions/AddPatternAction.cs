@@ -27,6 +27,11 @@
             return Pattern.InvokeActions(time, newContext);
         }
 
+        public override PatternAction Clone()
+        {
+            return new AddPatternAction(Pattern.Clone());
+        }
+
         #endregion
     }
 }

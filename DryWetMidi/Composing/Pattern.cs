@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>Copy of the pattern containing all actions from original one.</returns>
         public Pattern Clone()
         {
-            return new Pattern(Actions.ToList());
+            return new Pattern(Actions.Select(a => a.Clone()).ToList());
         }
 
         internal PatternActionResult InvokeActions(long time, PatternContext context)

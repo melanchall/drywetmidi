@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Fields
 
-        private SmpteFormat _format;
+        private SmpteFormat _format = SmpteFormat.TwentyFour;
         private byte _hours;
         private byte _minutes;
         private byte _seconds;
