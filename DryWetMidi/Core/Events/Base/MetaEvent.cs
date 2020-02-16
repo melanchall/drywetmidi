@@ -12,12 +12,18 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constructor
 
+        protected MetaEvent()
+            : this(MidiEventType.CustomMeta)
+        {
+
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
-        protected MetaEvent(MidiEventType eventType)
+        internal MetaEvent(MidiEventType eventType)
             : base(eventType)
         {
         }
