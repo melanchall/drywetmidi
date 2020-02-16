@@ -24,9 +24,14 @@ namespace Melanchall.DryWetMidi.Composing
 
         public override PatternActionResult Invoke(long time, PatternContext context)
         {
+            if (State == PatternActionState.Excluded)
+                return PatternActionResult.DoNothing;
+
             context.SaveTime(time);
 
             var chordLength = LengthConverter.ConvertFrom(ChordDescriptor.Length, time, context.TempoMap);
+            if (State == PatternActionState.Disabled)
+                return new PatternActionResult(time + chordLength);
 
             return new PatternActionResult(time + chordLength,
                                            ChordDescriptor.Notes.Select(d => new Note(d.NoteNumber, chordLength, time)

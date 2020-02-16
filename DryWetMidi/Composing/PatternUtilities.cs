@@ -212,6 +212,16 @@ namespace Melanchall.DryWetMidi.Composing
             SetNotesState(pattern, noteIndexWrapper, noteSelection, state, recursive);
         }
 
+        public static void SetChordsState(this Pattern pattern, ChordSelection chordSelection, PatternActionState state, bool recursive = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(chordSelection), chordSelection);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(state), state);
+
+            var chordIndexWrapper = new ObjectWrapper<int>();
+            SetChordsState(pattern, chordIndexWrapper, chordSelection, state, recursive);
+        }
+
         private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<PatternAction> actionSelector, bool removeEmptyPatterns)
         {
             var part = new List<PatternAction>();
@@ -285,6 +295,20 @@ namespace Melanchall.DryWetMidi.Composing
                 var addPatternAction = a as AddPatternAction;
                 if (addPatternAction != null && recursive)
                     SetNotesState(addPatternAction.Pattern, noteIndexWrapper, noteSelection, state, recursive);
+            }
+        }
+
+        private static void SetChordsState(Pattern pattern, ObjectWrapper<int> chordIndexWrapper, ChordSelection chordSelection, PatternActionState state, bool recursive)
+        {
+            foreach (var a in pattern.Actions)
+            {
+                var addChordAction = a as AddChordAction;
+                if (addChordAction != null && chordSelection(chordIndexWrapper.Object++, addChordAction.ChordDescriptor))
+                    addChordAction.State = state;
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    SetChordsState(addPatternAction.Pattern, chordIndexWrapper, chordSelection, state, recursive);
             }
         }
 
