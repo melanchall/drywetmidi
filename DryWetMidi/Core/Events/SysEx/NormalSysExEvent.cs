@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a normal system exclusive event.
@@ -34,6 +36,12 @@
         public NormalSysExEvent(byte[] data)
             : this()
         {
+            ThrowIfArgument.StartsWithInvalidValue(
+                nameof(data),
+                data,
+                EventStatusBytes.Global.NormalSysEx,
+                $"First data byte mustn't be {EventStatusBytes.Global.NormalSysEx} ({EventStatusBytes.Global.NormalSysEx:X2}) since it will be used automatically.");
+
             Data = data;
         }
 

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Reprsents an "escape" system exclusive event which defines an escape sequence.
@@ -36,6 +38,12 @@
         public EscapeSysExEvent(byte[] data)
             : this()
         {
+            ThrowIfArgument.StartsWithInvalidValue(
+                nameof(data),
+                data,
+                EventStatusBytes.Global.EscapeSysEx,
+                $"First data byte mustn't be {EventStatusBytes.Global.EscapeSysEx} ({EventStatusBytes.Global.EscapeSysEx:X2}) since it will be used automatically.");
+
             Data = data;
         }
 
