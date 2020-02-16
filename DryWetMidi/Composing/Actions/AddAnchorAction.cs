@@ -26,7 +26,9 @@
 
         public override PatternActionResult Invoke(long time, PatternContext context)
         {
-            context.AnchorTime(Anchor, time);
+            if (State == PatternActionState.Enabled)
+                context.AnchorTime(Anchor, time);
+
             return PatternActionResult.DoNothing;
         }
 

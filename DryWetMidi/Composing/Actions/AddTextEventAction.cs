@@ -26,6 +26,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         public override PatternActionResult Invoke(long time, PatternContext context)
         {
+            if (State != PatternActionState.Enabled)
+                return PatternActionResult.DoNothing;
+
             var textEvent = (BaseTextEvent)Activator.CreateInstance(typeof(TEvent), Text);
             var timedEvent = new TimedEvent(textEvent, time);
 

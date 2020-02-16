@@ -17,6 +17,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         public override PatternActionResult Invoke(long time, PatternContext context)
         {
+            if (State != PatternActionState.Enabled)
+                return PatternActionResult.DoNothing;
+
             context.SaveTime(time);
             return new PatternActionResult(time + LengthConverter.ConvertFrom(Step, time, context.TempoMap));
         }

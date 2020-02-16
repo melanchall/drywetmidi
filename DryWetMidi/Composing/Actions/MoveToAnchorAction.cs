@@ -52,6 +52,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         public override PatternActionResult Invoke(long time, PatternContext context)
         {
+            if (State != PatternActionState.Enabled)
+                return PatternActionResult.DoNothing;
+
             var anchorTimes = context.GetAnchorTimes(Anchor);
             var newTime = 0L;
 
