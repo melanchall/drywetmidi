@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             {
                 _received = 0;
 
-                const int iterationsCount = 1000;
+                const int iterationsCount = 100;
 
                 for (var i = 0; i < iterationsCount; i++)
                 {
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             {
                 _sent = 0;
 
-                const int iterationsCount = 1000;
+                const int iterationsCount = 100;
 
                 for (var i = 0; i < iterationsCount; i++)
                 {
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             {
                 _received = 0;
 
-                const int iterationsCount = 1000;
+                const int iterationsCount = 100;
 
                 for (var i = 0; i < iterationsCount; i++)
                 {
@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             {
                 _sent = 0;
 
-                const int iterationsCount = 1000;
+                const int iterationsCount = 100;
 
                 for (var i = 0; i < iterationsCount; i++)
                 {
