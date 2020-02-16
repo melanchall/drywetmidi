@@ -167,13 +167,15 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             RunBenchmarks<Benchmarks_SendReceive_SysEx>();
         }
 
-        [Test]
+        // TODO
+        // [Test]
         public void SendReceiveEvent_Batch_Channel()
         {
             RunBenchmarks<Benchmarks_SendReceive_Batch_Channel>();
         }
 
-        [Test]
+        // TODO
+        // [Test]
         public void SendReceiveEvent_Batch_SysEx()
         {
             RunBenchmarks<Benchmarks_SendReceive_Batch_SysEx>();
