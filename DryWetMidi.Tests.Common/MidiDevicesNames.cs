@@ -1,4 +1,4 @@
-﻿namespace Melanchall.DryWetMidi.Tests.Devices
+﻿namespace Melanchall.DryWetMidi.Tests.Common
 {
     public static class MidiDevicesNames
     {

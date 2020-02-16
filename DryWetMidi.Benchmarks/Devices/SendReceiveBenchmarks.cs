@@ -4,31 +4,34 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using System.Linq;
+using Melanchall.DryWetMidi.Tests.Common;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Devices
 {
     [TestFixture]
     public sealed class SendReceiveBenchmarks : BenchmarkTest
     {
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput, warmupCount: 32, targetCount: 32, launchCount: 32, invocationCount: 32)]
-        public class Benchmarks
+        public abstract class Benchmarks
         {
-            private InputDevice _inputDevice;
-            private OutputDevice _outputDevice;
+            protected InputDevice _inputDevice;
+            protected OutputDevice _outputDevice;
 
-            private bool _received;
-            private bool _sent;
+            protected int _received;
+            protected int _sent;
 
-            private readonly MidiEvent _midiEvent = new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100) { Channel = (FourBitNumber)12 };
+            protected readonly MidiEvent _channelMidiEvent = new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100) { Channel = (FourBitNumber)12 };
+            protected readonly MidiEvent _sysExMidiEvent = new NormalSysExEvent(Enumerable.Range(0, 10).Select(_ => (byte)0x56).Concat(new byte[] { 0xF7 }).ToArray());
 
             [GlobalSetup]
             public void Setup()
             {
-                _outputDevice = OutputDevice.GetByName("MIDI A");
-                _outputDevice.EventSent += (_, e) => _sent = true;
+                _outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+                _outputDevice.PrepareForEventsSending();
+                _outputDevice.EventSent += (_, e) => _sent++;
 
-                _inputDevice = InputDevice.GetByName("MIDI A");
-                _inputDevice.EventReceived += (_, e) => _received = true;
+                _inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+                _inputDevice.EventReceived += (_, e) => _received++;
                 _inputDevice.StartEventsListening();
             }
 
@@ -38,30 +41,142 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
                 _inputDevice.Dispose();
                 _outputDevice.Dispose();
             }
+        }
 
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput, warmupCount: 16, targetCount: 16, launchCount: 16, invocationCount: 16)]
+        public class Benchmarks_SendReceive_Channel : Benchmarks
+        {
             [Benchmark]
             public void ReceiveEvent()
             {
-                _received = false;
+                _received = 0;
 
-                _outputDevice.SendEvent(_midiEvent);
-                SpinWait.SpinUntil(() => _received);
+                _outputDevice.SendEvent(_channelMidiEvent);
+                SpinWait.SpinUntil(() => _received == 1);
             }
 
             [Benchmark]
             public void SendEvent()
             {
-                _sent = false;
+                _sent = 0;
 
-                _outputDevice.SendEvent(_midiEvent);
-                SpinWait.SpinUntil(() => _sent);
+                _outputDevice.SendEvent(_channelMidiEvent);
+                SpinWait.SpinUntil(() => _sent == 1);
+            }
+        }
+
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput, warmupCount: 32, targetCount: 32, launchCount: 32, invocationCount: 32)]
+        public class Benchmarks_SendReceive_SysEx : Benchmarks
+        {
+            [Benchmark]
+            public void ReceiveEvent()
+            {
+                _received = 0;
+
+                _outputDevice.SendEvent(_sysExMidiEvent);
+                SpinWait.SpinUntil(() => _received == 1);
+            }
+
+            [Benchmark]
+            public void SendEvent()
+            {
+                _sent = 0;
+
+                _outputDevice.SendEvent(_sysExMidiEvent);
+                SpinWait.SpinUntil(() => _sent == 1);
+            }
+        }
+
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 16)]
+        public class Benchmarks_SendReceive_Batch_Channel : Benchmarks
+        {
+            [Benchmark]
+            public void ReceiveEvent()
+            {
+                _received = 0;
+
+                const int iterationsCount = 1000;
+
+                for (var i = 0; i < iterationsCount; i++)
+                {
+                    _outputDevice.SendEvent(_channelMidiEvent);
+                }
+
+                SpinWait.SpinUntil(() => _received == iterationsCount);
+            }
+
+            [Benchmark]
+            public void SendEvent()
+            {
+                _sent = 0;
+
+                const int iterationsCount = 1000;
+
+                for (var i = 0; i < iterationsCount; i++)
+                {
+                    _outputDevice.SendEvent(_channelMidiEvent);
+                }
+
+                SpinWait.SpinUntil(() => _sent == iterationsCount);
+            }
+        }
+
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 16)]
+        public class Benchmarks_SendReceive_Batch_SysEx : Benchmarks
+        {
+            [Benchmark]
+            public void ReceiveEvent()
+            {
+                _received = 0;
+
+                const int iterationsCount = 1000;
+
+                for (var i = 0; i < iterationsCount; i++)
+                {
+                    _outputDevice.SendEvent(_sysExMidiEvent);
+                }
+
+                SpinWait.SpinUntil(() => _received == iterationsCount);
+            }
+
+            [Benchmark]
+            public void SendEvent()
+            {
+                _sent = 0;
+
+                const int iterationsCount = 1000;
+
+                for (var i = 0; i < iterationsCount; i++)
+                {
+                    _outputDevice.SendEvent(_sysExMidiEvent);
+                }
+
+                SpinWait.SpinUntil(() => _sent == iterationsCount);
             }
         }
 
         [Test]
-        public void SendReceiveEvent()
+        public void SendReceiveEvent_Channel()
         {
-            RunBenchmarks<Benchmarks>();
+            RunBenchmarks<Benchmarks_SendReceive_Channel>();
+        }
+
+        [Test]
+        public void SendReceiveEvent_SysEx()
+        {
+            RunBenchmarks<Benchmarks_SendReceive_SysEx>();
+        }
+
+        [Test]
+        public void SendReceiveEvent_Batch_Channel()
+        {
+            RunBenchmarks<Benchmarks_SendReceive_Batch_Channel>();
+        }
+
+        [Test]
+        public void SendReceiveEvent_Batch_SysEx()
+        {
+            RunBenchmarks<Benchmarks_SendReceive_Batch_SysEx>();
         }
     }
 }

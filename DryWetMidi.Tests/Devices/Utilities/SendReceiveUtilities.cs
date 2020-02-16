@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
