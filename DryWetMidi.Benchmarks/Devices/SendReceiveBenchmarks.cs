@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             }
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 16)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
         public class Benchmarks_SendReceive_Batch_Channel : Benchmarks
         {
             [Benchmark]
@@ -121,7 +121,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             }
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 16)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
         public class Benchmarks_SendReceive_Batch_SysEx : Benchmarks
         {
             [Benchmark]

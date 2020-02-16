@@ -6,15 +6,15 @@ trigger:
     - develop
   paths:
     exclude:
-    - DryWetMidi.Benchmarks
-    - DryWetMidi.Tests
-    - Docs
+    - DryWetMidi.Benchmarks/
+    - DryWetMidi.Tests/
+    - Docs/
     - README.md
     - Resources/CI/build-develop-win.yaml
     - Resources/CI/benchmarks-develop-win.yaml
     - Resources/CI/build-artifacts-docs.yaml
     - Resources/CI/check-readme-links.yaml
-    - .github/**/*
+    - .github/
 
 pool:
   vmImage: 'windows-latest'
