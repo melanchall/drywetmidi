@@ -14,7 +14,8 @@ namespace Melanchall.DryWetMidi.Composing
     {
         #region Constants
 
-        private static readonly NoteSelection AllNoteSelection = (i, d) => true;
+        private static readonly NoteSelection AllNotesSelection = (i, d) => true;
+        private static readonly ChordSelection AllChordsSelection = (i, d) => true;
 
         #endregion
 
@@ -35,7 +36,7 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
 
-            return TransformNotes(pattern, AllNoteSelection, noteTransformation, recursive);
+            return TransformNotes(pattern, AllNotesSelection, noteTransformation, recursive);
         }
 
         public static Pattern TransformNotes(this Pattern pattern, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive = true)
@@ -63,22 +64,17 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(chordTransformation), chordTransformation);
 
-            return new Pattern(pattern.Actions.Select(a =>
-            {
-                var addChordAction = a as AddChordAction;
-                if (addChordAction != null)
-                {
-                    var chordDescriptor = chordTransformation(addChordAction.ChordDescriptor);
-                    return new AddChordAction(chordDescriptor);
-                }
+            return TransformChords(pattern, AllChordsSelection, chordTransformation, recursive);
+        }
 
-                var addPatternAction = a as AddPatternAction;
-                if (addPatternAction != null && recursive)
-                    return new AddPatternAction(addPatternAction.Pattern.TransformChords(chordTransformation));
+        public static Pattern TransformChords(this Pattern pattern, ChordSelection chordSelection, ChordTransformation chordTransformation, bool recursive = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(chordSelection), chordSelection);
+            ThrowIfArgument.IsNull(nameof(chordTransformation), chordTransformation);
 
-                return a;
-            })
-            .ToList());
+            var chordIndexWrapper = new ObjectWrapper<int>();
+            return TransformChords(pattern, chordIndexWrapper, chordSelection, chordTransformation, recursive);
         }
 
         /// <summary>
@@ -253,7 +249,27 @@ namespace Melanchall.DryWetMidi.Composing
                 if (addPatternAction != null && recursive)
                     return new AddPatternAction(TransformNotes(addPatternAction.Pattern, noteIndexWrapper, noteSelection, noteTransformation, recursive));
 
-                return a;
+                return a.Clone();
+            })
+            .ToList());
+        }
+
+        private static Pattern TransformChords(Pattern pattern, ObjectWrapper<int> chordIndexWrapper, ChordSelection chordSelection, ChordTransformation chordTransformation, bool recursive)
+        {
+            return new Pattern(pattern.Actions.Select(a =>
+            {
+                var addChordAction = a as AddChordAction;
+                if (addChordAction != null && chordSelection(chordIndexWrapper.Object++, addChordAction.ChordDescriptor))
+                {
+                    var chordDescriptor = chordTransformation(addChordAction.ChordDescriptor);
+                    return new AddChordAction(chordDescriptor);
+                }
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    return new AddPatternAction(TransformChords(addPatternAction.Pattern, chordIndexWrapper, chordSelection, chordTransformation, recursive));
+
+                return a.Clone();
             })
             .ToList());
         }
