@@ -113,6 +113,7 @@ namespace Melanchall.DryWetMidi.Devices
             get
             {
                 EnsureDeviceIsNotDisposed();
+                EnsureHandleIsCreated();
 
                 if (!SupportsVolumeControl)
                     throw new InvalidOperationException("Device doesn't support volume control.");
@@ -130,6 +131,7 @@ namespace Melanchall.DryWetMidi.Devices
             set
             {
                 EnsureDeviceIsNotDisposed();
+                EnsureHandleIsCreated();
 
                 if (!SupportsVolumeControl)
                     throw new InvalidOperationException("Device doesn't support volume control.");
