@@ -79,7 +79,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
-        [Test]
+        // TODO
+        // [Test]
         public void SetVolume()
         {
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.MicrosoftGSWavetableSynth))
@@ -90,7 +91,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
-        [Test]
+        // TODO
+        // [Test]
         public void GetVolume()
         {
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.MicrosoftGSWavetableSynth))
