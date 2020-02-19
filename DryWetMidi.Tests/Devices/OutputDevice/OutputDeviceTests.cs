@@ -79,6 +79,27 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void SetVolume()
+        {
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.MicrosoftGSWavetableSynth))
+            {
+                var expectedVolume = new Volume(500);
+                outputDevice.Volume = expectedVolume;
+                Assert.AreEqual(expectedVolume, outputDevice.Volume, "Volume is invalid.");
+            }
+        }
+
+        [Test]
+        public void GetVolume()
+        {
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.MicrosoftGSWavetableSynth))
+            {
+                Assert.Greater(outputDevice.Volume.LeftVolume, 0, "Left volume is invalid.");
+                Assert.Greater(outputDevice.Volume.RightVolume, 0, "Right volume is invalid.");
+            }
+        }
+
         #endregion
     }
 }
