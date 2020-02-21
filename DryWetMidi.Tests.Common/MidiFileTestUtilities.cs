@@ -21,13 +21,23 @@ namespace Melanchall.DryWetMidi.Tests.Common
             return Read(midiFile, null, settings);
         }
 
-        public static MidiFile Read(MidiFile midiFile, WritingSettings writingSettings, ReadingSettings readingSettings)
+        public static MidiFile Read(MidiFile midiFile, WritingSettings writingSettings, ReadingSettings readingSettings, MidiFileFormat? format = null)
         {
             var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
             try
             {
-                midiFile.Write(filePath, settings: writingSettings);
+                if (format == null)
+                {
+                    format = MidiFileFormat.MultiTrack;
+                    try
+                    {
+                        format = midiFile.OriginalFormat;
+                    }
+                    catch { }
+                }
+
+                midiFile.Write(filePath, format: format.Value, settings: writingSettings);
                 return MidiFile.Read(filePath, readingSettings);
             }
             finally

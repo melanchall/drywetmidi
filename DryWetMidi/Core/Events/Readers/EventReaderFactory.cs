@@ -27,9 +27,6 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Reader for an event with the specified status byte.</returns>
         internal static IEventReader GetReader(byte statusByte, bool smfOnly)
         {
-            if (statusByte == EventStatusBytes.Global.Meta)
-                return _metaEventReader;
-
             if (statusByte == EventStatusBytes.Global.EscapeSysEx ||
                 statusByte == EventStatusBytes.Global.NormalSysEx)
                 return _sysExEventReader;
@@ -50,6 +47,9 @@ namespace Melanchall.DryWetMidi.Core
                     statusByte == EventStatusBytes.SystemCommon.TuneRequest)
                     return _systemCommonEventReader;
             }
+
+            if (statusByte == EventStatusBytes.Global.Meta)
+                return _metaEventReader;
 
             return _channelEventReader;
         }

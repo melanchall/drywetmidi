@@ -1241,12 +1241,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
+                MidiFile midiFile = null;
+                MidiFile midiFile2 = null;
+
                 Assert.DoesNotThrow(() =>
                     {
-                        var midiFile = MidiFile.Read(filePath);
-                        MidiFileTestUtilities.Read(midiFile, null, null);
+                        midiFile = MidiFile.Read(filePath);
+                        midiFile2 = MidiFileTestUtilities.Read(midiFile, null, null);
                     },
                     $"Read/Write/Read failed for '{filePath}'.");
+
+                Assert.IsNotNull(midiFile, "MIDI file is null.");
+                MidiAsserts.AreFilesEqual(midiFile, midiFile2, true, $"Reread failed for '{filePath}'.");
             }
         }
 
