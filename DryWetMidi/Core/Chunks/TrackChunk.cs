@@ -265,10 +265,16 @@ namespace Melanchall.DryWetMidi.Core
             var skipKeySignature = true;
             var skipTimeSignature = true;
 
-            foreach (var midiEvent in GetEventsToWrite())
+            //Events.Where(e => !(e is SystemCommonEvent) && !(e is SystemRealTimeEvent))
+            //             .Concat(new[] { new EndOfTrackEvent() });
+
+            foreach (var midiEvent in Events)
             {
                 var eventToWrite = midiEvent;
-                if (eventToWrite is UnknownMetaEvent && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaEvents))
+                if (eventToWrite is SystemCommonEvent || eventToWrite is SystemRealTimeEvent)
+                    continue;
+
+                if (eventToWrite.EventType == MidiEventType.UnknownMeta && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaEvents))
                     continue;
 
                 //
@@ -317,12 +323,10 @@ namespace Melanchall.DryWetMidi.Core
 
                 eventHandler(eventWriter, eventToWrite, writeStatusByte);
             }
-        }
 
-        private IEnumerable<MidiEvent> GetEventsToWrite()
-        {
-            return Events.Where(e => !(e is SystemCommonEvent) && !(e is SystemRealTimeEvent))
-                         .Concat(new[] { new EndOfTrackEvent() });
+            var endOfTrackEvent = new EndOfTrackEvent();
+            var endOfTrackEventWriter = EventWriterFactory.GetWriter(endOfTrackEvent);
+            eventHandler(endOfTrackEventWriter, endOfTrackEvent, true);
         }
 
         private static bool TrySkipDefaultSetTempo(MidiEvent midiEvent, ref bool skip)

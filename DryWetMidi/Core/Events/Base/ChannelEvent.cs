@@ -94,10 +94,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         internal sealed override void Write(MidiWriter writer, WritingSettings settings)
         {
-            foreach (var parameter in _parameters)
-            {
-                writer.WriteByte(parameter);
-            }
+            writer.WriteBytes(_parameters);
         }
 
         /// <summary>

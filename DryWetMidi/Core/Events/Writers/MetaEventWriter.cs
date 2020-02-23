@@ -14,21 +14,76 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            byte statusByte;
+            byte statusByte = 0;
 
-            var unknownMetaEvent = midiEvent as UnknownMetaEvent;
-            if (unknownMetaEvent != null)
-                statusByte = unknownMetaEvent.StatusByte;
-            else
+            switch (midiEvent.EventType)
             {
-                var eventType = midiEvent.GetType();
-                if (!StandardEventTypes.Meta.TryGetStatusByte(eventType, out statusByte))
-                {
-                    EventSettingsValidator.ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
+                case MidiEventType.Lyric:
+                    statusByte = EventStatusBytes.Meta.Lyric;
+                    break;
+                case MidiEventType.SetTempo:
+                    statusByte = EventStatusBytes.Meta.SetTempo;
+                    break;
+                case MidiEventType.Text:
+                    statusByte = EventStatusBytes.Meta.Text;
+                    break;
+                case MidiEventType.SequenceTrackName:
+                    statusByte = EventStatusBytes.Meta.SequenceTrackName;
+                    break;
+                case MidiEventType.PortPrefix:
+                    statusByte = EventStatusBytes.Meta.PortPrefix;
+                    break;
+                case MidiEventType.TimeSignature:
+                    statusByte = EventStatusBytes.Meta.TimeSignature;
+                    break;
+                case MidiEventType.SequencerSpecific:
+                    statusByte = EventStatusBytes.Meta.SequencerSpecific;
+                    break;
+                case MidiEventType.KeySignature:
+                    statusByte = EventStatusBytes.Meta.KeySignature;
+                    break;
+                case MidiEventType.Marker:
+                    statusByte = EventStatusBytes.Meta.Marker;
+                    break;
+                case MidiEventType.ChannelPrefix:
+                    statusByte = EventStatusBytes.Meta.ChannelPrefix;
+                    break;
+                case MidiEventType.InstrumentName:
+                    statusByte = EventStatusBytes.Meta.InstrumentName;
+                    break;
+                case MidiEventType.CopyrightNotice:
+                    statusByte = EventStatusBytes.Meta.CopyrightNotice;
+                    break;
+                case MidiEventType.SmpteOffset:
+                    statusByte = EventStatusBytes.Meta.SmpteOffset;
+                    break;
+                case MidiEventType.DeviceName:
+                    statusByte = EventStatusBytes.Meta.DeviceName;
+                    break;
+                case MidiEventType.CuePoint:
+                    statusByte = EventStatusBytes.Meta.CuePoint;
+                    break;
+                case MidiEventType.ProgramName:
+                    statusByte = EventStatusBytes.Meta.ProgramName;
+                    break;
+                case MidiEventType.SequenceNumber:
+                    statusByte = EventStatusBytes.Meta.SequenceNumber;
+                    break;
+                case MidiEventType.EndOfTrack:
+                    statusByte = EventStatusBytes.Meta.EndOfTrack;
+                    break;
+                case MidiEventType.UnknownMeta:
+                    statusByte = ((UnknownMetaEvent)midiEvent).StatusByte;
+                    break;
+                default:
+                    {
+                        EventSettingsValidator.ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
 
-                    if (settings.CustomMetaEventTypes?.TryGetStatusByte(eventType, out statusByte) != true)
-                        Debug.Fail($"Unable to write the {eventType} event.");
-                }
+                        var eventType = midiEvent.GetType();
+                        if (settings.CustomMetaEventTypes?.TryGetStatusByte(eventType, out statusByte) != true)
+                            Debug.Fail($"Unable to write the {eventType} event.");
+                    }
+                    break;
             }
 
             writer.WriteByte(statusByte);

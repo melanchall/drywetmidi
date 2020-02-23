@@ -181,16 +181,40 @@ namespace Melanchall.DryWetMidi.Common
         /// </remarks>
         public static int GetVlqLength(this long number)
         {
-            var mask = 1L << 62;
-            var bitsCount = 63;
+            var result = 1;
 
-            while ((number & mask) == 0 && mask > 0)
+            if (number > 127)
             {
-                mask >>= 1;
-                bitsCount--;
+                result++;
+                if (number > 16383)
+                {
+                    result++;
+                    if (number > 2097151)
+                    {
+                        result++;
+                        if (number > 268435455)
+                        {
+                            result++;
+                            if (number > 34359738367)
+                            {
+                                result++;
+                                if (number > 4398046511103)
+                                {
+                                    result++;
+                                    if (number > 562949953421311)
+                                    {
+                                        result++;
+                                        if (number > 72057594037927935)
+                                            result++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
-            return Math.Max(bitsCount / 7 + (bitsCount % 7 > 0 ? 1 : 0), 1);
+            return result;
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     internal sealed class SystemRealTimeEventWriter : IEventWriter
     {
@@ -10,12 +8,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             if (writeStatusByte)
             {
-                var eventType = midiEvent.GetType();
-
-                byte statusByte;
-                if (!StandardEventTypes.SystemRealTime.TryGetStatusByte(eventType, out statusByte))
-                    Debug.Fail($"Unable to write the {eventType} event.");
-
+                var statusByte = GetStatusByte(midiEvent);
                 writer.WriteByte(statusByte);
             }
 
@@ -29,13 +22,23 @@ namespace Melanchall.DryWetMidi.Core
 
         public byte GetStatusByte(MidiEvent midiEvent)
         {
-            var eventType = midiEvent.GetType();
+            switch (midiEvent.EventType)
+            {
+                case MidiEventType.ActiveSensing:
+                    return EventStatusBytes.SystemRealTime.ActiveSensing;
+                case MidiEventType.Continue:
+                    return EventStatusBytes.SystemRealTime.Continue;
+                case MidiEventType.Reset:
+                    return EventStatusBytes.SystemRealTime.Reset;
+                case MidiEventType.Start:
+                    return EventStatusBytes.SystemRealTime.Start;
+                case MidiEventType.Stop:
+                    return EventStatusBytes.SystemRealTime.Stop;
+                case MidiEventType.TimingClock:
+                    return EventStatusBytes.SystemRealTime.TimingClock;
+            }
 
-            byte statusByte;
-            if (!StandardEventTypes.SystemRealTime.TryGetStatusByte(eventType, out statusByte))
-                Debug.Fail($"No status byte defined for {eventType}.");
-
-            return statusByte;
+            return 0;
         }
 
         #endregion

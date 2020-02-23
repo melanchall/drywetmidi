@@ -177,8 +177,21 @@ namespace Melanchall.DryWetMidi.Core
 
         internal static byte GetFormatAndHours(SmpteFormat smpteFormat, byte hours)
         {
-            var format = Array.IndexOf(Formats, smpteFormat) << FormatOffset;
-            return (byte)(format & hours);
+            byte formatByte = 0;
+            switch (smpteFormat)
+            {
+                case SmpteFormat.TwentyFive:
+                    formatByte = 1;
+                    break;
+                case SmpteFormat.ThirtyDrop:
+                    formatByte = 2;
+                    break;
+                case SmpteFormat.Thirty:
+                    formatByte = 3;
+                    break;
+            }
+
+            return (byte)((formatByte << FormatOffset) & hours);
         }
 
         #endregion
