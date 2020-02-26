@@ -9,7 +9,8 @@ trigger:
     - DryWetMidi.Tests/
     - Docs/
     - README.md
-    - Resources/CI/build-develop-win.yaml
+    - Resources/CI/win-test-netframework-core.yaml
+    - Resources/CI/win-test-netframework-devices.yaml
     - Resources/CI/build-artifacts-library.yaml
     - Resources/CI/build-artifacts-docs.yaml
     - Resources/CI/check-readme-links.yaml
