@@ -31,6 +31,8 @@ Here the list of noticeable projects that use DryWetMIDI:
   VR rhythm shooter game.
 * [Electrophonics](https://kaiclavier.itch.io/electrophonics)  
   A collection of virtual musical instruments that features real MIDI output.
+* [Rustissimo](https://store.steampowered.com/app/1222580/Rustissimo)  
+  Using Rustissimo you can create a concert with your friends and play instruments with synchronization.
 
 ## Getting Started
 
