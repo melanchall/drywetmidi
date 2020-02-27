@@ -15,12 +15,12 @@ namespace Melanchall.DryWetMidi.Tests.Common
     {
         #region Constants
 
-        public const string FilesBasePath = @"Resources\MIDI files";
-        public const string FilesTestPath = @"..\..\..\..\" + FilesBasePath;
+        public static readonly string FilesBasePath = Path.Combine("Resources", "MIDI files");
+        public static readonly string FilesTestPath = Path.Combine("..", "..", "..", "..", FilesBasePath);
 
-        public const string ValidFilesPath = FilesTestPath + @"\Valid";
-        public const string InvalidFilesPath = FilesTestPath + @"\Invalid";
-        public const string ValidFilesReferencesPath = FilesTestPath + @"\ValidReferences";
+        public static readonly string ValidFilesPath = Path.Combine(FilesTestPath, "Valid");
+        public static readonly string InvalidFilesPath = Path.Combine(FilesTestPath, "Invalid");
+        public static readonly string ValidFilesReferencesPath = Path.Combine(FilesTestPath, "ValidReferences");
 
         #endregion
 
