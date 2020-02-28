@@ -61,19 +61,18 @@ steps:
   displayName: Run unit tests
   continueOnError: true
   inputs:
-    command: 'custom'
-    custom: 'test'
+    command: 'test'
     projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-    arguments: '--blame --no-restore --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework netcoreapp2.1'
+    arguments: '--blame --no-build --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework netcoreapp2.1 --verbosity normal'
 
 - task: CopyFiles@2
-  displayName: Copy Sequence.xml
+  displayName: Copy tests sequence
   inputs:
     contents: '**/Sequence*.xml'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishPipelineArtifact@1
-  displayName: Publish Sequence.xml
+  displayName: Publish tests sequence
   inputs:
     targetPath: $(Build.ArtifactStagingDirectory)
-    artifact: Sequence
+    artifact: Tests sequence

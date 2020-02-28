@@ -10,7 +10,10 @@ trigger:
     - DryWetMidi.Tests/
     - Resources/CI/win-test-netframework-core.yaml
     - Resources/CI/win-test-netframework-devices.yaml
+    - Resources/CI/win-test-netcore-core.yaml
+    - Resources/CI/win-test-netcore-devices.yaml
     - Resources/CI/mac-test-netcore-core.yaml
+    - Resources/CI/lin-test-netcore-core.yaml
     - Resources/CI/benchmarks-develop-win.yaml
     - Resources/CI/build-artifacts-library.yaml
     - Resources/CI/check-readme-links.yaml
