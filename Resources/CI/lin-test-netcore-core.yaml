@@ -18,11 +18,11 @@ trigger:
     - Resources/CI/win-test-netcore-core.yaml
     - Resources/CI/win-test-netframework-devices.yaml
     - Resources/CI/win-test-netcore-devices.yaml
-    - Resources/CI/lin-test-netcore-core.yaml
+    - Resources/CI/mac-test-netcore-core.yaml
     - .github/
 
 pool:
-  vmImage: 'macOS-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   solution: '**/*.sln'
@@ -30,7 +30,7 @@ variables:
   buildConfiguration: 'Release'
   version: '5.1.0'
 
-name: macOS_Test_NetCore_Core_$(version)$(Rev:.r)
+name: Linux_Test_NetCore_Core_$(version)$(Rev:.r)
 
 steps:
 - task: UseDotNet@2
