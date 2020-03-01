@@ -215,8 +215,6 @@ namespace Melanchall.DryWetMidi.Core
             if (Comparers.TryGetValue(midiEvent1.EventType, out comparer))
                 return comparer(midiEvent1, midiEvent2);
 
-            // TODO: custom comparison
-
             return midiEvent1.Equals(midiEvent2);
         }
 

@@ -78,8 +78,6 @@
                 return true;
             }
 
-            // TODO: custom comparison
-
             return midiChunk1.Equals(midiChunk2);
         }
 
