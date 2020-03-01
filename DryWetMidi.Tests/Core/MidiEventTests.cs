@@ -43,15 +43,26 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void CloneEvent_TypeIsCorrect()
+        public void CloneEvent()
         {
+            var random = new Random();
+
             foreach (var type in TypesProvider.GetAllEventTypes())
             {
                 var midiEvent = type == typeof(UnknownMetaEvent)
                     ? new UnknownMetaEvent(1)
                     : (MidiEvent)Activator.CreateInstance(type);
+
+                if (midiEvent is ChannelEvent channelEvent)
+                    channelEvent.Channel = (FourBitNumber)(random.Next(5) + 5);
+
+                if (midiEvent is BaseTextEvent baseTextEvent)
+                    baseTextEvent.Text = random.Next(1000).ToString();
+
+                midiEvent.DeltaTime = random.Next(1000) + 1;
+
                 var midiEventClone = midiEvent.Clone();
-                Assert.AreEqual(type, midiEventClone.GetType(), $"Clone of {type} is of invalid type.");
+                MidiAsserts.AreEventsEqual(midiEvent, midiEventClone, true, $"Clone of {type} is invalid.");
             }
         }
 

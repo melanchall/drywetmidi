@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System.Linq;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -50,6 +51,15 @@ namespace Melanchall.DryWetMidi.Core
         #endregion
 
         #region Overrides
+
+        /// <summary>
+        /// Clones event by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the event.</returns>
+        protected sealed override MidiEvent CloneEvent()
+        {
+            return new EscapeSysExEvent(Data?.ToArray());
+        }
 
         /// <summary>
         /// Returns a string that represents the current object.

@@ -90,21 +90,6 @@ namespace Melanchall.DryWetMidi.Core
             return Data?.Length ?? 0;
         }
 
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
-        protected sealed override MidiEvent CloneEvent()
-        {
-            // TODO: get rid of Activator.CreateInstance
-            var eventType = GetType();
-            var sysExEvent = (SysExEvent)Activator.CreateInstance(eventType);
-
-            sysExEvent.Data = Data?.Clone() as byte[];
-
-            return sysExEvent;
-        }
-
         #endregion
     }
 }

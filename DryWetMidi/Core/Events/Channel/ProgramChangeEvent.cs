@@ -56,6 +56,18 @@ namespace Melanchall.DryWetMidi.Core
         #region Overrides
 
         /// <summary>
+        /// Clones event by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the event.</returns>
+        protected override MidiEvent CloneEvent()
+        {
+            return new ProgramChangeEvent(ProgramNumber)
+            {
+                Channel = Channel
+            };
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>

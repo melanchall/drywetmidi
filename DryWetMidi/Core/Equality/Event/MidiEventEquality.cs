@@ -52,6 +52,7 @@ namespace Melanchall.DryWetMidi.Core
                            timeSignatureEvent1.ClocksPerClick == timeSignatureEvent2.ClocksPerClick &&
                            timeSignatureEvent1.ThirtySecondNotesPerBeat == timeSignatureEvent2.ThirtySecondNotesPerBeat;
                 },
+                [MidiEventType.EndOfTrack] = (e1, e2) => true,
                 [MidiEventType.MidiTimeCode] = (e1, e2) =>
                 {
                     var midiTimeCodeEvent1 = (MidiTimeCodeEvent)e1;

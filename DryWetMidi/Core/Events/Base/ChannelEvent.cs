@@ -107,24 +107,6 @@ namespace Melanchall.DryWetMidi.Core
             return _parameters.Length;
         }
 
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
-        protected sealed override MidiEvent CloneEvent()
-        {
-            // TODO: get rid of Activator.CreateInstance
-            var eventType = GetType();
-            var channelEvent = (ChannelEvent)Activator.CreateInstance(eventType);
-
-            channelEvent.Channel = Channel;
-            Array.Copy(_parameters,
-                       channelEvent._parameters,
-                       _parameters.Length);
-
-            return channelEvent;
-        }
-
         #endregion
     }
 }
