@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
@@ -41,6 +42,7 @@ namespace Melanchall.DryWetMidi.Core
         /// is used an instance of the <see cref="UnexpectedTrackChunksCountException"/> will be thrown if
         /// track chunks count is unexpected.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public UnexpectedTrackChunksCountPolicy UnexpectedTrackChunksCountPolicy
         {
             get { return _unexpectedTrackChunksCountPolicy; }
@@ -58,6 +60,7 @@ namespace Melanchall.DryWetMidi.Core
         /// track chunks count is greater or equals the one declared in the file's header chunk.
         /// The default is <see cref="ExtraTrackChunkPolicy.Read"/>.
         /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public ExtraTrackChunkPolicy ExtraTrackChunkPolicy
         {
             get { return _extraTrackChunkPolicy; }
@@ -78,6 +81,7 @@ namespace Melanchall.DryWetMidi.Core
         /// If <see cref="UnknownChunkIdPolicy.Abort"/> is used an instance of the
         /// <see cref="UnknownChunkException"/> will be thrown if a chunk to be read has unknown ID.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public UnknownChunkIdPolicy UnknownChunkIdPolicy
         {
             get { return _unknownChunkIdPolicy; }
@@ -100,6 +104,7 @@ namespace Melanchall.DryWetMidi.Core
         /// therefore missing of it must be treated as error, you can try to read a track chunk
         /// relying on the chunk's size only.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public MissedEndOfTrackPolicy MissedEndOfTrackPolicy
         {
             get { return _missedEndOfTrackPolicy; }
@@ -116,6 +121,7 @@ namespace Melanchall.DryWetMidi.Core
         /// The default is <see cref="SilentNoteOnPolicy.NoteOff"/>. Although it is recommended to treat silent
         /// Note On event as Note Off you can turn this behavior off to get original event stored in the file.
         /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public SilentNoteOnPolicy SilentNoteOnPolicy
         {
             get { return _silentNoteOnPolicy; }
@@ -136,6 +142,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidChunkSizeException"/> will be thrown if actual chunk's size differs from
         /// the one declared in chunk's header.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public InvalidChunkSizePolicy InvalidChunkSizePolicy
         {
             get { return _invalidChunkSizePolicy; }
@@ -156,6 +163,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="UnknownFileFormatException"/> will be thrown if file format stored in a header
         /// chunk doesn't belong to values defined by the <see cref="MidiFileFormat"/> enumeration.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public UnknownFileFormatPolicy UnknownFileFormatPolicy
         {
             get { return _unknownFileFormatPolicy; }
@@ -191,6 +199,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidChannelEventParameterValueException"/> will be thrown if event's parameter value
         /// just read is invalid.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy
         {
             get { return _invalidChannelEventParameterValuePolicy; }
@@ -213,6 +222,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidMetaEventParameterValueException"/> will be thrown if event's parameter value
         /// just read is invalid.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy
         {
             get { return _invalidMetaEventParameterValuePolicy; }
@@ -236,6 +246,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidSystemCommonEventParameterValueException"/> will be thrown if event's parameter value
         /// just read is invalid.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public InvalidSystemCommonEventParameterValuePolicy InvalidSystemCommonEventParameterValuePolicy
         {
             get { return _invalidSystemCommonEventParameterValuePolicy; }
@@ -257,6 +268,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="NotEnoughBytesException"/> will be thrown if the reader's underlying stream doesn't
         /// have enough bytes to read a value.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NotEnoughBytesPolicy NotEnoughBytesPolicy
         {
             get { return _notEnoughBytesPolicy; }
@@ -276,6 +288,7 @@ namespace Melanchall.DryWetMidi.Core
         /// If <see cref="NoHeaderChunkPolicy.Abort"/> is used an instance of the
         /// <see cref="NoHeaderChunkException"/> will be thrown if the MIDI file doesn't contain the header chunk.
         /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoHeaderChunkPolicy NoHeaderChunkPolicy
         {
             get { return _noHeaderChunkPolicy; }
