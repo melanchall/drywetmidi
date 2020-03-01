@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Core
 
             Length = stream.Length;
 
-            if (settings.PutDataInMemoryBeforeReading)
+            if (settings.PutDataInMemoryBeforeReading && !(stream is MemoryStream))
             {
                 _allDataBuffer = new MemoryStream();
                 stream.CopyTo(_allDataBuffer);

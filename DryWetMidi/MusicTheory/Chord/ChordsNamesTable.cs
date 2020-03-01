@@ -125,8 +125,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
                 foreach (var definitionIntervals in nameDefinition.Intervals)
                 {
-                    // TODO: rename
-                    var intervalsX = intervals;
+                    var processdIntervals = intervals;
 
                     if (definitionIntervals[0] != 0)
                     {
@@ -135,26 +134,26 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     }
                     else
                     {
-                        intervalsX = new[] { 0 }.Concat(intervals).ToArray();
+                        processdIntervals = new[] { 0 }.Concat(intervals).ToArray();
                     }
 
-                    var subMatched = intervalsX.Length >= definitionIntervals.Length;
+                    var subMatched = processdIntervals.Length >= definitionIntervals.Length;
                     var j = 0;
 
-                    for (int i = 0; i < definitionIntervals.Length && i < intervalsX.Length && subMatched; i++, j++)
+                    for (int i = 0; i < definitionIntervals.Length && i < processdIntervals.Length && subMatched; i++, j++)
                     {
                         var interval = definitionIntervals[i];
-                        if (intervalsX[i] != interval && !intervalsX.Contains(interval - 12) && !intervalsX.Contains(interval - 24))
+                        if (processdIntervals[i] != interval && !processdIntervals.Contains(interval - 12) && !processdIntervals.Contains(interval - 24))
                             subMatched = false;
                     }
 
-                    for (; j < intervalsX.Length && subMatched; j++)
+                    for (; j < processdIntervals.Length && subMatched; j++)
                     {
-                        if (!intervalsX.Contains(intervalsX[j] - 12) && !intervalsX.Contains(intervalsX[j] - 24))
+                        if (!processdIntervals.Contains(processdIntervals[j] - 12) && !processdIntervals.Contains(processdIntervals[j] - 24))
                             subMatched = false;
                     }
 
-                    matched |= subMatched && j >= intervalsX.Length;
+                    matched |= subMatched && j >= processdIntervals.Length;
                     if (matched)
                         break;
                 }
