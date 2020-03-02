@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tools
             get { return _bufferSize; }
             set
             {
-                ThrowIfArgument.IsNonpositive(nameof(value), value, "Buffer size is non-positive.");
+                ThrowIfArgument.IsNonpositive(nameof(value), value, "Buffer size is zero or negative.");
 
                 _bufferSize = value;
             }

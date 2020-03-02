@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNegative(nameof(capacity), capacity, "Capacity is negative.");
 
             _dataBytesStream = new MemoryStream(capacity);
-            _midiReader = new MidiReader(_dataBytesStream, new ReadingSettings());
+            _midiReader = new MidiReader(_dataBytesStream, new ReaderSettings());
         }
 
         public BytesToMidiEventConverter()

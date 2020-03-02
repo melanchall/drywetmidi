@@ -62,11 +62,13 @@ namespace Melanchall.DryWetMidi.Core
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
             var availableSize = reader.Length - reader.Position;
-            var bytes = reader.ReadBytes((int)(availableSize < size ? availableSize : size));
+            var bytesCount = availableSize < size ? availableSize : size;
+            var bytes = reader.ReadBytes((int)Math.Min(bytesCount, int.MaxValue));
             if (bytes.Length < size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
-                throw new NotEnoughBytesException("Chunk's data cannot be read since the reader's underlying stream doesn't have enough bytes.",
-                                                  size,
-                                                  bytes.Length);
+                throw new NotEnoughBytesException(
+                    "Chunk's data cannot be read since the reader's underlying stream doesn't have enough bytes.",
+                    size,
+                    bytes.Length);
 
             Data = bytes;
         }

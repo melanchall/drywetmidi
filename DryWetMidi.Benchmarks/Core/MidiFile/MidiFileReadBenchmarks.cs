@@ -5,6 +5,7 @@ using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Core
@@ -20,12 +21,6 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             Middle,
             Large
         }
-
-        #endregion
-
-        #region Constants
-
-        private const string FilesPath = @"..\..\..\..\Resources\MIDI files\Valid";
 
         #endregion
 
@@ -46,7 +41,9 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             [Benchmark]
             public void Read_BufferEntireDataBeforeReading()
             {
-                MidiFileReadBenchmarks.Read(FileFormat, FileSize, new ReadingSettings { PutDataInMemoryBeforeReading = true });
+                var settings = new ReadingSettings();
+                settings.ReaderSettings.PutDataInMemoryBeforeReading = true;
+                MidiFileReadBenchmarks.Read(FileFormat, FileSize, settings);
             }
         }
 
@@ -169,7 +166,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
 
         private static IEnumerable<MidiFile> GetFiles(MidiFileFormat midiFileFormat, MidiFileSize midiFileSize, ReadingSettings settings)
         {
-            foreach (var filePath in Directory.GetFiles(Path.Combine(FilesPath, midiFileFormat.ToString(), midiFileSize.ToString())))
+            foreach (var filePath in Directory.GetFiles(Path.Combine(TestFilesProvider.ValidFilesPath, midiFileFormat.ToString(), midiFileSize.ToString())))
             {
                 yield return MidiFile.Read(filePath, settings);
             }

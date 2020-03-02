@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -10,6 +12,8 @@ namespace Melanchall.DryWetMidi.Core
     public sealed class MidiReader : IDisposable
     {
         #region Fields
+
+        private readonly ReaderSettings _settings;
 
         private readonly BinaryReader _binaryReader;
         private readonly bool _isStreamWrapped;
@@ -28,9 +32,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
         /// or is already closed.</exception>
-        public MidiReader(Stream stream, ReadingSettings settings)
+        public MidiReader(Stream stream, ReaderSettings settings)
         {
-            ThrowIfArgument.IsNull(nameof(stream), stream);
+            _settings = settings;
 
             if (!stream.CanSeek)
             {
@@ -146,6 +150,26 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte[] ReadBytes(int count)
         {
+            if (_isStreamWrapped && count > _settings.NonSeekableStreamIncrementalBytesReadingThreshold)
+            {
+                var bytesList = new List<byte[]>();
+                var totalBytesRead = 0;
+
+                while (true)
+                {
+                    var bytes = _binaryReader.ReadBytes(Math.Min(count, _settings.NonSeekableStreamIncrementalBytesReadingStep));
+                    if (bytes.Length == 0)
+                        break;
+
+                    totalBytesRead += bytes.Length;
+                    count -= bytes.Length;
+
+                    bytesList.Add(bytes);
+                }
+
+                return bytesList.SelectMany(bytes => bytes).ToArray();
+            }
+
             return _binaryReader.ReadBytes(count);
         }
 

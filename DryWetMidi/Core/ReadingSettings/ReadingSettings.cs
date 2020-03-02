@@ -325,10 +325,7 @@ namespace Melanchall.DryWetMidi.Core
 
         public ICollection<ReadingHandler> ReadingHandlers { get; } = new List<ReadingHandler>();
 
-        // TODO: test
-        public int NonSeekableStreamBufferSize { get; set; } = 1024;
-
-        public bool PutDataInMemoryBeforeReading { get; set; }
+        public ReaderSettings ReaderSettings { get; } = new ReaderSettings();
 
         internal bool UseReadingHandlers { get; private set; }
 
