@@ -72,11 +72,6 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Gets or sets delimiter used to separate values in CSV representation. The default value is comma.
-        /// </summary>
-        public char CsvDelimiter { get; set; } = DefaultCsvDelimiter;
-
-        /// <summary>
         /// Gets or sets the type of a note length (metric, bar/beat and so on) which should be used to
         /// write to or read from CSV. The default value is <see cref="TimeSpanType.Midi"/>.
         /// </summary>
@@ -123,6 +118,8 @@ namespace Melanchall.DryWetMidi.Tools
                 _noteNumberFormat = value;
             }
         }
+
+        public CsvSettings CsvSettings { get; } = new CsvSettings();
 
         #endregion
     }

@@ -19,6 +19,10 @@ namespace Melanchall.DryWetMidi.Tools
         private readonly StreamReader _streamReader;
         private readonly char _delimiter;
 
+        private readonly char[] _buffer;
+        private int _bufferLength = 0;
+        private int _indexInBuffer = 0;
+
         private bool _disposed = false;
         private int _currentLineNumber = 0;
 
@@ -26,11 +30,11 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constructor
 
-        public CsvReader(Stream stream, char delimiter)
+        public CsvReader(Stream stream, CsvSettings settings)
         {
-            // TODO: provide settings
-            _streamReader = new StreamReader(stream, Encoding.UTF8, true, 1024, true);
-            _delimiter = delimiter;
+            _streamReader = new StreamReader(stream, Encoding.UTF8, true, settings.IoBufferSize, true);
+            _buffer = new char[settings.IoBufferSize];
+            _delimiter = settings.CsvDelimiter;
         }
 
         #endregion
@@ -41,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var oldLineNumber = _currentLineNumber;
 
-            var line = GetNextLine();
+            var line = GetFirstLine();
             if (string.IsNullOrEmpty(line))
                 return null;
 
@@ -53,30 +57,82 @@ namespace Melanchall.DryWetMidi.Tools
                 if (values.All(IsValueClosed))
                     break;
 
-                // TODO: Detect exact line ending
-
                 var nextLine = GetNextLine();
                 if (nextLine == null)
                     break;
 
-                line = line + Environment.NewLine + nextLine;
+                line += nextLine;
             }
 
             return new CsvRecord(oldLineNumber, _currentLineNumber - oldLineNumber, values);
         }
 
-        private string GetNextLine()
+        private string GetFirstLine()
         {
-            var result = string.Empty;
+            string result;
 
             do
             {
-                result = _streamReader.ReadLine();
-                _currentLineNumber++;
+                result = GetNextLine();
             }
-            while (result == string.Empty);
+            while (result?.Trim() == string.Empty);
 
             return result;
+        }
+
+        private string GetNextLine()
+        {
+            _currentLineNumber++;
+
+            var stringBuilder = new StringBuilder();
+            var lineEnding = false;
+
+            while (true)
+            {
+                for (; _indexInBuffer < _bufferLength; _indexInBuffer++)
+                {
+                    var c = _buffer[_indexInBuffer];
+                    if (c == '\r' || c == '\n')
+                    {
+                        lineEnding = true;
+                    }
+                    else if (lineEnding)
+                        break;
+
+                    stringBuilder.Append(c);
+                }
+
+                if (_indexInBuffer >= _bufferLength)
+                    FillBuffer();
+                else
+                    break;
+
+                if (_bufferLength == 0)
+                    break;
+            }
+
+            return stringBuilder.Length > 0
+                ? stringBuilder.ToString()
+                : null;
+        }
+
+        private void FillBuffer()
+        {
+            var readCharsCount = 0;
+            var unreadCharsCount = _buffer.Length;
+
+            while (unreadCharsCount > 0)
+            {
+                var count = _streamReader.ReadBlock(_buffer, readCharsCount, unreadCharsCount);
+                if (count == 0)
+                    break;
+
+                unreadCharsCount -= count;
+                readCharsCount += count;
+            }
+
+            _bufferLength = _buffer.Length - unreadCharsCount;
+            _indexInBuffer = 0;
         }
 
         private static IEnumerable<string> SplitValues(string input, char delimiter)
@@ -126,7 +182,12 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region IDisposable
 
-        void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        private void Dispose(bool disposing)
         {
             if (_disposed)
                 return;
@@ -135,11 +196,6 @@ namespace Melanchall.DryWetMidi.Tools
                 _streamReader.Dispose();
 
             _disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
         }
 
         #endregion

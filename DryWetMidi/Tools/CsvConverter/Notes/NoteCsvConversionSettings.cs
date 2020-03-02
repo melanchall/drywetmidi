@@ -21,11 +21,6 @@ namespace Melanchall.DryWetMidi.Tools
         #region Properties
 
         /// <summary>
-        /// Gets or sets delimiter used to separate values in CSV representation. The default value is comma.
-        /// </summary>
-        public char CsvDelimiter { get; set; } = ',';
-
-        /// <summary>
         /// Gets or sets format of timestamps inside CSV representation. The default value is <see cref="TimeSpanType.Midi"/>
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
@@ -71,6 +66,8 @@ namespace Melanchall.DryWetMidi.Tools
                 _noteNumberFormat = value;
             }
         }
+
+        public CsvSettings CsvSettings { get; } = new CsvSettings();
 
         #endregion
     }

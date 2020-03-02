@@ -16,10 +16,10 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constructor
 
-        public CsvWriter(Stream stream, char delimiter)
+        public CsvWriter(Stream stream, CsvSettings settings)
         {
             _streamWriter = new StreamWriter(stream, new UTF8Encoding(false, true), 1024, true);
-            _delimiter = delimiter;
+            _delimiter = settings.CsvDelimiter;
         }
 
         #endregion

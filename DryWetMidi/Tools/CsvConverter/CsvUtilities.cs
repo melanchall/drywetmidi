@@ -19,7 +19,10 @@
 
         public static string UnescapeString(string input)
         {
-            return input.Replace(DoubleQuote, QuoteString).Trim(Quote);
+            if (input.Length > 1 && input[0] == '\"' && input[input.Length - 1] == '\"')
+                input = input.Substring(1, input.Length - 2);
+
+            return input.Replace(DoubleQuote, QuoteString);
         }
 
         #endregion

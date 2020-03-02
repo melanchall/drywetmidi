@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         public static void ConvertToCsv(MidiFile midiFile, Stream stream, MidiFileCsvConversionSettings settings)
         {
-            using (var csvWriter = new CsvWriter(stream, settings.CsvDelimiter))
+            using (var csvWriter = new CsvWriter(stream, settings.CsvSettings))
             {
                 var trackNumber = 0;
                 var tempoMap = midiFile.GetTempoMap();

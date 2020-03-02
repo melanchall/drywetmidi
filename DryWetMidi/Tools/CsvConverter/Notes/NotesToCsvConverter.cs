@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         public static void ConvertToCsv(IEnumerable<Note> notes, Stream stream, TempoMap tempoMap, NoteCsvConversionSettings settings)
         {
-            using (var csvWriter = new CsvWriter(stream, settings.CsvDelimiter))
+            using (var csvWriter = new CsvWriter(stream, settings.CsvSettings))
             {
                 foreach (var note in notes.Where(n => n != null))
                 {

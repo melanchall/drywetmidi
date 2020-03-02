@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tools
             var midiFile = new MidiFile();
             var events = new Dictionary<int, List<TimedMidiEvent>>();
 
-            using (var csvReader = new CsvReader(stream, settings.CsvDelimiter))
+            using (var csvReader = new CsvReader(stream, settings.CsvSettings))
             {
                 var lineNumber = 0;
                 Record record;

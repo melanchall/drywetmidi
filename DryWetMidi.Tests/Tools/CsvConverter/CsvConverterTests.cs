@@ -297,7 +297,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [TestCase(MidiFileCsvLayout.DryWetMidi, new[]
         {
             "0, 0, Text, \"Test",
-            " text with new line\"",
+            " text wi\rth ne\nw line\"",
             "0, 100, Marker, \"Marker\"",
             "0, 200, Text, \"Test",
             " text with new line and",
@@ -306,7 +306,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [TestCase(MidiFileCsvLayout.MidiCsv, new[]
         {
             "0, 0, Text_t, \"Test",
-            " text with new line\"",
+            " text wi\rth ne\nw line\"",
             "0, 100, Marker_t, \"Marker\"",
             "0, 200, Text_t, \"Test",
             " text with new line and",
@@ -318,7 +318,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var expectedEvents = new[]
             {
-                new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line"), 0),
+                new TimedEvent(new TextEvent($"Test{Environment.NewLine} text wi\rth ne\nw line"), 0),
                 new TimedEvent(new MarkerEvent("Marker"), 100),
                 new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line and{Environment.NewLine} new \"line again"), 200),
             };
@@ -858,8 +858,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     csvConverter.ConvertMidiFileToCsv(midiFile, outputFilePath, true, settings);
                     var convertedFile = csvConverter.ConvertCsvToMidiFile(outputFilePath, settings);
 
-                    // TODO: uncomment when line ending bug fixed
-                    // MidiFileEquality.AssertAreEqual(midiFile, convertedFile, true);
+                    MidiAsserts.AreFilesEqual(midiFile, convertedFile, true, $"Conversion of '{filePath}' is invalid.");
                 }
             }
             finally
@@ -962,9 +961,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 TimeType = timeType,
                 NoteNumberFormat = noteNumberFormat,
-                NoteLengthType = noteLengthType,
-                CsvDelimiter = delimiter
+                NoteLengthType = noteLengthType
             };
+
+            settings.CsvSettings.CsvDelimiter = delimiter;
 
             try
             {
@@ -994,9 +994,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 TimeType = timeType,
                 NoteNumberFormat = noteNumberFormat,
-                NoteLengthType = noteLengthType,
-                CsvDelimiter = delimiter
+                NoteLengthType = noteLengthType
             };
+
+            settings.CsvSettings.CsvDelimiter = delimiter;
 
             try
             {
