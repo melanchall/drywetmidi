@@ -31,7 +31,6 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        // TODO: test
         /// <summary>
         /// Gets or sets reaction of the reading engine on unexpected track chunks count. The default is
         /// <see cref="UnexpectedTrackChunksCountPolicy.Ignore"/>.
@@ -54,7 +53,6 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        // TODO: test
         /// <summary>
         /// Gets or sets reaction of the reading engine on new track chunk if already read
         /// track chunks count is greater or equals the one declared in the file's header chunk.
@@ -72,7 +70,6 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        // TODO: test
         /// <summary>
         /// Gets or sets reaction of the reading engine on chunk with unknown ID. The default
         /// is <see cref="UnknownChunkIdPolicy.ReadAsUnknownChunk"/>.

@@ -447,6 +447,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             public const string UnexpectedRunningStatus = "Unexpected Running Status";
             public const string UnknownChannelEvent = "Unknown Channel Event";
             public const string UnknownFileFormat = "Unknown File Format";
+            public const string UnexpectedTrackChunksCount = "Unexpected Track Chunks Count";
+            public const string ExtraTrackChunk = "Extra Track Chunk";
+            public const string UnknownChunkId = "Unknown Chunk Id";
         }
 
         #endregion
@@ -468,6 +471,99 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Test methods
+
+        // TODO: test remote
+        [Test]
+        public void Read_UnexpectedTrackChunksCount_Abort()
+        {
+            ReadFilesWithException<UnexpectedTrackChunksCountException>(
+                DirectoriesNames.UnexpectedTrackChunksCount,
+                new ReadingSettings
+                {
+                    UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Abort
+                },
+                readRemote: false);
+        }
+
+        // TODO: test remote
+        [Test]
+        public void Read_UnexpectedTrackChunksCount_Ignore()
+        {
+            ReadInvalidFiles(
+                DirectoriesNames.UnexpectedTrackChunksCount,
+                new ReadingSettings
+                {
+                    UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore
+                },
+                readRemote: false);
+        }
+
+        [Test]
+        public void Read_ExtraTrackChunk_Read()
+        {
+            foreach (var filePath in GetInvalidFiles(DirectoriesNames.ExtraTrackChunk))
+            {
+                var midiFile = MidiFile.Read(filePath, new ReadingSettings
+                {
+                    ExtraTrackChunkPolicy = ExtraTrackChunkPolicy.Read
+                });
+
+                Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
+            }
+        }
+
+        [Test]
+        public void Read_ExtraTrackChunk_Skip()
+        {
+            foreach (var filePath in GetInvalidFiles(DirectoriesNames.ExtraTrackChunk))
+            {
+                var midiFile = MidiFile.Read(filePath, new ReadingSettings
+                {
+                    ExtraTrackChunkPolicy = ExtraTrackChunkPolicy.Skip
+                });
+
+                CollectionAssert.IsEmpty(midiFile.GetTrackChunks(), "Track chunks count is invalid.");
+            }
+        }
+
+        // TODO: test remote
+        [Test]
+        public void Read_UnknownChunkId_Abort()
+        {
+            ReadFilesWithException<UnknownChunkException>(
+                DirectoriesNames.UnknownChunkId,
+                new ReadingSettings
+                {
+                    UnknownChunkIdPolicy = UnknownChunkIdPolicy.Abort
+                },
+                readRemote: false);
+        }
+
+        // TODO: test remote
+        [Test]
+        public void Read_UnknownChunkId_Skip()
+        {
+            ReadInvalidFiles(
+                DirectoriesNames.UnknownChunkId,
+                new ReadingSettings
+                {
+                    UnknownChunkIdPolicy = UnknownChunkIdPolicy.Skip
+                },
+                readRemote: false);
+        }
+
+        // TODO: test remote
+        [Test]
+        public void Read_UnknownChunkId_ReadAsUnknown()
+        {
+            ReadInvalidFiles(
+                DirectoriesNames.UnknownChunkId,
+                new ReadingSettings
+                {
+                    UnknownChunkIdPolicy = UnknownChunkIdPolicy.ReadAsUnknownChunk
+                },
+                readRemote: false);
+        }
 
         [Test]
         [Description("Read MIDI file with invalid channel event parameter value and treat that as error.")]
