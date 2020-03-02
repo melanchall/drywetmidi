@@ -472,7 +472,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         #region Test methods
 
-        // TODO: test remote
         [Test]
         public void Read_UnexpectedTrackChunksCount_Abort()
         {
@@ -481,11 +480,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new ReadingSettings
                 {
                     UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Abort
-                },
-                readRemote: false);
+                });
         }
 
-        // TODO: test remote
         [Test]
         public void Read_UnexpectedTrackChunksCount_Ignore()
         {
@@ -494,8 +491,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new ReadingSettings
                 {
                     UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore
-                },
-                readRemote: false);
+                });
         }
 
         [Test]
@@ -526,7 +522,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        // TODO: test remote
         [Test]
         public void Read_UnknownChunkId_Abort()
         {
@@ -535,11 +530,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new ReadingSettings
                 {
                     UnknownChunkIdPolicy = UnknownChunkIdPolicy.Abort
-                },
-                readRemote: false);
+                });
         }
 
-        // TODO: test remote
         [Test]
         public void Read_UnknownChunkId_Skip()
         {
@@ -548,11 +541,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new ReadingSettings
                 {
                     UnknownChunkIdPolicy = UnknownChunkIdPolicy.Skip
-                },
-                readRemote: false);
+                });
         }
 
-        // TODO: test remote
         [Test]
         public void Read_UnknownChunkId_ReadAsUnknown()
         {
@@ -561,8 +552,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new ReadingSettings
                 {
                     UnknownChunkIdPolicy = UnknownChunkIdPolicy.ReadAsUnknownChunk
-                },
-                readRemote: false);
+                });
         }
 
         [Test]
