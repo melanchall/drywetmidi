@@ -17,7 +17,6 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        // TODO: test
         /// <summary>
         /// Gets or sets compression rules for the writing engine. The default is
         /// <see cref="CompressionPolicy.NoCompression"/>.

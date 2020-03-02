@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Melanchall.DryWetMidi.Core;
-using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
@@ -39,6 +38,21 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
                 midiFile.Write(filePath, format: format.Value, settings: writingSettings);
                 return MidiFile.Read(filePath, readingSettings);
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        public static void Write(MidiFile midiFile, Action<string> action, WritingSettings settings = null, MidiFileFormat? format = null)
+        {
+            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
+            try
+            {
+                midiFile.Write(filePath, format: format ?? MidiFileFormat.MultiTrack, settings: settings);
+                action(filePath);
             }
             finally
             {
