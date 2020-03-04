@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -16,6 +15,68 @@ namespace Melanchall.DryWetMidi.Tests.Core
     public sealed class MidiFileTests
     {
         #region Nested classes
+
+        private sealed class NonSeekableStream : Stream
+        {
+            #region Fields
+
+            private readonly MemoryStream _memoryStream;
+
+            #endregion
+
+            #region Constructor
+
+            public NonSeekableStream(string filePath)
+            {
+                _memoryStream = new MemoryStream(File.ReadAllBytes(filePath));
+                _memoryStream.Position = 0;
+            }
+
+            #endregion
+
+            #region Overrides
+
+            public override bool CanRead => true;
+
+            public override bool CanSeek => false;
+
+            public override bool CanWrite => false;
+
+            public override long Length => throw new NotSupportedException();
+
+            public override long Position
+            {
+                get => throw new NotSupportedException();
+                set => throw new NotSupportedException();
+            }
+
+            public override void Flush()
+            {
+                throw new NotSupportedException();
+            }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                return _memoryStream.Read(buffer, offset, count);
+            }
+
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override void SetLength(long value)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                throw new NotSupportedException();
+            }
+
+            #endregion
+        }
 
         private abstract class BaseReadingHandler : ReadingHandler
         {
@@ -832,7 +893,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
         }
 
-        // TODO: failed on remote file
         [Test]
         [Description("Read MIDI file without header chunk and ignore that.")]
         public void Read_NoHeaderChunk_Ignore()
@@ -844,8 +904,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore,
                     NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
                     InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
-                },
-                false);
+                });
         }
 
         [Test]
@@ -860,7 +919,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
         }
 
-        // TODO: failed on remote file
         [Test]
         [Description("Read MIDI file in case of not enough bytes to read an object and ignore that.")]
         public void Read_NotEnoughBytes_Ignore()
@@ -872,8 +930,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
                     InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
                     NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore
-                },
-                false);
+                });
         }
 
         [Test]
@@ -972,12 +1029,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void Read_NonSeekableStream()
         {
-            var request = WebRequest.Create(TestFilesProvider.GetRemoteFileAddress(TestFilesProvider.GetFileBasePath(TestFilesProvider.GetMiscFile_14000events())));
-
-            using (var response = request.GetResponse())
-            using (var responseStream = response.GetResponseStream())
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
-                Assert.DoesNotThrow(() => MidiFile.Read(responseStream));
+                var midiFile = MidiFile.Read(filePath);
+
+                var nonSeekableStream = new NonSeekableStream(filePath);
+                var midiFile2 = MidiFile.Read(nonSeekableStream);
+
+                MidiAsserts.AreFilesEqual(midiFile, midiFile2, true, $"File '{filePath}' is invalid.");
             }
         }
 
@@ -1610,7 +1669,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             return midiFile;
         }
 
-        private void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings, bool readRemote = true, bool readWithPuttingInMemory = true)
+        private void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings)
             where TException : Exception
         {
             foreach (var filePath in GetInvalidFiles(directoryName))
@@ -1621,36 +1680,28 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var fileBasePath = TestFilesProvider.GetFileBasePath(filePath);
                 var remoteFileAddress = TestFilesProvider.GetRemoteFileAddress(fileBasePath);
 
-                if (readRemote)
-                {
-                    MidiFile remoteMidiFile = null;
+                //
 
-                    var request = WebRequest.Create(remoteFileAddress);
+                var nonSeekableStream = new NonSeekableStream(filePath);
 
-                    using (var response = request.GetResponse())
-                    using (var responseStream = response.GetResponseStream())
-                    {
-                        Assert.Throws<TException>(() => remoteMidiFile = MidiFile.Read(responseStream, readingSettings), $"Exception not thrown for file '{filePath}'.");
-                    }
+                MidiFile nonSeekableFile = null;
+                Assert.Throws<TException>(() => nonSeekableFile = MidiFile.Read(nonSeekableStream, readingSettings), $"Exception not thrown for file '{filePath}'.");
+                MidiAsserts.AreFilesEqual(midiFile, nonSeekableFile, true, $"Non-seekable MIDI file '{fileBasePath}' is invalid.");
 
-                    MidiAsserts.AreFilesEqual(midiFile, remoteMidiFile, true, $"Remote MIDI file '{fileBasePath}' is invalid.");
-                }
+                //
 
-                if (readWithPuttingInMemory)
-                {
-                    readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = true;
+                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = true;
 
-                    MidiFile inMemoryMidiFile = null;
-                    Assert.Throws<TException>(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}'.");
+                MidiFile inMemoryMidiFile = null;
+                Assert.Throws<TException>(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}'.");
 
-                    MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
+                MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
-                    readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = false;
-                }
+                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = false;
             }
         }
 
-        private void ReadInvalidFiles(string directoryName, ReadingSettings readingSettings, bool readRemote = true, bool readWithPuttingInMemory = true)
+        private void ReadInvalidFiles(string directoryName, ReadingSettings readingSettings)
         {
             foreach (var filePath in GetInvalidFiles(directoryName))
             {
@@ -1660,32 +1711,24 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var fileBasePath = TestFilesProvider.GetFileBasePath(filePath);
                 var remoteFileAddress = TestFilesProvider.GetRemoteFileAddress(fileBasePath);
 
-                if (readRemote)
-                {
-                    MidiFile remoteMidiFile = null;
+                //
 
-                    var request = WebRequest.Create(remoteFileAddress);
+                var nonSeekableStream = new NonSeekableStream(filePath);
 
-                    using (var response = request.GetResponse())
-                    using (var responseStream = response.GetResponseStream())
-                    {
-                        Assert.DoesNotThrow(() => remoteMidiFile = MidiFile.Read(responseStream, readingSettings), $"Exception thrown for file '{filePath}'.");
-                    }
+                MidiFile nonSeekableFile = null;
+                Assert.DoesNotThrow(() => nonSeekableFile = MidiFile.Read(nonSeekableStream, readingSettings), $"Exception thrown for file '{filePath}'.");
+                MidiAsserts.AreFilesEqual(midiFile, nonSeekableFile, true, $"Non-seekable MIDI file '{fileBasePath}' is invalid.");
 
-                    MidiAsserts.AreFilesEqual(midiFile, remoteMidiFile, true, $"Remote MIDI file '{fileBasePath}' is invalid.");
-                }
+                //
 
-                if (readWithPuttingInMemory)
-                {
-                    readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = true;
+                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = true;
 
-                    MidiFile inMemoryMidiFile = null;
-                    Assert.DoesNotThrow(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception thrown for file '{filePath}'.");
+                MidiFile inMemoryMidiFile = null;
+                Assert.DoesNotThrow(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception thrown for file '{filePath}'.");
 
-                    MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
+                MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
-                    readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = false;
-                }
+                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = false;
             }
         }
 
