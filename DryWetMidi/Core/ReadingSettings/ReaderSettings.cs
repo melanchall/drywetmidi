@@ -22,7 +22,6 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        // TODO: test
         public int NonSeekableStreamBufferSize
         {
             get { return _nonSeekableStreamBufferSize; }
@@ -34,19 +33,17 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        // TODO: test
         public int NonSeekableStreamIncrementalBytesReadingThreshold
         {
             get { return _nonSeekableStreamIncrementalBytesReadingThreshold; }
             set
             {
-                ThrowIfArgument.IsNonpositive(nameof(value), value, "Value is zero or negative.");
+                ThrowIfArgument.IsNegative(nameof(value), value, "Value is negative.");
 
                 _nonSeekableStreamIncrementalBytesReadingThreshold = value;
             }
         }
 
-        // TODO: test
         public int NonSeekableStreamIncrementalBytesReadingStep
         {
             get { return _nonSeekableStreamIncrementalBytesReadingStep; }

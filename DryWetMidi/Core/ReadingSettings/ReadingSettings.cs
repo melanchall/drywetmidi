@@ -325,7 +325,7 @@ namespace Melanchall.DryWetMidi.Core
 
         public ICollection<ReadingHandler> ReadingHandlers { get; } = new List<ReadingHandler>();
 
-        public ReaderSettings ReaderSettings { get; } = new ReaderSettings();
+        public ReaderSettings ReaderSettings { get; set; } = new ReaderSettings();
 
         internal bool UseReadingHandlers { get; private set; }
 

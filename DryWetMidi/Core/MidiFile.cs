@@ -254,6 +254,9 @@ namespace Melanchall.DryWetMidi.Core
             if (settings == null)
                 settings = new ReadingSettings();
 
+            if (settings.ReaderSettings == null)
+                settings.ReaderSettings = new ReaderSettings();
+
             settings.PrepareReadingHandlers();
 
             var useReadingHandlers = settings.UseReadingHandlers;

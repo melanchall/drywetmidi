@@ -1040,6 +1040,41 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [TestCase(1024)]
+        [TestCase(4096)]
+        [TestCase(4)]
+        [TestCase(500000)]
+        public void Read_NonSeekableStream_BufferSize(int bufferSize)
+        {
+            Read_NonSeekableStream(new ReaderSettings
+            {
+                NonSeekableStreamBufferSize = bufferSize
+            });
+        }
+
+        [TestCase(1)]
+        [TestCase(128)]
+        [TestCase(500000)]
+        public void Read_NonSeekableStream_IncrementalBytesReadingThreshold(int threshold)
+        {
+            Read_NonSeekableStream(new ReaderSettings
+            {
+                NonSeekableStreamIncrementalBytesReadingThreshold = threshold
+            });
+        }
+
+        [TestCase(1)]
+        [TestCase(8)]
+        [TestCase(100000)]
+        public void Read_NonSeekableStream_IncrementalBytesReadingStep(int step)
+        {
+            Read_NonSeekableStream(new ReaderSettings
+            {
+                NonSeekableStreamIncrementalBytesReadingThreshold = 1,
+                NonSeekableStreamIncrementalBytesReadingStep = step
+            });
+        }
+
         [Test]
         public void Read_DecodeTextCallback_NoCallback()
         {
@@ -1657,6 +1692,17 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Private methods
+
+        private void Read_NonSeekableStream(ReaderSettings readerSettings)
+        {
+            var filePath = TestFilesProvider.GetMiscFile_14000events();
+            var midiFile = MidiFile.Read(filePath);
+
+            var nonSeekableStream = new NonSeekableStream(filePath);
+            var midiFile2 = MidiFile.Read(nonSeekableStream, new ReadingSettings { ReaderSettings = readerSettings });
+
+            MidiAsserts.AreFilesEqual(midiFile, midiFile2, true, $"File is invalid.");
+        }
 
         private MidiFile WriteRead(MidiFile midiFile, WritingSettings writingSettings = null, ReadingSettings readingSettings = null)
         {
