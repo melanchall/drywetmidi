@@ -106,6 +106,36 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [Test]
+        public void GetStandardMetaEventStatusBytes()
+        {
+            var statusBytes = MetaEvent.GetStandardMetaEventStatusBytes();
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    0x00,
+                    0x01,
+                    0x02,
+                    0x03,
+                    0x04,
+                    0x05,
+                    0x06,
+                    0x07,
+                    0x08,
+                    0x09,
+                    0x20,
+                    0x21,
+                    0x2F,
+                    0x51,
+                    0x54,
+                    0x58,
+                    0x59,
+                    0x7F
+                },
+                statusBytes,
+                "Status bytes are invalid.");
+        }
+
         #endregion
     }
 }

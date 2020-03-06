@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void GetStandardChunkIds()
         {
             var ids = MidiChunk.GetStandardChunkIds();
-            CollectionAssert.AreEqual(new[] { HeaderChunk.Id, TrackChunk.Id }, ids, "IDs are invalid.");
+            CollectionAssert.AreEqual(new[] { "MThd", "MTrk" }, ids, "IDs are invalid.");
         }
 
         #endregion

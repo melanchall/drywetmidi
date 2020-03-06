@@ -1292,53 +1292,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void WriteCustomMetaEvent_InvalidStatusBytes()
-        {
-            var customMetaEventTypes = new EventTypesCollection
-            {
-                { typeof(CustomMetaEvent), 0x54 }
-            };
-
-            var filePath = Path.GetRandomFileName();
-
-            try
-            {
-                var exception = Assert.Throws<InvalidOperationException>(() =>
-                    new MidiFile(
-                        new TrackChunk(
-                            new CustomMetaEvent(1234567, "Test", 45) { DeltaTime = 100 },
-                            new TextEvent("foo"),
-                            new MarkerEvent("bar")))
-                    .Write(filePath, settings: new WritingSettings { CustomMetaEventTypes = customMetaEventTypes }));
-
-                var error = exception.Message;
-                StringAssert.Contains(0x54.ToString(), error, "Exception message doesn't contain invalid status byte.");
-                StringAssert.Contains(typeof(SmpteOffsetEvent).Name, error, "Exception message doesn't contain standard event's type name.");
-            }
-            finally
-            {
-                File.Delete(filePath);
-            }
-        }
-
-        // TODO: validation before reading eats time
-        // [Test]
-        public void ReadCustomMetaEvent_InvalidStatusBytes()
-        {
-            var customMetaEventTypes = new EventTypesCollection
-            {
-                { typeof(CustomMetaEvent), 0x54 }
-            };
-
-            var exception = Assert.Throws<InvalidOperationException>(() =>
-                MidiFile.Read(TestFilesProvider.GetMiscFile_14000events(), new ReadingSettings { CustomMetaEventTypes = customMetaEventTypes }));
-
-            var error = exception.Message;
-            StringAssert.Contains(0x54.ToString(), error, "Exception message doesn't contain invalid status byte.");
-            StringAssert.Contains(typeof(SmpteOffsetEvent).Name, error, "Exception message doesn't contain standard event's type name.");
-        }
-
-        [Test]
         public void ReadWriteCustomChunk()
         {
             const int expectedA = 1234567;
@@ -1368,31 +1321,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.AreEqual(expectedA, customChunk.A, "A value is invalid");
             Assert.AreEqual(expectedB, customChunk.B, "B value is invalid");
             Assert.AreEqual(expectedC, customChunk.C, "C value is invalid");
-        }
-
-        [Test]
-        public void WriteCustomChunk_InvalidId()
-        {
-            var filePath = Path.GetRandomFileName();
-
-            try
-            {
-                var exception = Assert.Throws<InvalidOperationException>(() =>
-                    new MidiFile(
-                        new TrackChunk(
-                            new TextEvent("foo"),
-                            new MarkerEvent("bar")),
-                        new CustomChunkWithInvalidId())
-                    .Write(filePath));
-
-                var error = exception.Message;
-                StringAssert.Contains(CustomChunkWithInvalidId.Id.ToString(), error, "Exception message doesn't contain invalid ID.");
-                StringAssert.Contains(typeof(TrackChunk).Name, error, "Exception message doesn't contain standard chunk's type name.");
-            }
-            finally
-            {
-                File.Delete(filePath);
-            }
         }
 
         [Test]

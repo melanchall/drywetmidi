@@ -67,6 +67,11 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
+        public static byte[] GetStandardMetaEventStatusBytes()
+        {
+            return StandardMetaEventStatusBytes.GetStatusBytes();
+        }
+
         /// <summary>
         /// Reads content of a MIDI meta event.
         /// </summary>

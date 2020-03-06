@@ -2,15 +2,17 @@
 {
     internal static class StandardChunkIds
     {
+        #region Fields
+
+        private static string[] _ids;
+
+        #endregion
+
         #region Methods
 
         public static string[] GetIds()
         {
-            return new[]
-            {
-                HeaderChunk.Id,
-                TrackChunk.Id
-            };
+            return _ids ?? (_ids = new[] { HeaderChunk.Id, TrackChunk.Id });
         }
 
         #endregion

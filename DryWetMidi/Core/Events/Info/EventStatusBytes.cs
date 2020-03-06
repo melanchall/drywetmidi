@@ -1,6 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     internal static class EventStatusBytes
     {

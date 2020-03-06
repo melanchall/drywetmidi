@@ -77,8 +77,6 @@ namespace Melanchall.DryWetMidi.Core
                     break;
                 default:
                     {
-                        EventSettingsValidator.ValidateCustomMetaEventsStatusBytes(settings.CustomMetaEventTypes);
-
                         var eventType = midiEvent.GetType();
                         if (settings.CustomMetaEventTypes?.TryGetStatusByte(eventType, out statusByte) != true)
                             Debug.Fail($"Unable to write the {eventType} event.");
