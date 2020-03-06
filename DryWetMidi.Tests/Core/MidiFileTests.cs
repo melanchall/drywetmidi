@@ -1395,23 +1395,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        // TODO: validation before reading eats time
-        // [Test]
-        public void ReadCustomChunk_InvalidId()
-        {
-            var customChunkTypes = new ChunkTypesCollection
-            {
-                { typeof(CustomChunkWithInvalidId), CustomChunkWithInvalidId.Id }
-            };
-
-            var exception = Assert.Throws<InvalidOperationException>(() =>
-                MidiFile.Read(TestFilesProvider.GetMiscFile_14000events(), new ReadingSettings { CustomChunkTypes = customChunkTypes }));
-
-            var error = exception.Message;
-            StringAssert.Contains(CustomChunkWithInvalidId.Id.ToString(), error, "Exception message doesn't contain invalid ID.");
-            StringAssert.Contains(typeof(TrackChunk).Name, error, "Exception message doesn't contain standard chunk's type name.");
-        }
-
         [Test]
         public void ReadWriteRead()
         {

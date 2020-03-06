@@ -70,6 +70,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the chunk.</returns>
         public abstract MidiChunk Clone();
 
+        public static string[] GetStandardChunkIds()
+        {
+            return StandardChunkIds.GetIds();
+        }
+
         public static bool Equals(MidiChunk chunk1, MidiChunk chunk2)
         {
             string message;
