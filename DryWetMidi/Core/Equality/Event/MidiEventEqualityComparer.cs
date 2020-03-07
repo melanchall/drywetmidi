@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Core
 
         public int GetHashCode(MidiEvent obj)
         {
-            return obj?.EventType.GetHashCode() ?? 0;
+            return obj.EventType.GetHashCode();
         }
 
         #endregion

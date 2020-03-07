@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             using (var csvReader = new CsvReader(stream, settings.CsvSettings))
             {
-                CsvRecord record = null;
+                CsvRecord record;
 
                 while ((record = csvReader.ReadRecord()) != null)
                 {

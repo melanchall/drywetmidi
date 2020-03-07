@@ -16,7 +16,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Constants
 
         private const int ChannelEventBufferSize = 3;
-        private static readonly byte[] ZeroBuffer = new byte[ChannelEventBufferSize];
 
         #endregion
 

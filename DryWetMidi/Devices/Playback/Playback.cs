@@ -363,13 +363,13 @@ namespace Melanchall.DryWetMidi.Devices
             {
                 var currentTime = _clock.CurrentTime;
 
-                Note note;
                 var notes = new List<Note>();
 
                 foreach (var noteMetadata in _activeNotesMetadata.ToArray())
                 {
-                    TryPlayNoteEvent(noteMetadata, false, currentTime, out note);
-                    notes.Add(note);
+                    Note note;
+                    if (TryPlayNoteEvent(noteMetadata, false, currentTime, out note))
+                        notes.Add(note);
                 }
 
                 OnNotesPlaybackFinished(notes.ToArray());

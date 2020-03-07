@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tools
                 NoteHolder currentNoteHolder;
                 if (!currentNotes.TryGetValue(noteId, out currentNoteHolder))
                 {
-                    currentNotes.Add(noteId, currentNoteHolder = CreateNoteHolder(note, settings));
+                    currentNotes.Add(noteId, CreateNoteHolder(note, settings));
                     continue;
                 }
 

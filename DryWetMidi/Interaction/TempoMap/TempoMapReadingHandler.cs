@@ -32,7 +32,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 return _tempoMap;
             }
-            private set { _tempoMap = value; }
         }
 
         #endregion

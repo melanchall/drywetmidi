@@ -1,7 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -29,7 +27,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="SysExEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         protected SysExEvent(MidiEventType eventType)
             : base(eventType)
         {

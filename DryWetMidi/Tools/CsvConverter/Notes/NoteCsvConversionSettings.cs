@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the format which should be used to write a note's number to or read it from CSV.
-        /// The default value is <see cref="NoteNumberFormat.NoteNumber"/>.
+        /// The default value is <see cref="Tools.NoteNumberFormat.NoteNumber"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteNumberFormat NoteNumberFormat

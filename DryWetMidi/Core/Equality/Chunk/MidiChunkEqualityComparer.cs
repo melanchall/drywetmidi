@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Core
 
         public int GetHashCode(MidiChunk obj)
         {
-            return obj?.ChunkId.GetHashCode() ?? 0;
+            return obj.ChunkId.GetHashCode();
         }
 
         #endregion

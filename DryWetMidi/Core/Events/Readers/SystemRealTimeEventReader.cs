@@ -30,7 +30,7 @@
                     break;
             }
 
-            systemRealTimeEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
+            systemRealTimeEvent?.Read(reader, settings, MidiEvent.UnknownContentSize);
             return systemRealTimeEvent;
         }
 

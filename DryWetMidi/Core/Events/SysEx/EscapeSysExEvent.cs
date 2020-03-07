@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Clones event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the event.</returns>
-        protected sealed override MidiEvent CloneEvent()
+        protected override MidiEvent CloneEvent()
         {
             return new EscapeSysExEvent(Data?.ToArray());
         }

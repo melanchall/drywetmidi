@@ -514,7 +514,7 @@ namespace Melanchall.DryWetMidi.Standards
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(percussionSet), percussionSet);
 
-            return new MidiEvent[]
+            return new[]
             {
                 ControlName.BankSelect.GetControlChangeEvent((SevenBitNumber)RhythmChannelBankMsb, channel),
                 ControlName.LsbForBankSelect.GetControlChangeEvent((SevenBitNumber)0, channel),

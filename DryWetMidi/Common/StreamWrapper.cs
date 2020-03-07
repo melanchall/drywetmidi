@@ -14,7 +14,6 @@ namespace Melanchall.DryWetMidi.Common
         private readonly byte[] _skipBytesBuffer = new byte[1024];
 
         private long _position;
-        private long _totalReadBytesCount;
 
         #endregion
 
@@ -84,7 +83,6 @@ namespace Melanchall.DryWetMidi.Common
 
             offset += bufferedData.Length;
             var readBytesCount = _stream.Read(buffer, offset, count - bufferedData.Length);
-            _totalReadBytesCount += readBytesCount;
 
             for (int i = 0; i < readBytesCount; i++)
             {

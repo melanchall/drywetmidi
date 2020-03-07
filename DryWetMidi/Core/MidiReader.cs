@@ -153,17 +153,14 @@ namespace Melanchall.DryWetMidi.Core
             if (_isStreamWrapped && count > _settings.NonSeekableStreamIncrementalBytesReadingThreshold)
             {
                 var bytesList = new List<byte[]>();
-                var totalBytesRead = 0;
 
-                while (true)
+                while (count > 0)
                 {
                     var bytes = _binaryReader.ReadBytes(Math.Min(count, _settings.NonSeekableStreamIncrementalBytesReadingStep));
                     if (bytes.Length == 0)
                         break;
 
-                    totalBytesRead += bytes.Length;
                     count -= bytes.Length;
-
                     bytesList.Add(bytes);
                 }
 

@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -24,7 +23,6 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="eventType">The type of event.</param>
         /// <param name="parametersCount">Count of the parameters for this channel event.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Parameters count is negative number which is unallowable.</exception>
         protected ChannelEvent(MidiEventType eventType, int parametersCount)
             : base(eventType)
         {

@@ -1,7 +1,6 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {

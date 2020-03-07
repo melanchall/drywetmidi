@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Gets or sets compression rules for the writing engine. The default is
-        /// <see cref="CompressionPolicy.NoCompression"/>.
+        /// <see cref="Core.CompressionPolicy.NoCompression"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public CompressionPolicy CompressionPolicy

@@ -1390,8 +1390,10 @@ namespace Melanchall.DryWetMidi.Tests.Core
             foreach (var filePath in filesPaths)
             {
                 var midiFile1 = MidiFile.Read(filePath);
-                var midiFile2 = MidiFile.Read(filesPaths.Where(p => p != filePath).ToArray()[random.Next(filesPaths.Length - 1)]);
-                MidiAsserts.AreFilesNotEqual(midiFile1, midiFile2, true, $"File '{filePath}' equals to another one.");
+
+                var filePath2 = filesPaths.Where(p => p != filePath).ToArray()[random.Next(filesPaths.Length - 1)];
+                var midiFile2 = MidiFile.Read(filePath2);
+                MidiAsserts.AreFilesNotEqual(midiFile1, midiFile2, true, $"File '{filePath}' equals to another one '{filePath2}'.");
             }
         }
 

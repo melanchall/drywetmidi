@@ -430,6 +430,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 return false;
 
             return Bars == other.Bars &&
+                   // TODO: epsilon
                    Beats == other.Beats;
         }
 

@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            MetaEvent metaEvent = null;
+            MetaEvent metaEvent;
 
             switch (statusByte)
             {

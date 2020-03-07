@@ -22,8 +22,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Fields
 
-        private static readonly Dictionary<SevenBitNumber, Note> _cache =
-            new Dictionary<SevenBitNumber, Note>();
+        private static readonly Dictionary<SevenBitNumber, Note> Cache = new Dictionary<SevenBitNumber, Note>();
 
         #endregion
 
@@ -83,8 +82,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public static Note Get(SevenBitNumber noteNumber)
         {
             Note note;
-            if (!_cache.TryGetValue(noteNumber, out note))
-                _cache.Add(noteNumber, note = new Note(noteNumber));
+            if (!Cache.TryGetValue(noteNumber, out note))
+                Cache.Add(noteNumber, note = new Note(noteNumber));
 
             return note;
         }

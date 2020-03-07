@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Fields
 
-        private static readonly Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>> _cache =
+        private static readonly Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>> Cache =
             new Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>>();
 
         private IReadOnlyCollection<IntervalDefinition> _intervalDefinitions;
@@ -357,8 +357,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsInvalidEnumValue(nameof(direction), direction);
 
             Dictionary<IntervalDirection, Interval> intervals;
-            if (!_cache.TryGetValue(intervalSize, out intervals))
-                _cache.Add(intervalSize, intervals = new Dictionary<IntervalDirection, Interval>());
+            if (!Cache.TryGetValue(intervalSize, out intervals))
+                Cache.Add(intervalSize, intervals = new Dictionary<IntervalDirection, Interval>());
 
             Interval cachedInterval;
             if (!intervals.TryGetValue(direction, out cachedInterval))

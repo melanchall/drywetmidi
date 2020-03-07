@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Core
             var statusByte = currentStatusByte.GetHead();
             var channel = currentStatusByte.GetTail();
 
-            ChannelEvent channelEvent = null;
+            ChannelEvent channelEvent;
 
             switch (statusByte)
             {
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Core
             if (channelEvent.EventType == MidiEventType.NoteOn)
             {
                 var noteOnEvent = (NoteOnEvent)channelEvent;
-                if (noteOnEvent != null && settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff && noteOnEvent.Velocity == 0)
+                if (settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff && noteOnEvent.Velocity == 0)
                     channelEvent = new NoteOffEvent
                     {
                         DeltaTime = noteOnEvent.DeltaTime,

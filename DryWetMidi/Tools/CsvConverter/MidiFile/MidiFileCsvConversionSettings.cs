@@ -11,12 +11,6 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public sealed class MidiFileCsvConversionSettings
     {
-        #region Constants
-
-        private const char DefaultCsvDelimiter = ',';
-
-        #endregion
-
         #region Fields
 
         private MidiFileCsvLayout _csvLayout = MidiFileCsvLayout.DryWetMidi;
@@ -89,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the format which should be used to write notes to or read them from CSV.
-        /// The default value is <see cref="NoteFormat.Events"/>.
+        /// The default value is <see cref="Tools.NoteFormat.Events"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteFormat NoteFormat
@@ -105,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the format which should be used to write a note's number to or read it from CSV.
-        /// The default value is <see cref="NoteNumberFormat.NoteNumber"/>.
+        /// The default value is <see cref="Tools.NoteNumberFormat.NoteNumber"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteNumberFormat NoteNumberFormat

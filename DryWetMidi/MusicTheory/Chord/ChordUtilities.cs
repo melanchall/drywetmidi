@@ -95,9 +95,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         internal static IEnumerable<Interval> GetIntervalsFromRootNote(ICollection<NoteName> notesNames)
         {
-            var lastNoteNumber = (int)notesNames.First();
             var lastInterval = SevenBitNumber.MinValue;
-
             var result = new List<Interval>();
 
             foreach (var interval in GetIntervals(notesNames))

@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         /// <summary>
         /// Default octave further notes and chords will be relative to if it's not
-        /// specified explicitly. Octave can be altered with <see cref="SetOctave(Octave)"/>.
+        /// specified explicitly. Octave can be altered with <see cref="SetOctave"/>.
         /// </summary>
         public static readonly Octave DefaultOctave = Octave.Middle;
 
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         /// <summary>
         /// Gets the octave further notes and chords will be relative to if it's not
-        /// specified explicitly. Octave can be altered with <see cref="SetOctave(Octave)"/>.
+        /// specified explicitly. Octave can be altered with <see cref="SetOctave"/>.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="noteName">The name of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
@@ -273,7 +273,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="length">The length of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -291,7 +291,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
@@ -309,7 +309,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
@@ -398,7 +398,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// <para>
         /// Chord's notes will be resolved according to <see cref="Octave"/>.
-        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// To change octave use <see cref="SetOctave"/> method.
         /// </para>
         /// <para>
         /// Chord's notes length will be taken from <see cref="NoteLength"/>.
@@ -452,7 +452,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// <para>
         /// Chord's notes will be resolved according to <see cref="Octave"/>.
-        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// To change octave use <see cref="SetOctave"/> method.
         /// </para>
         /// <para>
         /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
@@ -502,7 +502,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// <para>
         /// Chord's notes will be resolved according to <see cref="Octave"/>.
-        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// To change octave use <see cref="SetOctave"/> method.
         /// </para>
         /// <para>
         /// Chord's notes length will be taken from <see cref="NoteLength"/>.
@@ -550,7 +550,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// <para>
         /// Chord's notes will be resolved according to <see cref="Octave"/>.
-        /// To change octave use <see cref="SetOctave(Octave)"/> method.
+        /// To change octave use <see cref="SetOctave"/> method.
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
@@ -589,7 +589,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="rootNoteName">The root note's name of the chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
@@ -609,7 +609,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="length">The length of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -631,7 +631,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
@@ -763,8 +763,7 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(intervals), intervals);
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
 
-            return Chord(new[] { rootNote }.Concat(intervals.Where(i => i != null)
-                                                                      .Select(i => rootNote.Transpose(i))),
+            return Chord(new[] { rootNote }.Concat(intervals.Where(i => i != null).Select(rootNote.Transpose)),
                          length,
                          velocity);
         }
@@ -775,7 +774,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="noteNames">Names of notes that represent a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
@@ -793,7 +792,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="length">The length of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -811,7 +810,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
@@ -829,7 +828,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set default octave use <see cref="SetOctave(Octave)"/> method. By default the octave number is 4.
+        /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null. -or-
         /// <paramref name="length"/> is null.</exception>
@@ -1145,9 +1144,9 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="repetitionsCount">Count of repetitions.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave(Octave)"/>,
+        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
         /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
-        /// actions and will not be repeated since default values applies immidiately on next actions.
+        /// actions and will not be repeated since default values applies immediately on next actions.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="actionsCount"/> is
         /// negative. -or- <paramref name="actionsCount"/> is greater than count of existing actions. -or-
@@ -1170,9 +1169,9 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="repetitionsCount">Count of repetitions.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave(Octave)"/>,
+        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
         /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
-        /// actions and will not be repeated since default values applies immidiately on next actions.
+        /// actions and will not be repeated since default values applies immediately on next actions.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repetitionsCount"/> is negative.</exception>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
@@ -1191,9 +1190,9 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave(Octave)"/>,
+        /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
         /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
-        /// actions and will not be repeated since default values applies immidiately on next actions.
+        /// actions and will not be repeated since default values applies immediately on next actions.
         /// </remarks>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
         public PatternBuilder Repeat()

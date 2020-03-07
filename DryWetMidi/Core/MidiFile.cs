@@ -1,10 +1,9 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -584,7 +583,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 //
 
-                chunk.Read(reader, settings);
+                chunk?.Read(reader, settings);
 
                 if (settings.UseReadingHandlers && chunkId == TrackChunk.Id)
                 {

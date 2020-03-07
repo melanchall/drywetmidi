@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Provides a way to get <see cref="IEventReader"/> for an event.
@@ -9,11 +7,11 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
-        private static readonly IEventReader _metaEventReader = new MetaEventReader();
-        private static readonly IEventReader _channelEventReader = new ChannelEventReader();
-        private static readonly IEventReader _sysExEventReader = new SysExEventReader();
-        private static readonly IEventReader _systemRealTimeEventReader = new SystemRealTimeEventReader();
-        private static readonly IEventReader _systemCommonEventReader = new SystemCommonEventReader();
+        private static readonly IEventReader MetaEventReader = new MetaEventReader();
+        private static readonly IEventReader ChannelEventReader = new ChannelEventReader();
+        private static readonly IEventReader SysExEventReader = new SysExEventReader();
+        private static readonly IEventReader SystemRealTimeEventReader = new SystemRealTimeEventReader();
+        private static readonly IEventReader SystemCommonEventReader = new SystemCommonEventReader();
 
         #endregion
 
@@ -29,7 +27,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             if (statusByte == EventStatusBytes.Global.EscapeSysEx ||
                 statusByte == EventStatusBytes.Global.NormalSysEx)
-                return _sysExEventReader;
+                return SysExEventReader;
 
             if (!smfOnly)
             {
@@ -39,19 +37,19 @@ namespace Melanchall.DryWetMidi.Core
                     statusByte == EventStatusBytes.SystemRealTime.Start ||
                     statusByte == EventStatusBytes.SystemRealTime.Stop ||
                     statusByte == EventStatusBytes.SystemRealTime.TimingClock)
-                    return _systemRealTimeEventReader;
+                    return SystemRealTimeEventReader;
 
                 if (statusByte == EventStatusBytes.SystemCommon.MtcQuarterFrame ||
                     statusByte == EventStatusBytes.SystemCommon.SongPositionPointer ||
                     statusByte == EventStatusBytes.SystemCommon.SongSelect ||
                     statusByte == EventStatusBytes.SystemCommon.TuneRequest)
-                    return _systemCommonEventReader;
+                    return SystemCommonEventReader;
             }
 
             if (statusByte == EventStatusBytes.Global.Meta)
-                return _metaEventReader;
+                return MetaEventReader;
 
-            return _channelEventReader;
+            return ChannelEventReader;
         }
 
         #endregion
