@@ -197,6 +197,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Get(Size, IntervalDirection.Down);
         }
 
+        /// <summary>
+        /// Returns collection of definitions of the current <see cref="Interval"/>.
+        /// </summary>
+        /// <returns>Collection of definitions of the current <see cref="Interval"/>.</returns>
         public IReadOnlyCollection<IntervalDefinition> GetIntervalDefinitions()
         {
             if (_intervalDefinitions != null)
@@ -407,6 +411,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
                        Math.Sign(halfSteps) < 0 ? IntervalDirection.Down : IntervalDirection.Up);
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="Interval"/> from <see cref="IntervalDefinition"/>.
+        /// </summary>
+        /// <param name="intervalDefinition">Interval definition to create interval from.</param>
+        /// <returns><see cref="Interval"/> created from <paramref name="intervalDefinition"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null.</exception>
         public static Interval FromDefinition(IntervalDefinition intervalDefinition)
         {
             ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
@@ -598,6 +608,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region IComparable<Interval>
 
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer that indicates
+        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared.</returns>
         public int CompareTo(Interval other)
         {
             return HalfSteps.CompareTo(other.HalfSteps);

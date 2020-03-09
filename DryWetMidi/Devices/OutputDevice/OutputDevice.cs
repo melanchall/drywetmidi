@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         /// <summary>
-        /// Send a MIDI event to the current <see cref="OutputDevice"/>.
+        /// Sends a MIDI event to the current output device.
         /// </summary>
         /// <param name="midiEvent">MIDI event to send.</param>
         /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>

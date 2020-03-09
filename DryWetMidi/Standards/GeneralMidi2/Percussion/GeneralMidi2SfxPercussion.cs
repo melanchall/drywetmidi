@@ -1,5 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Standards
 {
+    /// <summary>
+    /// General MIDI Level 2 'SFX' percussion.
+    /// </summary>
     public enum GeneralMidi2SfxPercussion : byte
     {
         /// <summary>

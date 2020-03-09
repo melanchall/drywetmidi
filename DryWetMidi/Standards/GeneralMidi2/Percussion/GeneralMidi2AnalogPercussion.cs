@@ -1,5 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Standards
 {
+    /// <summary>
+    /// General MIDI Level 2 'Analog' percussion.
+    /// </summary>
     public enum GeneralMidi2AnalogPercussion : byte
     {
         /// <summary>

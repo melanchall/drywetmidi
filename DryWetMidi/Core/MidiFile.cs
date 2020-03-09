@@ -456,50 +456,49 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiFile"/> objects have the same content.
+        /// </summary>
+        /// <param name="midiFile1">The first file to compare, or null.</param>
+        /// <param name="midiFile2">The second file to compare, or null.</param>
+        /// <returns>true if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
+        /// otherwise, false.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2)
         {
             string message;
             return Equals(midiFile1, midiFile2, out message);
         }
 
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiFile"/> objects have the same content.
+        /// </summary>
+        /// <param name="midiFile1">The first file to compare, or null.</param>
+        /// <param name="midiFile2">The second file to compare, or null.</param>
+        /// <param name="message">Message containing information about what exactly is different in
+        /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
+        /// <returns>true if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
+        /// otherwise, false.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, out string message)
         {
             return Equals(midiFile1, midiFile2, null, out message);
         }
 
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiFile"/> objects have the same content using
+        /// the specified comparison settings.
+        /// </summary>
+        /// <param name="midiFile1">The first file to compare, or null.</param>
+        /// <param name="midiFile2">The second file to compare, or null.</param>
+        /// <param name="settings">Settings according to which files should be compared.</param>
+        /// <param name="message">Message containing information about what exactly is different in
+        /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
+        /// <returns>true if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
+        /// otherwise, false.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings, out string message)
         {
             return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);
         }
 
-        /// <summary>
-        /// Reads a chunk from a MIDI file.
-        /// </summary>
-        /// <param name="reader">Reader to read a chunk with.</param>
-        /// <param name="settings">Settings according to which a chunk must be read.</param>
-        /// <param name="actualTrackChunksCount">Actual count of track chunks at the moment.</param>
-        /// <param name="expectedTrackChunksCount">Expected count of track chunks.</param>
-        /// <returns>A MIDI-file chunk.</returns>
-        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
-        /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
-        /// count is greater than expected one and that should be treated as error according to
-        /// the specified <paramref name="settings"/>.</exception>
-        /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the specified
-        /// <paramref name="settings"/>.</exception>
-        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
-        /// <exception cref="NotEnoughBytesException">Value cannot be read since the reader's underlying stream
-        /// doesn't have enough bytes.</exception>
-        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
-        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
-        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
-        /// just read is invalid.</exception>
-        /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
-        /// just read is invalid.</exception>
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount, ICollection<ReadingHandler> trackChunkReadingHandlers)
         {
             MidiChunk chunk = null;

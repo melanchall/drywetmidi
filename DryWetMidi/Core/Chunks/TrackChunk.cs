@@ -206,21 +206,6 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        /// <summary>
-        /// Reads an event from the reader's underlying stream.
-        /// </summary>
-        /// <param name="reader">Reader to read an event.</param>
-        /// <param name="settings">Settings according to which an event must be read.</param>
-        /// <param name="channelEventStatusByte">Current channel event status byte used as running status.</param>
-        /// <returns>Instance of the <see cref="MidiEvent"/> representing a MIDI event.</returns>
-        /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream
-        /// was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
-        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
-        /// <exception cref="NotEnoughBytesException">Not enough bytes to read an event.</exception>
-        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter just
-        /// read is invalid.</exception>
         private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte, out long deltaTime)
         {
             deltaTime = reader.ReadVlqLongNumber();

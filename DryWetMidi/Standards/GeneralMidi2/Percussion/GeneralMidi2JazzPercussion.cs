@@ -1,5 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Standards
 {
+    /// <summary>
+    /// General MIDI Level 2 'Jazz' percussion.
+    /// </summary>
     public enum GeneralMidi2JazzPercussion : byte
     {
         /// <summary>

@@ -172,6 +172,15 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on unknown channel event. The default is
+        /// <see cref="UnknownChannelEventPolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="UnknownChannelEventPolicy.Abort"/> is used an instance of the
+        /// <see cref="UnknownChannelEventException"/> will be thrown if channel event has unknown status byte.
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public UnknownChannelEventPolicy UnknownChannelEventPolicy
         {
             get { return _unknownChannelEventPolicy; }
@@ -183,6 +192,10 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets a callback used to read unknown channel event if <see cref="UnknownChannelEventPolicy"/>
+        /// set to <see cref="UnknownChannelEventPolicy.UseCallback"/>.
+        /// </summary>
         public UnknownChannelEventCallback UnknownChannelEventCallback { get; set; }
 
         /// <summary>
@@ -323,8 +336,14 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public DecodeTextCallback DecodeTextCallback { get; set; }
 
+        /// <summary>
+        /// Gets collection of <see cref="ReadingHandler"/> objects that handle MIDI data reading.
+        /// </summary>
         public ICollection<ReadingHandler> ReadingHandlers { get; } = new List<ReadingHandler>();
 
+        /// <summary>
+        /// Gets or sets settings according to which <see cref="MidiReader"/> should read MIDI data.
+        /// </summary>
         public ReaderSettings ReaderSettings { get; set; } = new ReaderSettings();
 
         internal bool UseReadingHandlers { get; private set; }

@@ -1,5 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Standards
 {
+    /// <summary>
+    /// General MIDI Level 2 'Brush' percussion.
+    /// </summary>
     public enum GeneralMidi2BrushPercussion : byte
     {
         /// <summary>

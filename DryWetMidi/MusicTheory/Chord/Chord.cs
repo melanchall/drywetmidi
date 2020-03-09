@@ -112,12 +112,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        /// <summary>
+        /// Returns collection of names of the current <see cref="Chord"/>.
+        /// </summary>
+        /// <returns>Collection of names of the current <see cref="Chord"/>.</returns>
         public IReadOnlyCollection<string> GetNames()
         {
             if (_chordNames != null)
                 return _chordNames;
 
-            var names = ChordsNamesTable.GetChordName(NotesNames.ToArray());
+            var names = ChordsNamesTable.GetChordNames(NotesNames.ToArray());
             return _chordNames = new ReadOnlyCollection<string>(names);
         }
 

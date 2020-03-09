@@ -1,7 +1,11 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Common CSV reading/writing settings.
+    /// </summary>
     public sealed class CsvSettings
     {
         #region Fields
@@ -17,6 +21,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public char CsvDelimiter { get; set; } = ',';
 
+        /// <summary>
+        /// Gets or sets the size of buffer used to read/write CSV data.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Value is zero or negative.</exception>
         public int IoBufferSize
         {
             get { return _bufferSize; }

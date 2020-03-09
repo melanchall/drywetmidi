@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        public static IList<string> GetChordName(NoteName[] notesNames)
+        public static IList<string> GetChordNames(NoteName[] notesNames)
         {
             var result = new List<string>();
             if (!notesNames.Any())
@@ -94,23 +94,23 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 if (!chordsStrings.Add(chordString))
                     continue;
 
-                result.AddRange(GetChordNameByPermutation(permutation));
+                result.AddRange(GetChordNamesByPermutation(permutation));
             }
 
             return result.Distinct().OrderBy(n => n.Length).ToArray();
         }
 
-        private static IList<string> GetChordNameByPermutation(NoteName[] notesNames)
+        private static IList<string> GetChordNamesByPermutation(NoteName[] notesNames)
         {
-            var result = new List<string>(GetChordNameInternal(notesNames));
+            var result = new List<string>(GetChordNamesInternal(notesNames));
 
             var firstNoteName = notesNames.First();
-            result.AddRange(GetChordNameInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName}"));
+            result.AddRange(GetChordNamesInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName}"));
 
             return result;
         }
 
-        private static List<string> GetChordNameInternal(ICollection<NoteName> notesNames)
+        private static List<string> GetChordNamesInternal(ICollection<NoteName> notesNames)
         {
             var result = new List<string>();
             if (!notesNames.Any())

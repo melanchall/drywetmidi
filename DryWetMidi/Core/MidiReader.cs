@@ -29,11 +29,14 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="MidiReader"/> with the specified stream.
         /// </summary>
         /// <param name="stream">Stream to read MIDI file from.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
-        /// or is already closed.</exception>
+        /// <param name="settings">Settings according to which MIDI data should be read.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null. -or-
+        /// <paramref name="settings"/> is null.</exception>
         public MidiReader(Stream stream, ReaderSettings settings)
         {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNull(nameof(settings), settings);
+
             _settings = settings;
 
             if (!stream.CanSeek)
@@ -44,7 +47,7 @@ namespace Melanchall.DryWetMidi.Core
 
             Length = stream.Length;
 
-            if (settings.PutDataInMemoryBeforeReading && !(stream is MemoryStream))
+            if (settings.ReadFromMemory && !(stream is MemoryStream))
             {
                 _allDataBuffer = new MemoryStream();
                 stream.CopyTo(_allDataBuffer);

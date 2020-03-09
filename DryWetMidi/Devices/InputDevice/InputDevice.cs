@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         /// <summary>
-        /// Starts listening for incoming MIDI events on the current <see cref="InputDevice"/>.
+        /// Starts listening for incoming MIDI events on the current input device.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="InputDevice"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Stops listening for incoming MIDI events on the current <see cref="InputDevice"/>.
+        /// Stops listening for incoming MIDI events on the current input device.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="InputDevice"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>

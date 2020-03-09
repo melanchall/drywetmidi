@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Core
                         case UnknownChannelEventInstruction.Abort:
                             throw new UnknownChannelEventException(statusByte, channel);
                         case UnknownChannelEventInstruction.SkipData:
-                            reader.Position += action.DataBytesToSkip;
+                            reader.Position += action.DataBytesToSkipCount;
                             return;
                     }
                     break;

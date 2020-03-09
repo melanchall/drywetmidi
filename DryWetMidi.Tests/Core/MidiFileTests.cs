@@ -1344,13 +1344,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Read_PutDataInMemoryBeforeReading()
+        public void Read_ReadFromMemory()
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
                 var expectedMidiFile = MidiFile.Read(filePath);
                 var settings = new ReadingSettings();
-                settings.ReaderSettings.PutDataInMemoryBeforeReading = true;
+                settings.ReaderSettings.ReadFromMemory = true;
                 var midiFile = MidiFile.Read(filePath, settings);
                 MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
             }
@@ -1653,14 +1653,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 //
 
-                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = true;
+                readingSettings.ReaderSettings.ReadFromMemory = true;
 
                 MidiFile inMemoryMidiFile = null;
                 Assert.Throws<TException>(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}'.");
 
                 MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
-                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = false;
+                readingSettings.ReaderSettings.ReadFromMemory = false;
             }
         }
 
@@ -1684,14 +1684,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 //
 
-                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = true;
+                readingSettings.ReaderSettings.ReadFromMemory = true;
 
                 MidiFile inMemoryMidiFile = null;
                 Assert.DoesNotThrow(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception thrown for file '{filePath}'.");
 
                 MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
-                readingSettings.ReaderSettings.PutDataInMemoryBeforeReading = false;
+                readingSettings.ReaderSettings.ReadFromMemory = false;
             }
         }
 

@@ -113,6 +113,9 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Gets common CSV settings.
+        /// </summary>
         public CsvSettings CsvSettings { get; } = new CsvSettings();
 
         #endregion

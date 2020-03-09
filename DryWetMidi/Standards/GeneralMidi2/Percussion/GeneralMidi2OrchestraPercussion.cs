@@ -1,5 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Standards
 {
+    /// <summary>
+    /// General MIDI Level 2 'Orchestra' percussion.
+    /// </summary>
     public enum GeneralMidi2OrchestraPercussion : byte
     {
         /// <summary>

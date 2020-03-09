@@ -338,6 +338,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MidiFile(notes.ToTrackChunk());
         }
 
+        /// <summary>
+        /// Returns <see cref="MusicTheory.Note"/> corresponding to the specified <see cref="Note"/>.
+        /// </summary>
+        /// <param name="note"><see cref="Note"/> to get music theory note from.</param>
+        /// <returns><see cref="MusicTheory.Note"/> corresponding to the <paramref name="note"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
         public static MusicTheory.Note GetMusicTheoryNote(this Note note)
         {
             ThrowIfArgument.IsNull(nameof(note), note);

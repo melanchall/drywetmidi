@@ -4,6 +4,9 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
+    /// <summary>
+    /// Provides methods to convert bytes to an instance of the <see cref="MidiEvent"/>.
+    /// </summary>
     public sealed class BytesToMidiEventConverter : IDisposable
     {
         #region Fields
@@ -17,6 +20,12 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BytesToMidiEventConverter"/> with the specified
+        /// initial capacity of internal buffer.
+        /// </summary>
+        /// <param name="capacity">Initial capacity of the internal buffer.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="capacity"/> is negative.</exception>
         public BytesToMidiEventConverter(int capacity)
         {
             ThrowIfArgument.IsNegative(nameof(capacity), capacity, "Capacity is negative.");
@@ -25,6 +34,9 @@ namespace Melanchall.DryWetMidi.Core
             _midiReader = new MidiReader(_dataBytesStream, new ReaderSettings());
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BytesToMidiEventConverter"/>.
+        /// </summary>
         public BytesToMidiEventConverter()
             : this(0)
         {
@@ -34,12 +46,23 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
+        /// <summary>
+        /// Gets settings according to which MIDI data should be read from bytes.
+        /// </summary>
         public ReadingSettings ReadingSettings { get; } = new ReadingSettings();
 
         #endregion
 
         #region Methods
 
+        // TODO: improve performance
+        /// <summary>
+        /// Converts the specified status byte and data bytes to an instance of the <see cref="MidiEvent"/>.
+        /// </summary>
+        /// <param name="statusByte">The status byte of MIDI event.</param>
+        /// <param name="dataBytes">Data bytes of MIDI event (bytes except status byte). Can be null
+        /// if MIDI event has no data bytes.</param>
+        /// <returns><see cref="MidiEvent"/> read from <paramref name="statusByte"/> and <paramref name="dataBytes"/>.</returns>
         public MidiEvent Convert(byte statusByte, byte[] dataBytes)
         {
             _dataBytesStream.Seek(0, SeekOrigin.Begin);
@@ -51,6 +74,14 @@ namespace Melanchall.DryWetMidi.Core
             return eventReader.Read(_midiReader, ReadingSettings, statusByte);
         }
 
+        /// <summary>
+        /// Converts the specified bytes to an instance of the <see cref="MidiEvent"/>. First byte is
+        /// the status byte of MIDI event.
+        /// </summary>
+        /// <param name="bytes">Bytes representing a MIDI event.</param>
+        /// <returns><see cref="MidiEvent"/> read from <paramref name="bytes"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
         public MidiEvent Convert(byte[] bytes)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
@@ -59,6 +90,18 @@ namespace Melanchall.DryWetMidi.Core
             return Convert(bytes, 0, bytes.Length);
         }
 
+        /// <summary>
+        /// Converts sub-array of the specified bytes to an instance of the <see cref="MidiEvent"/>.
+        /// </summary>
+        /// <param name="bytes">Bytes to take sub-array from.</param>
+        /// <param name="offset">Offset of sub-array to read MIDI event from.</param>
+        /// <param name="length">Length of sub-array to read MIDI event from.</param>
+        /// <returns><see cref="MidiEvent"/> read from <paramref name="bytes"/> starting from
+        /// <paramref name="offset"/> and taking <paramref name="length"/> of bytes.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> is out of range. -or-
+        /// <paramref name="length"/> is out of range.</exception>
         public MidiEvent Convert(byte[] bytes, int offset, int length)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);

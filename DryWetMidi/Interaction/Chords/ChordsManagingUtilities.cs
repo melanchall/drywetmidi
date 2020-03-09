@@ -416,6 +416,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MidiFile(chords.ToTrackChunk());
         }
 
+        /// <summary>
+        /// Returns <see cref="MusicTheory.Chord"/> containing notes of the specified <see cref="Chord"/>.
+        /// </summary>
+        /// <param name="chord"><see cref="Chord"/> to get music theory chord from.</param>
+        /// <returns><see cref="MusicTheory.Chord"/> containing notes of the <paramref name="chord"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
         public static MusicTheory.Chord GetMusicTheoryChord(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);

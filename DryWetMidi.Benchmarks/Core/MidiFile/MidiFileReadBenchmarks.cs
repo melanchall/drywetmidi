@@ -39,10 +39,10 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             }
 
             [Benchmark]
-            public void Read_BufferEntireDataBeforeReading()
+            public void Read_ReadFromMemory()
             {
                 var settings = new ReadingSettings();
-                settings.ReaderSettings.PutDataInMemoryBeforeReading = true;
+                settings.ReaderSettings.ReadFromMemory = true;
                 MidiFileReadBenchmarks.Read(FileFormat, FileSize, settings);
             }
         }
