@@ -1385,15 +1385,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void CheckValidFilesAreNotEqualToAnother()
         {
             var filesPaths = TestFilesProvider.GetValidFilesPaths().ToArray();
-            var random = new Random();
 
-            foreach (var filePath in filesPaths)
+            for (var i = 0; i < filesPaths.Length; i++)
             {
-                var midiFile1 = MidiFile.Read(filePath);
+                var iFilePath = filesPaths[i];
+                var iMidiFile = MidiFile.Read(iFilePath);
 
-                var filePath2 = filesPaths.Where(p => p != filePath).ToArray()[random.Next(filesPaths.Length - 1)];
-                var midiFile2 = MidiFile.Read(filePath2);
-                MidiAsserts.AreFilesNotEqual(midiFile1, midiFile2, true, $"File '{filePath}' equals to another one '{filePath2}'.");
+                for (var j = i + 1; j < filesPaths.Length; j++)
+                {
+                    var jFilePath = filesPaths[j];
+                    var jMidiFile = MidiFile.Read(jFilePath);
+
+                    MidiAsserts.AreFilesNotEqual(iMidiFile, jMidiFile, true, $"File '{iFilePath}' equals to another one '{jFilePath}'.");
+                }
             }
         }
 
