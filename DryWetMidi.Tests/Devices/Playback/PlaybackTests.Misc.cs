@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Interaction;
-using Melanchall.DryWetMidi.Tests.Utilities;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
@@ -214,7 +214,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                     lock (context.ReceivedEventsLockObject)
                     {
-                        var groupedReceivedEvents = context.ReceivedEvents.GroupBy(e => e.Event, new MidiEventEquality.EqualityComparer(false)).Take(eventsToSend.Length).ToArray();
+                        var groupedReceivedEvents = context.ReceivedEvents.GroupBy(e => e.Event, new MidiEventEqualityComparer(new MidiEventEqualityCheckSettings { CompareDeltaTimes = false })).Take(eventsToSend.Length).ToArray();
                         Assert.IsTrue(groupedReceivedEvents.All(g => g.Count() >= repetitionsNumber), $"Events are not repeated {repetitionsNumber} times.");
                     }
                 });

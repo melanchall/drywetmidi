@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Occurs when new tick generated.
         /// </summary>
-        public event EventHandler<TickedEventArgs> Ticked;
+        public event EventHandler Ticked;
 
         #endregion
 
@@ -205,7 +205,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnTicked()
         {
-            Ticked?.Invoke(this, new TickedEventArgs(CurrentTime));
+            Ticked?.Invoke(this, EventArgs.Empty);
         }
 
         private void EnsureIsNotDisposed()

@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddPatternAction : IPatternAction
+    internal sealed class AddPatternAction : PatternAction
     {
         #region Constructor
 
@@ -17,14 +17,19 @@
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
             context.SaveTime(time);
 
             var newContext = new PatternContext(context.TempoMap, context.Channel);
             return Pattern.InvokeActions(time, newContext);
+        }
+
+        public override PatternAction Clone()
+        {
+            return new AddPatternAction(Pattern.Clone());
         }
 
         #endregion

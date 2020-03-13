@@ -6,11 +6,18 @@ trigger:
     - develop
   paths:
     exclude:
-    - DryWetMidi.Benchmarks
-    - DryWetMidi.Tests
-    - Resources/CI/build-develop-win.yaml
+    - DryWetMidi.Benchmarks/
+    - DryWetMidi.Tests/
+    - Resources/CI/win-test-netframework-core.yaml
+    - Resources/CI/win-test-netframework-devices.yaml
+    - Resources/CI/win-test-netcore-core.yaml
+    - Resources/CI/win-test-netcore-devices.yaml
+    - Resources/CI/mac-test-netcore-core.yaml
+    - Resources/CI/lin-test-netcore-core.yaml
     - Resources/CI/benchmarks-develop-win.yaml
     - Resources/CI/build-artifacts-library.yaml
+    - Resources/CI/check-readme-links.yaml
+    - .github/
 
 pool:
   vmImage: 'windows-latest'
@@ -19,25 +26,16 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '5.0.0'
+  version: '5.1.0'
 
 name: $(TeamProject)_$(SourceBranchName)_BuildDocs_$(version)$(Rev:.r)
 
 steps:
-- task: NuGetToolInstaller@1
-  displayName: Install NuGet tools
-
-- task: NuGetCommand@2
-  displayName: Restore packages
-  inputs:
-    restoreSolution: '$(solution)'
-
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   displayName: Build solution
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: PowerShell@2
   displayName: Setup docs pages
@@ -76,3 +74,24 @@ steps:
   inputs:
     targetPath: Docs\latest-release-notes.md
     artifact: LatestReleaseNotes
+
+- task: PowerShell@2
+  displayName: Prepare release notes for midi.org
+  inputs:
+    targetType: 'inline'
+    script: |
+      $content = Get-Content Docs\latest-release-notes.md
+      $content = $content `
+        -Replace '\[`?(.+?)`?\]\(.+?\)', '[i]$1[/i]' `
+        -Replace '# (.+?)$', '[u]$1[/u]' `
+        -Replace '\*\*(.+?)\*\*', '[b]$1[/b]' `
+        -Replace '`(.+?)`', '[i]$1[/i]' `
+        -Replace '^\*', '[*]' `
+        -Replace '^  \*', '  -'
+      Set-Content -Path "Docs\latest-release-notes-midi-org.txt" -Value $content
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'LatestReleaseNotesMidiOrg' artifact
+  inputs:
+    targetPath: Docs\latest-release-notes-midi-org.txt
+    artifact: LatestReleaseNotesMidiOrg

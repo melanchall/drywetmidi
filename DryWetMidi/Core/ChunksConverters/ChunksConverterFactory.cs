@@ -1,7 +1,6 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,17 +10,6 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     internal static class ChunksConverterFactory
     {
-        #region Fields
-
-        private static readonly Dictionary<MidiFileFormat, IChunksConverter> _converters = new Dictionary<MidiFileFormat, IChunksConverter>
-        {
-            [MidiFileFormat.SingleTrack] = new SingleTrackChunksConverter(),
-            [MidiFileFormat.MultiTrack] = new MultiTrackChunksConverter(),
-            [MidiFileFormat.MultiSequence] = new MultiSequenceChunksConverter()
-        };
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -36,9 +24,15 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
-            IChunksConverter converter;
-            if (_converters.TryGetValue(format, out converter))
-                return converter;
+            switch (format)
+            {
+                case MidiFileFormat.SingleTrack:
+                    return new SingleTrackChunksConverter();
+                case MidiFileFormat.MultiTrack:
+                    return new MultiTrackChunksConverter();
+                case MidiFileFormat.MultiSequence:
+                    return new MultiSequenceChunksConverter();
+            }
 
             throw new NotSupportedException($"Converter for the {format} format is not supported.");
         }

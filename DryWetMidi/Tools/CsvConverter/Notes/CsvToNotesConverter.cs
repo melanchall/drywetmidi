@@ -11,9 +11,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         public static IEnumerable<Note> ConvertToNotes(Stream stream, TempoMap tempoMap, NoteCsvConversionSettings settings)
         {
-            using (var csvReader = new CsvReader(stream, settings.CsvDelimiter))
+            using (var csvReader = new CsvReader(stream, settings.CsvSettings))
             {
-                CsvRecord record = null;
+                CsvRecord record;
 
                 while ((record = csvReader.ReadRecord()) != null)
                 {

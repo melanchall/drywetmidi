@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -11,7 +12,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="value">Value to check.</param>
         /// <returns>true if the number is a power of 2, false - otherwise.</returns>
-        internal static bool IsPowerOfTwo(int value)
+        public static bool IsPowerOfTwo(int value)
         {
             return value != 0 && (value & (value - 1)) == 0;
         }
@@ -24,7 +25,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <returns>Least common multiple of <paramref name="a"/> and <paramref name="b"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="a"/> is zero or negative. -or-
         /// <paramref name="b"/> is zero or negative.</exception>
-        internal static long LeastCommonMultiple(long a, long b)
+        public static long LeastCommonMultiple(long a, long b)
         {
             ThrowIfArgument.IsNonpositive(nameof(a), a, "First number is zero or negative.");
             ThrowIfArgument.IsNonpositive(nameof(b), b, "Second number is zero or negative.");
@@ -51,7 +52,7 @@ namespace Melanchall.DryWetMidi.Common
             return n1 * n2;
         }
 
-        internal static long GreatestCommonDivisor(long a, long b)
+        public static long GreatestCommonDivisor(long a, long b)
         {
             long remainder;
 
@@ -65,25 +66,61 @@ namespace Melanchall.DryWetMidi.Common
             return a;
         }
 
-        internal static Tuple<long, long> SolveDiophantineEquation(long a, long b)
+        public static Tuple<long, long> SolveDiophantineEquation(long a, long b)
         {
             var greatestCommonDivisor = GreatestCommonDivisor(a, b);
             return Tuple.Create(b / greatestCommonDivisor, -a / greatestCommonDivisor);
         }
 
-        internal static double Round(double value)
+        public static double Round(double value)
         {
             return Math.Round(value, MidpointRounding.AwayFromZero);
         }
 
-        internal static double Round(double value, int digits)
+        public static double Round(double value, int digits)
         {
             return Math.Round(value, digits, MidpointRounding.AwayFromZero);
         }
 
-        internal static long RoundToLong(double value)
+        public static long RoundToLong(double value)
         {
             return (long)Round(value);
+        }
+
+        public static IEnumerable<T[]> GetPermutations<T>(T[] objects)
+        {
+            return GetPermutations(objects, objects.Length);
+        }
+
+        private static IEnumerable<T[]> GetPermutations<T>(T[] objects, int k)
+        {
+            if (k == 1)
+                yield return objects;
+            else
+            {
+                foreach (var permutation in GetPermutations(objects, k - 1))
+                {
+                    yield return permutation;
+                }
+
+                for (var i = 0; i < k - 1; i++)
+                {
+                    var firstIndex = k % 2 == 0 ? i : 0;
+                    var secondIndex = k - 1;
+
+                    if (objects[firstIndex].Equals(objects[secondIndex]))
+                        break;
+
+                    var firstValue = objects[firstIndex];
+                    objects[firstIndex] = objects[secondIndex];
+                    objects[secondIndex] = firstValue;
+
+                    foreach (var permutation in GetPermutations(objects, k - 1))
+                    {
+                        yield return permutation;
+                    }
+                }
+            }
         }
 
         #endregion

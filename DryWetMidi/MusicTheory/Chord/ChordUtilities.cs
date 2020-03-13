@@ -24,21 +24,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
-            var lastNoteNumber = (int)chord.NotesNames.First();
-            var lastInterval = SevenBitNumber.MinValue;
-
-            var result = new List<Interval>();
-
-            foreach (var interval in GetIntervals(chord))
-            {
-                if (lastInterval + interval > SevenBitNumber.MaxValue)
-                    throw new InvalidOperationException($"Some interval(s) are greater than {SevenBitNumber.MaxValue}.");
-
-                lastInterval += interval;
-                result.Add(Interval.GetUp(lastInterval));
-            }
-
-            return result;
+            return GetIntervalsFromRootNote(chord.NotesNames);
         }
 
         /// <summary>
@@ -90,11 +76,50 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return result;
         }
 
+        /// <summary>
+        /// Gets the collection of chord's inversions.
+        /// </summary>
+        /// <returns>Collection of chord's inversions.</returns>
+        public static IEnumerable<Chord> GetInversions(this Chord chord)
+        {
+            ThrowIfArgument.IsNull(nameof(chord), chord);
+
+            foreach (var permutation in MathUtilities.GetPermutations(chord.NotesNames.ToArray()))
+            {
+                if (permutation[0] == chord.RootNoteName)
+                    continue;
+
+                yield return new Chord(permutation.ToArray());
+            }
+        }
+
+        internal static IEnumerable<Interval> GetIntervalsFromRootNote(ICollection<NoteName> notesNames)
+        {
+            var lastInterval = SevenBitNumber.MinValue;
+            var result = new List<Interval>();
+
+            foreach (var interval in GetIntervals(notesNames))
+            {
+                if (lastInterval + interval > SevenBitNumber.MaxValue)
+                    throw new InvalidOperationException($"Some interval(s) are greater than {SevenBitNumber.MaxValue}.");
+
+                lastInterval += interval;
+                result.Add(Interval.GetUp(lastInterval));
+            }
+
+            return result;
+        }
+
         private static IEnumerable<SevenBitNumber> GetIntervals(Chord chord)
         {
-            var lastNoteNumber = (int)chord.NotesNames.First();
+            return GetIntervals(chord.NotesNames);
+        }
 
-            foreach (var noteName in chord.NotesNames.Skip(1))
+        private static IEnumerable<SevenBitNumber> GetIntervals(ICollection<NoteName> notesNames)
+        {
+            var lastNoteNumber = (int)notesNames.First();
+
+            foreach (var noteName in notesNames.Skip(1))
             {
                 var offset = (int)noteName - lastNoteNumber;
                 if (offset <= 0)

@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddAnchorAction : IPatternAction
+    internal sealed class AddAnchorAction : PatternAction
     {
         #region Constructor
 
@@ -22,12 +22,19 @@
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
-            context.AnchorTime(Anchor, time);
+            if (State == PatternActionState.Enabled)
+                context.AnchorTime(Anchor, time);
+
             return PatternActionResult.DoNothing;
+        }
+
+        public override PatternAction Clone()
+        {
+            return new AddAnchorAction(Anchor);
         }
 
         #endregion

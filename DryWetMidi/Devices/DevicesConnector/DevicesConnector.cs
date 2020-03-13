@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="ArgumentNullException"><paramref name="inputDevice"/> is null. -or-
         /// <paramref name="outputDevices"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="outputDevices"/> contains null.</exception>
-        public DevicesConnector(InputDevice inputDevice, params OutputDevice[] outputDevices)
+        public DevicesConnector(InputDevice inputDevice, params IOutputDevice[] outputDevices)
         {
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
             ThrowIfArgument.IsNull(nameof(outputDevices), outputDevices);
@@ -58,14 +58,14 @@ namespace Melanchall.DryWetMidi.Devices
         #region Properties
 
         /// <summary>
-        /// Gets an input MIDI device to connect to <see cref="OutputDevice"/>.
+        /// Gets an input MIDI device to connect to <see cref="OutputDevices"/>.
         /// </summary>
         public InputDevice InputDevice { get; }
 
         /// <summary>
         /// Gets output MIDI devices to connect <see cref="InputDevice"/> to.
         /// </summary>
-        public IReadOnlyCollection<OutputDevice> OutputDevices { get; }
+        public IReadOnlyCollection<IOutputDevice> OutputDevices { get; }
 
         #endregion
 
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Disconnects <see cref="InputDevice"/> from <see cref="OutputDevice"/>.
+        /// Disconnects <see cref="InputDevice"/> from <see cref="OutputDevices"/>.
         /// </summary>
         public void Disconnect()
         {

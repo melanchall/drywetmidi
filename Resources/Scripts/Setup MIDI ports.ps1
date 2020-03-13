@@ -9,24 +9,35 @@ Write-Host "Installing loopMIDI..."
 Start-Process ../Tools/loopMIDISetup.exe -NoNewWindow -Wait -ArgumentList "/quiet"
 $runPath = (Get-ItemProperty HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -Name "loopMIDI").loopMIDI
 
+Write-Host "Waiting 5 seconds before running loopMIDI..."
+sleep 5
+
 Write-Host "Running loopMIDI..."
 & $runPath
-sleep 1
+sleep 3
 
 Write-Host "Destroying existing MIDI ports..."
 $wshell.AppActivate('loopMIDI') | Out-Null
-sleep 1
-$wshell.SendKeys('+{TAB}+{TAB}{ENTER}{ENTER}')
+sleep 3
+$wshell.SendKeys('+{TAB}+{TAB}{ENTER}{ENTER}{ENTER}')
 Stop-Process -Name "loopMIDI"
+
+Write-Host "Waiting 5 seconds before rerunning loopMIDI..."
+sleep 5
 
 Write-Host "Rerunning loopMIDI..."
 & $runPath
-sleep 1
+sleep 3
 
 Write-Host "Creating MIDI ports..."
 $wshell.AppActivate('loopMIDI') | Out-Null
-sleep 1
+sleep 3
 $wshell.SendKeys('{TAB}MIDI A{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}MIDI B{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}MIDI C{TAB}{TAB}{TAB}{ENTER}')
+sleep 3
+
+Write-Host "Turning off feedback detection..."
+$wshell.SendKeys('{TAB}{RIGHT}{TAB}{TAB}{TAB} ')
+sleep 3
 
 Write-Host "Switching back to '$currentDirectory'..."
 cd $currentDirectory

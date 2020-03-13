@@ -47,7 +47,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <summary>
         /// Gets the length of the note.
         /// </summary>
-        public ITimeSpan Length { get; set; }
+        public ITimeSpan Length { get; }
 
         #endregion
 

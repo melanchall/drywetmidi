@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -13,13 +14,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private static readonly Dictionary<ChordQuality, Interval[]> IntervalsByQuality = new Dictionary<ChordQuality, Interval[]>
+        private static readonly Dictionary<ChordQuality, IntervalDefinition[]> IntervalsByQuality = new Dictionary<ChordQuality, IntervalDefinition[]>
         {
-            [ChordQuality.Major] = new[] { Interval.Get(IntervalQuality.Major, 3), Interval.Get(IntervalQuality.Perfect, 5) },
-            [ChordQuality.Minor] = new[] { Interval.Get(IntervalQuality.Minor, 3), Interval.Get(IntervalQuality.Perfect, 5) },
-            [ChordQuality.Augmented] = new[] { Interval.Get(IntervalQuality.Major, 3), Interval.Get(IntervalQuality.Augmented, 5) },
-            [ChordQuality.Diminished] = new[] { Interval.Get(IntervalQuality.Minor, 3), Interval.Get(IntervalQuality.Diminished, 5) }
+            [ChordQuality.Major] = new[] { new IntervalDefinition(3, IntervalQuality.Major), new IntervalDefinition(5, IntervalQuality.Perfect) },
+            [ChordQuality.Minor] = new[] { new IntervalDefinition(3, IntervalQuality.Minor), new IntervalDefinition(5, IntervalQuality.Perfect) },
+            [ChordQuality.Augmented] = new[] { new IntervalDefinition(3, IntervalQuality.Major), new IntervalDefinition(5, IntervalQuality.Augmented) },
+            [ChordQuality.Diminished] = new[] { new IntervalDefinition(3, IntervalQuality.Minor), new IntervalDefinition(5, IntervalQuality.Diminished) }
         };
+
+        #endregion
+
+        #region Fields
+
+        private IReadOnlyCollection<string> _chordNames;
 
         #endregion
 
@@ -106,20 +113,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
         #region Methods
 
         /// <summary>
-        /// Gets the collection of chord's inversions.
+        /// Returns collection of names of the current <see cref="Chord"/>.
         /// </summary>
-        /// <returns>Collection of chord's inversions.</returns>
-        public IEnumerable<Chord> GetInversions()
+        /// <returns>Collection of names of the current <see cref="Chord"/>.</returns>
+        public IReadOnlyCollection<string> GetNames()
         {
-            var notesNames = new Queue<NoteName>(NotesNames);
+            if (_chordNames != null)
+                return _chordNames;
 
-            for (var i = 1; i < NotesNames.Count; i++)
-            {
-                var noteName = notesNames.Dequeue();
-                notesNames.Enqueue(noteName);
-
-                yield return new Chord(notesNames.ToArray());
-            }
+            var names = ChordsNamesTable.GetChordNames(NotesNames.ToArray());
+            return _chordNames = new ReadOnlyCollection<string>(names);
         }
 
         /// <summary>
@@ -168,7 +171,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsNull(nameof(intervalsFromRoot), intervalsFromRoot);
 
             var intervals = IntervalsByQuality[chordQuality];
-            return new Chord(rootNoteName, intervals.Concat(intervalsFromRoot));
+            return new Chord(rootNoteName, intervals.Select(i => Interval.FromDefinition(i)).Concat(intervalsFromRoot));
         }
 
         #endregion

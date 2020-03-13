@@ -59,6 +59,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentOutOfRangeException(parameterName, value, message);
         }
 
+        internal static void IsOutOfRange(string parameterName, int value, string message, params int[] values)
+        {
+            if (Array.IndexOf(values, value) < 0)
+                throw new ArgumentOutOfRangeException(parameterName, value, message);
+        }
+
         internal static void DoesntSatisfyCondition(string parameterName, int value, Predicate<int> condition, string message)
         {
             if (!condition(value))
@@ -151,6 +157,12 @@ namespace Melanchall.DryWetMidi.Common
                 if (!Enum.IsDefined(typeof(TEnum), value))
                     throw new InvalidEnumArgumentException(parameterName, Convert.ToInt32(value), typeof(TEnum));
             }
+        }
+
+        internal static void StartsWithInvalidValue<T>(string parameterName, IEnumerable<T> collection, T invalidValue, string message)
+        {
+            if (collection != null && collection.First().Equals(invalidValue))
+                throw new ArgumentException(message, parameterName);
         }
 
         #endregion

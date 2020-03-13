@@ -6,13 +6,20 @@ trigger:
     - develop
   paths:
     exclude:
-    - DryWetMidi.Benchmarks
-    - DryWetMidi.Tests
-    - Docs/*
+    - DryWetMidi.Benchmarks/
+    - DryWetMidi.Tests/
+    - Docs/
     - README.md
-    - Resources/CI/build-develop-win.yaml
+    - Resources/CI/win-test-netframework-core.yaml
+    - Resources/CI/win-test-netframework-devices.yaml
+    - Resources/CI/win-test-netcore-core.yaml
+    - Resources/CI/win-test-netcore-devices.yaml
+    - Resources/CI/mac-test-netcore-core.yaml
+    - Resources/CI/lin-test-netcore-core.yaml
     - Resources/CI/benchmarks-develop-win.yaml
     - Resources/CI/build-artifacts-docs.yaml
+    - Resources/CI/check-readme-links.yaml
+    - .github/
 
 pool:
   vmImage: 'windows-latest'
@@ -21,32 +28,27 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '5.0.0'
+  version: '5.1.0'
 
 name: $(TeamProject)_$(SourceBranchName)_BuildLibrary_$(version)$(Rev:.r)
 
 steps:
-- task: NuGetToolInstaller@1
-  displayName: Install NuGet tools
-
-- task: NuGetCommand@2
-  displayName: Restore packages
-  inputs:
-    restoreSolution: '$(solution)'
-
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   displayName: Build solution
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    projects: |
+      DryWetMidi/Melanchall.DryWetMidi.csproj
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Create NuGet package
   inputs: 
     command: 'pack'
-    projects: '**/Melanchall.DryWetMidi.csproj'
+    projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
     outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+    packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+    nobuild: true
 
 - task: PublishPipelineArtifact@1
   displayName: Publish 'NuGetPackage' artifact

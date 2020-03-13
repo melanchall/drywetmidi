@@ -1,6 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -30,11 +29,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="MidiEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         public MidiEvent(MidiEventType eventType)
         {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(eventType), eventType);
-
             EventType = eventType;
         }
 
@@ -109,6 +105,49 @@ namespace Melanchall.DryWetMidi.Core
             var midiEvent = CloneEvent();
             midiEvent.DeltaTime = DeltaTime;
             return midiEvent;
+        }
+
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiEvent"/> objects have the same content.
+        /// </summary>
+        /// <param name="midiEvent1">The first event to compare, or null.</param>
+        /// <param name="midiEvent2">The second event to compare, or null.</param>
+        /// <returns>true if the <paramref name="midiEvent1"/> is equal to the <paramref name="midiEvent2"/>;
+        /// otherwise, false.</returns>
+        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2)
+        {
+            string message;
+            return Equals(midiEvent1, midiEvent2, out message);
+        }
+
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiEvent"/> objects have the same content.
+        /// </summary>
+        /// <param name="midiEvent1">The first event to compare, or null.</param>
+        /// <param name="midiEvent2">The second event to compare, or null.</param>
+        /// <param name="message">Message containing information about what exactly is different in
+        /// <paramref name="midiEvent1"/> and <paramref name="midiEvent2"/>.</param>
+        /// <returns>true if the <paramref name="midiEvent1"/> is equal to the <paramref name="midiEvent2"/>;
+        /// otherwise, false.</returns>
+        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, out string message)
+        {
+            return Equals(midiEvent1, midiEvent2, null, out message);
+        }
+
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiEvent"/> objects have the same content using
+        /// the specified comparison settings.
+        /// </summary>
+        /// <param name="midiEvent1">The first event to compare, or null.</param>
+        /// <param name="midiEvent2">The second event to compare, or null.</param>
+        /// <param name="settings">Settings according to which events should be compared.</param>
+        /// <param name="message">Message containing information about what exactly is different in
+        /// <paramref name="midiEvent1"/> and <paramref name="midiEvent2"/>.</param>
+        /// <returns>true if the <paramref name="midiEvent1"/> is equal to the <paramref name="midiEvent2"/>;
+        /// otherwise, false.</returns>
+        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, MidiEventEqualityCheckSettings settings, out string message)
+        {
+            return MidiEventEquality.Equals(midiEvent1, midiEvent2, settings ?? new MidiEventEqualityCheckSettings(), out message);
         }
 
         #endregion

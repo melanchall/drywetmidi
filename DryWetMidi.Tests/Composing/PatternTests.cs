@@ -33,7 +33,18 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var patternClone = pattern.Clone();
 
             Assert.AreEqual(10, patternClone.Actions.Count(), "Actions count is invalid.");
-            CollectionAssert.AreEqual(pattern.Actions, patternClone.Actions, "Pattern clone is invalid.");
+
+            var actions = pattern.Actions.ToArray();
+            var actionsClone = patternClone.Actions.ToArray();
+
+            for (var i = 0; i < actions.Length; i++)
+            {
+                var action = actions[i];
+                var actionClone = actionsClone[i];
+
+                Assert.AreEqual(action.GetType(), actionClone.GetType(), "Action type is invalid.");
+                Assert.AreNotSame(action, actionClone, "Actions are the same object.");
+            }
         }
 
         #endregion

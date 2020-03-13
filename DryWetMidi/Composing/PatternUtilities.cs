@@ -12,6 +12,13 @@ namespace Melanchall.DryWetMidi.Composing
     /// </summary>
     public static class PatternUtilities
     {
+        #region Constants
+
+        private static readonly NoteSelection AllNotesSelection = (i, d) => true;
+        private static readonly ChordSelection AllChordsSelection = (i, d) => true;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -29,22 +36,29 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
 
-            return new Pattern(pattern.Actions.Select(a =>
-            {
-                var addNoteAction = a as AddNoteAction;
-                if (addNoteAction != null)
-                {
-                    var noteDescriptor = noteTransformation(addNoteAction.NoteDescriptor);
-                    return new AddNoteAction(noteDescriptor);
-                }
+            return TransformNotes(pattern, AllNotesSelection, noteTransformation, recursive);
+        }
 
-                var addPatternAction = a as AddPatternAction;
-                if (addPatternAction != null && recursive)
-                    return new AddPatternAction(addPatternAction.Pattern.TransformNotes(noteTransformation));
+        /// <summary>
+        /// Creates new <see cref="Pattern"/> by transforming notes in the specified pattern using predicate
+        /// to select notes to transform.
+        /// </summary>
+        /// <param name="pattern">Pattern to transform notes of.</param>
+        /// <param name="noteSelection">Predicate to select notes to transform.</param>
+        /// <param name="noteTransformation">Transformation to apply to notes of the <paramref name="pattern"/>.</param>
+        /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
+        /// default value is true.</param>
+        /// <returns><see cref="Pattern"/> that created by transforming notes of the <paramref name="pattern"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
+        /// <paramref name="noteSelection"/> is null. -or- <paramref name="noteTransformation"/> is null.</exception>
+        public static Pattern TransformNotes(this Pattern pattern, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(noteSelection), noteSelection);
+            ThrowIfArgument.IsNull(nameof(noteTransformation), noteTransformation);
 
-                return a;
-            })
-            .ToList());
+            var noteIndexWrapper = new ObjectWrapper<int>();
+            return TransformNotes(pattern, noteIndexWrapper, noteSelection, noteTransformation, recursive);
         }
 
         /// <summary>
@@ -62,22 +76,29 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(chordTransformation), chordTransformation);
 
-            return new Pattern(pattern.Actions.Select(a =>
-            {
-                var addChordAction = a as AddChordAction;
-                if (addChordAction != null)
-                {
-                    var chordDescriptor = chordTransformation(addChordAction.ChordDescriptor);
-                    return new AddChordAction(chordDescriptor);
-                }
+            return TransformChords(pattern, AllChordsSelection, chordTransformation, recursive);
+        }
 
-                var addPatternAction = a as AddPatternAction;
-                if (addPatternAction != null && recursive)
-                    return new AddPatternAction(addPatternAction.Pattern.TransformChords(chordTransformation));
+        /// <summary>
+        /// Creates new <see cref="Pattern"/> by transforming chords in the specified pattern using predicate
+        /// to select chords to transform..
+        /// </summary>
+        /// <param name="pattern">Pattern to transform notes of.</param>
+        /// <param name="chordSelection">Predicate to select chords to transform.</param>
+        /// <param name="chordTransformation">Transformation to apply to chords of the <paramref name="pattern"/>.</param>
+        /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
+        /// default value is true.</param>
+        /// <returns><see cref="Pattern"/> that created by transforming chords of the <paramref name="pattern"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
+        /// <paramref name="chordSelection"/> is null. -or- <paramref name="chordTransformation"/> is null.</exception>
+        public static Pattern TransformChords(this Pattern pattern, ChordSelection chordSelection, ChordTransformation chordTransformation, bool recursive = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(chordSelection), chordSelection);
+            ThrowIfArgument.IsNull(nameof(chordTransformation), chordTransformation);
 
-                return a;
-            })
-            .ToList());
+            var chordIndexWrapper = new ObjectWrapper<int>();
+            return TransformChords(pattern, chordIndexWrapper, chordSelection, chordTransformation, recursive);
         }
 
         /// <summary>
@@ -205,9 +226,51 @@ namespace Melanchall.DryWetMidi.Composing
             return patternBuilder.Build();
         }
 
-        private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<IPatternAction> actionSelector, bool removeEmptyPatterns)
+        /// <summary>
+        /// Sets the state of notes within the specified pattern.
+        /// </summary>
+        /// <param name="pattern">Pattern to set notes state within.</param>
+        /// <param name="noteSelection">Predicate to select notes to set state.</param>
+        /// <param name="state">State of notes selected with <paramref name="noteSelection"/>.</param>
+        /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
+        /// default value is true.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
+        /// <paramref name="noteSelection"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="state"/> specified an invalid value.</exception>
+        public static void SetNotesState(this Pattern pattern, NoteSelection noteSelection, PatternActionState state, bool recursive = true)
         {
-            var part = new List<IPatternAction>();
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(noteSelection), noteSelection);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(state), state);
+
+            var noteIndexWrapper = new ObjectWrapper<int>();
+            SetNotesState(pattern, noteIndexWrapper, noteSelection, state, recursive);
+        }
+
+        /// <summary>
+        /// Sets the state of chords within the specified pattern.
+        /// </summary>
+        /// <param name="pattern">Pattern to set chords state within.</param>
+        /// <param name="chordSelection">Predicate to select chords to set state.</param>
+        /// <param name="state">State of chords selected with <paramref name="chordSelection"/>.</param>
+        /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
+        /// default value is true.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
+        /// <paramref name="chordSelection"/> is null.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="state"/> specified an invalid value.</exception>
+        public static void SetChordsState(this Pattern pattern, ChordSelection chordSelection, PatternActionState state, bool recursive = true)
+        {
+            ThrowIfArgument.IsNull(nameof(pattern), pattern);
+            ThrowIfArgument.IsNull(nameof(chordSelection), chordSelection);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(state), state);
+
+            var chordIndexWrapper = new ObjectWrapper<int>();
+            SetChordsState(pattern, chordIndexWrapper, chordSelection, state, recursive);
+        }
+
+        private static IEnumerable<Pattern> SplitAtActions(Pattern pattern, Predicate<PatternAction> actionSelector, bool removeEmptyPatterns)
+        {
+            var part = new List<PatternAction>();
 
             foreach (var action in pattern.Actions)
             {
@@ -220,11 +283,79 @@ namespace Melanchall.DryWetMidi.Composing
                 if (part.Any() || !removeEmptyPatterns)
                     yield return new Pattern(part.AsReadOnly());
 
-                part = new List<IPatternAction>();
+                part = new List<PatternAction>();
             }
 
             if (part.Any())
                 yield return new Pattern(part.AsReadOnly());
+        }
+
+        private static Pattern TransformNotes(Pattern pattern, ObjectWrapper<int> noteIndexWrapper, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive)
+        {
+            return new Pattern(pattern.Actions.Select(a =>
+            {
+                var addNoteAction = a as AddNoteAction;
+                if (addNoteAction != null && noteSelection(noteIndexWrapper.Object++, addNoteAction.NoteDescriptor))
+                {
+                    var noteDescriptor = noteTransformation(addNoteAction.NoteDescriptor);
+                    return new AddNoteAction(noteDescriptor);
+                }
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    return new AddPatternAction(TransformNotes(addPatternAction.Pattern, noteIndexWrapper, noteSelection, noteTransformation, recursive));
+
+                return a.Clone();
+            })
+            .ToList());
+        }
+
+        private static Pattern TransformChords(Pattern pattern, ObjectWrapper<int> chordIndexWrapper, ChordSelection chordSelection, ChordTransformation chordTransformation, bool recursive)
+        {
+            return new Pattern(pattern.Actions.Select(a =>
+            {
+                var addChordAction = a as AddChordAction;
+                if (addChordAction != null && chordSelection(chordIndexWrapper.Object++, addChordAction.ChordDescriptor))
+                {
+                    var chordDescriptor = chordTransformation(addChordAction.ChordDescriptor);
+                    return new AddChordAction(chordDescriptor);
+                }
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    return new AddPatternAction(TransformChords(addPatternAction.Pattern, chordIndexWrapper, chordSelection, chordTransformation, recursive));
+
+                return a.Clone();
+            })
+            .ToList());
+        }
+
+        private static void SetNotesState(Pattern pattern, ObjectWrapper<int> noteIndexWrapper, NoteSelection noteSelection, PatternActionState state, bool recursive)
+        {
+            foreach (var a in pattern.Actions)
+            {
+                var addNoteAction = a as AddNoteAction;
+                if (addNoteAction != null && noteSelection(noteIndexWrapper.Object++, addNoteAction.NoteDescriptor))
+                    addNoteAction.State = state;
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    SetNotesState(addPatternAction.Pattern, noteIndexWrapper, noteSelection, state, recursive);
+            }
+        }
+
+        private static void SetChordsState(Pattern pattern, ObjectWrapper<int> chordIndexWrapper, ChordSelection chordSelection, PatternActionState state, bool recursive)
+        {
+            foreach (var a in pattern.Actions)
+            {
+                var addChordAction = a as AddChordAction;
+                if (addChordAction != null && chordSelection(chordIndexWrapper.Object++, addChordAction.ChordDescriptor))
+                    addChordAction.State = state;
+
+                var addPatternAction = a as AddPatternAction;
+                if (addPatternAction != null && recursive)
+                    SetChordsState(addPatternAction.Pattern, chordIndexWrapper, chordSelection, state, recursive);
+            }
         }
 
         #endregion

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,16 +10,8 @@ namespace Melanchall.DryWetMidi.Core
         {
             if (writeStatusByte)
             {
-                var eventType = midiEvent.GetType();
-
-                byte statusByte;
-                if (!StandardEventTypes.Channel.TryGetStatusByte(eventType, out statusByte))
-                    Debug.Fail($"Unable to write the {eventType} event.");
-
-                var channel = ((ChannelEvent)midiEvent).Channel;
-
-                var totalStatusByte = DataTypesUtilities.Combine((FourBitNumber)statusByte, channel);
-                writer.WriteByte(totalStatusByte);
+                var statusByte = GetStatusByte(midiEvent);
+                writer.WriteByte(statusByte);
             }
 
             //
@@ -35,14 +26,35 @@ namespace Melanchall.DryWetMidi.Core
 
         public byte GetStatusByte(MidiEvent midiEvent)
         {
-            var eventType = midiEvent.GetType();
+            byte statusByte = 0;
 
-            byte statusByte;
-            if (!StandardEventTypes.Channel.TryGetStatusByte(eventType, out statusByte))
-                Debug.Fail($"No status byte defined for {eventType}.");
+            switch (midiEvent.EventType)
+            {
+                case MidiEventType.NoteOff:
+                    statusByte = EventStatusBytes.Channel.NoteOff;
+                    break;
+                case MidiEventType.NoteOn:
+                    statusByte = EventStatusBytes.Channel.NoteOn;
+                    break;
+                case MidiEventType.ControlChange:
+                    statusByte = EventStatusBytes.Channel.ControlChange;
+                    break;
+                case MidiEventType.PitchBend:
+                    statusByte = EventStatusBytes.Channel.PitchBend;
+                    break;
+                case MidiEventType.ChannelAftertouch:
+                    statusByte = EventStatusBytes.Channel.ChannelAftertouch;
+                    break;
+                case MidiEventType.ProgramChange:
+                    statusByte = EventStatusBytes.Channel.ProgramChange;
+                    break;
+                case MidiEventType.NoteAftertouch:
+                    statusByte = EventStatusBytes.Channel.NoteAftertouch;
+                    break;
+            }
 
-            return DataTypesUtilities.Combine((FourBitNumber)statusByte,
-                                              ((ChannelEvent)midiEvent).Channel);
+            var channel = ((ChannelEvent)midiEvent).Channel;
+            return DataTypesUtilities.Combine((FourBitNumber)statusByte, channel);
         }
 
         #endregion

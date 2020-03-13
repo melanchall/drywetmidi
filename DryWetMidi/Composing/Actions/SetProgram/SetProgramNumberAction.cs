@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class SetProgramNumberAction : IPatternAction
+    internal sealed class SetProgramNumberAction : PatternAction
     {
         #region Constructor
 
@@ -21,14 +21,22 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
+            if (State != PatternActionState.Enabled)
+                return PatternActionResult.DoNothing;
+
             var programChangeEvent = new ProgramChangeEvent(ProgramNumber) { Channel = context.Channel };
             var timedEvent = new TimedEvent(programChangeEvent, time);
 
             return new PatternActionResult(time, new[] { timedEvent });
+        }
+
+        public override PatternAction Clone()
+        {
+            return new SetProgramNumberAction(ProgramNumber);
         }
 
         #endregion

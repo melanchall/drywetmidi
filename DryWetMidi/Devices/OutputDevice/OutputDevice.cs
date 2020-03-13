@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,12 +11,11 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Represents an output MIDI device.
     /// </summary>
-    public sealed class OutputDevice : MidiDevice
+    public sealed class OutputDevice : MidiDevice, IOutputDevice
     {
         #region Constants
 
         private const int ChannelEventBufferSize = 3;
-        private static readonly byte[] ZeroBuffer = new byte[ChannelEventBufferSize];
 
         #endregion
 
@@ -32,9 +30,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private readonly MemoryStream _memoryStream = new MemoryStream(ChannelEventBufferSize);
-        private readonly MidiWriter _midiWriter;
-        private readonly WritingSettings _writingSettings = new WritingSettings();
+        private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ChannelEventBufferSize);
+        private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter();
+
         private MidiWinApi.MidiMessageCallback _callback;
 
         private readonly HashSet<IntPtr> _sysExHeadersPointers = new HashSet<IntPtr>();
@@ -46,8 +44,6 @@ namespace Melanchall.DryWetMidi.Devices
         internal OutputDevice(int id)
             : base(id)
         {
-            _midiWriter = new MidiWriter(_memoryStream);
-
             SetDeviceInformation();
         }
 
@@ -116,6 +112,7 @@ namespace Melanchall.DryWetMidi.Devices
             get
             {
                 EnsureDeviceIsNotDisposed();
+                EnsureHandleIsCreated();
 
                 if (!SupportsVolumeControl)
                     throw new InvalidOperationException("Device doesn't support volume control.");
@@ -133,6 +130,7 @@ namespace Melanchall.DryWetMidi.Devices
             set
             {
                 EnsureDeviceIsNotDisposed();
+                EnsureHandleIsCreated();
 
                 if (!SupportsVolumeControl)
                     throw new InvalidOperationException("Device doesn't support volume control.");
@@ -153,7 +151,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         /// <summary>
-        /// Send a MIDI event to the current <see cref="OutputDevice"/>.
+        /// Sends a MIDI event to the current output device.
         /// </summary>
         /// <param name="midiEvent">MIDI event to send.</param>
         /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>
@@ -337,12 +335,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private int PackShortEvent(MidiEvent midiEvent)
         {
-            WriteBytesToStream(_memoryStream, ZeroBuffer);
-
-            var eventWriter = EventWriterFactory.GetWriter(midiEvent);
-            eventWriter.Write(midiEvent, _midiWriter, _writingSettings, true);
-
-            var bytes = _memoryStream.GetBuffer();
+            var bytes = _midiEventToBytesConverter.Convert(midiEvent, ChannelEventBufferSize);
             return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);
         }
 
@@ -433,8 +426,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (disposing)
             {
-                _memoryStream.Dispose();
-                _midiWriter.Dispose();
+                _midiEventToBytesConverter.Dispose();
+                _bytesToMidiEventConverter.Dispose();
             }
 
             DestroyHandle();

@@ -175,7 +175,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             foreach (var programEvent in expectedProgramEvents)
             {
-                var sentEvent = sentEvents.FirstOrDefault(e => MidiEventEquality.AreEqual(e.Event, programEvent, false));
+                string message;
+                var sentEvent = sentEvents.FirstOrDefault(e => MidiEvent.Equals(e.Event, programEvent, new MidiEventEqualityCheckSettings { CompareDeltaTimes = false }, out message));
                 Assert.IsNotNull(sentEvent, $"Program event {programEvent} was not sent.");
 
                 Assert.LessOrEqual(

@@ -13,33 +13,90 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            Type eventType;
-            var midiEvent = TryGetEventType(settings.CustomMetaEventTypes, statusByte, out eventType)
-                ? (MetaEvent)Activator.CreateInstance(eventType)
-                : new UnknownMetaEvent(statusByte);
+            MetaEvent metaEvent;
+
+            switch (statusByte)
+            {
+                case EventStatusBytes.Meta.Lyric:
+                    metaEvent = new LyricEvent();
+                    break;
+                case EventStatusBytes.Meta.SetTempo:
+                    metaEvent = new SetTempoEvent();
+                    break;
+                case EventStatusBytes.Meta.Text:
+                    metaEvent = new TextEvent();
+                    break;
+                case EventStatusBytes.Meta.SequenceTrackName:
+                    metaEvent = new SequenceTrackNameEvent();
+                    break;
+                case EventStatusBytes.Meta.PortPrefix:
+                    metaEvent = new PortPrefixEvent();
+                    break;
+                case EventStatusBytes.Meta.TimeSignature:
+                    metaEvent = new TimeSignatureEvent();
+                    break;
+                case EventStatusBytes.Meta.SequencerSpecific:
+                    metaEvent = new SequencerSpecificEvent();
+                    break;
+                case EventStatusBytes.Meta.KeySignature:
+                    metaEvent = new KeySignatureEvent();
+                    break;
+                case EventStatusBytes.Meta.Marker:
+                    metaEvent = new MarkerEvent();
+                    break;
+                case EventStatusBytes.Meta.ChannelPrefix:
+                    metaEvent = new ChannelPrefixEvent();
+                    break;
+                case EventStatusBytes.Meta.InstrumentName:
+                    metaEvent = new InstrumentNameEvent();
+                    break;
+                case EventStatusBytes.Meta.CopyrightNotice:
+                    metaEvent = new CopyrightNoticeEvent();
+                    break;
+                case EventStatusBytes.Meta.SmpteOffset:
+                    metaEvent = new SmpteOffsetEvent();
+                    break;
+                case EventStatusBytes.Meta.DeviceName:
+                    metaEvent = new DeviceNameEvent();
+                    break;
+                case EventStatusBytes.Meta.CuePoint:
+                    metaEvent = new CuePointEvent();
+                    break;
+                case EventStatusBytes.Meta.ProgramName:
+                    metaEvent = new ProgramNameEvent();
+                    break;
+                case EventStatusBytes.Meta.SequenceNumber:
+                    metaEvent = new SequenceNumberEvent();
+                    break;
+                case EventStatusBytes.Meta.EndOfTrack:
+                    metaEvent = new EndOfTrackEvent();
+                    break;
+                default:
+                    {
+                        Type eventType = null;
+                        metaEvent = settings.CustomMetaEventTypes?.TryGetType(statusByte, out eventType) == true && IsMetaEventType(eventType)
+                            ? (MetaEvent)Activator.CreateInstance(eventType)
+                            : new UnknownMetaEvent(statusByte);
+                    }
+                    break;
+            }
 
             //
 
             var readerPosition = reader.Position;
-            midiEvent.Read(reader, settings, size);
+            metaEvent.Read(reader, settings, size);
 
             var bytesRead = reader.Position - readerPosition;
             var bytesUnread = size - bytesRead;
             if (bytesUnread > 0)
                 reader.Position += bytesUnread;
 
-            return midiEvent;
+            return metaEvent;
         }
 
         #endregion
 
         #region Methods
-
-        private static bool TryGetEventType(EventTypesCollection customMetaEventTypes, byte statusByte, out Type eventType)
-        {
-            return StandardEventTypes.Meta.TryGetType(statusByte, out eventType) ||
-                   (customMetaEventTypes?.TryGetType(statusByte, out eventType) == true && IsMetaEventType(eventType));
-        }
 
         private static bool IsMetaEventType(Type type)
         {

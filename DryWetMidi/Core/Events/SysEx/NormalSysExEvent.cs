@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using System.Linq;
+using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a normal system exclusive event.
@@ -34,12 +37,27 @@
         public NormalSysExEvent(byte[] data)
             : this()
         {
+            ThrowIfArgument.StartsWithInvalidValue(
+                nameof(data),
+                data,
+                EventStatusBytes.Global.NormalSysEx,
+                $"First data byte mustn't be {EventStatusBytes.Global.NormalSysEx} ({EventStatusBytes.Global.NormalSysEx:X2}) since it will be used automatically.");
+
             Data = data;
         }
 
         #endregion
 
         #region Overrides
+
+        /// <summary>
+        /// Clones event by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the event.</returns>
+        protected override MidiEvent CloneEvent()
+        {
+            return new NormalSysExEvent(Data?.ToArray());
+        }
 
         /// <summary>
         /// Returns a string that represents the current object.

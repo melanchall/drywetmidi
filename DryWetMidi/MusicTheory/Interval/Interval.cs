@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -9,12 +9,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
     /// <summary>
     /// Represents a musical interval in terms of half steps number.
     /// </summary>
-    public sealed class Interval
+    public sealed class Interval : IComparable<Interval>
     {
         #region Fields
 
-        private static readonly Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>> _cache =
+        private static readonly Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>> Cache =
             new Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>>();
+
+        private IReadOnlyCollection<IntervalDefinition> _intervalDefinitions;
 
         #endregion
 
@@ -110,6 +112,31 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 }
             };
 
+        private static readonly IntervalQuality?[] QualitiesPattern = new IntervalQuality?[]
+        {
+            IntervalQuality.Perfect,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+            IntervalQuality.Perfect,
+            null,
+            IntervalQuality.Perfect,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+            IntervalQuality.Minor,
+            IntervalQuality.Major,
+        };
+
+        private static readonly Dictionary<int, IntervalQuality> AdditionalQualitiesPattern = new Dictionary<int, IntervalQuality>
+        {
+            [1] = IntervalQuality.Augmented,
+            [4] = IntervalQuality.Augmented,
+            [5] = IntervalQuality.Diminished
+        };
+
+        private static readonly int[] IntervalNumbersOffsets = new[] { 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7 };
+
         #endregion
 
         #region Constructor
@@ -168,6 +195,71 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public Interval Down()
         {
             return Get(Size, IntervalDirection.Down);
+        }
+
+        /// <summary>
+        /// Returns collection of definitions of the current <see cref="Interval"/>.
+        /// </summary>
+        /// <returns>Collection of definitions of the current <see cref="Interval"/>.</returns>
+        public IReadOnlyCollection<IntervalDefinition> GetIntervalDefinitions()
+        {
+            if (_intervalDefinitions != null)
+                return _intervalDefinitions;
+
+            var result = new List<IntervalDefinition>();
+
+            var quality = QualitiesPattern[Size % Octave.OctaveSize];
+            var number = 7 * (Size / Octave.OctaveSize) + IntervalNumbersOffsets[Size % Octave.OctaveSize];
+
+            if (quality != null)
+            {
+                result.Add(new IntervalDefinition(number, quality.Value));
+
+                var additionalQuality = IntervalQuality.Augmented;
+
+                switch (quality.Value)
+                {
+                    case IntervalQuality.Perfect:
+                        if (number == 1)
+                            additionalQuality = IntervalQuality.Diminished;
+                        else
+                            additionalQuality = AdditionalQualitiesPattern[number % 7];
+
+                        if (number % 7 == 1)
+                        {
+                            if (number > 1)
+                                result.Add(new IntervalDefinition(number - 1, IntervalQuality.Augmented));
+
+                            result.Add(new IntervalDefinition(number + 1, IntervalQuality.Diminished));
+                            return _intervalDefinitions = new ReadOnlyCollection<IntervalDefinition>(result);
+                        }
+
+                        break;
+                    case IntervalQuality.Minor:
+                        additionalQuality = IntervalQuality.Augmented;
+                        break;
+                    case IntervalQuality.Major:
+                        additionalQuality = IntervalQuality.Diminished;
+                        break;
+                }
+
+                switch (additionalQuality)
+                {
+                    case IntervalQuality.Augmented:
+                        result.Add(new IntervalDefinition(number - 1, IntervalQuality.Augmented));
+                        break;
+                    case IntervalQuality.Diminished:
+                        result.Add(new IntervalDefinition(number + 1, IntervalQuality.Diminished));
+                        break;
+                }
+            }
+            else
+            {
+                result.Add(new IntervalDefinition(number, IntervalQuality.Diminished));
+                result.Add(new IntervalDefinition(number - 1, IntervalQuality.Augmented));
+            }
+
+            return _intervalDefinitions = new ReadOnlyCollection<IntervalDefinition>(result);
         }
 
         /// <summary>
@@ -269,8 +361,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsInvalidEnumValue(nameof(direction), direction);
 
             Dictionary<IntervalDirection, Interval> intervals;
-            if (!_cache.TryGetValue(intervalSize, out intervals))
-                _cache.Add(intervalSize, intervals = new Dictionary<IntervalDirection, Interval>());
+            if (!Cache.TryGetValue(intervalSize, out intervals))
+                Cache.Add(intervalSize, intervals = new Dictionary<IntervalDirection, Interval>());
 
             Interval cachedInterval;
             if (!intervals.TryGetValue(direction, out cachedInterval))
@@ -317,6 +409,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             return Get((SevenBitNumber)Math.Abs(halfSteps),
                        Math.Sign(halfSteps) < 0 ? IntervalDirection.Down : IntervalDirection.Up);
+        }
+
+        /// <summary>
+        /// Creates an instance of the <see cref="Interval"/> from <see cref="IntervalDefinition"/>.
+        /// </summary>
+        /// <param name="intervalDefinition">Interval definition to create interval from.</param>
+        /// <returns><see cref="Interval"/> created from <paramref name="intervalDefinition"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null.</exception>
+        public static Interval FromDefinition(IntervalDefinition intervalDefinition)
+        {
+            ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
+
+            return Get(intervalDefinition.Quality, intervalDefinition.Number);
         }
 
         /// <summary>
@@ -497,6 +602,21 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsNull(nameof(interval), interval);
 
             return interval.Down();
+        }
+
+        #endregion
+
+        #region IComparable<Interval>
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer that indicates
+        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared.</returns>
+        public int CompareTo(Interval other)
+        {
+            return HalfSteps.CompareTo(other.HalfSteps);
         }
 
         #endregion

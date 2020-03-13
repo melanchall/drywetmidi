@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices

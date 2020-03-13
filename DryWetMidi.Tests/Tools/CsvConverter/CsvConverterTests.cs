@@ -5,6 +5,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
@@ -82,9 +83,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #region Convert MIDI files to/from CSV
 
-        [TestCase(MidiFileCsvLayout.DryWetMidi)]
-        [TestCase(MidiFileCsvLayout.MidiCsv)]
-        public void ConvertMidiFileToFromCsv(MidiFileCsvLayout layout)
+        [Test]
+        public void ConvertMidiFileToFromCsv([Values] MidiFileCsvLayout layout)
         {
             var settings = new MidiFileCsvConversionSettings
             {
@@ -97,6 +97,28 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #endregion
 
         #region CsvToMidiFile
+
+        [Test]
+        public void ConvertCsvToMidiFile_StreamIsNotDisposed([Values] MidiFileCsvLayout layout)
+        {
+            var settings = new MidiFileCsvConversionSettings
+            {
+                CsvLayout = layout
+            };
+
+            var csvConverter = new CsvConverter();
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                csvConverter.ConvertMidiFileToCsv(new MidiFile(), streamToWrite, settings);
+
+                using (var streamToRead = new MemoryStream())
+                {
+                    var midiFile = csvConverter.ConvertCsvToMidiFile(streamToRead, settings);
+                    Assert.DoesNotThrow(() => { var l = streamToRead.Length; });
+                }
+            }
+        }
 
         [TestCase(MidiFileCsvLayout.DryWetMidi, new[] { ",,Header,MultiTrack,1000" })]
         [TestCase(MidiFileCsvLayout.MidiCsv, new[] { ",,Header,1,0,1000" })]
@@ -275,7 +297,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [TestCase(MidiFileCsvLayout.DryWetMidi, new[]
         {
             "0, 0, Text, \"Test",
-            " text with new line\"",
+            " text wi\rth ne\nw line\"",
             "0, 100, Marker, \"Marker\"",
             "0, 200, Text, \"Test",
             " text with new line and",
@@ -284,7 +306,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [TestCase(MidiFileCsvLayout.MidiCsv, new[]
         {
             "0, 0, Text_t, \"Test",
-            " text with new line\"",
+            " text wi\rth ne\nw line\"",
             "0, 100, Marker_t, \"Marker\"",
             "0, 200, Text_t, \"Test",
             " text with new line and",
@@ -296,7 +318,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var expectedEvents = new[]
             {
-                new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line"), 0),
+                new TimedEvent(new TextEvent($"Test{Environment.NewLine} text wi\rth ne\nw line"), 0),
                 new TimedEvent(new MarkerEvent("Marker"), 100),
                 new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line and{Environment.NewLine} new \"line again"), 200),
             };
@@ -391,6 +413,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #endregion
 
         #region MidiFileToCsv
+
+        [Test]
+        public void ConvertMidiFileToCsv_StreamIsNotDisposed([Values] MidiFileCsvLayout layout)
+        {
+            var settings = new MidiFileCsvConversionSettings
+            {
+                CsvLayout = layout
+            };
+
+            var csvConverter = new CsvConverter();
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                csvConverter.ConvertMidiFileToCsv(new MidiFile(), streamToWrite, settings);
+                Assert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+            }
+        }
 
         [TestCase(MidiFileCsvLayout.DryWetMidi, new[] { ",,header,,96" })]
         [TestCase(MidiFileCsvLayout.MidiCsv, new[]
@@ -817,7 +856,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
                     var csvConverter = new CsvConverter();
                     csvConverter.ConvertMidiFileToCsv(midiFile, outputFilePath, true, settings);
-                    csvConverter.ConvertCsvToMidiFile(outputFilePath, settings);
+                    var convertedFile = csvConverter.ConvertCsvToMidiFile(outputFilePath, settings);
+
+                    MidiAsserts.AreFilesEqual(midiFile, convertedFile, true, $"Conversion of '{filePath}' is invalid.");
                 }
             }
             finally
@@ -920,9 +961,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 TimeType = timeType,
                 NoteNumberFormat = noteNumberFormat,
-                NoteLengthType = noteLengthType,
-                CsvDelimiter = delimiter
+                NoteLengthType = noteLengthType
             };
+
+            settings.CsvSettings.CsvDelimiter = delimiter;
 
             try
             {
@@ -952,9 +994,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 TimeType = timeType,
                 NoteNumberFormat = noteNumberFormat,
-                NoteLengthType = noteLengthType,
-                CsvDelimiter = delimiter
+                NoteLengthType = noteLengthType
             };
+
+            settings.CsvSettings.CsvDelimiter = delimiter;
 
             try
             {

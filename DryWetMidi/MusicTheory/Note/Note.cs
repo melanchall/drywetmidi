@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     /// <summary>
     /// Represents a note, i.e. note name and octave.
     /// </summary>
-    public sealed class Note
+    public sealed class Note : IComparable<Note>
     {
         #region Constants
 
@@ -22,8 +22,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Fields
 
-        private static readonly Dictionary<SevenBitNumber, Note> _cache =
-            new Dictionary<SevenBitNumber, Note>();
+        private static readonly Dictionary<SevenBitNumber, Note> Cache = new Dictionary<SevenBitNumber, Note>();
 
         #endregion
 
@@ -83,8 +82,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public static Note Get(SevenBitNumber noteNumber)
         {
             Note note;
-            if (!_cache.TryGetValue(noteNumber, out note))
-                _cache.Add(noteNumber, note = new Note(noteNumber));
+            if (!Cache.TryGetValue(noteNumber, out note))
+                Cache.Add(noteNumber, note = new Note(noteNumber));
 
             return note;
         }
@@ -196,6 +195,21 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public static Note operator -(Note note, int halfSteps)
         {
             return note + (-halfSteps);
+        }
+
+        #endregion
+
+        #region IComparable<Note>
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer that indicates
+        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared.</returns>
+        public int CompareTo(Note other)
+        {
+            return NoteNumber.CompareTo(other.NoteNumber);
         }
 
         #endregion

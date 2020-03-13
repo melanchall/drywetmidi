@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// Initializes a new instance of the <see cref="Pattern"/> with the specified actions.
         /// </summary>
         /// <param name="actions">Actions that pattern have to invoke on export to MIDI.</param>
-        internal Pattern(IEnumerable<IPatternAction> actions)
+        internal Pattern(IEnumerable<PatternAction> actions)
         {
             Actions = actions;
         }
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Properties
 
-        internal IEnumerable<IPatternAction> Actions { get; }
+        internal IEnumerable<PatternAction> Actions { get; }
 
         #endregion
 
@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>Copy of the pattern containing all actions from original one.</returns>
         public Pattern Clone()
         {
-            return new Pattern(Actions.ToList());
+            return new Pattern(Actions.Select(a => a.Clone()).ToList());
         }
 
         internal PatternActionResult InvokeActions(long time, PatternContext context)

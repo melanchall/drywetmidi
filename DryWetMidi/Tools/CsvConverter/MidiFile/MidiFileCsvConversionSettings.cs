@@ -11,12 +11,6 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public sealed class MidiFileCsvConversionSettings
     {
-        #region Constants
-
-        private const char DefaultCsvDelimiter = ',';
-
-        #endregion
-
         #region Fields
 
         private MidiFileCsvLayout _csvLayout = MidiFileCsvLayout.DryWetMidi;
@@ -72,11 +66,6 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Gets or sets delimiter used to separate values in CSV representation. The default value is comma.
-        /// </summary>
-        public char CsvDelimiter { get; set; } = DefaultCsvDelimiter;
-
-        /// <summary>
         /// Gets or sets the type of a note length (metric, bar/beat and so on) which should be used to
         /// write to or read from CSV. The default value is <see cref="TimeSpanType.Midi"/>.
         /// </summary>
@@ -94,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the format which should be used to write notes to or read them from CSV.
-        /// The default value is <see cref="NoteFormat.Events"/>.
+        /// The default value is <see cref="Tools.NoteFormat.Events"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteFormat NoteFormat
@@ -110,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the format which should be used to write a note's number to or read it from CSV.
-        /// The default value is <see cref="NoteNumberFormat.NoteNumber"/>.
+        /// The default value is <see cref="Tools.NoteNumberFormat.NoteNumber"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteNumberFormat NoteNumberFormat
@@ -123,6 +112,11 @@ namespace Melanchall.DryWetMidi.Tools
                 _noteNumberFormat = value;
             }
         }
+
+        /// <summary>
+        /// Gets common CSV settings.
+        /// </summary>
+        public CsvSettings CsvSettings { get; } = new CsvSettings();
 
         #endregion
     }

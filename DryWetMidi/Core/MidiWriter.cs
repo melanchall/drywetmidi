@@ -12,6 +12,8 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         private readonly BinaryWriter _binaryWriter;
+        private readonly byte[] _numberBuffer = new byte[4];
+
         private bool _disposed;
 
         #endregion
@@ -89,11 +91,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteWord(ushort value)
         {
-            var bytes = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
+            _numberBuffer[0] = (byte)((value >> 8) & 0xFF);
+            _numberBuffer[1] = (byte)(value & 0xFF);
 
-            WriteBytes(bytes);
+            _binaryWriter.Write(_numberBuffer, 0, 2);
         }
 
         /// <summary>
@@ -105,11 +106,12 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteDword(uint value)
         {
-            var bytes = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
+            _numberBuffer[0] = (byte)((value >> 24) & 0xFF);
+            _numberBuffer[1] = (byte)((value >> 16) & 0xFF);
+            _numberBuffer[2] = (byte)((value >> 8) & 0xFF);
+            _numberBuffer[3] = (byte)(value & 0xFF);
 
-            WriteBytes(bytes);
+            _binaryWriter.Write(_numberBuffer, 0, 4);
         }
 
         /// <summary>
@@ -121,11 +123,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteInt16(short value)
         {
-            var bytes = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
+            _numberBuffer[0] = (byte)((value >> 8) & 0xFF);
+            _numberBuffer[1] = (byte)(value & 0xFF);
 
-            WriteBytes(bytes);
+            _binaryWriter.Write(_numberBuffer, 0, 2);
         }
 
         /// <summary>

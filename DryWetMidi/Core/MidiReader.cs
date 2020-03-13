@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,7 +13,12 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
+        private readonly ReaderSettings _settings;
+
         private readonly BinaryReader _binaryReader;
+        private readonly bool _isStreamWrapped;
+        private readonly MemoryStream _allDataBuffer;
+
         private bool _disposed;
 
         #endregion
@@ -22,12 +29,31 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="MidiReader"/> with the specified stream.
         /// </summary>
         /// <param name="stream">Stream to read MIDI file from.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading,
-        /// or is already closed.</exception>
-        public MidiReader(Stream stream)
+        /// <param name="settings">Settings according to which MIDI data should be read.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null. -or-
+        /// <paramref name="settings"/> is null.</exception>
+        public MidiReader(Stream stream, ReaderSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNull(nameof(settings), settings);
+
+            _settings = settings;
+
+            if (!stream.CanSeek)
+            {
+                stream = new StreamWrapper(stream, settings.NonSeekableStreamBufferSize);
+                _isStreamWrapped = true;
+            }
+
+            Length = stream.Length;
+
+            if (settings.ReadFromMemory && !(stream is MemoryStream))
+            {
+                _allDataBuffer = new MemoryStream();
+                stream.CopyTo(_allDataBuffer);
+                _allDataBuffer.Position = 0;
+                stream = _allDataBuffer;
+            }
 
             _binaryReader = new BinaryReader(stream, SmfConstants.DefaultTextEncoding, leaveOpen: true);
         }
@@ -50,16 +76,14 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets length of the underlying stream.
         /// </summary>
-        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
-        public long Length => _binaryReader.BaseStream.Length;
+        public long Length { get; }
 
         /// <summary>
         /// Gets a value indicating whether end of the underlying stream is reached.
         /// </summary>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
-        public bool EndReached => Position >= Length;
+        public bool EndReached => Position >= Length || (_isStreamWrapped && ((StreamWrapper)_binaryReader.BaseStream).IsEndReached());
 
         #endregion
 
@@ -129,6 +153,23 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte[] ReadBytes(int count)
         {
+            if (_isStreamWrapped && count > _settings.NonSeekableStreamIncrementalBytesReadingThreshold)
+            {
+                var bytesList = new List<byte[]>();
+
+                while (count > 0)
+                {
+                    var bytes = _binaryReader.ReadBytes(Math.Min(count, _settings.NonSeekableStreamIncrementalBytesReadingStep));
+                    if (bytes.Length == 0)
+                        break;
+
+                    count -= bytes.Length;
+                    bytesList.Add(bytes);
+                }
+
+                return bytesList.SelectMany(bytes => bytes).ToArray();
+            }
+
             return _binaryReader.ReadBytes(count);
         }
 
@@ -148,10 +189,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < wordSize)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a WORD.", wordSize, bytes.Length);
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
-
-            return BitConverter.ToUInt16(bytes, 0);
+            return (ushort)((bytes[0] << 8) + bytes[1]);
         }
 
         /// <summary>
@@ -170,10 +208,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < dwordSize)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a DWORD.", dwordSize, bytes.Length);
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
-
-            return BitConverter.ToUInt32(bytes, 0);
+            return (uint)((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]);
         }
 
         /// <summary>
@@ -192,10 +227,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < int16Size)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a INT16.", int16Size, bytes.Length);
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
-
-            return BitConverter.ToInt16(bytes, 0);
+            return (short)((bytes[0] << 8) + bytes[1]);
         }
 
         /// <summary>
@@ -284,13 +316,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes.Length < dwordSize)
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a 3-byte DWORD.", dwordSize, bytes.Length);
 
-            var bytesForInt = new byte[sizeof(uint)];
-            Array.Copy(bytes, 0, bytesForInt, bytesForInt.Length - bytes.Length, bytes.Length);
-
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytesForInt);
-
-            return BitConverter.ToUInt32(bytesForInt, 0);
+            return (uint)((bytes[0] << 16) + (bytes[1] << 8) + bytes[2]);
         }
 
         #endregion
@@ -311,7 +337,10 @@ namespace Melanchall.DryWetMidi.Core
                 return;
 
             if (disposing)
+            {
+                _allDataBuffer?.Dispose();
                 _binaryReader.Dispose();
+            }
 
             _disposed = true;
         }

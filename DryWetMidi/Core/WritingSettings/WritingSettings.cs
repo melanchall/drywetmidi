@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
+using System.Text;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -7,11 +9,29 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public class WritingSettings
     {
+        #region Fields
+
+        private CompressionPolicy _compressionPolicy = CompressionPolicy.NoCompression;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets or sets compression rules for the writing engine. The default is
-        /// <see cref="CompressionPolicy.NoCompression"/>.
+        /// <see cref="Core.CompressionPolicy.NoCompression"/>.
         /// </summary>
-        public CompressionPolicy CompressionPolicy { get; set; } = CompressionPolicy.NoCompression;
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public CompressionPolicy CompressionPolicy
+        {
+            get { return _compressionPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _compressionPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets collection of custom meta events types. These types must be derived from the
@@ -25,5 +45,7 @@ namespace Melanchall.DryWetMidi.Core
         /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
         public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
+
+        #endregion
     }
 }

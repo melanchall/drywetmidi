@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -7,6 +11,26 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public class ReadingSettings
     {
+        #region Fields
+
+        private UnexpectedTrackChunksCountPolicy _unexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore;
+        private ExtraTrackChunkPolicy _extraTrackChunkPolicy = ExtraTrackChunkPolicy.Read;
+        private UnknownChunkIdPolicy _unknownChunkIdPolicy = UnknownChunkIdPolicy.ReadAsUnknownChunk;
+        private MissedEndOfTrackPolicy _missedEndOfTrackPolicy = MissedEndOfTrackPolicy.Ignore;
+        private SilentNoteOnPolicy _silentNoteOnPolicy = SilentNoteOnPolicy.NoteOff;
+        private InvalidChunkSizePolicy _invalidChunkSizePolicy = InvalidChunkSizePolicy.Abort;
+        private UnknownFileFormatPolicy _unknownFileFormatPolicy = UnknownFileFormatPolicy.Ignore;
+        private UnknownChannelEventPolicy _unknownChannelEventPolicy = UnknownChannelEventPolicy.Abort;
+        private InvalidChannelEventParameterValuePolicy _invalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.Abort;
+        private InvalidMetaEventParameterValuePolicy _invalidMetaEventParameterValuePolicy = InvalidMetaEventParameterValuePolicy.Abort;
+        private InvalidSystemCommonEventParameterValuePolicy _invalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.Abort;
+        private NotEnoughBytesPolicy _notEnoughBytesPolicy = NotEnoughBytesPolicy.Abort;
+        private NoHeaderChunkPolicy _noHeaderChunkPolicy = NoHeaderChunkPolicy.Abort;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets or sets reaction of the reading engine on unexpected track chunks count. The default is
         /// <see cref="UnexpectedTrackChunksCountPolicy.Ignore"/>.
@@ -17,14 +41,34 @@ namespace Melanchall.DryWetMidi.Core
         /// is used an instance of the <see cref="UnexpectedTrackChunksCountException"/> will be thrown if
         /// track chunks count is unexpected.
         /// </remarks>
-        public UnexpectedTrackChunksCountPolicy UnexpectedTrackChunksCountPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public UnexpectedTrackChunksCountPolicy UnexpectedTrackChunksCountPolicy
+        {
+            get { return _unexpectedTrackChunksCountPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _unexpectedTrackChunksCountPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on new track chunk if already read
         /// track chunks count is greater or equals the one declared in the file's header chunk.
         /// The default is <see cref="ExtraTrackChunkPolicy.Read"/>.
         /// </summary>
-        public ExtraTrackChunkPolicy ExtraTrackChunkPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public ExtraTrackChunkPolicy ExtraTrackChunkPolicy
+        {
+            get { return _extraTrackChunkPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _extraTrackChunkPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on chunk with unknown ID. The default
@@ -34,7 +78,17 @@ namespace Melanchall.DryWetMidi.Core
         /// If <see cref="UnknownChunkIdPolicy.Abort"/> is used an instance of the
         /// <see cref="UnknownChunkException"/> will be thrown if a chunk to be read has unknown ID.
         /// </remarks>
-        public UnknownChunkIdPolicy UnknownChunkIdPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public UnknownChunkIdPolicy UnknownChunkIdPolicy
+        {
+            get { return _unknownChunkIdPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _unknownChunkIdPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on missed End Of Track event.
@@ -47,14 +101,34 @@ namespace Melanchall.DryWetMidi.Core
         /// therefore missing of it must be treated as error, you can try to read a track chunk
         /// relying on the chunk's size only.
         /// </remarks>
-        public MissedEndOfTrackPolicy MissedEndOfTrackPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public MissedEndOfTrackPolicy MissedEndOfTrackPolicy
+        {
+            get { return _missedEndOfTrackPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _missedEndOfTrackPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on Note On events with velocity 0.
         /// The default is <see cref="SilentNoteOnPolicy.NoteOff"/>. Although it is recommended to treat silent
         /// Note On event as Note Off you can turn this behavior off to get original event stored in the file.
         /// </summary>
-        public SilentNoteOnPolicy SilentNoteOnPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public SilentNoteOnPolicy SilentNoteOnPolicy
+        {
+            get { return _silentNoteOnPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _silentNoteOnPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on difference between actual chunk's size and
@@ -65,7 +139,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidChunkSizeException"/> will be thrown if actual chunk's size differs from
         /// the one declared in chunk's header.
         /// </remarks>
-        public InvalidChunkSizePolicy InvalidChunkSizePolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public InvalidChunkSizePolicy InvalidChunkSizePolicy
+        {
+            get { return _invalidChunkSizePolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _invalidChunkSizePolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on unknown file format stored in a header chunk.
@@ -76,7 +160,43 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="UnknownFileFormatException"/> will be thrown if file format stored in a header
         /// chunk doesn't belong to values defined by the <see cref="MidiFileFormat"/> enumeration.
         /// </remarks>
-        public UnknownFileFormatPolicy UnknownFileFormatPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public UnknownFileFormatPolicy UnknownFileFormatPolicy
+        {
+            get { return _unknownFileFormatPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _unknownFileFormatPolicy = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on unknown channel event. The default is
+        /// <see cref="UnknownChannelEventPolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="UnknownChannelEventPolicy.Abort"/> is used an instance of the
+        /// <see cref="UnknownChannelEventException"/> will be thrown if channel event has unknown status byte.
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public UnknownChannelEventPolicy UnknownChannelEventPolicy
+        {
+            get { return _unknownChannelEventPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _unknownChannelEventPolicy = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a callback used to read unknown channel event if <see cref="UnknownChannelEventPolicy"/>
+        /// set to <see cref="UnknownChannelEventPolicy.UseCallback"/>.
+        /// </summary>
+        public UnknownChannelEventCallback UnknownChannelEventCallback { get; set; }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on invalid value of a channel event's
@@ -89,7 +209,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidChannelEventParameterValueException"/> will be thrown if event's parameter value
         /// just read is invalid.
         /// </remarks>
-        public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy
+        {
+            get { return _invalidChannelEventParameterValuePolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _invalidChannelEventParameterValuePolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on invalid value of a meta event's
@@ -102,8 +232,19 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidMetaEventParameterValueException"/> will be thrown if event's parameter value
         /// just read is invalid.
         /// </remarks>
-        public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy
+        {
+            get { return _invalidMetaEventParameterValuePolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
+                _invalidMetaEventParameterValuePolicy = value;
+            }
+        }
+
+        // TODO: test
         /// <summary>
         /// Gets or sets reaction of the reading engine on invalid value of a system common event's
         /// parameter value. For example, 255 is the invalid value for the <see cref="SongSelectEvent.Number"/>
@@ -115,7 +256,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="InvalidSystemCommonEventParameterValueException"/> will be thrown if event's parameter value
         /// just read is invalid.
         /// </remarks>
-        public InvalidSystemCommonEventParameterValuePolicy InvalidSystemCommonEventParameterValuePolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public InvalidSystemCommonEventParameterValuePolicy InvalidSystemCommonEventParameterValuePolicy
+        {
+            get { return _invalidSystemCommonEventParameterValuePolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _invalidSystemCommonEventParameterValuePolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on lack of bytes in the underlying stream
@@ -127,7 +278,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="NotEnoughBytesException"/> will be thrown if the reader's underlying stream doesn't
         /// have enough bytes to read a value.
         /// </remarks>
-        public NotEnoughBytesPolicy NotEnoughBytesPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public NotEnoughBytesPolicy NotEnoughBytesPolicy
+        {
+            get { return _notEnoughBytesPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _notEnoughBytesPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on missing of the header chunk in the MIDI file.
@@ -137,7 +298,17 @@ namespace Melanchall.DryWetMidi.Core
         /// If <see cref="NoHeaderChunkPolicy.Abort"/> is used an instance of the
         /// <see cref="NoHeaderChunkException"/> will be thrown if the MIDI file doesn't contain the header chunk.
         /// </remarks>
-        public NoHeaderChunkPolicy NoHeaderChunkPolicy { get; set; }
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public NoHeaderChunkPolicy NoHeaderChunkPolicy
+        {
+            get { return _noHeaderChunkPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _noHeaderChunkPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets collection of custom chunks types. These types must be derived from the <see cref="MidiChunk"/>
@@ -164,5 +335,43 @@ namespace Melanchall.DryWetMidi.Core
         /// meta event. The default is null.
         /// </summary>
         public DecodeTextCallback DecodeTextCallback { get; set; }
+
+        /// <summary>
+        /// Gets collection of <see cref="ReadingHandler"/> objects that handle MIDI data reading.
+        /// </summary>
+        public ICollection<ReadingHandler> ReadingHandlers { get; } = new List<ReadingHandler>();
+
+        /// <summary>
+        /// Gets or sets settings according to which <see cref="MidiReader"/> should read MIDI data.
+        /// </summary>
+        public ReaderSettings ReaderSettings { get; set; } = new ReaderSettings();
+
+        internal bool UseReadingHandlers { get; private set; }
+
+        internal ICollection<ReadingHandler> FileReadingHandlers { get; private set; }
+
+        internal ICollection<ReadingHandler> TrackChunkReadingHandlers { get; private set; }
+
+        internal ICollection<ReadingHandler> EventReadingHandlers { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        internal void PrepareReadingHandlers()
+        {
+            UseReadingHandlers = ReadingHandlers.Any();
+
+            foreach (var handler in ReadingHandlers)
+            {
+                handler.Initialize();
+            }
+
+            FileReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.File)).ToArray();
+            TrackChunkReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.TrackChunk)).ToArray();
+            EventReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.Event)).ToArray();
+        }
+
+        #endregion
     }
 }

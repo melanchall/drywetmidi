@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="ArgumentNullException"><paramref name="inputDevice"/> is null. -or-
         /// <paramref name="outputDevices"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="outputDevices"/> contains null.</exception>
-        public static DevicesConnector Connect(this InputDevice inputDevice, params OutputDevice[] outputDevices)
+        public static DevicesConnector Connect(this InputDevice inputDevice, params IOutputDevice[] outputDevices)
         {
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
             ThrowIfArgument.IsNull(nameof(outputDevices), outputDevices);

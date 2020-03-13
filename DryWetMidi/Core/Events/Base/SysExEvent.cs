@@ -1,7 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -29,7 +27,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="SysExEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         protected SysExEvent(MidiEventType eventType)
             : base(eventType)
         {
@@ -88,20 +85,6 @@ namespace Melanchall.DryWetMidi.Core
         internal sealed override int GetSize(WritingSettings settings)
         {
             return Data?.Length ?? 0;
-        }
-
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
-        protected sealed override MidiEvent CloneEvent()
-        {
-            var eventType = GetType();
-            var sysExEvent = (SysExEvent)Activator.CreateInstance(eventType);
-
-            sysExEvent.Data = Data?.Clone() as byte[];
-
-            return sysExEvent;
         }
 
         #endregion

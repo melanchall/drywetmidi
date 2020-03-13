@@ -21,12 +21,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
-        #region Fields
-
-        private MusicTheory.Note _note;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -120,7 +114,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Absolute time of the note in units defined by the time division of a MIDI file.</param>
         public Note(SevenBitNumber noteNumber, long length, long time)
         {
-            _note = MusicTheory.Note.Get(noteNumber);
+            UnderlyingNote = MusicTheory.Note.Get(noteNumber);
 
             Length = length;
             Time = time;
@@ -148,7 +142,7 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
 
-            _note = MusicTheory.Note.Get(noteOnEvent.NoteNumber);
+            UnderlyingNote = MusicTheory.Note.Get(noteOnEvent.NoteNumber);
 
             Velocity = noteOnEvent.Velocity;
             OffVelocity = noteOffEvent.Velocity;
@@ -194,8 +188,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public SevenBitNumber NoteNumber
         {
-            get { return _note.NoteNumber; }
-            set { _note = MusicTheory.Note.Get(value); }
+            get { return UnderlyingNote.NoteNumber; }
+            set { UnderlyingNote = MusicTheory.Note.Get(value); }
         }
 
         /// <summary>
@@ -216,12 +210,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets name of the note.
         /// </summary>
-        public NoteName NoteName => _note.NoteName;
+        public NoteName NoteName => UnderlyingNote.NoteName;
 
         /// <summary>
         /// Gets octave of the note.
         /// </summary>
-        public int Octave => _note.Octave;
+        public int Octave => UnderlyingNote.Octave;
 
         /// <summary>
         /// Gets Note On timed event of the note.
@@ -232,6 +226,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets Note Off timed event of the note.
         /// </summary>
         internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
+
+        internal MusicTheory.Note UnderlyingNote { get; private set; }
 
         #endregion
 
@@ -274,7 +270,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// name and octave.</exception>
         public void SetNoteNameAndOctave(NoteName noteName, int octave)
         {
-            _note = MusicTheory.Note.Get(noteName, octave);
+            UnderlyingNote = MusicTheory.Note.Get(noteName, octave);
         }
 
         /// <summary>
@@ -340,7 +336,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return _note.ToString();
+            return UnderlyingNote.ToString();
         }
 
         #endregion

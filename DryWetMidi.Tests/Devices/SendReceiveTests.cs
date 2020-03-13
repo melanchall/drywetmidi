@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
@@ -35,16 +37,33 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             });
         }
 
-        // TODO: Use files collecting from devices connector tests (hangs on midiInStop)
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckEventsReceiving_AllEventTypes_ExceptSysEx()
+        {
+            var events = TypesProvider.GetAllEventTypes()
+                .Where(t => !typeof(MetaEvent).IsAssignableFrom(t) && !typeof(SysExEvent).IsAssignableFrom(t))
+                .Select(t => (MidiEvent)Activator.CreateInstance(t))
+                .ToArray();
+
+            CollectionAssert.IsNotEmpty(events, "Events collection is empty.");
+            SendReceiveUtilities.CheckEventsReceiving(events.Select(e => new EventToSend(e, TimeSpan.Zero)).ToArray());
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void CheckFileEventsReceiving()
         {
+            var filesToTestCount = 5;
+            var maxFileDuration = TimeSpan.FromSeconds(10);
+
             var filesToTest = TestFilesProvider.GetValidFiles(
                     f => f.GetTrackChunks().Count() == 1,
-                    f => (TimeSpan)f.GetDuration<MetricTimeSpan>() < TimeSpan.FromSeconds(30))
-                .Take(5)
+                    f => (TimeSpan)f.GetDuration<MetricTimeSpan>() < maxFileDuration)
+                .OrderByDescending(f => f.GetDuration<MetricTimeSpan>())
+                .Take(filesToTestCount)
                 .ToArray();
+            Debug.Assert(filesToTest.Length == filesToTestCount, "Not enough files for test.");
 
             for (var i = 0; i < filesToTest.Length; i++)
             {

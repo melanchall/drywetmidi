@@ -13,12 +13,20 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
         public override PatternActionResult Invoke(long time, PatternContext context)
         {
+            if (State != PatternActionState.Enabled)
+                return PatternActionResult.DoNothing;
+
             context.SaveTime(time);
             return new PatternActionResult(time + LengthConverter.ConvertFrom(Step, time, context.TempoMap));
+        }
+
+        public override PatternAction Clone()
+        {
+            return new StepForwardAction(Step.Clone());
         }
 
         #endregion

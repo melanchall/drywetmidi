@@ -1,0 +1,56 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    exclude:
+    - DryWetMidi.Benchmarks/
+    - Docs/
+    - README.md
+    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/build-artifacts-library.yaml
+    - Resources/CI/build-artifacts-docs.yaml
+    - Resources/CI/check-readme-links.yaml
+    - Resources/CI/win-test-netcore-devices.yaml
+    - Resources/CI/win-test-netframework-core.yaml
+    - Resources/CI/win-test-netcore-core.yaml
+    - Resources/CI/mac-test-netcore-core.yaml
+    - Resources/CI/lin-test-netcore-core.yaml
+    - .github/
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  version: '5.1.0'
+
+name: Windows_Test_NetFramework_Devices_$(version)$(Rev:.r)
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Build solution
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: PowerShell@2
+  displayName: Setup MIDI ports for devices API tests
+  inputs:
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+
+- task: VSTest@2
+  displayName: Run unit tests
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    testSelector: testAssemblies
+    testAssemblyVer2:
+      '**/*.Tests.dll'
+    testFiltercriteria: 'FullyQualifiedName~.Devices'
+    rerunMaxAttempts: '3'

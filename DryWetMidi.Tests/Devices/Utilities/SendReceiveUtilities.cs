@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
@@ -78,13 +79,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var sentEvent = sentEvents[i];
                 var receivedEvent = receivedEvents[i];
 
-                Assert.IsTrue(
-                    MidiEventEquality.AreEqual(sentEvent.Event, eventToSend.Event, false),
-                    $"Sent event ({sentEvent.Event}) doesn't match the one that should be sent ({eventToSend.Event}).");
-
-                Assert.IsTrue(
-                    MidiEventEquality.AreEqual(sentEvent.Event, receivedEvent.Event, false),
-                    $"Received event ({receivedEvent.Event}) doesn't match the sent one ({sentEvent.Event}).");
+                MidiAsserts.AreEventsEqual(sentEvent.Event, eventToSend.Event, false, $"Sent event ({sentEvent.Event}) doesn't match the one that should be sent ({eventToSend.Event}).");
+                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event ({receivedEvent.Event}) doesn't match the sent one ({sentEvent.Event}).");
 
                 var delay = (receivedEvent.Time - sentEvent.Time).Duration();
                 Assert.LessOrEqual(

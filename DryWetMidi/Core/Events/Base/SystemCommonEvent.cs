@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a system common event.
@@ -18,7 +16,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="SystemCommonEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         protected SystemCommonEvent(MidiEventType eventType)
             : base(eventType)
         {

@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Fields
 
-        private static readonly Dictionary<int, Octave> _cache = new Dictionary<int, Octave>();
+        private static readonly Dictionary<int, Octave> Cache = new Dictionary<int, Octave>();
 
         private readonly Dictionary<NoteName, Note> _notes;
 
@@ -184,8 +184,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
                                          $"Octave number is out of [{MinOctaveNumber}, {MaxOctaveNumber}] range.");
 
             Octave octave;
-            if (!_cache.TryGetValue(octaveNumber, out octave))
-                _cache.Add(octaveNumber, octave = new Octave(octaveNumber));
+            if (!Cache.TryGetValue(octaveNumber, out octave))
+                Cache.Add(octaveNumber, octave = new Octave(octaveNumber));
 
             return octave;
         }

@@ -112,20 +112,47 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
+            var useReadingHandlers = settings.UseReadingHandlers;
+            if (useReadingHandlers)
+            {
+                foreach (var handler in settings.TrackChunkReadingHandlers)
+                {
+                    handler.OnStartTrackChunkContentReading(this);
+                }
+            }
+
+            //
+
             var endReaderPosition = reader.Position + size;
             var endOfTrackPresented = false;
 
             byte? currentChannelEventStatusByte = null;
+            long absoluteTime = 0;
 
             //
 
             while (reader.Position < endReaderPosition && !reader.EndReached)
             {
-                var midiEvent = ReadEvent(reader, settings, ref currentChannelEventStatusByte);
+                long deltaTime;
+
+                var midiEvent = ReadEvent(reader, settings, ref currentChannelEventStatusByte, out deltaTime);
                 if (midiEvent is EndOfTrackEvent)
                 {
                     endOfTrackPresented = true;
                     break;
+                }
+
+                absoluteTime += deltaTime;
+
+                if (midiEvent == null)
+                    continue;
+
+                if (useReadingHandlers)
+                {
+                    foreach (var handler in settings.EventReadingHandlers)
+                    {
+                        handler.OnFinishEventReading(midiEvent, absoluteTime);
+                    }
                 }
 
                 Events.Add(midiEvent);
@@ -179,24 +206,9 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        /// <summary>
-        /// Reads an event from the reader's underlying stream.
-        /// </summary>
-        /// <param name="reader">Reader to read an event.</param>
-        /// <param name="settings">Settings according to which an event must be read.</param>
-        /// <param name="channelEventStatusByte">Current channel event status byte used as running status.</param>
-        /// <returns>Instance of the <see cref="MidiEvent"/> representing a MIDI event.</returns>
-        /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream
-        /// was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
-        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
-        /// <exception cref="NotEnoughBytesException">Not enough bytes to read an event.</exception>
-        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter just
-        /// read is invalid.</exception>
-        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
+        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte, out long deltaTime)
         {
-            var deltaTime = reader.ReadVlqLongNumber();
+            deltaTime = reader.ReadVlqLongNumber();
             if (deltaTime < 0)
                 deltaTime = 0;
 
@@ -219,28 +231,14 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            if (settings.SilentNoteOnPolicy == SilentNoteOnPolicy.NoteOff)
-            {
-                var noteOnEvent = midiEvent as NoteOnEvent;
-                if (noteOnEvent?.Velocity == 0)
-                {
-                    midiEvent = new NoteOffEvent
-                    {
-                        DeltaTime = noteOnEvent.DeltaTime,
-                        Channel = noteOnEvent.Channel,
-                        NoteNumber = noteOnEvent.NoteNumber
-                    };
-                }
-            }
-
-            //
-
             if (midiEvent is ChannelEvent)
                 channelEventStatusByte = statusByte;
 
             //
 
-            midiEvent.DeltaTime = deltaTime;
+            if (midiEvent != null)
+                midiEvent.DeltaTime = deltaTime;
+
             return midiEvent;
         }
 
@@ -252,10 +250,16 @@ namespace Melanchall.DryWetMidi.Core
             var skipKeySignature = true;
             var skipTimeSignature = true;
 
-            foreach (var midiEvent in GetEventsToWrite())
+            //Events.Where(e => !(e is SystemCommonEvent) && !(e is SystemRealTimeEvent))
+            //             .Concat(new[] { new EndOfTrackEvent() });
+
+            foreach (var midiEvent in Events)
             {
                 var eventToWrite = midiEvent;
-                if (eventToWrite is UnknownMetaEvent && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaEvents))
+                if (eventToWrite is SystemCommonEvent || eventToWrite is SystemRealTimeEvent)
+                    continue;
+
+                if (eventToWrite.EventType == MidiEventType.UnknownMeta && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaEvents))
                     continue;
 
                 //
@@ -304,12 +308,10 @@ namespace Melanchall.DryWetMidi.Core
 
                 eventHandler(eventWriter, eventToWrite, writeStatusByte);
             }
-        }
 
-        private IEnumerable<MidiEvent> GetEventsToWrite()
-        {
-            return Events.Where(e => !(e is SystemCommonEvent) && !(e is SystemRealTimeEvent))
-                         .Concat(new[] { new EndOfTrackEvent() });
+            var endOfTrackEvent = new EndOfTrackEvent();
+            var endOfTrackEventWriter = EventWriterFactory.GetWriter(endOfTrackEvent);
+            eventHandler(endOfTrackEventWriter, endOfTrackEvent, true);
         }
 
         private static bool TrySkipDefaultSetTempo(MidiEvent midiEvent, ref bool skip)

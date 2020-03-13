@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a MIDI file meta event.
@@ -13,11 +11,19 @@ namespace Melanchall.DryWetMidi.Core
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MetaEvent"/>.
+        /// </summary>
+        protected MetaEvent()
+            : this(MidiEventType.CustomMeta)
+        {
+
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MetaEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
-        protected MetaEvent(MidiEventType eventType)
+        internal MetaEvent(MidiEventType eventType)
             : base(eventType)
         {
         }
@@ -60,6 +66,19 @@ namespace Melanchall.DryWetMidi.Core
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Returns array of status bytes of standard meta events.
+        /// </summary>
+        /// <returns>Array of status bytes of standard meta events.</returns>
+        /// <remarks>
+        /// This method can be used for choosing status byte for custom meta event to prevent
+        /// the status byte is equal to one of the standard ones.
+        /// </remarks>
+        public static byte[] GetStandardMetaEventStatusBytes()
+        {
+            return StandardMetaEventStatusBytes.GetStatusBytes();
+        }
 
         /// <summary>
         /// Reads content of a MIDI meta event.

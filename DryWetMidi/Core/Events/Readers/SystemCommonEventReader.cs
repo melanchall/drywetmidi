@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     internal sealed class SystemCommonEventReader : IEventReader
     {
@@ -8,11 +6,25 @@ namespace Melanchall.DryWetMidi.Core
 
         public MidiEvent Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
         {
-            Type eventType;
-            StandardEventTypes.SystemCommon.TryGetType(currentStatusByte, out eventType);
-            var systemCommonEvent = (SystemCommonEvent)Activator.CreateInstance(eventType);
+            SystemCommonEvent systemCommonEvent = null;
 
-            systemCommonEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
+            switch (currentStatusByte)
+            {
+                case EventStatusBytes.SystemCommon.MtcQuarterFrame:
+                    systemCommonEvent = new MidiTimeCodeEvent();
+                    break;
+                case EventStatusBytes.SystemCommon.SongSelect:
+                    systemCommonEvent = new SongSelectEvent();
+                    break;
+                case EventStatusBytes.SystemCommon.SongPositionPointer:
+                    systemCommonEvent = new SongPositionPointerEvent();
+                    break;
+                case EventStatusBytes.SystemCommon.TuneRequest:
+                    systemCommonEvent = new TuneRequestEvent();
+                    break;
+            }
+
+            systemCommonEvent?.Read(reader, settings, MidiEvent.UnknownContentSize);
             return systemCommonEvent;
         }
 

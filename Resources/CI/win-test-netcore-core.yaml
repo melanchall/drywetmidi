@@ -1,0 +1,78 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    exclude:
+    - DryWetMidi.Benchmarks/
+    - DryWetMidi/Devices/
+    - Docs/
+    - README.md
+    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/build-artifacts-library.yaml
+    - Resources/CI/build-artifacts-docs.yaml
+    - Resources/CI/check-readme-links.yaml
+    - Resources/CI/win-test-netframework-core.yaml
+    - Resources/CI/win-test-netframework-devices.yaml
+    - Resources/CI/win-test-netcore-devices.yaml
+    - Resources/CI/mac-test-netcore-core.yaml
+    - Resources/CI/lin-test-netcore-core.yaml
+    - .github/
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  version: '5.1.0'
+
+name: Windows_Test_NetCore_Core_$(version)$(Rev:.r)
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET Core 2.1'
+  inputs:
+    packageType: sdk
+    version: 2.1.804
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  displayName: Build DryWetMidi and DryWetMidi.Tests.Common
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
+    projects: |
+      DryWetMidi/Melanchall.DryWetMidi.csproj
+      DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: Build DryWetMidi.Tests
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration) --framework netcoreapp2.1'
+    projects: |
+      DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: Run unit tests
+  continueOnError: true
+  inputs:
+    command: 'test'
+    projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+    arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework netcoreapp2.1 --verbosity normal'
+
+- task: CopyFiles@2
+  displayName: Copy tests sequence
+  inputs:
+    contents: '**/Sequence*.xml'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish tests sequence
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)
+    artifact: Tests sequence

@@ -1,0 +1,1 @@
+new MidiFile(new TrackChunk(new TimeSignatureEvent { Numerator=4,Denominator=4,ClocksPerClick=24,ThirtySecondNotesPerBeat=8,DeltaTime=0,}),new TrackChunk(new SetTempoEvent { MicrosecondsPerQuarterNote=441176,DeltaTime=0,})) { TimeDivision=new TicksPerQuarterNoteTimeDivision(96) }

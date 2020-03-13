@@ -41,6 +41,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
                 type,
                 ManualConfig.Create(DefaultConfig.Instance)
                             .With(AsciiDocExporter.Default, JsonExporter.Brief)
+                            .With(StatisticColumn.Min)
                             .With(columns));
 
             // Assert validation errors

@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets policy according to which a quantizer should act in case of an object is going
-        /// to be moved beyond zero. The default value is <see cref="QuantizingBeyondZeroPolicy.FixAtZero"/>.
+        /// to be moved beyond zero. The default value is <see cref="Tools.QuantizingBeyondZeroPolicy.FixAtZero"/>.
         /// </summary>
         /// <remarks>
         /// When the start time of an object is not fixed, there is a chance that the object's end time
@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Gets or sets policy according to which a quantizer should act in case of object's side
         /// is going to be moved beyond an opposite one that is fixed. The default value is
-        /// <see cref="QuantizingBeyondFixedEndPolicy.CollapseAndFix"/>.
+        /// <see cref="Tools.QuantizingBeyondFixedEndPolicy.CollapseAndFix"/>.
         /// </summary>
         /// <remarks>
         /// When one end of an object is fixed, there is a chance that the object's opposite end

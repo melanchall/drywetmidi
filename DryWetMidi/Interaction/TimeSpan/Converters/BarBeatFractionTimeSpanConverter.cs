@@ -99,6 +99,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             var barBeatFractionTimeSpan = (BarBeatFractionTimeSpan)timeSpan;
+            // TODO: epsilon
             if (barBeatFractionTimeSpan.Bars == 0 && barBeatFractionTimeSpan.Beats == 0)
                 return 0;
 

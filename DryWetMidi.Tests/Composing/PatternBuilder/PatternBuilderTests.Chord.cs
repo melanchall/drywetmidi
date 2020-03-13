@@ -140,65 +140,362 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        [Description("Add chord with default velocity and octave.")]
-        public void Chord_DefaultOctave()
+        public void Chord_Intervals_RootNoteName()
         {
             var defaultVelocity = (SevenBitNumber)90;
             var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
 
-            var chordLength = MusicalTimeSpan.Sixteenth.Triplet();
-            var chordTime1 = new MetricTimeSpan(0, 1, 12);
-            var chordTime2 = chordTime1.Add(chordLength, TimeSpanMode.TimeLength);
+            var chordTime = MusicalTimeSpan.Eighth;
 
             var pattern = new PatternBuilder()
                 .SetVelocity(defaultVelocity)
                 .SetOctave(defaultOctave)
-
-                .MoveToTime(chordTime1)
-                .Chord(new[]
-                {
-                    NoteName.C,
-                    NoteName.G
-                }, chordLength)
-                .Repeat()
-
+                .SetNoteLength(defaultNoteLength)
+                .MoveToTime(chordTime)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, NoteName.D)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.C, defaultOctave.Number, chordTime1, chordLength, defaultVelocity),
-                new NoteInfo(NoteName.G, defaultOctave.Number, chordTime1, chordLength, defaultVelocity),
-                new NoteInfo(NoteName.C, defaultOctave.Number, chordTime2, chordLength, defaultVelocity),
-                new NoteInfo(NoteName.G, defaultOctave.Number, chordTime2, chordLength, defaultVelocity)
+                new NoteInfo(NoteName.D, defaultOctave.Number, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, chordTime, defaultNoteLength, defaultVelocity)
             });
         }
 
         [Test]
-        [Description("Add several chords by interval.")]
-        public void Chord_Interval()
+        public void Chord_Intervals_RootNoteName_Length()
         {
-            var defaultNoteLength = MusicalTimeSpan.Quarter;
             var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = Octave.Get(2);
+
+            var chordLength = (MidiTimeSpan)300;
 
             var pattern = new PatternBuilder()
-                .SetNoteLength(defaultNoteLength)
                 .SetVelocity(defaultVelocity)
-                .SetRootNote(Notes.CSharp5)
-
-                .Chord(new[] { Interval.Two, Interval.Five }, Notes.A2)
-                .Chord(new[] { Interval.Two, -Interval.Ten }, Notes.B2)
-
+                .SetOctave(defaultOctave)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, NoteName.D, chordLength)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
-                new NoteInfo(NoteName.A, 2, null, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.B, 2, null, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.D, 3, null, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.D, defaultOctave.Number, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, null, chordLength, defaultVelocity)
+            });
+        }
 
-                new NoteInfo(NoteName.B, 2, defaultNoteLength, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 3, defaultNoteLength, defaultNoteLength, defaultVelocity),
-                new NoteInfo(NoteName.CSharp, 2, defaultNoteLength, defaultNoteLength, defaultVelocity),
+        [Test]
+        public void Chord_Intervals_RootNoteName_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
+
+            var chordVelocity = (SevenBitNumber)70;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .SetNoteLength(defaultNoteLength)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, NoteName.D, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, defaultOctave.Number, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, null, defaultNoteLength, chordVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Intervals_RootNoteName_Length_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+
+            var chordVelocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, NoteName.D, chordLength, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, defaultOctave.Number, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, null, chordLength, chordVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Intervals_RootNote()
+        {
+            var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
+
+            var chordTime = MusicalTimeSpan.Eighth;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(defaultVelocity)
+                .SetOctave(defaultOctave)
+                .SetNoteLength(defaultNoteLength)
+                .MoveToTime(chordTime)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, Notes.D3)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.E, 3, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, 3, chordTime, defaultNoteLength, defaultVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Intervals_RootNote_Length()
+        {
+            var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = Octave.Get(2);
+
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(defaultVelocity)
+                .SetOctave(defaultOctave)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, Notes.D3, chordLength)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.E, 3, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, 3, null, chordLength, defaultVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Intervals_RootNote_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
+
+            var chordVelocity = (SevenBitNumber)70;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .SetNoteLength(defaultNoteLength)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, Notes.D3, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.E, 3, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, 3, null, defaultNoteLength, chordVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Intervals_RootNote_Length_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+
+            var chordVelocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, Notes.D3, chordLength, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.E, 3, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, 3, null, chordLength, chordVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_NotesNames()
+        {
+            var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
+
+            var chordTime = MusicalTimeSpan.Eighth;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(defaultVelocity)
+                .SetOctave(defaultOctave)
+                .SetNoteLength(defaultNoteLength)
+                .MoveToTime(chordTime)
+                .Chord(new[] { NoteName.D, NoteName.E, NoteName.FSharp })
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, defaultOctave.Number, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, chordTime, defaultNoteLength, defaultVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_NotesNames_Length()
+        {
+            var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = Octave.Get(2);
+
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(defaultVelocity)
+                .SetOctave(defaultOctave)
+                .Chord(new[] { NoteName.D, NoteName.E, NoteName.FSharp }, chordLength)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, defaultOctave.Number, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, null, chordLength, defaultVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_NotesNames_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
+
+            var chordVelocity = (SevenBitNumber)70;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .SetNoteLength(defaultNoteLength)
+                .Chord(new[] { NoteName.D, NoteName.E, NoteName.FSharp }, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, defaultOctave.Number, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, null, defaultNoteLength, chordVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_NotesNames_Length_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+
+            var chordVelocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .Chord(new[] { NoteName.D, NoteName.E, NoteName.FSharp }, chordLength, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, defaultOctave.Number, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.E, defaultOctave.Number, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, defaultOctave.Number, null, chordLength, chordVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Notes()
+        {
+            var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
+
+            var chordTime = MusicalTimeSpan.Eighth;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(defaultVelocity)
+                .SetOctave(defaultOctave)
+                .SetNoteLength(defaultNoteLength)
+                .MoveToTime(chordTime)
+                .Chord(new[] { Notes.D3, Notes.E3, Notes.FSharp4 })
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.E, 3, chordTime, defaultNoteLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, 4, chordTime, defaultNoteLength, defaultVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Notes_Length()
+        {
+            var defaultVelocity = (SevenBitNumber)90;
+            var defaultOctave = Octave.Get(2);
+
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(defaultVelocity)
+                .SetOctave(defaultOctave)
+                .Chord(new[] { Notes.D3, Notes.E3, Notes.FSharp4 }, chordLength)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.E, 3, null, chordLength, defaultVelocity),
+                new NoteInfo(NoteName.FSharp, 4, null, chordLength, defaultVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Notes_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+            var defaultNoteLength = (MidiTimeSpan)300;
+
+            var chordVelocity = (SevenBitNumber)70;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .SetNoteLength(defaultNoteLength)
+                .Chord(new[] { Notes.D3, Notes.E3, Notes.FSharp4 }, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.E, 3, null, defaultNoteLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, 4, null, defaultNoteLength, chordVelocity)
+            });
+        }
+
+        [Test]
+        public void Chord_Notes_Length_Velocity()
+        {
+            var defaultOctave = Octave.Get(2);
+
+            var chordVelocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(defaultOctave)
+                .Chord(new[] { Notes.D3, Notes.E3, Notes.FSharp4 }, chordLength, chordVelocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.D, 3, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.E, 3, null, chordLength, chordVelocity),
+                new NoteInfo(NoteName.FSharp, 4, null, chordLength, chordVelocity)
             });
         }
 

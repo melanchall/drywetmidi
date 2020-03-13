@@ -27,6 +27,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private readonly List<ITempoMapValuesCache> _valuesCaches = new List<ITempoMapValuesCache>();
 
+        private bool _isTempoMapReady = true;
+
         #endregion
 
         #region Constructor
@@ -85,6 +87,23 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 _tempo = value;
                 _tempo.ValuesChanged += OnTempoChanged;
+            }
+        }
+
+        internal bool IsTempoMapReady
+        {
+            get { return _isTempoMapReady; }
+            set
+            {
+                if (_isTempoMapReady == value)
+                    return;
+
+                _isTempoMapReady = value;
+                if (_isTempoMapReady)
+                {
+                    InvalidateCaches(TempoMapLine.Tempo);
+                    InvalidateCaches(TempoMapLine.TimeSignature);
+                }
             }
         }
 
@@ -276,6 +295,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private void InvalidateCaches(TempoMapLine tempoMapLine)
         {
+            if (!IsTempoMapReady)
+                return;
+
             foreach (var valuesCache in _valuesCaches.Where(c => c.InvalidateOnLines?.Contains(tempoMapLine) == true))
             {
                 valuesCache.Invalidate(this);

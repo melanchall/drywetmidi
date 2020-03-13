@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,12 +10,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             if (writeStatusByte)
             {
-                var eventType = midiEvent.GetType();
-
-                byte statusByte;
-                if (!StandardEventTypes.SysEx.TryGetStatusByte(eventType, out statusByte))
-                    Debug.Fail($"Unable to write the {eventType} event.");
-
+                var statusByte = GetStatusByte(midiEvent);
                 writer.WriteByte(statusByte);
             }
 
@@ -35,11 +29,15 @@ namespace Melanchall.DryWetMidi.Core
 
         public byte GetStatusByte(MidiEvent midiEvent)
         {
-            byte statusByte;
-            if (!StandardEventTypes.SysEx.TryGetStatusByte(midiEvent.GetType(), out statusByte))
-                Debug.Fail($"No status byte defined for {midiEvent.GetType()}.");
+            switch (midiEvent.EventType)
+            {
+                case MidiEventType.NormalSysEx:
+                    return EventStatusBytes.Global.NormalSysEx;
+                case MidiEventType.EscapeSysEx:
+                    return EventStatusBytes.Global.EscapeSysEx;
+            }
 
-            return statusByte;
+            return 0;
         }
 
         #endregion

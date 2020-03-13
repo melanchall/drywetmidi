@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,7 +12,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Parameters of the MIDI channel event.
         /// </summary>
-        private readonly SevenBitNumber[] _parameters;
+        internal readonly byte[] _parameters;
 
         #endregion
 
@@ -24,13 +23,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="eventType">The type of event.</param>
         /// <param name="parametersCount">Count of the parameters for this channel event.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Parameters count is negative number which is unallowable.</exception>
         protected ChannelEvent(MidiEventType eventType, int parametersCount)
             : base(eventType)
         {
-            ThrowIfArgument.IsNegative(nameof(parametersCount), parametersCount, "Parameters count is negative.");
-
-            _parameters = new SevenBitNumber[parametersCount];
+            _parameters = new byte[parametersCount];
         }
 
         #endregion
@@ -49,7 +45,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Value of parameter at the specified index.</returns>
         protected SevenBitNumber this[int index]
         {
-            get { return _parameters[index]; }
+            get { return (SevenBitNumber)_parameters[index]; }
             set { _parameters[index] = value; }
         }
 
@@ -85,7 +81,7 @@ namespace Melanchall.DryWetMidi.Core
                     }
                 }
 
-                _parameters[i] = (SevenBitNumber)parameter;
+                _parameters[i] = parameter;
             }
         }
 
@@ -96,10 +92,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         internal sealed override void Write(MidiWriter writer, WritingSettings settings)
         {
-            foreach (var parameter in _parameters)
-            {
-                writer.WriteByte(parameter);
-            }
+            writer.WriteBytes(_parameters);
         }
 
         /// <summary>
@@ -110,23 +103,6 @@ namespace Melanchall.DryWetMidi.Core
         internal sealed override int GetSize(WritingSettings settings)
         {
             return _parameters.Length;
-        }
-
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
-        protected sealed override MidiEvent CloneEvent()
-        {
-            var eventType = GetType();
-            var channelEvent = (ChannelEvent)Activator.CreateInstance(eventType);
-
-            channelEvent.Channel = Channel;
-            Array.Copy(_parameters,
-                       channelEvent._parameters,
-                       _parameters.Length);
-
-            return channelEvent;
         }
 
         #endregion

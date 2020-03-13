@@ -71,6 +71,61 @@ namespace Melanchall.DryWetMidi.Core
         public abstract MidiChunk Clone();
 
         /// <summary>
+        /// Returns array of IDs of standard chunks.
+        /// </summary>
+        /// <remarks>
+        /// Standard chunks are header chunk (ID is MThd) and track chunk (ID is MTrk).
+        /// </remarks>
+        /// <returns>Array of IDs of standard chunks.</returns>
+        public static string[] GetStandardChunkIds()
+        {
+            return StandardChunkIds.GetIds();
+        }
+
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content.
+        /// </summary>
+        /// <param name="chunk1">The first chunk to compare, or null.</param>
+        /// <param name="chunk2">The second chunk to compare, or null.</param>
+        /// <returns>true if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
+        /// otherwise, false.</returns>
+        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2)
+        {
+            string message;
+            return Equals(chunk1, chunk2, out message);
+        }
+
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content.
+        /// </summary>
+        /// <param name="chunk1">The first chunk to compare, or null.</param>
+        /// <param name="chunk2">The second chunk to compare, or null.</param>
+        /// <param name="message">Message containing information about what exactly is different in
+        /// <paramref name="chunk1"/> and <paramref name="chunk2"/>.</param>
+        /// <returns>true if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
+        /// otherwise, false.</returns>
+        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, out string message)
+        {
+            return Equals(chunk1, chunk2, null, out message);
+        }
+
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content using
+        /// the specified comparison settings.
+        /// </summary>
+        /// <param name="chunk1">The first chunk to compare, or null.</param>
+        /// <param name="chunk2">The second chunk to compare, or null.</param>
+        /// <param name="settings">Settings according to which chunks should be compared.</param>
+        /// <param name="message">Message containing information about what exactly is different in
+        /// <paramref name="chunk1"/> and <paramref name="chunk2"/>.</param>
+        /// <returns>true if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
+        /// otherwise, false.</returns>
+        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, MidiChunkEqualityCheckSettings settings, out string message)
+        {
+            return MidiChunkEquality.Equals(chunk1, chunk2, settings ?? new MidiChunkEqualityCheckSettings(), out message);
+        }
+
+        /// <summary>
         /// Reads chunk from the <see cref="MidiReader"/>'s underlying stream according to
         /// specified <see cref="ReadingSettings"/>.
         /// </summary>
@@ -99,7 +154,7 @@ namespace Melanchall.DryWetMidi.Core
 
             var bytesUnread = size - bytesRead;
             if (bytesUnread > 0)
-                reader.Position += bytesUnread;
+                reader.Position += Math.Min(bytesUnread, reader.Length);
         }
 
         /// <summary>

@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddChordAction : IPatternAction
+    internal sealed class AddChordAction : PatternAction
     {
         #region Constructor
 
@@ -20,13 +20,18 @@ namespace Melanchall.DryWetMidi.Composing
 
         #endregion
 
-        #region IPatternAction
+        #region Overrides
 
-        public PatternActionResult Invoke(long time, PatternContext context)
+        public override PatternActionResult Invoke(long time, PatternContext context)
         {
+            if (State == PatternActionState.Excluded)
+                return PatternActionResult.DoNothing;
+
             context.SaveTime(time);
 
             var chordLength = LengthConverter.ConvertFrom(ChordDescriptor.Length, time, context.TempoMap);
+            if (State == PatternActionState.Disabled)
+                return new PatternActionResult(time + chordLength);
 
             return new PatternActionResult(time + chordLength,
                                            ChordDescriptor.Notes.Select(d => new Note(d.NoteNumber, chordLength, time)
@@ -34,6 +39,11 @@ namespace Melanchall.DryWetMidi.Composing
                                                Channel = context.Channel,
                                                Velocity = ChordDescriptor.Velocity
                                            }));
+        }
+
+        public override PatternAction Clone()
+        {
+            return new AddChordAction(new ChordDescriptor(ChordDescriptor.Notes, ChordDescriptor.Velocity, ChordDescriptor.Length.Clone()));
         }
 
         #endregion

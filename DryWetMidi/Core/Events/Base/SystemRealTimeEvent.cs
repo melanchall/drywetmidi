@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a system real-time event.
@@ -17,7 +15,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="SystemRealTimeEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
         protected SystemRealTimeEvent(MidiEventType eventType)
             : base(eventType)
         {

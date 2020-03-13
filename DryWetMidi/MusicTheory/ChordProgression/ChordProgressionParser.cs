@@ -29,8 +29,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ['m'] = 1000
         };
 
-        private const string InvalidChordCharacteristicsString = "Invalid chord characteristics string.";
-
         #endregion
 
         #region Methods
@@ -63,7 +61,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 var degreeGroupIndex = degreeGroup.Index;
                 var chordString =
                     fullString.Substring(0, degreeGroupIndex - matchIndex) +
-                    rootNoteName.ToString() +
+                    rootNoteName +
                     fullString.Substring(degreeGroupIndex - matchIndex + degreeGroup.Length);
 
                 Chord chord;

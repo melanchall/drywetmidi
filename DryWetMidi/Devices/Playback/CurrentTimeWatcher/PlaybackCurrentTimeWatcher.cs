@@ -179,7 +179,7 @@ namespace Melanchall.DryWetMidi.Devices
             RecreateClock();
         }
 
-        private void OnTick(object sender, TickedEventArgs e)
+        private void OnTick(object sender, EventArgs e)
         {
             if (_disposed || !IsWatching)
                 return;

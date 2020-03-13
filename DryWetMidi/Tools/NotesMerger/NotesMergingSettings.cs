@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a policy which determines how <see cref="Note.Velocity"/> of notes should be merged.
-        /// The default value is <see cref="VelocityMergingPolicy.First"/>.
+        /// The default value is <see cref="Tools.VelocityMergingPolicy.First"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public VelocityMergingPolicy VelocityMergingPolicy
@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a policy which determines how <see cref="Note.OffVelocity"/> of notes should be merged.
-        /// The default value is <see cref="VelocityMergingPolicy.Last"/>.
+        /// The default value is <see cref="Tools.VelocityMergingPolicy.Last"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public VelocityMergingPolicy OffVelocityMergingPolicy

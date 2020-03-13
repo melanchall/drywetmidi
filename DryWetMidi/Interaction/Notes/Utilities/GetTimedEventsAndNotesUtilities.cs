@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Nested classes
 
-        private sealed class NoteEventsDescriptor
+        internal sealed class NoteEventsDescriptor
         {
             #region Constructor
 
@@ -92,55 +92,14 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
 
             var noteEventsDescriptors = new List<NoteEventsDescriptor>();
-            List<TimedEvent> eventsTail = null;
+            var eventsTail = new ObjectWrapper<List<TimedEvent>>();
 
             foreach (var timedEvent in timedEvents)
             {
-                var midiEvent = timedEvent?.Event;
-
-                var noteOnEvent = midiEvent as NoteOnEvent;
-                if (noteOnEvent != null)
+                foreach (var timedObject in GetTimedEventsAndNotes(timedEvent, noteEventsDescriptors, eventsTail))
                 {
-                    noteEventsDescriptors.Add(new NoteEventsDescriptor(timedEvent, eventsTail = new List<TimedEvent>()));
-                    continue;
+                    yield return timedObject;
                 }
-
-                var noteOffEvent = midiEvent as NoteOffEvent;
-                if (noteOffEvent != null)
-                {
-                    var noteEventsDescriptor = noteEventsDescriptors.FirstOrDefault(d => d.IsCorrespondingNoteOffEvent(noteOffEvent));
-                    if (noteEventsDescriptor != null)
-                    {
-                        noteEventsDescriptor.CompleteNote(timedEvent);
-                        if (noteEventsDescriptors.First() != noteEventsDescriptor)
-                            continue;
-
-                        for (int i = 0; i < noteEventsDescriptors.Count; i++)
-                        {
-                            var descriptor = noteEventsDescriptors[i];
-                            if (!descriptor.IsNoteCompleted)
-                                break;
-
-                            foreach (var timedObject in descriptor.GetTimedObjects())
-                            {
-                                yield return timedObject;
-                            }
-
-                            noteEventsDescriptors.RemoveAt(i);
-                            i--;
-                        }
-
-                        if (!noteEventsDescriptors.Any())
-                            eventsTail = null;
-
-                        continue;
-                    }
-                }
-
-                if (eventsTail != null)
-                    eventsTail.Add(timedEvent);
-                else
-                    yield return timedEvent;
             }
 
             foreach (var timedObject in noteEventsDescriptors.SelectMany(d => d.GetTimedObjects()))
@@ -207,6 +166,55 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
             return midiFile.GetTimedEvents().GetTimedEventsAndNotes();
+        }
+
+        internal static IEnumerable<ITimedObject> GetTimedEventsAndNotes(TimedEvent timedEvent, List<NoteEventsDescriptor>  noteEventsDescriptors, ObjectWrapper<List<TimedEvent>> eventsTail)
+        {
+            var midiEvent = timedEvent?.Event;
+
+            var noteOnEvent = midiEvent as NoteOnEvent;
+            if (noteOnEvent != null)
+            {
+                noteEventsDescriptors.Add(new NoteEventsDescriptor(timedEvent, eventsTail.Object = new List<TimedEvent>()));
+                yield break;
+            }
+
+            var noteOffEvent = midiEvent as NoteOffEvent;
+            if (noteOffEvent != null)
+            {
+                var noteEventsDescriptor = noteEventsDescriptors.FirstOrDefault(d => d.IsCorrespondingNoteOffEvent(noteOffEvent));
+                if (noteEventsDescriptor != null)
+                {
+                    noteEventsDescriptor.CompleteNote(timedEvent);
+                    if (noteEventsDescriptors.First() != noteEventsDescriptor)
+                        yield break;
+
+                    for (int i = 0; i < noteEventsDescriptors.Count; i++)
+                    {
+                        var descriptor = noteEventsDescriptors[i];
+                        if (!descriptor.IsNoteCompleted)
+                            break;
+
+                        foreach (var timedObject in descriptor.GetTimedObjects())
+                        {
+                            yield return timedObject;
+                        }
+
+                        noteEventsDescriptors.RemoveAt(i);
+                        i--;
+                    }
+
+                    if (!noteEventsDescriptors.Any())
+                        eventsTail.Object = null;
+
+                    yield break;
+                }
+            }
+
+            if (eventsTail.Object != null)
+                eventsTail.Object.Add(timedEvent);
+            else
+                yield return timedEvent;
         }
 
         #endregion
