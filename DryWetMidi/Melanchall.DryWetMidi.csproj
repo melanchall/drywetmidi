@@ -14,6 +14,7 @@
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/master/LICENSE</licenseUrl>
     <PackageProjectUrl>https://github.com/melanchall/drywetmidi</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/melanchall/drywetmidi/master/Resources/NuGet/icon.png</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/melanchall/drywetmidi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -34,6 +35,7 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
   
   <ItemGroup>
     <Folder Include="Properties\" />
+    <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>

@@ -37,14 +37,18 @@ steps:
   displayName: Build solution
   inputs:
     command: 'build'
+    projects: |
+      DryWetMidi/Melanchall.DryWetMidi.csproj
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Create NuGet package
   inputs: 
     command: 'pack'
-    projects: '**/Melanchall.DryWetMidi.csproj'
+    projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
     outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+    packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+    nobuild: true
 
 - task: PublishPipelineArtifact@1
   displayName: Publish 'NuGetPackage' artifact
