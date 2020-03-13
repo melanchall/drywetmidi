@@ -16,14 +16,6 @@ namespace Melanchall.DryWetMidi.Core
 
         #endregion
 
-        #region Constructor
-
-        internal ReaderSettings()
-        {
-        }
-
-        #endregion
-
         #region Properties
 
         /// <summary>
