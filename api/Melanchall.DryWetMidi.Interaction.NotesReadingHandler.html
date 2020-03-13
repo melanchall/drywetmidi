@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class NotesReadingHandler
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler" class="text-break">Class NotesReadingHandler
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Collects notes during MIDI data reading.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -139,11 +141,19 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class NotesReadingHandler : ReadingHandler</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+This handler can be added to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReadingHandlers">ReadingHandlers</a> collection to
+collect notes along with MIDI data reading. Scope of the handler is <code>TargetScope.Event | TargetScope.File</code>.
+</div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler__ctor_System_Boolean_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.#ctor(System.Boolean)">NotesReadingHandler(Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html">NotesReadingHandler</a> with the specified
+value indicating whether notes should be automatically sorted on <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes">Notes</a> get.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -162,7 +172,8 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">sortNotes</span></td>
-        <td></td>
+        <td>A value indicating whether notes should be automatically sorted
+on <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html#Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes">Notes</a> get.</td>
       </tr>
     </tbody>
   </table>
@@ -170,7 +181,10 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Notes" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Notes">Notes</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets the notes collected during MIDI data reading. If the current <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.html">NotesReadingHandler</a>
+was created with <code>sortNotes</code> set to <code>true</code>, the returned notes will be sorted by start time.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -195,7 +209,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Initialize_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_Initialize" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.Initialize">Initialize()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes handler. This method will be called before reading MIDI data.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -205,7 +221,10 @@
   <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Initialize">ReadingHandler.Initialize()</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishEventReading_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)">OnFinishEventReading(MidiEvent, Int64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of MIDI event reading. Called after MIDI event is read and before
+putting it to <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html#Melanchall_DryWetMidi_Core_TrackChunk_Events">Events</a> collection.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -224,12 +243,12 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
         <td><span class="parametername">midiEvent</span></td>
-        <td></td>
+        <td>MIDI event read.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td><span class="parametername">absoluteTime</span></td>
-        <td></td>
+        <td>Absolute time of <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -237,7 +256,9 @@
   <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_">ReadingHandler.OnFinishEventReading(MidiEvent, Int64)</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishFileReading_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_NotesReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Interaction.NotesReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)">OnFinishFileReading(MidiFile)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of file reading. Called after file is read.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -256,7 +277,7 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td><span class="parametername">midiFile</span></td>
-        <td></td>
+        <td>MIDI file read.</td>
       </tr>
     </tbody>
   </table>
@@ -282,7 +303,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

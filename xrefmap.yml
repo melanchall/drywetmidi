@@ -1792,6 +1792,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Composing.ChordDescriptor.Velocity
   nameWithType: ChordDescriptor.Velocity
+- uid: Melanchall.DryWetMidi.Composing.ChordSelection
+  name: ChordSelection
+  href: api/Melanchall.DryWetMidi.Composing.ChordSelection.html
+  commentId: T:Melanchall.DryWetMidi.Composing.ChordSelection
+  fullName: Melanchall.DryWetMidi.Composing.ChordSelection
+  nameWithType: ChordSelection
 - uid: Melanchall.DryWetMidi.Composing.ChordTransformation
   name: ChordTransformation
   href: api/Melanchall.DryWetMidi.Composing.ChordTransformation.html
@@ -1921,6 +1927,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Composing.NoteDescriptor.Velocity
   nameWithType: NoteDescriptor.Velocity
+- uid: Melanchall.DryWetMidi.Composing.NoteSelection
+  name: NoteSelection
+  href: api/Melanchall.DryWetMidi.Composing.NoteSelection.html
+  commentId: T:Melanchall.DryWetMidi.Composing.NoteSelection
+  fullName: Melanchall.DryWetMidi.Composing.NoteSelection
+  nameWithType: NoteSelection
 - uid: Melanchall.DryWetMidi.Composing.NoteTransformation
   name: NoteTransformation
   href: api/Melanchall.DryWetMidi.Composing.NoteTransformation.html
@@ -1984,6 +1996,30 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Composing.Pattern.ToTrackChunk
   nameWithType: Pattern.ToTrackChunk
+- uid: Melanchall.DryWetMidi.Composing.PatternActionState
+  name: PatternActionState
+  href: api/Melanchall.DryWetMidi.Composing.PatternActionState.html
+  commentId: T:Melanchall.DryWetMidi.Composing.PatternActionState
+  fullName: Melanchall.DryWetMidi.Composing.PatternActionState
+  nameWithType: PatternActionState
+- uid: Melanchall.DryWetMidi.Composing.PatternActionState.Disabled
+  name: Disabled
+  href: api/Melanchall.DryWetMidi.Composing.PatternActionState.html#Melanchall_DryWetMidi_Composing_PatternActionState_Disabled
+  commentId: F:Melanchall.DryWetMidi.Composing.PatternActionState.Disabled
+  fullName: Melanchall.DryWetMidi.Composing.PatternActionState.Disabled
+  nameWithType: PatternActionState.Disabled
+- uid: Melanchall.DryWetMidi.Composing.PatternActionState.Enabled
+  name: Enabled
+  href: api/Melanchall.DryWetMidi.Composing.PatternActionState.html#Melanchall_DryWetMidi_Composing_PatternActionState_Enabled
+  commentId: F:Melanchall.DryWetMidi.Composing.PatternActionState.Enabled
+  fullName: Melanchall.DryWetMidi.Composing.PatternActionState.Enabled
+  nameWithType: PatternActionState.Enabled
+- uid: Melanchall.DryWetMidi.Composing.PatternActionState.Excluded
+  name: Excluded
+  href: api/Melanchall.DryWetMidi.Composing.PatternActionState.html#Melanchall_DryWetMidi_Composing_PatternActionState_Excluded
+  commentId: F:Melanchall.DryWetMidi.Composing.PatternActionState.Excluded
+  fullName: Melanchall.DryWetMidi.Composing.PatternActionState.Excluded
+  nameWithType: PatternActionState.Excluded
 - uid: Melanchall.DryWetMidi.Composing.PatternBuilder
   name: PatternBuilder
   href: api/Melanchall.DryWetMidi.Composing.PatternBuilder.html
@@ -2740,6 +2776,32 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.CombineInSequence
   nameWithType: PatternUtilities.CombineInSequence
+- uid: Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordSelection,Melanchall.DryWetMidi.Composing.PatternActionState,System.Boolean)
+  name: SetChordsState(Pattern, ChordSelection, PatternActionState, Boolean)
+  href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SetChordsState_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_ChordSelection_Melanchall_DryWetMidi_Composing_PatternActionState_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordSelection,Melanchall.DryWetMidi.Composing.PatternActionState,System.Boolean)
+  fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Composing.ChordSelection, Melanchall.DryWetMidi.Composing.PatternActionState, System.Boolean)
+  nameWithType: PatternUtilities.SetChordsState(Pattern, ChordSelection, PatternActionState, Boolean)
+- uid: Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState*
+  name: SetChordsState
+  href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SetChordsState_
+  commentId: Overload:Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState
+  nameWithType: PatternUtilities.SetChordsState
+- uid: Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.NoteSelection,Melanchall.DryWetMidi.Composing.PatternActionState,System.Boolean)
+  name: SetNotesState(Pattern, NoteSelection, PatternActionState, Boolean)
+  href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SetNotesState_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_NoteSelection_Melanchall_DryWetMidi_Composing_PatternActionState_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.NoteSelection,Melanchall.DryWetMidi.Composing.PatternActionState,System.Boolean)
+  fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Composing.NoteSelection, Melanchall.DryWetMidi.Composing.PatternActionState, System.Boolean)
+  nameWithType: PatternUtilities.SetNotesState(Pattern, NoteSelection, PatternActionState, Boolean)
+- uid: Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState*
+  name: SetNotesState
+  href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SetNotesState_
+  commentId: Overload:Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState
+  nameWithType: PatternUtilities.SetNotesState
 - uid: Melanchall.DryWetMidi.Composing.PatternUtilities.SplitAtAllAnchors(Melanchall.DryWetMidi.Composing.Pattern,System.Boolean)
   name: SplitAtAllAnchors(Pattern, Boolean)
   href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SplitAtAllAnchors_Melanchall_DryWetMidi_Composing_Pattern_System_Boolean_
@@ -2792,6 +2854,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.SplitAtMarker
   nameWithType: PatternUtilities.SplitAtMarker
+- uid: Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordSelection,Melanchall.DryWetMidi.Composing.ChordTransformation,System.Boolean)
+  name: TransformChords(Pattern, ChordSelection, ChordTransformation, Boolean)
+  href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_TransformChords_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_ChordSelection_Melanchall_DryWetMidi_Composing_ChordTransformation_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordSelection,Melanchall.DryWetMidi.Composing.ChordTransformation,System.Boolean)
+  fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Composing.ChordSelection, Melanchall.DryWetMidi.Composing.ChordTransformation, System.Boolean)
+  nameWithType: PatternUtilities.TransformChords(Pattern, ChordSelection, ChordTransformation, Boolean)
 - uid: Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordTransformation,System.Boolean)
   name: TransformChords(Pattern, ChordTransformation, Boolean)
   href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_TransformChords_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_ChordTransformation_System_Boolean_
@@ -2805,6 +2873,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords
   nameWithType: PatternUtilities.TransformChords
+- uid: Melanchall.DryWetMidi.Composing.PatternUtilities.TransformNotes(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.NoteSelection,Melanchall.DryWetMidi.Composing.NoteTransformation,System.Boolean)
+  name: TransformNotes(Pattern, NoteSelection, NoteTransformation, Boolean)
+  href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_TransformNotes_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_NoteSelection_Melanchall_DryWetMidi_Composing_NoteTransformation_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Composing.PatternUtilities.TransformNotes(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.NoteSelection,Melanchall.DryWetMidi.Composing.NoteTransformation,System.Boolean)
+  fullName: Melanchall.DryWetMidi.Composing.PatternUtilities.TransformNotes(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Composing.NoteSelection, Melanchall.DryWetMidi.Composing.NoteTransformation, System.Boolean)
+  nameWithType: PatternUtilities.TransformNotes(Pattern, NoteSelection, NoteTransformation, Boolean)
 - uid: Melanchall.DryWetMidi.Composing.PatternUtilities.TransformNotes(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.NoteTransformation,System.Boolean)
   name: TransformNotes(Pattern, NoteTransformation, Boolean)
   href: api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_TransformNotes_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_NoteTransformation_System_Boolean_
@@ -3069,6 +3143,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.AftertouchValue
   nameWithType: ChannelAftertouchEvent.AftertouchValue
+- uid: Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.html#Melanchall_DryWetMidi_Core_ChannelAftertouchEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.CloneEvent()
+  nameWithType: ChannelAftertouchEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.html#Melanchall_DryWetMidi_Core_ChannelAftertouchEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.CloneEvent
+  nameWithType: ChannelAftertouchEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.html#Melanchall_DryWetMidi_Core_ChannelAftertouchEvent_ToString
@@ -3114,19 +3201,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ChannelEvent.Channel
   nameWithType: ChannelEvent.Channel
-- uid: Melanchall.DryWetMidi.Core.ChannelEvent.CloneEvent
-  name: CloneEvent()
-  href: api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_CloneEvent
-  commentId: M:Melanchall.DryWetMidi.Core.ChannelEvent.CloneEvent
-  fullName: Melanchall.DryWetMidi.Core.ChannelEvent.CloneEvent()
-  nameWithType: ChannelEvent.CloneEvent()
-- uid: Melanchall.DryWetMidi.Core.ChannelEvent.CloneEvent*
-  name: CloneEvent
-  href: api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_CloneEvent_
-  commentId: Overload:Melanchall.DryWetMidi.Core.ChannelEvent.CloneEvent
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.ChannelEvent.CloneEvent
-  nameWithType: ChannelEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.ChannelEvent.Item(System.Int32)
   name: Item[Int32]
   href: api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Item_System_Int32_
@@ -3693,6 +3767,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ControlChangeEvent.ControlChangeEvent
   nameWithType: ControlChangeEvent.ControlChangeEvent
+- uid: Melanchall.DryWetMidi.Core.ControlChangeEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html#Melanchall_DryWetMidi_Core_ControlChangeEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.ControlChangeEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.ControlChangeEvent.CloneEvent()
+  nameWithType: ControlChangeEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.ControlChangeEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html#Melanchall_DryWetMidi_Core_ControlChangeEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ControlChangeEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ControlChangeEvent.CloneEvent
+  nameWithType: ControlChangeEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.ControlChangeEvent.ControlNumber
   name: ControlNumber
   href: api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html#Melanchall_DryWetMidi_Core_ControlChangeEvent_ControlNumber
@@ -3964,6 +4051,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.EscapeSysExEvent.EscapeSysExEvent
   nameWithType: EscapeSysExEvent.EscapeSysExEvent
+- uid: Melanchall.DryWetMidi.Core.EscapeSysExEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.EscapeSysExEvent.html#Melanchall_DryWetMidi_Core_EscapeSysExEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.EscapeSysExEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.EscapeSysExEvent.CloneEvent()
+  nameWithType: EscapeSysExEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.EscapeSysExEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.EscapeSysExEvent.html#Melanchall_DryWetMidi_Core_EscapeSysExEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EscapeSysExEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EscapeSysExEvent.CloneEvent
+  nameWithType: EscapeSysExEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.EscapeSysExEvent.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Core.EscapeSysExEvent.html#Melanchall_DryWetMidi_Core_EscapeSysExEvent_ToString
@@ -4963,12 +5063,12 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.MetaEvent
   fullName: Melanchall.DryWetMidi.Core.MetaEvent
   nameWithType: MetaEvent
-- uid: Melanchall.DryWetMidi.Core.MetaEvent.#ctor(Melanchall.DryWetMidi.Core.MidiEventType)
-  name: MetaEvent(MidiEventType)
-  href: api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent__ctor_Melanchall_DryWetMidi_Core_MidiEventType_
-  commentId: M:Melanchall.DryWetMidi.Core.MetaEvent.#ctor(Melanchall.DryWetMidi.Core.MidiEventType)
-  fullName: Melanchall.DryWetMidi.Core.MetaEvent.MetaEvent(Melanchall.DryWetMidi.Core.MidiEventType)
-  nameWithType: MetaEvent.MetaEvent(MidiEventType)
+- uid: Melanchall.DryWetMidi.Core.MetaEvent.#ctor
+  name: MetaEvent()
+  href: api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent__ctor
+  commentId: M:Melanchall.DryWetMidi.Core.MetaEvent.#ctor
+  fullName: Melanchall.DryWetMidi.Core.MetaEvent.MetaEvent()
+  nameWithType: MetaEvent.MetaEvent()
 - uid: Melanchall.DryWetMidi.Core.MetaEvent.#ctor*
   name: MetaEvent
   href: api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent__ctor_
@@ -4989,6 +5089,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MetaEvent.GetContentSize
   nameWithType: MetaEvent.GetContentSize
+- uid: Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes
+  name: GetStandardMetaEventStatusBytes()
+  href: api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes
+  commentId: M:Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes
+  fullName: Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes()
+  nameWithType: MetaEvent.GetStandardMetaEventStatusBytes()
+- uid: Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes*
+  name: GetStandardMetaEventStatusBytes
+  href: api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes
+  nameWithType: MetaEvent.GetStandardMetaEventStatusBytes
 - uid: Melanchall.DryWetMidi.Core.MetaEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32)
   name: ReadContent(MidiReader, ReadingSettings, Int32)
   href: api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_
@@ -5060,6 +5173,37 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiChunk.Clone
   nameWithType: MidiChunk.Clone
+- uid: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk)
+  name: Equals(MidiChunk, MidiChunk)
+  href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_Equals_Melanchall_DryWetMidi_Core_MidiChunk_Melanchall_DryWetMidi_Core_MidiChunk_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk)
+  fullName: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunk)
+  nameWithType: MidiChunk.Equals(MidiChunk, MidiChunk)
+- uid: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings,System.String@)
+  name: Equals(MidiChunk, MidiChunk, MidiChunkEqualityCheckSettings, out String)
+  href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_Equals_Melanchall_DryWetMidi_Core_MidiChunk_Melanchall_DryWetMidi_Core_MidiChunk_Melanchall_DryWetMidi_Core_MidiChunkEqualityCheckSettings_System_String__
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings,System.String@)
+  name.vb: Equals(MidiChunk, MidiChunk, MidiChunkEqualityCheckSettings, ByRef String)
+  fullName: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings, out System.String)
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings, ByRef System.String)
+  nameWithType: MidiChunk.Equals(MidiChunk, MidiChunk, MidiChunkEqualityCheckSettings, out String)
+  nameWithType.vb: MidiChunk.Equals(MidiChunk, MidiChunk, MidiChunkEqualityCheckSettings, ByRef String)
+- uid: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk,System.String@)
+  name: Equals(MidiChunk, MidiChunk, out String)
+  href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_Equals_Melanchall_DryWetMidi_Core_MidiChunk_Melanchall_DryWetMidi_Core_MidiChunk_System_String__
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk,System.String@)
+  name.vb: Equals(MidiChunk, MidiChunk, ByRef String)
+  fullName: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunk, out System.String)
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiChunk.Equals(Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunk, ByRef System.String)
+  nameWithType: MidiChunk.Equals(MidiChunk, MidiChunk, out String)
+  nameWithType.vb: MidiChunk.Equals(MidiChunk, MidiChunk, ByRef String)
+- uid: Melanchall.DryWetMidi.Core.MidiChunk.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiChunk.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiChunk.Equals
+  nameWithType: MidiChunk.Equals
 - uid: Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)
   name: GetContentSize(WritingSettings)
   href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_
@@ -5073,6 +5217,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize
   nameWithType: MidiChunk.GetContentSize
+- uid: Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds
+  name: GetStandardChunkIds()
+  href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_GetStandardChunkIds
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds
+  fullName: Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds()
+  nameWithType: MidiChunk.GetStandardChunkIds()
+- uid: Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds*
+  name: GetStandardChunkIds
+  href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_GetStandardChunkIds_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds
+  nameWithType: MidiChunk.GetStandardChunkIds
 - uid: Melanchall.DryWetMidi.Core.MidiChunk.IdLength
   name: IdLength
   href: api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_IdLength
@@ -5105,6 +5262,76 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiChunk.WriteContent
   nameWithType: MidiChunk.WriteContent
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings
+  name: MidiChunkEqualityCheckSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings
+  nameWithType: MidiChunkEqualityCheckSettings
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.EventEqualityCheckSettings
+  name: EventEqualityCheckSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityCheckSettings_EventEqualityCheckSettings
+  commentId: P:Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.EventEqualityCheckSettings
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.EventEqualityCheckSettings
+  nameWithType: MidiChunkEqualityCheckSettings.EventEqualityCheckSettings
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.EventEqualityCheckSettings*
+  name: EventEqualityCheckSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityCheckSettings_EventEqualityCheckSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.EventEqualityCheckSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.EventEqualityCheckSettings
+  nameWithType: MidiChunkEqualityCheckSettings.EventEqualityCheckSettings
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer
+  name: MidiChunkEqualityComparer
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer
+  nameWithType: MidiChunkEqualityComparer
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.#ctor
+  name: MidiChunkEqualityComparer()
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityComparer__ctor
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.#ctor
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.MidiChunkEqualityComparer()
+  nameWithType: MidiChunkEqualityComparer.MidiChunkEqualityComparer()
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.#ctor(Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings)
+  name: MidiChunkEqualityComparer(MidiChunkEqualityCheckSettings)
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityComparer__ctor_Melanchall_DryWetMidi_Core_MidiChunkEqualityCheckSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.#ctor(Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings)
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.MidiChunkEqualityComparer(Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings)
+  nameWithType: MidiChunkEqualityComparer.MidiChunkEqualityComparer(MidiChunkEqualityCheckSettings)
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.#ctor*
+  name: MidiChunkEqualityComparer
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityComparer__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.MidiChunkEqualityComparer
+  nameWithType: MidiChunkEqualityComparer.MidiChunkEqualityComparer
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk)
+  name: Equals(MidiChunk, MidiChunk)
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityComparer_Equals_Melanchall_DryWetMidi_Core_MidiChunk_Melanchall_DryWetMidi_Core_MidiChunk_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiChunk,Melanchall.DryWetMidi.Core.MidiChunk)
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiChunk, Melanchall.DryWetMidi.Core.MidiChunk)
+  nameWithType: MidiChunkEqualityComparer.Equals(MidiChunk, MidiChunk)
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityComparer_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.Equals
+  nameWithType: MidiChunkEqualityComparer.Equals
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiChunk)
+  name: GetHashCode(MidiChunk)
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityComparer_GetHashCode_Melanchall_DryWetMidi_Core_MidiChunk_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiChunk)
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiChunk)
+  nameWithType: MidiChunkEqualityComparer.GetHashCode(MidiChunk)
+- uid: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.GetHashCode*
+  name: GetHashCode
+  href: api/Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiChunkEqualityComparer_GetHashCode_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.GetHashCode
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.GetHashCode
+  nameWithType: MidiChunkEqualityComparer.GetHashCode
 - uid: Melanchall.DryWetMidi.Core.MidiEvent
   name: MidiEvent
   href: api/Melanchall.DryWetMidi.Core.MidiEvent.html
@@ -5163,6 +5390,37 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiEvent.DeltaTime
   nameWithType: MidiEvent.DeltaTime
+- uid: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent)
+  name: Equals(MidiEvent, MidiEvent)
+  href: api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent)
+  fullName: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEvent)
+  nameWithType: MidiEvent.Equals(MidiEvent, MidiEvent)
+- uid: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings,System.String@)
+  name: Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, out String)
+  href: api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_System_String__
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings,System.String@)
+  name.vb: Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, ByRef String)
+  fullName: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings, out System.String)
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings, ByRef System.String)
+  nameWithType: MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, out String)
+  nameWithType.vb: MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, ByRef String)
+- uid: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent,System.String@)
+  name: Equals(MidiEvent, MidiEvent, out String)
+  href: api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_String__
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent,System.String@)
+  name.vb: Equals(MidiEvent, MidiEvent, ByRef String)
+  fullName: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEvent, out System.String)
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiEvent.Equals(Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEvent, ByRef System.String)
+  nameWithType: MidiEvent.Equals(MidiEvent, MidiEvent, out String)
+  nameWithType.vb: MidiEvent.Equals(MidiEvent, MidiEvent, ByRef String)
+- uid: Melanchall.DryWetMidi.Core.MidiEvent.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEvent.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEvent.Equals
+  nameWithType: MidiEvent.Equals
 - uid: Melanchall.DryWetMidi.Core.MidiEvent.EventType
   name: EventType
   href: api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_EventType
@@ -5182,6 +5440,89 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.MidiEvent.UnknownContentSize
   fullName: Melanchall.DryWetMidi.Core.MidiEvent.UnknownContentSize
   nameWithType: MidiEvent.UnknownContentSize
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings
+  name: MidiEventEqualityCheckSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings
+  nameWithType: MidiEventEqualityCheckSettings
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.CompareDeltaTimes
+  name: CompareDeltaTimes
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_CompareDeltaTimes
+  commentId: P:Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.CompareDeltaTimes
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.CompareDeltaTimes
+  nameWithType: MidiEventEqualityCheckSettings.CompareDeltaTimes
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.CompareDeltaTimes*
+  name: CompareDeltaTimes
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_CompareDeltaTimes_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.CompareDeltaTimes
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.CompareDeltaTimes
+  nameWithType: MidiEventEqualityCheckSettings.CompareDeltaTimes
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.TextComparison
+  name: TextComparison
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_TextComparison
+  commentId: P:Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.TextComparison
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.TextComparison
+  nameWithType: MidiEventEqualityCheckSettings.TextComparison
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.TextComparison*
+  name: TextComparison
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_TextComparison_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.TextComparison
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.TextComparison
+  nameWithType: MidiEventEqualityCheckSettings.TextComparison
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer
+  name: MidiEventEqualityComparer
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer
+  nameWithType: MidiEventEqualityComparer
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.#ctor
+  name: MidiEventEqualityComparer()
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiEventEqualityComparer__ctor
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.#ctor
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.MidiEventEqualityComparer()
+  nameWithType: MidiEventEqualityComparer.MidiEventEqualityComparer()
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.#ctor(Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings)
+  name: MidiEventEqualityComparer(MidiEventEqualityCheckSettings)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiEventEqualityComparer__ctor_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.#ctor(Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.MidiEventEqualityComparer(Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings)
+  nameWithType: MidiEventEqualityComparer.MidiEventEqualityComparer(MidiEventEqualityCheckSettings)
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.#ctor*
+  name: MidiEventEqualityComparer
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiEventEqualityComparer__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.MidiEventEqualityComparer
+  nameWithType: MidiEventEqualityComparer.MidiEventEqualityComparer
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent)
+  name: Equals(MidiEvent, MidiEvent)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiEventEqualityComparer_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Core.MidiEvent)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiEvent, Melanchall.DryWetMidi.Core.MidiEvent)
+  nameWithType: MidiEventEqualityComparer.Equals(MidiEvent, MidiEvent)
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiEventEqualityComparer_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.Equals
+  nameWithType: MidiEventEqualityComparer.Equals
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiEvent)
+  name: GetHashCode(MidiEvent)
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiEventEqualityComparer_GetHashCode_Melanchall_DryWetMidi_Core_MidiEvent_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiEvent)
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiEvent)
+  nameWithType: MidiEventEqualityComparer.GetHashCode(MidiEvent)
+- uid: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.GetHashCode*
+  name: GetHashCode
+  href: api/Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiEventEqualityComparer_GetHashCode_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.GetHashCode
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.GetHashCode
+  nameWithType: MidiEventEqualityComparer.GetHashCode
 - uid: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter
   name: MidiEventToBytesConverter
   href: api/Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html
@@ -5592,6 +5933,37 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiFile.Clone
   nameWithType: MidiFile.Clone
+- uid: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile)
+  name: Equals(MidiFile, MidiFile)
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile)
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFile)
+  nameWithType: MidiFile.Equals(MidiFile, MidiFile)
+- uid: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings,System.String@)
+  name: Equals(MidiFile, MidiFile, MidiFileEqualityCheckSettings, out String)
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_System_String__
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings,System.String@)
+  name.vb: Equals(MidiFile, MidiFile, MidiFileEqualityCheckSettings, ByRef String)
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings, out System.String)
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings, ByRef System.String)
+  nameWithType: MidiFile.Equals(MidiFile, MidiFile, MidiFileEqualityCheckSettings, out String)
+  nameWithType.vb: MidiFile.Equals(MidiFile, MidiFile, MidiFileEqualityCheckSettings, ByRef String)
+- uid: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile,System.String@)
+  name: Equals(MidiFile, MidiFile, out String)
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_System_String__
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile,System.String@)
+  name.vb: Equals(MidiFile, MidiFile, ByRef String)
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFile, out System.String)
+  fullName.vb: Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFile, ByRef System.String)
+  nameWithType: MidiFile.Equals(MidiFile, MidiFile, out String)
+  nameWithType.vb: MidiFile.Equals(MidiFile, MidiFile, ByRef String)
+- uid: Melanchall.DryWetMidi.Core.MidiFile.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFile.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.Equals
+  nameWithType: MidiFile.Equals
 - uid: Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat
   name: OriginalFormat
   href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat
@@ -5656,6 +6028,89 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiFile.Write
   nameWithType: MidiFile.Write
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings
+  name: MidiFileEqualityCheckSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings
+  nameWithType: MidiFileEqualityCheckSettings
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings
+  name: ChunkEqualityCheckSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_ChunkEqualityCheckSettings
+  commentId: P:Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings
+  nameWithType: MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings*
+  name: ChunkEqualityCheckSettings
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_ChunkEqualityCheckSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings
+  nameWithType: MidiFileEqualityCheckSettings.ChunkEqualityCheckSettings
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.CompareOriginalFormat
+  name: CompareOriginalFormat
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_CompareOriginalFormat
+  commentId: P:Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.CompareOriginalFormat
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.CompareOriginalFormat
+  nameWithType: MidiFileEqualityCheckSettings.CompareOriginalFormat
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.CompareOriginalFormat*
+  name: CompareOriginalFormat
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html#Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_CompareOriginalFormat_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.CompareOriginalFormat
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.CompareOriginalFormat
+  nameWithType: MidiFileEqualityCheckSettings.CompareOriginalFormat
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer
+  name: MidiFileEqualityComparer
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer
+  nameWithType: MidiFileEqualityComparer
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.#ctor
+  name: MidiFileEqualityComparer()
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiFileEqualityComparer__ctor
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.#ctor
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.MidiFileEqualityComparer()
+  nameWithType: MidiFileEqualityComparer.MidiFileEqualityComparer()
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.#ctor(Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings)
+  name: MidiFileEqualityComparer(MidiFileEqualityCheckSettings)
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiFileEqualityComparer__ctor_Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.#ctor(Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings)
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.MidiFileEqualityComparer(Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings)
+  nameWithType: MidiFileEqualityComparer.MidiFileEqualityComparer(MidiFileEqualityCheckSettings)
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.#ctor*
+  name: MidiFileEqualityComparer
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiFileEqualityComparer__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.MidiFileEqualityComparer
+  nameWithType: MidiFileEqualityComparer.MidiFileEqualityComparer
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile)
+  name: Equals(MidiFile, MidiFile)
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiFileEqualityComparer_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile)
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.Equals(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Core.MidiFile)
+  nameWithType: MidiFileEqualityComparer.Equals(MidiFile, MidiFile)
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiFileEqualityComparer_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.Equals
+  nameWithType: MidiFileEqualityComparer.Equals
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiFile)
+  name: GetHashCode(MidiFile)
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiFileEqualityComparer_GetHashCode_Melanchall_DryWetMidi_Core_MidiFile_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiFile)
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.GetHashCode(Melanchall.DryWetMidi.Core.MidiFile)
+  nameWithType: MidiFileEqualityComparer.GetHashCode(MidiFile)
+- uid: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.GetHashCode*
+  name: GetHashCode
+  href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html#Melanchall_DryWetMidi_Core_MidiFileEqualityComparer_GetHashCode_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.GetHashCode
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.GetHashCode
+  nameWithType: MidiFileEqualityComparer.GetHashCode
 - uid: Melanchall.DryWetMidi.Core.MidiFileFormat
   name: MidiFileFormat
   href: api/Melanchall.DryWetMidi.Core.MidiFileFormat.html
@@ -5705,12 +6160,12 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.MidiReader
   fullName: Melanchall.DryWetMidi.Core.MidiReader
   nameWithType: MidiReader
-- uid: Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream,System.Int32)
-  name: MidiReader(Stream, Int32)
-  href: api/Melanchall.DryWetMidi.Core.MidiReader.html#Melanchall_DryWetMidi_Core_MidiReader__ctor_System_IO_Stream_System_Int32_
-  commentId: M:Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream,System.Int32)
-  fullName: Melanchall.DryWetMidi.Core.MidiReader.MidiReader(System.IO.Stream, System.Int32)
-  nameWithType: MidiReader.MidiReader(Stream, Int32)
+- uid: Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream,Melanchall.DryWetMidi.Core.ReaderSettings)
+  name: MidiReader(Stream, ReaderSettings)
+  href: api/Melanchall.DryWetMidi.Core.MidiReader.html#Melanchall_DryWetMidi_Core_MidiReader__ctor_System_IO_Stream_Melanchall_DryWetMidi_Core_ReaderSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiReader.#ctor(System.IO.Stream,Melanchall.DryWetMidi.Core.ReaderSettings)
+  fullName: Melanchall.DryWetMidi.Core.MidiReader.MidiReader(System.IO.Stream, Melanchall.DryWetMidi.Core.ReaderSettings)
+  nameWithType: MidiReader.MidiReader(Stream, ReaderSettings)
 - uid: Melanchall.DryWetMidi.Core.MidiReader.#ctor*
   name: MidiReader
   href: api/Melanchall.DryWetMidi.Core.MidiReader.html#Melanchall_DryWetMidi_Core_MidiReader__ctor_
@@ -6353,6 +6808,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.NormalSysExEvent.NormalSysExEvent
   nameWithType: NormalSysExEvent.NormalSysExEvent
+- uid: Melanchall.DryWetMidi.Core.NormalSysExEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.NormalSysExEvent.html#Melanchall_DryWetMidi_Core_NormalSysExEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.NormalSysExEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.NormalSysExEvent.CloneEvent()
+  nameWithType: NormalSysExEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.NormalSysExEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.NormalSysExEvent.html#Melanchall_DryWetMidi_Core_NormalSysExEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.NormalSysExEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.NormalSysExEvent.CloneEvent
+  nameWithType: NormalSysExEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.NormalSysExEvent.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Core.NormalSysExEvent.html#Melanchall_DryWetMidi_Core_NormalSysExEvent_ToString
@@ -6404,6 +6872,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.NoteAftertouchEvent.AftertouchValue
   nameWithType: NoteAftertouchEvent.AftertouchValue
+- uid: Melanchall.DryWetMidi.Core.NoteAftertouchEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.NoteAftertouchEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.NoteAftertouchEvent.CloneEvent()
+  nameWithType: NoteAftertouchEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.NoteAftertouchEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.NoteAftertouchEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.NoteAftertouchEvent.CloneEvent
+  nameWithType: NoteAftertouchEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.NoteAftertouchEvent.NoteNumber
   name: NoteNumber
   href: api/Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_NoteNumber
@@ -6658,6 +7139,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.NoteOffEvent.NoteOffEvent
   nameWithType: NoteOffEvent.NoteOffEvent
+- uid: Melanchall.DryWetMidi.Core.NoteOffEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.NoteOffEvent.html#Melanchall_DryWetMidi_Core_NoteOffEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.NoteOffEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.NoteOffEvent.CloneEvent()
+  nameWithType: NoteOffEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.NoteOffEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.NoteOffEvent.html#Melanchall_DryWetMidi_Core_NoteOffEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.NoteOffEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.NoteOffEvent.CloneEvent
+  nameWithType: NoteOffEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.NoteOffEvent.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Core.NoteOffEvent.html#Melanchall_DryWetMidi_Core_NoteOffEvent_ToString
@@ -6696,6 +7190,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.NoteOnEvent.NoteOnEvent
   nameWithType: NoteOnEvent.NoteOnEvent
+- uid: Melanchall.DryWetMidi.Core.NoteOnEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.NoteOnEvent.html#Melanchall_DryWetMidi_Core_NoteOnEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.NoteOnEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.NoteOnEvent.CloneEvent()
+  nameWithType: NoteOnEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.NoteOnEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.NoteOnEvent.html#Melanchall_DryWetMidi_Core_NoteOnEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.NoteOnEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.NoteOnEvent.CloneEvent
+  nameWithType: NoteOnEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.NoteOnEvent.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Core.NoteOnEvent.html#Melanchall_DryWetMidi_Core_NoteOnEvent_ToString
@@ -6734,6 +7241,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.PitchBendEvent.PitchBendEvent
   nameWithType: PitchBendEvent.PitchBendEvent
+- uid: Melanchall.DryWetMidi.Core.PitchBendEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.PitchBendEvent.html#Melanchall_DryWetMidi_Core_PitchBendEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.PitchBendEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.PitchBendEvent.CloneEvent()
+  nameWithType: PitchBendEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.PitchBendEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.PitchBendEvent.html#Melanchall_DryWetMidi_Core_PitchBendEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.PitchBendEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.PitchBendEvent.CloneEvent
+  nameWithType: PitchBendEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.PitchBendEvent.PitchValue
   name: PitchValue
   href: api/Melanchall.DryWetMidi.Core.PitchBendEvent.html#Melanchall_DryWetMidi_Core_PitchBendEvent_PitchValue
@@ -6888,6 +7408,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ProgramChangeEvent.ProgramChangeEvent
   nameWithType: ProgramChangeEvent.ProgramChangeEvent
+- uid: Melanchall.DryWetMidi.Core.ProgramChangeEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.ProgramChangeEvent.html#Melanchall_DryWetMidi_Core_ProgramChangeEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.ProgramChangeEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.ProgramChangeEvent.CloneEvent()
+  nameWithType: ProgramChangeEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.ProgramChangeEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.ProgramChangeEvent.html#Melanchall_DryWetMidi_Core_ProgramChangeEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ProgramChangeEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ProgramChangeEvent.CloneEvent
+  nameWithType: ProgramChangeEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.ProgramChangeEvent.ProgramNumber
   name: ProgramNumber
   href: api/Melanchall.DryWetMidi.Core.ProgramChangeEvent.html#Melanchall_DryWetMidi_Core_ProgramChangeEvent_ProgramNumber
@@ -6965,6 +7498,64 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ProgramNameEvent.ToString
   nameWithType: ProgramNameEvent.ToString
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings
+  name: ReaderSettings
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html
+  commentId: T:Melanchall.DryWetMidi.Core.ReaderSettings
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings
+  nameWithType: ReaderSettings
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize
+  name: NonSeekableStreamBufferSize
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamBufferSize
+  commentId: P:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize
+  nameWithType: ReaderSettings.NonSeekableStreamBufferSize
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize*
+  name: NonSeekableStreamBufferSize
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamBufferSize_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize
+  nameWithType: ReaderSettings.NonSeekableStreamBufferSize
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep
+  name: NonSeekableStreamIncrementalBytesReadingStep
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingStep
+  commentId: P:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep
+  nameWithType: ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep*
+  name: NonSeekableStreamIncrementalBytesReadingStep
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingStep_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep
+  nameWithType: ReaderSettings.NonSeekableStreamIncrementalBytesReadingStep
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+  name: NonSeekableStreamIncrementalBytesReadingThreshold
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingThreshold
+  commentId: P:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+  nameWithType: ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold*
+  name: NonSeekableStreamIncrementalBytesReadingThreshold
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingThreshold_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+  nameWithType: ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  name: ReadFromMemory
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory
+  commentId: P:Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  nameWithType: ReaderSettings.ReadFromMemory
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory*
+  name: ReadFromMemory
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  nameWithType: ReaderSettings.ReadFromMemory
 - uid: Melanchall.DryWetMidi.Core.ReadingHandler
   name: ReadingHandler
   href: api/Melanchall.DryWetMidi.Core.ReadingHandler.html
@@ -7261,19 +7852,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReadingSettings.NoHeaderChunkPolicy
   nameWithType: ReadingSettings.NoHeaderChunkPolicy
-- uid: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
-  name: NonSeekableStreamBufferSize
-  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NonSeekableStreamBufferSize
-  commentId: P:Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
-  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
-  nameWithType: ReadingSettings.NonSeekableStreamBufferSize
-- uid: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize*
-  name: NonSeekableStreamBufferSize
-  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NonSeekableStreamBufferSize_
-  commentId: Overload:Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.NonSeekableStreamBufferSize
-  nameWithType: ReadingSettings.NonSeekableStreamBufferSize
 - uid: Melanchall.DryWetMidi.Core.ReadingSettings.NotEnoughBytesPolicy
   name: NotEnoughBytesPolicy
   href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy
@@ -7287,6 +7865,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReadingSettings.NotEnoughBytesPolicy
   nameWithType: ReadingSettings.NotEnoughBytesPolicy
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings
+  name: ReaderSettings
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReaderSettings
+  commentId: P:Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings
+  nameWithType: ReadingSettings.ReaderSettings
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings*
+  name: ReaderSettings
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReaderSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings
+  nameWithType: ReadingSettings.ReaderSettings
 - uid: Melanchall.DryWetMidi.Core.ReadingSettings.ReadingHandlers
   name: ReadingHandlers
   href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReadingHandlers
@@ -8370,19 +8961,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.SysExEvent.SysExEvent
   nameWithType: SysExEvent.SysExEvent
-- uid: Melanchall.DryWetMidi.Core.SysExEvent.CloneEvent
-  name: CloneEvent()
-  href: api/Melanchall.DryWetMidi.Core.SysExEvent.html#Melanchall_DryWetMidi_Core_SysExEvent_CloneEvent
-  commentId: M:Melanchall.DryWetMidi.Core.SysExEvent.CloneEvent
-  fullName: Melanchall.DryWetMidi.Core.SysExEvent.CloneEvent()
-  nameWithType: SysExEvent.CloneEvent()
-- uid: Melanchall.DryWetMidi.Core.SysExEvent.CloneEvent*
-  name: CloneEvent
-  href: api/Melanchall.DryWetMidi.Core.SysExEvent.html#Melanchall_DryWetMidi_Core_SysExEvent_CloneEvent_
-  commentId: Overload:Melanchall.DryWetMidi.Core.SysExEvent.CloneEvent
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.SysExEvent.CloneEvent
-  nameWithType: SysExEvent.CloneEvent
 - uid: Melanchall.DryWetMidi.Core.SysExEvent.Completed
   name: Completed
   href: api/Melanchall.DryWetMidi.Core.SysExEvent.html#Melanchall_DryWetMidi_Core_SysExEvent_Completed
@@ -9249,19 +9827,19 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Abort
   fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Abort
   nameWithType: UnknownChannelEventAction.Abort
-- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
-  name: DataBytesToSkip
-  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkip
-  commentId: P:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
-  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
-  nameWithType: UnknownChannelEventAction.DataBytesToSkip
-- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip*
-  name: DataBytesToSkip
-  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkip_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount
+  name: DataBytesToSkipCount
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkipCount
+  commentId: P:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount
+  nameWithType: UnknownChannelEventAction.DataBytesToSkipCount
+- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount*
+  name: DataBytesToSkipCount
+  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkipCount_
+  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip
-  nameWithType: UnknownChannelEventAction.DataBytesToSkip
+  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount
+  nameWithType: UnknownChannelEventAction.DataBytesToSkipCount
 - uid: Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction
   name: Instruction
   href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html#Melanchall_DryWetMidi_Core_UnknownChannelEventAction_Instruction
@@ -29688,6 +30266,38 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv
   nameWithType: CsvConverter.ConvertNotesToCsv
+- uid: Melanchall.DryWetMidi.Tools.CsvSettings
+  name: CsvSettings
+  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html
+  commentId: T:Melanchall.DryWetMidi.Tools.CsvSettings
+  fullName: Melanchall.DryWetMidi.Tools.CsvSettings
+  nameWithType: CsvSettings
+- uid: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
+  name: CsvDelimiter
+  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_CsvDelimiter
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
+  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
+  nameWithType: CsvSettings.CsvDelimiter
+- uid: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter*
+  name: CsvDelimiter
+  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_CsvDelimiter_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
+  nameWithType: CsvSettings.CsvDelimiter
+- uid: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
+  name: IoBufferSize
+  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_IoBufferSize
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
+  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
+  nameWithType: CsvSettings.IoBufferSize
+- uid: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize*
+  name: IoBufferSize
+  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_IoBufferSize_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
+  nameWithType: CsvSettings.IoBufferSize
 - uid: Melanchall.DryWetMidi.Tools.IBounds
   name: IBounds
   href: api/Melanchall.DryWetMidi.Tools.IBounds.html
@@ -30148,19 +30758,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings
   fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings
   nameWithType: MidiFileCsvConversionSettings
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvDelimiter
-  name: CsvDelimiter
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvDelimiter
-  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvDelimiter
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvDelimiter
-  nameWithType: MidiFileCsvConversionSettings.CsvDelimiter
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvDelimiter*
-  name: CsvDelimiter
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvDelimiter_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvDelimiter
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvDelimiter
-  nameWithType: MidiFileCsvConversionSettings.CsvDelimiter
 - uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout
   name: CsvLayout
   href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvLayout
@@ -30174,6 +30771,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout
   nameWithType: MidiFileCsvConversionSettings.CsvLayout
+- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
+  name: CsvSettings
+  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvSettings
+  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
+  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
+  nameWithType: MidiFileCsvConversionSettings.CsvSettings
+- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings*
+  name: CsvSettings
+  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
+  nameWithType: MidiFileCsvConversionSettings.CsvSettings
 - uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat
   name: NoteFormat
   href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteFormat
@@ -30327,19 +30937,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings
   fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings
   nameWithType: NoteCsvConversionSettings
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvDelimiter
-  name: CsvDelimiter
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvDelimiter
-  commentId: P:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvDelimiter
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvDelimiter
-  nameWithType: NoteCsvConversionSettings.CsvDelimiter
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvDelimiter*
-  name: CsvDelimiter
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvDelimiter_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvDelimiter
+- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
+  name: CsvSettings
+  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvSettings
+  commentId: P:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
+  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
+  nameWithType: NoteCsvConversionSettings.CsvSettings
+- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings*
+  name: CsvSettings
+  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvDelimiter
-  nameWithType: NoteCsvConversionSettings.CsvDelimiter
+  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
+  nameWithType: NoteCsvConversionSettings.CsvSettings
 - uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType
   name: NoteLengthType
   href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteLengthType

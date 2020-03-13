@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class UnknownChannelEventAction
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction" class="text-break">Class UnknownChannelEventAction
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+An action that should be done in case of unknown channel event.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -123,7 +125,9 @@
   <h3 id="fields">Fields
   </h3>
   <h4 id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_Abort" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Abort">Abort</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Abort reading of MIDI data and throw <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -146,13 +150,15 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkip_" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkip" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkip">DataBytesToSkip</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkipCount_" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_DataBytesToSkipCount" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.DataBytesToSkipCount">DataBytesToSkipCount</h4>
+  <div class="markdown level1 summary">
+Gets count of data bytes to skip be reading engine. Data bytes are event bytes without status byte.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int DataBytesToSkip { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int DataBytesToSkipCount { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -171,7 +177,9 @@
   </table>
   <a id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_Instruction_" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_Instruction" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.Instruction">Instruction</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets instruction for reading engine to react on unknown channel event.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -196,11 +204,14 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_SkipData_" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_UnknownChannelEventAction_SkipData_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.SkipData(System.Int32)">SkipData(Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Creates an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html">UnknownChannelEventAction</a> to skip data bytes of
+unknown channel event.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static UnknownChannelEventAction SkipData(int dataBytesToSkip)</code></pre>
+    <pre><code class="lang-csharp hljs">public static UnknownChannelEventAction SkipData(int dataBytesToSkipCount)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -214,8 +225,9 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">dataBytesToSkip</span></td>
-        <td></td>
+        <td><span class="parametername">dataBytesToSkipCount</span></td>
+        <td>Count of data bytes to skip be reading engine.
+Data bytes are event bytes without status byte.</td>
       </tr>
     </tbody>
   </table>
@@ -230,7 +242,23 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html">UnknownChannelEventAction</a></td>
-        <td></td>
+        <td>an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html">UnknownChannelEventAction</a> to skip data bytes of
+unknown channel event.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">dataBytesToSkipCount</code> is negative.</td>
       </tr>
     </tbody>
   </table>
@@ -254,7 +282,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

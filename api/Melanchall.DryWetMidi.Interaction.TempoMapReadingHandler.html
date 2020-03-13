@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class TempoMapReadingHandler
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler" class="text-break">Class TempoMapReadingHandler
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Collects tempo map during MIDI data reading.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -136,11 +138,18 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class TempoMapReadingHandler : ReadingHandler</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+This handler can be added to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReadingHandlers">ReadingHandlers</a> collection to
+collect tempo map along with MIDI data reading. Scope of the handler is <code>TargetScope.Event | TargetScope.File</code>.
+</div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler__ctor" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.#ctor">TempoMapReadingHandler()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.html">TempoMapReadingHandler</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -150,7 +159,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_TempoMap" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap">TempoMap</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets the tempo map collected during MIDI data reading.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -171,11 +182,28 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Tempo map is not ready for usage.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_Initialize_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_Initialize" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.Initialize">Initialize()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes handler. This method will be called before reading MIDI data.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -185,7 +213,10 @@
   <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_Initialize">ReadingHandler.Initialize()</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishEventReading_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)">OnFinishEventReading(MidiEvent, Int64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of MIDI event reading. Called after MIDI event is read and before
+putting it to <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html#Melanchall_DryWetMidi_Core_TrackChunk_Events">Events</a> collection.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -204,12 +235,12 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
         <td><span class="parametername">midiEvent</span></td>
-        <td></td>
+        <td>MIDI event read.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td><span class="parametername">absoluteTime</span></td>
-        <td></td>
+        <td>Absolute time of <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -217,7 +248,9 @@
   <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_">ReadingHandler.OnFinishEventReading(MidiEvent, Int64)</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishFileReading_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)">OnFinishFileReading(MidiFile)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of file reading. Called after file is read.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -236,7 +269,7 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td><span class="parametername">midiFile</span></td>
-        <td></td>
+        <td>MIDI file read.</td>
       </tr>
     </tbody>
   </table>
@@ -244,7 +277,9 @@
   <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html#Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_">ReadingHandler.OnFinishFileReading(MidiFile)</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishHeaderChunkReading_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMapReadingHandler_OnFinishHeaderChunkReading_Melanchall_DryWetMidi_Core_TimeDivision_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.OnFinishHeaderChunkReading(Melanchall.DryWetMidi.Core.TimeDivision)">OnFinishHeaderChunkReading(TimeDivision)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of header chunk reading. Called after header chunk is read.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -263,7 +298,7 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.TimeDivision.html">TimeDivision</a></td>
         <td><span class="parametername">timeDivision</span></td>
-        <td></td>
+        <td>Time division of the file is being read.</td>
       </tr>
     </tbody>
   </table>
@@ -289,7 +324,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

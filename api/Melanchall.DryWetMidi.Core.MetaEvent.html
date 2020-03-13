@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class MetaEvent
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -121,6 +121,15 @@ Represents a MIDI file meta event.
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Clone">MidiEvent.Clone()</a>
     </div>
     <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_">MidiEvent.Equals(MidiEvent, MidiEvent)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, String)</a>
+    </div>
+    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
     </div>
     <div>
@@ -155,47 +164,15 @@ Meta event specifies non-MIDI information useful to this format or to sequencers
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MetaEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_MetaEvent__ctor_Melanchall_DryWetMidi_Core_MidiEventType_" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.#ctor(Melanchall.DryWetMidi.Core.MidiEventType)">MetaEvent(MidiEventType)</h4>
+  <h4 id="Melanchall_DryWetMidi_Core_MetaEvent__ctor" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.#ctor">MetaEvent()</h4>
   <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a> with the specified event type.
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MetaEvent(MidiEventType eventType)</code></pre>
+    <pre><code class="lang-csharp hljs">protected MetaEvent()</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventType.html">MidiEventType</a></td>
-        <td><span class="parametername">eventType</span></td>
-        <td>The type of event.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">eventType</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MetaEvent_GetContentSize_" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.GetContentSize*"></a>
@@ -240,6 +217,36 @@ Gets the size of the content of a MIDI meta event.
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes_" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes">GetStandardMetaEventStatusBytes()</h4>
+  <div class="markdown level1 summary">
+Returns array of status bytes of standard meta events.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static byte[] GetStandardMetaEventStatusBytes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td>Array of status bytes of standard meta events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method can be used for choosing status byte for custom meta event to prevent
+the status byte is equal to one of the standard ones.
+</div>
   <a id="Melanchall_DryWetMidi_Core_MetaEvent_ReadContent_" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.ReadContent*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MetaEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.MetaEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32)">ReadContent(MidiReader, ReadingSettings, Int32)</h4>
   <div class="markdown level1 summary">
@@ -329,7 +336,7 @@ Writes content of a MIDI meta event.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

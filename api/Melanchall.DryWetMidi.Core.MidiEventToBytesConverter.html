@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class MidiEventToBytesConverter
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter" class="text-break">Class MidiEventToBytesConverter
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Provides methods to convert an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to bytes.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -128,7 +130,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter__ctor" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.#ctor">MidiEventToBytesConverter()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html">MidiEventToBytesConverter</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -136,7 +140,10 @@
   </div>
   <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter__ctor_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.#ctor(System.Int32)">MidiEventToBytesConverter(Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html">MidiEventToBytesConverter</a> with the specified
+initial capacity of internal buffer.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -155,7 +162,22 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td><span class="parametername">capacity</span></td>
-        <td></td>
+        <td>Initial capacity of the internal buffer.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">capacity</code> is negative.</td>
       </tr>
     </tbody>
   </table>
@@ -163,7 +185,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.WritingSettings*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_WritingSettings" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.WritingSettings">WritingSettings</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets settings according to which MIDI data should be write to bytes.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -188,7 +212,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Convert*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Convert_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Convert(Melanchall.DryWetMidi.Core.MidiEvent)">Convert(MidiEvent)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Converts an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to bytes array.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -207,7 +233,7 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
         <td><span class="parametername">midiEvent</span></td>
-        <td></td>
+        <td>MIDI event to convert.</td>
       </tr>
     </tbody>
   </table>
@@ -222,13 +248,31 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
-        <td></td>
+        <td>Array of bytes representing <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is null.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Convert*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Convert_Melanchall_DryWetMidi_Core_MidiEvent_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Convert(Melanchall.DryWetMidi.Core.MidiEvent,System.Int32)">Convert(MidiEvent, Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Converts an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to bytes array using the specified
+minimum size of resulting array.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -247,12 +291,12 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
         <td><span class="parametername">midiEvent</span></td>
-        <td></td>
+        <td>MIDI event to convert.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td><span class="parametername">minSize</span></td>
-        <td></td>
+        <td>Minimum size of bytes array representing <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -267,14 +311,33 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
-        <td></td>
+        <td>Array of bytes representing <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">minSize</code> is negative.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Dispose_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Dispose*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Dispose" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Dispose">Dispose()</h4>
   <div class="markdown level1 summary">
-Releases all resources used by the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html">BytesToMidiEventConverter</a> class.
+Releases all resources used by the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html">MidiEventToBytesConverter</a> class.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -305,7 +368,7 @@ Releases all resources used by the current instance of the <a class="xref" href=
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

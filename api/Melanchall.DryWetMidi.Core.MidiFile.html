@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class MidiFile
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -364,6 +364,168 @@ Clones MIDI file by creating a copy of it.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td>Copy of the MIDI file.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Equals_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile)">Equals(MidiFile, MidiFile)</h4>
+  <div class="markdown level1 summary">
+Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> objects have the same content.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool Equals(MidiFile midiFile1, MidiFile midiFile2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile1</span></td>
+        <td>The first file to compare, or null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile2</span></td>
+        <td>The second file to compare, or null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
+otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Equals_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_System_String__" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings,System.String@)">Equals(MidiFile, MidiFile, MidiFileEqualityCheckSettings, out String)</h4>
+  <div class="markdown level1 summary">
+Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> objects have the same content using
+the specified comparison settings.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings, out string message)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile1</span></td>
+        <td>The first file to compare, or null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile2</span></td>
+        <td>The second file to compare, or null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html">MidiFileEqualityCheckSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which files should be compared.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">message</span></td>
+        <td>Message containing information about what exactly is different in
+<code data-dev-comment-type="paramref" class="paramref">midiFile1</code> and <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
+otherwise, false.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_MidiFile_Equals_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_System_String__" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile,System.String@)">Equals(MidiFile, MidiFile, out String)</h4>
+  <div class="markdown level1 summary">
+Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> objects have the same content.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, out string message)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile1</span></td>
+        <td>The first file to compare, or null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile2</span></td>
+        <td>The second file to compare, or null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">message</span></td>
+        <td>Message containing information about what exactly is different in
+<code data-dev-comment-type="paramref" class="paramref">midiFile1</code> and <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td>true if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
+otherwise, false.</td>
       </tr>
     </tbody>
   </table>
@@ -993,7 +1155,7 @@ exceeds maximum value allowed for MIDI file.</td>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

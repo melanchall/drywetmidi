@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ReadingHandler
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_ReadingHandler" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler" class="text-break">Class ReadingHandler
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Provides callbacks to handle MIDI data reading stages.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -127,7 +129,10 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler__ctor_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler__ctor_Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.#ctor(Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope)">ReadingHandler(ReadingHandler.TargetScope)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html">ReadingHandler</a> with the specified scope of
+MIDI data to handle.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -146,15 +151,23 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html">ReadingHandler.TargetScope</a></td>
         <td><span class="parametername">scope</span></td>
-        <td></td>
+        <td>Scope of MIDI data to handle.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler__ctor_Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+It&apos;s important to set desired scope to avoid performance degradation. For example, if you want to handle
+start of file reading and start of track chunk reading, specify <code data-dev-comment-type="paramref" class="paramref">scope</code> to
+<code>TargetScope.File | TargetScope.TrackChunk</code>.
+</div>
   <h3 id="properties">Properties
   </h3>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_Scope_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.Scope*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_Scope" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.Scope">Scope</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets the scope of MIDI data to handle.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -179,7 +192,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_Initialize_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.Initialize*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_Initialize" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.Initialize">Initialize()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes handler. This method will be called before reading MIDI data.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -187,7 +202,10 @@
   </div>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishEventReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishEventReading(Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)">OnFinishEventReading(MidiEvent, Int64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of MIDI event reading. Called after MIDI event is read and before
+putting it to <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html#Melanchall_DryWetMidi_Core_TrackChunk_Events">Events</a> collection.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -206,18 +224,24 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
         <td><span class="parametername">midiEvent</span></td>
-        <td></td>
+        <td>MIDI event read.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td><span class="parametername">absoluteTime</span></td>
-        <td></td>
+        <td>Absolute time of <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishEventReading_Melanchall_DryWetMidi_Core_MidiEvent_System_Int64__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method called within <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html#Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_Event">Event</a> scope.
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishFileReading_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishFileReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishFileReading(Melanchall.DryWetMidi.Core.MidiFile)">OnFinishFileReading(MidiFile)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of file reading. Called after file is read.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -236,13 +260,19 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td><span class="parametername">midiFile</span></td>
-        <td></td>
+        <td>MIDI file read.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishFileReading_Melanchall_DryWetMidi_Core_MidiFile__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method called within <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html#Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_File">File</a> scope.
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishHeaderChunkReading_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishHeaderChunkReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishHeaderChunkReading_Melanchall_DryWetMidi_Core_TimeDivision_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishHeaderChunkReading(Melanchall.DryWetMidi.Core.TimeDivision)">OnFinishHeaderChunkReading(TimeDivision)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of header chunk reading. Called after header chunk is read.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -261,13 +291,19 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.TimeDivision.html">TimeDivision</a></td>
         <td><span class="parametername">timeDivision</span></td>
-        <td></td>
+        <td>Time division of the file is being read.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishHeaderChunkReading_Melanchall_DryWetMidi_Core_TimeDivision__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method called within <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html#Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_File">File</a> scope.
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishTrackChunkReading_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishTrackChunkReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishTrackChunkReading_Melanchall_DryWetMidi_Core_TrackChunk_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnFinishTrackChunkReading(Melanchall.DryWetMidi.Core.TrackChunk)">OnFinishTrackChunkReading(TrackChunk)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles finish of track chunk reading. Called after track chunk is read.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -286,21 +322,33 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
         <td><span class="parametername">trackChunk</span></td>
-        <td></td>
+        <td>Track chunk read.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnFinishTrackChunkReading_Melanchall_DryWetMidi_Core_TrackChunk__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method called within <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html#Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_TrackChunk">TrackChunk</a> scope.
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartFileReading_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnStartFileReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartFileReading" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnStartFileReading">OnStartFileReading()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles start of file reading. Called before file reading.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual void OnStartFileReading()</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartFileReading_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method called within <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html#Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_File">File</a> scope.
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkContentReading_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnStartTrackChunkContentReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkContentReading_Melanchall_DryWetMidi_Core_TrackChunk_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnStartTrackChunkContentReading(Melanchall.DryWetMidi.Core.TrackChunk)">OnStartTrackChunkContentReading(TrackChunk)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles start of track chunk&apos;s content reading. Called after track chunk header is read.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -319,18 +367,28 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
         <td><span class="parametername">trackChunk</span></td>
-        <td></td>
+        <td>Track chunk is being read.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkContentReading_Melanchall_DryWetMidi_Core_TrackChunk__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method called within <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html#Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_TrackChunk">TrackChunk</a> scope.
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkReading_" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnStartTrackChunkReading*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkReading" data-uid="Melanchall.DryWetMidi.Core.ReadingHandler.OnStartTrackChunkReading">OnStartTrackChunkReading()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Handles start of track chunk reading. Called before track chunk reading.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual void OnStartTrackChunkReading()</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingHandler_OnStartTrackChunkReading_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+This method called within <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html#Melanchall_DryWetMidi_Core_ReadingHandler_TargetScope_TrackChunk">TrackChunk</a> scope.
+</div>
 </article>
           </div>
           
@@ -351,7 +409,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

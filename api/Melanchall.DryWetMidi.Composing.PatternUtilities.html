@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class PatternUtilities
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -235,6 +235,132 @@ Combines the specified patterns into single one placing them after each other.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td><code data-dev-comment-type="paramref" class="paramref">patterns</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternUtilities_SetChordsState_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternUtilities_SetChordsState_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_ChordSelection_Melanchall_DryWetMidi_Composing_PatternActionState_System_Boolean_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.SetChordsState(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordSelection,Melanchall.DryWetMidi.Composing.PatternActionState,System.Boolean)">SetChordsState(Pattern, ChordSelection, PatternActionState, Boolean)</h4>
+  <div class="markdown level1 summary">
+Sets the state of chords within the specified pattern.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetChordsState(this Pattern pattern, ChordSelection chordSelection, PatternActionState state, bool recursive = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a></td>
+        <td><span class="parametername">pattern</span></td>
+        <td>Pattern to set chords state within.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.ChordSelection.html">ChordSelection</a></td>
+        <td><span class="parametername">chordSelection</span></td>
+        <td>Predicate to select chords to set state.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternActionState.html">PatternActionState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td>State of chords selected with <code data-dev-comment-type="paramref" class="paramref">chordSelection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">recursive</span></td>
+        <td>A value indicating whether nested patterns should be processed or not. The
+default value is true.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">chordSelection</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">state</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternUtilities_SetNotesState_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternUtilities_SetNotesState_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_NoteSelection_Melanchall_DryWetMidi_Composing_PatternActionState_System_Boolean_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.SetNotesState(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.NoteSelection,Melanchall.DryWetMidi.Composing.PatternActionState,System.Boolean)">SetNotesState(Pattern, NoteSelection, PatternActionState, Boolean)</h4>
+  <div class="markdown level1 summary">
+Sets the state of notes within the specified pattern.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetNotesState(this Pattern pattern, NoteSelection noteSelection, PatternActionState state, bool recursive = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a></td>
+        <td><span class="parametername">pattern</span></td>
+        <td>Pattern to set notes state within.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.NoteSelection.html">NoteSelection</a></td>
+        <td><span class="parametername">noteSelection</span></td>
+        <td>Predicate to select notes to set state.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternActionState.html">PatternActionState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td>State of notes selected with <code data-dev-comment-type="paramref" class="paramref">noteSelection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">recursive</span></td>
+        <td>A value indicating whether nested patterns should be processed or not. The
+default value is true.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">noteSelection</code> is null.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">state</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>
@@ -516,6 +642,81 @@ splitted at <code data-dev-comment-type="paramref" class="paramref">marker</code
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Composing_PatternUtilities_TransformChords_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternUtilities_TransformChords_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_ChordSelection_Melanchall_DryWetMidi_Composing_ChordTransformation_System_Boolean_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordSelection,Melanchall.DryWetMidi.Composing.ChordTransformation,System.Boolean)">TransformChords(Pattern, ChordSelection, ChordTransformation, Boolean)</h4>
+  <div class="markdown level1 summary">
+Creates new <a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> by transforming chords in the specified pattern using predicate
+to select chords to transform..
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Pattern TransformChords(this Pattern pattern, ChordSelection chordSelection, ChordTransformation chordTransformation, bool recursive = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a></td>
+        <td><span class="parametername">pattern</span></td>
+        <td>Pattern to transform notes of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.ChordSelection.html">ChordSelection</a></td>
+        <td><span class="parametername">chordSelection</span></td>
+        <td>Predicate to select chords to transform.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.ChordTransformation.html">ChordTransformation</a></td>
+        <td><span class="parametername">chordTransformation</span></td>
+        <td>Transformation to apply to chords of the <code data-dev-comment-type="paramref" class="paramref">pattern</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">recursive</span></td>
+        <td>A value indicating whether nested patterns should be processed or not. The
+default value is true.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> that created by transforming chords of the <code data-dev-comment-type="paramref" class="paramref">pattern</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">chordSelection</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">chordTransformation</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternUtilities_TransformChords_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords*"></a>
   <h4 id="Melanchall_DryWetMidi_Composing_PatternUtilities_TransformChords_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_ChordTransformation_System_Boolean_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.TransformChords(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.ChordTransformation,System.Boolean)">TransformChords(Pattern, ChordTransformation, Boolean)</h4>
   <div class="markdown level1 summary">
 Creates new <a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> by transforming chords in the specified pattern.
@@ -581,6 +782,81 @@ default value is true.</td>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
 <code data-dev-comment-type="paramref" class="paramref">chordTransformation</code> is null.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternUtilities_TransformNotes_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.TransformNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternUtilities_TransformNotes_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_NoteSelection_Melanchall_DryWetMidi_Composing_NoteTransformation_System_Boolean_" data-uid="Melanchall.DryWetMidi.Composing.PatternUtilities.TransformNotes(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Composing.NoteSelection,Melanchall.DryWetMidi.Composing.NoteTransformation,System.Boolean)">TransformNotes(Pattern, NoteSelection, NoteTransformation, Boolean)</h4>
+  <div class="markdown level1 summary">
+Creates new <a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> by transforming notes in the specified pattern using predicate
+to select notes to transform.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Pattern TransformNotes(this Pattern pattern, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a></td>
+        <td><span class="parametername">pattern</span></td>
+        <td>Pattern to transform notes of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.NoteSelection.html">NoteSelection</a></td>
+        <td><span class="parametername">noteSelection</span></td>
+        <td>Predicate to select notes to transform.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.NoteTransformation.html">NoteTransformation</a></td>
+        <td><span class="parametername">noteTransformation</span></td>
+        <td>Transformation to apply to notes of the <code data-dev-comment-type="paramref" class="paramref">pattern</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">recursive</span></td>
+        <td>A value indicating whether nested patterns should be processed or not. The
+default value is true.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> that created by transforming notes of the <code data-dev-comment-type="paramref" class="paramref">pattern</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">pattern</code> is null. -or-
+<code data-dev-comment-type="paramref" class="paramref">noteSelection</code> is null. -or- <code data-dev-comment-type="paramref" class="paramref">noteTransformation</code> is null.</td>
       </tr>
     </tbody>
   </table>
@@ -673,7 +949,7 @@ default value is true.</td>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

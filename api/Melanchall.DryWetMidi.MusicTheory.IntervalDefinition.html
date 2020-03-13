@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class IntervalDefinition
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition" class="text-break">Class IntervalDefinition
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Definition of a musical interval which is number and quality.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -115,7 +117,10 @@
   </h3>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition__ctor_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition__ctor_System_Int32_Melanchall_DryWetMidi_MusicTheory_IntervalQuality_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.#ctor(System.Int32,Melanchall.DryWetMidi.MusicTheory.IntervalQuality)">IntervalDefinition(Int32, IntervalQuality)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a> with the specified
+interval number and quality.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -134,12 +139,31 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td><span class="parametername">number</span></td>
-        <td></td>
+        <td>Interval number.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalQuality.html">IntervalQuality</a></td>
         <td><span class="parametername">quality</span></td>
-        <td></td>
+        <td>Interval quality.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">number</code> is less than 1.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">quality</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>
@@ -147,7 +171,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Number_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Number" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Number">Number</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets the interval number.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -170,7 +196,9 @@
   </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Quality_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Quality" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Quality">Quality</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets the interval quality.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -195,7 +223,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Equals_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Equals_System_Object_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.Equals(System.Object)">Equals(Object)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Determines whether the specified object is equal to the current object.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -214,7 +244,7 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
         <td><span class="parametername">obj</span></td>
-        <td></td>
+        <td>The object to compare with the current object.</td>
       </tr>
     </tbody>
   </table>
@@ -229,7 +259,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
+        <td>true if the specified object is equal to the current object; otherwise, false.</td>
       </tr>
     </tbody>
   </table>
@@ -237,7 +267,9 @@
   <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_GetHashCode_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_GetHashCode" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.GetHashCode">GetHashCode()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Serves as the default hash function.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -254,7 +286,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td></td>
+        <td>A hash code for the current object.</td>
       </tr>
     </tbody>
   </table>
@@ -262,7 +294,9 @@
   <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_ToString_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_ToString" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.ToString">ToString()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns a string that represents the current object.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -279,7 +313,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
+        <td>A string that represents the current object.</td>
       </tr>
     </tbody>
   </table>
@@ -289,7 +323,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Equality_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Equality*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Equality_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Equality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition,Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)">Equality(IntervalDefinition, IntervalDefinition)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Determines if two <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a> objects are equal.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -308,12 +344,12 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a></td>
         <td><span class="parametername">intervalDefinition1</span></td>
-        <td></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a> to compare.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a></td>
         <td><span class="parametername">intervalDefinition2</span></td>
-        <td></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a> to compare.</td>
       </tr>
     </tbody>
   </table>
@@ -328,13 +364,15 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
+        <td>true if the interval definitions are equal, false otherwise.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Inequality_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Inequality*"></a>
   <h4 id="Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_op_Inequality_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_Melanchall_DryWetMidi_MusicTheory_IntervalDefinition_" data-uid="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.op_Inequality(Melanchall.DryWetMidi.MusicTheory.IntervalDefinition,Melanchall.DryWetMidi.MusicTheory.IntervalDefinition)">Inequality(IntervalDefinition, IntervalDefinition)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Determines if two <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a> objects are not equal.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -353,12 +391,12 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a></td>
         <td><span class="parametername">intervalDefinition1</span></td>
-        <td></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a> to compare.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a></td>
         <td><span class="parametername">intervalDefinition2</span></td>
-        <td></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.MusicTheory.IntervalDefinition.html">IntervalDefinition</a> to compare.</td>
       </tr>
     </tbody>
   </table>
@@ -373,7 +411,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
+        <td>false if the interval definitions are equal, true otherwise.</td>
       </tr>
     </tbody>
   </table>
@@ -397,7 +435,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

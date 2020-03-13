@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Breaking changes | DryWetMIDI </title>
+    <title>Performance | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Breaking changes | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="title" content="Performance | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="images/favicon.png">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -70,87 +70,82 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="breaking-changes">Breaking changes</h1>
+<h1 id="performance">Performance</h1>
 
-<p>This version of the library has breaking changes:</p>
-<ul>
-<li><code>Melanchall.DryWetMidi.Smf</code> namespace renamed to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.html"><code>Melanchall.DryWetMidi.Core</code></a>.</li>
-<li><code>Melanchall.DryWetMidi.Smf.Interaction</code> namespace renamed to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.html"><code>Melanchall.DryWetMidi.Interaction</code></a>.</li>
-<li><a href="https://github.com/melanchall/drywetmidi/wiki/Pattern">Pattern</a> API moved to new namespace <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.html"><code>Melanchall.DryWetMidi.Composing</code></a>.</li>
-<li><code>BarBeatTimeSpan</code> renamed to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan.html"><code>BarBeatTicksTimeSpan</code></a>.</li>
-<li>Renamed <code>SetProgram</code> methods of the <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html"><code>PatternBuilder</code></a> class to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_ProgramChange_Melanchall_DryWetMidi_Common_SevenBitNumber_"><code>ProgramChange</code></a>.</li>
-<li>Changed type of the parameter of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_"><code>SetOctave</code></a> method of the <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html"><code>PatternBuilder</code></a> class from <code>int</code> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Octave.html"><code>Octave</code></a>.</li>
-</ul>
-<h1 id="documentation">Documentation</h1>
-<p>From now you can read complete library documentation on <a href="https://melanchall.github.io/drywetmidi">https://melanchall.github.io/drywetmidi</a>. Here you can find information about every class and members of the library. API documentation is placed in <strong>API Documentation</strong> section.</p>
-<p>Right now it's not full replacement for the library Wiki so please don't forget to look at Wiki also when you want to get more information on some topic.</p>
+<p><code>MidiFile.Read</code> and <code>MidiFile.Write</code> methods now work much faster (#64). For <code>MidiFile.Read</code> new setting <code>ReadingSettings.ReaderSettings.ReadFromMemory</code> was added:</p>
+<pre><code class="lang-csharp">MidiFile.Read(&quot;file.mid&quot;, new ReadingSettings
+{
+    ReaderSettings = new ReaderSettings
+    {
+        ReadFromMemory = true
+    }
+});
+</code></pre>
+<p>With <code>ReadFromMemory</code> set to <code>true</code> entire MIDI file will be put to memory and read from there which gives big speed up.</p>
 <h1 id="new-features">New features</h1>
 <ul>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Chord.html"><code>Chord</code></a> class to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.html"><code>Melanchall.DryWetMidi.MusicTheory</code></a> namespace.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.ChordProgression.html"><code>ChordProgression</code></a> class to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.html"><code>Melanchall.DryWetMidi.MusicTheory</code></a> namespace.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.html#Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetStep_Melanchall_DryWetMidi_MusicTheory_Scale_System_Int32_"><code>GetStep</code></a> method to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.html"><code>ScaleUtilities</code></a> that gets <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.NoteName.html"><code>NoteName</code></a> corresponding to the specified step of a musical scale.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.html#Melanchall_DryWetMidi_MusicTheory_ScaleUtilities_GetNotesNames_Melanchall_DryWetMidi_MusicTheory_Scale_"><code>GetNotesNames</code></a> method to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.ScaleUtilities.html"><code>ScaleUtilities</code></a> that returns infinite collection of note names that belong to the specified scale.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.IntervalQuality.html"><code>IntervalQuality</code></a> enum to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.html"><code>Melanchall.DryWetMidi.MusicTheory</code></a> namespace.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Interval.html#Melanchall_DryWetMidi_MusicTheory_Interval_Get_Melanchall_DryWetMidi_MusicTheory_IntervalQuality_System_Int32_"><code>Get</code></a> method to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Interval.html"><code>Interval</code></a> class which accepts interval number and quality.</li>
-<li>Implemented parsing of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Interval.html"><code>Interval</code></a> by number and quality (for example, <em>&quot;P8&quot;</em> which is perfect eight).</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.NoteUtilities.html#Melanchall_DryWetMidi_MusicTheory_NoteUtilities_Transpose_Melanchall_DryWetMidi_MusicTheory_NoteName_Melanchall_DryWetMidi_MusicTheory_Interval_"><code>Transpose</code></a> method to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.NoteUtilities.html"><code>NoteUtilities</code></a> class which returns the <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.NoteName.html"><code>NoteName</code></a> transposed by the specified interval.</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Note.html"><code>Note</code></a> can be parsed now from string with any number of sharps and flats.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_NoteCallback"><code>NoteCallback</code></a> property to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a> class which allows to modify and filter every note to be played.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_EventCallback"><code>EventCallback</code></a> property to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a> class which allows to modify and filter every MIDI event to be played.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_EventPlayed"><code>EventPlayed</code></a> event to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a> class to track MIDI events playing.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.PlaybackCurrentTimeWatcher.html"><code>PlaybackCurrentTimeWatcher</code></a> class which allows to watch current time of specified playbacks and report it in the specified units via corresponding event.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.BarBeatFractionTimeSpan.html"><code>BarBeatFractionTimeSpan</code></a> which represents a beat as a fraction (for example <code>0.5</code>) instead of number of whole beats and number of MIDI ticks (used by <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan.html"><code>BarBeatTicksTimeSpan</code></a>).</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.BarBeatUtilities.html"><code>BarBeatUitilities</code></a> which contains methods:
-<ul>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.BarBeatUtilities.html#Melanchall_DryWetMidi_Interaction_BarBeatUtilities_GetBarLength_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_"><code>GetBarLength</code></a> that allows to get length of specified bar in terms of MIDI ticks;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.BarBeatUtilities.html#Melanchall_DryWetMidi_Interaction_BarBeatUtilities_GetBeatLength_System_Int64_Melanchall_DryWetMidi_Interaction_TempoMap_"><code>GetBeatLength</code></a> that allows to get length of a beat of specified bar in terms MIDI ticks.</li>
-</ul>
+<li><p>Added <code>IInputDevice</code> interface (#54), all methods that accept <code>InputDevice</code> as an argument accept now <code>IInputDevice</code>, which implemented by <code>InputDevice</code>. This interface gives ability to create custom input device implementations.</p>
 </li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.QuantizingSettings-1.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_1_Filter"><code>Filter</code></a> property to quantizing settings classes to filter out objects that should be quantized.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.RandomizingSettings-1.html#Melanchall_DryWetMidi_Tools_RandomizingSettings_1_Filter"><code>Filter</code></a> property to randomizing settings classes to filter out objects that should be randomized.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiClock.html"><code>MidiClock</code></a> class which allows to report ticks with the specified interval and speed.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NoteId.html"><code>NoteId</code></a> class that repesents a separately sounding note (note number and channel).</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html"><code>PatternUtilities</code></a> class with methods:
-<ul>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_TransformNotes_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_NoteTransformation_System_Boolean_"><code>TransformNotes</code></a> that transforms notes within the specified <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.Pattern.html"><code>Pattern</code></a> producing new pattern;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_TransformChords_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Composing_ChordTransformation_System_Boolean_"><code>TransformChords</code></a> that transforms chords within the specified <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.Pattern.html"><code>Pattern</code></a> producing new pattern;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SplitAtAnchor_Melanchall_DryWetMidi_Composing_Pattern_System_Object_System_Boolean_"><code>SplitAtAnchor</code></a> that splits a pattern into subpatterns in points where the specified anchor inserted;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SplitAtAllAnchors_Melanchall_DryWetMidi_Composing_Pattern_System_Boolean_"><code>SplitAtAllAnchors</code></a> that splits a pattern into subpatterns in points where anchors inserted;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SplitAtMarker_Melanchall_DryWetMidi_Composing_Pattern_System_String_System_Boolean_System_StringComparison_"><code>SplitAtMarker</code></a> that splits a pattern into subpatterns in points where the specified marker inserted;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_SplitAtAllMarkers_Melanchall_DryWetMidi_Composing_Pattern_System_Boolean_"><code>SplitAtAllMarkers</code></a> that splits a pattern into subpatterns in points where markers inserted;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_CombineInSequence_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Composing_Pattern__"><code>CombineInSequence</code></a> that combines the specified patterns into single one placing them after each other;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_CombineInParallel_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Composing_Pattern__"><code>CombineInParallel</code></a> that combines the specified patterns into single one starting all them at the same time (i.e. stacking patterns).</li>
-</ul>
+<li><p>Added <code>IOutputDevice</code> interface, all methods that accept <code>OutputDevice</code> as an argument accept now <code>IOutputDevice</code>, which implemented by <code>OutputDevice</code>. This interface gives ability to create custom output device implementations.</p>
 </li>
-<li>Added constants to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html"><code>PatternBuilder</code></a> that holds default values:
-<ul>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_DefaultVelocity"><code>DefaultVelocity</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_DefaultNoteLength"><code>DefaultNoteLength</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_DefaultStep"><code>DefaultStep</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_DefaultOctave"><code>DefaultOctave</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_DefaultRootNote"><code>DefaultRootNote</code></a>.</li>
-</ul>
+<li><p>Added <code>BytesToMidiEventConverter</code> class to convert bytes to MIDI events (#55).</p>
 </li>
-<li>Added properties to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html"><code>PatternBuilder</code></a> that return current values:
-<ul>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Velocity"><code>Velocity</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_NoteLength"><code>NoteLength</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Step"><code>Step</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Octave"><code>Octave</code></a>;</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_RootNote"><code>RootNote</code></a>.</li>
-</ul>
+<li><p>Added <code>MidiEventToBytesConverter</code> class to convert MIDI events to bytes.</p>
 </li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_ReplayPattern_Melanchall_DryWetMidi_Composing_Pattern_"><code>ReplayPattern</code></a> method to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html"><code>PatternBuilder</code></a> class to insert all actions from the specifed pattern.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html"><code>PatternBuilder</code></a> constructor that accepts <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.Pattern.html"><code>Pattern</code></a> to start from the list of actions of the passed pattern.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_Melanchall_DryWetMidi_MusicTheory_Chord_"><code>Chord</code></a> methods to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html"><code>PatternBuilder</code></a> class which accept an instance of the <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Chord.html"><code>Melanchall.DryWetMidi.MusicTheory.Chord</code></a>.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.Pattern.html#Melanchall_DryWetMidi_Composing_Pattern_Clone"><code>Clone</code></a> method to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.Pattern.html"><code>Pattern</code></a> class to create a copy of the current pattern.</li>
+<li><p>Added <code>Interaction.Chord.GetMusicTheoryChord</code> method.</p>
+</li>
+<li><p>Added <code>Interaction.Note.GetMusicTheoryNote</code> method.</p>
+</li>
+<li><p>Added <code>Interval.GetIntervalDefinitions</code> method returning collection of <code>IntervalDefinition</code> which is interval number and quality.</p>
+</li>
+<li><p>Added <code>Interval.FromDefinition</code> method to create <code>Interval</code> from interval number and quality.</p>
+</li>
+<li><p>Added <code>MusicTheory.Chord.GetNames</code> method returning names of a chord (for example, <code>A#</code> or <code>Ddim</code>) (#58).</p>
+</li>
+<li><p>Added General MIDI Level 2 percussion API to <code>Melanchall.DryWetMidi.Standards</code> namespace (#65).</p>
+</li>
+<li><p>Added <code>ReadingHandlers</code> property to <code>ReadingSettings</code> which provides collection of objects that handle MIDI data reading. Also added three handler classes:</p>
+<ul>
+<li><code>TimedEventsReadingHandler</code></li>
+<li><code>NotesReadingHandler</code></li>
+<li><code>TempoMapReadingHandler</code></li>
+</ul>
+<p>These classes can speed up getting MIDI data from a MIDI file since information will be gathered during MIDI data reading rather than after data is read which involves additional iteration over MIDI data.</p>
+<p>You can create custom reading handler and process MIDI file reading stages.</p>
+</li>
+<li><p>Added <code>UnknownChannelEventPolicy</code> property to <code>ReadingSettings</code> (#69) which specifies how reading engine should react on unknown channel event status byte. Also added <code>UnknownChannelEvent</code> property which specifies callback that will be called on unknown channel event if <code>UnknownChannelEventPolicy</code> set to <code>UnknownChannelEventPolicy.UseCallback</code>.</p>
+</li>
+<li><p>Added <code>ReaderSettings</code> property to <code>ReadingSettings</code>. <code>ReaderSettings</code> holds I/O settings for MIDI data reader.</p>
+</li>
+<li><p>Implemented reading MIDI file from non-seekable stream. Settings related to reading from such streams are placed at <code>ReadingSettings.ReaderSettings</code>. Names of properties corresponding to these settings are start with <code>NonSeekableStream</code>.</p>
+</li>
+<li><p>Added <code>Equals</code> static methods for <code>MidiEvent</code>, <code>MidiChunk</code> and <code>MidiFile</code> classes.</p>
+</li>
+<li><p>Added <code>PatternUtilities.TransformNotes</code> accepting <code>NoteSelection</code> which is predicate to select notes to transform.</p>
+</li>
+<li><p>Added <code>PatternUtilities.TransformChords</code> accepting <code>ChordSelection</code> which is predicate to select chords to transform.</p>
+</li>
+<li><p>Added <code>PatternUtilities.SetNotesState</code> method (#74).</p>
+</li>
+<li><p>Added <code>PatternUtilities.SetChordsState</code> method.</p>
+</li>
+<li><p><code>Pattern.Clone</code> creates now deep copy instead of shallow one.</p>
+</li>
+<li><p>Added <code>GetStandardChunkIds</code> static method to <code>MidiChunk</code>.</p>
+</li>
+<li><p>Added <code>GetStandardMetaEventStatusBytes</code> static method to <code>MetaEvent</code>.</p>
+</li>
 </ul>
 <h1 id="small-changes-and-bug-fixes">Small changes and bug fixes</h1>
 <ul>
-<li>Improved <code>GetHashCode</code> implementation for the library classes.</li>
-<li><strong>Fixed:</strong> notes order is invalid on collecting by <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NotesManager.html"><code>NotesManager</code></a> when notes are overlapped.</li>
-<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_MoveToPreviousTime"><code>PatternBuilder.MoveToPreviousTime</code></a> doesn't work.</li>
-<li><strong>Fixed:</strong> playback starts immidiately if first event is meta event with delta-time greater than zero (#37).</li>
+<li>Implemented <code>IComparable</code> on <code>Interval</code>.</li>
+<li>Implemented <code>IComparable</code> on <code>MusicTheory.Note</code>.</li>
+<li>Prevent creation of sysex event with status byte as a first data byte.</li>
+<li><strong>Fixed:</strong> <code>Playback</code> looped on current time change inside <code>EventPlayed</code> event handler (#56).</li>
+<li><strong>Fixed:</strong> <code>CsvConverter</code> closes passed stream after data is read or written (#73).</li>
+<li><strong>Fixed:</strong> <code>OutputDevice.Volume</code> get/set fails (#75).</li>
+<li><strong>Fixed:</strong> <code>ResetEvent</code> not received by input device.</li>
+<li><strong>Fixed:</strong> Fixed CSV parsing with <code>\r</code> and <code>\n</code> in texts of meta events.</li>
 </ul>
 </article>
           </div>
@@ -172,7 +167,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>

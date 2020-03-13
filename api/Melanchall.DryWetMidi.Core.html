@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Melanchall.DryWetMidi.Core
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.48.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -96,7 +96,9 @@ Represents Active Sensing event.
 Represents a text meta event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html">BytesToMidiEventConverter</a></h4>
-      <section></section>
+      <section>
+Provides methods to convert bytes to an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.html">ChannelAftertouchEvent</a></h4>
       <section>
 Represents a Channel Pressure (Aftertouch) message.
@@ -211,12 +213,32 @@ Represents a MIDI file meta event.
       <section>
 Represents a chunk of Standard MIDI file.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunkEqualityCheckSettings.html">MidiChunkEqualityCheckSettings</a></h4>
+      <section>
+Holds settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> objects should
+be compared for equality.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunkEqualityComparer.html">MidiChunkEqualityComparer</a></h4>
+      <section>
+Comparer to compare <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> objects for equality.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></h4>
       <section>
 Represents a MIDI file event stored in a track chunk.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventEqualityCheckSettings.html">MidiEventEqualityCheckSettings</a></h4>
+      <section>
+Holds settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> objects should
+be compared for equality.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventEqualityComparer.html">MidiEventEqualityComparer</a></h4>
+      <section>
+Comparer to compare <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> objects for equality.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html">MidiEventToBytesConverter</a></h4>
-      <section></section>
+      <section>
+Provides methods to convert an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to bytes.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiException.html">MidiException</a></h4>
       <section>
 Base MIDI exception class.
@@ -224,6 +246,15 @@ Base MIDI exception class.
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></h4>
       <section>
 Class that represents a MIDI file.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html">MidiFileEqualityCheckSettings</a></h4>
+      <section>
+Holds settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> objects should
+be compared for equality.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileEqualityComparer.html">MidiFileEqualityComparer</a></h4>
+      <section>
+Comparer to compare <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> objects for equality.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileUtilities.html">MidiFileUtilities</a></h4>
       <section>
@@ -294,8 +325,14 @@ Represents a Program Change message.
       <section>
 Represents a Program Name meta event.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html">ReaderSettings</a></h4>
+      <section>
+Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiReader.html">MidiReader</a> should read MIDI data.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.html">ReadingHandler</a></h4>
-      <section></section>
+      <section>
+Provides callbacks to handle MIDI data reading stages.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a></h4>
       <section>
 Settings of the reading engine.
@@ -409,7 +446,9 @@ The exception that is thrown when count of track chunks in a MIDI file differs f
 the one declared in the header chunk of this file.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventAction.html">UnknownChannelEventAction</a></h4>
-      <section></section>
+      <section>
+An action that should be done in case of unknown channel event.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a></h4>
       <section>
 The exception that is thrown when the reading engine encountered unknown channel event.
@@ -507,7 +546,9 @@ that are needed to read some value (for example, DWORD requires 4 bytes availabl
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html">ReadingHandler.TargetScope</a></h4>
-      <section></section>
+      <section>
+Scope of MIDI data to handle.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html">SilentNoteOnPolicy</a></h4>
       <section>
 Specifies how reading engine should react on Note On events with velocity 0.
@@ -519,9 +560,14 @@ Specifies how reading engine should react on unexpected track chunks count. The 
 <a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountPolicy_Ignore">Ignore</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventInstruction.html">UnknownChannelEventInstruction</a></h4>
-      <section></section>
+      <section>
+Instruction for reading engine which tells how unknown channel event should be handled.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html">UnknownChannelEventPolicy</a></h4>
-      <section></section>
+      <section>
+Specifies how reading engine should react on unknown channel event. The default is
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_Abort">Abort</a>.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkIdPolicy.html">UnknownChunkIdPolicy</a></h4>
       <section>
 Specifies how reading engine should react on chunk with unknown ID. The default
@@ -540,7 +586,10 @@ Callback used to decode a string from the specified bytes during reading a text-
 meta event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventCallback.html">UnknownChannelEventCallback</a></h4>
-      <section></section>
+      <section>
+Callback used to read unknown channel event if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventPolicy">UnknownChannelEventPolicy</a>
+set to <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_UseCallback">UseCallback</a>.
+</section>
 </article>
           </div>
           
@@ -561,7 +610,7 @@ meta event.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on February 5, 2020 22:04:04
+            Generated by <b>DocFX</b> on March 13, 2020 15:03:15
             
           </div>
         </div>
