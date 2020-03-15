@@ -23,12 +23,12 @@
         "dest": "api"
       },
       {
-        "files": [ "*.md", "toc.yml" ]
+        "files": [ "**/*.md", "**/toc.yml" ]
       }
     ],
     "resource": [
       {
-        "files": [ "images/**" ]
+        "files": [ "images/**", "wiki/images/**" ]
       }
     ],
     "globalMetadata": {

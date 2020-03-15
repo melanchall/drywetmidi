@@ -1,5 +1,8 @@
 - name: Overview
   href: index.md
   homepage: index.md
+- name: Wiki
+  href: wiki/
+  homepage: wiki/Home.md
 - name: API Documentation
   href: obj/api/
