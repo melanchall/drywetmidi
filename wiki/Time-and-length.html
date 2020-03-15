@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Utilities | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Utilities | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>All times and lengths in a MIDI file are presented as some long values in units defined by the time division of a file. In practice it is much more convenient to operate by &quot;human understandable&quot; representations like seconds or bars/beats. In fact there is no difference between time and length since time within a MIDI file is just a length that always starts at zero. The <em>time span</em> term will be used to describe both time and length. DryWetMIDI provides the following classes to represent time span:</p>
+<ul>
+<li><strong>MetricTimeSpan</strong> for time span in terms of microseconds;</li>
+<li><strong>BarBeatTicksTimeSpan</strong> for time span in terms of number of bars, beats and ticks;</li>
+<li><strong>BarBeatFractionTimeSpan</strong> for time span in terms of number of bars and fractional beats (for example, 0.5 beats);</li>
+<li><strong>MusicalTimeSpan</strong> for time span in terms of a fraction of the whole note length;</li>
+<li><strong>MidiTimeSpan</strong> exists for unification purposes and simply holds long value in units defined by the time division of a file.</li>
+</ul>
+<p>All time span classes implement <code>ITimeSpan</code> interface that has following public members:</p>
+<pre><code class="lang-csharp">public interface ITimeSpan
+{
+    ITimeSpan Add(ITimeSpan timeSpan, TimeSpanMode mode);
+    ITimeSpan Subtract(ITimeSpan timeSpan, TimeSpanMode mode);
+    ITimeSpan Multiply(double multiplier);
+    ITimeSpan Divide(double divisor);
+    ITimeSpan Clone();
+}
+</code></pre>
+<p>To convert time span between different representations you should use <code>TimeConverter</code> or <code>LengthConverter</code> classes (these conversions require <a href="Tempo-map.html">tempo map</a> of a MIDI file). (You can use <code>LengthConverter</code> for time conversions but with the <code>TimeConverter</code> you don't need to specify time where time span starts since it is always zero.)</p>
+<p>Examples of time conversions:</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+
+// Some time in MIDI ticks (we assume time division of a MIDI file is &quot;ticks per quarter note&quot;)
+
+long ticks = 123;
+
+// Convert ticks to metric time
+
+MetricTimeSpan metricTime = TimeConverter.ConvertTo&lt;MetricTimeSpan&gt;(ticks, tempoMap);
+
+// Convert ticks to musical time
+
+MusicalTimeSpan musicalTimeFromTicks = TimeConverter.ConvertTo&lt;MusicalTimeSpan&gt;(ticks, tempoMap);
+
+// Convert metric time to musical time
+
+MusicalTimeSpan musicalTimeFromMetric = TimeConverter.ConvertTo&lt;MusicalTimeSpan&gt;(metricTime, tempoMap);
+
+// Convert metric time to bar/beat time
+
+BarBeatTicksTimeSpan barBeatTicksTimeFromMetric = TimeConverter.ConvertTo&lt;BarBeatTicksTimeSpan&gt;(metricTime, tempoMap);
+
+// Convert musical time back to ticks
+
+long ticksFromMusical = TimeConverter.ConvertFrom(musicalTimeFromTicks, tempoMap);
+</code></pre>
+<p>Examples of length conversions:</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+
+// Convert ticks to metric length
+
+MetricTimeSpan metricLength = LengthConverter.ConvertTo&lt;MetricTimeSpan&gt;(ticks, time, tempoMap);
+
+// Convert metric length to musical length using metric time
+
+MusicalTimeSpan musicalLengthFromMetric = LengthConverter.ConvertTo&lt;MusicalTimeSpan&gt;(metricLength,
+                                                                                     metricTime,
+                                                                                     tempoMap);
+
+// Convert musical length back to ticks
+
+long ticksFromMetricLength = LengthConverter.ConvertFrom(metricLength, time, tempoMap);
+</code></pre>
+<p>You could notice that <code>LengthConverter</code>'s methods take a time. In general case MIDI file has changes of the tempo and time signature. Thus the same long value can represent different amount of seconds, for example, depending on the time of an object with length of this value. The methods above can take time either as <code>long</code> or as <code>ITimeSpan</code>.</p>
+<p>There are some useful methods in the <code>TimedObjectUtilities</code> class. This class contains extension methods for types that implement the <code>ITimedObject</code> interface – <code>TimedEvent</code>, <code>Note</code> and <code>Chord</code>. For example, you can get time of a timed event in hours, minutes, seconds with <code>TimeAs</code> method:</p>
+<pre><code class="lang-csharp">var metricTime = timedEvent.TimeAs&lt;MetricTimeSpan&gt;(tempoMap);
+</code></pre>
+<p>Or you can find all notes of a MIDI file that start at time of 10 bars and 4 beats:</p>
+<pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
+IEnumerable&lt;Note&gt; notes = midiFile.GetNotes()
+                                  .AtTime(new BarBeatTicksTimeSpan(10, 4), tempoMap);
+</code></pre>
+<p>Also there is the <code>LengthedObjectUtilities</code> class. This class contains extension methods for types that implement the <code>ILengthedObject</code> interface – <code>Note</code> and <code>Chord</code>. For example, you can get length of a note as a fraction of the whole note with <code>LengthAs</code> method:</p>
+<pre><code class="lang-csharp">var musicalLength = note.LengthAs&lt;MusicalTimeSpan&gt;(tempoMap);
+</code></pre>
+<p>Or you can get all notes of a MIDI file that end exactly at 30 seconds from the start of the file:</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+var notesAt30sec = midiFile.GetNotes()
+                           .EndAtTime(new MetricTimeSpan(0, 0, 30), tempoMap);
+</code></pre>
+<p>If you want, for example, to know length of a MIDI file in minutes and seconds, you can use this code:</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+var midiFileDuration = midiFile.GetTimedEvents()
+                               .LastOrDefault(e =&gt; e.Event is NoteOffEvent)
+                              ?.TimeAs&lt;MetricTimeSpan&gt;(tempoMap)
+                              ?? new MetricTimeSpan();
+</code></pre>
+<p>Both <code>TimeAs</code> and <code>LengthAs</code> methods have non-generic versions where the desired type of result should be passed as an argument of the <code>TimeSpanType</code> type. <code>TimeSpanType</code> enum has following values:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Metric</code></td>
+<td>Result will be of the <code>MetricTimeSpan</code> type.</td>
+</tr>
+<tr>
+<td><code>Musical</code></td>
+<td>Result will be of the <code>MusicalTimeSpan</code> type.</td>
+</tr>
+<tr>
+<td><code>BarBeatTicks</code></td>
+<td>Result will be of the <code>BarBeatTicksTimeSpan</code> type.</td>
+</tr>
+<tr>
+<td><code>BarBeatFraction</code></td>
+<td>Result will be of the <code>BarBeatFractionTimeSpan</code> type.</td>
+</tr>
+<tr>
+<td><code>Midi</code></td>
+<td>Result will be of the <code>MidiTimeSpan</code> type.</td>
+</tr>
+</tbody>
+</table>
+<p><code>ITimeSpan</code> interface has several methods to perform arithmetic operations on time spans. For example, to add metric length to metric time you can write:</p>
+<pre><code class="lang-csharp">var timeSpan1 = new MetricTimeSpan(0, 2, 20);
+var timeSpan2 = new MetricTimeSpan(0, 0, 10);
+ITimeSpan result = timeSpan1.Add(timeSpan2, TimeSpanMode.TimeLength);
+</code></pre>
+<p>You need to specify mode of the operation. In the example above <code>TimeLength</code> is used which means that first time span represents a time and the second one represents a length. This information is needed for conversion engine when operands are of different types. There are also <code>TimeTime</code> and <code>LengthLength</code> modes.</p>
+<p>You can also subtract one time span from another one:</p>
+<pre><code class="lang-csharp">var timeSpan1 = new MetricTimeSpan(0, 10, 0);
+var timeSpan2 = new MusicalTimeSpan(3, 8);
+ITimeSpan result = timeSpan1.Subtract(timeSpan2, TimeSpanMode.TimeTime);
+</code></pre>
+<p>If operands of the same type, result time span will be of this type too. But if you sum or subtract time spans of different types, the type of a result time span will be <code>MathTimeSpan</code> which holds operands along with operation (addition or subtraction) and mode. <code>MathTimeSpan</code> has following public members:</p>
+<pre><code class="lang-csharp">public sealed class MathTimeSpan : ITimeSpan
+{
+    // ...
+    public ITimeSpan TimeSpan1 { get; }
+    public ITimeSpan TimeSpan2 { get; }
+    public MathOperation Operation { get; }
+    public TimeSpanMode Mode { get; }
+    // ...
+}
+</code></pre>
+<p>To stretch or shrink a time span use <code>Multiply</code> or <code>Divide</code> methods:</p>
+<pre><code class="lang-csharp">ITimeSpan stretchedTimeSpan = new MetricTimeSpan(0, 0, 10).Multiply(2.5);
+ITimeSpan shrinkedTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
+</code></pre>
+<h2 id="utilities">Utilities</h2>
+<p>There are some useful methods in the <code>TimeSpanUtilities</code> class.</p>
+<p>To get a time span representing a maximum value for the specified time span type use <code>GetMaxTimeSpan</code> method:</p>
+<pre><code class="lang-csharp">ITimeSpan GetMaxTimeSpan(TimeSpanType timeSpanType)
+</code></pre>
+<p>To get zero time span use <code>GetZeroTimeSpan</code> method:</p>
+<pre><code class="lang-csharp">ITimeSpan GetZeroTimeSpan(TimeSpanType timeSpanType)
+
+TTimeSpan GetZeroTimeSpan&lt;TTimeSpan&gt;()
+</code></pre>
+<p>There are <code>Parse</code> and <code>TryParse</code> methods that allows to parse a string to appropriate time span:</p>
+<pre><code class="lang-csharp">bool TryParse(string input, out ITimeSpan timeSpan)
+
+bool TryParse(string input, TimeSpanType timeSpanType, out ITimeSpan timeSpan)
+
+ITimeSpan Parse(string input)
+</code></pre>
+<p>Formats of time span strings are described below.</p>
+<h4 id="miditimespan"><code>MidiTimeSpan</code></h4>
+<pre><code>Value
+</code></pre>
+<p>Examples:</p>
+<ul>
+<li><code>0</code> – zero time span</li>
+<li><code>100</code> – 100 ticks</li>
+<li><code>123456</code> – 123456 ticks</li>
+</ul>
+<p>where <em>Value</em> is a nonnegative integer number.</p>
+<h4 id="metrictimespan"><code>MetricTimeSpan</code></h4>
+<pre><code>Hours : Minutes : Seconds : Milliseconds
+HoursGroup : Minutes : Seconds
+Minutes : Seconds
+
+Hours h Minutes m Seconds s Milliseconds ms
+Hours h Minutes m Seconds s
+Hours h Minutes m Milliseconds ms
+Hours h Seconds s Milliseconds ms
+Minutes m Seconds s Milliseconds ms
+Hours h Minutes m
+Hours h Seconds s
+Hours h Milliseconds ms
+Minutes m Seconds s
+Hours h Milliseconds ms
+Seconds s Milliseconds ms
+Hours h
+Minutes m
+Seconds s
+Milliseconds ms
+</code></pre>
+<p>where <em>Hours</em>, <em>Minutes</em>, <em>Seconds</em> and <em>Milliseconds</em> are nonnegative integer numbers.</p>
+<p>Examples:</p>
+<ul>
+<li><code>0:0:0:0</code> – zero time span</li>
+<li><code>0:0:0:156</code> – 156 milliseconds</li>
+<li><code>2:0:156</code> – 2 hours and 156 seconds</li>
+<li><code>1:156</code> – 1 minute and 156 seconds</li>
+<li><code>1h2m3s4ms</code> – 1 hour 2 minutes 3 seconds 4 milliseconds</li>
+<li><code>1h 2m3s</code> – 1 hour 2 minutes 3 seconds</li>
+<li><code>1h2M 4ms</code> – 1 hour 2 minutes 4 milliseconds</li>
+<li><code>1 h3s4ms</code> – 1 hour 3 seconds 4 milliseconds</li>
+<li><code>2M3 S 4 MS</code> – 2 minutes 3 seconds 4 milliseconds</li>
+<li><code>1h2m</code> – 1 hour 2 minutes</li>
+<li><code>1h 3s</code> – 1 hour 3 seconds</li>
+<li><code>1h4MS</code> – 1 hour 4 milliseconds</li>
+<li><code>2M3s</code> – 2 minutes 3 seconds</li>
+<li><code>2 m 4 Ms</code> – 2 minutes 4 milliseconds</li>
+<li><code>3 s 4 mS</code> – 2 seconds 4 milliseconds</li>
+</ul>
+<h4 id="barbeattickstimespan"><code>BarBeatTicksTimeSpan</code></h4>
+<pre><code>Bars.Beats.Ticks
+</code></pre>
+<p>where <em>Bars</em>, <em>Beats</em> and <em>Ticks</em> are nonnegative integer numbers.</p>
+<p>Examples:</p>
+<ul>
+<li><code>0.0.0</code> – zero time span</li>
+<li><code>1.0.0</code> – 1 bar</li>
+<li><code>0.10.5</code> – 10 beats and 5 ticks</li>
+<li><code>100.20.0</code> – 100 bars and 20 ticks</li>
+</ul>
+<h4 id="barbeatfractiontimespan"><code>BarBeatFractionTimeSpan</code></h4>
+<pre><code>Bars.BeatsIntegerPart.BeatsFractionalPart
+</code></pre>
+<p>where <em>Bars</em>, <em>BeatsIntegerPart</em>, <em>BeatsFractionalPart</em> are nonnegative integer numbers.</p>
+<p>Examples:</p>
+<ul>
+<li><code>0.0.0</code> – zero time span</li>
+<li><code>1.0.0</code> – 1 bar</li>
+<li><code>0.10.5</code> – 10.5 beats</li>
+<li><code>100.20.2</code> – 100 bars and 20.2 beats</li>
+</ul>
+<h4 id="musicaltimespan"><code>MusicalTimeSpan</code></h4>
+<pre><code>Fraction Tuplet Dots
+</code></pre>
+<p>where <em>Fraction</em> defines note length which is one of the following terms:</p>
+<ul>
+<li><code>Numerator/Denominator</code> where <em>Numerator</em> and <em>Denominator</em> are nonnegative integer numbers; <code>Numerator</code> can be omitted assuming it's <code>1</code>;</li>
+<li><code>w</code>, <code>h</code>, <code>q</code>, <code>e</code> or <code>s</code> which mean whole, half, quarter, eighth or sixteenth note length respectively;<br>
+where <code>Tuplet</code> represents tuplet definition which is one of the following terms:</li>
+<li><code>[NotesCount : SpaceSize]</code> where <em>NotesCount</em> is positive integer count of notes with length defined by <em>Fraction</em> part; <em>SpaceSize</em> is count of notes of normal length;</li>
+<li><code>t</code> or <code>d</code> which mean triplet and duplet respectively;<br>
+where <code>Dots</code> is any number of dots.</li>
+</ul>
+<p><code>Tuplet</code> and <code>Dots</code> can be omitted.</p>
+<p>Examples:</p>
+<ul>
+<li><code>0/1</code> – zero time span</li>
+<li><code>q</code> – quarter note length</li>
+<li><code>1/4.</code> – dotted quarter note length</li>
+<li><code>/8..</code> – double dotted eighth note length</li>
+<li><code>wt.</code> – dotted whole triplet note length</li>
+<li><code>w[3:10]</code> – length of 3 whole notes in space of 10 notes of normal length</li>
+<li><code>s[3:10]...</code> – length of 3 sixteenth triple dotted notes in space of 10 notes of normal length</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><code>MidiEvent</code> has the <code>DeltaTime</code> property which provides offset from previous event in units defined by the time division of a MIDI file. But in practice it is more useful to operate by absolute times rather than relative ones. DryWetMIDI provides a way for this:</p>
+<pre><code class="lang-csharp">using (var manager = new TimedEventsManager(trackChunk.Events))
+{
+    TimedEventsCollection timedEvents = manager.Events;
+
+    TimedEvent firstEvent = timedEvents.First();
+    firstEvent.Time = 123;
+
+    timedEvents.Add(new TimedEvent(new InstrumentNameEvent(&quot;Guitar&quot;), 456));
+}
+</code></pre>
+<p>So to edit collection of events by absolute times you need to use <code>TimedEventsManager</code>. With this manager you operate by instances of the <code>TimedEvent</code> which is wrapper for <code>MidiEvent</code>. <code>TimedEvent</code> has the <code>Time</code> property holding an absolute time of the underlying event that can be accessed with the <code>Event</code> property.</p>
+<pre><code class="lang-csharp">public sealed class TimedEvent : ITimedObject
+{
+    // ...
+    public TimedEvent(MidiEvent midiEvent) { /*...*/}
+    public TimedEvent(MidiEvent midiEvent, long time) { /*...*/}
+    // ...
+    public MidiEvent Event { get; }
+    public long Time { get; set; }
+    // ...
+}
+</code></pre>
+<p>Please read <a href="Events-managers.html">general information about events managers</a> prior to use <code>TimedEventsManager</code>.</p>
+<p>To get collection of all timed events being managed by the current <code>TimedEventsManager</code> you need to use <code>Events</code> property which returns <code>TimedEventsCollection</code>. <code>TimedEventsCollection</code> has methods for adding and removing timed events and also can be enumerated since it implements <code>IEnumerable&lt;TimedEvent&gt;</code>. In addition to these methods there are extension ones contained in <code>TimedObjectUtilities</code>. For example, you can get all timed events in the first track chunk of a MIDI file at 20 seconds from the start of the file:</p>
+<pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
+
+using (var timedEventsManager = midiFile.GetTrackChunks().First().ManageTimedEvents())
+{
+    var eventsAt20Seconds = timedEventsManager.Events
+                                              .AtTime(new MetricTimeSpan(0, 0, 20),
+                                                      tempoMap);
+}
+</code></pre>
+<p>Read the <a href="Time-and-length.html">Time and length</a> page to learn more about custom time.</p>
+<p>As you can see there is another way to get an instance of the <code>TimedEventsManager</code> – through the <code>ManageTimedEvents</code> extension method. This method and another useful ones are placed in <code>TimedEventsManagingUtilities</code>.</p>
+<p>Note that <code>TimedEventsManager</code> is the basic events manager provided by DryWetMIDI. There are several dedicated managers for managing special types of events. These managers built as wrappers for <code>TimedEventsManager</code>. For example, it is much more convenient to manage notes with the <code>NotesManager</code> rather than mess with instances of <code>NoteOnEvent</code> and <code>NoteOffEvent</code> through <code>TimedEventsManager</code>. These managers are:</p>
+<ul>
+<li><a href="Notes.html">NotesManager</a></li>
+<li><a href="Chords.html">ChordsManager</a></li>
+<li><a href="Tempo-map.html">TempoMapManager</a></li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

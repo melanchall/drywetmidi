@@ -1,0 +1,356 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Quantizing timed events | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Quantizing timed events | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>DryWetMIDI provides tools to perform quantizing of timed events, notes and chords by the specified grid. The classes aimed to solve this task are:</p>
+<ul>
+<li><code>TimedEventsQuantizer</code></li>
+<li><code>NotesQuantizer</code></li>
+<li><code>ChordsQuantizer</code></li>
+</ul>
+<p>Sections below describe usage of them in details.</p>
+<p>Grid is passed to the <code>Quantize</code> method of those classes as <code>IGrid</code> interface. DryWetMIDI provides two built-in grid implementations:</p>
+<ul>
+<li><code>SteppedGrid</code> for grid started at the specified time where times distanced from each other with the specified steps. Such grid allows to perform <em>groove quantizing</em> where collection of steps defines pattern of repeating distances between grid's times.</li>
+<li><code>ArbitraryGrid</code> for grid where collection of times is specified as the constructor's argument. Such grid allows to quantize objects by custom collection of times which can be distributed in absolutely irregular way.</li>
+</ul>
+<p>Note that quantizing routine modifies passed objects instead of returning new ones with quantized times. So be sure you've cloned input objects if you want to save them. <code>TimedEvent</code>, <code>Note</code> and <code>Chord</code> classes have Clone method you can use for that purpose.</p>
+<p>Also there are <code>TimedEventsQuantizerUtilities</code>, <code>NotesQuantizerUtilities</code> and <code>ChordsQuantizerUtilities</code> classes that contain useful methods to quantize objects inside <code>TrackChunk</code> and <code>MidiFile</code> without necessity to work with collection of timed events, notes or chords directly.</p>
+<h3 id="quantizing-timed-events">Quantizing timed events</h3>
+<p>Timed events can be quantized with <code>Quantize</code> method of the <code>TimedEventsQuantizer</code> class:</p>
+<pre><code class="lang-csharp">void Quantize(IEnumerable&lt;TimedEvent&gt; objects,
+              IGrid grid,
+              TempoMap tempoMap,
+              TimedEventsQuantizingSettings settings = null)
+</code></pre>
+<p>The image below illustrates quantizing of timed events:</p>
+<p><img src="Images/Quantizer/QuantizeTimedEvents.png" alt="Quantize timed events"></p>
+<p>The following image shows <em>groove quantizing</em>. Grid's times will be distributed according to the provided steps. So distance between first pair of adjacent times will be equal to first step, distance between second pair of adjacent times will be equal to second step and so on. When last step reached, steps will go from the first one.</p>
+<p><img src="Images/Quantizer/GrooveQuantizing.png" alt="Groove quantizing"></p>
+<p>Let's see available settings provided by <code>TimedEventsQuantizingSettings</code>.</p>
+<h4 id="distancecalculationtype"><code>DistanceCalculationType</code></h4>
+<p>Defines the type of distance calculation between an object's time and grid's times. For example, if the type is set to <code>Metric</code>, the grid's time with minimal count of microseconds between it and an object's time will be selected. But if you use <code>Musical</code> type, the grid's time where distance between it and an object's time represent smallest fraction of the whole note's length will be selected. The default value is <code>Midi</code> and you should always set this property to get desired result. Possible values are listed in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Metric</code></td>
+<td>Calculate distances in terms of number of microseconds.</td>
+</tr>
+<tr>
+<td><code>Musical</code></td>
+<td>Calculate distances in terms of fraction of the whole note's length.</td>
+</tr>
+<tr>
+<td><code>BarBeatTicks</code></td>
+<td>Calculate distances in terms of number of bars, beats and ticks.</td>
+</tr>
+<tr>
+<td><code>BarBeatFraction</code></td>
+<td>Calculate distances in terms of number of bars and fractional beats.</td>
+</tr>
+<tr>
+<td><code>Midi</code></td>
+<td>Calculate distances in terms of number of MIDI ticks.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="quantizinglevel"><code>QuantizingLevel</code></h4>
+<p>The level of quantizing from 0.0 (no quantizing) to 1.0 (full quantizng). This setting specifies how close an object should be moved to nearest grid time. For example, 0.5 will lead to an object will be moved half the distance between its time and the nearest grid time. The following image shows how this setting affects quantizing process:</p>
+<p><img src="Images/Quantizer/QuantizingLevel.png" alt="Using quantizing level"></p>
+<h3 id="quantizing-notes-and-chords">Quantizing notes and chords</h3>
+<p>For quantizing notes and chords there are <code>NotesQuantizer</code> and <code>ChordsQuantizer</code> classes respectively. Both classes provide <code>Quantize</code> method:</p>
+<pre><code class="lang-csharp">void Quantize(IEnumerable&lt;Note&gt; objects,
+              IGrid grid,
+              TempoMap tempoMap,
+              NotesQuantizingSettings settings = null)
+
+void Quantize(IEnumerable&lt;Chord&gt; objects,
+              IGrid grid,
+              TempoMap tempoMap,
+              ChordsQuantizingSettings settings = null)
+</code></pre>
+<p><code>Note</code> and <code>Chord</code> are objects that have length so there are two options:</p>
+<ul>
+<li>quantize start time;</li>
+<li>quantize end time.</li>
+</ul>
+<p>Both <code>NotesQuantizingSettings</code> and <code>ChordsQuantizingSettings</code> have the same set of properties:</p>
+<h4 id="quantizingtarget"><code>QuantizingTarget</code></h4>
+<p>Gets or sets the side of an object that should be quantized. The default value is <code>LengthedObjectTarget.Start</code> so the start time of an object will be quantized.</p>
+<p>The type of this property is <code>LengthedObjectTarget</code> enum. Values are listed in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Start</code></td>
+<td>Quantize start time of objects.</td>
+</tr>
+<tr>
+<td><code>End</code></td>
+<td>Quantize end time of objects.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="fixoppositeend"><code>FixOppositeEnd</code></h4>
+<p>Gets or sets a value indicating whether an opposite side of an object should be fixed or not. The default value is <code>false</code>. Note that in case of an object's side is fixed the length can be changed during quantizing.</p>
+<p>The following image illustrates quantizing of start time with different values of this property.</p>
+<p><img src="Images/Quantizer/QuantizeStart.png" alt="Quantize start time"></p>
+<p>and quantizing of end time:</p>
+<p><img src="Images/Quantizer/QuantizeEnd.png" alt="Quantize end time"></p>
+<h4 id="distancecalculationtype-1"><code>DistanceCalculationType</code></h4>
+<p>Gets or sets the type of calculation distance between an object's time and grid's times. The purpose of this property described in <a href="#quantizing-timed-events">Quantizing timed events</a> section.</p>
+<h4 id="lengthtype"><code>LengthType</code></h4>
+<p>Gets or sets the type of an object's length that should be kept in case the opposite side is not fixed (<code>FixOppositeEnd</code> is set to <code>false</code>). The default value is <code>TimeSpanType.Midi</code>. Similar to <code>DistanceCalculationType</code> property you should always set it to get the result you're expecting. For example, with <code>Metric</code> type an object's length will represent the same number of microseconds before and after quantizing. But if you use <code>Musical</code> type, an object's length will represent the same fraction of the whole note's length before and after quantizing.</p>
+<p>The type of this property is <code>TimeSpanType</code> enum. Values are listed in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Metric</code></td>
+<td>Keep length as number of microseconds.</td>
+</tr>
+<tr>
+<td><code>Musical</code></td>
+<td>Keep length as fraction of the whole note's length.</td>
+</tr>
+<tr>
+<td><code>BarBeatTicks</code></td>
+<td>Keep length as number of bars, beats and ticks.</td>
+</tr>
+<tr>
+<td><code>BarBeatFraction</code></td>
+<td>Keep length as number of bars and fractional beats.</td>
+</tr>
+<tr>
+<td><code>Midi</code></td>
+<td>Keep length as number of MIDI ticks.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="quantizingbeyondzeropolicy"><code>QuantizingBeyondZeroPolicy</code></h4>
+<p>Gets or sets policy according to which quantizer should act in case of an object is going to be moved beyond zero. The default value is <code>QuantizingBeyondZeroPolicy.FixAtZero</code>. When the start time of an object is not fixed, there is a chance that the object's end time will be quantized in a such way that the start time will be negative due to the object is moved to the left. Negative time is invalid so this policy provides options to prevent this situation.</p>
+<p>The type of this property is <code>QuantizingBeyondZeroPolicy</code> enum. Values are listed in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FixAtZero</code></td>
+<td>Object will be shrinked due to end time quantizing and fixed at zero.</td>
+</tr>
+<tr>
+<td><code>Skip</code></td>
+<td>Object will be skipped so quantizing will not be applied to it.</td>
+</tr>
+<tr>
+<td><code>Abort</code></td>
+<td>Throw an exception aborting quantizing.</td>
+</tr>
+</tbody>
+</table>
+<p>The image below shows those options when end time quantizing leads to object will be moved beyond zero:</p>
+<p><img src="Images/Quantizer/QuantizeEndBeyondZero.png" alt="Quantize end time moving object beyond zero"></p>
+<h4 id="quantizingbeyondfixedendpolicy"><code>QuantizingBeyondFixedEndPolicy</code></h4>
+<p>Gets or sets policy according to which a quantizer should act in case of object's side is going to be moved beyond an opposite one that is fixed. The default value is <code>QuantizingBeyondFixedEndPolicy.CollapseAndFix</code>. When one end of an object is fixed, there is a chance that the object's opposite end will be quantized in a such way that the object will be reversed resulting to negative length. This policy provides options to prevent this situation.</p>
+<p>The type of this property is <code>QuantizingBeyondFixedEndPolicy</code> enum. Values are listed in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CollapseAndFix</code></td>
+<td>Object will be collapsed and fixed at fixed end's time.</td>
+</tr>
+<tr>
+<td><code>CollapseAndMove</code></td>
+<td>Object will be collapsed and moved to the new time calculated by a quantizer.</td>
+</tr>
+<tr>
+<td><code>SwapEnds</code></td>
+<td>Ends of an object will be swapped.</td>
+</tr>
+<tr>
+<td><code>Skip</code></td>
+<td>Object will be skipped so quantizing will not be applied to it.</td>
+</tr>
+<tr>
+<td><code>Abort</code></td>
+<td>Throw an exception aborting quantizing.</td>
+</tr>
+</tbody>
+</table>
+<p>The image below shows those options when start time is being quantized beyond the end one:</p>
+<p><img src="Images/Quantizer/QuantizeStartBeyondFixedEnd.png" alt="Quantize start time beyond fixed end"></p>
+<p>and for end time quantizing:</p>
+<p><img src="Images/Quantizer/QuantizeEndBeyondFixedEnd.png" alt="Quantize end time beyond fixed end"></p>
+<h3 id="custom-quantizing">Custom quantizing</h3>
+<p>You can derive from any of the quantizer classes provided by DryWetMIDI and override <code>OnObjectQuantizing</code> protected method. Inside this method you can decide whether quantizing for an object should be performed or not. You can also modify the time that will be set to the object. Signature of the method is:</p>
+<pre><code class="lang-csharp">TimeProcessingInstruction OnObjectQuantizing(TObject obj,
+                                             QuantizedTime quantizedTime,
+                                             IGrid grid,
+                                             TempoMap tempoMap,
+                                             TSettings settings)
+</code></pre>
+<p>You should return an instance of the <code>TimeProcessingInstruction</code> class that holds an action quantizer should do and the new time. Action is defined by the <code>TimeProcessingAction</code> enum. Possible values are:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Apply</code></td>
+<td>Set new time to an object.</td>
+</tr>
+<tr>
+<td><code>Skip</code></td>
+<td>Skip an object and leave its time untouched.</td>
+</tr>
+</tbody>
+</table>
+<p><code>quantizedTime</code> parameter holds information about new time for an object that was calculated during quantizing. Let's look at properties the <code>QuantizedTime</code> class provides:</p>
+<p><img src="Images/Quantizer/QuantizedTime.png" alt="QuantizedTime"></p>
+<h4 id="long-gridtime-a"><code>long GridTime</code> (A)</h4>
+<p>Grid time that was selected for an object as the nearest one.</p>
+<h4 id="long-newtime-b"><code>long NewTime</code> (B)</h4>
+<p>The new time of an object that was calculated during quantizing.</p>
+<h4 id="long-distancetogridtime-c"><code>long DistanceToGridTime</code> (C)</h4>
+<p>The distance between an object's current time and the nearest grid time.</p>
+<h4 id="itimespan-converteddistancetogridtime"><code>ITimeSpan ConvertedDistanceToGridTime</code></h4>
+<p>The distance between an object's current time and the nearest grid time as time span of the type specified by <code>DistanceCalculationType</code> of quantizing settings.</p>
+<h4 id="itimespan-shift-d"><code>ITimeSpan Shift</code> (D)</h4>
+<p>The distance an object is going to be moved on toward the new time.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

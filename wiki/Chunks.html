@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MidiChunk | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="MidiChunk | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>MIDI files are made up of <em>chunks</em>. Each chunk has a 4-character type and a 32-bit length, which is the number of bytes in the chunk. With DryWetMIDI you manage chunks via <code>ChunksCollection</code> returned by the <code>Chunks</code> property of the <code>MidiFile</code>.</p>
+<p>There are two standard types of MIDI chunks: <em>header chunk</em> and <em>track chunk</em>. The first one will not be presented in the <code>ChunksCollection</code>. Its data is used by the reading engine to set some properties of the <code>MidiFile</code> such as <code>TimeDivision</code> and <code>OriginalFormat</code>. You cannot add header chunks in the chunks collection of the file, the appropriate one will be written by writing engine automatically on <code>MidiFile.Write</code>.</p>
+<p>Instances of the <code>TrackChunk</code> can be added to the <code>ChunksCollection</code> via <code>Add</code>, <code>AddRange</code> and <code>Insert</code> methods. Of course you can remove chunks with corresponding methods.</p>
+<p><code>ChunksCollection</code> implements <code>IEnumerable&lt;MidiChunk&gt;</code> so you can use all the power of LINQ for working with MIDI file's chunks.</p>
+<p>The structure of the chunk allows any custom chunks be placed in a MIDI file along with the standard ones described below. DryWetMIDI allows to implement custom chunks that can be read from and written to a MIDI file. Visit <a href="Custom-chunks.html">Custom chunks</a> page to learn more. If you doesn't specify information about your custom chunk types the reading engine will read them as instances of the <code>UnknownChunk</code> class which <code>Data</code> property will hold chunk's data and <code>ChunkId</code> will return ID of the chunk.</p>
+<h2 id="midichunk">MidiChunk</h2>
+<pre><code class="lang-csharp">public abstract class MidiChunk
+{
+    // ...
+
+    public string ChunkId { get; }
+
+    // ...
+
+    protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, uint size);
+
+    protected abstract void WriteContent(MidiWriter writer, WritingSettings settings);
+
+    protected abstract uint GetContentSize(WritingSettings settings);
+
+    // ...
+}
+</code></pre>
+<p>It is the base class for all chunks. It has the <code>ChunkId</code> property which holds a 4-character identifier of the chunk and some protected abstract methods you need to implement when you develop a custom chunk class.</p>
+<h2 id="trackchunk">TrackChunk</h2>
+<pre><code class="lang-csharp">public sealed class TrackChunk : MidiChunk
+{
+    public TrackChunk() { /* ... */ }
+
+    public TrackChunk(IEnumerable&lt;MidiEvent&gt; events) { /* ... */ }
+
+    public TrackChunk(params MidiEvent[] events) { /* ... */ }
+
+    // ...
+
+    public EventsCollection Events { get; }
+
+    // ...
+}
+</code></pre>
+<p>This class represents a MIDI file's track chunk. This chunk is where you manage MIDI events via <code>EventsCollection</code> returned by the <code>Events</code> property of the <code>TrackChunk</code>. <code>EventsCollection</code> implements <code>IEnumerable&lt;MidiEvent&gt;</code> and provide methods for adding and removing events.</p>
+<h2 id="unknownchunk">UnknownChunk</h2>
+<pre><code class="lang-csharp">public sealed class UnknownChunk : MidiChunk
+{
+    // ...
+
+    public byte[] Data { get; }
+
+    // ...
+}
+</code></pre>
+<p>This class represents any unknown chunk was encountered by the reading engine. You cannot create an instance of the <code>UnknownChunk</code> or set its <code>Data</code> property. If you want that chunks with specific ID be read as instances of your custom class you need to implement custom chunk according with instructions provided on the <a href="Custom-chunks.html">Custom chunks</a> page and pass information about it to the <code>Read</code> method of the <code>MidiFile</code>.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

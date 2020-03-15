@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Reading a MIDI file | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Reading a MIDI file | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h3 id="reading-a-midi-file">Reading a MIDI file</h3>
+
+<ul>
+<li><a href="Reading-a-MIDI-file.html">Reading a MIDI file</a></li>
+<li><a href="Reading-settings.html">Reading settings</a></li>
+</ul>
+<hr>
+<h3 id="writing-a-midi-file">Writing a MIDI file</h3>
+<ul>
+<li><a href="Writing-a-MIDI-file.html">Writing a MIDI file</a></li>
+<li><a href="Writing-settings.html">Writing settings</a></li>
+</ul>
+<hr>
+<h3 id="midi-data-structures">MIDI data structures</h3>
+<ul>
+<li><a href="MidiFile.html">File</a></li>
+<li><a href="Chunks.html">Chunks</a></li>
+<li><a href="Events.html">Events</a>
+<ul>
+<li><a href="Channel-events.html">Channel events</a></li>
+<li><a href="Meta-events.html">Meta events</a></li>
+<li><a href="Sysex-events.html">Sysex events</a></li>
+<li><a href="System-common-events.html">System common events</a></li>
+<li><a href="System-real-time-events.html">System real-time events</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="custom-data-structures">Custom data structures</h3>
+<ul>
+<li><a href="Custom-chunks.html">Custom chunks</a></li>
+<li><a href="Custom-meta-events.html">Custom meta events</a></li>
+</ul>
+<hr>
+<h3 id="high-level-data-managing">High-level data managing</h3>
+<ul>
+<li><a href="Events-managers.html">Events managers</a>
+<ul>
+<li><a href="Events-absolute-time.html">Events absolute time</a></li>
+<li><a href="Notes.html">Notes</a></li>
+<li><a href="Chords.html">Chords</a></li>
+<li><a href="Tempo-map.html">Tempo map</a></li>
+</ul>
+</li>
+<li><a href="Time-and-length.html">Time and length</a></li>
+<li><a href="Pattern.html">Pattern</a></li>
+<li><a href="Tools.html">Tools</a>
+<ul>
+<li><a href="Notes-and-chords-splitter.html">Notes and chords splitter</a></li>
+<li><a href="Quantizer.html">Quantizer</a></li>
+<li><a href="Randomizer.html">Randomizer</a></li>
+<li><a href="Notes-merger.html">Notes merger</a></li>
+<li><a href="MIDI-file-splitter.html">MIDI file splitter</a></li>
+<li><a href="CSV-converter.html">CSV converter</a></li>
+</ul>
+</li>
+<li><a href="Music-theory.html">Music theory</a></li>
+</ul>
+<hr>
+<h3 id="sendingreceiving-midi-data">Sending/receiving MIDI data</h3>
+<ul>
+<li><a href="MIDI-devices.html">MIDI devices</a>
+<ul>
+<li><a href="Input-device.html">Input device</a></li>
+<li><a href="Output-device.html">Output device</a></li>
+<li><a href="Devices-connector.html">Devices connector</a></li>
+</ul>
+</li>
+<li><a href="Playback.html">Playback</a></li>
+<li><a href="Recording.html">Recording</a></li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

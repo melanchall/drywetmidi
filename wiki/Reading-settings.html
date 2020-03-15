@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>UnexpectedTrackChunksCountPolicy | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="UnexpectedTrackChunksCountPolicy | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>You can adjust process of reading a MIDI file with help of the <code>ReadingSettings</code> class. Create an instance of it, set some properties and pass the instance to the <code>Read</code> method of the <code>MidiFile</code>. Members of the <code>ReadingSettings</code> are described below.</p>
+<h3 id="unexpectedtrackchunkscountpolicy">UnexpectedTrackChunksCountPolicy</h3>
+<p>Gets or sets reaction of the reading engine on unexpected track chunks count. The default is <code>UnexpectedTrackChunksCountPolicy.Ignore</code>. This policy will be taken into account if actual track chunks count is less or greater than tracks number specified in the file's header chunk. If <code>UnexpectedTrackChunksCountPolicy.Abort</code> is used an instance of the <code>UnexpectedTrackChunksCountException</code> will be thrown while loading the file if track chunks count is unexpected.</p>
+<p>The type of this property is <code>UnexpectedTrackChunksCountPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ignore</td>
+<td>Ignore unexpected track chunks count.</td>
+</tr>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>UnexpectedTrackChunksCountException</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="extratrackchunkpolicy">ExtraTrackChunkPolicy</h3>
+<p>Gets or sets reaction of the reading engine on new track chunk if already read track chunks count is greater or equals the one declared in the file's header chunk. The default is <code>ExtraTrackChunkPolicy.Read</code>.</p>
+<p>The type of this property is <code>ExtraTrackChunkPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read</td>
+<td>Read the track chunk anyway.</td>
+</tr>
+<tr>
+<td>Skip</td>
+<td>Skip the chunk and go to the next one.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unknownchunkidpolicy">UnknownChunkIdPolicy</h3>
+<p>Gets or sets reaction of the reading engine on chunk with unknown ID. The default is <code>UnknownChunkIdPolicy.ReadAsUnknownChunk</code>. If <code>UnknownChunkIdPolicy.Abort</code> is used an instance of the <code>UnknownChunkIdException</code> will be thrown if a chunk to be read has unknown ID.</p>
+<p>The type of this property is <code>UnknownChunkIdPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ReadAsUnknownChunk</td>
+<td>Read the chunk as <code>UnknownChunk</code>.</td>
+</tr>
+<tr>
+<td>Skip</td>
+<td>Skip this chunk and go to the next one.</td>
+</tr>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>UnknownChunkIdException</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="missedendoftrackpolicy">MissedEndOfTrackPolicy</h3>
+<p>Gets or sets reaction of the reading engine on missed <em>End Of Track</em> event. The default is <code>MissedEndOfTrackPolicy.Ignore</code>. If <code>MissedEndOfTrackPolicy.Abort</code> is used an instance of the <code>MissedEndOfTrackEventException</code> will be thrown if track chunk doesn't end with <em>End Of Track</em> event. Although this event is not optional and therefore missing of it must be treated as error, you can try to read a track chunk relying on the chunk's size only.</p>
+<p>The type of this property is <code>MissedEndOfTrackPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ignore</td>
+<td>Ignore missing of the <em>End Of Track</em> event and try to read a track chunk relying on the chunk's size.</td>
+</tr>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>MissedEndOfTrackEventException</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="silentnoteonpolicy">SilentNoteOnPolicy</h3>
+<p>Gets or sets reaction of the reading engine on <em>Note On</em> events with velocity 0. The default is <code>SilentNoteOnPolicy.NoteOff</code>. Although it is recommended to treat silent <em>Note On</em> event as <em>Note Off</em> you can turn this behavior off to get original event stored in the file.</p>
+<p>The type of this property is <code>SilentNoteOnPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NoteOff</td>
+<td>Read the <em>Note On</em> event with zero velocity as <code>NoteOffEvent</code>.</td>
+</tr>
+<tr>
+<td>NoteOn</td>
+<td>Read the <em>Note On</em> event as <code>NoteOnEvent</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="invalidchunksizepolicy">InvalidChunkSizePolicy</h3>
+<p>Gets or sets reaction of the reading engine on difference between actual chunk's size and the one declared in its header. The default is <code>InvalidChunkSizePolicy.Abort</code>. If <code>InvalidChunkSizePolicy.Abort</code> is used an instance of the <code>InvalidChunkSizeException</code> will be thrown if actual chunk's size differs from the one declared in chunk's header.</p>
+<p>The type of this property is <code>InvalidChunkSizePolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>InvalidChunkSizeException</code>.</td>
+</tr>
+<tr>
+<td>Ignore</td>
+<td>Ignore difference between actual chunk's size and the declared one.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unknownfileformatpolicy">UnknownFileFormatPolicy</h3>
+<p>Gets or sets reaction of the reading engine on unknown file format stored in a header chunk. The default is <code>UnknownFileFormatPolicy.Ignore</code>. If <code>UnknownFileFormatPolicy.Abort</code> is used an instance of the <code>UnknownFileFormatException</code> will be thrown if file format stored in a header chunk doesn't belong to values defined by the <code>MidiFileFormat</code> enumeration.</p>
+<p>The type of this property is <code>UnknownFileFormatPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ignore</td>
+<td>Ignore unknown file format and try to read chunks.</td>
+</tr>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>UnknownFileFormatException</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="invalidchanneleventparametervaluepolicy">InvalidChannelEventParameterValuePolicy</h3>
+<p>Gets or sets reaction of the reading engine on invalid value of a channel event's parameter value. Valid values are 0-127 so, for example, 128 is the invalid one and will be processed according with this policy. The default is <code>InvalidChannelEventParameterValuePolicy.Abort</code>. If <code>InvalidChannelEventParameterValuePolicy.Abort</code> is used an instance of the <code>InvalidChannelEventParameterValueException</code> will be thrown if event's parameter value just read is invalid.</p>
+<p>The type of this property is <code>InvalidChannelEventParameterValuePolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>InvalidChannelEventParameterValueException</code>.</td>
+</tr>
+<tr>
+<td>ReadValid</td>
+<td>Read byte and take its lower seven bits as the final value.</td>
+</tr>
+<tr>
+<td>SnapToLimits</td>
+<td>Read value and snap it to limits of the allowable range if it is out of them.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="invalidmetaeventparametervaluepolicy">InvalidMetaEventParameterValuePolicy</h3>
+<p>Gets or sets reaction of the reading engine on invalid value of a meta event's parameter value. For example, 255 is the invalid value for the Key of a Key SignatureEvent event and will be processed according with this policy. The default is
+<code>InvalidMetaEventParameterValuePolicy.Abort</code>. If <code>InvalidMetaEventParameterValuePolicy.Abort</code> is used an instance of the <code>InvalidMetaEventParameterValueException</code> will be thrown if event's parameter value just read is invalid.</p>
+<p>The type of this property is <code>InvalidMetaEventParameterValuePolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>InvalidMetaEventParameterValueException</code>.</td>
+</tr>
+<tr>
+<td>SnapToLimits</td>
+<td>Read value and snap it to limits of the allowable range if it is out of them.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notenoughbytespolicy">NotEnoughBytesPolicy</h3>
+<p>Gets or sets reaction of the reading engine on lack of bytes in the underlying stream that are needed to read some value (for example, DWORD requires 4 bytes available). The default is <code>NotEnoughBytesPolicy.Abort</code>. If <code>NotEnoughBytesPolicy.Abort</code> is used an instance of the <code>NotEnoughBytesException</code> will be thrown if the reader's underlying stream doesn't have enough bytes to read a value.</p>
+<p>The type of this property is <code>NotEnoughBytesPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>NotEnoughBytesException</code>.</td>
+</tr>
+<tr>
+<td>Ignore</td>
+<td>Ignore lack of bytes in the reader's underlying stream and just end reading.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="noheaderchunkpolicy">NoHeaderChunkPolicy</h3>
+<p>Gets or sets reaction of the reading engine on missing of the header chunk in the MIDI file. The default is <code>NoHeaderChunkPolicy.Abort</code>. If <code>NoHeaderChunkPolicy.Abort</code> is used an instance of the <code>NoHeaderChunkException</code> will be thrown if the MIDI file doesn't contain the header chunk. If <code>NoHeaderChunkPolicy.Ignore</code> is used the result file's <code>TimeDivision</code> will be null and <code>OriginalFormat</code> will throw an <a href="https://msdn.microsoft.com/library/system.invalidoperationexception(v=vs.110).aspx">InvalidOperationException</a>.</p>
+<p>The type of this property is <code>NoHeaderChunkPolicy</code> enum. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abort</td>
+<td>Abort reading and throw an <code>NoHeaderChunkException</code>.</td>
+</tr>
+<tr>
+<td>Ignore</td>
+<td>Ignore missing of the header chunk.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="customchunkstypes">CustomChunksTypes</h3>
+<p>Gets or sets collection of custom chunks types. These types must be derived from the <code>MidiChunk</code> class and have parameterless constructor. No exception will be thrown if some types don't meet these requirements.</p>
+<p>The type of this property is <code>ChunkTypesCollection</code>.</p>
+<p>Read the <a href="Custom-chunks.html">Custom chunks</a> page to learn more about custom chunks support.</p>
+<h3 id="custommetaeventtypes">CustomMetaEventTypes</h3>
+<p>Gets or sets collection of custom meta events types. These types must be derived from the <code>MetaEvent</code> class and have parameterless constructor. No exception will be thrown while reading a MIDI file if some types don't meet these requirements.</p>
+<p>The type of this property is <code>EventTypesCollection</code>.</p>
+<p>Read the <a href="Custom-meta-events.html">Custom meta events</a> page to learn more about custom meta events support.</p>
+<h3 id="textencoding">TextEncoding</h3>
+<p>Gets or sets an encoding that will be used to read the text of a text-based meta event like <em>Sequence/Track Name</em> or <em>Lyric</em>. The default is <a href="https://msdn.microsoft.com/library/system.text.encoding.ascii(v=vs.110).aspx"><code>Encoding.ASCII</code></a>.</p>
+<p>The type of this property is <a href="https://msdn.microsoft.com/library/system.text.encoding(v=vs.110).aspx"><code>Encoding</code></a>.</p>
+<h3 id="decodetextcallback">DecodeTextCallback</h3>
+<p>Gets or sets a callback used to decode a string from the specified bytes during reading a text-based meta event. The default is <code>null</code>.</p>
+<p>The type of this property is <code>DecodeTextCallback</code> defined as:</p>
+<pre><code class="lang-csharp">delegate string DecodeTextCallback(byte[] bytes, ReadingSettings settings)
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

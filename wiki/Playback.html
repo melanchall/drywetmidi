@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Blocking playback | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Blocking playback | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><strong>Please note that Devices API is Windows only at now.</strong></p>
+<p><code>Playback</code> class allows to play MIDI events via an <code>OutputDevice</code> (see <a href="Output-device.html">Output device</a> article). In other words it sends MIDI data to output MIDI device taking events delta-times into account. To get an instance of the <code>Playback</code> you must use its constructor passing collection of MIDI events, tempo map and output device:</p>
+<pre><code class="lang-csharp">using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+
+var eventsToPlay = new MidiEvent[]
+{
+    new NoteOnEvent(),
+    new NoteOffEvent
+    {
+        DeltaTime = 100
+    }
+};
+
+using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
+using (var playback = new Playback(eventsToPlay, TempoMap.Default, outputDevice))
+{
+    // ...
+}
+</code></pre>
+<p>There are also extension methods <code>GetPlayback</code> for <code>TrackChunk</code>, <code>IEnumerable&lt;TrackChunk&gt;</code>, <code>MidiFile</code> and <code>Pattern</code> classes which simplify obtaining a playback object for MIDI file entities and musical composition created with <a href="Pattern.html">patterns</a>:</p>
+<pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
+using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(outputDevice))
+{
+    // ...
+}
+</code></pre>
+<p><code>GetDuration</code> method returns the total duration of a playback in the specified format.</p>
+<p>There are two approaches of playing MIDI data: blocking and non-blocking.</p>
+<h3 id="blocking-playback">Blocking playback</h3>
+<p>If you call <code>Play</code> method of the <code>Playback</code>, the calling thread will be blocked until entire collection of MIDI events will be sent to MIDI device. Note that execution of this method will be infinite if the <code>Loop</code> property set to <code>true</code>. See <a href="#playback-properties">playback properties</a> below to learn more.</p>
+<p>There are also extension methods <code>Play</code> for <code>TrackChunk</code>, <code>IEnumerable&lt;TrackChunk&gt;</code>, <code>MidiFile</code> and <code>Pattern</code> classes which simplify playing MIDI file entities and musical compositions created with <a href="Pattern.html">patterns</a>:</p>
+<pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
+{
+    MidiFile.Read(&quot;Some MIDI file.mid&quot;).Play(outputDevice);
+
+    // ...
+}
+</code></pre>
+<h3 id="non-blocking-playback">Non-blocking playback</h3>
+<p>Is you call <code>Start</code> method of the <code>Playback</code>, execution of the calling thread will continue immediately after the method is called. To stop playback use <code>Stop</code> method. Note that there is no <code>Pause</code> method since it useless. <code>Stop</code> leaves playback at the point where the method was called. To move to the start of the playback use <code>MoveToStart</code> method described in the <a href="#time-management">Time management</a> section below.</p>
+<p>You should be very careful with this approach and <code>using</code> block. Example below shows the case where part of MIDI data will not be played because of playback is disposed before the last MIDI event will be sent to output device:</p>
+<pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
+using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(outputDevice))
+{
+    playback.Start();
+
+    // ...
+}
+</code></pre>
+<p>With non-blocking approach it is recommended to call <code>Dispose</code> manually after you've finished work with playback object.</p>
+<p>After playback finished the <code>Finished</code> event will be fired. <code>Started</code> and <code>Stopped</code> events will be fired on <code>Start</code> (<code>Play</code>) and <code>Stop</code> calls respectively.</p>
+<h3 id="playback-properties">Playback properties</h3>
+<p>Let's see public properties of the <code>Playback</code> class.</p>
+<h4 id="loop"><code>Loop</code></h4>
+<p>Gets or sets a value indicating whether playing should automatically start from the first event after the last one played. If you set it to <code>true</code> and call <code>Play</code> method, calling thread will be blocked forever. The default value is <code>false</code>.</p>
+<h4 id="speed"><code>Speed</code></h4>
+<p>Gets or sets the speed of events playing. <code>1.0</code> means normal speed which is the default. For example, to play MIDI data twice slower this property should be set to <code>0.5</code>. Pass <code>10.0</code> to play MIDI events ten times faster.</p>
+<h4 id="interruptnotesonstop"><code>InterruptNotesOnStop</code></h4>
+<p>Gets or sets a value indicating whether currently playing notes must be stopped when <code>Stop</code> method called on playback.</p>
+<h4 id="tracknotes"><code>TrackNotes</code></h4>
+<p>Gets or sets a value indicating whether notes must be tracked or not. If <code>false</code>, notes will be treated as just Note On/Note Off events. If <code>true</code>, notes will be treated as lengthed objects.</p>
+<p>If playback stopped in middle of a note, then <em>Note Off</em> event will be sent on stop, and <em>Note On</em> – on playback start. If one of <a href="#time-management">time management</a> methods is called:</p>
+<ul>
+<li>and old playback's position was on a note, then <em>Note Off</em> will be send for that note;</li>
+<li>and new playback's position is on a note, then <em>Note On</em> will be send for that note.</li>
+</ul>
+<h4 id="isrunning"><code>IsRunning</code></h4>
+<p>Gets a value indicating whether playing is currently running or not.</p>
+<h4 id="snapping"><code>Snapping</code></h4>
+<p>Provides a way to manage snap points for playback. See <a href="#snapping">Snapping</a> section below to learn more.</p>
+<h3 id="playback-events">Playback events</h3>
+<h4 id="started"><code>Started</code></h4>
+<p>Occurs when playback started via <code>Start</code> or <code>Play</code> methods.</p>
+<h4 id="stopped"><code>Stopped</code></h4>
+<p>Occurs when playback stopped via <code>Stop</code> method.</p>
+<h4 id="finished"><code>Finished</code></h4>
+<p>Occurs when playback finished, i.e. last event has been played and no need to restart playback due to value of the <code>Loop</code> property.</p>
+<h4 id="notesplaybackstarted"><code>NotesPlaybackStarted</code></h4>
+<p>Occurs when notes started to play. It will raised if playback's cursor gets in to notes (due to normal playing or <a href="#time-management">time management</a> operations).</p>
+<p>Related notes can be obtained via instance of the <code>NotesEventArgs</code> passed to event handler.</p>
+<h4 id="notesplaybackfinished"><code>NotesPlaybackFinished</code></h4>
+<p>Occurs when notes finished to play. It will raised if playback's cursor gets out from notes (due to normal playing or <a href="#time-management">time management</a> operations).</p>
+<p>Related notes can be obtained via instance of the <code>NotesEventArgs</code> passed to event handler.</p>
+<h3 id="snapping-1">Snapping</h3>
+<p><code>Snapping</code> property of the <code>Playback</code> gives an instance of the <code>PlaybackSnapping</code> class which manages snap points for playback. Snap points are markers at speicified times which can be used to move to (see <a href="#time-management">Time management</a> section below).</p>
+<p><code>PlaybackSnapping</code> provides following members:</p>
+<ul>
+<li><code>IEnumerable&lt;SnapPoint&gt; SnapPoints</code><br>
+Returns all snap points currently set for playback (including disabled ones).</li>
+<li><code>SnapPoint&lt;TData&gt; AddSnapPoint&lt;TData&gt;(ITimeSpan time, TData data)</code><br>
+Add a snap point with the specified data at given time. The data will be available through <code>Data</code> property of the snap point returned by the method.</li>
+<li><code>SnapPoint&lt;Guid&gt; AddSnapPoint(ITimeSpan time)</code><br>
+Add a snap point at the specified time without user data. <code>Data</code> will hold unique <code>Guid</code> value.</li>
+<li><code>RemoveSnapPoint&lt;TData&gt;(SnapPoint&lt;TData&gt; snapPoint)</code><br>
+Remove a snap point.</li>
+<li><code>RemoveSnapPointsByData&lt;TData&gt;(Predicate&lt;TData&gt; predicate)</code><br>
+Remove all snap points that match the conditions defined by the specified predicate.</li>
+<li><code>SnapPointsGroup SnapToGrid(IGrid grid)</code><br>
+Add snap points at times defined by the specified grid. Implementations of <code>IGrid</code> are <code>SteppedGrid</code> (grid where times are defined by collection of repeating steps) and <code>ArbitraryGrid</code> (grid where times are specified explicitly). An instance of <code>SnapPointsGroup</code> will be returned which can be used to manage all the snap points added by the method.</li>
+<li><code>SnapPointsGroup SnapToNotesStarts()</code><br>
+Adds snap points at start times of notes. Returned group can be used to manage added snap points.</li>
+<li><code>SnapPointsGroup SnapToNotesEnds()</code><br>
+Adds snap points at end times of notes. Returned group can be used to manage added snap points.</li>
+</ul>
+<h4 id="snappoint"><code>SnapPoint</code></h4>
+<p><code>SnapPoint&lt;&gt;</code> returned by the methods above is inherited from <code>SnapPoint</code> and just adds <code>Data</code> property that holds user data attached to a snap point. <code>SnapPoint</code> has following members:</p>
+<h5 id="isenabled"><code>IsEnabled</code></h5>
+<p>Gets or sets a value indicating whether a snap point is enabled or not. Can be used to turn a snap point on or off. If a snap point is disabled, it won't participate in <a href="#time-management">time management</a> operations.</p>
+<h5 id="time"><code>Time</code></h5>
+<p>Gets the time of a snap point as an instance of <code>TimeSpan</code>.</p>
+<h5 id="snappointsgroup"><code>SnapPointsGroup</code></h5>
+<p>Gets the group a snap point belongs to as an instance of <code>SnapPointsGroup</code>. It will be <code>null</code> for snap points added by <code>AddSnapPoint</code> method.</p>
+<h4 id="snappointsgroup-1"><code>SnapPointsGroup</code></h4>
+<p><code>SnapPointsGroup</code> has <code>IsEnabled</code> property that is similar to that the <code>SnapPoint</code> has. If a snap points group is disabled, its snap points won't participate in <a href="#time-management">time management</a> operations.</p>
+<h3 id="time-management">Time management</h3>
+<p>You have several options to manipulate by the current time of playback:</p>
+<ul>
+<li><code>GetCurrentTime()</code><br>
+Returns the current time of a playback in the specified format.</li>
+<li><code>MoveToStart()</code><br>
+Sets playback position to the beginning of the MIDI data.</li>
+<li><code>MoveToTime()</code><br>
+Sets playback position to the specified time from the beginning of the MIDI data. If new position is greater than playback duration, position will be set to the end of the playback.</li>
+<li><code>MoveForward()</code><br>
+Shifts playback position forward by the specified step. If new position is greater than playback duration, position will be set to the end of the playback.</li>
+<li><code>MoveBack()</code><br>
+Shifts playback position back by the specified step. If step is greater than the elapsed time of playback, position will be set to the start of the playback.</li>
+<li><code>MoveToSnapPoint(SnapPoint snapPoint)</code><br>
+Sets playback position to the time of the specified snap point. If <code>snapPoint</code> is disabled, nothing will happen.</li>
+<li><code>MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)</code><br>
+Sets playback position to the time of the previous snap point (relative to the current time of playback) that belongs to <code>snapPointsGroup</code>.</li>
+<li><code>MoveToPreviousSnapPoint()</code><br>
+Sets playback position to the time of the previous snap point (relative to the current time of playback).</li>
+<li><code>MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)</code><br>
+Sets playback position to the time of the next snap point (relative to the current time of playback) that belongs to the specified <code>SnapPointsGroup</code>.</li>
+<li><code>MoveToNextSnapPoint()</code><br>
+Sets playback position to the time of the next snap point (relative to the current time of playback).</li>
+</ul>
+<p>You don't need to call <code>Stop</code> method if you want to call any method that changes the current playback position.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

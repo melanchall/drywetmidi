@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>CompressionPolicy | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="CompressionPolicy | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>You can adjust process of writing a MIDI file with help of the <code>WritingSettings</code> class. Create an instance of it, set some properties and pass the instance to the <code>Write</code> method of the <code>MidiFile</code>. Members of the <code>WritingSettings</code> are described below.</p>
+<h3 id="compressionpolicy">CompressionPolicy</h3>
+<p>Gets or sets compression rules for the writing engine. The default is <code>CompressionPolicy.NoCompression</code>. The type of this property is <code>CompressionPolicy</code> enum. It's a flags enum so you can combine its values with | operator. Values are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NoCompression</td>
+<td>Don't use any compression on the MIDI data to write.</td>
+</tr>
+<tr>
+<td>UseRunningStatus</td>
+<td>Use <em>running status</em> to turn off writing of the status bytes of consecutive events of the same type.</td>
+</tr>
+<tr>
+<td>NoteOffAsSilentNoteOn</td>
+<td>Turn <em>Note Off</em> events into the <em>Note On</em> ones with zero velocity. Note that it helps to compress MIDI data in the case of <code>UseRunningStatus</code> is used only.</td>
+</tr>
+<tr>
+<td>DeleteDefaultTimeSignature</td>
+<td>Don't write default <em>Time Signature</em> event. Default signature is 4/4 with 24 clocks count and 8 32nd notes per beat.</td>
+</tr>
+<tr>
+<td>DeleteDefaultKeySignature</td>
+<td>Don't write default <em>Key Signature</em> event. Default signature is C major which is expressed as 0 for key and 0 for scale.</td>
+</tr>
+<tr>
+<td>DeleteDefaultSetTempo</td>
+<td>Don't write default <em>Set Tempo</em> event. Default tempo is 500,000 microseconds per beat.</td>
+</tr>
+<tr>
+<td>DeleteUnknownMetaEvents</td>
+<td>Don't write instances of the <code>UnknownMetaEvent</code>.</td>
+</tr>
+<tr>
+<td>DeleteUnknownChunks</td>
+<td>Don't write instances of the <code>UnknownChunk</code>.</td>
+</tr>
+<tr>
+<td>Default</td>
+<td>Use default compression on the MIDI data to write. This option is combination of other ones and turns on all options that don't lead to data losing (for example, unknown meta events): <code>UseRunningStatus</code>, <code>NoteOffAsSilentNoteOn</code>, <code>DeleteDefaultTimeSignature</code>, <code>DeleteDefaultKeySignature</code>, <code>DeleteDefaultSetTempo</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="custommetaeventtypes">CustomMetaEventTypes</h3>
+<p>Gets or sets collection of custom meta events types. These types must be derived from the <code>MetaEvent</code> class and have parameterless constructor. No exception will be thrown while writing a MIDI file if some types don't meet these requirements.</p>
+<p>The type of this property is <code>EventTypesCollection</code>.</p>
+<p>Read the <a href="Custom-meta-events.html">Custom meta events</a> page to learn more about custom meta events support.</p>
+<h3 id="textencoding">TextEncoding</h3>
+<p>Gets or sets an encoding that will be used to write the text of a text-based meta event like <em>Sequence/Track Name</em> or <em>Lyric</em>. The default is <a href="https://msdn.microsoft.com/library/system.text.encoding.ascii(v=vs.110).aspx"><code>Encoding.ASCII</code></a>.</p>
+<p>The type of this property is <a href="https://msdn.microsoft.com/library/system.text.encoding(v=vs.110).aspx"><code>Encoding</code></a>.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

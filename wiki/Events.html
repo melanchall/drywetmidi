@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>MIDI data is stored in a MIDI file as <em>events</em>. Events are placed inside track chunks and can be of three types:</p>
+<ul>
+<li><a href="Channel-events.html">Channel (voice) events</a><br>
+<em>MIDI voice messages are those messages that are specific to a MIDI channel and directly affect the sound produced by MIDI devices.</em></li>
+<li><a href="Meta-events.html">Meta events</a><br>
+<em>MIDI meta messages are messages that contains information about the MIDI sequence and that are not to be sent over MIDI ports.</em></li>
+<li><a href="Sysex-events.html">System exclusive events</a><br>
+<em>A MIDI event that carries the MIDI system exclusive message, also known as a &quot;MIDI sysex message&quot;, carries information that is specific to the manufacturer of the MIDI device receiving the message. The action that this message prompts for can be anything.</em></li>
+<li><a href="System-common-events.html">System common events</a><br>
+<em>MIDI system common messages are those MIDI messages that prompt all devices on the MIDI system to respond (are not specific to a MIDI channel), but do not require an immediate response from the receiving MIDI devices.</em></li>
+<li><a href="System-real-time-events.html">System real-time events</a><br>
+<em>MIDI system realtime messages are messages that are not specific to a MIDI channel but prompt all devices on the MIDI system to respond and to do so in real time.</em></li>
+</ul>
+<p>Image below shows the class diagram of event types in the DryWetMIDI:</p>
+<p><img src="Images/ClassDiagrams/EventsClassDiagram.png" alt="Event classes diagram"></p>
+<p><code>MidiEvent</code> is the base class which represents a MIDI event. It has one public property <code>DeltaTime</code> and one public method <code>Clone</code>. Delta-time is the offset from the previous event. If the first event in a track chunk occurs at the very beginning of a track, or if two events occur simultaneously, a delta-time of zero is used. Delta-time is in some fraction of a beat (or a second, for recording a track with SMPTE times), as specified by the time division of a MIDI file (or tempo map used in playback/recording).</p>
+<pre><code class="lang-csharp">public abstract class MidiEvent
+{
+    // ...
+    public long DeltaTime { get; set; }
+    public MidiEventType EventType { get; }
+    // ...
+    public MidiEvent Clone() { /*...*/ }
+    // ...
+}
+</code></pre>
+<hr>
+<p><em>Descriptions of MIDI events are taken from <a href="https://www.recordingblogs.com">RecordingBlogs.com</a>.</em></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <b>DocFX</b> on March 15, 2020 16:52:10
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
