@@ -8,6 +8,7 @@ trigger:
     exclude:
     - DryWetMidi.Benchmarks/
     - DryWetMidi.Tests/
+    - DryWetMidi.Tests.Common/
     - Resources/CI/win-test-netframework-core.yaml
     - Resources/CI/win-test-netframework-devices.yaml
     - Resources/CI/win-test-netcore-core.yaml
