@@ -1,0 +1,55 @@
+.toc .nav > li > a {
+  color: #f0d8d1;
+}
+
+.toc .nav > li > a:hover, .toc .nav > li > a:focus {
+  color: white;
+}
+
+.toc .nav > li.active > a {
+  color: white;
+}
+
+.toc .nav > li.active > a:hover, .toc .nav > li.active > a:focus {
+  color: white;
+}
+
+.toc .nav > li> .expand-stub {
+  color: #f0d8d1;
+}
+
+.sidetoc {
+  background-color: #e95621;
+  border-left: 1px solid #e95621;
+  border-right: 1px solid #ff3c00;
+}
+
+body .toc {
+  background-color: #e95621;
+}
+
+.sidefilter {
+  background-color: #e95621;
+  border-left: 1px solid #e95621;
+  border-right: 1px solid #ff3c00;
+}
+
+.toc-filter {
+  border-radius: 0px;
+}
+
+header .subnav {
+  /* border-bottom: 1px solid #e95621; */
+}
+
+.breadcrumb>li+li:before {
+  color: #e95621;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+  background-color: #e95621;
+}
+
+header .form-control {
+  border-radius: 0px;
+}
