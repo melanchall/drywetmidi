@@ -1,17 +1,5 @@
-.toc .nav > li > a {
+/*.toc .nav > li > a {
   color: #f0d8d1;
-}
-
-.toc .nav > li > a:hover, .toc .nav > li > a:focus {
-  color: white;
-}
-
-.toc .nav > li.active > a {
-  color: white;
-}
-
-.toc .nav > li.active > a:hover, .toc .nav > li.active > a:focus {
-  color: white;
 }
 
 .toc .nav > li> .expand-stub {
@@ -32,6 +20,18 @@ body .toc {
   background-color: #e95621;
   border-left: 1px solid #e95621;
   border-right: 1px solid #ff3c00;
+}*/
+/*
+.toc .nav > li.active > a:hover, .toc .nav > li.active > a:focus {
+  color: #ff3c00;
+}
+
+.toc .nav > li > a:hover, .toc .nav > li > a:focus {
+  color: #ff3c00;
+}
+
+.toc .nav > li.active > a {
+  color: #e95621;
 }
 
 .toc-filter {
@@ -39,7 +39,7 @@ body .toc {
 }
 
 header .subnav {
-  /* border-bottom: 1px solid #e95621; */
+  border-bottom: 1px solid #e95621;
 }
 
 .breadcrumb>li+li:before {
@@ -52,4 +52,4 @@ header .subnav {
 
 header .form-control {
   border-radius: 0px;
-}
+}*/
