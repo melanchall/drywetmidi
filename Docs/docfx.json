@@ -40,8 +40,7 @@
 	  "_disableContribution": true
     },
 	"template": [
-      "default",
-      "templates/dwm"
+      "default"
     ],
     "markdownEngineName": "markdig",
     "dest": "_site",
