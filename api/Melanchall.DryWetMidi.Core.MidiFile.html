@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Core_MidiFile" data-uid="Melanchall.DryWetMidi.Core.MidiFile" class="text-break">Class MidiFile
   </h1>
   <div class="markdown level0 summary">
-Class that represents a MIDI file.
+Represents a MIDI file.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -122,6 +122,19 @@ Class that represents a MIDI file.
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class MidiFile</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiFile_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+<p>An instance of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> can be obtained via one of <code>Read</code>
+(<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_">Read(String, ReadingSettings)</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings_">Read(Stream, ReadingSettings)</a>)
+static methods or via constructor which allows to create a MIDI file from scratch.</p>
+<p>Content of MIDI file available via <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Chunks">Chunks</a> property which contains instances of
+following chunk classes (derived from <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>):</p>
+<ul><li><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></li><li><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a></li><li>Any of the types specified by <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_CustomChunkTypes">CustomChunkTypes</a> property of the
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a> that was used to read the file</li></ul>
+<p>To save MIDI data to file on disk or to stream use appropriate <code>Write</code> method
+(<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a> or
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_IO_Stream_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(Stream, MidiFileFormat, WritingSettings)</a>).</p>
+</div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiFile__ctor_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.#ctor*"></a>
@@ -163,9 +176,10 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Co
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_MidiFile__ctor_Melanchall_DryWetMidi_Core_MidiChunk____remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
-Header chunk with appropriate information will be written to a file automatically on
-<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+<p>Note that the library doesn&apos;t provide class for MIDI file header chunk
+so it cannot be added into the collection. Use <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat">OriginalFormat</a> and <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_TimeDivision">TimeDivision</a>
+properties instead. Header chunk with appropriate information will be written to a file automatically
+on <code>Write</code> method.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -211,9 +225,10 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Co
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_MidiFile__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
-Header chunk with appropriate information will be written to a file automatically on
-<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+<p>Note that the library doesn&apos;t provide class for MIDI file header chunk
+so it cannot be added into the collection. Use <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat">OriginalFormat</a> and <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_TimeDivision">TimeDivision</a>
+properties instead. Header chunk with appropriate information will be written to a file automatically
+on <code>Write</code> method.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -259,15 +274,17 @@ Gets collection of chunks of a MIDI file.
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_MidiFile_Chunks_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-MIDI Files are made up of chunks. Сollection returned by this property may contain chunks
-of the following types: <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>, <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a>, and any custom
-chunk types you&apos;ve defined.
+<p> MIDI files are made up of chunks. Сollection returned by this property may contain chunks
+of the following types:</p>
+<ul><li><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></li><li><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a></li><li>Custom chunk types</li></ul>
+<p>You cannot create instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a>. It will be created by the
+library on reading unknown chunk (neither track chunk nor custom one).</p>
 </div>
   <a id="Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat" data-uid="Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat">OriginalFormat</h4>
   <div class="markdown level1 summary">
-Gets original format of the file was read. This property returns null for the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>
-created by constructor.
+Gets original format of the file was read or <code>null</code> if the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>
+was created by constructor.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -304,7 +321,8 @@ created by constructor.
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
-        <td>Unable to get original format of the file.</td>
+        <td>Unable to get original format of the file. It means
+the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> was created via constructor rather than via <code>Read</code> method.</td>
       </tr>
     </tbody>
   </table>
@@ -335,17 +353,17 @@ Gets or sets a time division of a MIDI file.
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_MidiFile_TimeDivision_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-Time division specifies the meaning of the delta-times of events. There are two types of
-the time division: ticks per quarter note and SMPTE. The first type represented by
+<p>Time division specifies the meaning of the delta-times of MIDI events within <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+There are two types of the time division: ticks per quarter note and SMPTE. The first type represented by
 <a class="xref" href="Melanchall.DryWetMidi.Core.TicksPerQuarterNoteTimeDivision.html">TicksPerQuarterNoteTimeDivision</a> class and the second one represented by
-<a class="xref" href="Melanchall.DryWetMidi.Core.SmpteTimeDivision.html">SmpteTimeDivision</a> class.
+<a class="xref" href="Melanchall.DryWetMidi.Core.SmpteTimeDivision.html">SmpteTimeDivision</a> class.</p>
 </div>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiFile_Clone_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Clone*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Clone" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Clone">Clone()</h4>
   <div class="markdown level1 summary">
-Clones MIDI file by creating a copy of it.
+Clones the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> creating a copy of it.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -363,7 +381,7 @@ Clones MIDI file by creating a copy of it.
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
-        <td>Copy of the MIDI file.</td>
+        <td>Copy of the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.</td>
       </tr>
     </tbody>
   </table>
@@ -390,12 +408,12 @@ Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Cor
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td><span class="parametername">midiFile1</span></td>
-        <td>The first file to compare, or null.</td>
+        <td>The first file to compare, or <code>null</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td><span class="parametername">midiFile2</span></td>
-        <td>The second file to compare, or null.</td>
+        <td>The second file to compare, or <code>null</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -410,8 +428,8 @@ Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Cor
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td>true if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
-otherwise, false.</td>
+        <td><code>true</code> if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
+    otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -470,8 +488,8 @@ the specified comparison settings.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td>true if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
-otherwise, false.</td>
+        <td><code>true</code> if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
+    otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -524,8 +542,8 @@ Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Cor
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td>true if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
-otherwise, false.</td>
+        <td><code>true</code> if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
+    otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -596,53 +614,78 @@ and <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.stream
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> doesn&apos;t support reading. -or
-<code data-dev-comment-type="paramref" class="paramref">stream</code> doesn&apos;t support seeking. -or- <code data-dev-comment-type="paramref" class="paramref">stream</code> is already read.</td>
+        <td>
+One of the following errors occured:
+<ul><li><code data-dev-comment-type="paramref" class="paramref">stream</code> doesn&apos;t support reading.</li><li><code data-dev-comment-type="paramref" class="paramref">stream</code> is already read.</li></ul>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
-        <td>An I/O error occurred while reading from the stream.</td>
+        <td>An I/O error occurred while reading the file.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is disposed. -or-
-    Underlying stream reader is disposed.</td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
-        <td>Unable to get position of the <code data-dev-comment-type="paramref" class="paramref">stream</code>. -or
-Unable to get length of the <code data-dev-comment-type="paramref" class="paramref">stream</code>.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.unauthorizedaccessexception">UnauthorizedAccessException</a></td>
+        <td>
+One of the following errors occured:
+<ul><li>This operation is not supported on the current platform.</li><li>The caller does not have the required permission.</li></ul>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a></td>
-        <td>There is no header chunk in a file.</td>
+        <td>There is no header chunk in a file and that should be treated as error
+according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NoHeaderChunkPolicy">NoHeaderChunkPolicy</a> of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html">InvalidChunkSizeException</a></td>
         <td>Actual header or track chunk&apos;s size differs from the one declared
-in its header and that should be treated as error according to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+in its header and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChunkSizePolicy">InvalidChunkSizePolicy</a>
+of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a></td>
         <td>Chunk to be read has unknown ID and that
-should be treated as error accordng to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChunkIdPolicy">UnknownChunkIdPolicy</a> of the
+<code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a></td>
         <td>Actual track chunks
-count differs from the expected one and that should be treated as error according to
-the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+count differs from the expected one (declared in the file header) and that should be treated as error according to
+the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnexpectedTrackChunksCountPolicy">UnexpectedTrackChunksCountPolicy</a> of the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatException.html">UnknownFileFormatException</a></td>
-        <td>The header chunk contains unknown file format and
-<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy">UnknownFileFormatPolicy</a> property of the <code data-dev-comment-type="paramref" class="paramref">settings</code> set to
-<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy.html#Melanchall_DryWetMidi_Core_UnknownFileFormatPolicy_Abort">Abort</a>.</td>
+        <td>The header chunk of the file specifies unknown file format and
+that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy">UnknownFileFormatPolicy</a> of
+the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
+        <td>Value of a channel event&apos;s parameter
+just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</a> of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
+        <td>Value of a meta event&apos;s parameter
+just read is invalid and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</a> of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a></td>
+        <td>Reader has encountered an unknown channel event and that
+should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventPolicy">UnknownChannelEventPolicy</a> of
+the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
-        <td>MIDI file cannot be read since the reader&apos;s underlying stream doesn&apos;t
-have enough bytes.</td>
+        <td>MIDI file data cannot be read since the reader&apos;s underlying stream doesn&apos;t
+have enough bytes and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy">NotEnoughBytesPolicy</a>
+of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
@@ -650,18 +693,9 @@ have enough bytes.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a></td>
-        <td>Track chunk doesn&apos;t end with End Of Track event and that
-should be treated as error accordng to the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
-        <td>Value of a channel event&apos;s parameter
-just read is invalid.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
-        <td>Value of a meta event&apos;s parameter
-just read is invalid.</td>
+        <td>Track chunk doesn&apos;t end with <code>End Of Track</code> event and that
+should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</a> of
+the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -739,7 +773,7 @@ and file names must be less than 260 characters.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.directorynotfoundexception">DirectoryNotFoundException</a></td>
-        <td>The specified path is invalid, (for example,
+        <td>The specified path is invalid (for example,
 it is on an unmapped drive).</td>
       </tr>
       <tr>
@@ -752,53 +786,63 @@ it is on an unmapped drive).</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.unauthorizedaccessexception">UnauthorizedAccessException</a></td>
-        <td>This operation is not supported on the current platform. -or-
-<code data-dev-comment-type="paramref" class="paramref">filePath</code> specified a directory. -or- The caller does not have the required permission.</td>
+        <td>
+One of the following errors occured:
+<ul><li>This operation is not supported on the current platform.</li><li><code data-dev-comment-type="paramref" class="paramref">filePath</code> specified a directory.</li><li>The caller does not have the required permission.</li></ul>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a></td>
-        <td>There is no header chunk in a file.</td>
+        <td>There is no header chunk in a file and that should be treated as error
+according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NoHeaderChunkPolicy">NoHeaderChunkPolicy</a> of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html">InvalidChunkSizeException</a></td>
         <td>Actual header or track chunk&apos;s size differs from the one declared
-in its header and that should be treated as error according to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+in its header and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChunkSizePolicy">InvalidChunkSizePolicy</a>
+of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a></td>
         <td>Chunk to be read has unknown ID and that
-should be treated as error accordng to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChunkIdPolicy">UnknownChunkIdPolicy</a> of the
+<code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a></td>
         <td>Actual track chunks
-count differs from the expected one and that should be treated as error according to
-the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+count differs from the expected one (declared in the file header) and that should be treated as error according to
+the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnexpectedTrackChunksCountPolicy">UnexpectedTrackChunksCountPolicy</a> of the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatException.html">UnknownFileFormatException</a></td>
-        <td>The header chunk contains unknown file format and
-<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy">UnknownFileFormatPolicy</a> property of the <code data-dev-comment-type="paramref" class="paramref">settings</code> set to
-<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy.html#Melanchall_DryWetMidi_Core_UnknownFileFormatPolicy_Abort">Abort</a>.</td>
+        <td>The header chunk of the file specifies unknown file format and
+that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy">UnknownFileFormatPolicy</a> of
+the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
         <td>Value of a channel event&apos;s parameter
-just read is invalid.</td>
+just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</a> of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
         <td>Value of a meta event&apos;s parameter
-just read is invalid.</td>
+just read is invalid and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</a> of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a></td>
-        <td>Reader has encountered an unknown channel event.</td>
+        <td>Reader has encountered an unknown channel event and that
+should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventPolicy">UnknownChannelEventPolicy</a> of
+the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
-        <td>MIDI file cannot be read since the reader&apos;s underlying stream doesn&apos;t
-have enough bytes.</td>
+        <td>MIDI file data cannot be read since the reader&apos;s underlying stream doesn&apos;t
+have enough bytes and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy">NotEnoughBytesPolicy</a>
+of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
@@ -806,8 +850,9 @@ have enough bytes.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a></td>
-        <td>Track chunk doesn&apos;t end with End Of Track event and that
-should be treated as error accordng to the specified <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+        <td>Track chunk doesn&apos;t end with <code>End Of Track</code> event and that
+should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</a> of
+the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -871,7 +916,7 @@ Writes current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">M
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
-        <td>Time division is null.</td>
+        <td>Time division is <code>null</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
@@ -879,8 +924,7 @@ Writes current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">M
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is disposed. -or-
-    Underlying stream writer is disposed.</td>
+        <td><code data-dev-comment-type="paramref" class="paramref">stream</code> is disposed.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html">TooManyTrackChunksException</a></td>
@@ -917,8 +961,8 @@ Writes the MIDI file to location specified by full path.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">overwriteFile</span></td>
-        <td>If true and file specified by <code data-dev-comment-type="paramref" class="paramref">filePath</code> already
-exists it will be overwritten; if false and the file exists exception will be thrown.</td>
+        <td>If <code>true</code> and file specified by <code data-dev-comment-type="paramref" class="paramref">filePath</code> already
+exists it will be overwritten; if <code>false</code> and the file exists exception will be thrown.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileFormat.html">MidiFileFormat</a></td>
@@ -963,7 +1007,7 @@ and file names must be less than 260 characters.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.directorynotfoundexception">DirectoryNotFoundException</a></td>
-        <td>The specified path is invalid, (for example,
+        <td>The specified path is invalid (for example,
 it is on an unmapped drive).</td>
       </tr>
       <tr>
@@ -976,12 +1020,14 @@ it is on an unmapped drive).</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.unauthorizedaccessexception">UnauthorizedAccessException</a></td>
-        <td>This operation is not supported on the current platform.-or-
-<code data-dev-comment-type="paramref" class="paramref">filePath</code> specified a directory.-or- The caller does not have the required permission.</td>
+        <td>
+One of the following errors occured:
+<ul><li>This operation is not supported on the current platform.</li><li><code data-dev-comment-type="paramref" class="paramref">filePath</code> specified a directory.</li><li>The caller does not have the required permission.</li></ul>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
-        <td>Time division is null.</td>
+        <td>Time division is <code>null</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html">TooManyTrackChunksException</a></td>
@@ -1135,6 +1181,14 @@ exceeds maximum value allowed for MIDI file.</td>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.TimedEventsRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_TimedEventsRandomizerUtilities_RandomizeTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Tools_TimedEventsRandomizingSettings_">TimedEventsRandomizerUtilities.RandomizeTimedEvents(MidiFile, IBounds, TimedEventsRandomizingSettings)</a>
   </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></div>
+  </div>
 </article>
           </div>
           
@@ -1155,7 +1209,7 @@ exceeds maximum value allowed for MIDI file.</td>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <b>DocFX</b> on March 20, 2020 15:01:02
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>
