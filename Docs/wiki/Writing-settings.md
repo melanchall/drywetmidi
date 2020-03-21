@@ -1,3 +1,9 @@
+**!!! This page will be deleted in the future.**
+
+**Please read API documentation for [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) and [WritingSettings](xref:Melanchall.DryWetMidi.Core.WritingSettings) to learn more.**
+
+---
+
 You can adjust process of writing a MIDI file with help of the `WritingSettings` class. Create an instance of it, set some properties and pass the instance to the `Write` method of the `MidiFile`. Members of the `WritingSettings` are described below.
 
 ### CompressionPolicy

@@ -1,3 +1,9 @@
+**!!! This page will be deleted in the future.**
+
+**Please read API documentation for [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) to learn more.**
+
+---
+
 `MidiFile` class represents a MIDI file. You can get an instance of it with `Read` static method to manage content of an existing file or by calling one of `MidiFile`'s constructors to create a MIDI file from scratch.
 
 ## Constructors

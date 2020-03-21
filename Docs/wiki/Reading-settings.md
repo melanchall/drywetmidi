@@ -1,3 +1,9 @@
+**!!! This page will be deleted in the future.**
+
+**Please read API documentation for [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) and [ReadingSettings](xref:Melanchall.DryWetMidi.Core.ReadingSettings) to learn more.**
+
+---
+
 You can adjust process of reading a MIDI file with help of the `ReadingSettings` class. Create an instance of it, set some properties and pass the instance to the `Read` method of the `MidiFile`. Members of the `ReadingSettings` are described below.
 
 ### UnexpectedTrackChunksCountPolicy

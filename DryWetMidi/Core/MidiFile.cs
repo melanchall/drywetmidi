@@ -8,8 +8,35 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
-    /// Class that represents a MIDI file.
+    /// Represents a MIDI file.
     /// </summary>
+    /// <remarks>
+    /// <para>An instance of <see cref="MidiFile"/> can be obtained via one of <c>Read</c>
+    /// (<see cref="Read(string, ReadingSettings)"/> or <see cref="Read(Stream, ReadingSettings)"/>)
+    /// static methods or via constructor which allows to create a MIDI file from scratch.</para>
+    /// <para>Content of MIDI file available via <see cref="Chunks"/> property which contains instances of
+    /// following chunk classes (derived from <see cref="MidiChunk"/>):</para>
+    /// <list type="bullet">
+    /// <item>
+    /// <description><see cref="TrackChunk"/></description>
+    /// </item>
+    /// <item>
+    /// <description><see cref="UnknownChunk"/></description>
+    /// </item>
+    /// <item>
+    /// <description>Any of the types specified by <see cref="ReadingSettings.CustomChunkTypes"/> property of the
+    /// <see cref="ReadingSettings"/> that was used to read the file</description>
+    /// </item>
+    /// </list>
+    /// <para>To save MIDI data to file on disk or to stream use appropriate <c>Write</c> method
+    /// (<see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/> or
+    /// <see cref="Write(Stream, MidiFileFormat, WritingSettings)"/>).</para>
+    /// </remarks>
+    /// <seealso cref="ReadingSettings"/>
+    /// <seealso cref="WritingSettings"/>
+    /// <seealso cref="MidiChunk"/>
+    /// <seealso cref="MidiEvent"/>
+    /// <seealso cref="Interaction"/>
     public sealed class MidiFile
     {
         #region Constants
@@ -39,9 +66,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="chunks">Chunks to add to the file.</param>
         /// <remarks>
-        /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
-        /// Header chunk with appropriate information will be written to a file automatically on
-        /// <see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <para>Note that the library doesn't provide class for MIDI file header chunk
+        /// so it cannot be added into the collection. Use <see cref="OriginalFormat"/> and <see cref="TimeDivision"/>
+        /// properties instead. Header chunk with appropriate information will be written to a file automatically
+        /// on <c>Write</c> method.</para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
         public MidiFile(IEnumerable<MidiChunk> chunks)
@@ -56,9 +84,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="chunks">Chunks to add to the file.</param>
         /// <remarks>
-        /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
-        /// Header chunk with appropriate information will be written to a file automatically on
-        /// <see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <para>Note that the library doesn't provide class for MIDI file header chunk
+        /// so it cannot be added into the collection. Use <see cref="OriginalFormat"/> and <see cref="TimeDivision"/>
+        /// properties instead. Header chunk with appropriate information will be written to a file automatically
+        /// on <c>Write</c> method.</para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
         public MidiFile(params MidiChunk[] chunks)
@@ -74,10 +103,10 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets a time division of a MIDI file.
         /// </summary>
         /// <remarks>
-        /// Time division specifies the meaning of the delta-times of events. There are two types of
-        /// the time division: ticks per quarter note and SMPTE. The first type represented by
+        /// <para>Time division specifies the meaning of the delta-times of MIDI events within <see cref="TrackChunk"/>.
+        /// There are two types of the time division: ticks per quarter note and SMPTE. The first type represented by
         /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
-        /// <see cref="SmpteTimeDivision"/> class.
+        /// <see cref="SmpteTimeDivision"/> class.</para>
         /// </remarks>
         public TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
 
@@ -85,18 +114,31 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets collection of chunks of a MIDI file.
         /// </summary>
         /// <remarks>
-        /// MIDI Files are made up of chunks. Сollection returned by this property may contain chunks
-        /// of the following types: <see cref="TrackChunk"/>, <see cref="UnknownChunk"/>, and any custom
-        /// chunk types you've defined.
+        /// <para> MIDI files are made up of chunks. Сollection returned by this property may contain chunks
+        /// of the following types:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><see cref="TrackChunk"/></description>
+        /// </item>
+        /// <item>
+        /// <description><see cref="UnknownChunk"/></description>
+        /// </item>
+        /// <item>
+        /// <description>Custom chunk types</description>
+        /// </item>
+        /// </list>
+        /// <para>You cannot create instance of the <see cref="UnknownChunk"/>. It will be created by the
+        /// library on reading unknown chunk (neither track chunk nor custom one).</para>
         /// </remarks>
         public ChunksCollection Chunks { get; } = new ChunksCollection();
 
         /// <summary>
-        /// Gets original format of the file was read. This property returns null for the <see cref="MidiFile"/>
-        /// created by constructor.
+        /// Gets original format of the file was read or <c>null</c> if the current <see cref="MidiFile"/>
+        /// was created by constructor.
         /// </summary>
         /// <exception cref="UnknownFileFormatException">File format is unknown.</exception>
-        /// <exception cref="InvalidOperationException">Unable to get original format of the file.</exception>
+        /// <exception cref="InvalidOperationException">Unable to get original format of the file. It means
+        /// the current <see cref="MidiFile"/> was created via constructor rather than via <c>Read</c> method.</exception>
         public MidiFileFormat OriginalFormat
         {
             get
@@ -133,33 +175,54 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
         /// and file names must be less than 260 characters.</exception>
-        /// <exception cref="DirectoryNotFoundException">The specified path is invalid, (for example,
+        /// <exception cref="DirectoryNotFoundException">The specified path is invalid (for example,
         /// it is on an unmapped drive).</exception>
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
-        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform. -or-
-        /// <paramref name="filePath"/> specified a directory. -or- The caller does not have the required permission.</exception>
-        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file and that should be treated as error
+        /// according to the <see cref="ReadingSettings.NoHeaderChunkPolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the <paramref name="settings"/>.</exception>
+        /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
+        /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
+        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
-        /// count differs from the expected one and that should be treated as error according to
-        /// the specified <paramref name="settings"/>.</exception>
-        /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
-        /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
-        /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
+        /// count differs from the expected one (declared in the file header) and that should be treated as error according to
+        /// the <see cref="ReadingSettings.UnexpectedTrackChunksCountPolicy"/> of the specified <paramref name="settings"/>.</exception>
+        /// <exception cref="UnknownFileFormatException">The header chunk of the file specifies unknown file format and
+        /// that should be treated as error according to the <see cref="ReadingSettings.UnknownFileFormatPolicy"/> of
+        /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
-        /// just read is invalid.</exception>
+        /// just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+        /// <see cref="ReadingSettings.InvalidChannelEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
-        /// just read is invalid.</exception>
-        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
-        /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
-        /// have enough bytes.</exception>
+        /// just read is invalid and that should be treated as error according to the
+        /// <see cref="ReadingSettings.InvalidMetaEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
+        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event and that
+        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChannelEventPolicy"/> of
+        /// the <paramref name="settings"/>.</exception>
+        /// <exception cref="NotEnoughBytesException">MIDI file data cannot be read since the reader's underlying stream doesn't
+        /// have enough bytes and that should be treated as error according to the <see cref="ReadingSettings.NotEnoughBytesPolicy"/>
+        /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
-        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
+        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
+        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// the <paramref name="settings"/>.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = FileUtilities.OpenFileForRead(filePath))
@@ -172,8 +235,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Writes the MIDI file to location specified by full path.
         /// </summary>
         /// <param name="filePath">Full path of the file to write to.</param>
-        /// <param name="overwriteFile">If true and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if false and the file exists exception will be thrown.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
         /// <param name="format">MIDI file format to write in.</param>
         /// <param name="settings">Settings according to which the file must be written.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
@@ -184,13 +247,25 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
         /// and file names must be less than 260 characters.</exception>
-        /// <exception cref="DirectoryNotFoundException">The specified path is invalid, (for example,
+        /// <exception cref="DirectoryNotFoundException">The specified path is invalid (for example,
         /// it is on an unmapped drive).</exception>
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
-        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
-        /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
-        /// <exception cref="InvalidOperationException">Time division is null.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
         public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
@@ -214,33 +289,60 @@ namespace Melanchall.DryWetMidi.Core
         /// and <see cref="Stream.Length"/> properties.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading. -or
-        /// <paramref name="stream"/> doesn't support seeking. -or- <paramref name="stream"/> is already read.</exception>
-        /// <exception cref="IOException">An I/O error occurred while reading from the stream.</exception>
-        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed. -or-
-        /// Underlying stream reader is disposed.</exception>
-        /// <exception cref="NotSupportedException">Unable to get position of the <paramref name="stream"/>. -or
-        /// Unable to get length of the <paramref name="stream"/>.</exception>
-        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file.</exception>
+        /// <exception cref="ArgumentException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> doesn't support reading.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is already read.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
+        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file and that should be treated as error
+        /// according to the <see cref="ReadingSettings.NoHeaderChunkPolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the <paramref name="settings"/>.</exception>
+        /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
+        /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the <paramref name="settings"/>.</exception>
+        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
-        /// count differs from the expected one and that should be treated as error according to
-        /// the specified <paramref name="settings"/>.</exception>
-        /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
-        /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
-        /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
-        /// <exception cref="NotEnoughBytesException">MIDI file cannot be read since the reader's underlying stream doesn't
-        /// have enough bytes.</exception>
-        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event and that
-        /// should be treated as error accordng to the specified <paramref name="settings"/>.</exception>
+        /// count differs from the expected one (declared in the file header) and that should be treated as error according to
+        /// the <see cref="ReadingSettings.UnexpectedTrackChunksCountPolicy"/> of the specified <paramref name="settings"/>.</exception>
+        /// <exception cref="UnknownFileFormatException">The header chunk of the file specifies unknown file format and
+        /// that should be treated as error according to the <see cref="ReadingSettings.UnknownFileFormatPolicy"/> of
+        /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
-        /// just read is invalid.</exception>
+        /// just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+        /// <see cref="ReadingSettings.InvalidChannelEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
-        /// just read is invalid.</exception>
+        /// just read is invalid and that should be treated as error according to the
+        /// <see cref="ReadingSettings.InvalidMetaEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
+        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event and that
+        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChannelEventPolicy"/> of
+        /// the <paramref name="settings"/>.</exception>
+        /// <exception cref="NotEnoughBytesException">MIDI file data cannot be read since the reader's underlying stream doesn't
+        /// have enough bytes and that should be treated as error according to the <see cref="ReadingSettings.NotEnoughBytesPolicy"/>
+        /// of the <paramref name="settings"/>.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
+        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
+        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// the <paramref name="settings"/>.</exception>
         public static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -390,10 +492,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
-        /// <exception cref="InvalidOperationException">Time division is null.</exception>
+        /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>
         /// <exception cref="IOException">An I/O error occurred while writing to the stream.</exception>
-        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed. -or-
-        /// Underlying stream writer is disposed.</exception>
+        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
         public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
@@ -442,9 +543,9 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Clones MIDI file by creating a copy of it.
+        /// Clones the current <see cref="MidiFile"/> creating a copy of it.
         /// </summary>
-        /// <returns>Copy of the MIDI file.</returns>
+        /// <returns>Copy of the current <see cref="MidiFile"/>.</returns>
         public MidiFile Clone()
         {
             var result = new MidiFile(Chunks.Select(c => c.Clone()))
@@ -459,10 +560,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Determines whether two specified <see cref="MidiFile"/> objects have the same content.
         /// </summary>
-        /// <param name="midiFile1">The first file to compare, or null.</param>
-        /// <param name="midiFile2">The second file to compare, or null.</param>
-        /// <returns>true if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
-        /// otherwise, false.</returns>
+        /// <param name="midiFile1">The first file to compare, or <c>null</c>.</param>
+        /// <param name="midiFile2">The second file to compare, or <c>null</c>.</param>
+        /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
+        /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2)
         {
             string message;
@@ -476,8 +577,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="midiFile2">The second file to compare, or null.</param>
         /// <param name="message">Message containing information about what exactly is different in
         /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
-        /// <returns>true if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
-        /// otherwise, false.</returns>
+        /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
+        /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, out string message)
         {
             return Equals(midiFile1, midiFile2, null, out message);
@@ -492,8 +593,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which files should be compared.</param>
         /// <param name="message">Message containing information about what exactly is different in
         /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
-        /// <returns>true if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
-        /// otherwise, false.</returns>
+        /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
+        /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings, out string message)
         {
             return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);

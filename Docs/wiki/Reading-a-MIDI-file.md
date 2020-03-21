@@ -1,3 +1,9 @@
+**!!! This page will be deleted in the future.**
+
+**Please read API documentation for [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) to learn more.**
+
+---
+
 To read a MIDI file you have to use `Read` static method of the `MidiFile` class
 
 ```csharp

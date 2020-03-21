@@ -1,3 +1,9 @@
+**!!! This page will be deleted in the future.**
+
+**Please read API documentation for [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) to learn more.**
+
+---
+
 To write MIDI data to a file you have to use `Write` method of the `MidiFile` class
 
 ```csharp
