@@ -3,7 +3,8 @@
 namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
-    /// Internal utilities to manipulate MIDI data types.
+    /// Utilities to manipulate MIDI data types which can be useful for reading/writing data
+    /// of custom MIDI structures (chunks or meta events).
     /// </summary>
     public static class DataTypesUtilities
     {
@@ -157,16 +158,24 @@ namespace Melanchall.DryWetMidi.Common
         /// </remarks>
         public static int GetVlqLength(this int number)
         {
-            var mask = 1 << 30;
-            var bitsCount = 31;
+            var result = 1;
 
-            while ((number & mask) == 0 && mask > 0)
+            if (number > 127)
             {
-                mask >>= 1;
-                bitsCount--;
+                result++;
+                if (number > 16383)
+                {
+                    result++;
+                    if (number > 2097151)
+                    {
+                        result++;
+                        if (number > 268435455)
+                            result++;
+                    }
+                }
             }
 
-            return Math.Max(bitsCount / 7 + (bitsCount % 7 > 0 ? 1 : 0), 1);
+            return result;
         }
 
         /// <summary>
