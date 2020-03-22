@@ -1,7 +1,7 @@
 ﻿namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
-    /// Name and function of a MIDI controller.
+    /// MIDI controller names.
     /// </summary>
     public enum ControlName : byte
     {
