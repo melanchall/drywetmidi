@@ -166,7 +166,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Reads a MIDI file specified by its full path.
         /// </summary>
         /// <param name="filePath">Path to the file to read.</param>
-        /// <param name="settings">Settings according to which the file must be read.</param>
+        /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
+        /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
@@ -238,7 +239,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
         /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
         /// <param name="format">MIDI file format to write in.</param>
-        /// <param name="settings">Settings according to which the file must be written.</param>
+        /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
+        /// default settings.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
@@ -282,7 +284,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Reads a MIDI file from the stream.
         /// </summary>
         /// <param name="stream">Stream to read file from.</param>
-        /// <param name="settings">Settings according to which the file must be read.</param>
+        /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
+        /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file was read from the stream.</returns>
         /// <remarks>
         /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
@@ -488,7 +491,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="stream">Stream to write file's data to.</param>
         /// <param name="format">Format of the file to be written.</param>
-        /// <param name="settings">Settings according to which the file must be written.</param>
+        /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
+        /// default settings.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>

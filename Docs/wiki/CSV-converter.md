@@ -1,3 +1,7 @@
+---
+uid: wiki_CsvConverter
+---
+
 DryWetMIDI provides a way to convert MIDI objects to CSV representation and read them back. CSV allows you to edit MIDI data, for example, via Microsoft Excel or to write it to database. `CsvConverter` class performs such conversions. Let's see what methods it provides.
 
 ### `ConvertMidiFileToCsv`

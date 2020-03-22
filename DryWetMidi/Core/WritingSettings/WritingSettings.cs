@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
-    /// Settings of the writing engine.
+    /// Settings according to which MIDI data should be written.
     /// </summary>
     public class WritingSettings
     {
@@ -21,6 +22,11 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets compression rules for the writing engine. The default is
         /// <see cref="Core.CompressionPolicy.NoCompression"/>.
         /// </summary>
+        /// <remarks>
+        /// <para>You can specify <see cref="CompressionPolicy.Default"/> to use basic compression rules.
+        /// <see cref="CompressionPolicy"/> is marked with <see cref="FlagsAttribute"/> so you can
+        /// combine separate rules as you want.</para>
+        /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public CompressionPolicy CompressionPolicy
         {
@@ -34,10 +40,13 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Gets or sets collection of custom meta events types. These types must be derived from the
-        /// <see cref="MetaEvent"/> class and have parameterless constructor. No exception will be thrown
-        /// while writing a MIDI file if some types don't meet these requirements.
+        /// Gets or sets collection of custom meta events types.
         /// </summary>
+        /// <remarks>
+        /// <para>Types within this collection must be derived from the <see cref="MetaEvent"/>
+        /// class and have parameterless constructor. No exception will be thrown
+        /// while writing a MIDI file if some types don't meet these requirements.</para>
+        /// </remarks>
         public EventTypesCollection CustomMetaEventTypes { get; set; }
 
         /// <summary>

@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Callback used to decode a string from the specified bytes during reading a text-based
-    /// meta event.
+    /// meta event's text.
     /// </summary>
     /// <param name="bytes">Bytes to decode a string from.</param>
     /// <param name="settings">Settings used to read MIDI data.</param>
