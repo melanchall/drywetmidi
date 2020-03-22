@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Core_WritingSettings" data-uid="Melanchall.DryWetMidi.Core.WritingSettings" class="text-break">Class WritingSettings
   </h1>
   <div class="markdown level0 summary">
-Settings of the writing engine.
+Settings according to which MIDI data should be written.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -150,6 +150,12 @@ Gets or sets compression rules for the writing engine. The default is
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>You can specify <a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_Default">Default</a> to use basic compression rules.
+<a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy">CompressionPolicy</a> is marked with <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.flagsattribute">FlagsAttribute</a> so you can
+combine separate rules as you want.</p>
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -168,9 +174,7 @@ Gets or sets compression rules for the writing engine. The default is
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CustomMetaEventTypes*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CustomMetaEventTypes">CustomMetaEventTypes</h4>
   <div class="markdown level1 summary">
-Gets or sets collection of custom meta events types. These types must be derived from the
-<a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a> class and have parameterless constructor. No exception will be thrown
-while writing a MIDI file if some types don&apos;t meet these requirements.
+Gets or sets collection of custom meta events types.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -192,6 +196,12 @@ while writing a MIDI file if some types don&apos;t meet these requirements.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Types within this collection must be derived from the <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a>
+class and have parameterless constructor. No exception will be thrown
+while writing a MIDI file if some types don&apos;t meet these requirements.</p>
+</div>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_TextEncoding_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.TextEncoding*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_TextEncoding" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.TextEncoding">TextEncoding</h4>
   <div class="markdown level1 summary">

@@ -114,19 +114,19 @@ that don&apos;t lead to data losing (for example, unknown meta events).
       <tr>
         <td id="Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteDefaultKeySignature">DeleteDefaultKeySignature</td>
         <td>
-Don&apos;t write default Key Signature event.
+Don&apos;t write default <code>Key Signature</code> events if there are no non-default ones before them.
 </td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteDefaultSetTempo">DeleteDefaultSetTempo</td>
         <td>
-Don&apos;t write default Set Tempo event.
+Don&apos;t write default <code>Set Tempo</code> events if there are no non-default ones before them.
 </td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteDefaultTimeSignature">DeleteDefaultTimeSignature</td>
         <td>
-Don&apos;t write default Time Signature event.
+Don&apos;t write default <code>Time Signature</code> events if there are no non-default ones before them.
 </td>
       </tr>
       <tr>
@@ -144,14 +144,14 @@ Don&apos;t write instances of the <a class="xref" href="Melanchall.DryWetMidi.Co
       <tr>
         <td id="Melanchall_DryWetMidi_Core_CompressionPolicy_NoCompression">NoCompression</td>
         <td>
-Don&apos;t use any compression on the MIDI data to write.
+Don&apos;t use any compression on the MIDI data to write. All data will be written as is.
 </td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_CompressionPolicy_NoteOffAsSilentNoteOn">NoteOffAsSilentNoteOn</td>
         <td>
-Turn Note Off events into the Note On ones with zero velocity. Note that it helps to
-compress MIDI data in the case of <a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_UseRunningStatus">UseRunningStatus</a> is used only.
+Turn Note Off events into the <code>Note On</code> ones with zero velocity. Note that it helps to
+compress MIDI data only if <a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_UseRunningStatus">UseRunningStatus</a> is used.
 </td>
       </tr>
       <tr>

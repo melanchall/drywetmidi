@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Core_ReadingSettings" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings" class="text-break">Class ReadingSettings
   </h1>
   <div class="markdown level0 summary">
-Settings of the reading engine.
+Settings according to which MIDI data should be read.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -127,9 +127,7 @@ Settings of the reading engine.
   <a id="Melanchall_DryWetMidi_Core_ReadingSettings_CustomChunkTypes_" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.CustomChunkTypes*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_CustomChunkTypes" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.CustomChunkTypes">CustomChunkTypes</h4>
   <div class="markdown level1 summary">
-Gets or sets collection of custom chunks types. These types must be derived from the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>
-class and have parameterless constructor. No exception will be thrown if some types don&apos;t meet
-these requirements.
+Gets or sets collection of custom chunks types.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -151,12 +149,16 @@ these requirements.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_CustomChunkTypes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Types within this collection must be derived from the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>
+class and have parameterless constructor. No exception will be thrown if some types don&apos;t meet
+these requirements.</p>
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingSettings_CustomMetaEventTypes_" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.CustomMetaEventTypes*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_CustomMetaEventTypes" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.CustomMetaEventTypes">CustomMetaEventTypes</h4>
   <div class="markdown level1 summary">
-Gets or sets collection of custom meta events types. These types must be derived from the
-<a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a> class and have parameterless constructor. No exception will be thrown
-if some types don&apos;t meet these requirements.
+Gets or sets collection of custom meta events types.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -178,11 +180,17 @@ if some types don&apos;t meet these requirements.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_CustomMetaEventTypes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Types within this collection must be derived from the <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a>
+class and have parameterless constructor. No exception will be thrown
+if some types don&apos;t meet these requirements.</p>
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingSettings_DecodeTextCallback_" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.DecodeTextCallback*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_DecodeTextCallback" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.DecodeTextCallback">DecodeTextCallback</h4>
   <div class="markdown level1 summary">
 Gets or sets a callback used to decode a string from the specified bytes during reading a text-based
-meta event. The default is null.
+meta event&apos;s text. The default is <code>null</code>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -250,9 +258,7 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.ExtraTrackChunkP
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChannelEventParameterValuePolicy" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</h4>
   <div class="markdown level1 summary">
 Gets or sets reaction of the reading engine on invalid value of a channel event&apos;s
-parameter value. Valid values are 0-127 so, for example, 128 is the invalid one
-and will be processed according with this policy. The default is
-<a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a>.
+parameter value. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -276,9 +282,10 @@ and will be processed according with this policy. The default is
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChannelEventParameterValuePolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a> is used an instance of the
-<a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a> will be thrown if event&apos;s parameter value
-just read is invalid.
+<p>Valid values are 0-127 so, for example, 128 is the invalid one
+and will be processed according with this policy. If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a>
+is used, an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a> will be thrown if
+event&apos;s parameter value just read is invalid.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -323,9 +330,9 @@ the one declared in its header. The default is <a class="xref" href="Melanchall.
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChunkSizePolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy.html#Melanchall_DryWetMidi_Core_InvalidChunkSizePolicy_Abort">Abort</a> is used an instance of the
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy.html#Melanchall_DryWetMidi_Core_InvalidChunkSizePolicy_Abort">Abort</a> is used, an instance of the
 <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html">InvalidChunkSizeException</a> will be thrown if actual chunk&apos;s size differs from
-the one declared in chunk&apos;s header.
+the one declared in chunk&apos;s header.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -346,9 +353,7 @@ the one declared in chunk&apos;s header.
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_InvalidMetaEventParameterValuePolicy" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</h4>
   <div class="markdown level1 summary">
 Gets or sets reaction of the reading engine on invalid value of a meta event&apos;s
-parameter value. For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_Scale">Scale</a>
-and will be processed according with this policy. The default is
-<a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a>.
+parameter value. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -372,9 +377,10 @@ and will be processed according with this policy. The default is
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_InvalidMetaEventParameterValuePolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a> is used an instance of the
-<a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a> will be thrown if event&apos;s parameter value
-just read is invalid.
+<p>For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_Scale">Scale</a>
+and will be processed according with this policy. If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a>
+is used, an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a> will be thrown if event&apos;s
+parameter value just read is invalid.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -395,9 +401,7 @@ just read is invalid.
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_InvalidSystemCommonEventParameterValuePolicy" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.InvalidSystemCommonEventParameterValuePolicy">InvalidSystemCommonEventParameterValuePolicy</h4>
   <div class="markdown level1 summary">
 Gets or sets reaction of the reading engine on invalid value of a system common event&apos;s
-parameter value. For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.SongSelectEvent.html#Melanchall_DryWetMidi_Core_SongSelectEvent_Number">Number</a>
-and will be processed according with this policy. The default is
-<a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a>.
+parameter value. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -421,9 +425,10 @@ and will be processed according with this policy. The default is
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_InvalidSystemCommonEventParameterValuePolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a> is used an instance of the
-<a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html">InvalidSystemCommonEventParameterValueException</a> will be thrown if event&apos;s parameter value
-just read is invalid.
+<p>For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.SongSelectEvent.html#Melanchall_DryWetMidi_Core_SongSelectEvent_Number">Number</a>
+and will be processed according with this policy. If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a>
+is used, an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html">InvalidSystemCommonEventParameterValueException</a> will be thrown if event&apos;s
+parameter value just read is invalid.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -443,7 +448,7 @@ just read is invalid.
   <a id="Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy_" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.MissedEndOfTrackPolicy*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</h4>
   <div class="markdown level1 summary">
-Gets or sets reaction of the reading engine on missed End Of Track event.
+Gets or sets reaction of the reading engine on missed <code>End Of Track</code> event.
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_Ignore">Ignore</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -468,11 +473,11 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrack
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_Abort">Abort</a> is used an instance of the
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_Abort">Abort</a> is used, an instance of the
 <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a> will be thrown if track chunk
-doesn&apos;t end with End Of Track event. Although this event is not optional and
+doesn&apos;t end with <code>End Of Track</code> event. Although this event is not optional and
 therefore missing of it must be treated as error, you can try to read a track chunk
-relying on the chunk&apos;s size only.
+relying only on the chunk&apos;s size declared in its header.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -517,8 +522,8 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkPol
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_NoHeaderChunkPolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkPolicy.html#Melanchall_DryWetMidi_Core_NoHeaderChunkPolicy_Abort">Abort</a> is used an instance of the
-<a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a> will be thrown if the MIDI file doesn&apos;t contain the header chunk.
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkPolicy.html#Melanchall_DryWetMidi_Core_NoHeaderChunkPolicy_Abort">Abort</a> is used, an instance of the
+<a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a> will be thrown if the MIDI file doesn&apos;t contain the header chunk.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -539,7 +544,7 @@ If <a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkPolicy.html#Mel
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.NotEnoughBytesPolicy">NotEnoughBytesPolicy</h4>
   <div class="markdown level1 summary">
 Gets or sets reaction of the reading engine on lack of bytes in the underlying stream
-that are needed to read some value (for example, DWORD requires 4 bytes available).
+that are needed to read MIDI data (for example, DWORD requires 4 bytes available).
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -564,9 +569,9 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPo
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a> is used an instance of the
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a> is used, an instance of the
 <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a> will be thrown if the reader&apos;s underlying stream doesn&apos;t
-have enough bytes to read a value.
+have enough bytes to read MIDI data.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -608,6 +613,10 @@ Gets or sets settings according to which <a class="xref" href="Melanchall.DryWet
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_ReaderSettings_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>These settings specify reading binary data without knowledge about MIDI data structures.</p>
+</div>
   <a id="Melanchall_DryWetMidi_Core_ReadingSettings_ReadingHandlers_" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.ReadingHandlers*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_ReadingHandlers" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.ReadingHandlers">ReadingHandlers</h4>
   <div class="markdown level1 summary">
@@ -636,9 +645,8 @@ Gets collection of <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandl
   <a id="Melanchall_DryWetMidi_Core_ReadingSettings_SilentNoteOnPolicy_" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.SilentNoteOnPolicy*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_SilentNoteOnPolicy" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.SilentNoteOnPolicy">SilentNoteOnPolicy</h4>
   <div class="markdown level1 summary">
-Gets or sets reaction of the reading engine on Note On events with velocity 0.
-The default is <a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html#Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_NoteOff">NoteOff</a>. Although it is recommended to treat silent
-Note On event as Note Off you can turn this behavior off to get original event stored in the file.
+Gets or sets reaction of the reading engine on <code>Note On</code> events with velocity of zero.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html#Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_NoteOff">NoteOff</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -660,6 +668,11 @@ Note On event as Note Off you can turn this behavior off to get original event s
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_SilentNoteOnPolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Although it is recommended to treat silent <code>Note On</code> event as <code>Note Off</code> you can turn
+this behavior off to get original event stored in a MIDI file.</p>
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -679,7 +692,7 @@ Note On event as Note Off you can turn this behavior off to get original event s
   <h4 id="Melanchall_DryWetMidi_Core_ReadingSettings_TextEncoding" data-uid="Melanchall.DryWetMidi.Core.ReadingSettings.TextEncoding">TextEncoding</h4>
   <div class="markdown level1 summary">
 Gets or sets an <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding">Encoding</a> that will be used to read the text of a
-text-based meta event. The default is <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding.ascii#System_Text_Encoding_ASCII">ASCII</a>.
+text-based meta events. The default is <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding.ascii#System_Text_Encoding_ASCII">ASCII</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -729,10 +742,10 @@ Gets or sets reaction of the reading engine on unexpected track chunks count. Th
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_UnexpectedTrackChunksCountPolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-This policy will be taken into account if actual track chunks count is less or greater than
+<p>This policy will be taken into account if actual track chunks count is less or greater than
 tracks number specified in the file&apos;s header chunk. If <a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountPolicy_Abort">Abort</a>
-is used an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a> will be thrown if
-track chunks count is unexpected.
+is used, an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a> will be thrown if
+track chunks count is unexpected.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -803,8 +816,8 @@ Gets or sets reaction of the reading engine on unknown channel event. The defaul
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventPolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_Abort">Abort</a> is used an instance of the
-<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a> will be thrown if channel event has unknown status byte.
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_Abort">Abort</a> is used, an instance of the
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a> will be thrown if channel event has unknown status byte.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -849,8 +862,8 @@ is <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkIdPolicy.html#Me
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChunkIdPolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkIdPolicy.html#Melanchall_DryWetMidi_Core_UnknownChunkIdPolicy_Abort">Abort</a> is used an instance of the
-<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a> will be thrown if a chunk to be read has unknown ID.
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkIdPolicy.html#Melanchall_DryWetMidi_Core_UnknownChunkIdPolicy_Abort">Abort</a> is used, an instance of the
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a> will be thrown if a chunk to be read has unknown ID.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -895,9 +908,9 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileForma
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy.html#Melanchall_DryWetMidi_Core_UnknownFileFormatPolicy_Abort">Abort</a> is used an instance of the
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy.html#Melanchall_DryWetMidi_Core_UnknownFileFormatPolicy_Abort">Abort</a> is used, an instance of the
 <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatException.html">UnknownFileFormatException</a> will be thrown if file format stored in a header
-chunk doesn&apos;t belong to values defined by the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileFormat.html">MidiFileFormat</a> enumeration.
+chunk doesn&apos;t belong to values defined by the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileFormat.html">MidiFileFormat</a> enumeration.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">

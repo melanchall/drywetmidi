@@ -32120,3 +32120,6 @@ references:
   commentId: F:Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.Min
   fullName: Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.Min
   nameWithType: VelocityMergingPolicy.Min
+- uid: wiki_CsvConverter
+  name: ConvertMidiFileToCsv
+  href: wiki/CSV-converter.html
