@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             var fileFormat = reader.ReadWord();
             if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), fileFormat))
-                throw new UnknownFileFormatException($"File format {fileFormat} is unknown.", fileFormat);
+                throw new UnknownFileFormatException(fileFormat);
 
             FileFormat = fileFormat;
             TracksNumber = reader.ReadWord();

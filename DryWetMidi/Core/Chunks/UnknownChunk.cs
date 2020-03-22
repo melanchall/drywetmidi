@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Core
             var bytes = reader.ReadBytes((int)Math.Min(bytesCount, int.MaxValue));
             if (bytes.Length < size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
                 throw new NotEnoughBytesException(
-                    "Chunk's data cannot be read since the reader's underlying stream doesn't have enough bytes.",
+                    "Unknown chunk's data cannot be read since the reader's underlying stream doesn't have enough bytes.",
                     size,
                     bytes.Length);
 

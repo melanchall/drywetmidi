@@ -63,14 +63,14 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        private static SevenBitNumber ProcessValue(byte value, string property, InvalidSystemCommonEventParameterValuePolicy policy)
+        private SevenBitNumber ProcessValue(byte value, string property, InvalidSystemCommonEventParameterValuePolicy policy)
         {
             if (value > SevenBitNumber.MaxValue)
             {
                 switch (policy)
                 {
                     case InvalidSystemCommonEventParameterValuePolicy.Abort:
-                        throw new InvalidSystemCommonEventParameterValueException($"{value} is invalid value for the {property} of a song position Pointer event.", value);
+                        throw new InvalidSystemCommonEventParameterValueException(GetType(), property, value);
                     case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
                         return SevenBitNumber.MaxValue;
                 }

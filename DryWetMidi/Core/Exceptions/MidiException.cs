@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,7 +12,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="MidiException"/>.
         /// </summary>
-        public MidiException()
+        internal MidiException()
         {
         }
 
@@ -22,7 +21,7 @@ namespace Melanchall.DryWetMidi.Core
         /// specified error message.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        public MidiException(string message)
+        internal MidiException(string message)
             : base(message)
         {
         }
@@ -35,21 +34,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
         /// or a null reference if no inner exception is specified.</param>
-        public MidiException(string message, Exception innerException)
+        internal MidiException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MidiException"/>
-        /// with serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized
-        /// object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information
-        /// about the source or destination.</param>
-        protected MidiException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
 

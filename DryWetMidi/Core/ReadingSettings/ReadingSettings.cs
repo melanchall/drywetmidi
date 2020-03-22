@@ -334,12 +334,18 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a
         /// text-based meta events. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
+        /// <remarks>
+        /// <para>Value of this property will be used only if <see cref="DecodeTextCallback"/> is not set.</para>
+        /// </remarks>
         public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
 
         /// <summary>
         /// Gets or sets a callback used to decode a string from the specified bytes during reading a text-based
         /// meta event's text. The default is <c>null</c>.
         /// </summary>
+        /// <remarks>
+        /// <para>If callback is not set, <see cref="TextEncoding"/> will be used.</para>
+        /// </remarks>
         public DecodeTextCallback DecodeTextCallback { get; set; }
 
         /// <summary>

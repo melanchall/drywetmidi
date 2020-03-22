@@ -148,7 +148,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 var formatValue = _originalFormat.Value;
                 if (!Enum.IsDefined(typeof(MidiFileFormat), formatValue))
-                    throw new UnknownFileFormatException($"File format {formatValue} is unknown.", formatValue);
+                    throw new UnknownFileFormatException(formatValue);
 
                 return (MidiFileFormat)formatValue;
             }
@@ -524,9 +524,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 var trackChunksCount = chunks.Count(c => c is TrackChunk);
                 if (trackChunksCount > ushort.MaxValue)
-                    throw new TooManyTrackChunksException(
-                        $"Count of track chunks to be written ({trackChunksCount}) is greater than the valid maximum ({ushort.MaxValue}).",
-                        trackChunksCount);
+                    throw new TooManyTrackChunksException(trackChunksCount);
 
                 var headerChunk = new HeaderChunk
                 {
@@ -663,7 +661,7 @@ namespace Melanchall.DryWetMidi.Core
                             return null;
 
                         case UnknownChunkIdPolicy.Abort:
-                            throw new UnknownChunkException($"'{chunkId}' chunk ID is unknown.", chunkId);
+                            throw new UnknownChunkException(chunkId);
                     }
                 }
 
@@ -727,10 +725,7 @@ namespace Melanchall.DryWetMidi.Core
                     break;
 
                 case UnexpectedTrackChunksCountPolicy.Abort:
-                    throw new UnexpectedTrackChunksCountException(
-                        $"Count of track chunks is {actualTrackChunksCount} while {expectedTrackChunksCount} expected.",
-                        actualTrackChunksCount,
-                        expectedTrackChunksCount);
+                    throw new UnexpectedTrackChunksCountException(actualTrackChunksCount, expectedTrackChunksCount);
             }
         }
 

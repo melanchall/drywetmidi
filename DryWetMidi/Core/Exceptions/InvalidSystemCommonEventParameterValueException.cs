@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -9,52 +7,20 @@ namespace Melanchall.DryWetMidi.Core
     /// of a system common event.
     /// </summary>
     /// <remarks>
-    /// Note that this exception will be thrown only if <see cref="ReadingSettings.InvalidSystemCommonEventParameterValuePolicy"/>
+    /// <para>Note that this exception will be thrown only if <see cref="ReadingSettings.InvalidSystemCommonEventParameterValuePolicy"/>
     /// is set to <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/> for the <see cref="ReadingSettings"/>
-    /// used for reading a MIDI file.
+    /// used for reading a MIDI file.</para>
     /// </remarks>
-    [Serializable]
     public sealed class InvalidSystemCommonEventParameterValueException : MidiException
     {
-        #region Constants
-
-        private const string ValueSerializationPropertyName = "Value";
-
-        #endregion
-
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidSystemCommonEventParameterValueException"/>.
-        /// </summary>
-        public InvalidSystemCommonEventParameterValueException()
+        internal InvalidSystemCommonEventParameterValueException(Type eventType, string componentName, int componentValue)
+            : base($"{componentValue} is invalid value for the {componentName} property of a system common event of {eventType} type.")
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidSystemCommonEventParameterValueException"/> with
-        /// the specified error message and invalid value that represents an invalid parameter value.
-        /// </summary>
-        /// <param name="message">The message that describes the error.</param>
-        /// <param name="value">The value of the system common event's parameter that caused this exception.</param>
-        public InvalidSystemCommonEventParameterValueException(string message, int value)
-            : base(message)
-        {
-            Value = value;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidSystemCommonEventParameterValueException"/>
-        /// with serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized
-        /// object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information
-        /// about the source or destination.</param>
-        private InvalidSystemCommonEventParameterValueException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Value = info.GetInt32(ValueSerializationPropertyName);
+            EventType = eventType;
+            ComponentName = componentName;
+            ComponentValue = componentValue;
         }
 
         #endregion
@@ -62,29 +28,19 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets the value of the system common event's parameter that caused this exception.
+        /// Gets the type of an event that caused this exception.
         /// </summary>
-        public int Value { get; }
-
-        #endregion
-
-        #region Overrides
+        public Type EventType { get; }
 
         /// <summary>
-        /// Sets the <see cref="SerializationInfo"/> with information about the exception.
+        /// Gets the name of MIDI Time Code event's component which value is invalid.
         /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized
-        /// object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information
-        /// about the source or destination.</param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            ThrowIfArgument.IsNull(nameof(info), info);
+        public string ComponentName { get; }
 
-            info.AddValue(ValueSerializationPropertyName, Value);
-
-            base.GetObjectData(info, context);
-        }
+        /// <summary>
+        /// Gets the value of the system common event's parameter that caused this exception.
+        /// </summary>
+        public int ComponentValue { get; }
 
         #endregion
     }

@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        private static int ProcessValue(int value, string property, int min, int max, InvalidMetaEventParameterValuePolicy policy)
+        private int ProcessValue(int value, string property, int min, int max, InvalidMetaEventParameterValuePolicy policy)
         {
             if (value >= min && value <= max)
                 return value;
@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Core
             switch (policy)
             {
                 case InvalidMetaEventParameterValuePolicy.Abort:
-                    throw new InvalidMetaEventParameterValueException($"{value} is invalid value for the {property} of a Key Signature event.", value);
+                    throw new InvalidMetaEventParameterValueException(GetType(), property, value);
                 case InvalidMetaEventParameterValuePolicy.SnapToLimits:
                     return Math.Min(Math.Max(value, min), max);
             }

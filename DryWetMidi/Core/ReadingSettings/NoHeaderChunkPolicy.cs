@@ -12,7 +12,8 @@
         Abort = 0,
 
         /// <summary>
-        /// Ignore missing of the header chunk.
+        /// Ignore missing of the header chunk. You'll be able specify time division manually
+        /// after reading via <see cref="MidiFile.TimeDivision"/> property.
         /// </summary>
         Ignore
     }

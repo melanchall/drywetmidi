@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (settings.InvalidSystemCommonEventParameterValuePolicy)
                 {
                     case InvalidSystemCommonEventParameterValuePolicy.Abort:
-                        throw new InvalidSystemCommonEventParameterValueException($"{number} is invalid value for the {nameof(Number)} of a Song Select event.", number);
+                        throw new InvalidSystemCommonEventParameterValueException(GetType(), nameof(Number), number);
                     case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
                         number = SevenBitNumber.MaxValue;
                         break;

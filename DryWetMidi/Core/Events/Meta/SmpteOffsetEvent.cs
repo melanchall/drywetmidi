@@ -127,7 +127,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        private static byte ProcessValue(byte value, string property, byte max, InvalidMetaEventParameterValuePolicy policy)
+        private byte ProcessValue(byte value, string property, byte max, InvalidMetaEventParameterValuePolicy policy)
         {
             if (value <= max)
                 return value;
@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Core
             switch (policy)
             {
                 case InvalidMetaEventParameterValuePolicy.Abort:
-                    throw new InvalidMetaEventParameterValueException($"{value} is invalid value for the {property} of a SMPTE Offset event.", value);
+                    throw new InvalidMetaEventParameterValueException(GetType(), property, value);
                 case InvalidMetaEventParameterValuePolicy.SnapToLimits:
                     return Math.Min(value, max);
             }

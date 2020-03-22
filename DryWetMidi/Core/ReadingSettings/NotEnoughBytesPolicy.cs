@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Specifies how reading engine should react on lack of bytes in the underlying stream
-    /// that are needed to read some value (for example, DWORD requires 4 bytes available).
+    /// that are needed to read MIDI data (for example, DWORD requires 4 bytes available).
     /// The default is <see cref="Abort"/>.
     /// </summary>
     public enum NotEnoughBytesPolicy
@@ -13,7 +13,7 @@
         Abort = 0,
 
         /// <summary>
-        /// Ignore lack of bytes in the reader's underlying stream and just end reading.
+        /// Ignore lack of bytes in the reader's underlying stream and just finish reading.
         /// </summary>
         Ignore
     }

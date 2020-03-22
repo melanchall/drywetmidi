@@ -146,13 +146,13 @@ namespace Melanchall.DryWetMidi.Core
             var readerPosition = reader.Position;
             ReadContent(reader, settings, size);
 
-            var bytesRead = reader.Position - readerPosition;
-            if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && bytesRead != size)
-                throw new InvalidChunkSizeException(size, bytesRead);
+            var bytesReadCount = reader.Position - readerPosition;
+            if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && bytesReadCount != size)
+                throw new InvalidChunkSizeException(GetType(), size, bytesReadCount);
 
             // Skip unread bytes
 
-            var bytesUnread = size - bytesRead;
+            var bytesUnread = size - bytesReadCount;
             if (bytesUnread > 0)
                 reader.Position += Math.Min(bytesUnread, reader.Length);
         }

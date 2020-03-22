@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Core
 
             var midiTimeCodeComponent = (byte)data.GetHead();
             if (!Enum.IsDefined(typeof(MidiTimeCodeComponent), midiTimeCodeComponent))
-                throw new InvalidMidiTimeCodeComponentException("Invalid MIDI Time Code component.", midiTimeCodeComponent);
+                throw new InvalidMidiTimeCodeComponentException(midiTimeCodeComponent);
 
             Component = (MidiTimeCodeComponent)midiTimeCodeComponent;
 
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (settings.InvalidSystemCommonEventParameterValuePolicy)
                 {
                     case InvalidSystemCommonEventParameterValuePolicy.Abort:
-                        throw new InvalidSystemCommonEventParameterValueException($"{componentValue} is invalid value for the {nameof(ComponentValue)} of {Component} of a MIDI Time Code event.", componentValue);
+                        throw new InvalidSystemCommonEventParameterValueException(GetType(), $"{nameof(ComponentValue)} (component is {Component})", componentValue);
                     case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
                         componentValue = (FourBitNumber)ComponentValueMasks[Component];
                         break;
