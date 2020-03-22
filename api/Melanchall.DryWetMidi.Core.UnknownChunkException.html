@@ -104,6 +104,9 @@ The exception that is thrown when the reading engine encountered a chunk with un
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getbaseexception#System_Exception_GetBaseException">Exception.GetBaseException()</a>
     </div>
     <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a>
+    </div>
+    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.gettype#System_Exception_GetType">Exception.GetType()</a>
     </div>
     <div>
@@ -156,129 +159,20 @@ The exception that is thrown when the reading engine encountered a chunk with un
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_UnknownChunkException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Serializable]
-public sealed class UnknownChunkException : MidiException, ISerializable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class UnknownChunkException : MidiException, ISerializable</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_UnknownChunkException_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChunkIdPolicy">UnknownChunkIdPolicy</a>
+<p>Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChunkIdPolicy">UnknownChunkIdPolicy</a>
 is set to <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkIdPolicy.html#Melanchall_DryWetMidi_Core_UnknownChunkIdPolicy_Abort">Abort</a> for the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a>
-used for reading a MIDI file.
+used for reading a MIDI file.</p>
 </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor">UnknownChunkException()</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UnknownChunkException()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_System_String_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String)">UnknownChunkException(String)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a> with the
-specified error message.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UnknownChunkException(string message)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The error message that explains the reason for the exception.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_System_String_System_Exception_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String,System.Exception)">UnknownChunkException(String, Exception)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a> class with the
-specified error message and a reference to the inner exception that is the
-cause of this exception.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UnknownChunkException(string message, Exception innerException)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The error message that explains the reason for the exception.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception">Exception</a></td>
-        <td><span class="parametername">innerException</span></td>
-        <td>The exception that is the cause of the current exception,
-or a null reference if no inner exception is specified.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_System_String_System_String_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String,System.String)">UnknownChunkException(String, String)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a> with the
-specified error message and the ID of a chunk.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UnknownChunkException(string message, string chunkId)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The error message that explains the reason for the exception.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">chunkId</span></td>
-        <td>ID of a chunk.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="Melanchall_DryWetMidi_Core_UnknownChunkException_ChunkId_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.ChunkId*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_UnknownChunkException_ChunkId" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.ChunkId">ChunkId</h4>
   <div class="markdown level1 summary">
-Gets the ID of a chunk.
+Gets the ID of an unknown chunk.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -300,44 +194,6 @@ Gets the ID of a chunk.
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_UnknownChunkException_GetObjectData_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnknownChunkException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">GetObjectData(SerializationInfo, StreamingContext)</h4>
-  <div class="markdown level1 summary">
-Sets the <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> with information about the exception.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetObjectData(SerializationInfo info, StreamingContext context)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a></td>
-        <td><span class="parametername">info</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> that holds the serialized
-object data about the exception being thrown.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a></td>
-        <td><span class="parametername">context</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a> that contains contextual information
-about the source or destination.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">System.Runtime.Serialization.ISerializable</a>

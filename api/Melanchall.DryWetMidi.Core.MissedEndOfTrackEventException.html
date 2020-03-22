@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Core_MissedEndOfTrackEventException" data-uid="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException" class="text-break">Class MissedEndOfTrackEventException
   </h1>
   <div class="markdown level0 summary">
-The exception that is thrown when a MIDI file chunk doesn&apos;t end with an End of Track event.
+The exception that is thrown when a MIDI file chunk doesn&apos;t end with an <code>End of Track</code> event.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -159,27 +159,14 @@ The exception that is thrown when a MIDI file chunk doesn&apos;t end with an End
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_MissedEndOfTrackEventException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Serializable]
-public sealed class MissedEndOfTrackEventException : MidiException, ISerializable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class MissedEndOfTrackEventException : MidiException, ISerializable</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_MissedEndOfTrackEventException_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</a>
+<p>Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</a>
 is set to <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_Abort">Abort</a> for the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a>
-used for reading a MIDI file.
+used for reading a MIDI file.</p>
 </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_MissedEndOfTrackEventException__ctor_" data-uid="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_MissedEndOfTrackEventException__ctor" data-uid="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.#ctor">MissedEndOfTrackEventException()</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MissedEndOfTrackEventException()</code></pre>
-  </div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">System.Runtime.Serialization.ISerializable</a>

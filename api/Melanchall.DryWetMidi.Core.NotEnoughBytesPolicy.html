@@ -85,7 +85,7 @@
   </h1>
   <div class="markdown level0 summary">
 Specifies how reading engine should react on lack of bytes in the underlying stream
-that are needed to read some value (for example, DWORD requires 4 bytes available).
+that are needed to read MIDI data (for example, DWORD requires 4 bytes available).
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a>.
 </div>
   <div class="markdown level0 conceptual"></div>
@@ -114,7 +114,7 @@ Abort reading and throw an <a class="xref" href="Melanchall.DryWetMidi.Core.NotE
       <tr>
         <td id="Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Ignore">Ignore</td>
         <td>
-Ignore lack of bytes in the reader&apos;s underlying stream and just end reading.
+Ignore lack of bytes in the reader&apos;s underlying stream and just finish reading.
 </td>
       </tr>
     </tbody>

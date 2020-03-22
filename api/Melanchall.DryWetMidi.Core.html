@@ -274,7 +274,7 @@ Writer of the MIDI data types.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a></h4>
       <section>
-The exception that is thrown when a MIDI file chunk doesn&apos;t end with an End of Track event.
+The exception that is thrown when a MIDI file chunk doesn&apos;t end with an <code>End of Track</code> event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a></h4>
       <section>
@@ -420,8 +420,9 @@ Represents Timing Clock event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html">TooManyTrackChunksException</a></h4>
       <section>
-The exception that is thrown while writing a MIDI file when the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>
-contains more than 4294967295 track chunks which is the maximum allowed count for chunks of this type.
+The exception that is thrown while writing a MIDI file when the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Chunks">Chunks</a>
+contains more than <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16.maxvalue">MaxValue</a> track chunks which is the maximum allowed count for
+chunks of this type.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></h4>
       <section>
@@ -482,35 +483,29 @@ Specifies how writing engine should compress MIDI data. The default is <a class=
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.html">ExtraTrackChunkPolicy</a></h4>
       <section>
 Specifies how reading engine should react on new track chunk if already read chunks
-count greater or equals the one declared at the file header. The default is
-<a class="xref" href="Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.html#Melanchall_DryWetMidi_Core_ExtraTrackChunkPolicy_Read">Read</a>.
+count greater or equals the one declared at the file header. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.html#Melanchall_DryWetMidi_Core_ExtraTrackChunkPolicy_Read">Read</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html">InvalidChannelEventParameterValuePolicy</a></h4>
       <section>
 Specifies how reading engine should react on invalid value of a channel event&apos;s
 parameter value. Valid values are 0-127 so, for example, 128 is the invalid one
-and will be processed according with this policy. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a>.
+and will be processed according to this policy. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy.html">InvalidChunkSizePolicy</a></h4>
       <section>
 Specifies how reading engine should react on difference between actual
 chunk&apos;s size and the one declared in its header. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy.html#Melanchall_DryWetMidi_Core_InvalidChunkSizePolicy_Abort">Abort</a>.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.html">InvalidEventSizePolicy</a></h4>
-      <section>
-Specifies how reading engine should react on invalid expected size of an event.
-The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.html#Melanchall_DryWetMidi_Core_InvalidEventSizePolicy_Ignore">Ignore</a>.
-</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html">InvalidMetaEventParameterValuePolicy</a></h4>
       <section>
 Specifies how reading engine should react on invalid value of a meta event&apos;s
-parameter value. For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_Scale">Scale</a>
+parameter value. For example, <code>255</code> is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_Scale">Scale</a>
 and will be processed according with this policy. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html">InvalidSystemCommonEventParameterValuePolicy</a></h4>
       <section>
 Specifies how reading engine should react on invalid value of a system common event&apos;s
-parameter value. For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.SongSelectEvent.html#Melanchall_DryWetMidi_Core_SongSelectEvent_Number">Number</a>
+parameter value. For example, <code>255</code> is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.SongSelectEvent.html#Melanchall_DryWetMidi_Core_SongSelectEvent_Number">Number</a>
 and will be processed according with this policy. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventType.html">MidiEventType</a></h4>
@@ -531,7 +526,7 @@ MIDI time code type (frames per second).
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html">MissedEndOfTrackPolicy</a></h4>
       <section>
-Specifies how reading engine should react on missed End Of Track event.
+Specifies how reading engine should react on missed <code>End Of Track</code> event.
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_Ignore">Ignore</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkPolicy.html">NoHeaderChunkPolicy</a></h4>
@@ -542,7 +537,7 @@ in the MIDI file. The default is <a class="xref" href="Melanchall.DryWetMidi.Cor
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html">NotEnoughBytesPolicy</a></h4>
       <section>
 Specifies how reading engine should react on lack of bytes in the underlying stream
-that are needed to read some value (for example, DWORD requires 4 bytes available).
+that are needed to read MIDI data (for example, DWORD requires 4 bytes available).
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ReadingHandler.TargetScope.html">ReadingHandler.TargetScope</a></h4>
@@ -551,7 +546,7 @@ Scope of MIDI data to handle.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html">SilentNoteOnPolicy</a></h4>
       <section>
-Specifies how reading engine should react on Note On events with velocity 0.
+Specifies how reading engine should react on <code>Note On</code> events with velocity of zero.
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html#Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_NoteOff">NoteOff</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy.html">UnexpectedTrackChunksCountPolicy</a></h4>

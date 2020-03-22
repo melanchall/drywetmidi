@@ -105,6 +105,9 @@ of a system common event.
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getbaseexception#System_Exception_GetBaseException">Exception.GetBaseException()</a>
     </div>
     <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a>
+    </div>
+    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.gettype#System_Exception_GetType">Exception.GetType()</a>
     </div>
     <div>
@@ -157,71 +160,50 @@ of a system common event.
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Serializable]
-public sealed class InvalidSystemCommonEventParameterValueException : MidiException, ISerializable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class InvalidSystemCommonEventParameterValueException : MidiException, ISerializable</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidSystemCommonEventParameterValuePolicy">InvalidSystemCommonEventParameterValuePolicy</a>
+<p>Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidSystemCommonEventParameterValuePolicy">InvalidSystemCommonEventParameterValuePolicy</a>
 is set to <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a> for the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a>
-used for reading a MIDI file.
+used for reading a MIDI file.</p>
 </div>
-  <h3 id="constructors">Constructors
+  <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException__ctor_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException__ctor" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor">InvalidSystemCommonEventParameterValueException()</h4>
+  <a id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentName_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentName" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName">ComponentName</h4>
   <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html">InvalidSystemCommonEventParameterValueException</a>.
+Gets the name of MIDI Time Code event&apos;s component which value is invalid.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public InvalidSystemCommonEventParameterValueException()</code></pre>
+    <pre><code class="lang-csharp hljs">public string ComponentName { get; }</code></pre>
   </div>
-  <a id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException__ctor_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException__ctor_System_String_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor(System.String,System.Int32)">InvalidSystemCommonEventParameterValueException(String, Int32)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html">InvalidSystemCommonEventParameterValueException</a> with
-the specified error message and invalid value that represents an invalid parameter value.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public InvalidSystemCommonEventParameterValueException(string message, int value)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The message that describes the error.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">value</span></td>
-        <td>The value of the system common event&apos;s parameter that caused this exception.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="properties">Properties
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_Value_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_Value" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value">Value</h4>
+  <a id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentValue_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentValue" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue">ComponentValue</h4>
   <div class="markdown level1 summary">
 Gets the value of the system common event&apos;s parameter that caused this exception.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int Value { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int ComponentValue { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -238,44 +220,31 @@ Gets the value of the system common event&apos;s parameter that caused this exce
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_GetObjectData_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">GetObjectData(SerializationInfo, StreamingContext)</h4>
+  <a id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_EventType_" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_EventType" data-uid="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType">EventType</h4>
   <div class="markdown level1 summary">
-Sets the <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> with information about the exception.
+Gets the type of an event that caused this exception.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetObjectData(SerializationInfo info, StreamingContext context)</code></pre>
+    <pre><code class="lang-csharp hljs">public Type EventType { get; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a></td>
-        <td><span class="parametername">info</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> that holds the serialized
-object data about the exception being thrown.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a></td>
-        <td><span class="parametername">context</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a> that contains contextual information
-about the source or destination.</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">System.Runtime.Serialization.ISerializable</a>

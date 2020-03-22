@@ -4469,38 +4469,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException
   fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException
   nameWithType: InvalidChannelEventParameterValueException
-- uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.#ctor
-  name: InvalidChannelEventParameterValueException()
-  href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.InvalidChannelEventParameterValueException()
-  nameWithType: InvalidChannelEventParameterValueException.InvalidChannelEventParameterValueException()
-- uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.#ctor(System.String,System.Byte)
-  name: InvalidChannelEventParameterValueException(String, Byte)
-  href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException__ctor_System_String_System_Byte_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.#ctor(System.String,System.Byte)
-  fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.InvalidChannelEventParameterValueException(System.String, System.Byte)
-  nameWithType: InvalidChannelEventParameterValueException.InvalidChannelEventParameterValueException(String, Byte)
-- uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.#ctor*
-  name: InvalidChannelEventParameterValueException
-  href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.#ctor
+- uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.EventType
+  name: EventType
+  href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException_EventType
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.EventType
+  fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.EventType
+  nameWithType: InvalidChannelEventParameterValueException.EventType
+- uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.EventType*
+  name: EventType
+  href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException_EventType_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.EventType
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.InvalidChannelEventParameterValueException
-  nameWithType: InvalidChannelEventParameterValueException.InvalidChannelEventParameterValueException
-- uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: InvalidChannelEventParameterValueException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.GetObjectData
-  nameWithType: InvalidChannelEventParameterValueException.GetObjectData
+  fullName: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.EventType
+  nameWithType: InvalidChannelEventParameterValueException.EventType
 - uid: Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.Value
   name: Value
   href: api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValueException_Value
@@ -4544,25 +4525,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.InvalidChunkSizeException
   fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException
   nameWithType: InvalidChunkSizeException
-- uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.#ctor
-  name: InvalidChunkSizeException()
-  href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidChunkSizeException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.InvalidChunkSizeException()
-  nameWithType: InvalidChunkSizeException.InvalidChunkSizeException()
-- uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.#ctor(System.Int64,System.Int64)
-  name: InvalidChunkSizeException(Int64, Int64)
-  href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException__ctor_System_Int64_System_Int64_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidChunkSizeException.#ctor(System.Int64,System.Int64)
-  fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.InvalidChunkSizeException(System.Int64, System.Int64)
-  nameWithType: InvalidChunkSizeException.InvalidChunkSizeException(Int64, Int64)
-- uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.#ctor*
-  name: InvalidChunkSizeException
-  href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidChunkSizeException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.InvalidChunkSizeException
-  nameWithType: InvalidChunkSizeException.InvalidChunkSizeException
 - uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ActualSize
   name: ActualSize
   href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException_ActualSize
@@ -4576,6 +4538,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ActualSize
   nameWithType: InvalidChunkSizeException.ActualSize
+- uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ChunkType
+  name: ChunkType
+  href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException_ChunkType
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ChunkType
+  fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ChunkType
+  nameWithType: InvalidChunkSizeException.ChunkType
+- uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ChunkType*
+  name: ChunkType
+  href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException_ChunkType_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ChunkType
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ChunkType
+  nameWithType: InvalidChunkSizeException.ChunkType
 - uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ExpectedSize
   name: ExpectedSize
   href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException_ExpectedSize
@@ -4589,19 +4564,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.ExpectedSize
   nameWithType: InvalidChunkSizeException.ExpectedSize
-- uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidChunkSizeException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: InvalidChunkSizeException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html#Melanchall_DryWetMidi_Core_InvalidChunkSizeException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidChunkSizeException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizeException.GetObjectData
-  nameWithType: InvalidChunkSizeException.GetObjectData
 - uid: Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy
   name: InvalidChunkSizePolicy
   href: api/Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy.html
@@ -4620,62 +4582,38 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy.Ignore
   fullName: Melanchall.DryWetMidi.Core.InvalidChunkSizePolicy.Ignore
   nameWithType: InvalidChunkSizePolicy.Ignore
-- uid: Melanchall.DryWetMidi.Core.InvalidEventSizePolicy
-  name: InvalidEventSizePolicy
-  href: api/Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.html
-  commentId: T:Melanchall.DryWetMidi.Core.InvalidEventSizePolicy
-  fullName: Melanchall.DryWetMidi.Core.InvalidEventSizePolicy
-  nameWithType: InvalidEventSizePolicy
-- uid: Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.Abort
-  name: Abort
-  href: api/Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.html#Melanchall_DryWetMidi_Core_InvalidEventSizePolicy_Abort
-  commentId: F:Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.Abort
-  fullName: Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.Abort
-  nameWithType: InvalidEventSizePolicy.Abort
-- uid: Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.Ignore
-  name: Ignore
-  href: api/Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.html#Melanchall_DryWetMidi_Core_InvalidEventSizePolicy_Ignore
-  commentId: F:Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.Ignore
-  fullName: Melanchall.DryWetMidi.Core.InvalidEventSizePolicy.Ignore
-  nameWithType: InvalidEventSizePolicy.Ignore
 - uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException
   name: InvalidMetaEventParameterValueException
   href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html
   commentId: T:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException
   fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException
   nameWithType: InvalidMetaEventParameterValueException
-- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor
-  name: InvalidMetaEventParameterValueException()
-  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.InvalidMetaEventParameterValueException()
-  nameWithType: InvalidMetaEventParameterValueException.InvalidMetaEventParameterValueException()
-- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor(System.String,System.Int32)
-  name: InvalidMetaEventParameterValueException(String, Int32)
-  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException__ctor_System_String_System_Int32_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor(System.String,System.Int32)
-  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.InvalidMetaEventParameterValueException(System.String, System.Int32)
-  nameWithType: InvalidMetaEventParameterValueException.InvalidMetaEventParameterValueException(String, Int32)
-- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor*
-  name: InvalidMetaEventParameterValueException
-  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor
+- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType
+  name: EventType
+  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_EventType
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType
+  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType
+  nameWithType: InvalidMetaEventParameterValueException.EventType
+- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType*
+  name: EventType
+  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_EventType_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.InvalidMetaEventParameterValueException
-  nameWithType: InvalidMetaEventParameterValueException.InvalidMetaEventParameterValueException
-- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: InvalidMetaEventParameterValueException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData
+  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType
+  nameWithType: InvalidMetaEventParameterValueException.EventType
+- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName
+  name: PropertyName
+  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_PropertyName
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName
+  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName
+  nameWithType: InvalidMetaEventParameterValueException.PropertyName
+- uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName*
+  name: PropertyName
+  href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_PropertyName_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData
-  nameWithType: InvalidMetaEventParameterValueException.GetObjectData
+  fullName: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName
+  nameWithType: InvalidMetaEventParameterValueException.PropertyName
 - uid: Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.Value
   name: Value
   href: api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_Value
@@ -4713,102 +4651,64 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException
   fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException
   nameWithType: InvalidMidiTimeCodeComponentException
-- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.#ctor
-  name: InvalidMidiTimeCodeComponentException()
-  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.InvalidMidiTimeCodeComponentException()
-  nameWithType: InvalidMidiTimeCodeComponentException.InvalidMidiTimeCodeComponentException()
-- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.#ctor(System.String,System.Byte)
-  name: InvalidMidiTimeCodeComponentException(String, Byte)
-  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException__ctor_System_String_System_Byte_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.#ctor(System.String,System.Byte)
-  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.InvalidMidiTimeCodeComponentException(System.String, System.Byte)
-  nameWithType: InvalidMidiTimeCodeComponentException.InvalidMidiTimeCodeComponentException(String, Byte)
-- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.#ctor*
-  name: InvalidMidiTimeCodeComponentException
-  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.#ctor
+- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent
+  name: MidiTimeCodeComponent
+  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException_MidiTimeCodeComponent
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent
+  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent
+  nameWithType: InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent
+- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent*
+  name: MidiTimeCodeComponent
+  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException_MidiTimeCodeComponent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.InvalidMidiTimeCodeComponentException
-  nameWithType: InvalidMidiTimeCodeComponentException.InvalidMidiTimeCodeComponentException
-- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: InvalidMidiTimeCodeComponentException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.GetObjectData
-  nameWithType: InvalidMidiTimeCodeComponentException.GetObjectData
-- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.Value
-  name: Value
-  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException_Value
-  commentId: P:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.Value
-  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.Value
-  nameWithType: InvalidMidiTimeCodeComponentException.Value
-- uid: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.Value*
-  name: Value
-  href: api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html#Melanchall_DryWetMidi_Core_InvalidMidiTimeCodeComponentException_Value_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.Value
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.Value
-  nameWithType: InvalidMidiTimeCodeComponentException.Value
+  fullName: Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent
+  nameWithType: InvalidMidiTimeCodeComponentException.MidiTimeCodeComponent
 - uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException
   name: InvalidSystemCommonEventParameterValueException
   href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html
   commentId: T:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException
   fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException
   nameWithType: InvalidSystemCommonEventParameterValueException
-- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor
-  name: InvalidSystemCommonEventParameterValueException()
-  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.InvalidSystemCommonEventParameterValueException()
-  nameWithType: InvalidSystemCommonEventParameterValueException.InvalidSystemCommonEventParameterValueException()
-- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor(System.String,System.Int32)
-  name: InvalidSystemCommonEventParameterValueException(String, Int32)
-  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException__ctor_System_String_System_Int32_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor(System.String,System.Int32)
-  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.InvalidSystemCommonEventParameterValueException(System.String, System.Int32)
-  nameWithType: InvalidSystemCommonEventParameterValueException.InvalidSystemCommonEventParameterValueException(String, Int32)
-- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor*
-  name: InvalidSystemCommonEventParameterValueException
-  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.#ctor
+- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName
+  name: ComponentName
+  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentName
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName
+  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName
+  nameWithType: InvalidSystemCommonEventParameterValueException.ComponentName
+- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName*
+  name: ComponentName
+  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentName_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.InvalidSystemCommonEventParameterValueException
-  nameWithType: InvalidSystemCommonEventParameterValueException.InvalidSystemCommonEventParameterValueException
-- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: InvalidSystemCommonEventParameterValueException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData
+  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentName
+  nameWithType: InvalidSystemCommonEventParameterValueException.ComponentName
+- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue
+  name: ComponentValue
+  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentValue
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue
+  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue
+  nameWithType: InvalidSystemCommonEventParameterValueException.ComponentValue
+- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue*
+  name: ComponentValue
+  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_ComponentValue_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.GetObjectData
-  nameWithType: InvalidSystemCommonEventParameterValueException.GetObjectData
-- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value
-  name: Value
-  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_Value
-  commentId: P:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value
-  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value
-  nameWithType: InvalidSystemCommonEventParameterValueException.Value
-- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value*
-  name: Value
-  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_Value_
-  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value
+  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.ComponentValue
+  nameWithType: InvalidSystemCommonEventParameterValueException.ComponentValue
+- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType
+  name: EventType
+  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_EventType
+  commentId: P:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType
+  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType
+  nameWithType: InvalidSystemCommonEventParameterValueException.EventType
+- uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType*
+  name: EventType
+  href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValueException_EventType_
+  commentId: Overload:Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.Value
-  nameWithType: InvalidSystemCommonEventParameterValueException.Value
+  fullName: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.EventType
+  nameWithType: InvalidSystemCommonEventParameterValueException.EventType
 - uid: Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy
   name: InvalidSystemCommonEventParameterValuePolicy
   href: api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html
@@ -5839,37 +5739,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.MidiException
   fullName: Melanchall.DryWetMidi.Core.MidiException
   nameWithType: MidiException
-- uid: Melanchall.DryWetMidi.Core.MidiException.#ctor
-  name: MidiException()
-  href: api/Melanchall.DryWetMidi.Core.MidiException.html#Melanchall_DryWetMidi_Core_MidiException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.MidiException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.MidiException.MidiException()
-  nameWithType: MidiException.MidiException()
-- uid: Melanchall.DryWetMidi.Core.MidiException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: MidiException(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.MidiException.html#Melanchall_DryWetMidi_Core_MidiException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.MidiException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.MidiException.MidiException(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: MidiException.MidiException(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.MidiException.#ctor(System.String)
-  name: MidiException(String)
-  href: api/Melanchall.DryWetMidi.Core.MidiException.html#Melanchall_DryWetMidi_Core_MidiException__ctor_System_String_
-  commentId: M:Melanchall.DryWetMidi.Core.MidiException.#ctor(System.String)
-  fullName: Melanchall.DryWetMidi.Core.MidiException.MidiException(System.String)
-  nameWithType: MidiException.MidiException(String)
-- uid: Melanchall.DryWetMidi.Core.MidiException.#ctor(System.String,System.Exception)
-  name: MidiException(String, Exception)
-  href: api/Melanchall.DryWetMidi.Core.MidiException.html#Melanchall_DryWetMidi_Core_MidiException__ctor_System_String_System_Exception_
-  commentId: M:Melanchall.DryWetMidi.Core.MidiException.#ctor(System.String,System.Exception)
-  fullName: Melanchall.DryWetMidi.Core.MidiException.MidiException(System.String, System.Exception)
-  nameWithType: MidiException.MidiException(String, Exception)
-- uid: Melanchall.DryWetMidi.Core.MidiException.#ctor*
-  name: MidiException
-  href: api/Melanchall.DryWetMidi.Core.MidiException.html#Melanchall_DryWetMidi_Core_MidiException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.MidiException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.MidiException.MidiException
-  nameWithType: MidiException.MidiException
 - uid: Melanchall.DryWetMidi.Core.MidiFile
   name: MidiFile
   href: api/Melanchall.DryWetMidi.Core.MidiFile.html
@@ -6706,19 +6575,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException
   fullName: Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException
   nameWithType: MissedEndOfTrackEventException
-- uid: Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.#ctor
-  name: MissedEndOfTrackEventException()
-  href: api/Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackEventException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.MissedEndOfTrackEventException()
-  nameWithType: MissedEndOfTrackEventException.MissedEndOfTrackEventException()
-- uid: Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.#ctor*
-  name: MissedEndOfTrackEventException
-  href: api/Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackEventException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.MissedEndOfTrackEventException
-  nameWithType: MissedEndOfTrackEventException.MissedEndOfTrackEventException
 - uid: Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy
   name: MissedEndOfTrackPolicy
   href: api/Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html
@@ -6743,25 +6599,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.NoHeaderChunkException
   fullName: Melanchall.DryWetMidi.Core.NoHeaderChunkException
   nameWithType: NoHeaderChunkException
-- uid: Melanchall.DryWetMidi.Core.NoHeaderChunkException.#ctor
-  name: NoHeaderChunkException()
-  href: api/Melanchall.DryWetMidi.Core.NoHeaderChunkException.html#Melanchall_DryWetMidi_Core_NoHeaderChunkException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.NoHeaderChunkException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.NoHeaderChunkException.NoHeaderChunkException()
-  nameWithType: NoHeaderChunkException.NoHeaderChunkException()
-- uid: Melanchall.DryWetMidi.Core.NoHeaderChunkException.#ctor(System.String)
-  name: NoHeaderChunkException(String)
-  href: api/Melanchall.DryWetMidi.Core.NoHeaderChunkException.html#Melanchall_DryWetMidi_Core_NoHeaderChunkException__ctor_System_String_
-  commentId: M:Melanchall.DryWetMidi.Core.NoHeaderChunkException.#ctor(System.String)
-  fullName: Melanchall.DryWetMidi.Core.NoHeaderChunkException.NoHeaderChunkException(System.String)
-  nameWithType: NoHeaderChunkException.NoHeaderChunkException(String)
-- uid: Melanchall.DryWetMidi.Core.NoHeaderChunkException.#ctor*
-  name: NoHeaderChunkException
-  href: api/Melanchall.DryWetMidi.Core.NoHeaderChunkException.html#Melanchall_DryWetMidi_Core_NoHeaderChunkException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.NoHeaderChunkException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.NoHeaderChunkException.NoHeaderChunkException
-  nameWithType: NoHeaderChunkException.NoHeaderChunkException
 - uid: Melanchall.DryWetMidi.Core.NoHeaderChunkPolicy
   name: NoHeaderChunkPolicy
   href: api/Melanchall.DryWetMidi.Core.NoHeaderChunkPolicy.html
@@ -7026,37 +6863,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.NotEnoughBytesException
   fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException
   nameWithType: NotEnoughBytesException
-- uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor
-  name: NotEnoughBytesException()
-  href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.NotEnoughBytesException()
-  nameWithType: NotEnoughBytesException.NotEnoughBytesException()
-- uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String)
-  name: NotEnoughBytesException(String)
-  href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_System_String_
-  commentId: M:Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String)
-  fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.NotEnoughBytesException(System.String)
-  nameWithType: NotEnoughBytesException.NotEnoughBytesException(String)
-- uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String,System.Exception)
-  name: NotEnoughBytesException(String, Exception)
-  href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_System_String_System_Exception_
-  commentId: M:Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String,System.Exception)
-  fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.NotEnoughBytesException(System.String, System.Exception)
-  nameWithType: NotEnoughBytesException.NotEnoughBytesException(String, Exception)
-- uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String,System.Int64,System.Int64)
-  name: NotEnoughBytesException(String, Int64, Int64)
-  href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_System_String_System_Int64_System_Int64_
-  commentId: M:Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String,System.Int64,System.Int64)
-  fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.NotEnoughBytesException(System.String, System.Int64, System.Int64)
-  nameWithType: NotEnoughBytesException.NotEnoughBytesException(String, Int64, Int64)
-- uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor*
-  name: NotEnoughBytesException
-  href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.NotEnoughBytesException
-  nameWithType: NotEnoughBytesException.NotEnoughBytesException
 - uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.ActualCount
   name: ActualCount
   href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException_ActualCount
@@ -7083,19 +6889,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.ExpectedCount
   nameWithType: NotEnoughBytesException.ExpectedCount
-- uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: NotEnoughBytesException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html#Melanchall_DryWetMidi_Core_NotEnoughBytesException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData
-  nameWithType: NotEnoughBytesException.GetObjectData
 - uid: Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy
   name: NotEnoughBytesPolicy
   href: api/Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html
@@ -9446,38 +9239,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.TooManyTrackChunksException
   fullName: Melanchall.DryWetMidi.Core.TooManyTrackChunksException
   nameWithType: TooManyTrackChunksException
-- uid: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.#ctor
-  name: TooManyTrackChunksException()
-  href: api/Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html#Melanchall_DryWetMidi_Core_TooManyTrackChunksException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.TooManyTrackChunksException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.TooManyTrackChunksException()
-  nameWithType: TooManyTrackChunksException.TooManyTrackChunksException()
-- uid: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.#ctor(System.String,System.Int32)
-  name: TooManyTrackChunksException(String, Int32)
-  href: api/Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html#Melanchall_DryWetMidi_Core_TooManyTrackChunksException__ctor_System_String_System_Int32_
-  commentId: M:Melanchall.DryWetMidi.Core.TooManyTrackChunksException.#ctor(System.String,System.Int32)
-  fullName: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.TooManyTrackChunksException(System.String, System.Int32)
-  nameWithType: TooManyTrackChunksException.TooManyTrackChunksException(String, Int32)
-- uid: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.#ctor*
-  name: TooManyTrackChunksException
-  href: api/Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html#Melanchall_DryWetMidi_Core_TooManyTrackChunksException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.TooManyTrackChunksException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.TooManyTrackChunksException
-  nameWithType: TooManyTrackChunksException.TooManyTrackChunksException
-- uid: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html#Melanchall_DryWetMidi_Core_TooManyTrackChunksException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.TooManyTrackChunksException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: TooManyTrackChunksException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html#Melanchall_DryWetMidi_Core_TooManyTrackChunksException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.TooManyTrackChunksException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.GetObjectData
-  nameWithType: TooManyTrackChunksException.GetObjectData
 - uid: Melanchall.DryWetMidi.Core.TooManyTrackChunksException.TrackChunksCount
   name: TrackChunksCount
   href: api/Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html#Melanchall_DryWetMidi_Core_TooManyTrackChunksException_TrackChunksCount
@@ -9720,44 +9481,12 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException
   fullName: Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException
   nameWithType: UnexpectedRunningStatusException
-- uid: Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.#ctor
-  name: UnexpectedRunningStatusException()
-  href: api/Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html#Melanchall_DryWetMidi_Core_UnexpectedRunningStatusException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.UnexpectedRunningStatusException()
-  nameWithType: UnexpectedRunningStatusException.UnexpectedRunningStatusException()
-- uid: Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.#ctor*
-  name: UnexpectedRunningStatusException
-  href: api/Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html#Melanchall_DryWetMidi_Core_UnexpectedRunningStatusException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.UnexpectedRunningStatusException
-  nameWithType: UnexpectedRunningStatusException.UnexpectedRunningStatusException
 - uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException
   name: UnexpectedTrackChunksCountException
   href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html
   commentId: T:Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException
   fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException
   nameWithType: UnexpectedTrackChunksCountException
-- uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor
-  name: UnexpectedTrackChunksCountException()
-  href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.UnexpectedTrackChunksCountException()
-  nameWithType: UnexpectedTrackChunksCountException.UnexpectedTrackChunksCountException()
-- uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor(System.String,System.Int32,System.Int32)
-  name: UnexpectedTrackChunksCountException(String, Int32, Int32)
-  href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException__ctor_System_String_System_Int32_System_Int32_
-  commentId: M:Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor(System.String,System.Int32,System.Int32)
-  fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.UnexpectedTrackChunksCountException(System.String, System.Int32, System.Int32)
-  nameWithType: UnexpectedTrackChunksCountException.UnexpectedTrackChunksCountException(String, Int32, Int32)
-- uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor*
-  name: UnexpectedTrackChunksCountException
-  href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.UnexpectedTrackChunksCountException
-  nameWithType: UnexpectedTrackChunksCountException.UnexpectedTrackChunksCountException
 - uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.ActualCount
   name: ActualCount
   href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_ActualCount
@@ -9784,19 +9513,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.ExpectedCount
   nameWithType: UnexpectedTrackChunksCountException.ExpectedCount
-- uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: UnexpectedTrackChunksCountException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData
-  nameWithType: UnexpectedTrackChunksCountException.GetObjectData
 - uid: Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy
   name: UnexpectedTrackChunksCountPolicy
   href: api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy.html
@@ -9878,25 +9594,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.UnknownChannelEventException
   fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException
   nameWithType: UnknownChannelEventException
-- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException.#ctor
-  name: UnknownChannelEventException()
-  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html#Melanchall_DryWetMidi_Core_UnknownChannelEventException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChannelEventException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException.UnknownChannelEventException()
-  nameWithType: UnknownChannelEventException.UnknownChannelEventException()
-- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException.#ctor(Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)
-  name: UnknownChannelEventException(FourBitNumber, FourBitNumber)
-  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html#Melanchall_DryWetMidi_Core_UnknownChannelEventException__ctor_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChannelEventException.#ctor(Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)
-  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException.UnknownChannelEventException(Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Common.FourBitNumber)
-  nameWithType: UnknownChannelEventException.UnknownChannelEventException(FourBitNumber, FourBitNumber)
-- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException.#ctor*
-  name: UnknownChannelEventException
-  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html#Melanchall_DryWetMidi_Core_UnknownChannelEventException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChannelEventException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException.UnknownChannelEventException
-  nameWithType: UnknownChannelEventException.UnknownChannelEventException
 - uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException.Channel
   name: Channel
   href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html#Melanchall_DryWetMidi_Core_UnknownChannelEventException_Channel
@@ -9910,19 +9607,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException.Channel
   nameWithType: UnknownChannelEventException.Channel
-- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html#Melanchall_DryWetMidi_Core_UnknownChannelEventException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChannelEventException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: UnknownChannelEventException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html#Melanchall_DryWetMidi_Core_UnknownChannelEventException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChannelEventException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnknownChannelEventException.GetObjectData
-  nameWithType: UnknownChannelEventException.GetObjectData
 - uid: Melanchall.DryWetMidi.Core.UnknownChannelEventException.StatusByte
   name: StatusByte
   href: api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html#Melanchall_DryWetMidi_Core_UnknownChannelEventException_StatusByte
@@ -10080,37 +9764,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.UnknownChunkException
   fullName: Melanchall.DryWetMidi.Core.UnknownChunkException
   nameWithType: UnknownChunkException
-- uid: Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor
-  name: UnknownChunkException()
-  href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.UnknownChunkException()
-  nameWithType: UnknownChunkException.UnknownChunkException()
-- uid: Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String)
-  name: UnknownChunkException(String)
-  href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_System_String_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String)
-  fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.UnknownChunkException(System.String)
-  nameWithType: UnknownChunkException.UnknownChunkException(String)
-- uid: Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String,System.Exception)
-  name: UnknownChunkException(String, Exception)
-  href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_System_String_System_Exception_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String,System.Exception)
-  fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.UnknownChunkException(System.String, System.Exception)
-  nameWithType: UnknownChunkException.UnknownChunkException(String, Exception)
-- uid: Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String,System.String)
-  name: UnknownChunkException(String, String)
-  href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_System_String_System_String_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor(System.String,System.String)
-  fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.UnknownChunkException(System.String, System.String)
-  nameWithType: UnknownChunkException.UnknownChunkException(String, String)
-- uid: Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor*
-  name: UnknownChunkException
-  href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChunkException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.UnknownChunkException
-  nameWithType: UnknownChunkException.UnknownChunkException
 - uid: Melanchall.DryWetMidi.Core.UnknownChunkException.ChunkId
   name: ChunkId
   href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException_ChunkId
@@ -10124,19 +9777,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.ChunkId
   nameWithType: UnknownChunkException.ChunkId
-- uid: Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: UnknownChunkException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.UnknownChunkException.html#Melanchall_DryWetMidi_Core_UnknownChunkException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnknownChunkException.GetObjectData
-  nameWithType: UnknownChunkException.GetObjectData
 - uid: Melanchall.DryWetMidi.Core.UnknownChunkIdPolicy
   name: UnknownChunkIdPolicy
   href: api/Melanchall.DryWetMidi.Core.UnknownChunkIdPolicy.html
@@ -10167,31 +9807,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.UnknownFileFormatException
   fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException
   nameWithType: UnknownFileFormatException
-- uid: Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor
-  name: UnknownFileFormatException()
-  href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html#Melanchall_DryWetMidi_Core_UnknownFileFormatException__ctor
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor
-  fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException.UnknownFileFormatException()
-  nameWithType: UnknownFileFormatException.UnknownFileFormatException()
-- uid: Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor(System.String)
-  name: UnknownFileFormatException(String)
-  href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html#Melanchall_DryWetMidi_Core_UnknownFileFormatException__ctor_System_String_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor(System.String)
-  fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException.UnknownFileFormatException(System.String)
-  nameWithType: UnknownFileFormatException.UnknownFileFormatException(String)
-- uid: Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor(System.String,System.UInt16)
-  name: UnknownFileFormatException(String, UInt16)
-  href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html#Melanchall_DryWetMidi_Core_UnknownFileFormatException__ctor_System_String_System_UInt16_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor(System.String,System.UInt16)
-  fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException.UnknownFileFormatException(System.String, System.UInt16)
-  nameWithType: UnknownFileFormatException.UnknownFileFormatException(String, UInt16)
-- uid: Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor*
-  name: UnknownFileFormatException
-  href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html#Melanchall_DryWetMidi_Core_UnknownFileFormatException__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownFileFormatException.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException.UnknownFileFormatException
-  nameWithType: UnknownFileFormatException.UnknownFileFormatException
 - uid: Melanchall.DryWetMidi.Core.UnknownFileFormatException.FileFormat
   name: FileFormat
   href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html#Melanchall_DryWetMidi_Core_UnknownFileFormatException_FileFormat
@@ -10205,19 +9820,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException.FileFormat
   nameWithType: UnknownFileFormatException.FileFormat
-- uid: Melanchall.DryWetMidi.Core.UnknownFileFormatException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html#Melanchall_DryWetMidi_Core_UnknownFileFormatException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
-  commentId: M:Melanchall.DryWetMidi.Core.UnknownFileFormatException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-  fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
-  nameWithType: UnknownFileFormatException.GetObjectData(SerializationInfo, StreamingContext)
-- uid: Melanchall.DryWetMidi.Core.UnknownFileFormatException.GetObjectData*
-  name: GetObjectData
-  href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html#Melanchall_DryWetMidi_Core_UnknownFileFormatException_GetObjectData_
-  commentId: Overload:Melanchall.DryWetMidi.Core.UnknownFileFormatException.GetObjectData
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.UnknownFileFormatException.GetObjectData
-  nameWithType: UnknownFileFormatException.GetObjectData
 - uid: Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy
   name: UnknownFileFormatPolicy
   href: api/Melanchall.DryWetMidi.Core.UnknownFileFormatPolicy.html

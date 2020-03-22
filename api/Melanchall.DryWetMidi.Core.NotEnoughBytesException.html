@@ -105,6 +105,9 @@ to read a value.
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getbaseexception#System_Exception_GetBaseException">Exception.GetBaseException()</a>
     </div>
     <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a>
+    </div>
+    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.gettype#System_Exception_GetType">Exception.GetType()</a>
     </div>
     <div>
@@ -157,129 +160,14 @@ to read a value.
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Serializable]
-public sealed class NotEnoughBytesException : MidiException, ISerializable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class NotEnoughBytesException : MidiException, ISerializable</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy">NotEnoughBytesPolicy</a>
+<p>Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy">NotEnoughBytesPolicy</a>
 is set to <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a> for the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a>
-used for reading a MIDI file.
+used for reading a MIDI file.</p>
 </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor">NotEnoughBytesException()</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NotEnoughBytesException()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_System_String_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String)">NotEnoughBytesException(String)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a> with the
-specified error message.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NotEnoughBytesException(string message)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The error message that explains the reason for the exception.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_System_String_System_Exception_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String,System.Exception)">NotEnoughBytesException(String, Exception)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a> class with the
-specified error message and a reference to the inner exception that is the
-cause of this exception.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NotEnoughBytesException(string message, Exception innerException)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The error message that explains the reason for the exception.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception">Exception</a></td>
-        <td><span class="parametername">innerException</span></td>
-        <td>The exception that is the cause of the current exception,
-or a null reference if no inner exception is specified.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException__ctor_System_String_System_Int64_System_Int64_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.#ctor(System.String,System.Int64,System.Int64)">NotEnoughBytesException(String, Int64, Int64)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a> with the
-specified error message, expected count of bytes and the actual one available in
-the reader&apos;s underlying stream.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NotEnoughBytesException(string message, long expectedCount, long actualCount)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The error message that explains the reason for the exception.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">expectedCount</span></td>
-        <td>Expected count of bytes.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">actualCount</span></td>
-        <td>Actual count of bytes available in the reader&apos;s underlying stream.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="Melanchall_DryWetMidi_Core_NotEnoughBytesException_ActualCount_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.ActualCount*"></a>
@@ -332,44 +220,6 @@ Gets the expected count of bytes.
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_NotEnoughBytesException_GetObjectData_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">GetObjectData(SerializationInfo, StreamingContext)</h4>
-  <div class="markdown level1 summary">
-Sets the <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> with information about the exception.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetObjectData(SerializationInfo info, StreamingContext context)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a></td>
-        <td><span class="parametername">info</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> that holds the serialized
-object data about the exception being thrown.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a></td>
-        <td><span class="parametername">context</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a> that contains contextual information
-about the source or destination.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">System.Runtime.Serialization.ISerializable</a>

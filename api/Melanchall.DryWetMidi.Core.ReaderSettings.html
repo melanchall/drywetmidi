@@ -151,10 +151,10 @@ Gets or sets internal buffer for reading MIDI data from non-seekable stream.
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamBufferSize_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-During reading MIDI data there are cases when reader should move current stream&apos;s position back.
+<p>During reading MIDI data there are cases when reader should move current stream&apos;s position back.
 If stream doesn&apos;t support seeking, it will fail. So for non-seekable stream reading engine
 should maintain buffer of last N bytes to have ability to jump back. That N value is controlled by
-this property.
+this property.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -198,7 +198,7 @@ Gets or sets size of chunk for incremental reading of MIDI data from non-seekabl
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingStep_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-This property works in conjunction with <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingThreshold">NonSeekableStreamIncrementalBytesReadingThreshold</a>.
+<p>This property works in conjunction with <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingThreshold">NonSeekableStreamIncrementalBytesReadingThreshold</a>.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -243,10 +243,10 @@ reading them all at once.
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingThreshold_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If count of bytes to read is greater than or equal to the value of this property, reading engine
+<p>If count of bytes to read is greater than or equal to the value of this property, reading engine
 will read data by chunks of N bytes where N is a value of <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamIncrementalBytesReadingStep">NonSeekableStreamIncrementalBytesReadingStep</a>
 property. This property applies for non-seekable streams only. Since there is no way to determine available count
-of bytes within such streams, incremental reading can prevent <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.outofmemoryexception">OutOfMemoryException</a>.
+of bytes within such streams, incremental reading can prevent <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.outofmemoryexception">OutOfMemoryException</a>.</p>
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -291,9 +291,9 @@ The default value is false.
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory_remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If the property set to true, it can significantly speed up reading MIDI data. For almost all real
+<p>If the property set to true, it can significantly speed up reading MIDI data. For almost all real
 MIDI files it shouldn&apos;t be a problem to place entire file to memory since the size of most MIDI
-files is relatively small.
+files is relatively small.</p>
 </div>
 </article>
           </div>

@@ -105,6 +105,9 @@ the one declared in the header chunk of this file.
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getbaseexception#System_Exception_GetBaseException">Exception.GetBaseException()</a>
     </div>
     <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a>
+    </div>
+    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.gettype#System_Exception_GetType">Exception.GetType()</a>
     </div>
     <div>
@@ -157,66 +160,14 @@ the one declared in the header chunk of this file.
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Serializable]
-public sealed class UnexpectedTrackChunksCountException : MidiException, ISerializable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class UnexpectedTrackChunksCountException : MidiException, ISerializable</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnexpectedTrackChunksCountPolicy">UnexpectedTrackChunksCountPolicy</a>
+<p>Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnexpectedTrackChunksCountPolicy">UnexpectedTrackChunksCountPolicy</a>
 is set to <a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountPolicy.html#Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountPolicy_Abort">Abort</a> for the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a>
-used for reading a MIDI file.
+used for reading a MIDI file.</p>
 </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException__ctor_" data-uid="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException__ctor" data-uid="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor">UnexpectedTrackChunksCountException()</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UnexpectedTrackChunksCountException()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException__ctor_" data-uid="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException__ctor_System_String_System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.#ctor(System.String,System.Int32,System.Int32)">UnexpectedTrackChunksCountException(String, Int32, Int32)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a> with the
-specified error message, expected count of track chunks read from the header chunk, and the
-actual one.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UnexpectedTrackChunksCountException(string message, int expectedCount, int actualCount)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The error message that explains the reason for the exception.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">expectedCount</span></td>
-        <td>Expected count of track chunks read from the header chunk.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">actualCount</span></td>
-        <td>Actual count of track chunks read from a MIDI file.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_ActualCount_" data-uid="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.ActualCount*"></a>
@@ -269,44 +220,6 @@ Gets the expected count of track chunks read from the header chunk.
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_GetObjectData_" data-uid="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_UnexpectedTrackChunksCountException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">GetObjectData(SerializationInfo, StreamingContext)</h4>
-  <div class="markdown level1 summary">
-Sets the <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> with information about the exception.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetObjectData(SerializationInfo info, StreamingContext context)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a></td>
-        <td><span class="parametername">info</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> that holds the serialized
-object data about the exception being thrown.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a></td>
-        <td><span class="parametername">context</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a> that contains contextual information
-about the source or destination.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">System.Runtime.Serialization.ISerializable</a>

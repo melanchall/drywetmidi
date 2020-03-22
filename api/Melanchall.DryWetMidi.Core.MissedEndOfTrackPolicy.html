@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy" data-uid="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy" class="text-break">Enum MissedEndOfTrackPolicy
   </h1>
   <div class="markdown level0 summary">
-Specifies how reading engine should react on missed End Of Track event.
+Specifies how reading engine should react on missed <code>End Of Track</code> event.
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html#Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_Ignore">Ignore</a>.
 </div>
   <div class="markdown level0 conceptual"></div>
@@ -96,8 +96,8 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrack
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Although the End Of Track event is not optional and therefore missing of it
-must be treated as error, you can try to read a track chunk relying on the chunk&apos;s size only.
+<p>Although the <code>End Of Track</code> event is not optional and therefore missing of it
+should be treated as error, you can try to read a track chunk relying on the chunk&apos;s size only.</p>
 </div>
   <h3 id="fields">Fields
   </h3>
@@ -118,7 +118,7 @@ Abort reading and throw an <a class="xref" href="Melanchall.DryWetMidi.Core.Miss
       <tr>
         <td id="Melanchall_DryWetMidi_Core_MissedEndOfTrackPolicy_Ignore">Ignore</td>
         <td>
-Ignore missing of the End Of Track event and try to read a track chunk relying on
+Ignore missing of the <code>End Of Track</code> event and try to read a track chunk relying on
 the chunk&apos;s size.
 </td>
       </tr>

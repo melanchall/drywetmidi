@@ -105,6 +105,9 @@ of a meta event.
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getbaseexception#System_Exception_GetBaseException">Exception.GetBaseException()</a>
     </div>
     <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a>
+    </div>
+    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.gettype#System_Exception_GetType">Exception.GetType()</a>
     </div>
     <div>
@@ -157,62 +160,66 @@ of a meta event.
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Serializable]
-public sealed class InvalidMetaEventParameterValueException : MidiException, ISerializable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class InvalidMetaEventParameterValueException : MidiException, ISerializable</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</a>
+<p>Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</a>
 is set to <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a> for the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a>
-used for reading a MIDI file.
+used for reading a MIDI file.</p>
 </div>
-  <h3 id="constructors">Constructors
+  <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException__ctor_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException__ctor" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor">InvalidMetaEventParameterValueException()</h4>
+  <a id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_EventType_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_EventType" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.EventType">EventType</h4>
   <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a>.
+Gets the type of event that caused this exception.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public InvalidMetaEventParameterValueException()</code></pre>
+    <pre><code class="lang-csharp hljs">public Type EventType { get; }</code></pre>
   </div>
-  <a id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException__ctor_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException__ctor_System_String_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.#ctor(System.String,System.Int32)">InvalidMetaEventParameterValueException(String, Int32)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a> with
-the specified error message and invalid meta event&apos;s parameter value.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public InvalidMetaEventParameterValueException(string message, int value)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.type">Type</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_PropertyName_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_PropertyName" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.PropertyName">PropertyName</h4>
+  <div class="markdown level1 summary">
+Gets the name of event&apos;s property which value is invalid.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string PropertyName { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">message</span></td>
-        <td>The message that describes the error.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">value</span></td>
-        <td>The value of the meta event&apos;s parameter that caused this exception.</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="properties">Properties
-  </h3>
   <a id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_Value_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.Value*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_Value" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.Value">Value</h4>
   <div class="markdown level1 summary">
@@ -238,44 +245,6 @@ Gets the value of the meta event&apos;s parameter that caused this exception.
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_GetObjectData_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValueException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">GetObjectData(SerializationInfo, StreamingContext)</h4>
-  <div class="markdown level1 summary">
-Sets the <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> with information about the exception.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetObjectData(SerializationInfo info, StreamingContext context)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a></td>
-        <td><span class="parametername">info</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> that holds the serialized
-object data about the exception being thrown.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a></td>
-        <td><span class="parametername">context</span></td>
-        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a> that contains contextual information
-about the source or destination.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#System_Exception_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_">Exception.GetObjectData(SerializationInfo, StreamingContext)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">System.Runtime.Serialization.ISerializable</a>
