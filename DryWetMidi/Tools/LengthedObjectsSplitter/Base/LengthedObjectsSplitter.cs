@@ -36,8 +36,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="step"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public IEnumerable<TObject> SplitByStep(IEnumerable<TObject> objects, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -93,8 +105,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public IEnumerable<TObject> SplitByPartsNumber(IEnumerable<TObject> objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
@@ -160,8 +181,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public IEnumerable<TObject> SplitByGrid(IEnumerable<TObject> objects, IGrid grid, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -213,8 +246,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="distance"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public IEnumerable<TObject> SplitAtDistance(IEnumerable<TObject> objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
@@ -252,11 +297,29 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
-        /// <paramref name="from"/> specified an invalid value.</exception>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="lengthType"/> specified an invalid value.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="from"/> specified an invalid value.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public IEnumerable<TObject> SplitAtDistance(IEnumerable<TObject> objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

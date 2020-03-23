@@ -54,8 +54,17 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="rootNoteName">The root note's name.</param>
         /// <param name="notesNamesAboveRoot">The set of names of the notes above root one.</param>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value. -or-
-        /// <paramref name="notesNamesAboveRoot"/> contains an invalid value.</exception>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="rootNoteName"/> specified an invalid value.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="notesNamesAboveRoot"/> contains an invalid value.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public Chord(NoteName rootNoteName, params NoteName[] notesNamesAboveRoot)
             : this(new[] { rootNoteName }.Concat(notesNamesAboveRoot ?? Enumerable.Empty<NoteName>()).ToArray())
         {
@@ -161,8 +170,17 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="chordQuality">Chord's quality.</param>
         /// <param name="intervalsFromRoot">Intervals from root note.</param>
         /// <returns>Chord created by triad with addition of notes defined by <paramref name="intervalsFromRoot"/>.</returns>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value. -or-
-        /// <paramref name="chordQuality"/> specified an invalid value.</exception>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="rootNoteName"/> specified an invalid value.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="chordQuality"/> specified an invalid value.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is null.</exception>
         public static Chord GetByTriad(NoteName rootNoteName, ChordQuality chordQuality, params Interval[] intervalsFromRoot)
         {

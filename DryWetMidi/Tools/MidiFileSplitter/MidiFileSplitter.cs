@@ -111,8 +111,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to split <paramref name="midiFile"/> by.</param>
         /// <param name="settings">Settings according to which file should be splitted.</param>
         /// <returns>Collection of <see cref="MidiFile"/> produced during splitting the input file by grid.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="grid"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -153,8 +162,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which <paramref name="midiFile"/>
         /// should be splitted.</param>
         /// <returns><see cref="MidiFile"/> which is result of skipping a part of the <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="partLength"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="partLength"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiFile SkipPart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -184,8 +202,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which <paramref name="midiFile"/>
         /// should be splitted.</param>
         /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="partLength"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="partLength"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -215,8 +242,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which <paramref name="midiFile"/>
         /// should be splitted.</param>
         /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="partStart"/> is null. -or- <paramref name="partLength"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="partStart"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="partLength"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

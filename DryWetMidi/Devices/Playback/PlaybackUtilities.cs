@@ -28,8 +28,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -48,8 +60,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -68,8 +89,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -88,8 +121,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -107,8 +149,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this MidiFile midiFile, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -144,8 +195,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -165,8 +228,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -186,8 +258,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, SevenBitNumber programNumber, MidiClockSettings clockSettings = null)
             where TObject : IMusicalObject, ITimedObject
         {
@@ -213,8 +297,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidiProgram"/> specified an invalid value.</exception>
         public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidiProgram generalMidiProgram, MidiClockSettings clockSettings = null)
             where TObject : IMusicalObject, ITimedObject
@@ -242,8 +338,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidi2Program"/> specified an invalid value.</exception>
         public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidi2Program generalMidi2Program, MidiClockSettings clockSettings = null)
             where TObject : IMusicalObject, ITimedObject
@@ -267,8 +375,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void Play(this TrackChunk trackChunk, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -288,8 +408,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void Play(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -308,8 +440,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to play.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void Play(this MidiFile midiFile, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -326,8 +467,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="channel">MIDI channel to play channel events on.</param>
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void Play(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -346,8 +499,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, SevenBitNumber programNumber, MidiClockSettings clockSettings = null)
             where TObject : IMusicalObject, ITimedObject
         {
@@ -370,8 +535,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidiProgram"/> specified an invalid value.</exception>
         public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidiProgram generalMidiProgram, MidiClockSettings clockSettings = null)
             where TObject : IMusicalObject, ITimedObject
@@ -396,8 +573,20 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- <paramref name="outputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidi2Program"/> specified an invalid value.</exception>
         public static void Play<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidi2Program generalMidi2Program, MidiClockSettings clockSettings = null)
             where TObject : IMusicalObject, ITimedObject

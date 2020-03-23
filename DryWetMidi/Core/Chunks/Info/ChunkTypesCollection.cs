@@ -24,8 +24,17 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="type">Type of chunk.</param>
         /// <param name="id">ID of chunk.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null. -or- <paramref name="id"/>
-        /// is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="type"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="id"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException">Chunk type specified by <paramref name="type"/> and
         /// <paramref name="id"/> already exists in the <see cref="ChunksCollection"/>.</exception>
         public void Add(Type type, string id)

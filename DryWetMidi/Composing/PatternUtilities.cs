@@ -29,8 +29,17 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is true.</param>
         /// <returns><see cref="Pattern"/> that created by transforming notes of the <paramref name="pattern"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="noteTransformation"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="noteTransformation"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Pattern TransformNotes(this Pattern pattern, NoteTransformation noteTransformation, bool recursive = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -49,8 +58,20 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is true.</param>
         /// <returns><see cref="Pattern"/> that created by transforming notes of the <paramref name="pattern"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="noteSelection"/> is null. -or- <paramref name="noteTransformation"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="noteSelection"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="noteTransformation"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Pattern TransformNotes(this Pattern pattern, NoteSelection noteSelection, NoteTransformation noteTransformation, bool recursive = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -69,8 +90,17 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is true.</param>
         /// <returns><see cref="Pattern"/> that created by transforming chords of the <paramref name="pattern"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="chordTransformation"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="chordTransformation"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Pattern TransformChords(this Pattern pattern, ChordTransformation chordTransformation, bool recursive = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -89,8 +119,20 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is true.</param>
         /// <returns><see cref="Pattern"/> that created by transforming chords of the <paramref name="pattern"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="chordSelection"/> is null. -or- <paramref name="chordTransformation"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="chordSelection"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="chordTransformation"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Pattern TransformChords(this Pattern pattern, ChordSelection chordSelection, ChordTransformation chordTransformation, bool recursive = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -110,8 +152,17 @@ namespace Melanchall.DryWetMidi.Composing
         /// automatically removed or not. The default value is true.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at <paramref name="anchor"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="anchor"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="anchor"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<Pattern> SplitAtAnchor(this Pattern pattern, object anchor, bool removeEmptyPatterns = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -152,8 +203,17 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="stringComparison">Value that specifies how the marker strings will be compared.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at <paramref name="marker"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="marker"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="marker"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="stringComparison"/> specified an invalid value.</exception>
         public static IEnumerable<Pattern> SplitAtMarker(this Pattern pattern, string marker, bool removeEmptyPatterns = true, StringComparison stringComparison = StringComparison.CurrentCulture)
         {
@@ -234,8 +294,17 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="state">State of notes selected with <paramref name="noteSelection"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is true.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="noteSelection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="noteSelection"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="state"/> specified an invalid value.</exception>
         public static void SetNotesState(this Pattern pattern, NoteSelection noteSelection, PatternActionState state, bool recursive = true)
         {
@@ -255,8 +324,17 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="state">State of chords selected with <paramref name="chordSelection"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is true.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null. -or-
-        /// <paramref name="chordSelection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="pattern"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="chordSelection"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="state"/> specified an invalid value.</exception>
         public static void SetChordsState(this Pattern pattern, ChordSelection chordSelection, PatternActionState state, bool recursive = true)
         {

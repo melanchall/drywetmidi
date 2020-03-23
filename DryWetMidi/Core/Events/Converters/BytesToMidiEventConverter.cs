@@ -100,8 +100,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="offset"/> and taking <paramref name="length"/> of bytes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> is out of range. -or-
-        /// <paramref name="length"/> is out of range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="offset"/> is out of range.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is out of range.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public MidiEvent Convert(byte[] bytes, int offset, int length)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);

@@ -26,8 +26,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="bounds">Bounds to randomize time within.</param>
         /// <param name="tempoMap">Tempo map used to calculate time bounds to randomize within.</param>
         /// <param name="settings">Settings according to which objects should be randomized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="bounds"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="bounds"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void Randomize(IEnumerable<TimedEvent> objects, IBounds bounds, TempoMap tempoMap, TimedEventsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

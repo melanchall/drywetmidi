@@ -40,8 +40,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// it is on an unmapped drive).</exception>
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
-        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
-        /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void ConvertMidiFileToCsv(MidiFile midiFile, string filePath, bool overwriteFile = false, MidiFileCsvConversionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -63,8 +75,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Stream to write CSV representation to.</param>
         /// <param name="settings">Settings according to which <paramref name="midiFile"/> must be converted.
         /// Pass null to use default settings.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="stream"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="IOException">An I/O error occurred while writing to the stream.</exception>
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
@@ -101,8 +122,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// it is on an unmapped drive).</exception>
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
-        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform. -or-
-        /// <paramref name="filePath"/> specified a directory. -or- The caller does not have the required permission.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public MidiFile ConvertCsvToMidiFile(string filePath, MidiFileCsvConversionSettings settings = null)
         {
             using (var fileStream = FileUtilities.OpenFileForRead(filePath))
@@ -142,8 +175,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// exists it will be overwritten; if false and the file exists, exception will be thrown.</param>
         /// <param name="settings">Settings according to which <paramref name="notes"/> must be converted.
         /// Pass null to use default settings.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="notes"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
@@ -155,8 +197,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// it is on an unmapped drive).</exception>
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
-        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform.-or-
-        /// <paramref name="filePath"/> specified a directory.-or- The caller does not have the required permission.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void ConvertNotesToCsv(IEnumerable<Note> notes, string filePath, TempoMap tempoMap, bool overwriteFile = false, NoteCsvConversionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -176,8 +230,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to convert <paramref name="notes"/> to CSV.</param>
         /// <param name="settings">Settings according to which <paramref name="notes"/> must be converted.
         /// Pass null to use default settings.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
-        /// <paramref name="stream"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="notes"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="IOException">An I/O error occurred while writing to the stream.</exception>
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
@@ -204,8 +270,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="filePath"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
         /// and file names must be less than 260 characters.</exception>
@@ -213,8 +288,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// it is on an unmapped drive).</exception>
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
-        /// <exception cref="UnauthorizedAccessException">This operation is not supported on the current platform. -or-
-        /// <paramref name="filePath"/> specified a directory. -or- The caller does not have the required permission.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public IEnumerable<Note> ConvertCsvToNotes(string filePath, TempoMap tempoMap, NoteCsvConversionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -233,8 +320,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which CSV data must be converted. Pass null to
         /// use default settings.</param>
         /// <returns>Collection of <see cref="Note"/> representing notes written in CSV format.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading.</exception>
         /// <exception cref="IOException">An I/O error occurred while reading from the stream.</exception>
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>

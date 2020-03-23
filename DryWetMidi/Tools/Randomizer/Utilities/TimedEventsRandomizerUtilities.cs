@@ -20,8 +20,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="bounds">Bounds to randomize time within.</param>
         /// <param name="tempoMap">Tempo map used to calculate time bounds to randomize within.</param>
         /// <param name="settings">Settings according to which timed events should be randomized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="bounds"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="bounds"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void RandomizeTimedEvents(this TrackChunk trackChunk, IBounds bounds, TempoMap tempoMap, TimedEventsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -41,8 +53,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="bounds">Bounds to randomize time within.</param>
         /// <param name="tempoMap">Tempo map used to calculate time bounds to randomize within.</param>
         /// <param name="settings">Settings according to which timed events should be randomized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="bounds"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="bounds"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void RandomizeTimedEvents(this IEnumerable<TrackChunk> trackChunks, IBounds bounds, TempoMap tempoMap, TimedEventsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -61,8 +85,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to randomize timed events in.</param>
         /// <param name="bounds">Bounds to randomize time within.</param>
         /// <param name="settings">Settings according to which timed events should be randomized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="bounds"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="bounds"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void RandomizeTimedEvents(this MidiFile midiFile, IBounds bounds, TimedEventsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

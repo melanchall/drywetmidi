@@ -147,8 +147,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MidiTimeSpan"/> to add.</param>
         /// <returns>An object whose value is the sum of the values of <paramref name="timeSpan1"/> and
         /// <paramref name="timeSpan2"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiTimeSpan operator +(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -164,8 +173,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The subtrahend.</param>
         /// <returns>An object whose value is the result of the value of <paramref name="timeSpan1"/> minus
         /// the value of <paramref name="timeSpan2"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="timeSpan1"/> is less than <paramref name="timeSpan2"/>.</exception>
         public static MidiTimeSpan operator -(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
         {
@@ -185,8 +203,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MidiTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is less than the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator <(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -202,8 +229,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MidiTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator >(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -220,8 +256,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MidiTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator <=(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -238,8 +283,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MidiTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator >=(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);

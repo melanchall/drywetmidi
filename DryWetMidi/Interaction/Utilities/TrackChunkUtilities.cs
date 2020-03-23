@@ -19,8 +19,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to shift.</param>
         /// <param name="distance">Distance to shift events by.</param>
         /// <param name="tempoMap">Tempo map used for internal distance conversions.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="distance"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void ShiftEvents(this TrackChunk trackChunk, ITimeSpan distance, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -42,8 +54,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing events to shift.</param>
         /// <param name="distance">Distance to shift events by.</param>
         /// <param name="tempoMap">Tempo map used for internal distance conversions.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="distance"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void ShiftEvents(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);

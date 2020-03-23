@@ -30,8 +30,17 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="stream">Stream to read MIDI file from.</param>
         /// <param name="settings">Settings according to which MIDI data should be read.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null. -or-
-        /// <paramref name="settings"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="settings"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public MidiReader(Stream stream, ReaderSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);

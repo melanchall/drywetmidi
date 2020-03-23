@@ -20,8 +20,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to quantize by.</param>
         /// <param name="settings">Settings according to which timed events should be quantized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void QuantizeTimedEvents(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -41,8 +53,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to quantize by.</param>
         /// <param name="settings">Settings according to which timed events should be quantized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void QuantizeTimedEvents(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -61,8 +85,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to quantize timed events in.</param>
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="settings">Settings according to which timed events should be quantized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="grid"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void QuantizeTimedEvents(this MidiFile midiFile, IGrid grid, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

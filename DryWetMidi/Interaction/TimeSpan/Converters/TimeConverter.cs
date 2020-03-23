@@ -56,8 +56,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Time to convert.</param>
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of <typeparamref name="TTimeSpan"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
@@ -75,8 +84,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeType">Type that will represent the time of an object.</param>
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of time span defined by <paramref name="timeType"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(ITimeSpan time, TimeSpanType timeType, TempoMap tempoMap)
         {
@@ -94,8 +112,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeType">Type to convert time to.</param>
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of <paramref name="timeType"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
-        /// <paramref name="timeType"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeType"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="NotSupportedException"><paramref name="timeType"/> is not supported.</exception>
         public static ITimeSpan ConvertTo(ITimeSpan time, Type timeType, TempoMap tempoMap)
         {
@@ -112,8 +142,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Time to convert.</param>
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as <see cref="long"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static long ConvertFrom(ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(time), time);

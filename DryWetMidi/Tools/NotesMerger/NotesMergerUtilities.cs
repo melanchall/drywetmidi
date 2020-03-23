@@ -21,8 +21,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate distances between notes.</param>
         /// <param name="settings">Settings according to which notes should be merged.</param>
         /// <param name="filter">Filter for notes to merge.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void MergeNotes(this TrackChunk trackChunk,
                                       TempoMap tempoMap,
                                       NotesMergingSettings settings = null,
@@ -51,8 +60,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate distances between notes.</param>
         /// <param name="settings">Settings according to which notes should be merged.</param>
         /// <param name="filter">Filter for notes to merge.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void MergeNotes(this IEnumerable<TrackChunk> trackChunks,
                                       TempoMap tempoMap,
                                       NotesMergingSettings settings = null,

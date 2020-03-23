@@ -27,9 +27,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="numerator">Numerator of the time signature which defines number of beats.</param>
         /// <param name="denominator">Denominator of the time signature which defines beat length.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="numerator"/> is zero or negative. -or-
-        /// <paramref name="denominator"/> is zero or negative. -or- <paramref name="denominator"/> is not a
-        /// power of two.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="numerator"/> is zero or negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="denominator"/> is zero or negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="denominator"/> is not a power of two.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public TimeSignature(int numerator, int denominator)
         {
             ThrowIfArgument.IsNonpositive(nameof(numerator), numerator, "Numerator is zero or negative.");

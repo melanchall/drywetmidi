@@ -23,8 +23,17 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="a">First number.</param>
         /// <param name="b">Second number.</param>
         /// <returns>Least common multiple of <paramref name="a"/> and <paramref name="b"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="a"/> is zero or negative. -or-
-        /// <paramref name="b"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="a"/> is zero or negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="b"/> is zero or negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static long LeastCommonMultiple(long a, long b)
         {
             ThrowIfArgument.IsNonpositive(nameof(a), a, "First number is zero or negative.");

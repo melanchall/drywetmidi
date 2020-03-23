@@ -23,8 +23,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// used by events of the file.</param>
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage
         /// tempo map represented by the <paramref name="eventsCollections"/> and <paramref name="timeDivision"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollections"/> is null. -or-
-        /// <paramref name="timeDivision"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollections"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
@@ -43,8 +52,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// used by events of the file.</param>
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage
         /// tempo map represented by the <paramref name="trackChunks"/> and <paramref name="timeDivision"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="timeDivision"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<TrackChunk> trackChunks, TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -77,8 +95,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// used by events of the file.</param>
         /// <returns>Tempo map represented by the <paramref name="eventsCollections"/> and
         /// <paramref name="timeDivision"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollections"/> is null. -or-
-        /// <paramref name="timeDivision"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollections"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMap GetTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
@@ -98,8 +125,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeDivision">MIDI file time division which specifies the meaning of the time
         /// used by events of the file.</param>
         /// <returns>Tempo map represented by the <paramref name="trackChunks"/> and <paramref name="timeDivision"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="timeDivision"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMap GetTempoMap(this IEnumerable<TrackChunk> trackChunks, TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -131,8 +167,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollections">Collection of the <see cref="EventsCollection"/> holding a tempo map to replace.</param>
         /// <param name="tempoMap">Tempo map to replace the one contained in the <paramref name="eventsCollections"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollections"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollections"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="eventsCollections"/> is empty.</exception>
         public static void ReplaceTempoMap(this IEnumerable<EventsCollection> eventsCollections, TempoMap tempoMap)
         {
@@ -155,8 +200,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Collection of the <see cref="TrackChunk"/> holding a tempo map to replace.</param>
         /// <param name="tempoMap">Tempo map to replace the one contained in the <paramref name="trackChunks"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="trackChunks"/> is empty.</exception>
         public static void ReplaceTempoMap(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
         {
@@ -174,8 +228,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> holding a tempo map to replace.</param>
         /// <param name="tempoMap">Tempo map to replace the one contained in the <paramref name="file"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="file"/> is empty.</exception>
         public static void ReplaceTempoMap(this MidiFile file, TempoMap tempoMap)
         {

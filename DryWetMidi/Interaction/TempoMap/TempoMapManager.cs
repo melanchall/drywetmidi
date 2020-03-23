@@ -61,8 +61,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// used by events of the file.</param>
         /// <param name="eventsCollections">Collection of <see cref="EventsCollection"/> which hold events that
         /// represent tempo map of a MIDI file.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
-        /// <paramref name="eventsCollections"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="eventsCollections"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="eventsCollections"/> is empty.</exception>
         public TempoMapManager(TimeDivision timeDivision, IEnumerable<EventsCollection> eventsCollections)
         {
@@ -121,8 +130,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Time to set the new time signature at.</param>
         /// <param name="timeSignature">New time signature that will last from the specified
         /// time until next change of time signature.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
-        /// <paramref name="timeSignature"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSignature"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void SetTimeSignature(ITimeSpan time, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -160,8 +178,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of time signature in.</param>
         /// <param name="endTime">End of time range to remove changes of time signature in.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative. -or-
-        /// <paramref name="endTime"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="startTime"/> is negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="endTime"/> is negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void ClearTimeSignature(long startTime, long endTime)
         {
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
@@ -175,8 +202,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of time signature in.</param>
         /// <param name="endTime">End of time range to remove changes of time signature in.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
-        /// <paramref name="endTime"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="startTime"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="endTime"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void ClearTimeSignature(ITimeSpan startTime, ITimeSpan endTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
@@ -208,8 +244,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Time to set the new tempo at.</param>
         /// <param name="tempo">New tempo that will last from the specified time until next change
         /// of tempo.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null. -or-
-        /// <paramref name="tempo"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempo"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void SetTempo(ITimeSpan time, Tempo tempo)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -247,8 +292,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of tempo in.</param>
         /// <param name="endTime">End of time range to remove changes of tempo in.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative. -or-
-        /// <paramref name="endTime"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="startTime"/> is negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="endTime"/> is negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void ClearTempo(long startTime, long endTime)
         {
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
@@ -262,8 +316,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of tempo in.</param>
         /// <param name="endTime">End of time range to remove changes of tempo in.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is null. -or-
-        /// <paramref name="endTime"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="startTime"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="endTime"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void ClearTempo(ITimeSpan startTime, ITimeSpan endTime)
         {
             ThrowIfArgument.IsNull(nameof(startTime), startTime);

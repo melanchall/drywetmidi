@@ -26,8 +26,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to quantize by.</param>
         /// <param name="settings">Settings according to which objects should be quantized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void Quantize(IEnumerable<TimedEvent> objects, IGrid grid, TempoMap tempoMap, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

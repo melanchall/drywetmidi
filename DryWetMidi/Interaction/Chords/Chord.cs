@@ -149,8 +149,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets channel to play the chord on.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Unable to get channel since a chord doesn't contain notes.
-        /// -or- Unable to get channel since chord's notes have different <see cref="Note.Velocity"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Unable to get channel since a chord doesn't contain notes.</description>
+        /// </item>
+        /// <item>
+        /// <description>Unable to get channel since chord's notes have different <see cref="Note.Velocity"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public FourBitNumber Channel
         {
             get { return GetNotesProperty(ChannelPropertySelector); }
@@ -160,8 +169,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets velocity of the underlying <see cref="NoteOnEvent"/> events of a chord's notes.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Unable to get velocity since a chord doesn't contain notes.
-        /// -or- Unable to get velocity since chord's notes have different <see cref="Note.Velocity"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Unable to get velocity since a chord doesn't contain notes.</description>
+        /// </item>
+        /// <item>
+        /// <description>Unable to get velocity since chord's notes have different <see cref="Note.Velocity"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public SevenBitNumber Velocity
         {
             get { return GetNotesProperty(VelocityPropertySelector); }
@@ -171,8 +189,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets velocity of the underlying <see cref="NoteOffEvent"/> events of a chord's notes.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Unable to get off velocity since a chord doesn't contain notes.
-        /// -or- Unable to get off velocity since chord's notes have different <see cref="Note.OffVelocity"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Unable to get off velocity since a chord doesn't contain notes.</description>
+        /// </item>
+        /// <item>
+        /// <description>Unable to get off velocity since chord's notes have different <see cref="Note.OffVelocity"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public SevenBitNumber OffVelocity
         {
             get { return GetNotesProperty(OffVelocityPropertySelector); }
@@ -240,8 +267,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <typeparam name="TValue">Type of a note's property.</typeparam>
         /// <param name="propertySelector">Expression that represent a note's property.</param>
         /// <returns>Value of the specified note's property.</returns>
-        /// <exception cref="InvalidOperationException">Chord doesn't contain notes. -or-
-        /// Chord's notes have different values of the specified property.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Chord doesn't contain notes.</description>
+        /// </item>
+        /// <item>
+        /// <description>Chord's notes have different values of the specified property.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         private TValue GetNotesProperty<TValue>(Expression<Func<Note, TValue>> propertySelector)
         {
             if (!Notes.Any())

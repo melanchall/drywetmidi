@@ -18,8 +18,17 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="note">Note.</param>
         /// <param name="velocity">Velocity of the note.</param>
         /// <param name="length">Length of the note.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null. -or-
-        /// <paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="note"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public NoteDescriptor(MusicTheory.Note note, SevenBitNumber velocity, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(note), note);

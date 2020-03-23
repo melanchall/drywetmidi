@@ -41,9 +41,26 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="frames">Number of frames.</param>
         /// <param name="subFrames">Number of sub-frames.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Hours number is out of valid range. -or-
-        /// Minutes number is out of valid range. -or- Seconds number is out of valid range. -or-
-        /// Frames number is out of valid range. -or- Sub-frames number is out of valid range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="hours"/> is out of valid range.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="minutes"/> is out of valid range.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="seconds"/> is out of valid range.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="frames"/> is out of valid range.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="subFrames"/> is out of valid range.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public SmpteOffsetEvent(SmpteFormat format, byte hours, byte minutes, byte seconds, byte frames, byte subFrames)
             : this()
         {

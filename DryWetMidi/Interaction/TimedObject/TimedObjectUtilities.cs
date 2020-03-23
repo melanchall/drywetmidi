@@ -21,8 +21,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="obj">Object to get time of.</param>
         /// <param name="tempoMap">Tempo map to calculate time of the <paramref name="obj"/>.</param>
         /// <returns>Time of the specified object as an instance of <typeparamref name="TTime"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
         public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap tempoMap)
             where TTime : ITimeSpan
@@ -42,8 +51,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map to calculate time of the <paramref name="obj"/>.</param>
         /// <returns>Time of the specified object as an instance of time span defined by the
         /// <paramref name="timeType"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         public static ITimeSpan TimeAs(this ITimedObject obj, TimeSpanType timeType, TempoMap tempoMap)
         {
@@ -90,8 +108,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of timed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
             where TObject : ITimedObject
         {

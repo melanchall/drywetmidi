@@ -15,8 +15,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="inputDevice">Input MIDI device to connect to <paramref name="outputDevices"/>.</param>
         /// <param name="outputDevices">Output MIDI devices to connect <paramref name="inputDevice"/> to.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="inputDevice"/> is null. -or-
-        /// <paramref name="outputDevices"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="inputDevice"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevices"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="outputDevices"/> contains null.</exception>
         public static DevicesConnector Connect(this InputDevice inputDevice, params IOutputDevice[] outputDevices)
         {

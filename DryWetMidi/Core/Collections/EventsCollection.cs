@@ -109,8 +109,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="index">The zero-based index at which the event should be inserted.</param>
         /// <param name="midiEvent">The event to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
-        /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="index"/> is less than 0.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="index"/> is greater than <see cref="Count"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void Insert(int index, MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -130,8 +139,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="index">The zero-based index at which the events should be inserted.</param>
         /// <param name="midiEvents">The events to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
-        /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="index"/> is less than 0.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="index"/> is greater than <see cref="Count"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void InsertRange(int index, IEnumerable<MidiEvent> midiEvents)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);

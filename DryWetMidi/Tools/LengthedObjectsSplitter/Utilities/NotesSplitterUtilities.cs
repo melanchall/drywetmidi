@@ -27,8 +27,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="step"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -50,8 +62,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="step"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -75,8 +99,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="step"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesByStep(this MidiFile midiFile, ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -98,8 +131,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partsNumber">The number of parts to split notes into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
@@ -123,8 +165,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partsNumber">The number of parts to split notes into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitNotesByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
@@ -170,8 +221,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="grid">Grid to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -188,8 +251,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="grid">Grid to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -226,8 +301,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split notes at.</param>
         /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="distance"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
@@ -247,8 +334,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split notes at.</param>
         /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="distance"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="distance"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
@@ -270,8 +369,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="distance">Distance to split notes at.</param>
         /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="distance"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="distance"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitNotesAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from)
         {
@@ -294,11 +402,29 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a note's length should be processed according to.</param>
         /// <param name="from">Point of a note distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
-        /// <paramref name="from"/> specified an invalid value.</exception>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="lengthType"/> specified an invalid value.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="from"/> specified an invalid value.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -324,11 +450,29 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a note's length should be processed according to.</param>
         /// <param name="from">Point of a note distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
-        /// <paramref name="from"/> specified an invalid value.</exception>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="lengthType"/> specified an invalid value.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="from"/> specified an invalid value.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -358,8 +502,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="from">Point of a note distance should be measured from.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value. -or-
-        /// <paramref name="from"/> specified an invalid value.</exception>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="lengthType"/> specified an invalid value.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="from"/> specified an invalid value.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitNotesAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

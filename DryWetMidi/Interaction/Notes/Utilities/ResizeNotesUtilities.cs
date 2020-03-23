@@ -20,8 +20,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="length">New length of the notes collection.</param>
         /// <param name="distanceCalculationType">Type of distance calculations.</param>
         /// <param name="tempoMap"></param>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
-        /// <paramref name="length"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="notes"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeatTicks"/> or <see cref="TimeSpanType.BarBeatFraction"/>
         /// is used for <paramref name="distanceCalculationType"/> which is unsupported.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="distanceCalculationType"/> specified an
@@ -79,8 +91,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="ratio">Ratio to resize notes by.</param>
         /// <param name="distanceCalculationType">Type of distance calculations.</param>
         /// <param name="tempoMap"></param>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="notes"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeatTicks"/> or <see cref="TimeSpanType.BarBeatFraction"/>
         /// is used for <paramref name="distanceCalculationType"/> which is unsupported.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>

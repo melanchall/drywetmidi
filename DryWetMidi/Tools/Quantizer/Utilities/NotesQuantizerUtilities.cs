@@ -20,10 +20,31 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to quantize by.</param>
         /// <param name="settings">Settings according to which notes should be quantized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">Note is going to be moved beyond zero. -or-
-        /// Note's end is going to be moved beyond the note's fixed end.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Note is going to be moved beyond zero.</description>
+        /// </item>
+        /// <item>
+        /// <description>Note's end is going to be moved beyond the note's fixed end.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void QuantizeNotes(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, NotesQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -43,10 +64,31 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to quantize by.</param>
         /// <param name="settings">Settings according to which notes should be quantized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="grid"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">Note is going to be moved beyond zero. -or-
-        /// Note's end is going to be moved beyond the note's fixed end.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Note is going to be moved beyond zero.</description>
+        /// </item>
+        /// <item>
+        /// <description>Note's end is going to be moved beyond the note's fixed end.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void QuantizeNotes(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, NotesQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -65,10 +107,28 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to quantize notes in.</param>
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="settings">Settings according to which notes should be quantized.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="grid"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">Note is going to be moved beyond zero. -or-
-        /// Note's end is going to be moved beyond the note's fixed end.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Note is going to be moved beyond zero.</description>
+        /// </item>
+        /// <item>
+        /// <description>Note's end is going to be moved beyond the note's fixed end.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void QuantizeNotes(this MidiFile midiFile, IGrid grid, NotesQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

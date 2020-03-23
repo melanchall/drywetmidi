@@ -100,8 +100,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
         /// <param name="chunk">The chunk to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
-        /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="index"/> is less than 0.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="index"/> is greater than <see cref="Count"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void Insert(int index, MidiChunk chunk)
         {
             ThrowIfArgument.IsNull(nameof(chunk), chunk);
@@ -121,8 +130,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
         /// <param name="chunks">The chunk to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0. -or-
-        /// <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="index"/> is less than 0.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="index"/> is greater than <see cref="Count"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void InsertRange(int index, IEnumerable<MidiChunk> chunks)
         {
             ThrowIfArgument.IsNull(nameof(chunks), chunks);

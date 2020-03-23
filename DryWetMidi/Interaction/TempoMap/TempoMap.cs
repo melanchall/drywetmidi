@@ -132,8 +132,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo">Tempo of the tempo map.</param>
         /// <param name="timeSignature">Time signature of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified tempo and time signature.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="tempo"/> is null. -or-
-        /// <paramref name="timeSignature"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="tempo"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSignature"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMap Create(Tempo tempo, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(tempo), tempo);
@@ -201,8 +210,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeDivision">Time division of the tempo map.</param>
         /// <param name="tempo">Tempo of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified time division and tempo.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
-        /// <paramref name="tempo"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempo"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMap Create(TimeDivision timeDivision, Tempo tempo)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -221,8 +239,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeDivision">Time division of the tempo map.</param>
         /// <param name="timeSignature">Time signature of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified time division and time signature.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
-        /// <paramref name="timeSignature"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSignature"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMap Create(TimeDivision timeDivision, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -242,8 +269,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo">Tempo of the tempo map.</param>
         /// <param name="timeSignature">Time signature of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified time division, tempoand time signature.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null. -or-
-        /// <paramref name="tempo"/> is null. -or- <paramref name="timeSignature"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempo"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSignature"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TempoMap Create(TimeDivision timeDivision, Tempo tempo, TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);

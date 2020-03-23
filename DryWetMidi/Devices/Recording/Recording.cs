@@ -44,8 +44,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="inputDevice">Input MIDI device to capture MIDI data from.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null. -or-
-        /// <paramref name="inputDevice"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="inputDevice"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public Recording(TempoMap tempoMap, IInputDevice inputDevice)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);

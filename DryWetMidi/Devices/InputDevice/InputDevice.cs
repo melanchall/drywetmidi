@@ -176,8 +176,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="name">The name of an input MIDI device to retrieve.</param>
         /// <returns>Input MIDI device with the specified name.</returns>
-        /// <exception cref="ArgumentException"><paramref name="name"/> is null or contains white-spaces only. -or-
-        /// <paramref name="name"/> specifies an input MIDI device which is not presented in the system.</exception>
+        /// <exception cref="ArgumentException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="name"/> is null or contains white-spaces only.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="name"/> specifies an input MIDI device which is not presented in the system.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static InputDevice GetByName(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");

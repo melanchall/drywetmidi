@@ -32,8 +32,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="start">Start time of the grid.</param>
         /// <param name="step">Distance between adjacent times.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="start"/> is null. -or-
-        /// <paramref name="step"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="start"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public SteppedGrid(ITimeSpan start, ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(start), start);
@@ -71,8 +80,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </remarks>
         /// <param name="start">Start time of the grid.</param>
         /// <param name="steps">Collection of grid's steps.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="start"/> is null. -or-
-        /// <paramref name="steps"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="start"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="steps"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="steps"/> contains null.</exception>
         public SteppedGrid(ITimeSpan start, IEnumerable<ITimeSpan> steps)
         {

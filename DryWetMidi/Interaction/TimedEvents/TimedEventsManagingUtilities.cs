@@ -20,8 +20,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Time to set to <paramref name="timedEvent"/>.</param>
         /// <param name="tempoMap">Tempo map that will be used for time conversion.</param>
         /// <returns>An input <paramref name="timedEvent"/> with new time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timedEvent"/> is null. -or-
-        /// <paramref name="time"/> is null. -or- <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timedEvent"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(timedEvent), timedEvent);
@@ -144,8 +156,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="midiEvent">Event to add into the <paramref name="eventsCollection"/>.</param>
         /// <param name="time">Absolute time that will be assigned to the <paramref name="midiEvent"/>
         /// when it will be placed into the <paramref name="eventsCollection"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
-        /// <paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="midiEvent"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, long time)
         {
@@ -166,9 +187,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// when it will be placed into the <paramref name="eventsCollection"/>.</param>
         /// <param name="tempoMap">Tempo map used to place <paramref name="midiEvent"/> into the
         /// <paramref name="eventsCollection"/> with the specified time.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
-        /// <paramref name="midiEvent"/> is null. -or- <paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="midiEvent"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -186,8 +221,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
-        /// <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -209,8 +253,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -227,8 +280,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null. -or-
-        /// <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -247,8 +309,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null. -or-
-        /// <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -320,8 +391,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to add timed events to.</param>
         /// <param name="events">Timed events to add to the <paramref name="eventsCollection"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null. -or-
-        /// <paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="events"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void AddTimedEvents(this EventsCollection eventsCollection, IEnumerable<TimedEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -338,8 +418,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to add timed events to.</param>
         /// <param name="events">Timed events to add to the <paramref name="trackChunk"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null. -or-
-        /// <paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="events"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void AddTimedEvents(this TrackChunk trackChunk, IEnumerable<TimedEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);

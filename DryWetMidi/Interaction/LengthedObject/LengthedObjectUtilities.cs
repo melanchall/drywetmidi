@@ -21,8 +21,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="obj">Object to get length of.</param>
         /// <param name="tempoMap">Tempo map to calculate length of the <paramref name="obj"/>.</param>
         /// <returns>Length of the specified object as an instance of <typeparamref name="TLength"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TLength"/> is not supported.</exception>
         public static TLength LengthAs<TLength>(this ILengthedObject obj, TempoMap tempoMap)
             where TLength : ITimeSpan
@@ -42,8 +51,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map to calculate length of the <paramref name="obj"/>.</param>
         /// <returns>Time of the specified object as an instance of time span defined by the
         /// <paramref name="lengthType"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static ITimeSpan LengthAs(this ILengthedObject obj, TimeSpanType lengthType, TempoMap tempoMap)
         {
@@ -62,8 +80,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="obj">Object to get end time of.</param>
         /// <param name="tempoMap">Tempo map to calculate end time of the <paramref name="obj"/>.</param>
         /// <returns>End time of the specified object as an instance of <typeparamref name="TTime"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
         public static TTime EndTimeAs<TTime>(this ILengthedObject obj, TempoMap tempoMap)
             where TTime : ITimeSpan
@@ -83,8 +110,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map to calculate end time of the <paramref name="obj"/>.</param>
         /// <returns>End time of the specified object as an instance of time span defined by the
         /// <paramref name="timeType"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         public static ITimeSpan EndTimeAs(this ILengthedObject obj, TimeSpanType timeType, TempoMap tempoMap)
         {
@@ -107,7 +143,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of lengthed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ILengthedObject
@@ -127,7 +173,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of lengthed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ILengthedObject
@@ -148,8 +204,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of lengthed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<TObject> StartAtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
             where TObject : ILengthedObject
         {
@@ -169,8 +240,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of lengthed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<TObject> EndAtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
             where TObject : ILengthedObject
         {
@@ -190,7 +276,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of lengthed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="matchBy"/> specified an invalid value.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time, LengthedObjectPart matchBy)
@@ -217,8 +313,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of lengthed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null. -or- <paramref name="time"/> is null. -or-
-        /// <paramref name="tempoMap"/> is null. -or- One of the objects is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="time"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="matchBy"/> specified an invalid value.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap, LengthedObjectPart matchBy)
             where TObject : ILengthedObject

@@ -97,8 +97,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="startTime">Start time of the time range where value changes should be deleted.</param>
         /// <param name="endTime">End time of the time range where value changes should be deleted.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative. -or-
-        /// <paramref name="endTime"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="startTime"/> is negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="endTime"/> is negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         internal void DeleteValues(long startTime, long endTime)
         {
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);

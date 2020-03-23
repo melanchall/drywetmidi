@@ -72,8 +72,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to shift.</param>
         /// <param name="distance">Distance to shift events by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="distance"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="distance"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void ShiftEvents(this MidiFile midiFile, ITimeSpan distance)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -87,8 +96,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
         /// <param name="length">New length of the <paramref name="midiFile"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null. -or-
-        /// <paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void Resize(this MidiFile midiFile, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

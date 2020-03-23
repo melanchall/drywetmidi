@@ -75,8 +75,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="noteOnEvent"><see cref="NoteOnEvent"/> to check <see cref="NoteOffEvent"/> for.</param>
         /// <param name="noteOffEvent"><see cref="NoteOffEvent"/> to check <see cref="NoteOnEvent"/> for.</param>
         /// <returns>true if <paramref name="noteOnEvent"/> corresponds to <paramref name="noteOffEvent"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteOnEvent"/> is null. -or-
-        /// <paramref name="noteOffEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="noteOnEvent"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="noteOffEvent"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool IsNoteOnCorrespondToNoteOff(NoteOnEvent noteOnEvent, NoteOffEvent noteOffEvent)
         {
             ThrowIfArgument.IsNull(nameof(noteOnEvent), noteOnEvent);

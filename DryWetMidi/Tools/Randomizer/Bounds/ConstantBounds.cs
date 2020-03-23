@@ -30,8 +30,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="leftSize">Left part's size of the time range.</param>
         /// <param name="rightSize">Right part's size of the time range.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="leftSize"/> is null. -or-
-        /// <paramref name="rightSize"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="leftSize"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="rightSize"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public ConstantBounds(ITimeSpan leftSize, ITimeSpan rightSize)
         {
             ThrowIfArgument.IsNull(nameof(leftSize), leftSize);

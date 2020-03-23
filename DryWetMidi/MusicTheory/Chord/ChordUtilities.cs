@@ -47,8 +47,17 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="chord">Chord to resolve root note.</param>
         /// <param name="octave">Octave to resolve root note of the <paramref name="chord"/>.</param>
         /// <returns>Root note of the chord regarding to <paramref name="octave"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
-        /// <paramref name="octave"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="chord"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="octave"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Note ResolveRootNote(this Chord chord, Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -63,8 +72,17 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="chord">Chord to resolve notes.</param>
         /// <param name="octave">Octave to resolve notes of the <paramref name="chord"/>.</param>
         /// <returns>Notes of the chord regarding to <paramref name="octave"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null. -or-
-        /// <paramref name="octave"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="chord"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="octave"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<Note> ResolveNotes(this Chord chord, Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);

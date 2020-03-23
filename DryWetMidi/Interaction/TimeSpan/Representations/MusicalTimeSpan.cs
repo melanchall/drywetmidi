@@ -101,8 +101,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="numerator">The numerator of fraction of the whole note's length.</param>
         /// <param name="denominator">The denominator of fraction of the whole note's length.</param>
         /// <param name="simplify">true if the time span should be simplified, false otherwise.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="numerator"/> is negative. -or-
-        /// <paramref name="denominator"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="numerator"/> is negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="denominator"/> is zero or negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public MusicalTimeSpan(long numerator, long denominator, bool simplify = true)
         {
             ThrowIfArgument.IsNegative(nameof(numerator), numerator, "Numerator is negative.");
@@ -173,8 +182,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tupletNotesCount">Notes count of a tuplet to construct.</param>
         /// <param name="tupletSpaceSize">Space of a tuplet to construct.</param>
         /// <returns>A tuplet based on the current <see cref="MusicalTimeSpan"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="tupletNotesCount"/> is zero
-        /// or negative. -or- <paramref name="tupletSpaceSize"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="tupletNotesCount"/> is zero or negative.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tupletSpaceSize"/> is zero or negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public MusicalTimeSpan Tuplet(int tupletNotesCount, int tupletSpaceSize)
         {
             ThrowIfArgument.IsNonpositive(nameof(tupletNotesCount), tupletNotesCount, "Tuplet's notes count is zero or negative.");
@@ -371,8 +389,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MusicalTimeSpan"/> to add.</param>
         /// <returns>An object whose value is the sum of the values of <paramref name="timeSpan1"/> and
         /// <paramref name="timeSpan2"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MusicalTimeSpan operator +(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -390,8 +417,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The subtrahend.</param>
         /// <returns>An object whose value is the result of the value of <paramref name="timeSpan1"/> minus
         /// the value of <paramref name="timeSpan2"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="timeSpan1"/> is less than <paramref name="timeSpan2"/>.</exception>
         public static MusicalTimeSpan operator -(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
@@ -413,8 +449,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is less than the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator <(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -430,8 +475,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator >(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -448,8 +502,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator <=(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
@@ -466,8 +529,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan2">The second <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSpan1"/> is null. -or-
-        /// <paramref name="timeSpan2"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator >=(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
