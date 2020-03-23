@@ -416,7 +416,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="intervalDefinition">Interval definition to create interval from.</param>
         /// <returns><see cref="Interval"/> created from <paramref name="intervalDefinition"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalDefinition"/> is <c>null</c>.</exception>
         public static Interval FromDefinition(IntervalDefinition intervalDefinition)
         {
             ThrowIfArgument.IsNull(nameof(intervalDefinition), intervalDefinition);
@@ -431,7 +431,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="input">A string containing an interval to convert.</param>
         /// <param name="interval">When this method returns, contains the <see cref="Interval"/>
         /// equivalent of the musical interval contained in <paramref name="input"/>, if the conversion succeeded,
-        /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -445,7 +445,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="input">A string containing an interval to convert.</param>
         /// <returns>A <see cref="Scale"/> equivalent to the musical interval contained in <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Interval Parse(string input)
         {
@@ -509,7 +509,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="halfSteps">The number of half steps to add to the <paramref name="interval"/>.</param>
         /// <returns>The <see cref="Interval"/> which is the <paramref name="interval"/>
         /// shifted by the <paramref name="halfSteps"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="halfSteps"/> is out of range
         /// (result interval is out of the [-127,127] range).</exception>
         public static Interval operator +(Interval interval, int halfSteps)
@@ -526,7 +526,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="halfSteps">The number of half steps to subtract from the <paramref name="interval"/>.</param>
         /// <returns>The <see cref="Interval"/> which is the <paramref name="interval"/>
         /// shifted by the <paramref name="halfSteps"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="halfSteps"/> is out of range
         /// (result interval is out of the [-127,127] range).</exception>
         public static Interval operator -(Interval interval, int halfSteps)
@@ -543,7 +543,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="multiplier">The number to multiply the <paramref name="interval"/> by.</param>
         /// <returns>The <see cref="Interval"/> which is the <paramref name="interval"/>
         /// stretched by the <paramref name="multiplier"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="multiplier"/> is out of range
         /// (result interval is out of the [-127,127] range).</exception>
         public static Interval operator *(Interval interval, int multiplier)
@@ -560,7 +560,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="divisor">The number to divide the <paramref name="interval"/> by.</param>
         /// <returns>The <see cref="Interval"/> which is the <paramref name="interval"/>
         /// shrinked by the <paramref name="divisor"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero.</exception>
         public static Interval operator /(Interval interval, int divisor)
         {
@@ -580,7 +580,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <remarks>
         /// This operator produces the same result as the <see cref="Up"/> method.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         public static Interval operator +(Interval interval)
         {
             ThrowIfArgument.IsNull(nameof(interval), interval);
@@ -596,7 +596,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <remarks>
         /// This operator produces the same result as the <see cref="Down"/> method.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         public static Interval operator -(Interval interval)
         {
             ThrowIfArgument.IsNull(nameof(interval), interval);

@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Core
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         public TrackChunk(IEnumerable<MidiEvent> events)
             : this()
         {
@@ -60,9 +60,9 @@ namespace Melanchall.DryWetMidi.Core
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
-        /// <paramref name="events"/> contain null.
+        /// <paramref name="events"/> contain <c>null</c>.
         /// </exception>
         public TrackChunk(params MidiEvent[] events)
             : this()

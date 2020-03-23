@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate distances between notes.</param>
         /// <param name="settings">Settings according to which notes should be merged.</param>
         /// <returns>Collection of notes which produced from the input one by merging nearby notes.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public IEnumerable<Note> Merge(IEnumerable<Note> notes, TempoMap tempoMap, NotesMergingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);

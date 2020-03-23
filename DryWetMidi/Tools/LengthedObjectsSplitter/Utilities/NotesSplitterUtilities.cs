@@ -31,13 +31,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="step"/> is null.</description>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -66,13 +66,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="step"/> is null.</description>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -103,10 +103,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="step"/> is null.</description>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -135,10 +135,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -169,10 +169,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="partsNumber">The number of parts to split notes into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitNotesByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType)
@@ -225,13 +225,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="grid"/> is null.</description>
+        /// <description><paramref name="grid"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -255,13 +255,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="grid"/> is null.</description>
+        /// <description><paramref name="grid"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="grid">Grid to split notes by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="grid"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="grid"/> is <c>null</c>.</exception>
         public static void SplitNotesByGrid(this MidiFile midiFile, IGrid grid)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -305,13 +305,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="distance"/> is null.</description>
+        /// <description><paramref name="distance"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -338,13 +338,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="distance"/> is null.</description>
+        /// <description><paramref name="distance"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -373,10 +373,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="distance"/> is null.</description>
+        /// <description><paramref name="distance"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -406,10 +406,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -454,10 +454,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -500,7 +500,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="ratio">Ratio of a note's length to split by. Valid values are from 0 to 1.</param>
         /// <param name="lengthType">The type a note's length should be processed according to.</param>
         /// <param name="from">Point of a note distance should be measured from.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occured:</para>

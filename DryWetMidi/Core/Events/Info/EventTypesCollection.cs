@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="type">Type of event.</param>
         /// <param name="statusByte">Status byte of event.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Event type specified by <paramref name="type"/> and
         /// <paramref name="statusByte"/> already exists in the <see cref="EventsCollection"/>.</exception>
         public void Add(Type type, byte statusByte)
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="statusByte">The status byte of the event type to get.</param>
         /// <param name="type">When this method returns, contains the event type associated with
-        /// the specified status byte, if the status byte is found; otherwise, null. This parameter
+        /// the specified status byte, if the status byte is found; otherwise, <c>null</c>. This parameter
         /// is passed uninitialized.</param>
         /// <returns>true if the <see cref="EventTypesCollection"/> contains an event type with the
         /// specified status byte; otherwise, false.</returns>

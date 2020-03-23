@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="objects">Collection of timed objects to populate the <see cref="TimedObjectsCollection{TObject}"/>.</param>
         /// <remarks>
-        /// Note that null objects will be automatically filtered out so the collection will not
+        /// Note that <c>null</c> objects will be automatically filtered out so the collection will not
         /// contain them.
         /// </remarks>
         internal TimedObjectsCollection(IEnumerable<TObject> objects)
@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Adds objects to this collection.
         /// </summary>
         /// <param name="objects">Objects to add to the collection.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
         public void Add(IEnumerable<TObject> objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Adds objects to this collection.
         /// </summary>
         /// <param name="objects">Objects to add to the collection.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
         public void Add(params TObject[] objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Removes objects from this collection.
         /// </summary>
         /// <param name="objects">Objects to remove from the collection.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
         public void Remove(IEnumerable<TObject> objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Removes objects from this collection.
         /// </summary>
         /// <param name="objects">Objects to remove from the collection.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
         public void Remove(params TObject[] objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="match">The <see cref="Predicate{T}"/> delegate that defines the conditions of
         /// the objects to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="match"/> is <c>null</c>.</exception>
         public void RemoveAll(Predicate<TObject> match)
         {
             ThrowIfArgument.IsNull(nameof(match), match);

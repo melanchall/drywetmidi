@@ -24,10 +24,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="notes"/> is null.</description>
+        /// <description><paramref name="notes"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

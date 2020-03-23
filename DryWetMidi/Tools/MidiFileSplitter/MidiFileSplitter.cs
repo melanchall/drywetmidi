@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note number.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -115,10 +115,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="grid"/> is null.</description>
+        /// <description><paramref name="grid"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -166,10 +166,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="partLength"/> is null.</description>
+        /// <description><paramref name="partLength"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -206,10 +206,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="partLength"/> is null.</description>
+        /// <description><paramref name="partLength"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -246,13 +246,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="partStart"/> is null.</description>
+        /// <description><paramref name="partStart"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="partLength"/> is null.</description>
+        /// <description><paramref name="partLength"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

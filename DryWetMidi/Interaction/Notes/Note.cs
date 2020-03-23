@@ -291,9 +291,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Splits the current <see cref="Note"/> by the specified time.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="time"/> is less than time of the note, the left part will be null.
+        /// If <paramref name="time"/> is less than time of the note, the left part will be <c>null</c>.
         /// If <paramref name="time"/> is greater than end time of the note, the right part
-        /// will be null.
+        /// will be <c>null</c>.
         /// </remarks>
         /// <param name="time">Time to split the note by.</param>
         /// <returns>An object containing left and right parts of the splitted <see cref="Note"/>.

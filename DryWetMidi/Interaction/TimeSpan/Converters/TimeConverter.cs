@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of <typeparamref name="TTimeSpan"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan ConvertTo<TTimeSpan>(long time, TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of time span defined by <paramref name="timeType"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         public static ITimeSpan ConvertTo(long time, TimeSpanType timeType, TempoMap tempoMap)
         {
@@ -60,10 +60,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="time"/> is null.</description>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -88,10 +88,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="time"/> is null.</description>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -116,13 +116,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="time"/> is null.</description>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeType"/> is null.</description>
+        /// <description><paramref name="timeType"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -146,10 +146,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="time"/> is null.</description>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Time parameter's value should be changed at.</param>
         /// <param name="value">New parameter's value that will last until next value change.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
         internal void SetValue(long time, TValue value)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);

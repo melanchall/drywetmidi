@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Converts the specified status byte and data bytes to an instance of the <see cref="MidiEvent"/>.
         /// </summary>
         /// <param name="statusByte">The status byte of MIDI event.</param>
-        /// <param name="dataBytes">Data bytes of MIDI event (bytes except status byte). Can be null
+        /// <param name="dataBytes">Data bytes of MIDI event (bytes except status byte). Can be <c>null</c>
         /// if MIDI event has no data bytes.</param>
         /// <returns><see cref="MidiEvent"/> read from <paramref name="statusByte"/> and <paramref name="dataBytes"/>.</returns>
         public MidiEvent Convert(byte statusByte, byte[] dataBytes)
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="bytes">Bytes representing a MIDI event.</param>
         /// <returns><see cref="MidiEvent"/> read from <paramref name="bytes"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
         public MidiEvent Convert(byte[] bytes)
         {
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="length">Length of sub-array to read MIDI event from.</param>
         /// <returns><see cref="MidiEvent"/> read from <paramref name="bytes"/> starting from
         /// <paramref name="offset"/> and taking <paramref name="length"/> of bytes.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>One of the following errors occured:</para>

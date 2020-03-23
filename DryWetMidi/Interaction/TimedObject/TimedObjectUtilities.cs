@@ -25,10 +25,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="obj"/> is null.</description>
+        /// <description><paramref name="obj"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -55,10 +55,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="obj"/> is null.</description>
+        /// <description><paramref name="obj"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// data source (events collection, track chunk, file). To change properties of timed objects and
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time)
             where TObject : ITimedObject
@@ -112,13 +112,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="time"/> is null.</description>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

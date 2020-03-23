@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// will be placed into the underlying events collection in order of adding them through the manager.
         /// If you want to specify custom order of such events you need to specify appropriate comparison delegate.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public TimedEventsManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);

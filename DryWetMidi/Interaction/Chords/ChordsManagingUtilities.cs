@@ -25,16 +25,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="time"/> is null.</description>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <returns>An instance of the <see cref="ChordsManager"/> that can be used to manage chords
         /// represented by the <paramref name="eventsCollection"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ChordsManager ManageChords(this EventsCollection eventsCollection, long notesTolerance = 0, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <returns>An instance of the <see cref="ChordsManager"/> that can be used to manage
         /// chords represented by the <paramref name="trackChunk"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ChordsManager ManageChords(this TrackChunk trackChunk, long notesTolerance = 0, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <returns>Collection of chords contained in <paramref name="events"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         public static IEnumerable<Chord> GetChords(this IEnumerable<MidiEvent> events, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this EventsCollection eventsCollection, long notesTolerance = 0)
         {
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this TrackChunk trackChunk, long notesTolerance = 0)
         {
@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this IEnumerable<TrackChunk> trackChunks, long notesTolerance = 0)
         {
@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this MidiFile file, long notesTolerance = 0)
         {
@@ -188,7 +188,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <returns>Collection of chords made up from <paramref name="notes"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this IEnumerable<Note> notes, long notesTolerance = 0)
         {
@@ -213,10 +213,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -249,10 +249,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -280,10 +280,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -313,10 +313,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="file"/> is null.</description>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -337,7 +337,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void RemoveChords(this EventsCollection eventsCollection, Predicate<Chord> match = null, long notesTolerance = 0)
         {
@@ -357,7 +357,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void RemoveChords(this TrackChunk trackChunk, Predicate<Chord> match = null, long notesTolerance = 0)
         {
@@ -374,7 +374,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void RemoveChords(this IEnumerable<TrackChunk> trackChunks, Predicate<Chord> match = null, long notesTolerance = 0)
         {
@@ -394,7 +394,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void RemoveChords(this MidiFile file, Predicate<Chord> match = null, long notesTolerance = 0)
         {
@@ -413,10 +413,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="chords"/> is null.</description>
+        /// <description><paramref name="chords"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -440,10 +440,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="chords"/> is null.</description>
+        /// <description><paramref name="chords"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -460,7 +460,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="chords">Collection of chords to create a track chunk.</param>
         /// <returns><see cref="TrackChunk"/> containing the specified chords.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
         public static TrackChunk ToTrackChunk(this IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
@@ -476,7 +476,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="chords">Collection of chords to create a MIDI file.</param>
         /// <returns><see cref="MidiFile"/> containing the specified chords.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
         public static MidiFile ToFile(this IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
@@ -489,7 +489,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="chord"><see cref="Chord"/> to get music theory chord from.</param>
         /// <returns><see cref="MusicTheory.Chord"/> containing notes of the <paramref name="chord"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
         public static MusicTheory.Chord GetMusicTheoryChord(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);

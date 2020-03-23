@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>The event at the specified index.</returns>
         /// <exception cref="ArgumentOutOfRangeException"> <paramref name="index"/> is less than 0;
         /// or <paramref name="index"/> is equal to or greater than <see cref="Count"/>.</exception>
-        /// <exception cref="ArgumentNullException">value is null.</exception>
+        /// <exception cref="ArgumentNullException">value is <c>null</c>.</exception>
         public MidiEvent this[int index]
         {
             get
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Core
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         public void Add(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Core
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         public void AddRange(IEnumerable<MidiEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         /// <param name="index">The zero-based index at which the event should be inserted.</param>
         /// <param name="midiEvent">The event to insert.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -138,7 +138,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         /// <param name="index">The zero-based index at which the events should be inserted.</param>
         /// <param name="midiEvents">The events to insert.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -161,10 +161,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Removes the first occurrence of a specific event from the collection.
         /// </summary>
-        /// <param name="midiEvent">The event to remove from the collection. The value cannot be null.</param>
+        /// <param name="midiEvent">The event to remove from the collection. The value cannot be <c>null</c>.</param>
         /// <returns>true if event is successfully removed; otherwise, false. This method also returns
         /// false if event was not found in the collection.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         public bool Remove(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="match">The <see cref="Predicate{T}"/> delegate that defines the conditions
         /// of the events to remove.</param>
         /// <returns>The number of events removed from the <see cref="EventsCollection"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="match"/> is <c>null</c>.</exception>
         public int RemoveAll(Predicate<MidiEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -206,7 +206,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="midiEvent">The event to locate in the <see cref="EventsCollection"/>.</param>
         /// <returns>The zero-based index of the first occurrence of event within the entire
         /// <see cref="EventsCollection"/>, if found; otherwise, –1.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         public int IndexOf(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);

@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used for calculations.</param>
         /// <returns>Length of a bar in ticks.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         public static int GetBarLength(long bars, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used for calculations.</param>
         /// <returns>Length of a beat in ticks.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         public static int GetBeatLength(long bars, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");

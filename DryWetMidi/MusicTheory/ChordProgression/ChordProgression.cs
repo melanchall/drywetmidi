@@ -16,8 +16,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Initializes a new instance of the <see cref="ChordProgression"/> with the specified chords.
         /// </summary>
         /// <param name="chords">Chords of the chord progression.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="chords"/> contains null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="chords"/> contains <c>null</c>.</exception>
         public ChordProgression(IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
@@ -30,8 +30,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Initializes a new instance of the <see cref="ChordProgression"/> with the specified chords.
         /// </summary>
         /// <param name="chords">Chords of the chord progression.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="chords"/> contains null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="chords"/> contains <c>null</c>.</exception>
         public ChordProgression(params Chord[] chords)
             : this(chords as IEnumerable<Chord>)
         {
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale">Scale to resolve chords.</param>
         /// <param name="chordProgression">When this method returns, contains the <see cref="ChordProgression"/>
         /// equivalent of the chord progression contained in <paramref name="input"/>, if the conversion succeeded,
-        /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale">Scale to resolve chords.</param>
         /// <returns>A <see cref="ChordProgression"/> equivalent to the chord progression contained in
         /// <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static ChordProgression Parse(string input, Scale scale)
         {

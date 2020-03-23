@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// to calculate bounds relative to.
         /// </summary>
         /// <param name="size">Size of the time range. The length of time range will be 2 * <paramref name="size"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="size"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="size"/> is <c>null</c>.</exception>
         public ConstantBounds(ITimeSpan size)
             : this(size, size)
         {
@@ -34,10 +34,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="leftSize"/> is null.</description>
+        /// <description><paramref name="leftSize"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="rightSize"/> is null.</description>
+        /// <description><paramref name="rightSize"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

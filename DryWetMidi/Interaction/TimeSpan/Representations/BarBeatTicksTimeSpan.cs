@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="input">A string containing a time span to convert.</param>
         /// <param name="timeSpan">When this method returns, contains the <see cref="BarBeatTicksTimeSpan"/>
         /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
-        /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -130,7 +130,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="input">A string containing a time span to convert.</param>
         /// <returns>A <see cref="BarBeatTicksTimeSpan"/> equivalent to the time span contained in
         /// <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static BarBeatTicksTimeSpan Parse(string input)
         {
@@ -177,10 +177,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -205,10 +205,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -237,10 +237,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -263,10 +263,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -290,10 +290,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -317,10 +317,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeSpan1"/> is null.</description>
+        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSpan2"/> is null.</description>
+        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

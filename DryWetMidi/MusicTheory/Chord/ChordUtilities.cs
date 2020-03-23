@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="chord">Chord to get intervals from root note.</param>
         /// <returns>Intervals from the root note of the <paramref name="chord"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">Some intervals are greater than <see cref="SevenBitNumber.MaxValue"/>.</exception>
         public static IEnumerable<Interval> GetIntervalsFromRootNote(this Chord chord)
         {
@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="chord">Chord to get intervals between notes.</param>
         /// <returns>Intervals between notes of the <paramref name="chord"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
         public static IEnumerable<Interval> GetIntervalsBetweenNotes(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -51,10 +51,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="octave"/> is null.</description>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -76,10 +76,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="octave"/> is null.</description>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

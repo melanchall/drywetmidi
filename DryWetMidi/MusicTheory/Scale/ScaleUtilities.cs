@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="degree"><see cref="ScaleDegree"/> representing a degree of the
         /// <paramref name="scale"/>.</param>
         /// <returns><see cref="NoteName"/> which is the degree of the scale.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="degree"/> specified an
         /// invalid value.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="degree"/> is out of
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale"><see cref="Scale"/> to get step of.</param>
         /// <param name="step">Step of the scale.</param>
         /// <returns><see cref="NoteName"/> which is the step of the scale.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="step"/> is negative.</exception>
         public static NoteName GetStep(this Scale scale, int step)
         {
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="scale"><see cref="Scale"/> to get notes of.</param>
         /// <returns>Notes that belong to the <paramref name="scale"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
         public static IEnumerable<Note> GetNotes(this Scale scale)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="scale"><see cref="Scale"/> to get note names of.</param>
         /// <returns>Note names that belong to the <paramref name="scale"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
         public static IEnumerable<NoteName> GetNotesNames(this Scale scale)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
@@ -116,10 +116,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="scale"/> is null.</description>
+        /// <description><paramref name="scale"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="rootNote"/> is null.</description>
+        /// <description><paramref name="rootNote"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -144,10 +144,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="scale"/> is null.</description>
+        /// <description><paramref name="scale"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="rootNote"/> is null.</description>
+        /// <description><paramref name="rootNote"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -173,10 +173,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="scale"/> is null.</description>
+        /// <description><paramref name="scale"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="note"/> is null.</description>
+        /// <description><paramref name="note"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -200,10 +200,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="scale"/> is null.</description>
+        /// <description><paramref name="scale"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="note"/> is null.</description>
+        /// <description><paramref name="note"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -228,10 +228,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="scale"/> is null.</description>
+        /// <description><paramref name="scale"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="note"/> is null.</description>
+        /// <description><paramref name="note"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

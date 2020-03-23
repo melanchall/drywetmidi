@@ -18,8 +18,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// collection of times.
         /// </summary>
         /// <param name="times">Grid's times.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="times"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="times"/> contains null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="times"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="times"/> contains <c>null</c>.</exception>
         public ArbitraryGrid(IEnumerable<ITimeSpan> times)
         {
             ThrowIfArgument.IsNull(nameof(times), times);
@@ -33,8 +33,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// collection of times.
         /// </summary>
         /// <param name="times">Grid's times.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="times"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="times"/> contains null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="times"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="times"/> contains <c>null</c>.</exception>
         public ArbitraryGrid(params ITimeSpan[] times)
             : this(times as IEnumerable<ITimeSpan>)
         {
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="tempoMap">Tempo map used to get grid's times.</param>
         /// <returns>Collection of points in time of the current grid.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         public IEnumerable<long> GetTimes(TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);

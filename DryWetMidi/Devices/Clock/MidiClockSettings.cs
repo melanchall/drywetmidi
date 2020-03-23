@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets or sets a callback used to create tick generator for MIDI clock.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
         public CreateTickGeneratorCallback CreateTickGeneratorCallback
         {
             get { return _createTickGeneratorCallback; }

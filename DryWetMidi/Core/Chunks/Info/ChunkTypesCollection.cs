@@ -28,10 +28,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="type"/> is null.</description>
+        /// <description><paramref name="type"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="id"/> is null.</description>
+        /// <description><paramref name="id"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="id">ID of the chunk type to get.</param>
         /// <param name="type">When this method returns, contains the chunk type associated with
-        /// the specified ID, if ID is found; otherwise, null. This parameter is passed
+        /// the specified ID, if ID is found; otherwise, <c>null</c>. This parameter is passed
         /// uninitialized.</param>
         /// <returns>true if the <see cref="ChunkTypesCollection"/> contains a chunk type with the
         /// specified ID; otherwise, false.</returns>
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="type">Chunk type to get ID for.</param>
         /// <param name="id">When this method returns, contains the ID associated with the specified
-        /// chunk type, if the type is found; otherwise, null. This parameter is passed uninitialized.</param>
+        /// chunk type, if the type is found; otherwise, <c>null</c>. This parameter is passed uninitialized.</param>
         /// <returns>true if the <see cref="ChunkTypesCollection"/> contains an ID for the
         /// specified chunk type; otherwise, false.</returns>
         public bool TryGetId(Type type, out string id)

@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets maximum distance between two notes to consider them as nearby. The default value
         /// is time span of zero length.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
         public ITimeSpan Tolerance
         {
             get { return _tolerance; }

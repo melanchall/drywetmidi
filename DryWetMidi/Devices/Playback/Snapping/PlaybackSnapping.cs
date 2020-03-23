@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="data">Data to attach to snap point.</param>
         /// <returns>An instance of the <see cref="SnapPoint{TData}"/> representing a snap point
         /// with <paramref name="data"/> at <paramref name="time"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         public SnapPoint<TData> AddSnapPoint<TData>(ITimeSpan time, TData data)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="time">Time to add snap point at.</param>
         /// <returns>An instance of the <see cref="SnapPoint{Guid}"/> representing a snap point
         /// at <paramref name="time"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         public SnapPoint<Guid> AddSnapPoint(ITimeSpan time)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <typeparam name="TData">Type of data attached to <paramref name="snapPoint"/>.</typeparam>
         /// <param name="snapPoint">Snap point to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is <c>null</c>.</exception>
         public void RemoveSnapPoint<TData>(SnapPoint<TData> snapPoint)
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <typeparam name="TData">Type of data attached to snap points to remove.</typeparam>
         /// <param name="predicate">The <see cref="Predicate{TData}"/> delegate that defines the conditions
         /// of snap points to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is <c>null</c>.</exception>
         public void RemoveSnapPointsByData<TData>(Predicate<TData> predicate)
         {
             ThrowIfArgument.IsNull(nameof(predicate), predicate);
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="grid">The grid that defines times to add snap points to.</param>
         /// <returns>An instance of the <see cref="SnapPointsGroup"/> added snap points belong to.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="grid"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="grid"/> is <c>null</c>.</exception>
         public SnapPointsGroup SnapToGrid(IGrid grid)
         {
             ThrowIfArgument.IsNull(nameof(grid), grid);

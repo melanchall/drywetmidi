@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// constructor.
         /// </para>
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
         public PatternBuilder(Pattern pattern)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -179,7 +179,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
         public PatternBuilder Note(Interval interval)
         {
@@ -203,10 +203,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="interval"/> is null.</description>
+        /// <description><paramref name="interval"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -229,7 +229,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
         public PatternBuilder Note(Interval interval, SevenBitNumber velocity)
         {
@@ -252,10 +252,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="interval"/> is null.</description>
+        /// <description><paramref name="interval"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -296,7 +296,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is <c>null</c>.</exception>
         public PatternBuilder Note(NoteName noteName, ITimeSpan length)
         {
             return Note(noteName, length, Velocity);
@@ -330,7 +330,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is <c>null</c>.</exception>
         public PatternBuilder Note(NoteName noteName, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
@@ -348,7 +348,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
         public PatternBuilder Note(MusicTheory.Note note)
         {
             return Note(note, NoteLength, Velocity);
@@ -368,10 +368,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="note"/> is null.</description>
+        /// <description><paramref name="note"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -390,7 +390,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
         public PatternBuilder Note(MusicTheory.Note note, SevenBitNumber velocity)
         {
             return Note(note, NoteLength, velocity);
@@ -407,10 +407,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="note"/> is null.</description>
+        /// <description><paramref name="note"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -445,7 +445,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
         /// </para>
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -473,10 +473,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="octave"/> is null.</description>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -508,10 +508,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -540,13 +540,13 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="octave"/> is null.</description>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -575,7 +575,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
         /// </para>
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(MusicTheory.Chord chord, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -600,10 +600,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="octave"/> is null.</description>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -632,10 +632,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -659,13 +659,13 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="chord"/> is null.</description>
+        /// <description><paramref name="chord"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="octave"/> is null.</description>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -690,7 +690,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         public PatternBuilder Chord(IEnumerable<Interval> intervals, NoteName rootNoteName)
         {
@@ -713,10 +713,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="intervals"/> is null.</description>
+        /// <description><paramref name="intervals"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -740,7 +740,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         public PatternBuilder Chord(IEnumerable<Interval> intervals,
                                     NoteName rootNoteName,
@@ -761,10 +761,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="intervals"/> is null.</description>
+        /// <description><paramref name="intervals"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -798,10 +798,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="intervals"/> is null.</description>
+        /// <description><paramref name="intervals"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="rootNote"/> is null.</description>
+        /// <description><paramref name="rootNote"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -830,13 +830,13 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="interval"/> is null.</description>
+        /// <description><paramref name="interval"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="rootNote"/> is null.</description>
+        /// <description><paramref name="rootNote"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -867,10 +867,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="intervals"/> is null.</description>
+        /// <description><paramref name="intervals"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="rootNote"/> is null.</description>
+        /// <description><paramref name="rootNote"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -900,13 +900,13 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="intervals"/> is null.</description>
+        /// <description><paramref name="intervals"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="rootNote"/> is null.</description>
+        /// <description><paramref name="rootNote"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -935,7 +935,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames)
         {
             return Chord(noteNames, NoteLength, Velocity);
@@ -956,10 +956,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="noteNames"/> is null.</description>
+        /// <description><paramref name="noteNames"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -979,7 +979,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(IEnumerable<NoteName> noteNames, SevenBitNumber velocity)
         {
             return Chord(noteNames, NoteLength, velocity);
@@ -999,10 +999,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="noteNames"/> is null.</description>
+        /// <description><paramref name="noteNames"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -1024,7 +1024,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes)
         {
             return Chord(notes, NoteLength, Velocity);
@@ -1044,10 +1044,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="notes"/> is null.</description>
+        /// <description><paramref name="notes"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -1066,7 +1066,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, SevenBitNumber velocity)
         {
             return Chord(notes, NoteLength, velocity);
@@ -1083,10 +1083,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="notes"/> is null.</description>
+        /// <description><paramref name="notes"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -1107,7 +1107,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="pattern">Pattern to add.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
         public PatternBuilder Pattern(Pattern pattern)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -1124,7 +1124,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="anchor">Anchor to place.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is <c>null</c>.</exception>
         public PatternBuilder Anchor(object anchor)
         {
             ThrowIfArgument.IsNull(nameof(anchor), anchor);
@@ -1146,7 +1146,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="anchor">Anchor to move to.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">There are no anchors with the <paramref name="anchor"/> key.</exception>
         public PatternBuilder MoveToFirstAnchor(object anchor)
         {
@@ -1178,7 +1178,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="anchor">Anchor to move to.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">There are no anchors with the <paramref name="anchor"/> key.</exception>
         public PatternBuilder MoveToLastAnchor(object anchor)
         {
@@ -1211,7 +1211,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="anchor">Anchor to move to.</param>
         /// <param name="index">Index of an anchor to move to.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="anchor"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is out of range.</exception>
         public PatternBuilder MoveToNthAnchor(object anchor, int index)
         {
@@ -1254,7 +1254,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="step">Step to move by.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
         public PatternBuilder StepForward(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -1279,7 +1279,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="step">Step to move by.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
         public PatternBuilder StepBack(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -1304,7 +1304,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="time">Time to move to.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         public PatternBuilder MoveToTime(ITimeSpan time)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -1415,7 +1415,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="text">Text of lyrics.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="text"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/> is <c>null</c>.</exception>
         public PatternBuilder Lyrics(string text)
         {
             ThrowIfArgument.IsNull(nameof(text), text);
@@ -1428,7 +1428,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="marker">The text of marker.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="marker"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="marker"/> is <c>null</c>.</exception>
         public PatternBuilder Marker(string marker)
         {
             ThrowIfArgument.IsNull(nameof(marker), marker);
@@ -1489,7 +1489,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Setting a root note is not an action and thus will not be stored in a pattern.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="rootNote"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="rootNote"/> is <c>null</c>.</exception>
         public PatternBuilder SetRootNote(MusicTheory.Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
@@ -1520,7 +1520,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Setting default note length is not an action and thus will not be stored in a pattern.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="length"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is <c>null</c>.</exception>
         public PatternBuilder SetNoteLength(ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -1537,7 +1537,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Setting default step is not an action and thus will not be stored in a pattern.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
         public PatternBuilder SetStep(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -1554,7 +1554,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Setting default octave is not an action and thus will not be stored in a pattern.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="octave"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="octave"/> is <c>null</c>.</exception>
         public PatternBuilder SetOctave(Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(octave), octave);
@@ -1589,7 +1589,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
         public PatternBuilder ReplayPattern(Pattern pattern)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);

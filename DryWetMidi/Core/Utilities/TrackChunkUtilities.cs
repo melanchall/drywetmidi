@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="midiFile">MIDI file to get track chunks of.</param>
         /// <returns>Collection of track chunks contained in the <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<TrackChunk> GetTrackChunks(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Note that events will be cloned so events in the result track chunk will not be equal
         /// by reference to events in the <paramref name="trackChunks"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static TrackChunk Merge(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Note that events will be cloned so events in the result track chunks will not be equal
         /// by reference to events in the <paramref name="trackChunk"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static IEnumerable<TrackChunk> Explode(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to get channels of.</param>
         /// <returns>Collection of channel numbers presented in the <paramref name="trackChunk"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static IEnumerable<FourBitNumber> GetChannels(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to get channels of.</param>
         /// <returns>Collection of channel numbers presented in the <paramref name="trackChunks"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static IEnumerable<FourBitNumber> GetChannels(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);

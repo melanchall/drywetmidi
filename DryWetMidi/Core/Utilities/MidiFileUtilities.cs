@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to get channels of.</param>
         /// <returns>Collection of channel numbers presented in the <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<FourBitNumber> GetChannels(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

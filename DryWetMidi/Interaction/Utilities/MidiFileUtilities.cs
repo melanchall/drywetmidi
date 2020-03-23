@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="midiFile"><see cref="MidiFile"/> to get duration of.</param>
         /// <returns>An instance of <typeparamref name="TTimeSpan"/> representing
         /// duration of <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan GetDuration<TTimeSpan>(this MidiFile midiFile)
             where TTimeSpan : class, ITimeSpan
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="durationType">The type of time span representing the duration of <paramref name="midiFile"/>.</param>
         /// <returns>An implementation of <see cref="ITimeSpan"/> representing
         /// duration of <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
         public static ITimeSpan GetDuration(this MidiFile midiFile, TimeSpanType durationType)
         {
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to check emptiness of.</param>
         /// <returns>A value indicating whether <paramref name="midiFile"/> is empty or not.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static bool IsEmpty(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -76,10 +76,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="distance"/> is null.</description>
+        /// <description><paramref name="distance"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -100,10 +100,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
         /// <param name="ratio">Ratio to resize <paramref name="midiFile"/> by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
         public static void Resize(this MidiFile midiFile, double ratio)
         {

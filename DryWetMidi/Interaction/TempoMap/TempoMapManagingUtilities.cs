@@ -27,10 +27,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="eventsCollections"/> is null.</description>
+        /// <description><paramref name="eventsCollections"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -56,10 +56,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="file">MIDI file to manage tempo map of.</param>
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage
         /// tempo map of the <paramref name="file"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static TempoMapManager ManageTempoMap(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -99,10 +99,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="eventsCollections"/> is null.</description>
+        /// <description><paramref name="eventsCollections"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -129,10 +129,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file">MIDI file to get tempo map of.</param>
         /// <returns>Tempo map of the <paramref name="file"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static TempoMap GetTempoMap(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -171,10 +171,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="eventsCollections"/> is null.</description>
+        /// <description><paramref name="eventsCollections"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -204,10 +204,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -232,10 +232,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="file"/> is null.</description>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

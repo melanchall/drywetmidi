@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="playback">Playback to watch current time of.</param>
         /// <param name="timeType">Type of current time to convert to.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
         /// is disposed.</exception>
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// Removes a playback from the list of ones to watch current times of.
         /// </summary>
         /// <param name="playback">Playback to exclude current time watching of.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
         /// is disposed.</exception>
         public void RemovePlayback(Playback playback)

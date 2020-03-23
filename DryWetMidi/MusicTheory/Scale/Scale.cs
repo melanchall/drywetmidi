@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="intervals">Intervals between adjacent notes of the scale.</param>
         /// <param name="rootNote">Root note (tonic) of the scale.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNote"/> specified an
         /// invalid value.</exception>
         public Scale(IEnumerable<Interval> intervals, NoteName rootNote)
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="input">A string containing a scale to convert.</param>
         /// <param name="scale">When this method returns, contains the <see cref="Scale"/>
         /// equivalent of the musical scale contained in <paramref name="input"/>, if the conversion succeeded,
-        /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="input">A string containing a scale to convert.</param>
         /// <returns>A <see cref="Scale"/> equivalent to the musical scale contained in <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Scale Parse(string input)
         {

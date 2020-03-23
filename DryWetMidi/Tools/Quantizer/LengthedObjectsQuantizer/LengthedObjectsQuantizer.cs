@@ -27,13 +27,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="grid"/> is null.</description>
+        /// <description><paramref name="grid"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="controlChangeEvent">Control Change event to get controller name of.</param>
         /// <returns>Controller name of the <paramref name="controlChangeEvent"/> event.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="controlChangeEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="controlChangeEvent"/> is <c>null</c>.</exception>
         public static ControlName GetControlName(this ControlChangeEvent controlChangeEvent)
         {
             ThrowIfArgument.IsNull(nameof(controlChangeEvent), controlChangeEvent);

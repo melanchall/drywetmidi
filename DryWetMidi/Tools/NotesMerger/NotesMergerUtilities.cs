@@ -25,10 +25,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -64,10 +64,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to merge nearby notes in.</param>
         /// <param name="settings">Settings according to which notes should be merged.</param>
         /// <param name="filter">Filter for notes to merge.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void MergeNotes(this MidiFile midiFile,
                                       NotesMergingSettings settings = null,
                                       Predicate<Note> filter = null)

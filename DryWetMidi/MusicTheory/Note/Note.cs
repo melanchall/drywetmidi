@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="input">A string containing a note to convert.</param>
         /// <param name="note">When this method returns, contains the <see cref="Note"/>
         /// equivalent of the musical note contained in <paramref name="input"/>, if the conversion succeeded,
-        /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -128,7 +128,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="input">A string containing a note to convert.</param>
         /// <returns>A <see cref="Note"/> equivalent to the musical note contained in <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Note Parse(string input)
         {
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="halfSteps">The number of half steps to transpose the <paramref name="note"/> by.</param>
         /// <returns>The <see cref="Note"/> which is the <paramref name="note"/>
         /// transposed by the <paramref name="halfSteps"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
         public static Note operator +(Note note, int halfSteps)
         {
@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="halfSteps">The number of half steps to transpose the <paramref name="note"/> by.</param>
         /// <returns>The <see cref="Note"/> which is the <paramref name="note"/>
         /// transposed by the <paramref name="halfSteps"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
         public static Note operator -(Note note, int halfSteps)
         {

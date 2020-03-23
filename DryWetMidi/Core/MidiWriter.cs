@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="MidiWriter"/> with the specified stream.
         /// </summary>
         /// <param name="stream">Stream to write MIDI file to.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support writing,
         /// or is already closed.</exception>
         public MidiWriter(Stream stream)
@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Writes a byte array to the underlying stream.
         /// </summary>
         /// <param name="bytes">A byte array containing the data to write.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the writer was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteBytes(byte[] bytes)

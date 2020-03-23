@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Core
         /// properties instead. Header chunk with appropriate information will be written to a file automatically
         /// on <c>Write</c> method.</para>
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is <c>null</c>.</exception>
         public MidiFile(IEnumerable<MidiChunk> chunks)
         {
             ThrowIfArgument.IsNull(nameof(chunks), chunks);
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Core
         /// properties instead. Header chunk with appropriate information will be written to a file automatically
         /// on <c>Write</c> method.</para>
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is <c>null</c>.</exception>
         public MidiFile(params MidiChunk[] chunks)
             : this(chunks as IEnumerable<MidiChunk>)
         {
@@ -172,7 +172,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
         /// and file names must be less than 260 characters.</exception>
@@ -244,7 +244,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
@@ -291,7 +291,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
         /// and <see cref="Stream.Length"/> properties.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">
         /// One of the following errors occured:
         /// <list type="bullet">
@@ -493,7 +493,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="format">Format of the file to be written.</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
         /// default settings.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>
@@ -575,8 +575,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Determines whether two specified <see cref="MidiFile"/> objects have the same content.
         /// </summary>
-        /// <param name="midiFile1">The first file to compare, or null.</param>
-        /// <param name="midiFile2">The second file to compare, or null.</param>
+        /// <param name="midiFile1">The first file to compare, or <c>null</c>.</param>
+        /// <param name="midiFile2">The second file to compare, or <c>null</c>.</param>
         /// <param name="message">Message containing information about what exactly is different in
         /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
         /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
@@ -590,8 +590,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Determines whether two specified <see cref="MidiFile"/> objects have the same content using
         /// the specified comparison settings.
         /// </summary>
-        /// <param name="midiFile1">The first file to compare, or null.</param>
-        /// <param name="midiFile2">The second file to compare, or null.</param>
+        /// <param name="midiFile1">The first file to compare, or <c>null</c>.</param>
+        /// <param name="midiFile2">The second file to compare, or <c>null</c>.</param>
         /// <param name="settings">Settings according to which files should be compared.</param>
         /// <param name="message">Message containing information about what exactly is different in
         /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
@@ -750,7 +750,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="chunkId">ID of the chunk that need to be created.</param>
         /// <param name="chunksTypes">Collection of the chunks types to search for the one with
         /// <paramref name="chunkId"/> ID.</param>
-        /// <returns>An instance of the chunk type with the specified ID or null if <paramref name="chunksTypes"/>
+        /// <returns>An instance of the chunk type with the specified ID or <c>null</c> if <paramref name="chunksTypes"/>
         /// doesn't contain chunk type with it.</returns>
         private static MidiChunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
         {

@@ -34,10 +34,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="stream"/> is null.</description>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="settings"/> is null.</description>
+        /// <description><paramref name="settings"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

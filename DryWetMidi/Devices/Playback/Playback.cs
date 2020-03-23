@@ -85,10 +85,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="events"/> is null.</description>
+        /// <description><paramref name="events"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -110,13 +110,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="events"/> is null.</description>
+        /// <description><paramref name="events"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -137,10 +137,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="events"/> is null.</description>
+        /// <description><paramref name="events"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -161,13 +161,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="events"/> is null.</description>
+        /// <description><paramref name="events"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -187,10 +187,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timedObjects"/> is null.</description>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -231,13 +231,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timedObjects"/> is null.</description>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -464,7 +464,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// Sets playback position to the time of the specified snap point.
         /// </summary>
         /// <param name="snapPoint">Snap point to move to.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToSnapPoint(SnapPoint snapPoint)
@@ -484,7 +484,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
         /// select the one from.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)
@@ -518,7 +518,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
         /// select the one from.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)
@@ -562,7 +562,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// Sets playback position to the specified time from the beginning of the MIDI data.
         /// </summary>
         /// <param name="time">Time from the beginning of the MIDI data to set playback position to.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="time"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToTime(ITimeSpan time)
@@ -588,7 +588,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// Shifts playback position forward by the specified step.
         /// </summary>
         /// <param name="step">Amount of time to shift playback position by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveForward(ITimeSpan step)
@@ -604,7 +604,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// Shifts playback position back by the specified step.
         /// </summary>
         /// <param name="step">Amount of time to shift playback position by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="step"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveBack(ITimeSpan step)

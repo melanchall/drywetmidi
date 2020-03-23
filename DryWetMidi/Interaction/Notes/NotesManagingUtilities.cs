@@ -25,16 +25,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="note"/> is null.</description>
+        /// <description><paramref name="note"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="time"/> is null.</description>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="length"/> is null.</description>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
         /// notes represented by the <paramref name="eventsCollection"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static NotesManager ManageNotes(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
         /// notes represented by the <paramref name="trackChunk"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static NotesManager ManageNotes(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="events">Collection of<see cref="MidiFile"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="events"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         public static IEnumerable<Note> GetNotes(this IEnumerable<MidiEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static IEnumerable<Note> GetNotes(this EventsCollection eventsCollection)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static IEnumerable<Note> GetNotes(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -130,7 +130,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static IEnumerable<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static IEnumerable<Note> GetNotes(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -165,10 +165,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -197,10 +197,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -224,10 +224,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -253,10 +253,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="file"/> is null.</description>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="action"/> is null.</description>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -273,7 +273,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static void RemoveNotes(this EventsCollection eventsCollection, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -289,7 +289,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static void RemoveNotes(this TrackChunk trackChunk, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -302,7 +302,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static void RemoveNotes(this IEnumerable<TrackChunk> trackChunks, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -318,7 +318,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static void RemoveNotes(this MidiFile file, Predicate<Note> match = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -335,10 +335,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="eventsCollection"/> is null.</description>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="notes"/> is null.</description>
+        /// <description><paramref name="notes"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -362,10 +362,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="notes"/> is null.</description>
+        /// <description><paramref name="notes"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -382,7 +382,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="notes">Collection of notes to create a track chunk.</param>
         /// <returns><see cref="TrackChunk"/> containing the specified notes.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public static TrackChunk ToTrackChunk(this IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -398,7 +398,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="notes">Collection of notes to create a MIDI file.</param>
         /// <returns><see cref="MidiFile"/> containing the specified notes.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public static MidiFile ToFile(this IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -411,7 +411,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="note"><see cref="Note"/> to get music theory note from.</param>
         /// <returns><see cref="MusicTheory.Note"/> corresponding to the <paramref name="note"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="note"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
         public static MusicTheory.Note GetMusicTheoryNote(this Note note)
         {
             ThrowIfArgument.IsNull(nameof(note), note);

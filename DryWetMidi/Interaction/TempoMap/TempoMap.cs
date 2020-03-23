@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeDivision">MIDI file time division which specifies the meaning of the time
         /// used by events of the file.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is <c>null</c>.</exception>
         internal TempoMap(TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -136,10 +136,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="tempo"/> is null.</description>
+        /// <description><paramref name="tempo"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSignature"/> is null.</description>
+        /// <description><paramref name="timeSignature"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="tempo">Tempo of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified tempo.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="tempo"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempo"/> is <c>null</c>.</exception>
         public static TempoMap Create(Tempo tempo)
         {
             ThrowIfArgument.IsNull(nameof(tempo), tempo);
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSignature">Time signature of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified time signature.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeSignature"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSignature"/> is <c>null</c>.</exception>
         public static TempoMap Create(TimeSignature timeSignature)
         {
             ThrowIfArgument.IsNull(nameof(timeSignature), timeSignature);
@@ -195,7 +195,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeDivision">Time division of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified time division.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timeDivision"/> is <c>null</c>.</exception>
         public static TempoMap Create(TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
@@ -214,10 +214,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempo"/> is null.</description>
+        /// <description><paramref name="tempo"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -243,10 +243,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSignature"/> is null.</description>
+        /// <description><paramref name="timeSignature"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -273,13 +273,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="timeDivision"/> is null.</description>
+        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempo"/> is null.</description>
+        /// <description><paramref name="tempo"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="timeSignature"/> is null.</description>
+        /// <description><paramref name="timeSignature"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timedEvents">Collection of <see cref="TimedEvent"/> to iterate over.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="timedEvents"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timedEvents"/> is <c>null</c>.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TimedEvent> timedEvents)
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to iterate over.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunks"><see cref="TrackChunk"/> containing events to iterate over.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -160,7 +160,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to iterate over.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

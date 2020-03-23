@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Initializes a new instance of the <see cref="Chord"/> with the specified notes names (for example, C E G).
         /// </summary>
         /// <param name="notesNames">The set of notes names.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="notesNames"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notesNames"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="notesNames"/> contains an invalid value.</exception>
         /// <exception cref="ArgumentException"><paramref name="notesNames"/> is empty collection.</exception>
         public Chord(ICollection<NoteName> notesNames)
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="rootNoteName">The root note's name.</param>
         /// <param name="intervalsFromRoot">Intervals from root note.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is <c>null</c>.</exception>
         public Chord(NoteName rootNoteName, IEnumerable<Interval> intervalsFromRoot)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="rootNoteName">The root note's name.</param>
         /// <param name="intervalsFromRoot">Intervals from root note.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is <c>null</c>.</exception>
         public Chord(NoteName rootNoteName, params Interval[] intervalsFromRoot)
             : this(rootNoteName, intervalsFromRoot as IEnumerable<Interval>)
         {
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="input">A string containing a chord to convert.</param>
         /// <param name="chord">When this method returns, contains the <see cref="Chord"/>
         /// equivalent of the musical chord contained in <paramref name="input"/>, if the conversion succeeded,
-        /// or null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -155,7 +155,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="input">A string containing a chord to convert.</param>
         /// <returns>A <see cref="Chord"/> equivalent to the musical chord contained in <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Chord Parse(string input)
         {
@@ -181,7 +181,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is <c>null</c>.</exception>
         public static Chord GetByTriad(NoteName rootNoteName, ChordQuality chordQuality, params Interval[] intervalsFromRoot)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);

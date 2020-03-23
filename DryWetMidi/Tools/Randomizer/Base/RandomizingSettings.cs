@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
         #region Properties
 
         /// <summary>
-        /// Gets or sets a predicate to filter objects that should be randomized. Use null if
+        /// Gets or sets a predicate to filter objects that should be randomized. Use <c>null</c> if
         /// all objects should be processed.
         /// </summary>
         public Predicate<TObject> Filter { get; set; }

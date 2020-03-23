@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="index"/> is less than 0; or <paramref name="index"/> is equal to or greater than
         /// <see cref="Count"/>.
         /// </exception>
-        /// <exception cref="ArgumentNullException">value is null.</exception>
+        /// <exception cref="ArgumentNullException">value is <c>null</c>.</exception>
         public MidiChunk this[int index]
         {
             get
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Header chunk with appropriate information will be written to a file automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
         public void Add(MidiChunk chunk)
         {
             ThrowIfArgument.IsNull(nameof(chunk), chunk);
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Header chunk with appropriate information will be written to a file automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is <c>null</c>.</exception>
         public void AddRange(IEnumerable<MidiChunk> chunks)
         {
             ThrowIfArgument.IsNull(nameof(chunks), chunks);
@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
         /// <param name="chunk">The chunk to insert.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
         /// <param name="chunks">The chunk to insert.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -152,10 +152,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Removes the first occurrence of a specific chunk from the collection.
         /// </summary>
-        /// <param name="chunk">The chunk to remove from the collection. The value cannot be null.</param>
+        /// <param name="chunk">The chunk to remove from the collection. The value cannot be <c>null</c>.</param>
         /// <returns>true if chunk is successfully removed; otherwise, false. This method also returns
         /// false if chunk was not found in the collection.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
         public bool Remove(MidiChunk chunk)
         {
             ThrowIfArgument.IsNull(nameof(chunk), chunk);
@@ -182,7 +182,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="match">The <see cref="Predicate{T}"/> delegate that defines the conditions
         /// of the chunks to remove.</param>
         /// <returns>The number of chunks removed from the <see cref="ChunksCollection"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="match"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="match"/> is <c>null</c>.</exception>
         public int RemoveAll(Predicate<MidiChunk> match)
         {
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -197,7 +197,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="chunk">The chunk to locate in the <see cref="ChunksCollection"/>.</param>
         /// <returns>The zero-based index of the first occurrence of chunk within the entire
         /// <see cref="ChunksCollection"/>, if found; otherwise, –1.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
         public int IndexOf(MidiChunk chunk)
         {
             ThrowIfArgument.IsNull(nameof(chunk), chunk);

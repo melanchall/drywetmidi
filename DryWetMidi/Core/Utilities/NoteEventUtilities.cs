@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="noteEvent">Note event to get note name of.</param>
         /// <returns>Note name of the <paramref name="noteEvent"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is <c>null</c>.</exception>
         public static NoteName GetNoteName(this NoteEvent noteEvent)
         {
             ThrowIfArgument.IsNull(nameof(noteEvent), noteEvent);
@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Octave number will be returned in scientific pitch notation which means
         /// that 4 will be returned for 60 note number.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is <c>null</c>.</exception>
         public static int GetNoteOctave(this NoteEvent noteEvent)
         {
             ThrowIfArgument.IsNull(nameof(noteEvent), noteEvent);
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Octave number is specified in scientific pitch notation which means that 4 must be
         /// passed to get the number of the middle C.
         /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="noteEvent"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an
         /// invalid value.</exception>
         /// <exception cref="ArgumentException">Note number is out of range for the specified note
@@ -79,10 +79,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="noteOnEvent"/> is null.</description>
+        /// <description><paramref name="noteOnEvent"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="noteOffEvent"/> is null.</description>
+        /// <description><paramref name="noteOffEvent"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

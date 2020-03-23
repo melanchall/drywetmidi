@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// collection of notes.
         /// </summary>
         /// <param name="notes">Notes to combine into a chord.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public Chord(IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// collection of notes.
         /// </summary>
         /// <param name="notes">Notes to combine into a chord.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public Chord(params Note[] notes)
             : this(notes as IEnumerable<Note>)
         {
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="notes">Notes to combine into a chord.</param>
         /// <param name="time">Time of the chord which is time of the earliest note of the <paramref name="notes"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public Chord(IEnumerable<Note> notes, long time)
             : this(notes)
@@ -223,9 +223,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Splits the current <see cref="Chord"/> by the specified time.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="time"/> is less than time of the chord, the left part will be null.
+        /// If <paramref name="time"/> is less than time of the chord, the left part will be <c>null</c>.
         /// If <paramref name="time"/> is greater than end time of the chord, the right part
-        /// will be null.
+        /// will be <c>null</c>.
         /// </remarks>
         /// <param name="time">Time to split the chord by.</param>
         /// <returns>An object containing left and right parts of the splitted <see cref="Chord"/>.

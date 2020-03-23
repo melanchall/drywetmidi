@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="input">A string containing a time span to convert.</param>
         /// <param name="timeSpan">When this method returns, contains the <see cref="ITimeSpan"/>
         /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
-        /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpanType">the type of time span to convert <paramref name="input"/> to.</param>
         /// <param name="timeSpan">When this method returns, contains the <see cref="ITimeSpan"/>
         /// equivalent of the time span contained in <paramref name="input"/>, if the conversion succeeded, or
-        /// null if the conversion failed. The conversion fails if the <paramref name="input"/> is null or
+        /// <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="input">A string containing a time span to convert.</param>
         /// <returns>A <see cref="ITimeSpan"/> equivalent to the time span contained in <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is null or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static ITimeSpan Parse(string input)
         {

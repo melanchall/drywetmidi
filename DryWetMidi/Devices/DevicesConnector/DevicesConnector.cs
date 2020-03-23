@@ -32,14 +32,14 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="inputDevice"/> is null.</description>
+        /// <description><paramref name="inputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevices"/> is null.</description>
+        /// <description><paramref name="outputDevices"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentException"><paramref name="outputDevices"/> contains null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="outputDevices"/> contains <c>null</c>.</exception>
         public DevicesConnector(InputDevice inputDevice, params IOutputDevice[] outputDevices)
         {
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);

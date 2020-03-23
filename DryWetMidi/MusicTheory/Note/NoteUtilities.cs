@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="interval">Interval to transpose by.</param>
         /// <returns>Note name which is <paramref name="noteName"/> transposed by <paramref name="interval"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         public static NoteName Transpose(this NoteName noteName, Interval interval)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);

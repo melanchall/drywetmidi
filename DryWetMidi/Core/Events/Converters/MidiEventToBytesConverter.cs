@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="midiEvent">MIDI event to convert.</param>
         /// <returns>Array of bytes representing <paramref name="midiEvent"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         public byte[] Convert(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="midiEvent">MIDI event to convert.</param>
         /// <param name="minSize">Minimum size of bytes array representing <paramref name="midiEvent"/>.</param>
         /// <returns>Array of bytes representing <paramref name="midiEvent"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="minSize"/> is negative.</exception>
         public byte[] Convert(MidiEvent midiEvent, int minSize)
         {

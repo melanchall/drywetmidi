@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
         /// or <see cref="Rest"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
         /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(this IEnumerable<Note> notes, RestSeparationPolicy restSeparationPolicy)
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
         /// or <see cref="Rest"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
         /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(this TrackChunk trackChunk, RestSeparationPolicy restSeparationPolicy)
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
         /// or <see cref="Rest"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
         /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(this IEnumerable<TrackChunk> trackChunks, RestSeparationPolicy restSeparationPolicy)
@@ -112,7 +112,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="restSeparationPolicy">Policy which determines when rests should be returned.</param>
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="Note"/>
         /// or <see cref="Rest"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="restSeparationPolicy"/> specified an
         /// invalid value.</exception>
         public static IEnumerable<ILengthedObject> GetNotesAndRests(this MidiFile midiFile, RestSeparationPolicy restSeparationPolicy)

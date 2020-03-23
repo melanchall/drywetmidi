@@ -33,10 +33,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="noteTransformation"/> is null.</description>
+        /// <description><paramref name="noteTransformation"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -62,13 +62,13 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="noteSelection"/> is null.</description>
+        /// <description><paramref name="noteSelection"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="noteTransformation"/> is null.</description>
+        /// <description><paramref name="noteTransformation"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -94,10 +94,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="chordTransformation"/> is null.</description>
+        /// <description><paramref name="chordTransformation"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -123,13 +123,13 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="chordSelection"/> is null.</description>
+        /// <description><paramref name="chordSelection"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="chordTransformation"/> is null.</description>
+        /// <description><paramref name="chordTransformation"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -156,10 +156,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="anchor"/> is null.</description>
+        /// <description><paramref name="anchor"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -182,7 +182,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// automatically removed or not. The default value is true.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at anchors.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
         public static IEnumerable<Pattern> SplitAtAllAnchors(this Pattern pattern, bool removeEmptyPatterns = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -207,10 +207,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="marker"/> is null.</description>
+        /// <description><paramref name="marker"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -235,7 +235,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// automatically removed or not. The default value is true.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at markers.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
         public static IEnumerable<Pattern> SplitAtAllMarkers(this Pattern pattern, bool removeEmptyPatterns = true)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
@@ -251,7 +251,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="patterns">Patterns to combine.</param>
         /// <returns>Pattern that made up from <paramref name="patterns"/> following each other.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="patterns"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="patterns"/> is <c>null</c>.</exception>
         public static Pattern CombineInSequence(this IEnumerable<Pattern> patterns)
         {
             ThrowIfArgument.IsNull(nameof(patterns), patterns);
@@ -271,7 +271,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="patterns">Patterns to combine.</param>
         /// <returns>Pattern that made up from <paramref name="patterns"/> arranged into stack.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="patterns"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="patterns"/> is <c>null</c>.</exception>
         public static Pattern CombineInParallel(this IEnumerable<Pattern> patterns)
         {
             ThrowIfArgument.IsNull(nameof(patterns), patterns);
@@ -298,10 +298,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="noteSelection"/> is null.</description>
+        /// <description><paramref name="noteSelection"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -328,10 +328,10 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="chordSelection"/> is null.</description>
+        /// <description><paramref name="chordSelection"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

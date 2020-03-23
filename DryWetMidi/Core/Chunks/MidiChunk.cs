@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="id">The type of the chunk.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="id"/> is null.
+        /// <paramref name="id"/> is <c>null</c>.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="id"/> is empty, or consists only of white-space characters; or
@@ -85,8 +85,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content.
         /// </summary>
-        /// <param name="chunk1">The first chunk to compare, or null.</param>
-        /// <param name="chunk2">The second chunk to compare, or null.</param>
+        /// <param name="chunk1">The first chunk to compare, or <c>null</c>.</param>
+        /// <param name="chunk2">The second chunk to compare, or <c>null</c>.</param>
         /// <returns>true if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
         /// otherwise, false.</returns>
         public static bool Equals(MidiChunk chunk1, MidiChunk chunk2)
@@ -98,8 +98,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content.
         /// </summary>
-        /// <param name="chunk1">The first chunk to compare, or null.</param>
-        /// <param name="chunk2">The second chunk to compare, or null.</param>
+        /// <param name="chunk1">The first chunk to compare, or <c>null</c>.</param>
+        /// <param name="chunk2">The second chunk to compare, or <c>null</c>.</param>
         /// <param name="message">Message containing information about what exactly is different in
         /// <paramref name="chunk1"/> and <paramref name="chunk2"/>.</param>
         /// <returns>true if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
@@ -113,8 +113,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content using
         /// the specified comparison settings.
         /// </summary>
-        /// <param name="chunk1">The first chunk to compare, or null.</param>
-        /// <param name="chunk2">The second chunk to compare, or null.</param>
+        /// <param name="chunk1">The first chunk to compare, or <c>null</c>.</param>
+        /// <param name="chunk2">The second chunk to compare, or <c>null</c>.</param>
         /// <param name="settings">Settings according to which chunks should be compared.</param>
         /// <param name="message">Message containing information about what exactly is different in
         /// <paramref name="chunk1"/> and <paramref name="chunk2"/>.</param>

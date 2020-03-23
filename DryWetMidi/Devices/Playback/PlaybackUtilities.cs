@@ -32,13 +32,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -64,10 +64,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -93,13 +93,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -125,10 +125,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -153,10 +153,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="clockSettings">Settings of the internal playback's clock.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static Playback GetPlayback(this MidiFile midiFile, MidiClockSettings clockSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -199,13 +199,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -232,10 +232,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -262,13 +262,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -301,13 +301,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -342,13 +342,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -379,13 +379,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunk"/> is null.</description>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -412,13 +412,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="trackChunks"/> is null.</description>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -444,10 +444,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="midiFile"/> is null.</description>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -471,13 +471,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="pattern"/> is null.</description>
+        /// <description><paramref name="pattern"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -503,13 +503,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -539,13 +539,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -577,13 +577,13 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is null.</description>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

@@ -40,13 +40,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="step"/> is null.</description>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Splits objects into the specified number of parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// Nulls will not be splitted and will be returned as nulls. If an object has zero length,
+        /// Nulls will not be splitted and will be returned as <c>null</c>s. If an object has zero length,
         /// it will be splitted into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="objects">Objects to split.</param>
@@ -109,10 +109,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Splits objects by the specified grid.
         /// </summary>
         /// <remarks>
-        /// Nulls will not be splitted and will be returned as nulls.
+        /// Nulls will not be splitted and will be returned as <c>null</c>s.
         /// </remarks>
         /// <param name="objects">Objects to split.</param>
         /// <param name="grid">Grid to split objects by.</param>
@@ -185,13 +185,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="grid"/> is null.</description>
+        /// <description><paramref name="grid"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -250,13 +250,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="distance"/> is null.</description>
+        /// <description><paramref name="distance"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -301,10 +301,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="objects"/> is null.</description>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="tempoMap"/> is null.</description>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>

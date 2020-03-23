@@ -155,7 +155,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="midiEvent">MIDI event to send.</param>
         /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void SendEvent(MidiEvent midiEvent)
         {
@@ -243,7 +243,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
         /// <item>
-        /// <description><paramref name="name"/> is null or contains white-spaces only.</description>
+        /// <description><paramref name="name"/> is <c>null</c> or contains white-spaces only.</description>
         /// </item>
         /// <item>
         /// <description><paramref name="name"/> specifies an output MIDI device which is not presented in the system.</description>
