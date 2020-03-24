@@ -15,6 +15,9 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to quantize timed events time.
     /// </summary>
+    /// <remarks>
+    /// See <see href="xref:wiki_Quantizer">Quantizer</see> article on Wiki to learn more.
+    /// </remarks>
     public class TimedEventsQuantizer : Quantizer<TimedEvent, TimedEventsQuantizingSettings>
     {
         #region Methods

@@ -1,3 +1,7 @@
+---
+uid: wiki_NotesMerger
+---
+
 To merge nearby notes into one DryWetMIDI provides `NotesMerger` class which contains the method:
 
 ```csharp

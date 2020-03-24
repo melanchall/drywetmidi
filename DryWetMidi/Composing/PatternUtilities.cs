@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Composing
         #region Methods
 
         /// <summary>
-        /// Creates new <see cref="Pattern"/> by transforming notes in the specified pattern.
+        /// Creates a new <see cref="Pattern"/> by transforming notes in the specified pattern.
         /// </summary>
         /// <param name="pattern">Pattern to transform notes of.</param>
         /// <param name="noteTransformation">Transformation to apply to notes of the <paramref name="pattern"/>.</param>
@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Creates new <see cref="Pattern"/> by transforming notes in the specified pattern using predicate
+        /// Creates a new <see cref="Pattern"/> by transforming notes in the specified pattern using predicate
         /// to select notes to transform.
         /// </summary>
         /// <param name="pattern">Pattern to transform notes of.</param>
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Creates new <see cref="Pattern"/> by transforming chords in the specified pattern.
+        /// Creates a new <see cref="Pattern"/> by transforming chords in the specified pattern.
         /// </summary>
         /// <param name="pattern">Pattern to transform notes of.</param>
         /// <param name="chordTransformation">Transformation to apply to chords of the <paramref name="pattern"/>.</param>
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Creates new <see cref="Pattern"/> by transforming chords in the specified pattern using predicate
+        /// Creates a new <see cref="Pattern"/> by transforming chords in the specified pattern using predicate
         /// to select chords to transform..
         /// </summary>
         /// <param name="pattern">Pattern to transform notes of.</param>

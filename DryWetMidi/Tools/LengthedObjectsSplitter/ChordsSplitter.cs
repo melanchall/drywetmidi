@@ -5,6 +5,9 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods for splitting chords.
     /// </summary>
+    /// <remarks>
+    /// See <see href="xref:wiki_NotesChordsSplitter">Notes/chords splitter</see> article on Wiki to learn more.
+    /// </remarks>
     public sealed class ChordsSplitter : LengthedObjectsSplitter<Chord>
     {
         #region Overrides

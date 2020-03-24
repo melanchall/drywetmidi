@@ -1,3 +1,7 @@
+---
+uid: wiki_Randomizer
+---
+
 To randomize time of timed events, notes and chords DryWetMIDI provides following classes:
 
 * `TimedEventsRandomizer`

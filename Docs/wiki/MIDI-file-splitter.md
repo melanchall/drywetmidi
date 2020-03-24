@@ -1,3 +1,7 @@
+---
+uid: wiki_MidiFileSplitter
+---
+
 You can split MIDI file in different ways using extension methods from the `MidiFileSplitter` class. Available methods of splitting are described below.
 
 ### `SplitByChannel`

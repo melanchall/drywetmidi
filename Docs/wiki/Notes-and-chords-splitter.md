@@ -1,3 +1,7 @@
+---
+uid: wiki_NotesChordsSplitter
+---
+
 With DryWetMIDI notes or chords can be easily splitted using following classes:
 * `NotesSplitter`
 * `ChordsSplitter`

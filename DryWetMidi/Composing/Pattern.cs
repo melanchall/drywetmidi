@@ -8,16 +8,26 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Composing
 {
     /// <summary>
-    /// Represents a musical pattern - set of notes with the specified times and lengths.
+    /// Represents a musical pattern represented as a sequence of actions to create amusical composition.
     /// </summary>
+    /// <remarks>
+    /// <para>Pattern allows to represent musical composition as a set of actions like 'note' or 'program change'.
+    /// It allows in fact to create MIDI file in more musical manner.</para>
+    /// <para>There are two ways to get an instance of the <see cref="Pattern"/>:</para>
+    /// <list type="bullet">
+    /// <item>
+    /// <description>Build a pattern from scratch with fluent API provided by <see cref="PatternBuilder"/>.</description>
+    /// </item>
+    /// <item>
+    /// <description>Use one of extension methods within <see cref="PatternUtilities"/> to create pattern
+    /// by processing existing one.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     public sealed class Pattern
     {
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Pattern"/> with the specified actions.
-        /// </summary>
-        /// <param name="actions">Actions that pattern have to invoke on export to MIDI.</param>
         internal Pattern(IEnumerable<PatternAction> actions)
         {
             Actions = actions;

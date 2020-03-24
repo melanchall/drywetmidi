@@ -1,3 +1,7 @@
+---
+uid: wiki_Quantizer
+---
+
 DryWetMIDI provides tools to perform quantizing of timed events, notes and chords by the specified grid. The classes aimed to solve this task are:
 
 * `TimedEventsQuantizer`
