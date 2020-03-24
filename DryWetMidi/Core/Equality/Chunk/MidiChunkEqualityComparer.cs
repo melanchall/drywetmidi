@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="x">The first chunk to compare.</param>
         /// <param name="y">The second chunk to compare.</param>
-        /// <returns>true if the specified objects are equal; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified objects are equal; otherwise, <c>false</c>.</returns>
         public bool Equals(MidiChunk x, MidiChunk y)
         {
             string message;

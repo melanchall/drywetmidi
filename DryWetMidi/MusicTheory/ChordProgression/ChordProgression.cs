@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
-        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string input, Scale scale, out ChordProgression chordProgression)
         {
             return ParsingUtilities.TryParse(input, GetParsing(input, scale), out chordProgression);
@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="chordProgression1">The first <see cref="ChordProgression"/> to compare.</param>
         /// <param name="chordProgression2">The second <see cref="ChordProgression"/> to compare.</param>
-        /// <returns>true if the chord progressions are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the chord progressions are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(ChordProgression chordProgression1, ChordProgression chordProgression2)
         {
             if (ReferenceEquals(chordProgression1, chordProgression2))
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="chordProgression1">The first <see cref="ChordProgression"/> to compare.</param>
         /// <param name="chordProgression2">The second <see cref="ChordProgression"/> to compare.</param>
-        /// <returns>false if the chord progressions are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the chord progressions are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(ChordProgression chordProgression1, ChordProgression chordProgression2)
         {
             return !(chordProgression1 == chordProgression2);
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as ChordProgression);

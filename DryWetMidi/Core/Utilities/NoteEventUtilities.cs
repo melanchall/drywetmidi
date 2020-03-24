@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         /// <param name="noteOnEvent"><see cref="NoteOnEvent"/> to check <see cref="NoteOffEvent"/> for.</param>
         /// <param name="noteOffEvent"><see cref="NoteOffEvent"/> to check <see cref="NoteOnEvent"/> for.</param>
-        /// <returns>true if <paramref name="noteOnEvent"/> corresponds to <paramref name="noteOffEvent"/>.</returns>
+        /// <returns><c>true</c> if <paramref name="noteOnEvent"/> corresponds to <paramref name="noteOffEvent"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">

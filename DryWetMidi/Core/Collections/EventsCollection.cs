@@ -162,8 +162,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Removes the first occurrence of a specific event from the collection.
         /// </summary>
         /// <param name="midiEvent">The event to remove from the collection. The value cannot be <c>null</c>.</param>
-        /// <returns>true if event is successfully removed; otherwise, false. This method also returns
-        /// false if event was not found in the collection.</returns>
+        /// <returns><c>true</c> if event is successfully removed; otherwise, <c>false</c>. This method also returns
+        /// <c>false</c> if event was not found in the collection.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         public bool Remove(MidiEvent midiEvent)
         {

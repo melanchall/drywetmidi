@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a value indicating whether an opposite side of an object should be fixed or not.
-        /// The default value is false.
+        /// The default value is <c>false</c>.
         /// </summary>
         /// <remarks>
         /// When an object's side is fixed the length can be changed during randomizing.

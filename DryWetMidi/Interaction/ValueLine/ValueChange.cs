@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="change1">The first <see cref="ValueChange{TValue}"/> to compare.</param>
         /// <param name="change2">The second <see cref="ValueChange{TValue}"/> to compare.</param>
-        /// <returns>true if the value changes are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the value changes are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(ValueChange<TValue> change1, ValueChange<TValue> change2)
         {
             if (ReferenceEquals(change1, change2))
@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="change1">The first <see cref="ValueChange{TValue}"/> to compare.</param>
         /// <param name="change2">The second <see cref="ValueChange{TValue}"/> to compare.</param>
-        /// <returns>false if the value changes are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the value changes are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(ValueChange<TValue> change1, ValueChange<TValue> change2)
         {
             return !(change1 == change2);
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as ValueChange<TValue>);

@@ -350,7 +350,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="obj"><see cref="ILengthedObject"/> to check.</param>
         /// <param name="time">Time to check the <paramref name="obj"/>.</param>
         /// <param name="matchBy">Part of the <paramref name="obj"/> which have to be at <paramref name="time"/>.</param>
-        /// <returns>true if <paramref name="obj"/> is at <paramref name="time"/>; false - otherwise.</returns>
+        /// <returns><c>true</c> if <paramref name="obj"/> is at <paramref name="time"/>; <c>false</c> - otherwise.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/> is <c>null</c>.</exception>
         private static bool IsObjectAtTime<TObject>(TObject obj, long time, LengthedObjectPart matchBy)
             where TObject : ILengthedObject

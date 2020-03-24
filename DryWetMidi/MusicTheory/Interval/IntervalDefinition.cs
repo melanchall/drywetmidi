@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="intervalDefinition1">The first <see cref="IntervalDefinition"/> to compare.</param>
         /// <param name="intervalDefinition2">The second <see cref="IntervalDefinition"/> to compare.</param>
-        /// <returns>true if the interval definitions are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the interval definitions are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(IntervalDefinition intervalDefinition1, IntervalDefinition intervalDefinition2)
         {
             if (ReferenceEquals(intervalDefinition1, intervalDefinition2))
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="intervalDefinition1">The first <see cref="IntervalDefinition"/> to compare.</param>
         /// <param name="intervalDefinition2">The second <see cref="IntervalDefinition"/> to compare.</param>
-        /// <returns>false if the interval definitions are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the interval definitions are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(IntervalDefinition intervalDefinition1, IntervalDefinition intervalDefinition2)
         {
             return !(intervalDefinition1 == intervalDefinition2);
@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as IntervalDefinition);

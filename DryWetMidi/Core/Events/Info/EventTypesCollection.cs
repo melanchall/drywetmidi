@@ -40,8 +40,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="type">When this method returns, contains the event type associated with
         /// the specified status byte, if the status byte is found; otherwise, <c>null</c>. This parameter
         /// is passed uninitialized.</param>
-        /// <returns>true if the <see cref="EventTypesCollection"/> contains an event type with the
-        /// specified status byte; otherwise, false.</returns>
+        /// <returns><c>true</c> if the <see cref="EventTypesCollection"/> contains an event type with the
+        /// specified status byte; otherwise, <c>false</c>.</returns>
         public bool TryGetType(byte statusByte, out Type type)
         {
             return _types.TryGetValue(statusByte, out type);
@@ -54,8 +54,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="statusByte">When this method returns, contains the status byte associated with
         /// the specified event type, if the type is found; otherwise, 0. This parameter is passed
         /// uninitialized.</param>
-        /// <returns>true if the <see cref="EventTypesCollection"/> contains a status byte for the
-        /// specified event type; otherwise, false.</returns>
+        /// <returns><c>true</c> if the <see cref="EventTypesCollection"/> contains a status byte for the
+        /// specified event type; otherwise, <c>false</c>.</returns>
         public bool TryGetStatusByte(Type type, out byte statusByte)
         {
             return _statusBytes.TryGetValue(type, out statusByte);

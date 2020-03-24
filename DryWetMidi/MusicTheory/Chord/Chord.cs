@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
-        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string input, out Chord chord)
         {
             return ParsingUtilities.TryParse(input, ChordParser.TryParse, out chord);
@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="chord1">The first <see cref="Chord"/> to compare.</param>
         /// <param name="chord2">The second <see cref="Chord"/> to compare.</param>
-        /// <returns>true if the chords are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the chords are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(Chord chord1, Chord chord2)
         {
             if (ReferenceEquals(chord1, chord2))
@@ -218,7 +218,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="chord1">The first <see cref="Chord"/> to compare.</param>
         /// <param name="chord2">The second <see cref="Chord"/> to compare.</param>
-        /// <returns>false if the chords are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the chords are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(Chord chord1, Chord chord2)
         {
             return !(chord1 == chord2);
@@ -241,7 +241,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as Chord);

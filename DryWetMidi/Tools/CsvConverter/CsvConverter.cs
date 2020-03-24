@@ -24,8 +24,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to convert to CSV.</param>
         /// <param name="filePath">Path of the output CSV file.</param>
-        /// <param name="overwriteFile">If true and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if false and the file exists, exception will be thrown.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists, exception will be thrown.</param>
         /// <param name="settings">Settings according to which <paramref name="midiFile"/> must be converted.
         /// Pass <c>null</c> to use default settings.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
@@ -171,8 +171,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="notes">Collection of <see cref="Note"/> to convert to CSV.</param>
         /// <param name="filePath">Path of the output CSV file.</param>
         /// <param name="tempoMap">Tempo map used to convert <paramref name="notes"/> to CSV.</param>
-        /// <param name="overwriteFile">If true and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if false and the file exists, exception will be thrown.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists, exception will be thrown.</param>
         /// <param name="settings">Settings according to which <paramref name="notes"/> must be converted.
         /// Pass <c>null</c> to use default settings.</param>
         /// <exception cref="ArgumentNullException">

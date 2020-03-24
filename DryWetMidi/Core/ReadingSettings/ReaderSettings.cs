@@ -81,10 +81,10 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Gets or sets a value indicating whether all MIDI data should be put to memory and read from there.
-        /// The default value is false.
+        /// The default value is <c>false</c>.
         /// </summary>
         /// <remarks>
-        /// <para>If the property set to true, it can significantly speed up reading MIDI data. For almost all real
+        /// <para>If the property set to <c>true</c>, it can significantly speed up reading MIDI data. For almost all real
         /// MIDI files it shouldn't be a problem to place entire file to memory since the size of most MIDI
         /// files is relatively small.</para>
         /// </remarks>

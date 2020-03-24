@@ -7,6 +7,6 @@
     /// it will not be set to zero for sub-patterns.</param>
     /// <param name="noteDescriptor">The descriptor of a note containing all required information
     /// about the note.</param>
-    /// <returns>true if a note should be selected and processed; otherwise, false.</returns>
+    /// <returns><c>true</c> if a note should be selected and processed; otherwise, <c>false</c>.</returns>
     public delegate bool NoteSelection(int noteIndex, NoteDescriptor noteDescriptor);
 }

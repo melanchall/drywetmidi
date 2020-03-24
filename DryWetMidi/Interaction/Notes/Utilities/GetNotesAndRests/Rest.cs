@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="rest1">The first <see cref="Rest"/> to compare.</param>
         /// <param name="rest2">The second <see cref="Rest"/> to compare.</param>
-        /// <returns>true if the rests are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the rests are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(Rest rest1, Rest rest2)
         {
             if (ReferenceEquals(rest1, rest2))
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="rest1">The first <see cref="Rest"/> to compare.</param>
         /// <param name="rest2">The second <see cref="Rest"/> to compare.</param>
-        /// <returns>false if the rests are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the rests are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(Rest rest1, Rest rest2)
         {
             return !(rest1 == rest2);
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as Rest);

@@ -50,8 +50,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="type">When this method returns, contains the chunk type associated with
         /// the specified ID, if ID is found; otherwise, <c>null</c>. This parameter is passed
         /// uninitialized.</param>
-        /// <returns>true if the <see cref="ChunkTypesCollection"/> contains a chunk type with the
-        /// specified ID; otherwise, false.</returns>
+        /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains a chunk type with the
+        /// specified ID; otherwise, <c>false</c>.</returns>
         public bool TryGetType(string id, out Type type)
         {
             return _types.TryGetValue(id, out type);
@@ -63,8 +63,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="type">Chunk type to get ID for.</param>
         /// <param name="id">When this method returns, contains the ID associated with the specified
         /// chunk type, if the type is found; otherwise, <c>null</c>. This parameter is passed uninitialized.</param>
-        /// <returns>true if the <see cref="ChunkTypesCollection"/> contains an ID for the
-        /// specified chunk type; otherwise, false.</returns>
+        /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains an ID for the
+        /// specified chunk type; otherwise, <c>false</c>.</returns>
         public bool TryGetId(Type type, out string id)
         {
             return _ids.TryGetValue(type, out id);

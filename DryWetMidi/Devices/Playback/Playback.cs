@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Devices
         public bool InterruptNotesOnStop { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether notes must be tracked or not. If false, notes
+        /// Gets or sets a value indicating whether notes must be tracked or not. If <c>false</c>, notes
         /// will be treated as just Note On/Note Off events.
         /// </summary>
         public bool TrackNotes { get; set; }
@@ -448,7 +448,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// MIDI data is played.
         /// </summary>
         /// <remarks>
-        /// If <see cref="Loop"/> is set to true, this method will execute forever.
+        /// If <see cref="Loop"/> is set to <c>true</c>, this method will execute forever.
         /// </remarks>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>

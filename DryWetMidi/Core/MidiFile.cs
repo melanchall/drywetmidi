@@ -764,7 +764,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Checks if a type represents a MIDI-file chunk.
         /// </summary>
         /// <param name="type">Type to check whether it represents a chunk or not.</param>
-        /// <returns>True if passed type represents a MIDI-file chunk; false - otherwise.</returns>
+        /// <returns>True if passed type represents a MIDI-file chunk; <c>false</c> - otherwise.</returns>
         /// <remarks>
         /// Type represents a chunk if it is derived from the <see cref="MidiChunk"/> class and has
         /// parameterless constructor.

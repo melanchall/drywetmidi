@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
-        /// <returns>true if the tempos are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the tempos are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(Tempo tempo1, Tempo tempo2)
         {
             if (ReferenceEquals(tempo1, tempo2))
@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
-        /// <returns>false if the tempos are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the tempos are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(Tempo tempo1, Tempo tempo2)
         {
             return !(tempo1 == tempo2);
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as Tempo);

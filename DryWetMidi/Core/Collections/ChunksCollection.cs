@@ -153,8 +153,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Removes the first occurrence of a specific chunk from the collection.
         /// </summary>
         /// <param name="chunk">The chunk to remove from the collection. The value cannot be <c>null</c>.</param>
-        /// <returns>true if chunk is successfully removed; otherwise, false. This method also returns
-        /// false if chunk was not found in the collection.</returns>
+        /// <returns><c>true</c> if chunk is successfully removed; otherwise, <c>false</c>. This method also returns
+        /// <c>false</c> if chunk was not found in the collection.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
         public bool Remove(MidiChunk chunk)
         {

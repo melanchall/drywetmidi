@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Gets or sets a value indicating whether <see cref="MidiEvent.DeltaTime"/> values
-        /// should be compared or not. The default value is true.
+        /// should be compared or not. The default value is <c>true</c>.
         /// </summary>
         public bool CompareDeltaTimes { get; set; } = true;
 

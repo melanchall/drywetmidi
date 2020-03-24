@@ -266,7 +266,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Gets a value indicating whether the specified interval number (1 and greater) is perfect or not.
         /// </summary>
         /// <param name="intervalNumber">Interval number to determine whether it's perfect or not.</param>
-        /// <returns>true if <paramref name="intervalNumber"/> is perfect; otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="intervalNumber"/> is perfect; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
         public static bool IsPerfect(int intervalNumber)
         {
@@ -283,8 +283,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <paramref name="intervalNumber"/> or not.</param>
         /// <param name="intervalNumber">Interval number to check whether <paramref name="intervalQuality"/> is
         /// applicable to it or not.</param>
-        /// <returns>true if <paramref name="intervalQuality"/> is applicable to <paramref name="intervalNumber"/>;
-        /// otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="intervalQuality"/> is applicable to <paramref name="intervalNumber"/>;
+        /// otherwise, <c>false</c>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="intervalQuality"/> specified an
         /// invalid value.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalNumber"/> is less than 1.</exception>
@@ -434,7 +434,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
-        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string input, out Interval interval)
         {
             return ParsingUtilities.TryParse(input, IntervalParser.TryParse, out interval);
@@ -479,7 +479,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="interval1">The first <see cref="Interval"/> to compare.</param>
         /// <param name="interval2">The second <see cref="Interval"/> to compare.</param>
-        /// <returns>true if the intervals are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the intervals are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(Interval interval1, Interval interval2)
         {
             if (ReferenceEquals(interval1, interval2))
@@ -496,7 +496,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="interval1">The first <see cref="Interval"/> to compare.</param>
         /// <param name="interval2">The second <see cref="Interval"/> to compare.</param>
-        /// <returns>false if the intervals are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the intervals are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(Interval interval1, Interval interval2)
         {
             return !(interval1 == interval2);
@@ -636,7 +636,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as Interval);

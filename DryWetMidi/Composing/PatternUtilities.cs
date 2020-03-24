@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="pattern">Pattern to transform notes of.</param>
         /// <param name="noteTransformation">Transformation to apply to notes of the <paramref name="pattern"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
-        /// default value is true.</param>
+        /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming notes of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="noteSelection">Predicate to select notes to transform.</param>
         /// <param name="noteTransformation">Transformation to apply to notes of the <paramref name="pattern"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
-        /// default value is true.</param>
+        /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming notes of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="pattern">Pattern to transform notes of.</param>
         /// <param name="chordTransformation">Transformation to apply to chords of the <paramref name="pattern"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
-        /// default value is true.</param>
+        /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming chords of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="chordSelection">Predicate to select chords to transform.</param>
         /// <param name="chordTransformation">Transformation to apply to chords of the <paramref name="pattern"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
-        /// default value is true.</param>
+        /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming chords of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -149,7 +149,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="anchor">Anchor to split <paramref name="pattern"/> at.</param>
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
-        /// automatically removed or not. The default value is true.</param>
+        /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at <paramref name="anchor"/>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -179,7 +179,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
-        /// automatically removed or not. The default value is true.</param>
+        /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at anchors.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
@@ -199,7 +199,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="marker">Marker to split <paramref name="pattern"/> at.</param>
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
-        /// automatically removed or not. The default value is true.</param>
+        /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <param name="stringComparison">Value that specifies how the marker strings will be compared.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at <paramref name="marker"/>.</returns>
@@ -232,7 +232,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
-        /// automatically removed or not. The default value is true.</param>
+        /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// splitted at markers.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="noteSelection">Predicate to select notes to set state.</param>
         /// <param name="state">State of notes selected with <paramref name="noteSelection"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
-        /// default value is true.</param>
+        /// default value is <c>true</c>.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -323,7 +323,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="chordSelection">Predicate to select chords to set state.</param>
         /// <param name="state">State of chords selected with <paramref name="chordSelection"/>.</param>
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
-        /// default value is true.</param>
+        /// default value is <c>true</c>.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">

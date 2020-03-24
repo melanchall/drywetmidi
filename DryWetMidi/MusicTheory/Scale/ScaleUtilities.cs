@@ -167,8 +167,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale"><see cref="Scale"/> to check the note.</param>
         /// <param name="note"><see cref="Note"/> to check if it belongs to the <paramref name="scale"/>
         /// or not.</param>
-        /// <returns>true if <paramref name="note"/> belongs to the <paramref name="scale"/>;
-        /// otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="note"/> belongs to the <paramref name="scale"/>;
+        /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">

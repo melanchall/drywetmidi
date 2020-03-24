@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="timeDivision1">The first <see cref="TicksPerQuarterNoteTimeDivision"/> to compare.</param>
         /// <param name="timeDivision2">The second <see cref="TicksPerQuarterNoteTimeDivision"/> to compare.</param>
-        /// <returns>true if the time divisions are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the time divisions are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(TicksPerQuarterNoteTimeDivision timeDivision1, TicksPerQuarterNoteTimeDivision timeDivision2)
         {
             if (ReferenceEquals(timeDivision1, timeDivision2))
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="timeDivision1">The first <see cref="TicksPerQuarterNoteTimeDivision"/> to compare.</param>
         /// <param name="timeDivision2">The second <see cref="TicksPerQuarterNoteTimeDivision"/> to compare.</param>
-        /// <returns>false if the time divisions are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the time divisions are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(TicksPerQuarterNoteTimeDivision timeDivision1, TicksPerQuarterNoteTimeDivision timeDivision2)
         {
             return !(timeDivision1 == timeDivision2);
@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as TicksPerQuarterNoteTimeDivision);

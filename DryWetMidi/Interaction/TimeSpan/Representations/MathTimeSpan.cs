@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MathTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MathTimeSpan"/> to compare.</param>
-        /// <returns>true if time spans are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if time spans are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, timeSpan2))
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MathTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MathTimeSpan"/> to compare.</param>
-        /// <returns>false if time spans are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if time spans are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as MathTimeSpan);

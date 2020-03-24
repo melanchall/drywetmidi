@@ -180,7 +180,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
-        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string input, out MetricTimeSpan timeSpan)
         {
             return ParsingUtilities.TryParse(input, MetricTimeSpanParser.TryParse, out timeSpan);
@@ -227,7 +227,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
-        /// <returns>true if time spans are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if time spans are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(MetricTimeSpan timeSpan1, MetricTimeSpan timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, null))
@@ -241,7 +241,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
-        /// <returns>false if time spans are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if time spans are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(MetricTimeSpan timeSpan1, MetricTimeSpan timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
@@ -308,8 +308,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
-        /// <returns>true if the value of <paramref name="timeSpan1"/> is less than the value of
-        /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
+        /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than the value of
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -334,8 +334,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
-        /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than the value of
-        /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
+        /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than the value of
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -361,8 +361,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
-        /// <returns>true if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
-        /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
+        /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -388,8 +388,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
-        /// <returns>true if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
-        /// <paramref name="timeSpan2"/>; otherwise, false.</returns>
+        /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -417,7 +417,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return Equals(obj as MetricTimeSpan);
@@ -583,7 +583,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
+        /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
         public bool Equals(MetricTimeSpan other)
         {
             if (ReferenceEquals(this, other))

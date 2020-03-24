@@ -199,7 +199,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="octave1">The first <see cref="Octave"/> to compare.</param>
         /// <param name="octave2">The second <see cref="Octave"/> to compare.</param>
-        /// <returns>true if the octaves are equal, false otherwise.</returns>
+        /// <returns><c>true</c> if the octaves are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(Octave octave1, Octave octave2)
         {
             if (ReferenceEquals(octave1, octave2))
@@ -216,7 +216,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="octave1">The first <see cref="Octave"/> to compare.</param>
         /// <param name="octave2">The second <see cref="Octave"/> to compare.</param>
-        /// <returns>false if the octaves are equal, true otherwise.</returns>
+        /// <returns><c>false</c> if the octaves are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(Octave octave1, Octave octave2)
         {
             return !(octave1 == octave2);
@@ -239,7 +239,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             return this == (obj as Octave);

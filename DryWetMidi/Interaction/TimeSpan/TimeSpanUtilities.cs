@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
-        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string input, out ITimeSpan timeSpan)
         {
             timeSpan = null;
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
-        /// <returns>true if <paramref name="input"/> was converted successfully; otherwise, false.</returns>
+        /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string input, TimeSpanType timeSpanType, out ITimeSpan timeSpan)
         {
             return ParsingUtilities.TryParse(input, Parsers[timeSpanType], out timeSpan);
