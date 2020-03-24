@@ -31530,3 +31530,18 @@ references:
 - uid: wiki_CsvConverter
   name: ConvertMidiFileToCsv
   href: wiki/CSV-converter.html
+- uid: wiki_MidiFileSplitter
+  name: SplitByChannel
+  href: wiki/MIDI-file-splitter.html
+- uid: wiki_NotesChordsSplitter
+  name: SplitByStep
+  href: wiki/Notes-and-chords-splitter.html
+- uid: wiki_NotesMerger
+  name: wiki_NotesMerger
+  href: wiki/Notes-merger.html
+- uid: wiki_Quantizer
+  name: Quantizing timed events
+  href: wiki/Quantizer.html
+- uid: wiki_Randomizer
+  name: wiki_Randomizer
+  href: wiki/Randomizer.html

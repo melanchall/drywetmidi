@@ -196,7 +196,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Composing.Pattern.html",
-          "hash": "FhCaDF6R3MxrD97H9qemYg=="
+          "hash": "kzPYOOvgrLI7Zr8tbgFzcw=="
         }
       },
       "is_incremental": false,
@@ -220,7 +220,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Composing.PatternBuilder.html",
-          "hash": "l+VHXv80iJgmPcPqo1kv7Q=="
+          "hash": "odpGnLZLt8WqdC7qa8xczw=="
         }
       },
       "is_incremental": false,
@@ -232,7 +232,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Composing.PatternUtilities.html",
-          "hash": "p4M467NnYiQvkXhQsjwcsg=="
+          "hash": "uOpnW7XINXtoxN8+dYT0jw=="
         }
       },
       "is_incremental": false,
@@ -244,7 +244,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Composing.html",
-          "hash": "oHK5KcYE6PWRRP0kK+0zcQ=="
+          "hash": "0FvB0ygc+Ngc5EDORqi86g=="
         }
       },
       "is_incremental": false,
@@ -3316,7 +3316,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.ChordsQuantizer.html",
-          "hash": "aDOlgRL9BWzpEah24NV4Eg=="
+          "hash": "AdwWa21jeIC0aNugHRpQzQ=="
         }
       },
       "is_incremental": false,
@@ -3352,7 +3352,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.ChordsRandomizer.html",
-          "hash": "LdyrSiK9EiunJzPoT4EeQQ=="
+          "hash": "wpjlXZNYzmus/jragfDDMw=="
         }
       },
       "is_incremental": false,
@@ -3388,7 +3388,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.ChordsSplitter.html",
-          "hash": "0AA5GwYYsXEiI+4+J3it9w=="
+          "hash": "EObRcldnBYzG7OPfPX99ew=="
         }
       },
       "is_incremental": false,
@@ -3556,7 +3556,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html",
-          "hash": "2wNCtRaNBZhorh7qfUh4dQ=="
+          "hash": "Axwjx4NYaDw4knJstKeiMw=="
         }
       },
       "is_incremental": false,
@@ -3604,7 +3604,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.NotesMerger.html",
-          "hash": "Y8P8f+lC9NoA/5dKfMn6aQ=="
+          "hash": "Cu0jCH3lkg17SmZ3r3Zj0Q=="
         }
       },
       "is_incremental": false,
@@ -3640,7 +3640,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.NotesQuantizer.html",
-          "hash": "ocJTav0zQQSsHxGBMXqA/w=="
+          "hash": "XqMVgWpyXBiYThGTN6HrKw=="
         }
       },
       "is_incremental": false,
@@ -3676,7 +3676,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.NotesRandomizer.html",
-          "hash": "Fof5NgRxGaQh8MZeqTTEhw=="
+          "hash": "JqULtekaUxyKmVAau3NAzA=="
         }
       },
       "is_incremental": false,
@@ -3712,7 +3712,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.NotesSplitter.html",
-          "hash": "Zm4Vv3II2PvrUlPb5BBBSw=="
+          "hash": "//GhAZN1KC1ag3G1dxgsaw=="
         }
       },
       "is_incremental": false,
@@ -3856,7 +3856,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.TimedEventsQuantizer.html",
-          "hash": "p1WOSlbcDaFQ/O4tapaHQg=="
+          "hash": "nLIirL9ZM8Go4d8YoGyr9w=="
         }
       },
       "is_incremental": false,
@@ -3892,7 +3892,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.TimedEventsRandomizer.html",
-          "hash": "bjd6uWvXgT5NnpEKKvAxPQ=="
+          "hash": "56m974qJMUsCWGYjjIMFog=="
         }
       },
       "is_incremental": false,
@@ -4506,7 +4506,7 @@
       "output": {
         ".html": {
           "relative_path": "wiki/MIDI-file-splitter.html",
-          "hash": "8O5GoFyEiibkv/XhfZX1xA=="
+          "hash": "/sCl4pfXPX+z6KygLJHAKw=="
         }
       },
       "is_incremental": false,
@@ -4554,7 +4554,7 @@
       "output": {
         ".html": {
           "relative_path": "wiki/Notes-and-chords-splitter.html",
-          "hash": "sv54wVSLBC6fjfBFrq4/8A=="
+          "hash": "n+wQ1des0VcCgvFDVmg3xg=="
         }
       },
       "is_incremental": false,
@@ -4566,7 +4566,7 @@
       "output": {
         ".html": {
           "relative_path": "wiki/Notes-merger.html",
-          "hash": "L+3k3ggmp8ZwA3vWpylRMA=="
+          "hash": "eEb2qF9H36MoKdVVqRWvfQ=="
         }
       },
       "is_incremental": false,
@@ -4626,7 +4626,7 @@
       "output": {
         ".html": {
           "relative_path": "wiki/Quantizer.html",
-          "hash": "xQZ7S9Pqv7GeCNsg9oN2bQ=="
+          "hash": "ziHsC3xPJcvIpiZG+fcOTQ=="
         }
       },
       "is_incremental": false,
@@ -4638,7 +4638,7 @@
       "output": {
         ".html": {
           "relative_path": "wiki/Randomizer.html",
-          "hash": "nBnJt4TVpffHp5FigU3yyg=="
+          "hash": "s+LKvnAadj1/5/kh23TJ0Q=="
         }
       },
       "is_incremental": false,

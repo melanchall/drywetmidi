@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Composing_Pattern" data-uid="Melanchall.DryWetMidi.Composing.Pattern" class="text-break">Class Pattern
   </h1>
   <div class="markdown level0 summary">
-Represents a musical pattern - set of notes with the specified times and lengths.
+Represents a musical pattern represented as a sequence of actions to create amusical composition.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -122,6 +122,14 @@ Represents a musical pattern - set of notes with the specified times and lengths
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class Pattern</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Composing_Pattern_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+<p>Pattern allows to represent musical composition as a set of actions like &apos;note&apos; or &apos;program change&apos;.
+It allows in fact to create MIDI file in more musical manner.</p>
+<p>There are two ways to get an instance of the <a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a>:</p>
+<ul><li>Build a pattern from scratch with fluent API provided by <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</li><li>Use one of extension methods within <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternUtilities.html">PatternUtilities</a> to create pattern
+by processing existing one.</li></ul>
+</div>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Composing_Pattern_Clone_" data-uid="Melanchall.DryWetMidi.Composing.Pattern.Clone*"></a>
