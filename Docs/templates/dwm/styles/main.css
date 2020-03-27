@@ -1,55 +1,396 @@
-/*.toc .nav > li > a {
-  color: #f0d8d1;
+@media screen and (max-width: 767px) {
+  .table-responsive {
+    border-color: #5E5E5D;
+  }
+  
+  .fieldValue + .table-responsive {
+    border: none;
+  }
+  
+  .propertyValue + .table-responsive {
+    border: none;
+  }
 }
 
-.toc .nav > li> .expand-stub {
-  color: #f0d8d1;
+body {
+  background-color: #292827;
+  color: #F8F8F8;
+  /*font-family: Verdana, serif;*/
 }
 
-.sidetoc {
-  background-color: #e95621;
-  border-left: 1px solid #e95621;
-  border-right: 1px solid #ff3c00;
+header .navbar-inverse {
+  background-color: #201F1E;
+  border-color: #313130;
 }
 
-body .toc {
-  background-color: #e95621;
+.navbar-default {
+  background-color: #201F1E;
+  border-color: #313130;
 }
 
-.sidefilter {
-  background-color: #e95621;
-  border-left: 1px solid #e95621;
-  border-right: 1px solid #ff3c00;
-}*/
-/*
-.toc .nav > li.active > a:hover, .toc .nav > li.active > a:focus {
-  color: #ff3c00;
+.sidenav.hide-when-search {
+  background-color: #201F1E;
+  border-color: #313130;
 }
 
-.toc .nav > li > a:hover, .toc .nav > li > a:focus {
-  color: #ff3c00;
-}
-
-.toc .nav > li.active > a {
-  color: #e95621;
-}
-
-.toc-filter {
+.navbar-inverse .navbar-toggle {
+  border: 1px solid #5E5E5D;
   border-radius: 0px;
 }
 
-header .subnav {
-  border-bottom: 1px solid #e95621;
-}
-
-.breadcrumb>li+li:before {
-  color: #e95621;
+.navbar-inverse .navbar-toggle .icon-bar {
+  background-color: #F8F8F8;
 }
 
 .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
-  background-color: #e95621;
+  background-color: #EC5508;
 }
 
-header .form-control {
+.btn.focus, .btn:focus, .btn:hover {
+  color: rgb(77, 178, 255);
+}
+
+.footer {
+  border-top: 1px solid #313130;
+  background-color: #201F1E;
+}
+
+.sidetoc {
+  background-color: #3B3A39;
+  border-left: 1px solid #5E5E5D;
+  border-right: 1px solid #5E5E5D;
+}
+
+form#search input, .toc-filter {
   border-radius: 0px;
+  background-color: #292827;
+  border: 1px solid #5E5E5D;
+  color: #F8F8F8;
+}
+
+.toc-filter > input {
+  background-color: #292827;
+  color: #F8F8F8;
+}
+
+form#search input::-webkit-input-placeholder {
+  color: #5E5E5D;
+}
+
+form#search input:-ms-input-placeholder {
+  color: #5E5E5D;
+}
+
+form#search input::placeholder {
+  color: #5E5E5D;
+}
+
+.toc-filter input::-webkit-input-placeholder {
+  color: #5E5E5D;
+}
+
+.toc-filter input:-ms-input-placeholder {
+  color: #5E5E5D;
+}
+
+.toc-filter input::placeholder {
+  color: #5E5E5D;
+}
+
+.glyphicon {
+  color: #5E5E5D;
+}
+
+body .toc {
+  background-color: #3B3A39;
+}
+
+.sidefilter {
+  background-color: #3B3A39;
+  border-left: 1px solid #5E5E5D;
+  border-right: 1px solid #5E5E5D;
+}
+
+/*.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
 }*/
+
+.inheritance h5, .inheritedMembers h5 {
+  border-bottom: 1px solid #5E5E5D;
+}
+
+.level0.summary {
+  border-bottom: 1px solid #EC5508;
+  padding-bottom: 5px;
+}
+
+.level0.summary:empty {
+  border: none;
+}
+
+article h4 {
+  /*border-bottom: 1px solid #5E5E5D;*/
+  border-bottom: 2px solid #EC5508;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+/*h1[id|="Melanchall_DryWetMidi"] > h4 {
+  border-bottom: 2px solid #EC5508;
+}*/
+
+h1[data-uid] {
+    margin-bottom: 30px;
+}
+
+.toc .nav > li.active > .expand-stub::before, .toc .nav > li.in > .expand-stub::before, .toc .nav > li.in.active > .expand-stub::before, .toc .nav > li.filtered > .expand-stub::before {
+  content: "–";
+}
+
+.table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+  border-top-color: #5E5E5D;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-right-color: #5E5E5D;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-left-color: #5E5E5D;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border: 1px solid #5E5E5D;
+  color: #F8F8F8;
+}
+
+thead {
+  background-color: rgb(36, 36, 36);
+}
+
+pre {
+  background-color: #3B3A39;
+  border: 1px solid #5E5E5D;
+  border-radius: 0px;
+  color: rgb(227, 227, 227);
+}
+
+code, kbd, pre, samp {
+  font-family: Consolas, monospace;
+  color: #F8F8F8;
+  background-color: #3B3A39;
+  border-radius: 0px;
+}
+
+hr {
+    border-color: #5E5E5D;
+    border-top: 1px solid #5E5E5D;
+}
+
+.hljs {
+  color: rgb(227, 227, 227);
+}
+
+.hljs-keyword, .hljs-selector-tag, .hljs-type {
+  color: #569cd6;
+}
+
+.hljs-attr, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-selector-pseudo, .hljs-title {
+  color: #01cfff;
+}
+
+.hljs-meta {
+  color: #01cfff;
+}
+
+.hljs-comment {
+  color: rgb(87, 166, 74);
+}
+
+.hljs-string {
+  color: #ce9178;
+}
+
+.toc .nav > li > a {
+  color: #D5D5D5;
+}
+
+.toc .nav > li > a:hover, .toc .nav > li > a:focus {
+  color: #F8F8F8;
+}
+
+.toc .nav > li.active > a {
+  color: rgb(77, 178, 255);
+}
+
+button, a {
+  color: rgb(77, 178, 255);
+}
+
+button:hover, button:focus, a:hover, a:focus {
+  color: rgb(0, 145, 255);
+}
+
+.toc .nav > li.active > a:hover, .toc .nav > li.active > a:focus {
+  color: rgb(0, 145, 255);
+}
+
+.breadcrumb>li+li:before {
+  color: #5E5E5D;
+}
+
+.affix ul > li > a {
+  color: #D5D5D5;
+}
+
+.affix > ul > li.active > a, .affix > ul > li.active > a:before {
+  color: rgb(77, 178, 255);
+}
+
+.affix ul > li.active > a, .affix ul > li.active > a:before {
+  color: rgb(77, 178, 255);
+  content: "|";
+}
+
+.affix ul > li > a:hover {
+  color: rgb(0, 145, 255);
+}
+
+.affix ul ul > li > a:before {
+  content: "|";
+  color: #F8F8F8;
+}
+
+h5.decalaration {
+  display: none;
+}
+
+h5[id$=_syntax] {
+    display: none;
+}
+
+h5.propertyValue + .table-responsive::before {
+    content: "Property Type";
+    font-weight: 500;
+}
+
+h5.propertyValue + .table-responsive thead {
+    display: none;
+}
+
+h5.propertyValue + .table-responsive td {
+    border: none;
+}
+
+h5.propertyValue {
+    display: none;
+}
+
+h5.propertyValue+div>table>tbody>tr>td {
+  padding: 0px;
+}
+
+h5.propertyValue+div>table {
+  border: none;
+  margin-top: 5px;
+}
+
+/**/
+
+h5.fieldValue + .table-responsive::before {
+    content: "Field Type";
+    font-weight: 500;
+}
+
+h5.fieldValue + .table-responsive thead {
+    display: none;
+}
+
+h5.fieldValue + .table-responsive td {
+    border: none;
+}
+
+h5.fieldValue {
+    display: none;
+}
+
+h5.fieldValue+div>table>tbody>tr>td {
+  padding: 0px;
+}
+
+h5.fieldValue+div>table {
+  border: none;
+  margin-top: 5px;
+}
+
+/**/
+
+h5[id$=_syntax] + .codewrapper {
+    margin-top: 15px;
+}
+
+/**/
+
+h5.decalaration + .codewrapper {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+/**/
+
+h3#constructors, h3#properties, h3#methods, h3#fields, h3#events, h3#implements, h3#classes, h3#enums, h3#delegates, h3#structs, h3#interfaces, h3#extensionmethods, h3#seealso, h3#operators, h3#eii {
+  padding-bottom: 10px;
+  border-bottom: 5px solid #EC5508;
+  font-weight: bold;
+}
+
+/**/
+
+.markdown.level1.summary {
+  margin-bottom: 5px;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: transparent;
+}
+
+/**/
+
+.mark, mark {
+  background-color: #EC5508;
+  color: white
+}
+
+.pagination {
+  border-radius: 0px;
+  background-color: #292827;
+  border: none;
+}
+
+.pagination>li>a{
+  color: rgb(77, 178, 255);
+}
+
+.pagination>li>a, .pagination>li>span {
+  background-color: #292827;
+  border: 1px solid #5E5E5D;
+}
+
+.pagination>li:first-child>a, .pagination>li:first-child>span {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.pagination>li:last-child>a, .pagination>li:last-child>span {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+  color: #5E5E5D;
+  background-color: #292827;
+  border-color: #5E5E5D;
+}
+
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+  color: rgb(77, 178, 255);
+  background-color: #292827;
+  border-color: rgb(77, 178, 255);
+}
