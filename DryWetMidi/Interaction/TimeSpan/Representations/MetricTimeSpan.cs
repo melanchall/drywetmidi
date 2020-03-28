@@ -531,24 +531,40 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Compares the current instance with another object of the same type and returns an integer
-        /// that indicates whether the current instance precedes, follows, or occurs in the same
-        /// position in the sort order as the other object.
+        /// Compares the current instance with another object of the same type and returns
+        /// an integer that indicates whether the current instance precedes, follows, or
+        /// occurs in the same position in the sort order as the other object.
         /// </summary>
-        /// <param name="obj">An object to compare with this instance.</param>
-        /// <returns>A value that indicates the relative order of the objects being compared. The
-        /// return value has these meanings: Value Meaning Less than zero This instance precedes obj
-        /// in the sort order. Zero This instance occurs in the same position in the sort order as obj.
-        /// Greater than zero This instance follows obj in the sort order.</returns>
-        /// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
-        public int CompareTo(object obj)
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns><para>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings:</para>
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Value</term>
+        /// <description>Meaning</description>
+        /// </listheader>
+        /// <item>
+        /// <term>Less than zero</term>
+        /// <description>This instance precedes <paramref name="other"/> in the sort order.</description>
+        /// </item>
+        /// <item>
+        /// <term>Zero</term>
+        /// <description>This instance occurs in the same position in the sort order as <paramref name="other"/>.</description>
+        /// </item>
+        /// <item>
+        /// <term>Greater than zero</term>
+        /// <description>This instance follows <paramref name="other"/> in the sort order.</description>
+        /// </item>
+        /// </list>
+        /// </returns>
+        public int CompareTo(object other)
         {
-            if (ReferenceEquals(obj, null))
+            if (ReferenceEquals(other, null))
                 return 1;
 
-            var metricTimeSpan = obj as MetricTimeSpan;
+            var metricTimeSpan = other as MetricTimeSpan;
             if (ReferenceEquals(metricTimeSpan, null))
-                throw new ArgumentException("Time span is of different type.", nameof(obj));
+                throw new ArgumentException("Time span is of different type.", nameof(other));
 
             return CompareTo(metricTimeSpan);
         }
@@ -558,15 +574,32 @@ namespace Melanchall.DryWetMidi.Interaction
         #region IComparable<MetricTimeSpan>
 
         /// <summary>
-        /// Compares the current instance with another object of the same type and returns an integer
-        /// that indicates whether the current instance precedes, follows, or occurs in the same
-        /// position in the sort order as the other object.
+        /// Compares the current instance with another object of the same type and returns
+        /// an integer that indicates whether the current instance precedes, follows, or
+        /// occurs in the same position in the sort order as the other object.
         /// </summary>
         /// <param name="other">An object to compare with this instance.</param>
-        /// <returns>A value that indicates the relative order of the objects being compared. The
-        /// return value has these meanings: Value Meaning Less than zero This instance precedes other
-        /// in the sort order. Zero This instance occurs in the same position in the sort order as other.
-        /// Greater than zero This instance follows other in the sort order.</returns>
+        /// <returns><para>A value that indicates the relative order of the objects being compared. The
+        /// return value has these meanings:</para>
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Value</term>
+        /// <description>Meaning</description>
+        /// </listheader>
+        /// <item>
+        /// <term>Less than zero</term>
+        /// <description>This instance precedes <paramref name="other"/> in the sort order.</description>
+        /// </item>
+        /// <item>
+        /// <term>Zero</term>
+        /// <description>This instance occurs in the same position in the sort order as <paramref name="other"/>.</description>
+        /// </item>
+        /// <item>
+        /// <term>Greater than zero</term>
+        /// <description>This instance follows <paramref name="other"/> in the sort order.</description>
+        /// </item>
+        /// </list>
+        /// </returns>
         public int CompareTo(MetricTimeSpan other)
         {
             if (ReferenceEquals(other, null))
