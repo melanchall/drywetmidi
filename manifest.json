@@ -76,7 +76,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Common.FourBitNumber.html",
-          "hash": "JeO2835hK/EKpib0w3uEOQ=="
+          "hash": "D4KDNfwQ2jVKjFANYG4Y4g=="
         }
       },
       "is_incremental": false,
@@ -88,7 +88,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Common.SevenBitNumber.html",
-          "hash": "Zegs2nciPfk+KQIehR8MAQ=="
+          "hash": "87U3bJEJktqHpGvPmUQr8A=="
         }
       },
       "is_incremental": false,
@@ -2164,7 +2164,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.BarBeatFractionTimeSpan.html",
-          "hash": "Fq0gajpODIYB1CRjuwH7iQ=="
+          "hash": "6u+M3MK1FX2KeiSA5jqEpg=="
         }
       },
       "is_incremental": false,
@@ -2176,7 +2176,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan.html",
-          "hash": "j/ZQm6y1AOvGa9Ngy8EFCw=="
+          "hash": "i5GTwSSjZ5iuJ1EbPEEqaw=="
         }
       },
       "is_incremental": false,
@@ -2404,7 +2404,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MathTimeSpan.html",
-          "hash": "3slz5hjandA+3PpehvQKtw=="
+          "hash": "GZtkU0C46QHxlT/4ywMzcg=="
         }
       },
       "is_incremental": false,
@@ -2416,7 +2416,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html",
-          "hash": "XqmnRrZggVLG05epgtKYIA=="
+          "hash": "3nCeoUDLVfekByfg/Yr8aQ=="
         }
       },
       "is_incremental": false,
@@ -2440,7 +2440,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MidiTimeSpan.html",
-          "hash": "JfIIrZlB0qYhKxtXKC+6Qw=="
+          "hash": "ReRxFEGD1S5C6yga+ARRkg=="
         }
       },
       "is_incremental": false,
@@ -2452,7 +2452,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html",
-          "hash": "uVAM5ozXRmutEyxdQW2pbw=="
+          "hash": "YE0EEJvFSlQcm0jSG17X+Q=="
         }
       },
       "is_incremental": false,
@@ -2944,7 +2944,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.MusicTheory.Interval.html",
-          "hash": "1ljV3BiTfXVFaY82xRSA3w=="
+          "hash": "xAOXcSb8KsLv1TGqi8FMEw=="
         }
       },
       "is_incremental": false,
@@ -2992,7 +2992,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.MusicTheory.Note.html",
-          "hash": "sz1NeknIrqvO3X0PPH2OiQ=="
+          "hash": "BLkH7M24ZcohEKbtQz4I9w=="
         }
       },
       "is_incremental": false,

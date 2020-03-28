@@ -140,11 +140,15 @@ article h4 {
 }*/
 
 h1[data-uid] {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .toc .nav > li.active > .expand-stub::before, .toc .nav > li.in > .expand-stub::before, .toc .nav > li.in.active > .expand-stub::before, .toc .nav > li.filtered > .expand-stub::before {
   content: "–";
+}
+
+.table .table {
+  background-color: transparent;
 }
 
 .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
