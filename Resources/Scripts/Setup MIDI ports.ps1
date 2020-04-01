@@ -1,44 +1,28 @@
-Write-Host "Creating virtual MIDI ports to run devices tests..."
-$ErrorActionPreference = "Stop"
-$currentDirectory = Get-Location
-Write-Host "Current directory is '$currentDirectory', switching to '$PSScriptRoot'..."
-cd $PSScriptRoot
-$wshell = New-Object -ComObject wscript.shell
+$location = Get-Location
 
-Write-Host "Installing loopMIDI..."
-Start-Process ../Tools/loopMIDISetup.exe -NoNewWindow -Wait -ArgumentList "/quiet"
-$runPath = (Get-ItemProperty HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -Name "loopMIDI").loopMIDI
+Write-Host "Downloading virtualMIDI SDK..."
+Invoke-WebRequest -Uri "http://www.tobias-erichsen.de/wp-content/uploads/2020/01/teVirtualMIDISDKSetup_1_3_0_43.zip" -OutFile "teVirtualMIDISDKSetup.zip"
+Write-Host "Downloaded."
 
-Write-Host "Waiting 5 seconds before running loopMIDI..."
-sleep 5
+Write-Host "Extracting virtualMIDI SDK installer..."
+Expand-Archive -LiteralPath 'teVirtualMIDISDKSetup.zip' -DestinationPath "VirtualMIDISDKSetup"
+Write-Host "Extracted."
 
-Write-Host "Running loopMIDI..."
-& $runPath
-sleep 3
+$installer = Get-ChildItem -Path "VirtualMIDISDKSetup" -File -Filter "*.exe"
 
-Write-Host "Destroying existing MIDI ports..."
-$wshell.AppActivate('loopMIDI') | Out-Null
-sleep 3
-$wshell.SendKeys('+{TAB}+{TAB}{ENTER}{ENTER}{ENTER}')
-Stop-Process -Name "loopMIDI"
+Write-Host "Installing virtualMIDI SDK..."
+Start-Process "VirtualMIDISDKSetup/$installer" -NoNewWindow -Wait -ArgumentList "/quiet"
+Write-Host "Installed."
 
-Write-Host "Waiting 5 seconds before rerunning loopMIDI..."
-sleep 5
+Write-Host "Building CreateLoopbackPort..."
+dotnet publish "Resources/Utilities/CreateLoopbackPort/CreateLoopbackPort.sln" -c Release -r win10-x64 -o "$location/CreateLoopbackPort"
+Write-Host "Built."
 
-Write-Host "Rerunning loopMIDI..."
-& $runPath
-sleep 3
+$ports = "MIDI A", "MIDI B", "MIDI C"
 
-Write-Host "Creating MIDI ports..."
-$wshell.AppActivate('loopMIDI') | Out-Null
-sleep 3
-$wshell.SendKeys('{TAB}MIDI A{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}MIDI B{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}MIDI C{TAB}{TAB}{TAB}{ENTER}')
-sleep 3
-
-Write-Host "Turning off feedback detection..."
-$wshell.SendKeys('{TAB}{RIGHT}{TAB}{TAB}{TAB} ')
-sleep 3
-
-Write-Host "Switching back to '$currentDirectory'..."
-cd $currentDirectory
-Write-Host "MIDI ports are successfully created." -ForegroundColor Green
+ForEach ($port in $ports)
+{
+  Write-Host "Running $port port..."
+  Start-Process "CreateLoopbackPort/CreateLoopbackPort.exe" -ArgumentList """$port"""
+  Write-Host "$port is up."
+}
