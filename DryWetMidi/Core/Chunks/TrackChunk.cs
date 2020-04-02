@@ -10,7 +10,9 @@ namespace Melanchall.DryWetMidi.Core
     /// Represents a track chunk of a standard MIDI file.
     /// </summary>
     /// <remarks>
-    /// Track chunk contains actual MIDI data as set of events.
+    /// <para>
+    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// </para>
     /// </remarks>
     public sealed class TrackChunk : MidiChunk
     {

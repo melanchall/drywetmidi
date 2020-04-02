@@ -3,14 +3,6 @@ using System.IO;
 
 namespace Melanchall.DryWetMidi.Core
 {
-    /// <summary>
-    /// Represents a header chunk of a standard MIDI file.
-    /// </summary>
-    /// <remarks>
-    /// The header chunk at the beginning of the file specifies some basic information about the
-    /// data in the file: format of the file, number of track chunks and time division which specifies
-    /// the meaning of the delta-times of events.
-    /// </remarks>
     internal sealed class HeaderChunk : MidiChunk
     {
         #region Constants

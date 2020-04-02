@@ -31,6 +31,9 @@ namespace Melanchall.DryWetMidi.Core
     /// <para>To save MIDI data to file on disk or to stream use appropriate <c>Write</c> method
     /// (<see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/> or
     /// <see cref="Write(Stream, MidiFileFormat, WritingSettings)"/>).</para>
+    /// <para>
+    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// </para>
     /// </remarks>
     /// <seealso cref="ReadingSettings"/>
     /// <seealso cref="WritingSettings"/>

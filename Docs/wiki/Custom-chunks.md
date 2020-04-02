@@ -1,3 +1,7 @@
+---
+uid: wiki_CustomChunk
+---
+
 MIDI files are made up of *chunks*. Each chunk has a 4-character ID and a 32-bit length, which is the
 number of bytes in the chunk. This structure allows future or custom chunk types to be designed which may be easily be
 ignored if encountered by a program written before the chunk type is introduced or if the program doesn't know about the type. DryWetMIDI allows you to implement custom chunks which can be written to a MIDI file and be read from it.

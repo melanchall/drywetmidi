@@ -6,6 +6,11 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Represents a MIDI file event stored in a track chunk.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// </para>
+    /// </remarks>
     public abstract class MidiEvent
     {
         #region Constants

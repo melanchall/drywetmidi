@@ -7,8 +7,13 @@ namespace Melanchall.DryWetMidi.Core
     /// Represents an unknown chunk.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Structure of MIDI file chunks allows custom chunks be implemented and written to a MIDI file.
     /// Chunks DryWetMIDI doesn't know about will be read as an instances of the <see cref="UnknownChunk"/>.
+    /// </para>
+    /// <para>
+    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// </para>
     /// </remarks>
     public sealed class UnknownChunk : MidiChunk
     {

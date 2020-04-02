@@ -8,11 +8,29 @@ namespace Melanchall.DryWetMidi.Core
     /// Represents a chunk of Standard MIDI file.
     /// </summary>
     /// <remarks>
-    /// MIDI Files are made up of chunks. Each chunk has a 4-character ASCII string ID and a 32-bit length,
-    /// which is the number of bytes in the chunk. This structure allows future chunk types to be designed
-    /// which may be easily be ignored if encountered by a program written before the chunk type is introduced.
-    /// The length of the chunk refers to the number of bytes of data which follow (the eight bytes of ID and length
-    /// are not included).Therefore, a chunk with a length of 6 would actually occupy 14 bytes in the file.
+    /// <para>
+    /// MIDI files are made up of chunks. Each chunk has a 4-character type ID and a 32-bit length,
+    /// which is the number of bytes in the chunk. You manage chunks via <see cref="MidiFile.Chunks"/> property
+    /// of the <see cref="MidiFile"/>.
+    /// </para>
+    /// <para>
+    /// There are two standard types of MIDI chunks: header chunk and track chunk. The first one will
+    /// not be presented in the <see cref="MidiFile.Chunks"/>. Its data is used by the reading engine to set properties
+    /// of the <see cref="MidiFile"/> such as <see cref="MidiFile.TimeDivision"/> and <see cref="MidiFile.OriginalFormat"/>. You cannot add header
+    /// chunks in the chunks collection of the file since an appropriate one will be written by writing engine automatically
+    /// on <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/> or
+    /// <see cref="MidiFile.Write(Stream, MidiFileFormat, WritingSettings)"/>.
+    /// </para>
+    /// <para>
+    /// The structure of a MIDI chunk allows any custom chunks be placed in a MIDI file along with the standard
+    /// ones described above. You can implement custom chunks that can be read from and written to a MIDI
+    /// file. See <see href="xref:wiki_CustomChunk"/> on the Wiki to learn more. If you doesn't specify information
+    /// about your custom chunk types the reading engine will read them as instances of the <see cref="UnknownChunk"/> class where
+    /// <see cref="UnknownChunk.Data"/> property will hold chunk's data and <see cref="ChunkId"/> will hold the ID of a chunk.
+    /// </para>
+    /// <para>
+    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// </para>
     /// </remarks>
     public abstract class MidiChunk
     {
