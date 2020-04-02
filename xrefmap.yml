@@ -31530,6 +31530,9 @@ references:
 - uid: wiki_CsvConverter
   name: ConvertMidiFileToCsv
   href: wiki/CSV-converter.html
+- uid: wiki_CustomChunk
+  name: wiki_CustomChunk
+  href: wiki/Custom-chunks.html
 - uid: wiki_MidiFileSplitter
   name: SplitByChannel
   href: wiki/MIDI-file-splitter.html

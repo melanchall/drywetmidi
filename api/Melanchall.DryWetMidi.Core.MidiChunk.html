@@ -126,11 +126,29 @@ Represents a chunk of Standard MIDI file.
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_MidiChunk_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-MIDI Files are made up of chunks. Each chunk has a 4-character ASCII string ID and a 32-bit length,
-which is the number of bytes in the chunk. This structure allows future chunk types to be designed
-which may be easily be ignored if encountered by a program written before the chunk type is introduced.
-The length of the chunk refers to the number of bytes of data which follow (the eight bytes of ID and length
-are not included).Therefore, a chunk with a length of 6 would actually occupy 14 bytes in the file.
+<p>
+MIDI files are made up of chunks. Each chunk has a 4-character type ID and a 32-bit length,
+which is the number of bytes in the chunk. You manage chunks via <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Chunks">Chunks</a> property
+of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
+</p>
+<p>
+There are two standard types of MIDI chunks: header chunk and track chunk. The first one will
+not be presented in the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Chunks">Chunks</a>. Its data is used by the reading engine to set properties
+of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> such as <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_TimeDivision">TimeDivision</a> and <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat">OriginalFormat</a>. You cannot add header
+chunks in the chunks collection of the file since an appropriate one will be written by writing engine automatically
+on <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a> or
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_IO_Stream_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(Stream, MidiFileFormat, WritingSettings)</a>.
+</p>
+<p>
+The structure of a MIDI chunk allows any custom chunks be placed in a MIDI file along with the standard
+ones described above. You can implement custom chunks that can be read from and written to a MIDI
+file. See <a class="xref" href="../wiki/Custom-chunks.html">xref:wiki_CustomChunk</a> on the Wiki to learn more. If you doesn&apos;t specify information
+about your custom chunk types the reading engine will read them as instances of the <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a> class where
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html#Melanchall_DryWetMidi_Core_UnknownChunk_Data">Data</a> property will hold chunk&apos;s data and <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_ChunkId">ChunkId</a> will hold the ID of a chunk.
+</p>
+<p>
+See <a href="https://www.midi.org/specifications-old/category/smf-specifications">https://www.midi.org/specifications-old/category/smf-specifications</a> for detailed MIDI file specification.
+</p>
 </div>
   <h3 id="constructors">Constructors
   </h3>
