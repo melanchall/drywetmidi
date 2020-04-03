@@ -3,21 +3,15 @@ trigger:
     include:
     - master
     - develop
-  paths:
-    include:
-    - README.md
 
 pr:
   branches:
     include:
     - '*'
-  paths:
-    include:
-    - README.md
 
 schedules:
 - cron: '0 0,9,15,20 * * *'
-  displayName: Check README links schedule
+  displayName: Check cs links schedule
   branches:
     include:
     - master
@@ -27,7 +21,7 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
-name: $(TeamProject)_$(SourceBranchName)_CheckReadmeLinks_$(Rev:r)
+name: $(TeamProject)_$(SourceBranchName)_CheckCsLinks_$(Rev:r)
 
 steps:
 - task: PowerShell@2
@@ -35,5 +29,5 @@ steps:
   inputs:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Check links.ps1'
-    arguments: '-Folder "$(Build.SourcesDirectory)" -Filter "README.md"'
+    arguments: '-Folder "$(Build.SourcesDirectory)" -Filter "*.cs"'
     failOnStderr: 'true'
