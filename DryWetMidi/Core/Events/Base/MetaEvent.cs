@@ -4,7 +4,23 @@
     /// Represents a MIDI file meta event.
     /// </summary>
     /// <remarks>
-    /// Meta event specifies non-MIDI information useful to this format or to sequencers.
+    /// <para>
+    /// Meta event specifies non-MIDI information useful to specific applications.
+    /// </para>
+    /// <para>
+    /// As with <see cref="MidiChunk">chunks</see>, future meta events may be designed which may not be known to
+    /// existing programs, so programs must properly ignore meta events which they do not recognize, and indeed,
+    /// should expect to see them. Programs must never ignore the length of a meta-event which they do recognize,
+    /// and they shouldn't be surprised if it's bigger than they expected. If so, they must ignore everything past
+    /// what they know about. However, they must not add anything of their own to the end of a meta-event.
+    /// </para>
+    /// <para>
+    /// You can create custom meta events that can be read from and written to a MIDI file.
+    /// See <see href="xref:a_custom_meta_event">Custom meta events</see> article to learn more.
+    /// </para>
+    /// <para>
+    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// </para>
     /// </remarks>
     public abstract class MetaEvent : MidiEvent
     {

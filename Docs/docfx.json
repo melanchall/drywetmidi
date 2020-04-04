@@ -28,7 +28,7 @@
     ],
     "resource": [
       {
-        "files": [ "images/**", "wiki/images/**" ]
+        "files": [ "images/**", "wiki/images/**", "articles/images/**" ]
       }
     ],
     "globalMetadata": {

@@ -1,13 +1,19 @@
-Meta events specify non-MIDI information useful to this format or to sequencers. As with chunks, future or custom meta events may be designed. Format of meta events allows to programs which don't know about these new events to skip them. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file track chunk and be read from it.
+---
+uid: a_custom_meta_event
+---
 
-For example we want to create an event which will hold an image. Custom meta event must be derived from the `MetaEvent` and must implement four abstract methods:
+# Custom meta events
 
-* `ReadContent`;
-* `WriteContent`;
-* `GetContentSize`;
-* `CloneEvent`.
+Meta events specify non-MIDI information useful to specific application. As with [custom chunks](xref:a_custom_chunk), future or custom meta events may be designed. Format of meta events allows to programs which don't know about these new events to skip them without reading process failure. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file [track chunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) and be read from it.
 
-Also the class must have parameterless constructor.
+For example, let's create an event which will hold an image. Custom meta event must be derived from the [MetaEvent](xref:Melanchall.DryWetMidi.Core.MetaEvent) and must implement four abstract methods:
+
+* [ReadContent](xref:Melanchall.DryWetMidi.Core.MetaEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32));
+* [WriteContent](xref:Melanchall.DryWetMidi.Core.MetaEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings));
+* [GetContentSize](xref:Melanchall.DryWetMidi.Core.MetaEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
+* [CloneEvent](xref:Melanchall.DryWetMidi.Core.MidiEvent.CloneEvent).
+
+Also a class must have parameterless constructor.
 
 ```csharp
 public sealed class ImageEvent : MetaEvent
@@ -62,7 +68,7 @@ protected override void ReadContent(MidiReader reader, ReadingSettings settings,
 }
 ```
 
-Every meta event contains size of the event's content. Size is passed to `ReadContent` through *size* parameter so we know how much bytes we need to read in order to restore an image.
+Every meta event contains size of the event's content. Size is passed to `ReadContent` through `size` parameter so we know how much bytes we need to read in order to restore an image.
 
 Now let's implement `WriteContent`:
 
@@ -105,16 +111,16 @@ public override MidiEvent CloneEvent()
 }
 ```
 
-Custom meta event is completely implemented. In order to read and write it we must assign status byte to the event. You have to pick value from the [0x5F; 0x7E] range which will be the status byte of your event type. See code sample below to know how to read and write custom meta event:
+Custom meta event is completely implemented. In order to read and write it we must assign status byte to the event. You have to pick value from the **[0x5F; 0x7E]** range which will be the status byte of your event type. You can get status bytes of standard meta events via [MetaEvent.GetStandardMetaEventStatusBytes](xref:Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes). See code sample below to know how to read and write custom meta event:
 
 ```csharp
 // Define collection of custom meta event types along with
 // corresponding status bytes.
 
 var customMetaEventTypes = new EventTypesCollection
-                           {
-                               { typeof(ImageEvent), 0x5F }
-                           };
+                {
+                    { typeof(ImageEvent), 0x5F }
+                };
 
 // Write an image event to an existing file.
 
@@ -127,21 +133,22 @@ var imageEvent = new ImageEvent(image);
 trackChunk.Events.Add(imageEvent);
 
 file.Write("My Great Song.mid",
-           true,
-           MidiFileFormat.MultiTrack,
-           new WritingSettings
-           {
-               CustomMetaEventTypes = customMetaEventTypes
-           });
+            true,
+            MidiFileFormat.MultiTrack,
+            new WritingSettings
+            {
+                CustomMetaEventTypes = customMetaEventTypes
+            });
 
 // Read a MIDI file with ImageEvent inside.
 //
 // Note that if you don't specify custom meta event through CustomMetaEventTypes
 // property of the ReadingSettings it will be read as UnknownMetaEvent.
 
-var updatedFile = MidiFile.Read("My Great Song.mid",
-                                new ReadingSettings
-                                {
-                                    CustomMetaEventTypes = customMetaEventTypes
-                                });
+var updatedFile = MidiFile.Read(
+    "My Great Song.mid",
+    new ReadingSettings
+    {
+        CustomMetaEventTypes = customMetaEventTypes
+    });
 ```

@@ -405,3 +405,8 @@ h3#constructors, h3#properties, h3#methods, h3#fields, h3#events, h3#implements,
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+article h1 {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
