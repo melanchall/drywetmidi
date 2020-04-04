@@ -13,6 +13,42 @@
       "is_incremental": false
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "articles/custom-data-structures/Custom chunks.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/custom-data-structures/Custom chunks.html",
+          "hash": "5pHP5f9TW7z6KaZzqTRwXw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/custom-data-structures/Custom meta events.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/custom-data-structures/Custom meta events.html",
+          "hash": "/yWvIiA0zq0nzUhXedcIGw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "uqBxfnPT/5aQsBKhHNN9ig=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Resource",
       "source_relative_path": "images/favicon.png",
       "output": {
@@ -688,7 +724,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.MidiChunk.html",
-          "hash": "xp3LryV8B7BidA8p3h/B/w=="
+          "hash": "QnN+70eP9a42+OX2Y3PCsg=="
         }
       },
       "is_incremental": false,
@@ -3964,7 +4000,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "eSQ/WmXlvKua9aug5S+Baw=="
+          "hash": "e0FV/S9zPYTesdGmFHTggQ=="
         }
       },
       "is_incremental": false,
@@ -4007,36 +4043,15 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/Chunks.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Chunks.html",
-          "hash": "Zvisv0H4RpME85PXW34WIQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Custom-chunks.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Custom-chunks.html",
-          "hash": "bCcWBL3BSL5YJhcL2l3buA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Custom-meta-events.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Custom-meta-events.html",
-          "hash": "n0SxGPG5388XNL2w4kQBkQ=="
+          "hash": "3IBMDd4iZU4zUPRt7RZ2wg=="
         }
       },
       "is_incremental": false,
@@ -4091,12 +4106,15 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/Home.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Home.html",
-          "hash": "BmdPPUU+PsJnqdwZDxxaEw=="
+          "hash": "zs+G+AKZJo2jAtAmbCl2og=="
         }
       },
       "is_incremental": false,
@@ -4513,24 +4531,30 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/Meta-events.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Meta-events.html",
-          "hash": "HI70h3IKXLFx6lvMHnxGPw=="
+          "hash": "w3lCi6IC1UerbbHfNaHPRA=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/MidiFile.md",
       "output": {
         ".html": {
           "relative_path": "wiki/MidiFile.html",
-          "hash": "qhvI8ZFDcUo0awI3COiuLg=="
+          "hash": "buQF1qJeJ84L1fRC9z1RuA=="
         }
       },
       "is_incremental": false,
@@ -4645,24 +4669,30 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/Reading-a-MIDI-file.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Reading-a-MIDI-file.html",
-          "hash": "jidMR7CL3bAQYpOLQwcrQg=="
+          "hash": "AgG2EokoLfWSCkGEjr4Jpg=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/Reading-settings.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Reading-settings.html",
-          "hash": "SunEgIjnOaZ3egSetezNtQ=="
+          "hash": "4DZjqT1GC0l4UXFlVaZYfw=="
         }
       },
       "is_incremental": false,
@@ -4765,24 +4795,30 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/Writing-settings.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Writing-settings.html",
-          "hash": "iQXg5vAz4kgCSf9ltddrmw=="
+          "hash": "OBVJCu0fTsRfQy1GPxuk3g=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Toc",
       "source_relative_path": "wiki/toc.md",
       "output": {
         ".html": {
           "relative_path": "wiki/toc.html",
-          "hash": "wubBFq3TC951ua2X/E/19g=="
+          "hash": "u3ocQ6j1WNEUuyDEfWgrvg=="
         }
       },
       "is_incremental": false,

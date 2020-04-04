@@ -82,7 +82,7 @@
 <p>There are two standard types of MIDI chunks: <em>header chunk</em> and <em>track chunk</em>. The first one will not be presented in the <code>ChunksCollection</code>. Its data is used by the reading engine to set some properties of the <code>MidiFile</code> such as <code>TimeDivision</code> and <code>OriginalFormat</code>. You cannot add header chunks in the chunks collection of the file, the appropriate one will be written by writing engine automatically on <code>MidiFile.Write</code>.</p>
 <p>Instances of the <code>TrackChunk</code> can be added to the <code>ChunksCollection</code> via <code>Add</code>, <code>AddRange</code> and <code>Insert</code> methods. Of course you can remove chunks with corresponding methods.</p>
 <p><code>ChunksCollection</code> implements <code>IEnumerable&lt;MidiChunk&gt;</code> so you can use all the power of LINQ for working with MIDI file's chunks.</p>
-<p>The structure of the chunk allows any custom chunks be placed in a MIDI file along with the standard ones described below. DryWetMIDI allows to implement custom chunks that can be read from and written to a MIDI file. Visit <a href="Custom-chunks.html">Custom chunks</a> page to learn more. If you doesn't specify information about your custom chunk types the reading engine will read them as instances of the <code>UnknownChunk</code> class which <code>Data</code> property will hold chunk's data and <code>ChunkId</code> will return ID of the chunk.</p>
+<p>The structure of the chunk allows any custom chunks be placed in a MIDI file along with the standard ones described below. DryWetMIDI allows to implement custom chunks that can be read from and written to a MIDI file. Visit <a href="Custom-chunks.md">Custom chunks</a> page to learn more. If you doesn't specify information about your custom chunk types the reading engine will read them as instances of the <code>UnknownChunk</code> class which <code>Data</code> property will hold chunk's data and <code>ChunkId</code> will return ID of the chunk.</p>
 <h2 id="midichunk">MidiChunk</h2>
 <pre><code class="lang-csharp">public abstract class MidiChunk
 {
@@ -129,7 +129,7 @@
     // ...
 }
 </code></pre>
-<p>This class represents any unknown chunk was encountered by the reading engine. You cannot create an instance of the <code>UnknownChunk</code> or set its <code>Data</code> property. If you want that chunks with specific ID be read as instances of your custom class you need to implement custom chunk according with instructions provided on the <a href="Custom-chunks.html">Custom chunks</a> page and pass information about it to the <code>Read</code> method of the <code>MidiFile</code>.</p>
+<p>This class represents any unknown chunk was encountered by the reading engine. You cannot create an instance of the <code>UnknownChunk</code> or set its <code>Data</code> property. If you want that chunks with specific ID be read as instances of your custom class you need to implement custom chunk according with instructions provided on the <a href="Custom-chunks.md">Custom chunks</a> page and pass information about it to the <code>Read</code> method of the <code>MidiFile</code>.</p>
 </article>
           </div>
           
