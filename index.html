@@ -106,13 +106,13 @@
 <p>With the DryWetMIDI you can:</p>
 <ul>
 <li>Read, write and create <a href="https://www.midi.org/specifications/category/smf-specifications">Standard MIDI Files (SMF)</a>. It is also possible to read <a href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml">RMID</a> files where SMF wrapped to RIFF chunk.</li>
-<li><a href="https://github.com/melanchall/drywetmidi/wiki/Output-device">Send</a> MIDI events to/<a href="https://github.com/melanchall/drywetmidi/wiki/Input-device">receive</a> them from MIDI devices, <a href="https://github.com/melanchall/drywetmidi/wiki/Playback">play</a> MIDI data and <a href="https://github.com/melanchall/drywetmidi/wiki/Recording">record</a> it.</li>
+<li><a href="https://melanchall.github.io/drywetmidi/wiki/Output-device.html">Send</a> MIDI events to/<a href="https://melanchall.github.io/drywetmidi/wiki/Input-device.html">receive</a> them from MIDI devices, <a href="https://melanchall.github.io/drywetmidi/wiki/Playback.html">play</a> MIDI data and <a href="https://melanchall.github.io/drywetmidi/wiki/Recording.html">record</a> it.</li>
 <li>Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.</li>
-<li>Implement <a href="https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events">custom meta events</a> and <a href="https://github.com/melanchall/drywetmidi/wiki/Custom-chunks">custom chunks</a> that can be written to and read from MIDI files.</li>
+<li>Implement <a href="https://melanchall.github.io/drywetmidi/wiki/Custom-meta-events.html">custom meta events</a> and <a href="https://melanchall.github.io/drywetmidi/wiki/Custom-chunks.html">custom chunks</a> that can be written to and read from MIDI files.</li>
 <li>Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.</li>
 <li>Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the <strong>High-level data managing</strong> section of the Wiki).</li>
-<li>Build musical compositions (see <a href="https://github.com/melanchall/drywetmidi/wiki/Pattern">Pattern</a> page of the library Wiki).</li>
-<li>Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see <a href="https://github.com/melanchall/drywetmidi/wiki/Tools">Tools</a> page of the Wiki).</li>
+<li>Build musical compositions (see <a href="https://melanchall.github.io/drywetmidi/wiki/Pattern.html">Pattern</a> page of the library Wiki).</li>
+<li>Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see <a href="https://melanchall.github.io/drywetmidi/wiki/Tools.html">Tools</a> page of the Wiki).</li>
 </ul>
 <h2 id="documentation">Documentation</h2>
 <p>Complete documentation including API reference is available on <a href="https://melanchall.github.io/drywetmidi">https://melanchall.github.io/drywetmidi</a>.</p>
@@ -139,7 +139,7 @@ Using Rustissimo you can create a concert with your friends and play instruments
 <p>To <a href="https://github.com/melanchall/drymidi/wiki/Reading-a-MIDI-file">read a MIDI file</a> you have to use <code>Read</code> static method of the <code>MidiFile</code>:</p>
 <pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;Some Great Song.mid&quot;);
 </code></pre>
-<p>or, in more advanced form (visit <a href="https://github.com/melanchall/drywetmidi/wiki/Reading-settings">Reading settings</a> page on Wiki to learn more about how to adjust process of reading)</p>
+<p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReadingSettings.html">Reading settings</a> page on Wiki to learn more about how to adjust process of reading)</p>
 <pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;Some Great Song.mid&quot;,
                              new ReadingSettings
                              {
@@ -153,7 +153,7 @@ Using Rustissimo you can create a concert with your friends and play instruments
 <p>To <a href="https://github.com/melanchall/drymidi/wiki/Writing-a-MIDI-file">write MIDI data to a file</a> you have to use <code>Write</code> method of the <code>MidiFile</code>:</p>
 <pre><code class="lang-csharp">midiFile.Write(&quot;My Great Song.mid&quot;);
 </code></pre>
-<p>or, in more advanced form (visit <a href="https://github.com/melanchall/drywetmidi/wiki/Writing-settings">Writing settings</a> page on Wiki to learn more about how to adjust process of writing)</p>
+<p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WritingSettings.html">Writing settings</a> page on Wiki to learn more about how to adjust process of writing)</p>
 <pre><code class="lang-csharp">midiFile.Write(&quot;My Great Song.mid&quot;,
                true,
                MidiFileFormat.SingleTrack,
@@ -205,7 +205,7 @@ midiFile.Write(&quot;My Future Great Song.mid&quot;);
 }
 </code></pre>
 <p>Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (500,000 microseconds per beat).</p>
-<p>Instead of modifying a MIDI file you can use <a href="https://github.com/melanchall/drywetmidi/wiki/Playback"><code>Playback</code></a> class:</p>
+<p>Instead of modifying a MIDI file you can use <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a> class:</p>
 <pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;))
 using (var playback = midiFile.GetPlayback(outputDevice))
 {
@@ -278,7 +278,7 @@ midiFile.Write(&quot;Single note great song.mid&quot;);
 
 MidiFile midiFile = pattern.ToFile(TempoMap.Default);
 </code></pre>
-<p>DryWetMIDI provides <a href="https://github.com/melanchall/drywetmidi/wiki/MIDI-devices">devices API</a> allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:</p>
+<p>DryWetMIDI provides <a href="https://melanchall.github.io/drywetmidi/wiki/MIDI-devices.html">devices API</a> allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:</p>
 <pre><code class="lang-csharp">using System;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
