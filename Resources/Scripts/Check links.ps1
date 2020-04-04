@@ -18,13 +18,20 @@ foreach ($file in $files)
     try
     {    
       $linkUrl = $match.Value
+      Write-Host "    Checking '$linkUrl'"
+      
       if ($linkUrl -Match "melanchall\/drywetmidi\/wiki")
       {
         Write-Host "##vso[task.logissue type=error]    FAILED since Wiki link is prohibited"
         Write-Host "##vso[task.complete result=Failed;]    FAILED"
+        continue
       }
       
-      Write-Host "    Checking '$linkUrl'"
+      if ($linkUrl -Match "https:\/\/raw\.githubusercontent\.com\/melanchall\/drywetmidi\/develop\/")
+      {
+        Write-Host "    SKIPPED"
+        continue
+      }
       
       $HTTP_Request = [System.Net.WebRequest]::Create($linkUrl)
       $HTTP_Response = $HTTP_Request.GetResponse()
