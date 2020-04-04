@@ -16,13 +16,13 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. Visit [
 With the DryWetMIDI you can:
 
 * Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
-* [Send](https://github.com/melanchall/drywetmidi/wiki/Output-device) MIDI events to/[receive](https://github.com/melanchall/drywetmidi/wiki/Input-device) them from MIDI devices, [play](https://github.com/melanchall/drywetmidi/wiki/Playback) MIDI data and [record](https://github.com/melanchall/drywetmidi/wiki/Recording) it.
+* [Send](https://melanchall.github.io/drywetmidi/wiki/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/wiki/Input-device.html) them from MIDI devices, [play](https://melanchall.github.io/drywetmidi/wiki/Playback.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/wiki/Recording.html) it.
 * Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
-* Implement [custom meta events](https://github.com/melanchall/drywetmidi/wiki/Custom-meta-events) and [custom chunks](https://github.com/melanchall/drywetmidi/wiki/Custom-chunks) that can be written to and read from MIDI files.
+* Implement [custom meta events](https://melanchall.github.io/drywetmidi/wiki/Custom-meta-events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/wiki/Custom-chunks.html) that can be written to and read from MIDI files.
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
 * Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the **High-level data managing** section of the Wiki).
-* Build musical compositions (see [Pattern](https://github.com/melanchall/drywetmidi/wiki/Pattern) page of the library Wiki).
-* Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://github.com/melanchall/drywetmidi/wiki/Tools) page of the Wiki).
+* Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/wiki/Pattern.html) page of the library Wiki).
+* Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://melanchall.github.io/drywetmidi/wiki/Tools.html) page of the Wiki).
 
 ## Documentation
 
@@ -57,7 +57,7 @@ To [read a MIDI file](https://github.com/melanchall/drymidi/wiki/Reading-a-MIDI-
 var midiFile = MidiFile.Read("Some Great Song.mid");
 ```
 
-or, in more advanced form (visit [Reading settings](https://github.com/melanchall/drywetmidi/wiki/Reading-settings) page on Wiki to learn more about how to adjust process of reading)
+or, in more advanced form (visit [Reading settings](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReadingSettings.html) page on Wiki to learn more about how to adjust process of reading)
 
 ```csharp
 var midiFile = MidiFile.Read("Some Great Song.mid",
@@ -77,7 +77,7 @@ To [write MIDI data to a file](https://github.com/melanchall/drymidi/wiki/Writin
 midiFile.Write("My Great Song.mid");
 ```
 
-or, in more advanced form (visit [Writing settings](https://github.com/melanchall/drywetmidi/wiki/Writing-settings) page on Wiki to learn more about how to adjust process of writing)
+or, in more advanced form (visit [Writing settings](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WritingSettings.html) page on Wiki to learn more about how to adjust process of writing)
 
 ```csharp
 midiFile.Write("My Great Song.mid",
@@ -142,7 +142,7 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 
 Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (500,000 microseconds per beat).
 
-Instead of modifying a MIDI file you can use [`Playback`](https://github.com/melanchall/drywetmidi/wiki/Playback) class:
+Instead of modifying a MIDI file you can use [`Playback`](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html) class:
 
 ```csharp
 using (var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
@@ -236,7 +236,7 @@ Pattern pattern = new PatternBuilder()
 MidiFile midiFile = pattern.ToFile(TempoMap.Default);
 ```
 
-DryWetMIDI provides [devices API](https://github.com/melanchall/drywetmidi/wiki/MIDI-devices) allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:
+DryWetMIDI provides [devices API](https://melanchall.github.io/drywetmidi/wiki/MIDI-devices.html) allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:
 
 ```csharp
 using System;

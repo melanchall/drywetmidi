@@ -18,7 +18,7 @@ foreach ($file in $files)
     try
     {    
       $linkUrl = $match.Value
-      if ($linkUrl -Match "drywetmidi\/wiki")
+      if ($linkUrl -Match "melanchall\/drywetmidi\/wiki")
       {
         Write-Host "##vso[task.logissue type=error]    FAILED since Wiki link is prohibited"
         Write-Host "##vso[task.complete result=Failed;]    FAILED"
