@@ -398,3 +398,10 @@ h3#constructors, h3#properties, h3#methods, h3#fields, h3#events, h3#implements,
   background-color: #292827;
   border-color: rgb(77, 178, 255);
 }
+
+/**/
+
+.article img {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
