@@ -79,15 +79,15 @@
             <article class="content wrap" id="_content" data-uid="a_custom_meta_event">
 
 
-<p>Meta events specify non-MIDI information useful to this format or to sequencers. As with chunks, future or custom meta events may be designed. Format of meta events allows to programs which don't know about these new events to skip them. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file track chunk and be read from it.</p>
-<p>For example we want to create an event which will hold an image. Custom meta event must be derived from the <code>MetaEvent</code> and must implement four abstract methods:</p>
+<p>Meta events specify non-MIDI information useful to specific application. As with <a class="xref" href="Custom%20chunks.html">custom chunks</a>, future or custom meta events may be designed. Format of meta events allows to programs which don't know about these new events to skip them without reading process failure. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> and be read from it.</p>
+<p>For example, let's create an event which will hold an image. Custom meta event must be derived from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a> and must implement four abstract methods:</p>
 <ul>
-<li><code>ReadContent</code>;</li>
-<li><code>WriteContent</code>;</li>
-<li><code>GetContentSize</code>;</li>
-<li><code>CloneEvent</code>.</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_">ReadContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_">WriteContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_">GetContentSize</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_CloneEvent">CloneEvent</a>.</li>
 </ul>
-<p>Also the class must have parameterless constructor.</p>
+<p>Also a class must have parameterless constructor.</p>
 <pre><code class="lang-csharp">public sealed class ImageEvent : MetaEvent
 {
     public ImageEvent()
@@ -136,7 +136,7 @@
     Image = (Image)converter.ConvertFrom(imageBytes);
 }
 </code></pre>
-<p>Every meta event contains size of the event's content. Size is passed to <code>ReadContent</code> through <em>size</em> parameter so we know how much bytes we need to read in order to restore an image.</p>
+<p>Every meta event contains size of the event's content. Size is passed to <code>ReadContent</code> through <code>size</code> parameter so we know how much bytes we need to read in order to restore an image.</p>
 <p>Now let's implement <code>WriteContent</code>:</p>
 <pre><code class="lang-csharp">protected override void WriteContent(MidiWriter writer, WritingSettings settings)
 {
@@ -168,14 +168,14 @@
     return new ImageEvent(Image?.Clone() as Image);
 }
 </code></pre>
-<p>Custom meta event is completely implemented. In order to read and write it we must assign status byte to the event. You have to pick value from the [0x5F; 0x7E] range which will be the status byte of your event type. See code sample below to know how to read and write custom meta event:</p>
+<p>Custom meta event is completely implemented. In order to read and write it we must assign status byte to the event. You have to pick value from the <strong>[0x5F; 0x7E]</strong> range which will be the status byte of your event type. You can get status bytes of standard meta events via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes">MetaEvent.GetStandardMetaEventStatusBytes</a>. See code sample below to know how to read and write custom meta event:</p>
 <pre><code class="lang-csharp">// Define collection of custom meta event types along with
 // corresponding status bytes.
 
 var customMetaEventTypes = new EventTypesCollection
-                           {
-                               { typeof(ImageEvent), 0x5F }
-                           };
+                {
+                    { typeof(ImageEvent), 0x5F }
+                };
 
 // Write an image event to an existing file.
 
@@ -188,23 +188,24 @@ var imageEvent = new ImageEvent(image);
 trackChunk.Events.Add(imageEvent);
 
 file.Write(&quot;My Great Song.mid&quot;,
-           true,
-           MidiFileFormat.MultiTrack,
-           new WritingSettings
-           {
-               CustomMetaEventTypes = customMetaEventTypes
-           });
+            true,
+            MidiFileFormat.MultiTrack,
+            new WritingSettings
+            {
+                CustomMetaEventTypes = customMetaEventTypes
+            });
 
 // Read a MIDI file with ImageEvent inside.
 //
 // Note that if you don't specify custom meta event through CustomMetaEventTypes
 // property of the ReadingSettings it will be read as UnknownMetaEvent.
 
-var updatedFile = MidiFile.Read(&quot;My Great Song.mid&quot;,
-                                new ReadingSettings
-                                {
-                                    CustomMetaEventTypes = customMetaEventTypes
-                                });
+var updatedFile = MidiFile.Read(
+    &quot;My Great Song.mid&quot;,
+    new ReadingSettings
+    {
+        CustomMetaEventTypes = customMetaEventTypes
+    });
 </code></pre>
 </article>
           </div>
