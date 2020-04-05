@@ -163,8 +163,18 @@ Represents a MIDI file meta event.
 Meta event specifies non-MIDI information useful to specific applications.
 </p>
 <p>
+As with <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>, future meta events may be designed which may not be known to
+existing programs, so programs must properly ignore meta events which they do not recognize, and indeed,
+should expect to see them. Programs must never ignore the length of a meta-event which they do recognize,
+and they shouldn&apos;t be surprised if it&apos;s bigger than they expected. If so, they must ignore everything past
+what they know about. However, they must not add anything of their own to the end of a meta-event.
+</p>
+<p>
 You can create custom meta events that can be read from and written to a MIDI file.
 See <a class="xref" href="../articles/custom-data-structures/Custom%20meta%20events.html">Custom meta events</a> article to learn more.
+</p>
+<p>
+See <a href="https://www.midi.org/specifications-old/category/smf-specifications">https://www.midi.org/specifications-old/category/smf-specifications</a> for detailed MIDI file specification.
 </p>
 </div>
   <h3 id="constructors">Constructors

@@ -2,10 +2,10 @@
 sorted: true
 references:
 - uid: a_custom_chunk
-  name: a_custom_chunk
+  name: Custom chunks
   href: articles/custom-data-structures/Custom%20chunks.html
 - uid: a_custom_meta_event
-  name: a_custom_meta_event
+  name: Custom meta events
   href: articles/custom-data-structures/Custom%20meta%20events.html
 - uid: Melanchall.DryWetMidi.Common
   name: Melanchall.DryWetMidi.Common
