@@ -1,11 +1,3 @@
-### Reading a MIDI file
-* [Reading a MIDI file](Reading-a-MIDI-file.md)
-* [Reading settings](Reading-settings.md)
------------
-### Writing a MIDI file
-* [Writing a MIDI file](Writing-a-MIDI-file.md)
-* [Writing settings](Writing-settings.md)
------------
 ### High-level data managing
 * [Events managers](Events-managers.md)
     * [Events absolute time](Events-absolute-time.md)
