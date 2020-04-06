@@ -4044,38 +4044,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "wiki/Channel-events.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Channel-events.html",
-          "hash": "vpkZG6mG41YYNx26ETShAg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "wiki/Chords.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Chords.html",
           "hash": "M38o5p8n8wc2rJc9EDsvzw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Chunks.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Chunks.html",
-          "hash": "3IBMDd4iZU4zUPRt7RZ2wg=="
         }
       },
       "is_incremental": false,
@@ -4119,23 +4092,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "wiki/Events.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Events.html",
-          "hash": "gR46OHo3ncYvvoYftaLS/g=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "wiki/Home.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Home.html",
-          "hash": "z/S16RjXKyFOdz/XrQwpbw=="
+          "hash": "o/HCmqLGgvHPjpEmkq4sNA=="
         }
       },
       "is_incremental": false,
@@ -4540,42 +4501,15 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/MIDI-file-splitter.md",
       "output": {
         ".html": {
           "relative_path": "wiki/MIDI-file-splitter.html",
-          "hash": "/sCl4pfXPX+z6KygLJHAKw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Meta-events.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Meta-events.html",
-          "hash": "w3lCi6IC1UerbbHfNaHPRA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "wiki/MidiFile.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/MidiFile.html",
-          "hash": "buQF1qJeJ84L1fRC9z1RuA=="
+          "hash": "ryRt8+9phQaKI3MTXdD7iw=="
         }
       },
       "is_incremental": false,
@@ -4630,12 +4564,15 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "wiki/Output-device.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Output-device.html",
-          "hash": "/OUKB+rZ5aVAO6Qzcn8PYA=="
+          "hash": "CwnJf9OvC5y9K3nwUNsTYA=="
         }
       },
       "is_incremental": false,
@@ -4690,78 +4627,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Reading-a-MIDI-file.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Reading-a-MIDI-file.html",
-          "hash": "AgG2EokoLfWSCkGEjr4Jpg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Reading-settings.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Reading-settings.html",
-          "hash": "4DZjqT1GC0l4UXFlVaZYfw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
       "type": "Conceptual",
       "source_relative_path": "wiki/Recording.md",
       "output": {
         ".html": {
           "relative_path": "wiki/Recording.html",
           "hash": "S7UnazIgqhsf9P9RVWvkNQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Sysex-events.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Sysex-events.html",
-          "hash": "uufEBXpLiuunAESr8Njsgw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "wiki/System-common-events.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/System-common-events.html",
-          "hash": "qg4e2P6cCYdOXy8sxiUvfA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "wiki/System-real-time-events.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/System-real-time-events.html",
-          "hash": "bEbiMPihbz8oZTGpNes7MQ=="
         }
       },
       "is_incremental": false,
@@ -4804,39 +4675,12 @@
       "version": ""
     },
     {
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Writing-a-MIDI-file.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Writing-a-MIDI-file.html",
-          "hash": "Jo/4z8zCmD0jqkmsgRZw0A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "wiki/Writing-settings.md",
-      "output": {
-        ".html": {
-          "relative_path": "wiki/Writing-settings.html",
-          "hash": "OBVJCu0fTsRfQy1GPxuk3g=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
       "type": "Toc",
       "source_relative_path": "wiki/toc.md",
       "output": {
         ".html": {
           "relative_path": "wiki/toc.html",
-          "hash": "WqKR04AXO1jBm4qHCEBPgw=="
+          "hash": "YCQyrMukHE/opAI0/snFqw=="
         }
       },
       "is_incremental": false,
@@ -4857,7 +4701,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 40,
+          "total_file_count": 28,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {

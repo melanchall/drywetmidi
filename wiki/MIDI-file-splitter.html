@@ -83,7 +83,7 @@
 <h3 id="splitbychannel"><code>SplitByChannel</code></h3>
 <pre><code class="lang-csharp">IEnumerable&lt;MidiFile&gt; SplitByChannel(this MidiFile midiFile)
 </code></pre>
-<p>Splits MIDI file by channel so all <a href="Channel-events.html">channel events</a> will be separated by channel and copied to corresponding new files. All meta and system exclusive events will be copied to all the new files. Non-track chunks will not be copied to any of the new files. Thus each file from the result will contain all meta and sysex events and channel events for single channel. The image below illustrates this process:</p>
+<p>Splits MIDI file by channel so all <a href="Channel-events.md">channel events</a> will be separated by channel and copied to corresponding new files. All meta and system exclusive events will be copied to all the new files. Non-track chunks will not be copied to any of the new files. Thus each file from the result will contain all meta and sysex events and channel events for single channel. The image below illustrates this process:</p>
 <p><img src="Images/MidiFileSplitter/SplitByChannel.png" alt="Split MIDI file by channel"></p>
 <h3 id="splitbynotes"><code>SplitByNotes</code></h3>
 <pre><code class="lang-csharp">IEnumerable&lt;MidiFile&gt; SplitByNotes(this MidiFile midiFile)
