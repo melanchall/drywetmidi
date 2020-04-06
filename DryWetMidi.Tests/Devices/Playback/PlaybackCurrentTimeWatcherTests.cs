@@ -389,7 +389,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private static bool AreTimeSpansEqual(ITimeSpan x, ITimeSpan y)
         {
-            const long microsecondsEpsilon = 3000;
+            const long microsecondsEpsilon = 10000;
             const long ticksEpsilon = 3;
             const double fractionEpsilon = 0.00001;
             const double fractionalBeatsEpsilon = 0.1;
