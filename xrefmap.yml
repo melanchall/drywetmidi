@@ -7,6 +7,12 @@ references:
 - uid: a_custom_meta_event
   name: Custom meta events
   href: articles/custom-data-structures/Custom%20meta%20events.html
+- uid: a_file_reading
+  name: MIDI file reading
+  href: articles/file-reading-writing/MIDI%20file%20reading.html
+- uid: a_file_writing
+  name: MIDI file writing
+  href: articles/file-reading-writing/MIDI%20file%20writing.html
 - uid: Melanchall.DryWetMidi.Common
   name: Melanchall.DryWetMidi.Common
   href: api/Melanchall.DryWetMidi.Common.html

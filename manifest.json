@@ -18,7 +18,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/custom-data-structures/Custom chunks.html",
-          "hash": "04XX3M3TRCYEzZK7iQEobQ=="
+          "hash": "zMYedCa+YAOFVy4tXVZypw=="
         }
       },
       "is_incremental": false,
@@ -37,12 +37,36 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "articles/file-reading-writing/MIDI file reading.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/file-reading-writing/MIDI file reading.html",
+          "hash": "t9DPF/dmzn+N2/TuNnN++w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/file-reading-writing/MIDI file writing.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/file-reading-writing/MIDI file writing.html",
+          "hash": "Av0AIwJz3ysuCYWCv4+SFg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Toc",
       "source_relative_path": "articles/toc.md",
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "uqBxfnPT/5aQsBKhHNN9ig=="
+          "hash": "ruBWHNuB6pHS5MC0JBeQxA=="
         }
       },
       "is_incremental": false,
@@ -4000,7 +4024,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "e0FV/S9zPYTesdGmFHTggQ=="
+          "hash": "CrNcxKkIfcCZWUtGwuzzlw=="
         }
       },
       "is_incremental": false,
@@ -4833,7 +4857,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 38,
+          "total_file_count": 40,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {

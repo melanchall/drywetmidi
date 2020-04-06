@@ -262,6 +262,7 @@ var fileWithHistoryChunk = MidiFile.Read(
 
 var historyChunks = fileWithHistoryChunk.Chunks.OfType&lt;HistoryChunk&gt;();
 </code></pre>
+<p>If you don't provide information about your custom chunk in <code>ReadingSettings</code>, the chunks will be read as <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a>.</p>
 </article>
           </div>
           
