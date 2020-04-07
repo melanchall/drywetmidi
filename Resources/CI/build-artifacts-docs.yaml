@@ -19,6 +19,7 @@ trigger:
     - Resources/CI/build-artifacts-library.yaml
     - Resources/CI/check-readme-links.yaml
     - Resources/CI/check-cs-links.yaml
+    - Resources/CI/check-docs-links.yaml
     - .github/
 
 pool:
