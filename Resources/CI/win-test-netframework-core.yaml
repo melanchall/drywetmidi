@@ -35,6 +35,14 @@ variables:
 name: Windows_Test_NetFramework_Core_$(version)$(Rev:.r)
 
 steps:
+- task: NugetToolInstaller@1
+  displayName: Install latest NuGet tool
+
+- task: DotNetCoreCLI@2
+  displayName: Restore NuGet packages
+  inputs:
+    command: restore
+
 - task: DotNetCoreCLI@2
   displayName: Build solution
   inputs:
