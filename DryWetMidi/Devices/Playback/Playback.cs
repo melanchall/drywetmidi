@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly MidiClock _clock;
 
-        private readonly HashSet<NotePlaybackEventMetadata> _activeNotesMetadata = new HashSet<NotePlaybackEventMetadata>();
+        private readonly ConcurrentDictionary<NotePlaybackEventMetadata, byte> _activeNotesMetadata = new ConcurrentDictionary<NotePlaybackEventMetadata, byte>();
         private readonly List<NotePlaybackEventMetadata> _notesMetadata;
 
         private bool _disposed = false;
@@ -428,7 +429,7 @@ namespace Melanchall.DryWetMidi.Devices
 
                 var notes = new List<Note>();
 
-                foreach (var noteMetadata in _activeNotesMetadata.ToArray())
+                foreach (var noteMetadata in _activeNotesMetadata.Keys)
                 {
                     Note note;
                     if (TryPlayNoteEvent(noteMetadata, false, currentTime, out note))
@@ -629,8 +630,8 @@ namespace Melanchall.DryWetMidi.Devices
                                             .Where(m => m.StartTime < currentTime && m.EndTime > currentTime)
                                             .Distinct()
                                             .ToArray();
-            var onNotesMetadata = notesToPlay.Where(n => !_activeNotesMetadata.Contains(n)).ToArray();
-            var offNotesMetadata = _activeNotesMetadata.Where(n => !notesToPlay.Contains(n)).ToArray();
+            var onNotesMetadata = notesToPlay.Where(n => !_activeNotesMetadata.Keys.Contains(n)).ToArray();
+            var offNotesMetadata = _activeNotesMetadata.Keys.Where(n => !notesToPlay.Contains(n)).ToArray();
 
             OutputDevice?.PrepareForEventsSending();
 
@@ -816,9 +817,12 @@ namespace Melanchall.DryWetMidi.Devices
                 SendEvent(midiEvent);
 
                 if (midiEvent is NoteOnEvent)
-                    _activeNotesMetadata.Add(noteMetadata);
+                    _activeNotesMetadata.TryAdd(noteMetadata, 0);
                 else
-                    _activeNotesMetadata.Remove(noteMetadata);
+                {
+                    byte value;
+                    _activeNotesMetadata.TryRemove(noteMetadata, out value);
+                }
             }
             else
                 note = null;
