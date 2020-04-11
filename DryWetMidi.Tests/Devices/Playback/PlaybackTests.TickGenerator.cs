@@ -5,12 +5,54 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
     [TestFixture]
     public sealed partial class PlaybackTests
     {
+        #region Nested classes
+
+        private sealed class ThreadTickGenerator : ITickGenerator
+        {
+            public event EventHandler TickGenerated;
+
+            private Thread _thread;
+
+            public void TryStart()
+            {
+                if (_thread != null)
+                    return;
+
+                _thread = new Thread(() =>
+                {
+                    var stopwatch = new Stopwatch();
+                    var lastMs = 0L;
+
+                    stopwatch.Start();
+
+                    while (true)
+                    {
+                        var elapsedMs = stopwatch.ElapsedMilliseconds;
+                        if (elapsedMs - lastMs >= 1)
+                        {
+                            TickGenerated?.Invoke(this, EventArgs.Empty);
+                            lastMs = elapsedMs;
+                        }
+                    }
+                });
+
+                _thread.Start();
+            }
+
+            public void Dispose()
+            {
+            }
+        }
+
+        #endregion
+
         #region Test mthods
 
         [Retry(RetriesNumber)]
@@ -25,6 +67,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         public void CheckPlayback_RegularPrecisionTickGenerator()
         {
             CheckPlayback_TickGenerator(interval => new RegularPrecisionTickGenerator(interval), TimeSpan.FromMilliseconds(50));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlayback_CustomTickGenerator()
+        {
+            CheckPlayback_TickGenerator(_ => new ThreadTickGenerator(), TimeSpan.FromMilliseconds(10));
         }
 
         [Retry(RetriesNumber)]
