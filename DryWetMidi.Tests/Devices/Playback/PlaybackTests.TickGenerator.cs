@@ -19,6 +19,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             public event EventHandler TickGenerated;
 
             private Thread _thread;
+            private bool _isRunning;
+            private bool _disposed;
 
             public void TryStart()
             {
@@ -31,8 +33,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     var lastMs = 0L;
 
                     stopwatch.Start();
+                    _isRunning = true;
 
-                    while (true)
+                    while (_isRunning)
                     {
                         var elapsedMs = stopwatch.ElapsedMilliseconds;
                         if (elapsedMs - lastMs >= 1)
@@ -48,6 +51,20 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             public void Dispose()
             {
+                Dispose(true);
+            }
+
+            private void Dispose(bool disposing)
+            {
+                if (_disposed)
+                    return;
+
+                if (disposing)
+                {
+                    _isRunning = false;
+                }
+
+                _disposed = true;
             }
         }
 
