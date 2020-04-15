@@ -222,7 +222,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void CreateClock(TimeSpan pollingInterval)
         {
-            _clock = new MidiClock(true, _clockSettings.CreateTickGeneratorCallback(pollingInterval));
+            _clock = new MidiClock(true, _clockSettings.CreateTickGeneratorCallback(), pollingInterval);
             _clock.Ticked += OnTick;
         }
 

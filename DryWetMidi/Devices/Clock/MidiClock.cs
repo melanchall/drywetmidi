@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _started;
 
-        private readonly ITickGenerator _tickGenerator;
+        private readonly TickGenerator _tickGenerator;
 
         #endregion
 
@@ -51,13 +51,15 @@ namespace Melanchall.DryWetMidi.Devices
         /// immediately after clock started.</param>
         /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval. Null for
         /// no tick generator.</param>
-        public MidiClock(bool startImmediately, ITickGenerator tickGenerator)
+        public MidiClock(bool startImmediately, TickGenerator tickGenerator, TimeSpan interval)
         {
             _startImmediately = startImmediately;
 
             _tickGenerator = tickGenerator;
             if (_tickGenerator != null)
                 _tickGenerator.TickGenerated += OnTickGenerated;
+
+            Interval = interval;
         }
 
         #endregion
@@ -75,6 +77,8 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Properties
+
+        public TimeSpan Interval { get; }
 
         /// <summary>
         /// Gets a value indicating whether MIDI clock is currently running or not.
@@ -127,7 +131,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             if (!_started)
-                _tickGenerator?.TryStart();
+                _tickGenerator?.TryStart(Interval);
 
             _stopwatch.Start();
 

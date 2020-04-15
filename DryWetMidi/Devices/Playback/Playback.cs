@@ -214,7 +214,7 @@ namespace Melanchall.DryWetMidi.Devices
             TempoMap = tempoMap;
 
             clockSettings = clockSettings ?? new MidiClockSettings();
-            _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(ClockInterval));
+            _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(), ClockInterval);
             _clock.Ticked += OnClockTicked;
 
             Snapping = new PlaybackSnapping(playbackEvents, tempoMap);

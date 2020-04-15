@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// Tick generator providing most accurate ticking, allowing firing intervals of 1 ms which
     /// is the smallest possible one.
     /// </summary>
-    public sealed class HighPrecisionTickGenerator : ITickGenerator
+    public sealed class HighPrecisionTickGenerator : TickGenerator
     {
         #region Constants
 
@@ -27,44 +27,13 @@ namespace Melanchall.DryWetMidi.Devices
 
         #endregion
 
-        #region Events
-
-        /// <summary>
-        /// Occurs when new tick generated.
-        /// </summary>
-        public event EventHandler TickGenerated;
-
-        #endregion
-
         #region Fields
 
         private bool _disposed = false;
 
-        private readonly uint _interval;
         private uint _resolution;
         private MidiTimerWinApi.TimeProc _tickCallback;
         private uint _timerId = NoTimerId;
-
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HighPrecisionTickGenerator"/> with the specified
-        /// interval.
-        /// </summary>
-        /// <param name="interval">Interval of ticking.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="interval"/> is out of valid range.</exception>
-        public HighPrecisionTickGenerator(TimeSpan interval)
-        {
-            ThrowIfArgument.IsOutOfRange(nameof(interval),
-                                         interval,
-                                         MinInterval,
-                                         MaxInterval,
-                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
-
-            _interval = (uint)interval.TotalMilliseconds;
-        }
 
         #endregion
 
@@ -80,38 +49,43 @@ namespace Melanchall.DryWetMidi.Devices
 
         #endregion
 
-        #region Methods
+        #region Overrides
 
-        /// <summary>
-        /// Starts the tick generator if it's not started; otherwise does nothing.
-        /// </summary>
-        /// <exception cref="MidiDeviceException">An error occurred on tick generator.</exception>
-        public void TryStart()
+        protected override void Start(TimeSpan interval)
         {
-            if (_timerId != NoTimerId)
-                return;
+            ThrowIfArgument.IsOutOfRange(nameof(interval),
+                                         interval,
+                                         MinInterval,
+                                         MaxInterval,
+                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+
+            var intervalInMilliseconds = (uint)interval.TotalMilliseconds;
 
             var timeCaps = default(MidiTimerWinApi.TIMECAPS);
             ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
 
-            _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, _interval), timeCaps.wPeriodMax);
+            _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, intervalInMilliseconds), timeCaps.wPeriodMax);
             _tickCallback = OnTick;
 
             ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
-            _timerId = MidiTimerWinApi.timeSetEvent(_interval, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
-            if (_timerId == 0)
+            _timerId = MidiTimerWinApi.timeSetEvent(intervalInMilliseconds, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
+            if (_timerId == NoTimerId)
             {
                 var errorCode = Marshal.GetLastWin32Error();
                 throw new MidiDeviceException("Unable to start tick generator.", new Win32Exception(errorCode));
             }
         }
 
+        #endregion
+
+        #region Methods
+
         private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
         {
-            if (_timerId == NoTimerId || _disposed)
+            if (!IsRunning || _disposed)
                 return;
 
-            TickGenerated?.Invoke(this, EventArgs.Empty);
+            GenerateTick();
         }
 
         private static void ProcessMmResult(uint mmResult)
@@ -128,16 +102,13 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region IDisposable
 
-        /// <summary>
-        /// Releases all resources used by the current <see cref="HighPrecisionTickGenerator"/>.
-        /// </summary>
-        public void Dispose()
+        public override void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (_disposed)
                 return;
@@ -146,7 +117,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
             }
 
-            if (_timerId != NoTimerId)
+            if (IsRunning)
             {
                 MidiTimerWinApi.timeEndPeriod(_resolution);
                 MidiTimerWinApi.timeKillEvent(_timerId);

@@ -14,15 +14,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     {
         #region Nested classes
 
-        private sealed class ThreadTickGenerator : ITickGenerator
+        private sealed class ThreadTickGenerator : TickGenerator
         {
-            public event EventHandler TickGenerated;
-
             private Thread _thread;
             private bool _isRunning;
             private bool _disposed;
 
-            public void TryStart()
+            protected override void Start(TimeSpan interval)
             {
                 if (_thread != null)
                     return;
@@ -38,9 +36,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     while (_isRunning)
                     {
                         var elapsedMs = stopwatch.ElapsedMilliseconds;
-                        if (elapsedMs - lastMs >= 1)
+                        if (elapsedMs - lastMs >= interval.TotalMilliseconds)
                         {
-                            TickGenerated?.Invoke(this, EventArgs.Empty);
+                            GenerateTick();
                             lastMs = elapsedMs;
                         }
                     }
@@ -49,12 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 _thread.Start();
             }
 
-            public void Dispose()
-            {
-                Dispose(true);
-            }
-
-            private void Dispose(bool disposing)
+            protected override void Dispose(bool disposing)
             {
                 if (_disposed)
                     return;
@@ -76,21 +69,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void CheckPlayback_HighPrecisionTickGenerator()
         {
-            CheckPlayback_TickGenerator(interval => new HighPrecisionTickGenerator(interval), TimeSpan.FromMilliseconds(30));
+            CheckPlayback_TickGenerator(() => new HighPrecisionTickGenerator(), TimeSpan.FromMilliseconds(30));
         }
 
         [Retry(RetriesNumber)]
         [Test]
         public void CheckPlayback_RegularPrecisionTickGenerator()
         {
-            CheckPlayback_TickGenerator(interval => new RegularPrecisionTickGenerator(interval), TimeSpan.FromMilliseconds(50));
+            CheckPlayback_TickGenerator(() => new RegularPrecisionTickGenerator(), TimeSpan.FromMilliseconds(50));
         }
 
         [Retry(RetriesNumber)]
         [Test]
         public void CheckPlayback_CustomTickGenerator()
         {
-            CheckPlayback_TickGenerator(_ => new ThreadTickGenerator(), TimeSpan.FromMilliseconds(10));
+            CheckPlayback_TickGenerator(() => new ThreadTickGenerator(), TimeSpan.FromMilliseconds(10));
         }
 
         [Retry(RetriesNumber)]
@@ -143,14 +136,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, maximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
-                createTickGeneratorCallback: _ => null);
+                createTickGeneratorCallback: () => null);
         }
 
         #endregion
 
         #region Private methods
 
-        private void CheckPlayback_TickGenerator(CreateTickGeneratorCallback createTickGeneratorCallback, TimeSpan maximumEventSendReceiveDelay)
+        private void CheckPlayback_TickGenerator(Func<TickGenerator> createTickGeneratorCallback, TimeSpan maximumEventSendReceiveDelay)
         {
             var eventsToSend = new[]
             {

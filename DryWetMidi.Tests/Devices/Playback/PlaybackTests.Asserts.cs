@@ -373,7 +373,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             PlaybackAction afterPlaybackStarted,
             PlaybackAction waiting,
             PlaybackAction finalChecks,
-            CreateTickGeneratorCallback createTickGeneratorCallback = null)
+            Func<TickGenerator> createTickGeneratorCallback = null)
         {
             var playbackContext = new PlaybackContext();
 

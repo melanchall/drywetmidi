@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Fields
 
-        private CreateTickGeneratorCallback _createTickGeneratorCallback = interval => new HighPrecisionTickGenerator(interval);
+        private Func<TickGenerator> _createTickGeneratorCallback = () => new HighPrecisionTickGenerator();
 
         #endregion
 
@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// Gets or sets a callback used to create tick generator for MIDI clock.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
-        public CreateTickGeneratorCallback CreateTickGeneratorCallback
+        public Func<TickGenerator> CreateTickGeneratorCallback
         {
             get { return _createTickGeneratorCallback; }
             set
