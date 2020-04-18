@@ -66,6 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 expectedStartedRaised: 2,
                 expectedStoppedRaised: 1,
                 expectedFinishedRaised: 1,
+                expectedRepeatStartedRaised: 0,
                 setupPlayback: NoPlaybackAction,
                 beforeChecks: NoPlaybackAction,
                 afterChecks: (context, playback) =>
@@ -82,8 +83,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 expectedStartedRaised: 2,
                 expectedStoppedRaised: 1,
                 expectedFinishedRaised: 0,
+                expectedRepeatStartedRaised: 5,
                 setupPlayback: (context, playback) => playback.Loop = true,
-                beforeChecks: (context, playback) => Thread.Sleep(TimeSpan.FromSeconds(10)),
+                beforeChecks: (context, playback) => Thread.Sleep(TimeSpan.FromSeconds(5.5)),
                 afterChecks: (context, playback) =>
                 {
                     Assert.IsTrue(playback.IsRunning, "Playback is not running after waiting.");

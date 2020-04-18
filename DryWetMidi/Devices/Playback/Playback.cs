@@ -39,6 +39,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler Finished;
 
+        public event EventHandler RepeatStarted;
+
         /// <summary>
         /// Occurs when notes started to play. It will raised if playback's cursor
         /// gets in to notes.
@@ -671,6 +673,11 @@ namespace Melanchall.DryWetMidi.Devices
             Finished?.Invoke(this, EventArgs.Empty);
         }
 
+        private void OnRepeatStarted()
+        {
+            RepeatStarted?.Invoke(this, EventArgs.Empty);
+        }
+
         private void OnNotesPlaybackStarted(params Note[] notes)
         {
             NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes));
@@ -742,6 +749,8 @@ namespace Melanchall.DryWetMidi.Devices
             _clock.ResetCurrentTime();
             _eventsEnumerator.Reset();
             _eventsEnumerator.MoveNext();
+
+            OnRepeatStarted();
             _clock.Start();
         }
 

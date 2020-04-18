@@ -325,6 +325,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             int expectedStartedRaised,
             int expectedStoppedRaised,
             int expectedFinishedRaised,
+            int expectedRepeatStartedRaised,
             PlaybackAction setupPlayback,
             PlaybackAction beforeChecks,
             PlaybackAction afterChecks)
@@ -332,13 +333,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var started = 0;
             var stopped = 0;
             var finished = 0;
+            var repeatStarted = 0;
 
             var playbackEvents = new MidiEvent[]
             {
                 new NoteOnEvent(),
                 new NoteOffEvent
                 {
-                    DeltaTime = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 5), TempoMap.Default)
+                    DeltaTime = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 1), TempoMap.Default)
                 }
             };
 
@@ -350,6 +352,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 playback.Started += (sender, args) => started++;
                 playback.Stopped += (sender, args) => stopped++;
                 playback.Finished += (sender, args) => finished++;
+                playback.RepeatStarted += (sender, args) => repeatStarted++;
 
                 playback.Start();
                 playback.Stop();
@@ -358,7 +361,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 beforeChecks(null, playback);
 
                 Assert.IsTrue(
-                    SpinWait.SpinUntil(() => started == expectedStartedRaised && stopped == expectedStoppedRaised && finished == expectedFinishedRaised, TimeSpan.FromSeconds(6)),
+                    SpinWait.SpinUntil(() => started == expectedStartedRaised && stopped == expectedStoppedRaised && finished == expectedFinishedRaised && repeatStarted == expectedRepeatStartedRaised, TimeSpan.FromSeconds(2)),
                     "Playback events are raised invalid number of times.");
 
                 afterChecks(null, playback);
