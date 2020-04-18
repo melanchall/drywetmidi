@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
@@ -31,6 +33,24 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
                 });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void EventPlayed_AllEventsTypes()
+        {
+            var delay = 10;
+            var eventsToSend = TypesProvider
+                .GetAllEventTypes()
+                .Select(type => type == typeof(UnknownMetaEvent)
+                    ? new UnknownMetaEvent(0)
+                    : (MidiEvent)Activator.CreateInstance(type))
+                .Select(midiEvent => new EventToSend(midiEvent, TimeSpan.FromMilliseconds(delay)))
+                .ToArray();
+
+            CheckEventPlayedEvent(
+                eventsToSend: eventsToSend,
+                expectedPlayedEvents: eventsToSend.Select((e, i) => new ReceivedEvent(e.Event, TimeSpan.FromMilliseconds(delay * (i + 1)))).ToArray());
         }
 
         [Retry(RetriesNumber)]
