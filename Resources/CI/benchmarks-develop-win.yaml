@@ -52,6 +52,14 @@ steps:
     artifactName: 'BenchmarksResults'
     targetPath: $(Build.ArtifactStagingDirectory)\PreviousResults
 
+- task: NugetToolInstaller@1
+  displayName: Install latest NuGet tool
+
+- task: DotNetCoreCLI@2
+  displayName: Restore NuGet packages
+  inputs:
+    command: restore
+
 - task: DotNetCoreCLI@2
   displayName: Build solution
   inputs:
