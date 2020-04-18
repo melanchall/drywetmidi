@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
-        internal MidiEventSentEventArgs(MidiEvent midiEvent)
+        public MidiEventSentEventArgs(MidiEvent midiEvent)
         {
             Event = midiEvent;
         }
