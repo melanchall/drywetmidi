@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Provides a way to connect an input MIDI device to an output MIDI device.
     /// </summary>
-    public sealed class DevicesConnector : IDisposable
+    public sealed class DevicesConnector
     {
         #region Fields
 
@@ -52,18 +52,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         #endregion
 
-        #region Finalizer
-
-        /// <summary>
-        /// Finalizes the current instance of the <see cref="DevicesConnector"/>.
-        /// </summary>
-        ~DevicesConnector()
-        {
-            Dispose(false);
-        }
-
-        #endregion
-
         #region Properties
 
         /// <summary>
@@ -76,6 +64,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public IReadOnlyCollection<IOutputDevice> OutputDevices { get; }
 
+        public bool AreDevicesConnected { get; private set; }
+
         #endregion
 
         #region Methods
@@ -86,6 +76,7 @@ namespace Melanchall.DryWetMidi.Devices
         public void Connect()
         {
             InputDevice.EventReceived += OnEventReceived;
+            AreDevicesConnected = true;
         }
 
         /// <summary>
@@ -93,6 +84,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public void Disconnect()
         {
+            AreDevicesConnected = false;
             InputDevice.EventReceived -= OnEventReceived;
         }
 
@@ -100,32 +92,9 @@ namespace Melanchall.DryWetMidi.Devices
         {
             foreach (var outputDevice in OutputDevices)
             {
-                outputDevice.SendEvent(e.Event);
+                if (AreDevicesConnected)
+                    outputDevice.SendEvent(e.Event);
             }
-        }
-
-        #endregion
-
-        #region IDisposable
-
-        /// <summary>
-        /// Releases all resources used by the current instance of <see cref="DevicesConnector"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing)
-                Disconnect();
-
-            _disposed = true;
         }
 
         #endregion

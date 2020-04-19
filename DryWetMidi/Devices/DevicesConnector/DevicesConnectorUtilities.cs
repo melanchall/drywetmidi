@@ -31,6 +31,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
             ThrowIfArgument.IsNull(nameof(outputDevices), outputDevices);
+            ThrowIfArgument.ContainsNull(nameof(outputDevices), outputDevices);
 
             var devicesConnector = new DevicesConnector(inputDevice, outputDevices);
             devicesConnector.Connect();

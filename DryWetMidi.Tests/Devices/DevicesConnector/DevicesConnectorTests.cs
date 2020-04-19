@@ -109,8 +109,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                         using (var outputB = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
                         using (var outputC = OutputDevice.GetByName(MidiDevicesNames.DeviceC))
-                        using (var devicesConnector = inputA.Connect(outputB, outputC))
                         {
+                            var devicesConnector = inputA.Connect(outputB, outputC);
+                            Assert.IsTrue(devicesConnector.AreDevicesConnected, "Devices aren't connected.");
+
                             stopwatch.Start();
                             SendReceiveUtilities.SendEvents(eventsToSend, outputA);
                             stopwatch.Stop();
@@ -120,6 +122,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                                 () => receivedEventsB.Count == eventsToSend.Count && receivedEventsC.Count == eventsToSend.Count,
                                 timeout);
                             Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+
+                            devicesConnector.Disconnect();
+                            Assert.IsFalse(devicesConnector.AreDevicesConnected, "Devices aren't disconnected.");
                         }
                     }
                 }
