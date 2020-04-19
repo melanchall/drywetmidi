@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentException"><paramref name="outputDevices"/> contains <c>null</c>.</exception>
-        public DevicesConnector(InputDevice inputDevice, params IOutputDevice[] outputDevices)
+        public DevicesConnector(IInputDevice inputDevice, params IOutputDevice[] outputDevices)
         {
             ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
             ThrowIfArgument.IsNull(nameof(outputDevices), outputDevices);
@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets an input MIDI device to connect to <see cref="OutputDevices"/>.
         /// </summary>
-        public InputDevice InputDevice { get; }
+        public IInputDevice InputDevice { get; }
 
         /// <summary>
         /// Gets output MIDI devices to connect <see cref="InputDevice"/> to.
