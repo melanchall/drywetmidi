@@ -7,15 +7,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
+        private const char PartsDelimiter = '-';
+        
         private const string ScaleDegreeGroupName = "sd";
-        private const string ChordCharacteristicsGroupName = "cc";
 
         private static readonly string ScaleDegreeGroup = $@"(?<{ScaleDegreeGroupName}>(?i:M{{0,4}}(CM|CD|D?C{{0,3}})(XC|XL|L?X{{0,3}})(IX|IV|V?I{{0,3}})))";
-        private static readonly string ChordCharacteristicsGroup = $@"(?<{ChordCharacteristicsGroupName}>{ChordParser.ChordCharacteristicsGroup})";
 
         private static readonly string[] Patterns = new[]
         {
-            $@"{ScaleDegreeGroup}\s*{ChordCharacteristicsGroup}"
+            $@"{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}"
         };
 
         private static Dictionary<char, int> RomanMap = new Dictionary<char, int>
@@ -40,14 +40,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (string.IsNullOrWhiteSpace(input))
                 return ParsingResult.EmptyInputString;
 
-            var matches = ParsingUtilities.Matches(input, Patterns, ignoreCase: false);
-            if (matches == null)
-                return ParsingResult.NotMatched;
-
+            var parts = input.Split(new[] { PartsDelimiter }, System.StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
-            foreach (var match in matches)
+            foreach (var part in parts)
             {
+                var match = ParsingUtilities.Match(part, Patterns, ignoreCase: false);
+                if (match == null)
+                    return ParsingResult.NotMatched;
+
                 var degreeGroup = match.Groups[ScaleDegreeGroupName];
                 var degreeRoman = degreeGroup.Value.ToLower();
                 if (string.IsNullOrWhiteSpace(degreeRoman))

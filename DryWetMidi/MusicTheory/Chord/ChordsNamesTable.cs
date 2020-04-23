@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -79,6 +81,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
         #endregion
 
         #region Methods
+
+        public static NoteName[] GetChordNotesNames(NoteName rootNoteName, string chordCharacteristic, NoteName? bassNoteName)
+        {
+            var notesNames = new List<NoteName>();
+            if (bassNoteName != null)
+                notesNames.Add(bassNoteName.Value);
+
+            var definition = NamesDefinitions.FirstOrDefault(d => d.Names.Contains(chordCharacteristic.Replace(" ", string.Empty)));
+            if (definition != null)
+                notesNames.AddRange(definition.Intervals.First().Select(i => rootNoteName.Transpose(Interval.FromHalfSteps(i))));
+
+            return notesNames.ToArray();
+        }
 
         public static IList<string> GetChordNames(NoteName[] notesNames)
         {
