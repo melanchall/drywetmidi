@@ -190,6 +190,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return octave;
         }
 
+        public static bool TryParse(string input, out Octave octave)
+        {
+            return ParsingUtilities.TryParse(input, OctaveParser.TryParse, out octave);
+        }
+
+        public static Octave Parse(string input)
+        {
+            return ParsingUtilities.Parse<Octave>(input, OctaveParser.TryParse);
+        }
+
         #endregion
 
         #region Operators

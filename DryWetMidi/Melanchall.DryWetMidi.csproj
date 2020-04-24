@@ -35,7 +35,7 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
   
   <ItemGroup>
     <Folder Include="Properties\" />
-    <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\"/>
+    <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
