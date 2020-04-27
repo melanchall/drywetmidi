@@ -402,8 +402,11 @@ h3#constructors, h3#properties, h3#methods, h3#fields, h3#events, h3#implements,
 /**/
 
 .article img {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #201F1E;
+  padding: 10px;
+  border: 1px solid #5E5E5D;
 }
 
 article h1 {

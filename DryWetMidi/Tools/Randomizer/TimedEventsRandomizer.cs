@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides methods to randomize timed events time.
     /// </summary>
     /// <remarks>
-    /// See <see href="xref:wiki_Randomizer">Randomizer</see> article on Wiki to learn more.
+    /// See <see href="xref:a_randomizer">Randomizer</see> article on Wiki to learn more.
     /// </remarks>
     public sealed class TimedEventsRandomizer : Randomizer<TimedEvent, TimedEventsRandomizingSettings>
     {
