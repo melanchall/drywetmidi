@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides methods for splitting notes.
     /// </summary>
     /// <remarks>
-    /// See <see href="xref:wiki_NotesChordsSplitter">Notes/chords splitter</see> article on Wiki to learn more.
+    /// See <see href="xref:a_notes_chords_splitter">Notes/chords splitter</see> article on Wiki to learn more.
     /// </remarks>
     public sealed class NotesSplitter : LengthedObjectsSplitter<Note>
     {

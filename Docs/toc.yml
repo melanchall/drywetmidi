@@ -5,8 +5,6 @@
   href: obj/api/
 - name: Articles
   href: articles/
-- name: Wiki
-  href: wiki/
   homepage: wiki/Home.md
 - name: GitHub
   href: https://github.com/melanchall/drywetmidi
