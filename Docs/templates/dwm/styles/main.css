@@ -270,6 +270,8 @@ h5[id$=_syntax] {
     display: none;
 }
 
+/* Transform Property Value table to just type */
+
 h5.propertyValue + .table-responsive::before {
     content: "Property Type";
     font-weight: 500;
@@ -292,6 +294,34 @@ h5.propertyValue+div>table>tbody>tr>td {
 }
 
 h5.propertyValue+div>table {
+  border: none;
+  margin-top: 5px;
+}
+
+/* Transform Event Type table to just type */
+
+h5.eventType + .table-responsive::before {
+    content: "Event Type";
+    font-weight: 500;
+}
+
+h5.eventType + .table-responsive thead {
+    display: none;
+}
+
+h5.eventType + .table-responsive td {
+    border: none;
+}
+
+h5.eventType {
+    display: none;
+}
+
+h5.eventType+div>table>tbody>tr>td {
+  padding: 0px;
+}
+
+h5.eventType+div>table {
   border: none;
   margin-top: 5px;
 }
@@ -327,7 +357,7 @@ h5.fieldValue+div>table {
 /**/
 
 h5[id$=_syntax] + .codewrapper {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 /**/
