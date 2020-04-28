@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Overview | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Overview | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_dev_overview">
+<h1 id="overview">Overview</h1>
+
+<p><strong>Please note that Devices API is supported for Windows only at now.</strong></p>
+<p>DryWetMIDI provides ability to send MIDI data to or receive it from MIDI devices. For that purpose there are following types:</p>
+<ul>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IInputDevice.html">IInputDevice</a> (see <a href="Input-device.html">Input device</a>);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a> (see <a href="Output-device.html">Output device</a>);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.DevicesConnector.html">DevicesConnector</a> (see <a href="Devices-connector.html">Devices connector</a>).</li>
+</ul>
+<p>The library provides implementations for both <code>IInputDevice</code> and <code>IOutputDevice</code>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a> correspondingly which represent MIDI devices visible by the operating system. Both classes implement <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> interface so you should always dispose them to free devices for using by another applications.</p>
+<p>All classes that interact with devices work with interfaces mentioned above, so you can create custom implementation of your devices (see examples in <a href="Input-device.html">Input device</a> and <a href="Output-device.html">Output device</a> articles) and use it for playback or recording, for example.</p>
+<p>MIDI devices API classes are placed in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a> namespace.</p>
+<p>To understand what is input and output device in DryWetMIDI take a look at following image:</p>
+<p><img src="images/Devices.png" alt="Devices"></p>
+<p>So, as you can see, although a MIDI port is <em>MIDI IN</em> for MIDI device, it will be an <strong>output device</strong> in DryWetMIDI because your application will <strong>send MIDI data to</strong> this port. <em>MIDI OUT</em> of MIDI device will be an <strong>input device</strong> in DryWetMIDI because a program will <strong>receive MIDI data from</strong> the port.</p>
+<p>If some error occured during sending or receiving a MIDI event, the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_ErrorOccurred">ErrorOccurred</a> event will be fired holding an exception caused the error.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

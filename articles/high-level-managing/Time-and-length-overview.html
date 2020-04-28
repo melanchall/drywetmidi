@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Time and length - Overview | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Time and length - Overview | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="time-and-length---overview">Time and length - Overview</h1>
+
+<p>All times and lengths in a MIDI file are presented as some long values in units defined by the time division of a MIDI file. In practice it is much more convenient to operate by &quot;human understandable&quot; representations like seconds or bars/beats. In fact there is no difference between time and length since time within a MIDI file is just a length that always starts at zero, so the <em>time span</em> term will be used to describe both time and length. DryWetMIDI provides the following classes to represent time span:</p>
+<ul>
+<li><a href="MetricTimeSpan.html">MetricTimeSpan</a> for time span in terms of microseconds;</li>
+<li><a href="BarBeatTicksTimeSpan.html">BarBeatTicksTimeSpan</a> for time span in terms of number of bars, beats and ticks;</li>
+<li><a href="BarBeatFractionTimeSpan.html">BarBeatFractionTimeSpan</a> for time span in terms of number of bars and fractional beats (for example, <code>0.5</code> beats);</li>
+<li><a href="MusicalTimeSpan.html">MusicalTimeSpan</a> for time span in terms of a fraction of the whole note length;</li>
+<li><a href="MidiTimeSpan.html">MidiTimeSpan</a> exists for unification purposes and simply holds long value in units defined by the time division of a file.</li>
+</ul>
+<p>All time span classes implement <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> interface.</p>
+<p>To convert time span between different representations you should use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeConverter.html">TimeConverter</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.LengthConverter.html">LengthConverter</a> classes (these conversions require <a href="Tempo-map.html">tempo map</a> of a MIDI file). (You can use <code>LengthConverter</code> for time conversions too but with the <code>TimeConverter</code> you don't need to specify time where time span starts since it is always zero.)</p>
+<p>Examples of time conversions:</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+
+// Some time in MIDI ticks (we assume time division of a MIDI file is &quot;ticks per quarter note&quot;)
+
+long ticks = 123;
+
+// Convert ticks to metric time
+
+MetricTimeSpan metricTime = TimeConverter.ConvertTo&lt;MetricTimeSpan&gt;(ticks, tempoMap);
+
+// Convert ticks to musical time
+
+MusicalTimeSpan musicalTimeFromTicks = TimeConverter.ConvertTo&lt;MusicalTimeSpan&gt;(ticks, tempoMap);
+
+// Convert metric time to musical time
+
+MusicalTimeSpan musicalTimeFromMetric = TimeConverter.ConvertTo&lt;MusicalTimeSpan&gt;(metricTime, tempoMap);
+
+// Convert metric time to bar/beat time
+
+BarBeatTicksTimeSpan barBeatTicksTimeFromMetric = TimeConverter.ConvertTo&lt;BarBeatTicksTimeSpan&gt;(metricTime, tempoMap);
+
+// Convert musical time back to ticks
+
+long ticksFromMusical = TimeConverter.ConvertFrom(musicalTimeFromTicks, tempoMap);
+</code></pre>
+<p>Examples of length conversions:</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+
+// Convert ticks to metric length
+
+MetricTimeSpan metricLength = LengthConverter.ConvertTo&lt;MetricTimeSpan&gt;(ticks, time, tempoMap);
+
+// Convert metric length to musical length using metric time
+
+MusicalTimeSpan musicalLengthFromMetric = LengthConverter.ConvertTo&lt;MusicalTimeSpan&gt;(metricLength,
+                                                                                     metricTime,
+                                                                                     tempoMap);
+
+// Convert musical length back to ticks
+
+long ticksFromMetricLength = LengthConverter.ConvertFrom(metricLength, time, tempoMap);
+</code></pre>
+<p>You could notice that <code>LengthConverter</code>'s methods take a <code>time</code> as parameter. In general case MIDI file has changes of the tempo and time signature. Thus the same <code>long</code> (X) value can represent different amount of seconds, for example, depending on the time of an object with length of this X value. The methods above can take time either as <code>long</code> or as <code>ITimeSpan</code>.</p>
+<p>There are some useful methods in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html">TimedObjectUtilities</a> class. This class contains extension methods for types that implement the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> interface – <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>. For example, you can get time of a timed event in hours, minutes, seconds with <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs__1_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">TimeAs</a> method:</p>
+<pre><code class="lang-csharp">var metricTime = timedEvent.TimeAs&lt;MetricTimeSpan&gt;(tempoMap);
+</code></pre>
+<p>Or you can find all notes of a MIDI file that start at time of 10 bars and 4 beats:</p>
+<pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
+IEnumerable&lt;Note&gt; notes = midiFile
+    .GetNotes().AtTime(new BarBeatTicksTimeSpan(10, 4), tempoMap);
+</code></pre>
+<p>Also there is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html">LengthedObjectUtilities</a> class. This class contains extension methods for types that implement the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> interface – <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>. For example, you can get length of a note as a fraction of the whole note with <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_LengthAs__1_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthAs</a> method:</p>
+<pre><code class="lang-csharp">var musicalLength = note.LengthAs&lt;MusicalTimeSpan&gt;(tempoMap);
+</code></pre>
+<p>Or you can get all notes of a MIDI file that end exactly at 30 seconds from the start of the file:</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+var notesAt30sec = midiFile
+    .GetNotes().EndAtTime(new MetricTimeSpan(0, 0, 30), tempoMap);
+</code></pre>
+<p><code>TimeAs</code> (end <code>EndTimeAs</code>) and <code>LengthAs</code> methods have non-generic versions where the desired type of result should be passed as an argument of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a> type.</p>
+<p><code>ITimeSpan</code> interface has several methods to perform arithmetic operations on time spans. For example, to add metric length to metric time you can write:</p>
+<pre><code class="lang-csharp">var timeSpan1 = new MetricTimeSpan(0, 2, 20);
+var timeSpan2 = new MetricTimeSpan(0, 0, 10);
+ITimeSpan result = timeSpan1.Add(timeSpan2, TimeSpanMode.TimeLength);
+</code></pre>
+<p>You need to specify mode of the operation. In the example above <code>TimeLength</code> is used which means that first time span represents a time and the second one represents a length. This information is needed for conversion engine when operands are of different types. There are also <code>TimeTime</code> and <code>LengthLength</code> modes.</p>
+<p>You can also subtract one time span from another one:</p>
+<pre><code class="lang-csharp">var timeSpan1 = new MetricTimeSpan(0, 10, 0);
+var timeSpan2 = new MusicalTimeSpan(3, 8);
+ITimeSpan result = timeSpan1.Subtract(timeSpan2, TimeSpanMode.TimeTime);
+</code></pre>
+<p>If operands of the same type, result time span will be of this type too. But if you sum or subtract time spans of different types, the type of a result time span will be <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> which holds operands along with operation (addition or subtraction) and mode.</p>
+<pre><code>
+To stretch or shrink a time span use `Multiply` or `Divide` methods:
+
+```csharp
+ITimeSpan stretchedTimeSpan = new MetricTimeSpan(0, 0, 10).Multiply(2.5);
+ITimeSpan shrinkedTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
+</code></pre>
+<p>There are some useful methods in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html">TimeSpanUtilities</a> class. These methods include <code>Parse</code> and <code>TryParse</code> ones that allows to parse a string to appropriate time span. Please read article corresponding to desired time span type to learn formats of strings that can be parsed to this type (use links at the start of this article).</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

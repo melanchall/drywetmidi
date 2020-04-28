@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Custom chunks | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Custom chunks | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_custom_chunk">
+<h1 id="custom-chunks">Custom chunks</h1>
+
+<p>MIDI files are made up of <strong>chunks</strong>. Each chunk has a 4-character ID and a 32-bit length, which is the number of bytes in the chunk. This structure allows future or custom chunk types to be designed which may be easily ignored if encountered by a program written before a chunk type is introduced or if the program doesn't know about the type. DryWetMIDI allows you to implement custom chunks which can be written to a MIDI file and be read from it.</p>
+<p>For example, we want to design a chunk that will contain information about changes in whatever we want. A change is described by <strong>date</strong> (day, month, year) and <strong>comment</strong>. Let's create the class to store single change.</p>
+<pre><code class="lang-csharp">public sealed class Change
+{
+    public Change(DateTime date, string comment)
+    {
+        Date = date;
+        Comment = comment;
+    }
+
+    public DateTime Date { get; }
+
+    public string Comment { get; }
+}
+</code></pre>
+<p>Now we are going to implement a custom chunk. Custom chunk class must be derived from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> and must implement four abstract methods:</p>
+<ul>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_UInt32_">ReadContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_">WriteContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_">GetContentSize</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_Clone">Clone</a>.</li>
+</ul>
+<p>Also the class must have parameterless constructor which calls constructor of the base class (<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>) passing chunk's ID to it. ID is a 4-character string which will be <strong>Hstr</strong> for our chunk. ID of custom chunk should not be the same as one of standard chunks IDs. To get IDs of standard chunks you can call <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_GetStandardChunkIds">MidiChunk.GetStandardChunkIds</a>.</p>
+<p>The class will look like this:</p>
+<pre><code class="lang-csharp">public sealed class HistoryChunk : MidiChunk
+{
+    private const string Id = &quot;Hstr&quot;;
+
+    private readonly List&lt;Change&gt; _changes = new List&lt;Change&gt;();
+
+    public HistoryChunk()
+        : base(Id)
+    {
+    }
+
+    public void AddChange(DateTime dateTime, string comment)
+    {
+        _changes.Add(new Change(dateTime, comment));
+    }
+
+    protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override uint GetContentSize(WritingSettings settings)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override MidiChunk Clone()
+    {
+        throw new NotImplementedException();
+    }
+}
+</code></pre>
+<p>Before we will start to implement four methods mentioned above we need to determine the structure of change records according to which it should be read and written.</p>
+<p>Chunk's content will be started with the count of changes. We will write this count as <a href="https://en.wikipedia.org/wiki/Variable-length_quantity">variable-length quantity</a> (VLQ) number. The count followed by change records.</p>
+<p>Each change is:</p>
+<ul>
+<li>one byte for <strong>day</strong>;</li>
+<li>one byte for <strong>month</strong>;</li>
+<li>two bytes for <strong>year</strong>;</li>
+<li>VLQ number bytes representing size of bytes array which is encoded comment;</li>
+<li>bytes which represent encoded comment string.</li>
+</ul>
+<p>To store comments we will use <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding.unicode#System_Text_Encoding_Unicode" title="Encoding.Unicode">Unicode</a> encoding.</p>
+<p>Let's implement the <code>ReadContent</code> method:</p>
+<pre><code class="lang-csharp">protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+{
+    // Read changes count
+
+    var changesCount = reader.ReadVlqNumber();
+
+    for (int i = 0; i &lt; changesCount; i++)
+    {
+        // Read date
+
+        var day = reader.ReadByte();
+        var month = reader.ReadByte();
+        var year = reader.ReadWord(); // ushort
+
+        // Read comment
+
+        var commentLength = reader.ReadVlqNumber();
+        var commentBytes = reader.ReadBytes(commentLength);
+        var comment = Encoding.Unicode.GetString(commentBytes);
+
+        // Add change to changes list
+
+        AddChange(new DateTime(year, month, day), comment);
+    }
+}
+</code></pre>
+<p>It is highly recommended that count of the bytes were read by this method is equal to the value passed to <code>size</code> parameter.</p>
+<p>To be able to write the chunk we need to implement <code>WriteContent</code> method:</p>
+<pre><code class="lang-csharp">protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+{
+    // Write changes count
+
+    writer.WriteVlqNumber(_changes.Count);
+
+    foreach (var change in _changes)
+    {
+        // Write date
+
+        var date = change.Date;
+        writer.WriteByte((byte)date.Day);
+        writer.WriteByte((byte)date.Month);
+        writer.WriteWord((ushort)date.Year);
+
+        // Write comment
+
+        var comment = change.Comment;
+        if (string.IsNullOrEmpty(comment))
+        {
+            writer.WriteVlqNumber(0);
+            continue;
+        }
+
+        var commentBytes = Encoding.Unicode.GetBytes(comment.ToCharArray());
+        writer.WriteVlqNumber(commentBytes.Length);
+        writer.WriteBytes(commentBytes);
+    }
+}
+</code></pre>
+<p>Every chunk starts with ID and its size. DryWetMIDI calls <code>GetContentSize</code> method of the <code>MidiChunk</code> to write its return value as chunk's size. You must calculate real size of the chunk's content in order to programs which will be read a MIDI file with your custom chunk will be able to skip it by advancing position of the reader on this size. Let's implement <code>GetContentSize</code>:</p>
+<pre><code class="lang-csharp">protected override uint GetContentSize(WritingSettings settings)
+{
+    return (uint)(
+        _changes.Count.GetVlqLength() +
+        _changes.Select(c =&gt;
+        {
+            var commentLength = Encoding.Unicode.GetByteCount(c.Comment.ToCharArray());
+            return 4 /* 1 for day, 1 for month, 2 for year */ +
+                    commentLength.GetVlqLength() +
+                    commentLength;
+        })
+        .DefaultIfEmpty()
+        .Sum());
+}
+</code></pre>
+<p>Implementation of <code>Clone</code> method is pretty easy:</p>
+<pre><code class="lang-csharp">public override MidiChunk Clone()
+{
+    var result = new HistoryChunk();
+    result._changes.AddRange(_changes);
+    return result;
+}
+</code></pre>
+<p>That's all! Custom chunk is completely implemented. See code sample below to know how to read and write it:</p>
+<pre><code class="lang-csharp">// Create a history chunk and populate it by some changes
+
+var historyChunk = new HistoryChunk();
+historyChunk.AddChange(new DateTime(2017, 3, 23), &quot;Start the history!&quot;);
+historyChunk.AddChange(new DateTime(2156, 11, 3), &quot;Comment from the future.&quot;);
+historyChunk.AddChange(new DateTime(9999, 2, 12), null);
+
+// Add the chunk to an existing MIDI file
+
+var file = MidiFile.Read(&quot;My Great Song.mid&quot;);
+file.Chunks.Add(historyChunk);
+file.Write(&quot;My Great Song.mid&quot;, true);
+
+// Read the file with our chunk
+
+var fileWithHistoryChunk = MidiFile.Read(
+    &quot;My Great Song.mid&quot;,
+    new ReadingSettings
+    {
+        CustomChunkTypes = new ChunkTypesCollection
+        {
+            { typeof(HistoryChunk), &quot;Hstr&quot; }
+        }
+    });
+
+var historyChunks = fileWithHistoryChunk.Chunks.OfType&lt;HistoryChunk&gt;();
+</code></pre>
+<p>If you don't provide information about your custom chunk in <code>ReadingSettings</code>, the chunks will be read as <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a>.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

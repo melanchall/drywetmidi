@@ -1,18 +1,84 @@
 ### YamlMime:XRefMap
 sorted: true
 references:
+- uid: a_composing_pattern
+  name: Pattern
+  href: articles/composing/Pattern.html
 - uid: a_custom_chunk
   name: Custom chunks
-  href: articles/custom-data-structures/Custom%20chunks.html
+  href: articles/custom-data-structures/Custom-chunks.html
 - uid: a_custom_meta_event
   name: Custom meta events
-  href: articles/custom-data-structures/Custom%20meta%20events.html
+  href: articles/custom-data-structures/Custom-meta-events.html
+- uid: a_dev_connector
+  name: Devices connector
+  href: articles/devices/Devices-connector.html
+- uid: a_dev_input
+  name: Input device
+  href: articles/devices/Input-device.html
+- uid: a_dev_output
+  name: Output device
+  href: articles/devices/Output-device.html
+- uid: a_dev_overview
+  name: Overview
+  href: articles/devices/Overview.html
 - uid: a_file_reading
   name: MIDI file reading
-  href: articles/file-reading-writing/MIDI%20file%20reading.html
+  href: articles/file-reading-writing/MIDI-file-reading.html
+- uid: a_file_splitter
+  name: MIDI file splitter
+  href: articles/tools/MIDI-file-splitter.html
 - uid: a_file_writing
   name: MIDI file writing
-  href: articles/file-reading-writing/MIDI%20file%20writing.html
+  href: articles/file-reading-writing/MIDI-file-writing.html
+- uid: a_hldm_tempomap
+  name: Tempo map
+  href: articles/high-level-managing/Tempo-map.html
+- uid: a_mt_chord
+  name: Chord
+  href: articles/music-theory/Chord.html
+- uid: a_mt_chord_progression
+  name: Chord progression
+  href: articles/music-theory/Chord-progression.html
+- uid: a_mt_interval
+  name: Interval
+  href: articles/music-theory/Interval.html
+- uid: a_mt_note
+  name: Note
+  href: articles/music-theory/Note.html
+- uid: a_mt_octave
+  name: Octave
+  href: articles/music-theory/Octave.html
+- uid: a_mt_overview
+  name: Overview
+  href: articles/music-theory/Overview.html
+- uid: a_mt_scale
+  name: Scale
+  href: articles/music-theory/Scale.html
+- uid: a_notes_chords_splitter
+  name: Notes and chords splitters
+  href: articles/tools/Notes-and-chords-splitter.html
+- uid: a_notes_merger
+  name: Notes merger
+  href: articles/tools/Notes-merger.html
+- uid: a_playback_curtime
+  name: Current time watching
+  href: articles/playback/Current-time-watching.html
+- uid: a_playback_overview
+  name: Playback - Overview
+  href: articles/playback/Overview.html
+- uid: a_playback_tickgen
+  name: Tick generator
+  href: articles/playback/Tick-generator.html
+- uid: a_quantizer
+  name: Quantizer
+  href: articles/tools/Quantizer.html
+- uid: a_recording_overview
+  name: Recording - Overview
+  href: articles/recording/Overview.html
+- uid: a_tools_overview
+  name: Overview
+  href: articles/tools/Overview.html
 - uid: Melanchall.DryWetMidi.Common
   name: Melanchall.DryWetMidi.Common
   href: api/Melanchall.DryWetMidi.Common.html
@@ -9803,27 +9869,21 @@ references:
   commentId: N:Melanchall.DryWetMidi.Devices
   fullName: Melanchall.DryWetMidi.Devices
   nameWithType: Melanchall.DryWetMidi.Devices
-- uid: Melanchall.DryWetMidi.Devices.CreateTickGeneratorCallback
-  name: CreateTickGeneratorCallback
-  href: api/Melanchall.DryWetMidi.Devices.CreateTickGeneratorCallback.html
-  commentId: T:Melanchall.DryWetMidi.Devices.CreateTickGeneratorCallback
-  fullName: Melanchall.DryWetMidi.Devices.CreateTickGeneratorCallback
-  nameWithType: CreateTickGeneratorCallback
 - uid: Melanchall.DryWetMidi.Devices.DevicesConnector
   name: DevicesConnector
   href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html
   commentId: T:Melanchall.DryWetMidi.Devices.DevicesConnector
   fullName: Melanchall.DryWetMidi.Devices.DevicesConnector
   nameWithType: DevicesConnector
-- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor(Melanchall.DryWetMidi.Devices.InputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
-  name: DevicesConnector(InputDevice, IOutputDevice[])
-  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_Melanchall_DryWetMidi_Devices_InputDevice_Melanchall_DryWetMidi_Devices_IOutputDevice___
-  commentId: M:Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor(Melanchall.DryWetMidi.Devices.InputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
-  name.vb: DevicesConnector(InputDevice, IOutputDevice())
-  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.DevicesConnector(Melanchall.DryWetMidi.Devices.InputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice[])
-  fullName.vb: Melanchall.DryWetMidi.Devices.DevicesConnector.DevicesConnector(Melanchall.DryWetMidi.Devices.InputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice())
-  nameWithType: DevicesConnector.DevicesConnector(InputDevice, IOutputDevice[])
-  nameWithType.vb: DevicesConnector.DevicesConnector(InputDevice, IOutputDevice())
+- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor(Melanchall.DryWetMidi.Devices.IInputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
+  name: DevicesConnector(IInputDevice, IOutputDevice[])
+  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_Melanchall_DryWetMidi_Devices_IInputDevice_Melanchall_DryWetMidi_Devices_IOutputDevice___
+  commentId: M:Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor(Melanchall.DryWetMidi.Devices.IInputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
+  name.vb: DevicesConnector(IInputDevice, IOutputDevice())
+  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.DevicesConnector(Melanchall.DryWetMidi.Devices.IInputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice[])
+  fullName.vb: Melanchall.DryWetMidi.Devices.DevicesConnector.DevicesConnector(Melanchall.DryWetMidi.Devices.IInputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice())
+  nameWithType: DevicesConnector.DevicesConnector(IInputDevice, IOutputDevice[])
+  nameWithType.vb: DevicesConnector.DevicesConnector(IInputDevice, IOutputDevice())
 - uid: Melanchall.DryWetMidi.Devices.DevicesConnector.#ctor*
   name: DevicesConnector
   href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector__ctor_
@@ -9831,6 +9891,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.DevicesConnector
   nameWithType: DevicesConnector.DevicesConnector
+- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.AreDevicesConnected
+  name: AreDevicesConnected
+  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_AreDevicesConnected
+  commentId: P:Melanchall.DryWetMidi.Devices.DevicesConnector.AreDevicesConnected
+  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.AreDevicesConnected
+  nameWithType: DevicesConnector.AreDevicesConnected
+- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.AreDevicesConnected*
+  name: AreDevicesConnected
+  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_AreDevicesConnected_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.DevicesConnector.AreDevicesConnected
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.AreDevicesConnected
+  nameWithType: DevicesConnector.AreDevicesConnected
 - uid: Melanchall.DryWetMidi.Devices.DevicesConnector.Connect
   name: Connect()
   href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_Connect
@@ -9857,32 +9930,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.Disconnect
   nameWithType: DevicesConnector.Disconnect
-- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.Dispose
-  name: Dispose()
-  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_Dispose
-  commentId: M:Melanchall.DryWetMidi.Devices.DevicesConnector.Dispose
-  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.Dispose()
-  nameWithType: DevicesConnector.Dispose()
-- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.Dispose*
-  name: Dispose
-  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_Dispose_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.DevicesConnector.Dispose
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.Dispose
-  nameWithType: DevicesConnector.Dispose
-- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.Finalize
-  name: Finalize()
-  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_Finalize
-  commentId: M:Melanchall.DryWetMidi.Devices.DevicesConnector.Finalize
-  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.Finalize()
-  nameWithType: DevicesConnector.Finalize()
-- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.Finalize*
-  name: Finalize
-  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_Finalize_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.DevicesConnector.Finalize
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.Finalize
-  nameWithType: DevicesConnector.Finalize
 - uid: Melanchall.DryWetMidi.Devices.DevicesConnector.InputDevice
   name: InputDevice
   href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_InputDevice
@@ -9915,15 +9962,15 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities
   fullName: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities
   nameWithType: DevicesConnectorUtilities
-- uid: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.InputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
-  name: Connect(InputDevice, IOutputDevice[])
-  href: api/Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.html#Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities_Connect_Melanchall_DryWetMidi_Devices_InputDevice_Melanchall_DryWetMidi_Devices_IOutputDevice___
-  commentId: M:Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.InputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
-  name.vb: Connect(InputDevice, IOutputDevice())
-  fullName: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.InputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice[])
-  fullName.vb: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.InputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice())
-  nameWithType: DevicesConnectorUtilities.Connect(InputDevice, IOutputDevice[])
-  nameWithType.vb: DevicesConnectorUtilities.Connect(InputDevice, IOutputDevice())
+- uid: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.IInputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
+  name: Connect(IInputDevice, IOutputDevice[])
+  href: api/Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.html#Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities_Connect_Melanchall_DryWetMidi_Devices_IInputDevice_Melanchall_DryWetMidi_Devices_IOutputDevice___
+  commentId: M:Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.IInputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])
+  name.vb: Connect(IInputDevice, IOutputDevice())
+  fullName: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.IInputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice[])
+  fullName.vb: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.IInputDevice, Melanchall.DryWetMidi.Devices.IOutputDevice())
+  nameWithType: DevicesConnectorUtilities.Connect(IInputDevice, IOutputDevice[])
+  nameWithType.vb: DevicesConnectorUtilities.Connect(IInputDevice, IOutputDevice())
 - uid: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect*
   name: Connect
   href: api/Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.html#Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities_Connect_
@@ -9962,25 +10009,18 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator
   fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator
   nameWithType: HighPrecisionTickGenerator
-- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.#ctor(System.TimeSpan)
-  name: HighPrecisionTickGenerator(TimeSpan)
-  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator__ctor_System_TimeSpan_
-  commentId: M:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.#ctor(System.TimeSpan)
-  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.HighPrecisionTickGenerator(System.TimeSpan)
-  nameWithType: HighPrecisionTickGenerator.HighPrecisionTickGenerator(TimeSpan)
-- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.#ctor*
-  name: HighPrecisionTickGenerator
-  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.HighPrecisionTickGenerator
-  nameWithType: HighPrecisionTickGenerator.HighPrecisionTickGenerator
 - uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose
   name: Dispose()
   href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose
   commentId: M:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose
   fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose()
   nameWithType: HighPrecisionTickGenerator.Dispose()
+- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose(System.Boolean)
+  name: Dispose(Boolean)
+  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose(System.Boolean)
+  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose(System.Boolean)
+  nameWithType: HighPrecisionTickGenerator.Dispose(Boolean)
 - uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose*
   name: Dispose
   href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_
@@ -10013,25 +10053,19 @@ references:
   commentId: F:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.MinInterval
   fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.MinInterval
   nameWithType: HighPrecisionTickGenerator.MinInterval
-- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TickGenerated
-  name: TickGenerated
-  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_TickGenerated
-  commentId: E:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TickGenerated
-  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TickGenerated
-  nameWithType: HighPrecisionTickGenerator.TickGenerated
-- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart
-  name: TryStart()
-  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_TryStart
-  commentId: M:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart
-  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart()
-  nameWithType: HighPrecisionTickGenerator.TryStart()
-- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart*
-  name: TryStart
-  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_TryStart_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart
+- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start(System.TimeSpan)
+  name: Start(TimeSpan)
+  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Start_System_TimeSpan_
+  commentId: M:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start(System.TimeSpan)
+  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start(System.TimeSpan)
+  nameWithType: HighPrecisionTickGenerator.Start(TimeSpan)
+- uid: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start*
+  name: Start
+  href: api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Start_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart
-  nameWithType: HighPrecisionTickGenerator.TryStart
+  fullName: Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start
+  nameWithType: HighPrecisionTickGenerator.Start
 - uid: Melanchall.DryWetMidi.Devices.IClockDrivenObject
   name: IClockDrivenObject
   href: api/Melanchall.DryWetMidi.Devices.IClockDrivenObject.html
@@ -10390,31 +10424,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.IOutputDevice.SendEvent
   nameWithType: IOutputDevice.SendEvent
-- uid: Melanchall.DryWetMidi.Devices.ITickGenerator
-  name: ITickGenerator
-  href: api/Melanchall.DryWetMidi.Devices.ITickGenerator.html
-  commentId: T:Melanchall.DryWetMidi.Devices.ITickGenerator
-  fullName: Melanchall.DryWetMidi.Devices.ITickGenerator
-  nameWithType: ITickGenerator
-- uid: Melanchall.DryWetMidi.Devices.ITickGenerator.TickGenerated
-  name: TickGenerated
-  href: api/Melanchall.DryWetMidi.Devices.ITickGenerator.html#Melanchall_DryWetMidi_Devices_ITickGenerator_TickGenerated
-  commentId: E:Melanchall.DryWetMidi.Devices.ITickGenerator.TickGenerated
-  fullName: Melanchall.DryWetMidi.Devices.ITickGenerator.TickGenerated
-  nameWithType: ITickGenerator.TickGenerated
-- uid: Melanchall.DryWetMidi.Devices.ITickGenerator.TryStart
-  name: TryStart()
-  href: api/Melanchall.DryWetMidi.Devices.ITickGenerator.html#Melanchall_DryWetMidi_Devices_ITickGenerator_TryStart
-  commentId: M:Melanchall.DryWetMidi.Devices.ITickGenerator.TryStart
-  fullName: Melanchall.DryWetMidi.Devices.ITickGenerator.TryStart()
-  nameWithType: ITickGenerator.TryStart()
-- uid: Melanchall.DryWetMidi.Devices.ITickGenerator.TryStart*
-  name: TryStart
-  href: api/Melanchall.DryWetMidi.Devices.ITickGenerator.html#Melanchall_DryWetMidi_Devices_ITickGenerator_TryStart_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.ITickGenerator.TryStart
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.ITickGenerator.TryStart
-  nameWithType: ITickGenerator.TryStart
 - uid: Melanchall.DryWetMidi.Devices.Manufacturer
   name: Manufacturer
   href: api/Melanchall.DryWetMidi.Devices.Manufacturer.html
@@ -10859,12 +10868,12 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.MidiClock
   fullName: Melanchall.DryWetMidi.Devices.MidiClock
   nameWithType: MidiClock
-- uid: Melanchall.DryWetMidi.Devices.MidiClock.#ctor(System.Boolean,Melanchall.DryWetMidi.Devices.ITickGenerator)
-  name: MidiClock(Boolean, ITickGenerator)
-  href: api/Melanchall.DryWetMidi.Devices.MidiClock.html#Melanchall_DryWetMidi_Devices_MidiClock__ctor_System_Boolean_Melanchall_DryWetMidi_Devices_ITickGenerator_
-  commentId: M:Melanchall.DryWetMidi.Devices.MidiClock.#ctor(System.Boolean,Melanchall.DryWetMidi.Devices.ITickGenerator)
-  fullName: Melanchall.DryWetMidi.Devices.MidiClock.MidiClock(System.Boolean, Melanchall.DryWetMidi.Devices.ITickGenerator)
-  nameWithType: MidiClock.MidiClock(Boolean, ITickGenerator)
+- uid: Melanchall.DryWetMidi.Devices.MidiClock.#ctor(System.Boolean,Melanchall.DryWetMidi.Devices.TickGenerator,System.TimeSpan)
+  name: MidiClock(Boolean, TickGenerator, TimeSpan)
+  href: api/Melanchall.DryWetMidi.Devices.MidiClock.html#Melanchall_DryWetMidi_Devices_MidiClock__ctor_System_Boolean_Melanchall_DryWetMidi_Devices_TickGenerator_System_TimeSpan_
+  commentId: M:Melanchall.DryWetMidi.Devices.MidiClock.#ctor(System.Boolean,Melanchall.DryWetMidi.Devices.TickGenerator,System.TimeSpan)
+  fullName: Melanchall.DryWetMidi.Devices.MidiClock.MidiClock(System.Boolean, Melanchall.DryWetMidi.Devices.TickGenerator, System.TimeSpan)
+  nameWithType: MidiClock.MidiClock(Boolean, TickGenerator, TimeSpan)
 - uid: Melanchall.DryWetMidi.Devices.MidiClock.#ctor*
   name: MidiClock
   href: api/Melanchall.DryWetMidi.Devices.MidiClock.html#Melanchall_DryWetMidi_Devices_MidiClock__ctor_
@@ -10911,6 +10920,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.MidiClock.Finalize
   nameWithType: MidiClock.Finalize
+- uid: Melanchall.DryWetMidi.Devices.MidiClock.Interval
+  name: Interval
+  href: api/Melanchall.DryWetMidi.Devices.MidiClock.html#Melanchall_DryWetMidi_Devices_MidiClock_Interval
+  commentId: P:Melanchall.DryWetMidi.Devices.MidiClock.Interval
+  fullName: Melanchall.DryWetMidi.Devices.MidiClock.Interval
+  nameWithType: MidiClock.Interval
+- uid: Melanchall.DryWetMidi.Devices.MidiClock.Interval*
+  name: Interval
+  href: api/Melanchall.DryWetMidi.Devices.MidiClock.html#Melanchall_DryWetMidi_Devices_MidiClock_Interval_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.MidiClock.Interval
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.MidiClock.Interval
+  nameWithType: MidiClock.Interval
 - uid: Melanchall.DryWetMidi.Devices.MidiClock.IsRunning
   name: IsRunning
   href: api/Melanchall.DryWetMidi.Devices.MidiClock.html#Melanchall_DryWetMidi_Devices_MidiClock_IsRunning
@@ -11295,6 +11317,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs
   fullName: Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs
   nameWithType: MidiEventReceivedEventArgs
+- uid: Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.#ctor(Melanchall.DryWetMidi.Core.MidiEvent)
+  name: MidiEventReceivedEventArgs(MidiEvent)
+  href: api/Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventReceivedEventArgs__ctor_Melanchall_DryWetMidi_Core_MidiEvent_
+  commentId: M:Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.#ctor(Melanchall.DryWetMidi.Core.MidiEvent)
+  fullName: Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.MidiEventReceivedEventArgs(Melanchall.DryWetMidi.Core.MidiEvent)
+  nameWithType: MidiEventReceivedEventArgs.MidiEventReceivedEventArgs(MidiEvent)
+- uid: Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.#ctor*
+  name: MidiEventReceivedEventArgs
+  href: api/Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventReceivedEventArgs__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.MidiEventReceivedEventArgs
+  nameWithType: MidiEventReceivedEventArgs.MidiEventReceivedEventArgs
 - uid: Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.Event
   name: Event
   href: api/Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventReceivedEventArgs_Event
@@ -11314,6 +11349,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs
   fullName: Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs
   nameWithType: MidiEventSentEventArgs
+- uid: Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.#ctor(Melanchall.DryWetMidi.Core.MidiEvent)
+  name: MidiEventSentEventArgs(MidiEvent)
+  href: api/Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventSentEventArgs__ctor_Melanchall_DryWetMidi_Core_MidiEvent_
+  commentId: M:Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.#ctor(Melanchall.DryWetMidi.Core.MidiEvent)
+  fullName: Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.MidiEventSentEventArgs(Melanchall.DryWetMidi.Core.MidiEvent)
+  nameWithType: MidiEventSentEventArgs.MidiEventSentEventArgs(MidiEvent)
+- uid: Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.#ctor*
+  name: MidiEventSentEventArgs
+  href: api/Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventSentEventArgs__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.MidiEventSentEventArgs
+  nameWithType: MidiEventSentEventArgs.MidiEventSentEventArgs
 - uid: Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.Event
   name: Event
   href: api/Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventSentEventArgs_Event
@@ -12149,6 +12197,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.Playback.Play
   nameWithType: Playback.Play
+- uid: Melanchall.DryWetMidi.Devices.Playback.RepeatStarted
+  name: RepeatStarted
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_RepeatStarted
+  commentId: E:Melanchall.DryWetMidi.Devices.Playback.RepeatStarted
+  fullName: Melanchall.DryWetMidi.Devices.Playback.RepeatStarted
+  nameWithType: Playback.RepeatStarted
 - uid: Melanchall.DryWetMidi.Devices.Playback.Snapping
   name: Snapping
   href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Snapping
@@ -12913,32 +12967,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator
   fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator
   nameWithType: RegularPrecisionTickGenerator
-- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.#ctor(System.TimeSpan)
-  name: RegularPrecisionTickGenerator(TimeSpan)
-  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator__ctor_System_TimeSpan_
-  commentId: M:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.#ctor(System.TimeSpan)
-  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.RegularPrecisionTickGenerator(System.TimeSpan)
-  nameWithType: RegularPrecisionTickGenerator.RegularPrecisionTickGenerator(TimeSpan)
-- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.#ctor*
-  name: RegularPrecisionTickGenerator
-  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.RegularPrecisionTickGenerator
-  nameWithType: RegularPrecisionTickGenerator.RegularPrecisionTickGenerator
-- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose
-  name: Dispose()
-  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Dispose
-  commentId: M:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose
-  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose()
-  nameWithType: RegularPrecisionTickGenerator.Dispose()
-- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose*
-  name: Dispose
-  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Dispose_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose
-  nameWithType: RegularPrecisionTickGenerator.Dispose
 - uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.MaxInterval
   name: MaxInterval
   href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_MaxInterval
@@ -12951,25 +12979,19 @@ references:
   commentId: F:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.MinInterval
   fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.MinInterval
   nameWithType: RegularPrecisionTickGenerator.MinInterval
-- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TickGenerated
-  name: TickGenerated
-  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_TickGenerated
-  commentId: E:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TickGenerated
-  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TickGenerated
-  nameWithType: RegularPrecisionTickGenerator.TickGenerated
-- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TryStart
-  name: TryStart()
-  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_TryStart
-  commentId: M:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TryStart
-  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TryStart()
-  nameWithType: RegularPrecisionTickGenerator.TryStart()
-- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TryStart*
-  name: TryStart
-  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_TryStart_
-  commentId: Overload:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TryStart
+- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start(System.TimeSpan)
+  name: Start(TimeSpan)
+  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Start_System_TimeSpan_
+  commentId: M:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start(System.TimeSpan)
+  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start(System.TimeSpan)
+  nameWithType: RegularPrecisionTickGenerator.Start(TimeSpan)
+- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start*
+  name: Start
+  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Start_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.TryStart
-  nameWithType: RegularPrecisionTickGenerator.TryStart
+  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start
+  nameWithType: RegularPrecisionTickGenerator.Start
 - uid: Melanchall.DryWetMidi.Devices.SnapPoint
   name: SnapPoint
   href: api/Melanchall.DryWetMidi.Devices.SnapPoint.html
@@ -13060,6 +13082,70 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.SnapPointsGroup.IsEnabled
   nameWithType: SnapPointsGroup.IsEnabled
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator
+  name: TickGenerator
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html
+  commentId: T:Melanchall.DryWetMidi.Devices.TickGenerator
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator
+  nameWithType: TickGenerator
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.Dispose
+  name: Dispose()
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose
+  commentId: M:Melanchall.DryWetMidi.Devices.TickGenerator.Dispose
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.Dispose()
+  nameWithType: TickGenerator.Dispose()
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.Dispose(System.Boolean)
+  name: Dispose(Boolean)
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Devices.TickGenerator.Dispose(System.Boolean)
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.Dispose(System.Boolean)
+  nameWithType: TickGenerator.Dispose(Boolean)
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.Dispose*
+  name: Dispose
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.TickGenerator.Dispose
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.Dispose
+  nameWithType: TickGenerator.Dispose
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.GenerateTick
+  name: GenerateTick()
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_GenerateTick
+  commentId: M:Melanchall.DryWetMidi.Devices.TickGenerator.GenerateTick
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.GenerateTick()
+  nameWithType: TickGenerator.GenerateTick()
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.GenerateTick*
+  name: GenerateTick
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_GenerateTick_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.TickGenerator.GenerateTick
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.GenerateTick
+  nameWithType: TickGenerator.GenerateTick
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.IsRunning
+  name: IsRunning
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_IsRunning
+  commentId: P:Melanchall.DryWetMidi.Devices.TickGenerator.IsRunning
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.IsRunning
+  nameWithType: TickGenerator.IsRunning
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.IsRunning*
+  name: IsRunning
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_IsRunning_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.TickGenerator.IsRunning
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.IsRunning
+  nameWithType: TickGenerator.IsRunning
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.Start(System.TimeSpan)
+  name: Start(TimeSpan)
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Start_System_TimeSpan_
+  commentId: M:Melanchall.DryWetMidi.Devices.TickGenerator.Start(System.TimeSpan)
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.Start(System.TimeSpan)
+  nameWithType: TickGenerator.Start(TimeSpan)
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.Start*
+  name: Start
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Start_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.TickGenerator.Start
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.Start
+  nameWithType: TickGenerator.Start
 - uid: Melanchall.DryWetMidi.Devices.Volume
   name: Volume
   href: api/Melanchall.DryWetMidi.Devices.Volume.html
@@ -22021,6 +22107,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.Octave.Inequality
   nameWithType: Octave.Inequality
+- uid: Melanchall.DryWetMidi.MusicTheory.Octave.Parse(System.String)
+  name: Parse(String)
+  href: api/Melanchall.DryWetMidi.MusicTheory.Octave.html#Melanchall_DryWetMidi_MusicTheory_Octave_Parse_System_String_
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.Octave.Parse(System.String)
+  fullName: Melanchall.DryWetMidi.MusicTheory.Octave.Parse(System.String)
+  nameWithType: Octave.Parse(String)
+- uid: Melanchall.DryWetMidi.MusicTheory.Octave.Parse*
+  name: Parse
+  href: api/Melanchall.DryWetMidi.MusicTheory.Octave.html#Melanchall_DryWetMidi_MusicTheory_Octave_Parse_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.Octave.Parse
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.Octave.Parse
+  nameWithType: Octave.Parse
 - uid: Melanchall.DryWetMidi.MusicTheory.Octave.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.MusicTheory.Octave.html#Melanchall_DryWetMidi_MusicTheory_Octave_ToString
@@ -22034,6 +22133,22 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.MusicTheory.Octave.ToString
   nameWithType: Octave.ToString
+- uid: Melanchall.DryWetMidi.MusicTheory.Octave.TryParse(System.String,Melanchall.DryWetMidi.MusicTheory.Octave@)
+  name: TryParse(String, out Octave)
+  href: api/Melanchall.DryWetMidi.MusicTheory.Octave.html#Melanchall_DryWetMidi_MusicTheory_Octave_TryParse_System_String_Melanchall_DryWetMidi_MusicTheory_Octave__
+  commentId: M:Melanchall.DryWetMidi.MusicTheory.Octave.TryParse(System.String,Melanchall.DryWetMidi.MusicTheory.Octave@)
+  name.vb: TryParse(String, ByRef Octave)
+  fullName: Melanchall.DryWetMidi.MusicTheory.Octave.TryParse(System.String, out Melanchall.DryWetMidi.MusicTheory.Octave)
+  fullName.vb: Melanchall.DryWetMidi.MusicTheory.Octave.TryParse(System.String, ByRef Melanchall.DryWetMidi.MusicTheory.Octave)
+  nameWithType: Octave.TryParse(String, out Octave)
+  nameWithType.vb: Octave.TryParse(String, ByRef Octave)
+- uid: Melanchall.DryWetMidi.MusicTheory.Octave.TryParse*
+  name: TryParse
+  href: api/Melanchall.DryWetMidi.MusicTheory.Octave.html#Melanchall_DryWetMidi_MusicTheory_Octave_TryParse_
+  commentId: Overload:Melanchall.DryWetMidi.MusicTheory.Octave.TryParse
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.MusicTheory.Octave.TryParse
+  nameWithType: Octave.TryParse
 - uid: Melanchall.DryWetMidi.MusicTheory.Scale
   name: Scale
   href: api/Melanchall.DryWetMidi.MusicTheory.Scale.html
@@ -31539,21 +31654,3 @@ references:
   commentId: F:Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.Min
   fullName: Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.Min
   nameWithType: VelocityMergingPolicy.Min
-- uid: wiki_CsvConverter
-  name: ConvertMidiFileToCsv
-  href: wiki/CSV-converter.html
-- uid: wiki_MidiFileSplitter
-  name: SplitByChannel
-  href: wiki/MIDI-file-splitter.html
-- uid: wiki_NotesChordsSplitter
-  name: SplitByStep
-  href: wiki/Notes-and-chords-splitter.html
-- uid: wiki_NotesMerger
-  name: wiki_NotesMerger
-  href: wiki/Notes-merger.html
-- uid: wiki_Quantizer
-  name: Quantizing timed events
-  href: wiki/Quantizer.html
-- uid: wiki_Randomizer
-  name: wiki_Randomizer
-  href: wiki/Randomizer.html

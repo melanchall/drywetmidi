@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Chord | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Chord | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_mt_chord">
+<h1 id="chord">Chord</h1>
+
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.MusicTheory.Chord.html">Chord</a> represents a musical chord as a collection of notes names. Some examples of usage:</p>
+<pre><code class="lang-csharp">// Create chord by root note name and intervals from root
+var chordByIntervals = new Chord(NoteName.A, Interval.FromHalfSteps(2), Interval.FromHalfSteps(5));
+
+// Create A B chord
+var chordByNotesNames = new Chord(NoteName.A, NoteName.B);
+
+// Create C Major chord
+var cMajorTriad = Chord.GetByTriad(NoteName.C, ChordQuality.Major);
+
+// ... or parse it from string
+var cMajorTriadFromString = Chord.Parse(&quot;C&quot;);
+
+// Parse more complex chord from string
+var cAug7Chord = Chord.Parse(&quot;Caug7&quot;);
+</code></pre>
+<p>Last chord will contain C, E, G# and A# notes as expected.</p>
+<p>Chords parsing uses <a href="#chords-names-table">Chord Names Table (CNT)</a> so not all possible chords can be parsed since CNT contains limited set of chords naming rules. If you notice that some known chord name is not parsed by DryWetMIDI, please <a href="https://github.com/melanchall/drywetmidi/issues/new">create an issue on GitHub</a> and CNT will be extended. See following section for details.</p>
+<h2 id="parsing">Parsing</h2>
+<p>Following strings can be parsed to <code>Chord</code>:</p>
+<p><code>RootNote ChordCharacteristic</code>
+<code>RootNote ChordCharacteristic BassNote</code></p>
+<p>where</p>
+<ul>
+<li><strong>RootNote</strong> is the root note of a chord, for example, <code>A</code> or <code>C#</code>.</li>
+<li><strong>ChordCharacteristic</strong> is combination of chord quality, altered and added tones and so on. See <a href="#chords-names-table">Chords names table</a> section below to learn what characteristics are supported by the library.</li>
+<li><strong>BassNote</strong> is an added bass note the chord will be placed over.</li>
+</ul>
+<p>Examples of valid chord strings:</p>
+<p><code>C</code><br>
+<code>Caug7</code><br>
+<code>Cm</code><br>
+<code>Am</code><br>
+<code>Cm7</code><br>
+<code>CmM7</code><br>
+<code>Csus2</code><br>
+<code>C9sus4</code><br>
+<code>F/G</code><br>
+<code>C7b5</code></p>
+<h2 id="chords-names-table">Chords names table</h2>
+<p>Following table shows what chords currently supported for parsing from string and for retrieving names by chords notes. First column lists names and second one shows intervals from root. For example, <code>0 1 5</code> for <code>C</code> give us following chord: <code>C C# E</code>.</p>
+<p>Please note that some interval sets start from number greater than zero. Currently the library doesn't support chords with omitted root, but the feature will be implemented in the future.</p>
+<table>
+<thead>
+<tr>
+<th>Names</th>
+<th>Intervals</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maj</code><br><code>M</code><br><code></code></td>
+<td><code>0 4 7</code></td>
+</tr>
+<tr>
+<td><code>min</code><br><code>m</code></td>
+<td><code>0 3 7</code></td>
+</tr>
+<tr>
+<td><code>sus4</code></td>
+<td><code>0 5 7</code></td>
+</tr>
+<tr>
+<td><code>sus2</code></td>
+<td><code>0 2 7</code></td>
+</tr>
+<tr>
+<td><code>b5</code></td>
+<td><code>0 4 6</code></td>
+</tr>
+<tr>
+<td><code>dim</code></td>
+<td><code>0 3 6</code></td>
+</tr>
+<tr>
+<td><code>aug</code></td>
+<td><code>0 4 8</code></td>
+</tr>
+<tr>
+<td><code>min6</code><br><code>m6</code></td>
+<td><code>0 3 7 9</code></td>
+</tr>
+<tr>
+<td><code>maj6</code><br><code>M6</code><br><code>6</code></td>
+<td><code>0 4 7 9</code></td>
+</tr>
+<tr>
+<td><code>7</code></td>
+<td><code>0 4 7 10</code></td>
+</tr>
+<tr>
+<td><code>7sus4</code></td>
+<td><code>0 5 7 10</code></td>
+</tr>
+<tr>
+<td><code>7sus2</code></td>
+<td><code>0 2 7 10</code></td>
+</tr>
+<tr>
+<td><code>min7</code><br><code>m7</code></td>
+<td><code>0 3 7 10</code></td>
+</tr>
+<tr>
+<td><code>min9</code><br><code>min7(9)</code><br><code>m9</code><br><code>m7(9)</code></td>
+<td><code>0 3 7 10 14</code><br><code>0 3 10 14</code><br><code>3 10 14</code> (not supported)<br><code>3 7 10 14</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>min11</code><br><code>min7(9,11)</code><br><code>m11</code><br><code>m7(9,11)</code></td>
+<td><code>0 3 7 10 14 17</code><br><code>0 3 10 14 17</code><br><code>3 10 14 17</code> (not supported)<br><code>3 7 10 14 17</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>maj7</code></td>
+<td><code>0 4 7 11</code></td>
+</tr>
+<tr>
+<td><code>maj7(9)</code><br><code>M7(9)</code></td>
+<td><code>0 4 7 11 14</code><br><code>0 4 11 14</code><br><code>4 11 14</code> (not supported)<br><code>4 7 11 14</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>maj7(#11)</code><br><code>M7(#11)</code></td>
+<td><code>0 4 7 11 14 18</code><br><code>0 4 11 14 18</code><br><code>4 11 14 18</code> (not supported)<br><code>4 7 11 14 18</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>maj7(13)</code><br><code>M7(13)</code></td>
+<td><code>0 4 7 11 21</code><br><code>0 4 11 21</code><br><code>4 11 21</code> (not supported)<br><code>4 7 11 21</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>maj7(9,13)</code><br><code>M7(9,13)</code></td>
+<td><code>0 4 7 11 14 21</code><br><code>0 4 11 14 21</code><br><code>4 11 14 21</code> (not supported)<br><code>4 7 11 14 21</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>maj7#5</code><br><code>M7#5</code></td>
+<td><code>0 4 8 11</code></td>
+</tr>
+<tr>
+<td><code>maj7#5(9)</code><br><code>M7#5(9)</code></td>
+<td><code>0 4 8 11 14</code><br><code>4 8 11 14</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>minMaj7</code><br><code>mM7</code></td>
+<td><code>0 3 7 11</code></td>
+</tr>
+<tr>
+<td><code>minMaj7(9)</code><br><code>mM7(9)</code></td>
+<td><code>0 3 7 11 14</code><br><code>0 3 11 14</code><br><code>3 11 14</code> (not supported)<br><code>3 7 11 14</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>5</code></td>
+<td><code>0 7</code></td>
+</tr>
+<tr>
+<td><code>7b5</code><br><code>dom7dim5</code><br><code>7dim5</code></td>
+<td><code>0 4 6 10</code></td>
+</tr>
+<tr>
+<td><code>ø</code><br><code>ø7</code><br><code>m7b5</code><br><code>min7dim5</code><br><code>m7dim5</code><br><code>min7b5</code><br><code>m7b5</code></td>
+<td><code>0 3 6 10</code></td>
+</tr>
+<tr>
+<td><code>aug7</code></td>
+<td><code>0 4 8 10</code></td>
+</tr>
+<tr>
+<td><code>dim7</code></td>
+<td><code>0 3 6 9</code></td>
+</tr>
+<tr>
+<td><code>add9</code></td>
+<td><code>0 4 7 14</code></td>
+</tr>
+<tr>
+<td><code>minAdd9</code><br><code>mAdd9</code></td>
+<td><code>0 3 7 14</code></td>
+</tr>
+<tr>
+<td><code>maj6(9)</code><br><code>6(9)</code><br><code>6/9</code><br><code>M6/9</code><br><code>M6(9)</code></td>
+<td><code>0 4 7 9 14</code><br><code>4 7 9 14</code> (not supported)<br><code>0 4 9 14</code><br><code>4 9 14</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>min6(9)</code><br><code>m6(9)</code><br><code>m6/9</code><br><code>min6/9</code></td>
+<td><code>0 3 7 9 14</code><br><code>3 7 9 14</code> (not supported)<br><code>0 3 9 14</code><br><code>3 9 14</code> (not supported)</td>
+</tr>
+<tr>
+<td><code>9</code></td>
+<td><code>0 4 7 10 14</code></td>
+</tr>
+<tr>
+<td><code>9sus2</code></td>
+<td><code>0 2 7 10 14</code></td>
+</tr>
+<tr>
+<td><code>9sus4</code></td>
+<td><code>0 5 7 10 14</code></td>
+</tr>
+<tr>
+<td><code>11</code></td>
+<td><code>0 4 7 10 14 17</code></td>
+</tr>
+</tbody>
+</table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

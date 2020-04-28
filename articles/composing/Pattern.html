@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Pattern | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Pattern | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_composing_pattern">
+<h1 id="pattern">Pattern</h1>
+
+<p>DryWetMIDI provides a way to create a MIDI file in more &quot;musical&quot; manner. The key class here is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a> which allows to build a musical composition. <code>PatternBuilder</code> provides a fluent interface to program the music. For example, you can insert a note like this:</p>
+<pre><code class="lang-csharp">using Melanchall.DryWetMidi.Composing;
+
+var patternBuilder = new PatternBuilder()
+
+    // Insert the A4 note with length of 5/17 and velocity of 68
+    .Note(Octave.Get(4).A, new MusicalTimeSpan(5, 17), (SevenBitNumber)68)
+
+    // Insert the G#3 note with default length and velocity
+    .Note(Octave.Get(3).GSharp);
+</code></pre>
+<p>In the example above the last <code>Note</code> method inserts a note with default length and velocity that can be set via corresponding methods at any moment:</p>
+<pre><code class="lang-csharp">var patternBuilder = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Half)
+    .SetVelocity((SevenBitNumber)50)
+
+    // All the following notes will have half length and velocity of 50
+    .Note(Octave.Get(4).A)
+    .Note(Note.Get(NoteName.B, 1))
+    .Note(-Interval.Two)
+
+    .SetNoteLength(MusicalTimeSpan.Quarter)
+
+    // All the following notes will have quarter length
+    .Note(Octave.Get(2).A);
+</code></pre>
+<p>Please take a look at entire API provided by <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</p>
+<p>Following example shows how to create first four bars of Beethoven's 'Moonlight Sonata':</p>
+<pre><code class="lang-csharp">// Define a chord for bass part which is just an octave
+var bassChord = new[] { Interval.Twelve };
+    
+// Build the composition
+var pattern = new PatternBuilder()
+     
+    // The length of all main theme's notes within four first bars is
+    // triplet eight so set it which will free us from necessity to specify
+    // the length of each note explicitly
+    .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
+    
+    // Anchor current time (start of the pattern) to jump to it
+    // when we'll start to program bass part
+    .Anchor()
+    
+    // We will add notes relative to G#3.
+    // Instead of Octave.Get(3).GSharp it is possible to use Note.Get(NoteName.GSharp, 3)
+    .SetRootNote(Octave.Get(3).GSharp)
+    
+    // Add first three notes and repeat them seven times which will
+    // give us two bars of the main theme
+                            // G#3
+    .Note(Interval.Zero)  // +0  (G#3)
+    .Note(Interval.Five)  // +5  (C#4)
+    .Note(Interval.Eight) // +8  (E4)
+    .Repeat(3, 7)         // repeat three previous notes seven times
+    
+    // Add notes of the next two bars
+                            // G#3
+    .Note(Interval.One)   // +1  (A3)
+    .Note(Interval.Five)  // +5  (C#4)
+    .Note(Interval.Eight) // +8  (E4)
+    .Repeat(3, 1)         // repeat three previous notes
+    .Note(Interval.One)   // +1  (A3)
+    .Note(Interval.Six)   // +6  (D4)
+    .Note(Interval.Ten)   // +10 (F#4)
+    .Repeat(3, 1)         // repeat three previous notes
+                            // reaching the end of third bar
+    .Note(Interval.Zero)  // +0  (G#3)
+    .Note(Interval.Four)  // +4  (C4)
+    .Note(Interval.Ten)   // +10 (F#4)
+    .Note(Interval.Zero)  // +0  (G#3)
+    .Note(Interval.Five)  // +5  (C#4)
+    .Note(Interval.Eight) // +8  (E4)
+    .Note(Interval.Zero)  // +0  (G#3)
+    .Note(Interval.Five)  // +5  (C#4)
+    .Note(Intervaln.Seven) // +7  (D#4)
+    .Note(-Interval.Two)  // -2  (F#3)
+    .Note(Interval.Four)  // +4  (C4)
+    .Note(Interval.Seven) // +7  (D#4)
+    
+    // Now we will program bass part. To start adding notes from the
+    // beginning of the pattern we need to move to the anchor we set
+    // above
+    .MoveToFirstAnchor()
+    
+    // First two chords have whole length
+    .SetNoteLength(MusicalTimeSpan.Whole)
+    
+                                            // insert a chord relative to
+    .Chord(bassChord, Octave.Get(2).CSharp) // C#2 (C#2, C#3)
+    .Chord(bassChord, Octave.Get(1).B)      // B1  (B1, B2)
+    
+    // Remaining four chords has half length
+    .SetNoteLength(MusicalTimeSpan.Half)
+    
+    .Chord(bassChord, Octave.Get(1).A)      // A1  (A1, A2)
+    .Chord(bassChord, Octave.Get(1).FSharp) // F#1 (F#1, F#2)
+    .Chord(bassChord, Octave.Get(1).GSharp) // G#1 (G#1, G#2)
+    .Repeat()                               // repeat the previous chord
+    
+    // Build a pattern that can be then saved to a MIDI file
+    .Build();
+</code></pre>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Build">Build</a> method returns an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a>. Pattern can be transformed or altered by methods in <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternUtilities.html">PatternUtilities</a>.</p>
+<p>Also see <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#extensionmethods">Extension methods</a> section of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> API.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

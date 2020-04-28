@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class HighPrecisionTickGenerator
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.51.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -91,15 +91,21 @@ is the smallest possible one.
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">HighPrecisionTickGenerator</span></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html">TickGenerator</a></div>
+    <div class="level2"><span class="xref">HighPrecisionTickGenerator</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="Melanchall.DryWetMidi.Devices.ITickGenerator.html">ITickGenerator</a></div>
     <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_IsRunning">TickGenerator.IsRunning</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_GenerateTick">TickGenerator.GenerateTick()</a>
+    </div>
     <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
     </div>
@@ -126,53 +132,8 @@ is the smallest possible one.
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class HighPrecisionTickGenerator : ITickGenerator, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class HighPrecisionTickGenerator : TickGenerator, IDisposable</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator__ctor_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator__ctor_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.#ctor(System.TimeSpan)">HighPrecisionTickGenerator(TimeSpan)</h4>
-  <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> with the specified
-interval.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public HighPrecisionTickGenerator(TimeSpan interval)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
-        <td><span class="parametername">interval</span></td>
-        <td>Interval of ticking.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">interval</code> is out of valid range.</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="fields">Fields
   </h3>
   <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_MaxInterval" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.MaxInterval">MaxInterval</h4>
@@ -227,14 +188,41 @@ The smallest possible interval.
   </h3>
   <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary">
-Releases all resources used by the current <a class="xref" href="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a>.
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Dispose()</code></pre>
   </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose">TickGenerator.Dispose()</a></div>
+  <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_System_Boolean_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose_System_Boolean_">TickGenerator.Dispose(Boolean)</a></div>
   <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Finalize_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Finalize*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Finalize" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Finalize">Finalize()</h4>
   <div class="markdown level1 summary">
@@ -245,61 +233,34 @@ Finalizes the current instance of the <a class="xref" href="Melanchall.DryWetMid
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected void Finalize()</code></pre>
   </div>
-  <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_TryStart_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_TryStart" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TryStart">TryStart()</h4>
-  <div class="markdown level1 summary">
-Starts the tick generator if it&apos;s not started; otherwise does nothing.
-</div>
+  <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Start_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Start_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start(System.TimeSpan)">Start(TimeSpan)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void TryStart()</code></pre>
+    <pre><code class="lang-csharp hljs">protected override void Start(TimeSpan interval)</code></pre>
   </div>
-  <h5 class="exceptions">Exceptions</h5>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on tick generator.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="events">Events
-  </h3>
-  <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_TickGenerated" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.TickGenerated">TickGenerated</h4>
-  <div class="markdown level1 summary">
-Occurs when new tick generated.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler TickGenerated</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler">EventHandler</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td><span class="parametername">interval</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Start_System_TimeSpan_">TickGenerator.Start(TimeSpan)</a></div>
   <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Devices.ITickGenerator.html">ITickGenerator</a>
-  </div>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
   </div>

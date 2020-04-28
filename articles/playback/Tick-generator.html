@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Tick generator | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Tick generator | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_playback_tickgen">
+<h1 id="tick-generator">Tick generator</h1>
+
+<p>Playback uses timer under the hood. In DryWetMIDI this timer called tick generator. On every tick of timer playback looks what objects should be played by the current time, plays them and advances position within objects list waiting for next tick.</p>
+<p>To make playback smooth and correct, precision of timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> which is the best option in terms of CPU usage, memory usage and precision. Unfortunately this tick generator is supported for Windows only at now.</p>
+<p>But you can also use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> which uses standard <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timers.timer">Timer</a> and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.</p>
+<p>Tick generator can be specified via <code>clockSettings</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>'s constructors or <code>GetPlayback</code> extension methods within <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html">PlaybackUtilities</a>:</p>
+<pre><code class="lang-csharp">var playback = midiFile.GetPlayback(new MidiClockSettings
+{
+    CreateTickGeneratorCallback = () =&gt; new RegularPrecisionTickGenerator()
+});
+</code></pre>
+<h2 id="custom-tick-generator">Custom tick generator</h2>
+<p>All built-in tick generators extend abstract <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.TickGenerator.html">TickGenerator</a> class so you can create your own and use it for <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>.</p>
+<p>As an example we create simple loop tick generator working in separate thread. The code is:</p>
+<pre><code class="lang-csharp">private sealed class ThreadTickGenerator : TickGenerator
+{
+    private Thread _thread;
+    private bool _isRunning;
+    private bool _disposed;
+
+    protected override void Start(TimeSpan interval)
+    {
+        if (_thread != null)
+            return;
+
+        _thread = new Thread(() =&gt;
+        {
+            var stopwatch = new Stopwatch();
+            var lastMs = 0L;
+
+            stopwatch.Start();
+            _isRunning = true;
+
+            while (_isRunning)
+            {
+                var elapsedMs = stopwatch.ElapsedMilliseconds;
+                if (elapsedMs - lastMs &gt;= interval.TotalMilliseconds)
+                {
+                    GenerateTick();
+                    lastMs = elapsedMs;
+                }
+            }
+        });
+
+        _thread.Start();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+        {
+            _isRunning = false;
+        }
+
+        _disposed = true;
+    }
+}
+</code></pre>
+<p>And then use it:</p>
+<pre><code class="lang-csharp">var playback = midiFile.GetPlayback(new MidiClockSettings
+{
+    CreateTickGeneratorCallback = () =&gt; new ThreadTickGenerator()
+});
+</code></pre>
+<p>Of course this tick generator will use a lot of CPU due to infinite loop but it's for demo purposes only.</p>
+<h2 id="manual-ticking">Manual ticking</h2>
+<p>Also you can tick playback's internal clock manually without tick generator via <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TickClock">TickClock</a> method of <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>. For example, you can use manual ticking within every frame update in Unity.</p>
+<p>To use only manual ticking you should return <code>null</code> in <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.MidiClockSettings.html#Melanchall_DryWetMidi_Devices_MidiClockSettings_CreateTickGeneratorCallback">CreateTickGeneratorCallback</a>:</p>
+<pre><code class="lang-csharp">var playback = midiFile.GetPlayback(new MidiClockSettings
+{
+    CreateTickGeneratorCallback = () =&gt; null
+});
+</code></pre>
+<p>and then call</p>
+<pre><code class="lang-csharp">playback.TickClock();
+</code></pre>
+<p>when needed.</p>
+<p>You also can use manual ticking in conjunction with tick generator.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
