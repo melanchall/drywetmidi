@@ -12,9 +12,6 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to randomize chords time.
     /// </summary>
-    /// <remarks>
-    /// See <see href="xref:a_randomizer">Randomizer</see> article on Wiki to learn more.
-    /// </remarks>
     public sealed class ChordsRandomizer : LengthedObjectsRandomizer<Chord, ChordsRandomizingSettings>
     {
     }
