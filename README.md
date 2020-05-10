@@ -16,13 +16,13 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. Visit [
 With the DryWetMIDI you can:
 
 * Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
-* [Send](https://melanchall.github.io/drywetmidi/wiki/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/wiki/Input-device.html) them from MIDI devices, [play](https://melanchall.github.io/drywetmidi/wiki/Playback.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/wiki/Recording.html) it.
+* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices, [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) it.
 * Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
-* Implement [custom meta events](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom%20meta%20events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom%20chunks.html) that can be written to and read from MIDI files.
+* Implement [custom meta events](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html) that can be written to and read from MIDI files.
 * Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
 * Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the **High-level data managing** section of the Wiki).
-* Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/wiki/Pattern.html) page of the library Wiki).
-* Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://melanchall.github.io/drywetmidi/wiki/Tools.html) page of the Wiki).
+* Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html) page of the library Wiki).
+* Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html) page of the Wiki).
 
 ## Documentation
 
@@ -236,7 +236,7 @@ Pattern pattern = new PatternBuilder()
 MidiFile midiFile = pattern.ToFile(TempoMap.Default);
 ```
 
-DryWetMIDI provides [devices API](https://melanchall.github.io/drywetmidi/wiki/MIDI-devices.html) allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:
+DryWetMIDI provides [devices API](https://melanchall.github.io/drywetmidi/articles/devices/Overview.html) allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:
 
 ```csharp
 using System;

@@ -14,26 +14,36 @@ After an instance of `InputDevice` is obtained, call [StartEventsListening](xref
 
 If an input device is listening for events, it will fire [EventReceived](xref:Melanchall.DryWetMidi.Devices.IInputDevice.EventReceived) event for each incoming MIDI event. Received MIDI event will be passed to event's handler.
 
-Small example that shows receiving MIDI data:
+Small example (console app) that shows receiving MIDI data:
 
 ```csharp
 using System;
 using Melanchall.DryWetMidi.Devices;
 
-// ...
-
-using (var inputDevice = InputDevice.GetByName("Some MIDI device"))
+namespace InputDeviceExample
 {
-    inputDevice.EventReceived += OnEventReceived;
-    inputDevice.StartEventsListening();
-}
+    class Program
+    {
+        private static IInputDevice _inputDevice;
 
-// ...
+        static void Main(string[] args)
+        {
+            _inputDevice = InputDevice.GetByName("Some MIDI device");
+            _inputDevice.EventReceived += OnEventReceived;
+            _inputDevice.StartEventsListening();
 
-private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
-{
-    var midiDevice = (MidiDevice)sender;
-    Console.WriteLine($"Event received from '{midiDevice.Name}' at {DateTime.Now}: {e.Event}");
+            Console.WriteLine("Input device is listening for events. Press any key to exit...");
+            Console.ReadKey();
+
+            (_inputDevice as IDisposable)?.Dispose();
+        }
+
+        private static void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+        {
+            var midiDevice = (MidiDevice)sender;
+            Console.WriteLine($"Event received from '{midiDevice.Name}' at {DateTime.Now}: {e.Event}");
+        }
+    }
 }
 ```
 
