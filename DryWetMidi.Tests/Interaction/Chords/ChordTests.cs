@@ -409,9 +409,76 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region Time
+
+        [Test]
+        public void CheckTimeChangedEvent_ZeroTime_NoChange()
+        {
+            CheckTimeChangedEvent_NoChange(GetChord_ZeroTime());
+        }
+
+        [Test]
+        public void CheckTimeChangedEvent_NonZeroTime_NoChange()
+        {
+            CheckTimeChangedEvent_NoChange(GetChord_NonzeroTime());
+        }
+
+        [Test]
+        public void CheckTimeChangedEvent_ZeroTime_Changed()
+        {
+            CheckTimeChangedEvent_Changed(GetChord_ZeroTime());
+        }
+
+        [Test]
+        public void CheckTimeChangedEvent_NonZeroTime_Changed()
+        {
+            CheckTimeChangedEvent_Changed(GetChord_NonzeroTime());
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
+
+        private static void CheckTimeChangedEvent_NoChange(Chord chord)
+        {
+            object timeChangedSender = null;
+            TimeChangedEventArgs timeChangedEventArgs = null;
+
+            chord.TimeChanged += (sender, eventArgs) =>
+            {
+                timeChangedSender = sender;
+                timeChangedEventArgs = eventArgs;
+            };
+
+            chord.Time = chord.Time;
+
+            Assert.IsNull(timeChangedSender, "Sender is not null.");
+            Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
+        }
+
+        private static void CheckTimeChangedEvent_Changed(Chord chord)
+        {
+            object timeChangedSender = null;
+            TimeChangedEventArgs timeChangedEventArgs = null;
+
+            chord.TimeChanged += (sender, eventArgs) =>
+            {
+                timeChangedSender = sender;
+                timeChangedEventArgs = eventArgs;
+            };
+
+            var oldTime = chord.Time;
+            chord.Time += 100;
+
+            Assert.AreSame(chord, timeChangedSender, "Sender is invalid.");
+
+            Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
+            Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
+            Assert.AreEqual(chord.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
+            Assert.AreNotEqual(oldTime, chord.Time, "New time is equal to old one.");
+        }
 
         private static void CheckEndTime<TTimeSpan>(ITimeSpan time, ITimeSpan length, TTimeSpan expectedEndTime)
             where TTimeSpan : ITimeSpan

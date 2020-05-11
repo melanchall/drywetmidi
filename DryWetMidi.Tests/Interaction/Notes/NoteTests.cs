@@ -204,9 +204,76 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region Time
+
+        [Test]
+        public void CheckTimeChangedEvent_ZeroTime_NoChange()
+        {
+            CheckTimeChangedEvent_NoChange(GetNote_ZeroTime());
+        }
+
+        [Test]
+        public void CheckTimeChangedEvent_NonZeroTime_NoChange()
+        {
+            CheckTimeChangedEvent_NoChange(GetNote_NonzeroTime());
+        }
+
+        [Test]
+        public void CheckTimeChangedEvent_ZeroTime_Changed()
+        {
+            CheckTimeChangedEvent_Changed(GetNote_ZeroTime());
+        }
+
+        [Test]
+        public void CheckTimeChangedEvent_NonZeroTime_Changed()
+        {
+            CheckTimeChangedEvent_Changed(GetNote_NonzeroTime());
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
+
+        private static void CheckTimeChangedEvent_NoChange(Note note)
+        {
+            object timeChangedSender = null;
+            TimeChangedEventArgs timeChangedEventArgs = null;
+
+            note.TimeChanged += (sender, eventArgs) =>
+            {
+                timeChangedSender = sender;
+                timeChangedEventArgs = eventArgs;
+            };
+
+            note.Time = note.Time;
+
+            Assert.IsNull(timeChangedSender, "Sender is not null.");
+            Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
+        }
+
+        private static void CheckTimeChangedEvent_Changed(Note note)
+        {
+            object timeChangedSender = null;
+            TimeChangedEventArgs timeChangedEventArgs = null;
+
+            note.TimeChanged += (sender, eventArgs) =>
+            {
+                timeChangedSender = sender;
+                timeChangedEventArgs = eventArgs;
+            };
+
+            var oldTime = note.Time;
+            note.Time += 100;
+
+            Assert.AreSame(note, timeChangedSender, "Sender is invalid.");
+
+            Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
+            Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
+            Assert.AreEqual(note.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
+            Assert.AreNotEqual(oldTime, note.Time, "New time is equal to old one.");
+        }
 
         private static void CheckEndTime<TTimeSpan>(ITimeSpan time, ITimeSpan length, TTimeSpan expectedEndTime)
             where TTimeSpan : ITimeSpan
@@ -214,6 +281,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var tempoMap = TempoMap.Default;
             var note = new NoteMethods().Create(time, length, tempoMap);
             TimeSpanTestUtilities.AreEqual(expectedEndTime, note.EndTimeAs<TTimeSpan>(tempoMap), "End time is invalid.");
+        }
+
+        private static Note GetNote_ZeroTime()
+        {
+            return new Note((SevenBitNumber)10, 100, 0);
+        }
+
+        private static Note GetNote_NonzeroTime()
+        {
+            return new Note((SevenBitNumber)10, 100, 100);
         }
 
         #endregion

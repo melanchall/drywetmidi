@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents a musical note.
     /// </summary>
-    public sealed class Note : ILengthedObject, IMusicalObject
+    public sealed class Note : ILengthedObject, IMusicalObject, INotifyTimeChanged
     {
         #region Constants
 
@@ -18,6 +18,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Default velocity.
         /// </summary>
         public static readonly SevenBitNumber DefaultVelocity = (SevenBitNumber)100;
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<TimeChangedEventArgs> TimeChanged;
 
         #endregion
 
@@ -163,8 +169,14 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 ThrowIfTimeArgument.IsNegative(nameof(value), value);
 
+                var oldTime = Time;
+                if (value == oldTime)
+                    return;
+
                 TimedNoteOffEvent.Time = value + Length;
                 TimedNoteOnEvent.Time = value;
+
+                TimeChanged?.Invoke(this, new TimeChangedEventArgs(oldTime, value));
             }
         }
 

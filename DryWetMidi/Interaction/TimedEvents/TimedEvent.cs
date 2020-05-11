@@ -7,8 +7,14 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents wrapper for the <see cref="MidiEvent"/> that provides absolute time of an event.
     /// </summary>
-    public sealed class TimedEvent : ITimedObject
+    public sealed class TimedEvent : ITimedObject, INotifyTimeChanged
     {
+        #region Events
+
+        public event EventHandler<TimeChangedEventArgs> TimeChanged;
+
+        #endregion
+
         #region Fields
 
         private long _time;
@@ -61,7 +67,13 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 ThrowIfTimeArgument.IsNegative(nameof(value), value);
 
+                var oldTime = Time;
+                if (value == oldTime)
+                    return;
+
                 _time = value;
+
+                TimeChanged?.Invoke(this, new TimeChangedEventArgs(oldTime, value));
             }
         }
 

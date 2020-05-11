@@ -5,9 +5,13 @@
     /// </summary>
     public interface ITimedObject
     {
+        #region Properties
+
         /// <summary>
         /// Gets start time of an object.
         /// </summary>
         long Time { get; }
+
+        #endregion
     }
 }

@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents a musical chord.
     /// </summary>
-    public sealed class Chord : ILengthedObject, IMusicalObject
+    public sealed class Chord : ILengthedObject, IMusicalObject, INotifyTimeChanged
     {
         #region Events
 
@@ -19,6 +19,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Occurs when notes collection changes.
         /// </summary>
         public event NotesCollectionChangedEventHandler NotesCollectionChanged;
+
+        public event EventHandler<TimeChangedEventArgs> TimeChanged;
 
         #endregion
 
@@ -101,13 +103,17 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 ThrowIfTimeArgument.IsNegative(nameof(value), value);
 
-                var currentTime = Time;
+                var oldTime = Time;
+                if (value == oldTime)
+                    return;
 
                 foreach (var note in Notes)
                 {
-                    var offset = note.Time - currentTime;
+                    var offset = note.Time - oldTime;
                     note.Time = value + offset;
                 }
+
+                TimeChanged?.Invoke(this, new TimeChangedEventArgs(oldTime, value));
             }
         }
 
