@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents a musical note.
     /// </summary>
-    public sealed class Note : ILengthedObject, IMusicalObject, INotifyTimeChanged
+    public sealed class Note : ILengthedObject, IMusicalObject, INotifyTimeChanged, INotifyLengthChanged
     {
         #region Constants
 
@@ -24,6 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Events
 
         public event EventHandler<TimeChangedEventArgs> TimeChanged;
+        public event EventHandler<LengthChangedEventArgs> LengthChanged;
 
         #endregion
 
@@ -191,7 +192,13 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 ThrowIfLengthArgument.IsNegative(nameof(value), value);
 
+                var oldLength = Length;
+                if (value == oldLength)
+                    return;
+
                 TimedNoteOffEvent.Time = TimedNoteOnEvent.Time + value;
+
+                LengthChanged?.Invoke(this, new LengthChangedEventArgs(oldLength, value));
             }
         }
 

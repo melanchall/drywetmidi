@@ -437,6 +437,34 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region Length
+
+        [Test]
+        public void CheckLengthChangedEvent_ZeroTime_NoChange()
+        {
+            CheckLengthChangedEvent_NoChange(GetChord_ZeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_NonZeroTime_NoChange()
+        {
+            CheckLengthChangedEvent_NoChange(GetChord_NonzeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_ZeroTime_Changed()
+        {
+            CheckLengthChangedEvent_Changed(GetChord_ZeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_NonZeroTime_Changed()
+        {
+            CheckLengthChangedEvent_Changed(GetChord_NonzeroTime());
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
@@ -452,8 +480,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 timeChangedEventArgs = eventArgs;
             };
 
+            var lengthChangedFired = false;
+            chord.LengthChanged += (_, __) => lengthChangedFired = true;
+
             chord.Time = chord.Time;
 
+            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
             Assert.IsNull(timeChangedSender, "Sender is not null.");
             Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
         }
@@ -469,15 +501,64 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 timeChangedEventArgs = eventArgs;
             };
 
+            var lengthChangedFired = false;
+            chord.LengthChanged += (_, __) => lengthChangedFired = true;
+
             var oldTime = chord.Time;
             chord.Time += 100;
 
+            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
             Assert.AreSame(chord, timeChangedSender, "Sender is invalid.");
-
             Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
             Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
             Assert.AreEqual(chord.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
             Assert.AreNotEqual(oldTime, chord.Time, "New time is equal to old one.");
+        }
+
+        private static void CheckLengthChangedEvent_NoChange(Chord chord)
+        {
+            object lengthChangedSender = null;
+            LengthChangedEventArgs lengthChangedEventArgs = null;
+
+            chord.LengthChanged += (sender, eventArgs) =>
+            {
+                lengthChangedSender = sender;
+                lengthChangedEventArgs = eventArgs;
+            };
+
+            var timeChangedFired = false;
+            chord.TimeChanged += (_, __) => timeChangedFired = true;
+
+            chord.Length = chord.Length;
+
+            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
+            Assert.IsNull(lengthChangedSender, "Sender is not null.");
+            Assert.IsNull(lengthChangedEventArgs, "Event args is not null.");
+        }
+
+        private static void CheckLengthChangedEvent_Changed(Chord chord)
+        {
+            object lengthChangedSender = null;
+            LengthChangedEventArgs lengthChangedEventArgs = null;
+
+            chord.LengthChanged += (sender, eventArgs) =>
+            {
+                lengthChangedSender = sender;
+                lengthChangedEventArgs = eventArgs;
+            };
+
+            var timeChangedFired = false;
+            chord.TimeChanged += (_, __) => timeChangedFired = true;
+
+            var oldLength = chord.Length;
+            chord.Length += 100;
+
+            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
+            Assert.AreSame(chord, lengthChangedSender, "Sender is invalid.");
+            Assert.IsNotNull(lengthChangedEventArgs, "Event args is null.");
+            Assert.AreEqual(oldLength, lengthChangedEventArgs.OldLength, "Old length is invalid.");
+            Assert.AreEqual(chord.Length, lengthChangedEventArgs.NewLength, "New length is invalid.");
+            Assert.AreNotEqual(oldLength, chord.Length, "New length is equal to old one.");
         }
 
         private static void CheckEndTime<TTimeSpan>(ITimeSpan time, ITimeSpan length, TTimeSpan expectedEndTime)

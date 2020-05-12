@@ -232,6 +232,34 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region Length
+
+        [Test]
+        public void CheckLengthChangedEvent_ZeroTime_NoChange()
+        {
+            CheckLengthChangedEvent_NoChange(GetNote_ZeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_NonZeroTime_NoChange()
+        {
+            CheckLengthChangedEvent_NoChange(GetNote_NonzeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_ZeroTime_Changed()
+        {
+            CheckLengthChangedEvent_Changed(GetNote_ZeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_NonZeroTime_Changed()
+        {
+            CheckLengthChangedEvent_Changed(GetNote_NonzeroTime());
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
@@ -247,8 +275,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 timeChangedEventArgs = eventArgs;
             };
 
+            var lengthChangedFired = false;
+            note.LengthChanged += (_, __) => lengthChangedFired = true;
+
             note.Time = note.Time;
 
+            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
             Assert.IsNull(timeChangedSender, "Sender is not null.");
             Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
         }
@@ -264,15 +296,64 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 timeChangedEventArgs = eventArgs;
             };
 
+            var lengthChangedFired = false;
+            note.LengthChanged += (_, __) => lengthChangedFired = true;
+
             var oldTime = note.Time;
             note.Time += 100;
 
+            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
             Assert.AreSame(note, timeChangedSender, "Sender is invalid.");
-
             Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
             Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
             Assert.AreEqual(note.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
             Assert.AreNotEqual(oldTime, note.Time, "New time is equal to old one.");
+        }
+
+        private static void CheckLengthChangedEvent_NoChange(Note note)
+        {
+            object lengthChangedSender = null;
+            LengthChangedEventArgs lengthChangedEventArgs = null;
+
+            note.LengthChanged += (sender, eventArgs) =>
+            {
+                lengthChangedSender = sender;
+                lengthChangedEventArgs = eventArgs;
+            };
+
+            var timeChangedFired = false;
+            note.TimeChanged += (_, __) => timeChangedFired = true;
+
+            note.Length = note.Length;
+
+            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
+            Assert.IsNull(lengthChangedSender, "Sender is not null.");
+            Assert.IsNull(lengthChangedEventArgs, "Event args is not null.");
+        }
+
+        private static void CheckLengthChangedEvent_Changed(Note note)
+        {
+            object lengthChangedSender = null;
+            LengthChangedEventArgs lengthChangedEventArgs = null;
+
+            note.LengthChanged += (sender, eventArgs) =>
+            {
+                lengthChangedSender = sender;
+                lengthChangedEventArgs = eventArgs;
+            };
+
+            var timeChangedFired = false;
+            note.TimeChanged += (_, __) => timeChangedFired = true;
+
+            var oldLength = note.Length;
+            note.Length += 100;
+
+            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
+            Assert.AreSame(note, lengthChangedSender, "Sender is invalid.");
+            Assert.IsNotNull(lengthChangedEventArgs, "Event args is null.");
+            Assert.AreEqual(oldLength, lengthChangedEventArgs.OldLength, "Old length is invalid.");
+            Assert.AreEqual(note.Length, lengthChangedEventArgs.NewLength, "New length is invalid.");
+            Assert.AreNotEqual(oldLength, note.Length, "New length is equal to old one.");
         }
 
         private static void CheckEndTime<TTimeSpan>(ITimeSpan time, ITimeSpan length, TTimeSpan expectedEndTime)
@@ -285,12 +366,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         private static Note GetNote_ZeroTime()
         {
-            return new Note((SevenBitNumber)10, 100, 0);
+            return new Note((SevenBitNumber)10, 170, 0);
         }
 
         private static Note GetNote_NonzeroTime()
         {
-            return new Note((SevenBitNumber)10, 100, 100);
+            return new Note((SevenBitNumber)10, 150, 100);
         }
 
         #endregion

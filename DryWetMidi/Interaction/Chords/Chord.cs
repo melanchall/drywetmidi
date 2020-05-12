@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents a musical chord.
     /// </summary>
-    public sealed class Chord : ILengthedObject, IMusicalObject, INotifyTimeChanged
+    public sealed class Chord : ILengthedObject, IMusicalObject, INotifyTimeChanged, INotifyLengthChanged
     {
         #region Events
 
@@ -21,6 +21,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public event NotesCollectionChangedEventHandler NotesCollectionChanged;
 
         public event EventHandler<TimeChangedEventArgs> TimeChanged;
+        public event EventHandler<LengthChangedEventArgs> LengthChanged;
 
         #endregion
 
@@ -120,6 +121,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets length of the chord in units defined by the time division of a MIDI file.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Length is negative.</exception>
         public long Length
         {
             get
@@ -143,12 +145,20 @@ namespace Melanchall.DryWetMidi.Interaction
             }
             set
             {
+                ThrowIfTimeArgument.IsNegative(nameof(value), value);
+
+                var oldLength = Length;
+                if (value == oldLength)
+                    return;
+
                 var lengthChange = value - Length;
 
                 foreach (var note in Notes)
                 {
                     note.Length += lengthChange;
                 }
+
+                LengthChanged?.Invoke(this, new LengthChangedEventArgs(oldLength, value));
             }
         }
 
