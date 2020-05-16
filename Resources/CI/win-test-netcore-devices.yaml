@@ -9,7 +9,7 @@ trigger:
     - DryWetMidi.Benchmarks/
     - Docs/
     - README.md
-    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/run-benchmarks.yaml
     - Resources/CI/build-artifacts-library.yaml
     - Resources/CI/build-artifacts-docs.yaml
     - Resources/CI/check-readme-links.yaml

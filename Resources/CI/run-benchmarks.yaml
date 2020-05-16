@@ -31,7 +31,7 @@ variables:
   buildConfiguration: 'Release'
   version: '5.1.1'
 
-name: $(TeamProject)_$(SourceBranchName)_RunBenchmarks_Windows_$(version)$(Rev:.r)
+name: $(TeamProject)_$(SourceBranchName)_RunBenchmarks_$(ApiArea)_$(version)$(Rev:.r)
 
 steps:
 - task: PowerShell@2
@@ -61,25 +61,36 @@ steps:
     command: restore
 
 - task: DotNetCoreCLI@2
-  displayName: Build solution
+  displayName: Build DryWetMidi and DryWetMidi.Tests.Common
   inputs:
     command: 'build'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
+    projects: |
+      DryWetMidi/Melanchall.DryWetMidi.csproj
+      DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: Build DryWetMidi.Benchmarks
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration) --framework netcoreapp2.1'
+    projects: |
+      DryWetMidi.Benchmarks/Melanchall.DryWetMidi.Benchmarks.csproj
     
 - task: PowerShell@2
   displayName: Setup MIDI ports for devices API benchmarks
+  condition: "contains(variables['ApiArea'], 'Devices')"
   inputs:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
   displayName: Run benchmarks
+  continueOnError: true
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testSelector: testAssemblies
-    testAssemblyVer2:
-      '**/*.Benchmarks.dll'
+    command: 'test'
+    projects: 'DryWetMidi.Benchmarks/Melanchall.DryWetMidi.Benchmarks.csproj'
+    arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.$(ApiArea)) --framework netcoreapp2.1 --verbosity normal'
 
 - task: CopyFiles@2
   displayName: Copy results

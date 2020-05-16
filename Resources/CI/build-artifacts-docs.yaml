@@ -15,7 +15,7 @@ trigger:
     - Resources/CI/win-test-netcore-devices.yaml
     - Resources/CI/mac-test-netcore-core.yaml
     - Resources/CI/lin-test-netcore-core.yaml
-    - Resources/CI/benchmarks-develop-win.yaml
+    - Resources/CI/run-benchmarks.yaml
     - Resources/CI/build-artifacts-library.yaml
     - Resources/CI/check-readme-links.yaml
     - Resources/CI/check-cs-links.yaml
