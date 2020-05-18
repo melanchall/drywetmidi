@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Benchmarks.Devices
 {
     [TestFixture]
-    public sealed class PlaybackBenchmarks : BenchmarkTest
+    public sealed partial class PlaybackBenchmarks : BenchmarkTest
     {
         [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
         public class Benchmarks_Playback
