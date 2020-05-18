@@ -106,6 +106,7 @@ namespace ExportBenchmarksResults
             var branch = args[6];
 
             var client = InfluxDBClientFactory.Create(url, token.ToCharArray());
+            var timestamp = DateTime.UtcNow;
 
             var filesPathes = Directory.GetFiles(resultsFolderPath, "*.json", SearchOption.AllDirectories);
             var totalFilesCount = filesPathes.Length;
@@ -145,7 +146,7 @@ namespace ExportBenchmarksResults
                             .Field(FieldsNames.Median, benchmark.Statistics.Median)
                             .Field(FieldsNames.Mean, benchmark.Statistics.Mean)
 
-                            .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+                            .Timestamp(timestamp, WritePrecision.Ns);
 
                         writeApi.WritePoint(bucket, organization, point);
                     }
