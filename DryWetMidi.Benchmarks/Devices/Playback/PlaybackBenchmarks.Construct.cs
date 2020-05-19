@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BenchmarkDotNet.Attributes;
-using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
@@ -15,8 +13,6 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
 
         public abstract class Benchmarks_ConstructPlayback
         {
-            private const long NoteLength = 1000;
-
             private IEnumerable<ITimedObject> _timedObjects;
 
             protected abstract int NotesCount { get; }
@@ -24,10 +20,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             [GlobalSetup]
             public void GlobalSetup()
             {
-                _timedObjects = Enumerable
-                    .Range(0, NotesCount)
-                    .SelectMany(i => SevenBitNumber.Values.Select(noteNumber => new Note(noteNumber, NoteLength, i * NoteLength)))
-                    .ToArray();
+                _timedObjects = GetTimedObjects(NotesCount);
             }
 
             [Benchmark]
@@ -37,19 +30,19 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             }
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 2, targetCount: 3, launchCount: 4, invocationCount: 5)]
         public class Benchmarks_ConstructPlayback_Small : Benchmarks_ConstructPlayback
         {
             protected override int NotesCount => 10;
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 2, targetCount: 3, launchCount: 4, invocationCount: 5)]
         public class Benchmarks_ConstructPlayback_Middle : Benchmarks_ConstructPlayback
         {
             protected override int NotesCount => 100;
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 2, targetCount: 3, launchCount: 4, invocationCount: 5)]
         public class Benchmarks_ConstructPlayback_Large : Benchmarks_ConstructPlayback
         {
             protected override int NotesCount => 1000;
