@@ -23,7 +23,7 @@ trigger:
     - .github/
 
 schedules:
-- cron: '0 3 * * *'
+- cron: '0 0,3,6 * * *'
   displayName: Run benchmarks
   branches:
     include:
