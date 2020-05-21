@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Attributes.Jobs;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Toolchains.InProcess;
 
 namespace Melanchall.DryWetMidi.Benchmarks
 {
@@ -23,7 +24,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
         private static Job CreateJob(string id, int launchCount, int warmupCount, int targetCount, int invocationCount, RunStrategy? runStrategy)
         {
-            var job = Job.InProcess.UnfreezeCopy();
+            var job = Job.InProcess.With(new InProcessToolchain(TimeSpan.FromMinutes(10), BenchmarkActionCodegen.ReflectionEmit, true)).UnfreezeCopy();
 
             if (id != null)
                 job = job.WithId(id);
