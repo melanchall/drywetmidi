@@ -40,9 +40,9 @@ namespace Melanchall.DryWetMidi.Benchmarks
             var summary = BenchmarkRunner.Run(
                 type,
                 ManualConfig.Create(DefaultConfig.Instance)
-                            .With(AsciiDocExporter.Default, JsonExporter.Brief)
-                            .With(StatisticColumn.Min)
-                            .With(columns));
+                            .AddExporter(AsciiDocExporter.Default, JsonExporter.Brief)
+                            .AddColumn(StatisticColumn.Min)
+                            .AddColumn(columns));
 
             // Assert validation errors
 
@@ -65,8 +65,8 @@ namespace Melanchall.DryWetMidi.Benchmarks
             {
                 var buildResult = report.BuildResult;
 
-                if (!buildResult.IsBuildSuccess)
-                    buildErrorsStringBuilder.AppendLine($"Build exception={buildResult.BuildException.Message}");
+                if (!string.IsNullOrEmpty(buildResult.ErrorMessage))
+                    buildErrorsStringBuilder.AppendLine($"Error={buildResult.ErrorMessage}");
 
                 if (!buildResult.IsGenerateSuccess)
                     buildErrorsStringBuilder.AppendLine($"Generate exception={buildResult.GenerateException.Message}");

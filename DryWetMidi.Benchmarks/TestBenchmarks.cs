@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks
@@ -8,7 +7,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
     [TestFixture]
     public sealed class TestBenchmarks : BenchmarkTest
     {
-        [ClrJob]
+        [SimpleJob(BenchmarkDotNet.Jobs.RuntimeMoniker.Net472)]
         public class Benchmarks_Test
         {
             [Benchmark]

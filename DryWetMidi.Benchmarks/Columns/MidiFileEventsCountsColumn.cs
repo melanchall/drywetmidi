@@ -30,18 +30,18 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
         public UnitType UnitType => UnitType.Dimensionless;
 
-        public string GetValue(Summary summary, Benchmark benchmark)
+        public string GetValue(Summary summary, BenchmarkCase benchmark)
         {
             return string.Join(", ", _eventsCounts.OrderBy(c => c));
         }
 
-        public string GetValue(Summary summary, Benchmark benchmark, ISummaryStyle style)
+        public string GetValue(Summary summary, BenchmarkCase benchmark, SummaryStyle style)
         {
             return GetValue(summary, benchmark);
         }
 
         public bool IsAvailable(Summary summary) => true;
 
-        public bool IsDefault(Summary summary, Benchmark benchmark) => false;
+        public bool IsDefault(Summary summary, BenchmarkCase benchmark) => false;
     }
 }

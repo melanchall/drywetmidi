@@ -1,8 +1,9 @@
 ﻿using System;
-using BenchmarkDotNet.Attributes.Jobs;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.InProcess;
+using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 
 namespace Melanchall.DryWetMidi.Benchmarks
 {
@@ -24,7 +25,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
 
         private static Job CreateJob(string id, int launchCount, int warmupCount, int targetCount, int invocationCount, RunStrategy? runStrategy)
         {
-            var job = Job.InProcess.With(new InProcessToolchain(TimeSpan.FromMinutes(10), BenchmarkActionCodegen.ReflectionEmit, true)).UnfreezeCopy();
+            var job = Job.InProcess.WithToolchain(new InProcessNoEmitToolchain(TimeSpan.FromMinutes(10), true)).UnfreezeCopy();
 
             if (id != null)
                 job = job.WithId(id);
@@ -36,7 +37,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
                 job = job.WithWarmupCount(warmupCount);
 
             if (targetCount != DefaultValue)
-                job = job.WithTargetCount(targetCount);
+                job = job.WithIterationCount(targetCount);
 
             if (invocationCount != DefaultValue)
                 job = job.WithInvocationCount(invocationCount);
