@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             private InputDevice _inputDevice;
             private IEnumerable<MidiEvent> _events;
 
-            private ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
+            private ManualResetEvent _manualResetEvent;
 
             [GlobalSetup]
             public void GlobalSetup()
@@ -40,7 +40,6 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             [GlobalCleanup]
             public void GlobalCleanup()
             {
-                _manualResetEvent.Dispose();
                 _inputDevice.EventReceived -= OnEventReceived;
                 _inputDevice.Dispose();
                 _outputDevice.Dispose();
@@ -49,8 +48,9 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             [IterationSetup]
             public void IterationSetup()
             {
-                Thread.Sleep(1000);
-                _manualResetEvent.Reset();
+                Thread.Sleep(2000);
+                _manualResetEvent?.Dispose();
+                _manualResetEvent = new ManualResetEvent(false);
             }
 
             [Benchmark]
