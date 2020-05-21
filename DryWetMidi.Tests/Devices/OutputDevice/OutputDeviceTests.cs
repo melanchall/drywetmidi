@@ -47,36 +47,33 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [Test]
-        public void SendEvent_MidiEvent()
+        public void SendEvent_Channel()
         {
-            var midiEvent = new NoteOnEvent((SevenBitNumber)45, (SevenBitNumber)89)
+            SendEvent(new NoteOnEvent((SevenBitNumber)45, (SevenBitNumber)89)
             {
                 Channel = (FourBitNumber)6
-            };
+            });
+        }
 
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
-            {
-                MidiEvent eventSent = null;
-                outputDevice.EventSent += (_, e) => eventSent = e.Event;
+        [Retry(RetriesNumber)]
+        [Test]
+        public void SendEvent_SysEx()
+        {
+            SendEvent(new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }));
+        }
 
-                using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
-                {
-                    MidiEvent eventReceived = null;
-                    inputDevice.EventReceived += (_, e) => eventReceived = e.Event;
+        [Retry(RetriesNumber)]
+        [Test]
+        public void SendEvent_SystemCommon()
+        {
+            SendEvent(new TuneRequestEvent());
+        }
 
-                    inputDevice.StartEventsListening();
-
-                    outputDevice.PrepareForEventsSending();
-                    outputDevice.SendEvent(new NoteOnEvent((SevenBitNumber)45, (SevenBitNumber)89) { Channel = (FourBitNumber)6 });
-
-                    var timeout = TimeSpan.FromMilliseconds(15);
-                    var isEventSentReceived = SpinWait.SpinUntil(() => eventSent != null && eventReceived != null, timeout);
-                    Assert.IsTrue(isEventSentReceived, "Event either not sent ot not received.");
-
-                    MidiAsserts.AreEventsEqual(midiEvent, eventSent, false, "Sent event is invalid.");
-                    MidiAsserts.AreEventsEqual(eventSent, eventReceived, false, "Received event is invalid.");
-                }
-            }
+        [Retry(RetriesNumber)]
+        [Test]
+        public void SendEvent_SystemRealTime()
+        {
+            SendEvent(new StartEvent());
         }
 
         // TODO
@@ -99,6 +96,52 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             {
                 Assert.Greater(outputDevice.Volume.LeftVolume, 0, "Left volume is invalid.");
                 Assert.Greater(outputDevice.Volume.RightVolume, 0, "Right volume is invalid.");
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        public void SendEvent(MidiEvent midiEvent)
+        {
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                MidiEvent eventSent = null;
+                outputDevice.EventSent += (_, e) => eventSent = e.Event;
+
+                string errorOnSend = null;
+                outputDevice.ErrorOccurred += (_, e) => errorOnSend = e.Exception.Message;
+
+                using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+                {
+                    MidiEvent eventReceived = null;
+                    inputDevice.EventReceived += (_, e) => eventReceived = e.Event;
+
+                    string errorOnReceive = null;
+                    inputDevice.ErrorOccurred += (_, e) => errorOnReceive = e.Exception.Message;
+
+                    inputDevice.StartEventsListening();
+
+                    outputDevice.PrepareForEventsSending();
+                    outputDevice.SendEvent(midiEvent);
+
+                    var timeout = TimeSpan.FromMilliseconds(15);
+                    var isEventSentReceived = SpinWait.SpinUntil(() => eventSent != null && eventReceived != null, timeout);
+
+                    if (!isEventSentReceived)
+                    {
+                        if (errorOnSend != null)
+                            Assert.Fail($"Failed to send event: {errorOnSend}");
+                        else if (errorOnReceive != null)
+                            Assert.Fail($"Failed to receive event: {errorOnReceive}");
+                        else
+                            Assert.Fail("Event either not sent ot not received.");
+                    }
+
+                    MidiAsserts.AreEventsEqual(midiEvent, eventSent, false, "Sent event is invalid.");
+                    MidiAsserts.AreEventsEqual(eventSent, eventReceived, false, "Received event is invalid.");
+                }
             }
         }
 
