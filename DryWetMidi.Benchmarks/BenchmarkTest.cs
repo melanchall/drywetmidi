@@ -23,10 +23,6 @@ namespace Melanchall.DryWetMidi.Benchmarks
         [SetUp]
         public void SetupTest()
         {
-#if DEBUG
-            Assert.Inconclusive("Unable to run benchmarks on Debug configuration. Use Release.");
-#endif
-
             Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
         }
 
@@ -39,10 +35,16 @@ namespace Melanchall.DryWetMidi.Benchmarks
         {
             var summary = BenchmarkRunner.Run(
                 type,
-                ManualConfig.Create(DefaultConfig.Instance)
-                            .AddExporter(AsciiDocExporter.Default, JsonExporter.Brief)
-                            .AddColumn(StatisticColumn.Min)
-                            .AddColumn(columns));
+                ManualConfig.Create(
+#if DEBUG
+                    new DebugInProcessConfig()
+#else
+                    DefaultConfig.Instance
+#endif
+                    )
+                    .AddExporter(AsciiDocExporter.Default, JsonExporter.Brief)
+                    .AddColumn(StatisticColumn.Min)
+                    .AddColumn(columns));
 
             // Assert validation errors
 
@@ -85,6 +87,6 @@ namespace Melanchall.DryWetMidi.Benchmarks
                 Assert.Inconclusive(buildError);
         }
 
-        #endregion
+#endregion
     }
 }
