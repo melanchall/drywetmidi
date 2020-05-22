@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using BenchmarkDotNet.Attributes;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
@@ -17,16 +15,12 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
         public abstract class Benchmarks_OutputDevice_SendEvent
         {
             private OutputDevice _outputDevice;
-            private IEnumerable<MidiEvent> _events;
+            private MidiEvent _event;
 
             [GlobalSetup]
             public void GlobalSetup()
             {
-                _events = Enumerable
-                    .Range(0, 500)
-                    .Select(_ => GetMidiEvent())
-                    .ToArray();
-
+                _event = GetMidiEvent();
                 _outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
             }
 
@@ -39,40 +33,37 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             [IterationSetup]
             public void IterationSetup()
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
 
             [Benchmark]
             public void SendEvent()
             {
-                foreach (var midiEvent in _events)
-                {
-                    _outputDevice.SendEvent(midiEvent);
-                }
+                _outputDevice.SendEvent(_event);
             }
 
             protected abstract MidiEvent GetMidiEvent();
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput)]
         public class Benchmarks_OutputDevice_SendEvent_Channel : Benchmarks_OutputDevice_SendEvent
         {
             protected override MidiEvent GetMidiEvent() => new NoteOnEvent();
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput)]
         public class Benchmarks_OutputDevice_SendEvent_SysEx : Benchmarks_OutputDevice_SendEvent
         {
             protected override MidiEvent GetMidiEvent() => new NormalSysExEvent(new byte[] { 0x15, 0x2F });
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput)]
         public class Benchmarks_OutputDevice_SendEvent_SystemCommon : Benchmarks_OutputDevice_SendEvent
         {
             protected override MidiEvent GetMidiEvent() => new TuneRequestEvent();
         }
 
-        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, warmupCount: 5, targetCount: 5, launchCount: 5, invocationCount: 5)]
+        [InProcessSimpleJob(BenchmarkDotNet.Engines.RunStrategy.Throughput)]
         public class Benchmarks_OutputDevice_SendEvent_SystemRealTime : Benchmarks_OutputDevice_SendEvent
         {
             protected override MidiEvent GetMidiEvent() => new StopEvent();
