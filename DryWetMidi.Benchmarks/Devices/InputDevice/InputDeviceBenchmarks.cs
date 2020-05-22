@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             public void GlobalSetup()
             {
                 _events = Enumerable
-                    .Range(0, 1000)
+                    .Range(0, 500)
                     .Select(_ => GetMidiEvent())
                     .ToArray();
 
@@ -105,8 +105,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             RunBenchmarks<Benchmarks_InputDevice_SendReceiveEvent_Channel>();
         }
 
-        // TODO
-        //[Test]
+        [Test]
         public void SendReceiveEvent_SysEx()
         {
             RunBenchmarks<Benchmarks_InputDevice_SendReceiveEvent_SysEx>();

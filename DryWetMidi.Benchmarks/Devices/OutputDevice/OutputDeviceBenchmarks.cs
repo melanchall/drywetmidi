@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             public void GlobalSetup()
             {
                 _events = Enumerable
-                    .Range(0, 1000)
+                    .Range(0, 500)
                     .Select(_ => GetMidiEvent())
                     .ToArray();
 
