@@ -20,12 +20,6 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  version: '5.1.1'
-
 name: $(TeamProject)_ExportNuGetStat_$(version)$(Rev:.r)
 
 steps:
