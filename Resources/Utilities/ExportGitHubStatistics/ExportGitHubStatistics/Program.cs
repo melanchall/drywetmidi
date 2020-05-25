@@ -43,7 +43,9 @@ namespace ExportGitHubStatistics
             var gitHubClient = new GitHubClient(new ProductHeaderValue(AuthAppName));
             gitHubClient.Credentials = new Credentials(gitHubPat);
             var repository = gitHubClient.Repository.Get(RepoOwner, RepoName).Result;
-            var issues = gitHubClient.Issue.GetAllForRepository(RepoOwner, RepoName).Result;
+
+            var issuesClient = gitHubClient.Issue;
+            var allIssues = issuesClient.GetAllForRepository(RepoOwner, RepoName, new RepositoryIssueRequest { State = ItemStateFilter.All }).Result;
 
             var influxDbClient = InfluxDBClientFactory.Create(url, token.ToCharArray());
             var timestamp = DateTime.UtcNow;
@@ -68,9 +70,9 @@ namespace ExportGitHubStatistics
                     .Field(FieldsNames.WatchersPerDay, repository.SubscribersCount / lifeTime.TotalDays)
                     .Field(FieldsNames.DaysPerWatcher, lifeTime.TotalDays / repository.SubscribersCount)
 
-                    .Field(FieldsNames.Issues, issues.Count)
-                    .Field(FieldsNames.IssuesPerDay, issues.Count / lifeTime.TotalDays)
-                    .Field(FieldsNames.DaysPerIssue, lifeTime.TotalDays / issues.Count)
+                    .Field(FieldsNames.Issues, allIssues.Count)
+                    .Field(FieldsNames.IssuesPerDay, allIssues.Count / lifeTime.TotalDays)
+                    .Field(FieldsNames.DaysPerIssue, lifeTime.TotalDays / allIssues.Count)
 
                     .Field(FieldsNames.RepoSize, repository.Size)
 
