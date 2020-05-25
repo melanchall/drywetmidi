@@ -20,7 +20,7 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
-name: $(TeamProject)_ExportGitHubStat_$(version)$(Rev:.r)
+name: $(TeamProject)_ExportGitHubStat_$(Rev:r)
 
 steps:
 - task: PowerShell@2

@@ -20,7 +20,7 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
-name: $(TeamProject)_ExportNuGetStat_$(version)$(Rev:.r)
+name: $(TeamProject)_ExportNuGetStat_$(Rev:r)
 
 steps:
 - task: PowerShell@2
