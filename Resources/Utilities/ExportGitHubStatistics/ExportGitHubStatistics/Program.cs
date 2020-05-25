@@ -23,6 +23,7 @@ namespace ExportGitHubStatistics
             public const string IssuesPerDay = "issues_per_day";
             public const string DaysPerIssue = "days_per_issue";
             public const string RepoSize = "repo_size";
+            public const string RepoLifeDays = "repo_life_days";
         }
 
         private const string RepoOwner = "melanchall";
@@ -75,6 +76,7 @@ namespace ExportGitHubStatistics
                     .Field(FieldsNames.DaysPerIssue, lifeTime.TotalDays / allIssues.Count)
 
                     .Field(FieldsNames.RepoSize, repository.Size)
+                    .Field(FieldsNames.RepoLifeDays, lifeTime.TotalDays)
 
                     .Timestamp(timestamp, WritePrecision.Ns);
 
