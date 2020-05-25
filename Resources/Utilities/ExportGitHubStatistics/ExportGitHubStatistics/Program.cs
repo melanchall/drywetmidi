@@ -11,14 +11,17 @@ namespace ExportGitHubStatistics
         private static class FieldsNames
         {
             public const string Stars = "stars";
-            public const string Forks = "forks";
-            public const string Watchers = "watchers";
             public const string StarsPerDay = "stars_per_day";
             public const string DaysPerStar = "days_per_star";
+            public const string Forks = "forks";
             public const string ForksPerDay = "forks_per_day";
             public const string DaysPerFork = "days_per_fork";
+            public const string Watchers = "watchers";
             public const string WatchersPerDay = "watchers_per_day";
             public const string DaysPerWatcher = "days_per_watcher";
+            public const string Issues = "issues";
+            public const string IssuesPerDay = "issues_per_day";
+            public const string DaysPerIssue = "days_per_issue";
             public const string RepoSize = "repo_size";
         }
 
@@ -40,6 +43,7 @@ namespace ExportGitHubStatistics
             var gitHubClient = new GitHubClient(new ProductHeaderValue(AuthAppName));
             gitHubClient.Credentials = new Credentials(gitHubPat);
             var repository = gitHubClient.Repository.Get(RepoOwner, RepoName).Result;
+            var issues = gitHubClient.Issue.GetAllForRepository(RepoOwner, RepoName).Result;
 
             var influxDbClient = InfluxDBClientFactory.Create(url, token.ToCharArray());
             var timestamp = DateTime.UtcNow;
@@ -53,16 +57,20 @@ namespace ExportGitHubStatistics
                     .Measurement(measurement)
 
                     .Field(FieldsNames.Stars, repository.StargazersCount)
-                    .Field(FieldsNames.Forks, repository.ForksCount)
-                    .Field(FieldsNames.Watchers, repository.SubscribersCount)
-
-                    .Field(FieldsNames.StarsPerDay, repository.StargazersCount / lifeTime.TotalDays)
-                    .Field(FieldsNames.ForksPerDay, repository.ForksCount / lifeTime.TotalDays)
-                    .Field(FieldsNames.WatchersPerDay, repository.SubscribersCount / lifeTime.TotalDays)
-
                     .Field(FieldsNames.DaysPerStar, lifeTime.TotalDays / repository.StargazersCount)
+                    .Field(FieldsNames.StarsPerDay, repository.StargazersCount / lifeTime.TotalDays)
+
+                    .Field(FieldsNames.Forks, repository.ForksCount)
+                    .Field(FieldsNames.ForksPerDay, repository.ForksCount / lifeTime.TotalDays)
                     .Field(FieldsNames.DaysPerFork, lifeTime.TotalDays / repository.ForksCount)
+
+                    .Field(FieldsNames.Watchers, repository.SubscribersCount)
+                    .Field(FieldsNames.WatchersPerDay, repository.SubscribersCount / lifeTime.TotalDays)
                     .Field(FieldsNames.DaysPerWatcher, lifeTime.TotalDays / repository.SubscribersCount)
+
+                    .Field(FieldsNames.Issues, issues.Count)
+                    .Field(FieldsNames.IssuesPerDay, issues.Count / lifeTime.TotalDays)
+                    .Field(FieldsNames.DaysPerIssue, lifeTime.TotalDays / issues.Count)
 
                     .Field(FieldsNames.RepoSize, repository.Size)
 
