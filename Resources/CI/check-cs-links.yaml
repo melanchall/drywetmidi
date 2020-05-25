@@ -3,12 +3,10 @@ trigger:
     include:
     - master
     - develop
-
-pr:
-  branches:
+  paths:
     include:
-    - DryWetMidi/
-    - Resources/CI/check-cs-links.yaml
+    - 'DryWetMidi/*'
+    - 'Resources/CI/check-cs-links.yaml'
 
 schedules:
 - cron: '0 0,9,15,20 * * *'

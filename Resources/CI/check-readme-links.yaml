@@ -5,16 +5,9 @@ trigger:
     - develop
   paths:
     include:
-    - README.md
-
-pr:
-  branches:
-    include:
-    - '*'
-  paths:
-    include:
-    - README.md
-    - Resources/CI/check-readme-links.yaml
+    - 'README.md'
+    - 'Resources/Scripts/Check links.ps1'
+    - 'Resources/CI/check-readme-links.yaml'
 
 schedules:
 - cron: '0 0,9,15,20 * * *'

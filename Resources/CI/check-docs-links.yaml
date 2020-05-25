@@ -3,11 +3,11 @@ trigger:
     include:
     - master
     - develop
-
-pr:
-  branches:
+  paths:
     include:
-    - Docs/
+    - 'Docs/*'
+    - 'Resources/Scripts/Check links.ps1'
+    - 'Resources/CI/check-docs-links.yaml'
 
 schedules:
 - cron: '0 0,9,15,20 * * *'
