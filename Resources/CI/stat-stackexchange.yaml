@@ -1,0 +1,44 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'Resources/Utilities/ExportStackExchangeStatistics/*'
+    - 'Resources/CI/stat-stackexchange.yaml'
+
+schedules:
+- cron: '0 0 * * *'
+  displayName: Export StackExchange statistics
+  branches:
+    include:
+    - develop
+  always: 'true'
+
+pool:
+  vmImage: 'windows-latest'
+
+name: $(TeamProject)_ExportStackExchangeStat_$(Rev:r)
+
+steps:
+- task: PowerShell@2
+  displayName: Export StackExchange info to InfluxDB Cloud
+  inputs:
+    targetType: 'inline'
+    script: |
+      $location = Get-Location
+      Write-Host "Building ExportStackExchangeStatistics..."
+      dotnet publish "Resources/Utilities/ExportStackExchangeStatistics/ExportStackExchangeStatistics.sln" -c Release -r win10-x64 -o "$location/ExportStackExchangeStatistics"
+      Write-Host "Built."
+      
+      Write-Host "Exporting GitHub repo info..."
+      $url = "$(InfluxCloudUrl)"
+      $writeToken = "$(InfluxCloudWriteToken)"
+      $readToken = "$(InfluxCloudReadToken)"
+      $organization = "$(InfluxCloudOrganization)"
+      $bucket = "$(InfluxCloudBucket)"
+      $measurement = "$(InfluxCloudMeasurement)"
+      Start-Process "ExportStackExchangeStatistics/ExportStackExchangeStatistics.exe" -ArgumentList """$url"" ""$writeToken"" ""$readToken"" ""$organization"" ""$bucket"" ""$measurement""" -Wait -NoNewWindow
+      Write-Host "Exported."
