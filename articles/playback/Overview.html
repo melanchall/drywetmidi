@@ -8,7 +8,7 @@
     <title>Playback - Overview | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Playback - Overview | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.52.0.0">
+    <meta name="generator" content="docfx 2.55.0.0">
     
     <link rel="shortcut icon" href="../../images/favicon.png">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -79,36 +79,50 @@
             <article class="content wrap" id="_content" data-uid="a_playback_overview">
 <h1 id="playback---overview">Playback - Overview</h1>
 
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> class allows to play MIDI events via an <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a> (see <a class="xref" href="../devices/Output-device.html">Output device</a> article) or without a device at all (see <a href="#playback-without-device">Playback without device</a>). To get an instance of the <code>Playback</code> you can use its constructors:</p>
-<pre><code class="lang-csharp">using Melanchall.DryWetMidi.Devices;
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> class allows to play MIDI events via an <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a> (see <a class="xref" href="../devices/Output-device.html">Output device</a> article) or without a device at all (see <a href="#playback-without-device">Playback without device</a>). To get an instance of the <code>Playback</code> you can use its <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#constructors">constructors</a> or <code>GetPlayback</code> extension methods in <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html">PlaybackUtilities</a>.</p>
+<p>Following example shows simple console app where specified MIDI file is played until end of the file reached or B note is about to be played. So in our example B note means to stop playback.</p>
+<pre><code class="lang-csharp">using System;
+using System.Linq;
+using System.Threading;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Devices;
 
-var eventsToPlay = new MidiEvent[]
+namespace SimplePlaybackApp
 {
-    new NoteOnEvent(),
-    new NoteOffEvent
+    class Program
     {
-        DeltaTime = 100
-    }
-};
+        private static Playback _playback;
 
-using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
-using (var playback = new Playback(eventsToPlay, TempoMap.Default, outputDevice))
-{
-    // ...
+        static void Main(string[] args)
+        {
+            var midiFile = MidiFile.Read(&quot;The Greatest Song Ever.mid&quot;);
+
+            var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;);
+
+            _playback = midiFile.GetPlayback(outputDevice);
+            _playback.NotesPlaybackStarted += OnNotesPlaybackStarted;
+            _playback.Start();
+
+            SpinWait.SpinUntil(() =&gt; !_playback.IsRunning);
+
+            Console.WriteLine(&quot;Playback stopped or finished.&quot;);
+
+            outputDevice.Dispose();
+            _playback.Dispose();
+        }
+
+        private static void OnNotesPlaybackStarted(object sender, NotesEventArgs e)
+        {
+            if (e.Notes.Any(n =&gt; n.NoteName == Melanchall.DryWetMidi.MusicTheory.NoteName.B))
+                _playback.Stop();
+        }
+    }
 }
 </code></pre>
-<p>There are also extension methods <code>GetPlayback</code> in <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html">PlaybackUtilities</a>:</p>
-<pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
-using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(outputDevice))
-{
-    // ...
-}
-</code></pre>
-<p>Please read <a href="Tick-generator.html">Tick generator</a> article too to learn how you can adjust playback's internals.</p>
+<p>Please read <a href="Tick-generator.html">Tick generator</a> article and <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a> class documentation to learn how you can adjust playback's internals.</p>
 <h2 id="playback-without-device">Playback without device</h2>
 <p>There are constructors of <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> that don't accept <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a> as an argument. It can be useful, for example, for notes visualization without sound. <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> provides events that will be fired with or without output device (see <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#events">Events</a> section of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> API page). Also all <code>GetPlayback</code> extensions methods have overloads without the <code>outputDevice</code> parameter.</p>
+<p>Also if you don't specify output device and use <a href="Tick-generator.html">tick generator</a> other than <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a>, you can use <code>Playback</code> in cross-platform app like Unity game that is supposed to be built for different platforms.</p>
 <h2 id="blocking-playback">Blocking playback</h2>
 <p>If you call <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Play">Play</a> method of the <code>Playback</code>, the calling thread will be blocked until entire collection of MIDI events will be played. Note that execution of this method will be infinite if the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Loop">Loop</a> property set to <code>true</code>.</p>
 <p>There are also extension methods <code>Play</code> in <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html">PlaybackUtilities</a>:</p>
@@ -121,7 +135,7 @@ using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(
 </code></pre>
 <h2 id="non-blocking-playback">Non-blocking playback</h2>
 <p>Is you call <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Start">Start</a> method of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>, execution of the calling thread will continue immediately after the method is called. To stop playback use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Stop">Stop</a> method. Note that there is no any pausing method since it's useless. <code>Stop</code> leaves playback at the point where the method was called. To move to the start of the playback use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_MoveToStart">MoveToStart</a> method.</p>
-<p>You should be very careful with this approach and <code>using</code> block. Example below shows the case where part of MIDI data will not be played because of playback is disposed before the last MIDI event will be played:</p>
+<p>You should be very careful with this approach and <code>using</code> block. Example below shows the case where <strong>part of MIDI data will not be played because of playback is disposed before the last MIDI event will be played</strong>:</p>
 <pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
 using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(outputDevice))
 {
@@ -130,7 +144,7 @@ using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(
     // ...
 }
 </code></pre>
-<p>With non-blocking approach you shoudl call <code>Dispose</code> manually after you've finished work with playback object.</p>
+<p>With non-blocking approach you should call <code>Dispose</code> manually after you've finished work with playback object.</p>
 </article>
           </div>
           

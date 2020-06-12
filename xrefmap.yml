@@ -61,6 +61,9 @@ references:
 - uid: a_notes_merger
   name: Notes merger
   href: articles/tools/Notes-merger.html
+- uid: a_playback_commonproblems
+  name: Common problems
+  href: articles/playback/Common-problems.html
 - uid: a_playback_curtime
   name: Current time watching
   href: articles/playback/Current-time-watching.html
@@ -14117,6 +14120,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Chord.Length
   nameWithType: Chord.Length
+- uid: Melanchall.DryWetMidi.Interaction.Chord.LengthChanged
+  name: LengthChanged
+  href: api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_LengthChanged
+  commentId: E:Melanchall.DryWetMidi.Interaction.Chord.LengthChanged
+  fullName: Melanchall.DryWetMidi.Interaction.Chord.LengthChanged
+  nameWithType: Chord.LengthChanged
 - uid: Melanchall.DryWetMidi.Interaction.Chord.Notes
   name: Notes
   href: api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_Notes
@@ -14175,6 +14184,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Chord.Time
   nameWithType: Chord.Time
+- uid: Melanchall.DryWetMidi.Interaction.Chord.TimeChanged
+  name: TimeChanged
+  href: api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_TimeChanged
+  commentId: E:Melanchall.DryWetMidi.Interaction.Chord.TimeChanged
+  fullName: Melanchall.DryWetMidi.Interaction.Chord.TimeChanged
+  nameWithType: Chord.TimeChanged
 - uid: Melanchall.DryWetMidi.Interaction.Chord.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_ToString
@@ -14755,6 +14770,30 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.IMusicalObject.Channel
   nameWithType: IMusicalObject.Channel
+- uid: Melanchall.DryWetMidi.Interaction.INotifyLengthChanged
+  name: INotifyLengthChanged
+  href: api/Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.INotifyLengthChanged
+  fullName: Melanchall.DryWetMidi.Interaction.INotifyLengthChanged
+  nameWithType: INotifyLengthChanged
+- uid: Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.LengthChanged
+  name: LengthChanged
+  href: api/Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html#Melanchall_DryWetMidi_Interaction_INotifyLengthChanged_LengthChanged
+  commentId: E:Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.LengthChanged
+  fullName: Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.LengthChanged
+  nameWithType: INotifyLengthChanged.LengthChanged
+- uid: Melanchall.DryWetMidi.Interaction.INotifyTimeChanged
+  name: INotifyTimeChanged
+  href: api/Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.INotifyTimeChanged
+  fullName: Melanchall.DryWetMidi.Interaction.INotifyTimeChanged
+  nameWithType: INotifyTimeChanged
+- uid: Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.TimeChanged
+  name: TimeChanged
+  href: api/Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html#Melanchall_DryWetMidi_Interaction_INotifyTimeChanged_TimeChanged
+  commentId: E:Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.TimeChanged
+  fullName: Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.TimeChanged
+  nameWithType: INotifyTimeChanged.TimeChanged
 - uid: Melanchall.DryWetMidi.Interaction.ITimedObject
   name: ITimedObject
   href: api/Melanchall.DryWetMidi.Interaction.ITimedObject.html
@@ -14845,6 +14884,38 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.ITimeSpan.Subtract
   nameWithType: ITimeSpan.Subtract
+- uid: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs
+  name: LengthChangedEventArgs
+  href: api/Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs
+  fullName: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs
+  nameWithType: LengthChangedEventArgs
+- uid: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.NewLength
+  name: NewLength
+  href: api/Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_LengthChangedEventArgs_NewLength
+  commentId: P:Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.NewLength
+  fullName: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.NewLength
+  nameWithType: LengthChangedEventArgs.NewLength
+- uid: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.NewLength*
+  name: NewLength
+  href: api/Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_LengthChangedEventArgs_NewLength_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.NewLength
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.NewLength
+  nameWithType: LengthChangedEventArgs.NewLength
+- uid: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.OldLength
+  name: OldLength
+  href: api/Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_LengthChangedEventArgs_OldLength
+  commentId: P:Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.OldLength
+  fullName: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.OldLength
+  nameWithType: LengthChangedEventArgs.OldLength
+- uid: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.OldLength*
+  name: OldLength
+  href: api/Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_LengthChangedEventArgs_OldLength_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.OldLength
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.OldLength
+  nameWithType: LengthChangedEventArgs.OldLength
 - uid: Melanchall.DryWetMidi.Interaction.LengthConverter
   name: LengthConverter
   href: api/Melanchall.DryWetMidi.Interaction.LengthConverter.html
@@ -16748,6 +16819,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Note.Length
   nameWithType: Note.Length
+- uid: Melanchall.DryWetMidi.Interaction.Note.LengthChanged
+  name: LengthChanged
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_LengthChanged
+  commentId: E:Melanchall.DryWetMidi.Interaction.Note.LengthChanged
+  fullName: Melanchall.DryWetMidi.Interaction.Note.LengthChanged
+  nameWithType: Note.LengthChanged
 - uid: Melanchall.DryWetMidi.Interaction.Note.NoteName
   name: NoteName
   href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_NoteName
@@ -16839,6 +16916,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Note.Time
   nameWithType: Note.Time
+- uid: Melanchall.DryWetMidi.Interaction.Note.TimeChanged
+  name: TimeChanged
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_TimeChanged
+  commentId: E:Melanchall.DryWetMidi.Interaction.Note.TimeChanged
+  fullName: Melanchall.DryWetMidi.Interaction.Note.TimeChanged
+  nameWithType: Note.TimeChanged
 - uid: Melanchall.DryWetMidi.Interaction.Note.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_ToString
@@ -18380,6 +18463,38 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.TempoMapReadingHandler.TempoMap
   nameWithType: TempoMapReadingHandler.TempoMap
+- uid: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs
+  name: TimeChangedEventArgs
+  href: api/Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs
+  fullName: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs
+  nameWithType: TimeChangedEventArgs
+- uid: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.NewTime
+  name: NewTime
+  href: api/Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_TimeChangedEventArgs_NewTime
+  commentId: P:Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.NewTime
+  fullName: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.NewTime
+  nameWithType: TimeChangedEventArgs.NewTime
+- uid: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.NewTime*
+  name: NewTime
+  href: api/Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_TimeChangedEventArgs_NewTime_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.NewTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.NewTime
+  nameWithType: TimeChangedEventArgs.NewTime
+- uid: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.OldTime
+  name: OldTime
+  href: api/Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_TimeChangedEventArgs_OldTime
+  commentId: P:Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.OldTime
+  fullName: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.OldTime
+  nameWithType: TimeChangedEventArgs.OldTime
+- uid: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.OldTime*
+  name: OldTime
+  href: api/Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_TimeChangedEventArgs_OldTime_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.OldTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.OldTime
+  nameWithType: TimeChangedEventArgs.OldTime
 - uid: Melanchall.DryWetMidi.Interaction.TimeConverter
   name: TimeConverter
   href: api/Melanchall.DryWetMidi.Interaction.TimeConverter.html
@@ -18506,6 +18621,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.TimedEvent.Time
   nameWithType: TimedEvent.Time
+- uid: Melanchall.DryWetMidi.Interaction.TimedEvent.TimeChanged
+  name: TimeChanged
+  href: api/Melanchall.DryWetMidi.Interaction.TimedEvent.html#Melanchall_DryWetMidi_Interaction_TimedEvent_TimeChanged
+  commentId: E:Melanchall.DryWetMidi.Interaction.TimedEvent.TimeChanged
+  fullName: Melanchall.DryWetMidi.Interaction.TimedEvent.TimeChanged
+  nameWithType: TimedEvent.TimeChanged
 - uid: Melanchall.DryWetMidi.Interaction.TimedEvent.ToString
   name: ToString()
   href: api/Melanchall.DryWetMidi.Interaction.TimedEvent.html#Melanchall_DryWetMidi_Interaction_TimedEvent_ToString
