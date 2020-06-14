@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -120,7 +118,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             var result = new List<string>(GetChordNamesInternal(notesNames));
 
             var firstNoteName = notesNames.First();
-            result.AddRange(GetChordNamesInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName}"));
+            result.AddRange(GetChordNamesInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName.ToString().Replace(Note.SharpLongString, Note.SharpShortString)}"));
 
             return result;
         }
