@@ -51,8 +51,11 @@ namespace Melanchall.DryWetMidi.Devices
         /// immediately after clock started.</param>
         /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval. Null for
         /// no tick generator.</param>
+        /// <param name="interval">Interval of clock's ticiking.</param>
         public MidiClock(bool startImmediately, TickGenerator tickGenerator, TimeSpan interval)
         {
+            ThrowIfArgument.IsLessThan(nameof(interval), interval, TimeSpan.FromMilliseconds(1), "Interval is less than 1 ms.");
+
             _startImmediately = startImmediately;
 
             _tickGenerator = tickGenerator;
@@ -78,6 +81,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets the interval of the current clock's ticiking.
+        /// </summary>
         public TimeSpan Interval { get; }
 
         /// <summary>

@@ -81,6 +81,11 @@ namespace Melanchall.DryWetMidi.Common
             IsOutOfRange(parameterName, value, long.MinValue, reference, message);
         }
 
+        internal static void IsLessThan(string parameterName, TimeSpan value, TimeSpan reference, string message)
+        {
+            IsOutOfRange(parameterName, value, reference, TimeSpan.MaxValue, message);
+        }
+
         internal static void IsLessThan(string parameterName, int value, int reference, string message)
         {
             IsOutOfRange(parameterName, value, reference, int.MaxValue, message);

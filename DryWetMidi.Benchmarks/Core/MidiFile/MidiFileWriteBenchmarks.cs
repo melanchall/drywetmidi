@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Running;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 

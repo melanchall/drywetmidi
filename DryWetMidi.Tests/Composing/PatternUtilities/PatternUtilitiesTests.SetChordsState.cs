@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;

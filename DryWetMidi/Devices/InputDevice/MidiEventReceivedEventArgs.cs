@@ -1,4 +1,5 @@
 ﻿using System;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -10,8 +11,16 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiEventReceivedEventArgs"/> with
+        /// the specified MIDI event.
+        /// </summary>
+        /// <param name="midiEvent">MIDI event received by <see cref="IInputDevice"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
         public MidiEventReceivedEventArgs(MidiEvent midiEvent)
         {
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+
             Event = midiEvent;
         }
 

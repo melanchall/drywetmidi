@@ -15,6 +15,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets a value indicating whether the current tick generator is currently running or not.
+        /// </summary>
         protected bool IsRunning { get; set; }
 
         #endregion
@@ -30,22 +33,35 @@ namespace Melanchall.DryWetMidi.Devices
             IsRunning = true;
         }
 
+        /// <summary>
+        /// Generates a tick firing the <see cref="TickGenerated"/> event.
+        /// </summary>
         protected void GenerateTick()
         {
             TickGenerated?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Starts a tick generator.
+        /// </summary>
+        /// <param name="interval">Interval between ticks.</param>
         protected abstract void Start(TimeSpan interval);
 
         #endregion
 
         #region IDisposable
 
+        /// <summary>
+        /// Releases all resources used by the current tick generator.
+        /// </summary>
         public virtual void Dispose()
         {
             Dispose(true);
         }
 
+        /// <summary>
+        /// Releases all resources used by the current tick generator.
+        /// </summary>
         protected virtual void Dispose(bool disposing)
         {
         }

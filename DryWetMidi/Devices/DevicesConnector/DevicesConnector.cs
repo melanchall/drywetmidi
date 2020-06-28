@@ -9,12 +9,6 @@ namespace Melanchall.DryWetMidi.Devices
     /// </summary>
     public sealed class DevicesConnector
     {
-        #region Fields
-
-        private bool _disposed = false;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -64,6 +58,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public IReadOnlyCollection<IOutputDevice> OutputDevices { get; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether <see cref="InputDevice"/> currently connected
+        /// to <see cref="OutputDevices"/> or note (i.e. <see cref="Connect"/> method has been called).
+        /// </summary>
         public bool AreDevicesConnected { get; private set; }
 
         #endregion
@@ -75,6 +73,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public void Connect()
         {
+            if (AreDevicesConnected)
+                return;
+
             InputDevice.EventReceived += OnEventReceived;
             AreDevicesConnected = true;
         }

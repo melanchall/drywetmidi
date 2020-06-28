@@ -39,6 +39,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler Finished;
 
+        /// <summary>
+        /// Occurs when playback started new cycle of the data playing in case of <see cref="Loop"/> set to <see langword="true"/>.
+        /// </summary>
         public event EventHandler RepeatStarted;
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Common
+﻿namespace Melanchall.DryWetMidi.Common
 {
     internal static class DataTypesUtilities
     {

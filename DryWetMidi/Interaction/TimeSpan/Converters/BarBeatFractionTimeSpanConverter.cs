@@ -7,6 +7,12 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class BarBeatFractionTimeSpanConverter : ITimeSpanConverter
     {
+        #region Constants
+
+        private const double FractionalBeatsEpsilon = 0.000001;
+
+        #endregion
+
         #region ITimeSpanConverter
 
         public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap)
@@ -99,8 +105,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             var barBeatFractionTimeSpan = (BarBeatFractionTimeSpan)timeSpan;
-            // TODO: epsilon
-            if (barBeatFractionTimeSpan.Bars == 0 && barBeatFractionTimeSpan.Beats == 0)
+            if (barBeatFractionTimeSpan.Bars == 0 && barBeatFractionTimeSpan.Beats < FractionalBeatsEpsilon)
                 return 0;
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
@@ -108,10 +113,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
             //
 
-            double fractionalBeats = barBeatFractionTimeSpan.Beats;
-            long bars = barBeatFractionTimeSpan.Bars;
-            long beats = (long)Math.Truncate(fractionalBeats);
-            double fraction = fractionalBeats - Math.Truncate(fractionalBeats);
+            var fractionalBeats = barBeatFractionTimeSpan.Beats;
+            var bars = barBeatFractionTimeSpan.Bars;
+            var beats = (long)Math.Truncate(fractionalBeats);
+            var fraction = fractionalBeats - Math.Truncate(fractionalBeats);
 
             var startTimeSignature = timeSignatureLine.AtTime(time);
             var startBarLength = BarBeatUtilities.GetBarLength(startTimeSignature, ticksPerQuarterNote);
@@ -167,7 +172,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            if (beats == beatsBefore && fraction == fractionBefore)
+            if (beats == beatsBefore && Math.Abs(fraction - fractionBefore) < FractionalBeatsEpsilon)
                 return lastTime - time;
 
             // Balance beats

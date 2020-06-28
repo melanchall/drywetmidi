@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Standards;
-using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Standards

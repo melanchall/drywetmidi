@@ -47,7 +47,6 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .Note(Notes.C1)
                 .Build();
 
-            var noteLength2 = MusicalTimeSpan.Quarter;
             var pattern2 = new PatternBuilder()
                 .Pattern(pattern1)
                 .Repeat(2)

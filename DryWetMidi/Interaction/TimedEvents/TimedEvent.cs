@@ -11,6 +11,9 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Events
 
+        /// <summary>
+        /// Occurs when the time of an object has been changed.
+        /// </summary>
         public event EventHandler<TimeChangedEventArgs> TimeChanged;
 
         #endregion

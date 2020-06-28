@@ -32,6 +32,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Overrides
 
+        /// <summary>
+        /// Starts a tick generator.
+        /// </summary>
+        /// <param name="interval">Interval between ticks.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="interval"/> is out of
+        /// [<see cref="MinInterval"/>; <see cref="MaxInterval"/>] range.</exception>
         protected override void Start(TimeSpan interval)
         {
             ThrowIfArgument.IsOutOfRange(nameof(interval),
@@ -61,7 +67,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region IDisposable
 
-        private void Dispose(bool disposing)
+        /// <summary>
+        /// Releases all resources used by the current tick generator.
+        /// </summary>
+        protected override void Dispose(bool disposing)
         {
             if (_disposed)
                 return;

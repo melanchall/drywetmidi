@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;

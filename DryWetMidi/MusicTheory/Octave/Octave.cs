@@ -190,11 +190,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return octave;
         }
 
+        /// <summary>
+        /// Converts the string representation of a musical octave to its <see cref="Octave"/> equivalent.
+        /// A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="input">A string containing an octave to convert.</param>
+        /// <param name="octave">When this method returns, contains the <see cref="Octave"/>
+        /// equivalent of the musical octave contained in <paramref name="input"/>, if the conversion succeeded,
+        /// or <c>null</c> if the conversion failed. The conversion fails if the <paramref name="input"/> is <c>null</c> or
+        /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
+        /// any value originally supplied in result will be overwritten.</param>
+        /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string input, out Octave octave)
         {
             return ParsingUtilities.TryParse(input, OctaveParser.TryParse, out octave);
         }
 
+        /// <summary>
+        /// Converts the string representation of a musical octave to its <see cref="Octave"/> equivalent.
+        /// </summary>
+        /// <param name="input">A string containing an octave to convert.</param>
+        /// <returns>A <see cref="Octave"/> equivalent to the musical note contained in <paramref name="input"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Octave Parse(string input)
         {
             return ParsingUtilities.Parse<Octave>(input, OctaveParser.TryParse);

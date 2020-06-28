@@ -20,7 +20,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public event NotesCollectionChangedEventHandler NotesCollectionChanged;
 
+        /// <summary>
+        /// Occurs when the time of an object has been changed.
+        /// </summary>
         public event EventHandler<TimeChangedEventArgs> TimeChanged;
+
+        /// <summary>
+        /// Occurs when the length of an object has been changed.
+        /// </summary>
         public event EventHandler<LengthChangedEventArgs> LengthChanged;
 
         #endregion

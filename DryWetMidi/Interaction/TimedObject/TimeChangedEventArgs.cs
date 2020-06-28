@@ -2,6 +2,9 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Contains arguments for the <see cref="INotifyTimeChanged.TimeChanged"/> event.
+    /// </summary>
     public sealed class TimeChangedEventArgs : EventArgs
     {
         #region Constructor
@@ -16,8 +19,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets the old time of an object.
+        /// </summary>
         public long OldTime { get; }
 
+        /// <summary>
+        /// Gets the new time of an object.
+        /// </summary>
         public long NewTime { get; }
 
         #endregion
