@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class HighPrecisionTickGenerator
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.55.0.0">
+    <meta name="generator" content="docfx 2.56.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -188,7 +188,9 @@ The smallest possible interval.
   </h3>
   <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Releases all resources used by the current tick generator.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -198,7 +200,9 @@ The smallest possible interval.
   <div><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose">TickGenerator.Dispose()</a></div>
   <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Dispose_System_Boolean_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Dispose(System.Boolean)">Dispose(Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Releases all resources used by the current tick generator.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -235,7 +239,9 @@ Finalizes the current instance of the <a class="xref" href="Melanchall.DryWetMid
   </div>
   <a id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Start_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_Start_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.Start(System.TimeSpan)">Start(TimeSpan)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Starts a tick generator.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -254,12 +260,28 @@ Finalizes the current instance of the <a class="xref" href="Melanchall.DryWetMid
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
         <td><span class="parametername">interval</span></td>
-        <td></td>
+        <td>Interval between ticks.</td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Start_System_TimeSpan_">TickGenerator.Start(TimeSpan)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">interval</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_MinInterval">MinInterval</a>; <a class="xref" href="Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_HighPrecisionTickGenerator_MaxInterval">MaxInterval</a>] range.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>

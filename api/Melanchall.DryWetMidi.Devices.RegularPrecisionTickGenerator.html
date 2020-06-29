@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class RegularPrecisionTickGenerator
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.55.0.0">
+    <meta name="generator" content="docfx 2.56.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -109,9 +109,6 @@ Tick generator which uses <a class="xref" href="https://docs.microsoft.com/dotne
       <a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose">TickGenerator.Dispose()</a>
     </div>
     <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose_System_Boolean_">TickGenerator.Dispose(Boolean)</a>
-    </div>
-    <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
     </div>
     <div>
@@ -191,9 +188,40 @@ The smallest possible interval.
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Dispose_" data-uid="Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Dispose_System_Boolean_" data-uid="Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary">
+Releases all resources used by the current tick generator.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Dispose_System_Boolean_">TickGenerator.Dispose(Boolean)</a></div>
   <a id="Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Start_" data-uid="Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Start_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Start(System.TimeSpan)">Start(TimeSpan)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Starts a tick generator.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -212,12 +240,28 @@ The smallest possible interval.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
         <td><span class="parametername">interval</span></td>
-        <td></td>
+        <td>Interval between ticks.</td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_Start_System_TimeSpan_">TickGenerator.Start(TimeSpan)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">interval</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_MinInterval">MinInterval</a>; <a class="xref" href="Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_MaxInterval">MaxInterval</a>] range.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>

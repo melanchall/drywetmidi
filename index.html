@@ -8,7 +8,7 @@
     <title>Status | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Status | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.55.0.0">
+    <meta name="generator" content="docfx 2.56.0.0">
     
     <link rel="shortcut icon" href="images/favicon.png">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -138,39 +138,42 @@ Using Rustissimo you can create a concert with your friends and play instruments
 <pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;Some Great Song.mid&quot;);
 </code></pre>
 <p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReadingSettings.html">Reading settings</a> page on Wiki to learn more about how to adjust process of reading)</p>
-<pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;Some Great Song.mid&quot;,
-                             new ReadingSettings
-                             {
-                                 NoHeaderChunkPolicy = NoHeaderChunkPolicy.Abort,
-                                 CustomChunkTypes = new ChunkTypesCollection
-                                 {
-                                     { typeof(MyCustomChunk), &quot;Cstm&quot; }
-                                 }
-                             });
+<pre><code class="lang-csharp">var midiFile = MidiFile.Read(
+    &quot;Some Great Song.mid&quot;,
+    new ReadingSettings
+    {
+        NoHeaderChunkPolicy = NoHeaderChunkPolicy.Abort,
+        CustomChunkTypes = new ChunkTypesCollection
+        {
+            { typeof(MyCustomChunk), &quot;Cstm&quot; }
+        }
+    });
 </code></pre>
 <p>To <a href="https://github.com/melanchall/drymidi/wiki/Writing-a-MIDI-file">write MIDI data to a file</a> you have to use <code>Write</code> method of the <code>MidiFile</code>:</p>
 <pre><code class="lang-csharp">midiFile.Write(&quot;My Great Song.mid&quot;);
 </code></pre>
 <p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WritingSettings.html">Writing settings</a> page on Wiki to learn more about how to adjust process of writing)</p>
-<pre><code class="lang-csharp">midiFile.Write(&quot;My Great Song.mid&quot;,
-               true,
-               MidiFileFormat.SingleTrack,
-               new WritingSettings
-               {
-                   CompressionPolicy = CompressionPolicy.Default
-               });
+<pre><code class="lang-csharp">midiFile.Write(
+    &quot;My Great Song.mid&quot;,
+    true,
+    MidiFileFormat.SingleTrack,
+    new WritingSettings
+    {
+        CompressionPolicy = CompressionPolicy.Default
+    });
 </code></pre>
 <p>Of course you can create a MIDI file from scratch by creating an instance of the <code>MidiFile</code> and writing it:</p>
 <pre><code class="lang-csharp">var midiFile = new MidiFile(
-                   new TrackChunk(
-                       new SetTempoEvent(500000)),
-                   new TrackChunk(
-                       new TextEvent(&quot;It's just single note track...&quot;),
-                       new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)45),
-                       new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)0)
-                       {
-                           DeltaTime = 400
-                       }));
+    new TrackChunk(
+        new SetTempoEvent(500000)),
+    new TrackChunk(
+        new TextEvent(&quot;It's just single note track...&quot;),
+        new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)45),
+        new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)0)
+        {
+            DeltaTime = 400
+        }));
+
 midiFile.Write(&quot;My Future Great Song.mid&quot;);
 </code></pre>
 <p>or</p>
@@ -181,13 +184,13 @@ var trackChunk = new TrackChunk();
 using (var notesManager = trackChunk.ManageNotes())
 {
     NotesCollection notes = notesManager.Notes;
-    notes.Add(new Note(NoteName.A,
-                       4,
-                       LengthConverter.ConvertFrom(new MetricTimeSpan(hours: 0,
-                                                                      minutes: 0,
-                                                                      seconds: 10),
-                                                   0,
-                                                   tempoMap)));
+    notes.Add(new Note(
+        NoteName.A,
+        4,
+        LengthConverter.ConvertFrom(
+            new MetricTimeSpan(hours: 0, minutes: 0, seconds: 10),
+            0,
+            tempoMap)));
 }
 
 midiFile.Chunks.Add(trackChunk);
@@ -213,9 +216,13 @@ using (var playback = midiFile.GetPlayback(outputDevice))
 </code></pre>
 <p>To get duration of a MIDI file as <code>TimeSpan</code> use this code:</p>
 <pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
-TimeSpan midiFileDuration = midiFile.GetTimedEvents()
-                                    .LastOrDefault(e =&gt; e.Event is NoteOffEvent)
-                                    ?.TimeAs&lt;MetricTimeSpan&gt;(tempoMap) ?? new MetricTimeSpan();
+TimeSpan midiFileDuration = midiFile
+    .GetTimedEvents()
+    .LastOrDefault(e =&gt; e.Event is NoteOffEvent)
+    ?.TimeAs&lt;MetricTimeSpan&gt;(tempoMap) ?? new MetricTimeSpan();
+</code></pre>
+<p>or simply:</p>
+<pre><code class="lang-csharp">TimeSpan midiFileDuration = midiFile.GetDuration&lt;MetricTimeSpan&gt;();
 </code></pre>
 <p>Suppose you want to remove all C# notes from a MIDI file. It can be done with this code:</p>
 <pre><code class="lang-csharp">foreach (var trackChunk in midiFile.GetTrackChunks())
@@ -231,10 +238,12 @@ TimeSpan midiFileDuration = midiFile.GetTimedEvents()
 </code></pre>
 <p>To get all chords of a MIDI file at 20 seconds from the start of the file write this:</p>
 <pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
-IEnumerable&lt;Chord&gt; chordsAt20seconds = midiFile.GetChords()
-                                               .AtTime(new MetricTimeSpan(0, 0, 20),
-                                                       tempoMap,
-                                                       LengthedObjectPart.Entire);
+IEnumerable&lt;Chord&gt; chordsAt20seconds = midiFile
+    .GetChords()
+    .AtTime(
+        new MetricTimeSpan(0, 0, 20),
+        tempoMap,
+        LengthedObjectPart.Entire);
 </code></pre>
 <p>To create a MIDI file with single note which length will be equal to length of two triplet eighth notes you can use this code:</p>
 <pre><code class="lang-csharp">var midiFile = new MidiFile();
@@ -243,9 +252,10 @@ var tempoMap = midiFile.GetTempoMap();
 var trackChunk = new TrackChunk();
 using (var notesManager = trackChunk.ManageNotes())
 {
-    var length = LengthConverter.ConvertFrom(2 * MusicalTimeSpan.Eighth.Triplet(),
-                                             0,
-                                             tempoMap);
+    var length = LengthConverter.ConvertFrom(
+        2 * MusicalTimeSpan.Eighth.Triplet(),
+        0,
+        tempoMap);
     var note = new Note(NoteName.A, 4, length);
     notesManager.Notes.Add(note);
 }

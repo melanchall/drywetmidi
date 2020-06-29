@@ -12970,6 +12970,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator
   fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator
   nameWithType: RegularPrecisionTickGenerator
+- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose(System.Boolean)
+  name: Dispose(Boolean)
+  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Dispose_System_Boolean_
+  commentId: M:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose(System.Boolean)
+  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose(System.Boolean)
+  nameWithType: RegularPrecisionTickGenerator.Dispose(Boolean)
+- uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose*
+  name: Dispose
+  href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_Dispose_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.Dispose
+  nameWithType: RegularPrecisionTickGenerator.Dispose
 - uid: Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.MaxInterval
   name: MaxInterval
   href: api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html#Melanchall_DryWetMidi_Devices_RegularPrecisionTickGenerator_MaxInterval

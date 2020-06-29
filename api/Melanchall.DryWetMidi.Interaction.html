@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Melanchall.DryWetMidi.Interaction
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.55.0.0">
+    <meta name="generator" content="docfx 2.56.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -136,7 +136,9 @@ Provides a way to iterate through a collection of <a class="xref" href="Melancha
 for all other events.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.html">LengthChangedEventArgs</a></h4>
-      <section></section>
+      <section>
+Contains arguments for the <a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html#Melanchall_DryWetMidi_Interaction_INotifyLengthChanged_LengthChanged">LengthChanged</a> event.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthConverter.html">LengthConverter</a></h4>
       <section>
 Provides a way to convert the length of an object from one representation to another.
@@ -236,7 +238,9 @@ Extension methods for managing tempo map.
 Collects tempo map during MIDI data reading.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.html">TimeChangedEventArgs</a></h4>
-      <section></section>
+      <section>
+Contains arguments for the <a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html#Melanchall_DryWetMidi_Interaction_INotifyTimeChanged_TimeChanged">TimeChanged</a> event.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeConverter.html">TimeConverter</a></h4>
       <section>
 Provides a way to convert the time of an object from one representation to another.
@@ -309,9 +313,13 @@ Represents an object that has length.
 Musical objects that can be played.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html">INotifyLengthChanged</a></h4>
-      <section></section>
+      <section>
+Provides the event which fired when the length of an object has been changed.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html">INotifyTimeChanged</a></h4>
-      <section></section>
+      <section>
+Provides the event which fired when the time of an object has been changed.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a></h4>
       <section>
 Represents an object that has start time.
