@@ -75,10 +75,11 @@ steps:
     script: |
       $content = Get-Content Docs\latest-release-notes.md
       $content = $content `
-        -Replace '\[`?(.+?)`?\]\(.+?\)', '[i]$1[/i]' `
+        -Replace '\[`?(.+?)`?\]\((.+?)\)', '[url=$2]$1[/url]' `
         -Replace '# (.+?)$', '[u]$1[/u]' `
         -Replace '\*\*(.+?)\*\*', '[b]$1[/b]' `
         -Replace '`(.+?)`', '[i]$1[/i]' `
+        -Replace '\b_(.+?)_\b', '[i]$1[/i]' `
         -Replace '^\*', '[*]' `
         -Replace '^  \*', '  -'
       Set-Content -Path "Docs\latest-release-notes-midi-org.txt" -Value $content
