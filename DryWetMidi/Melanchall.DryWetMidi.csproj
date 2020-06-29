@@ -8,7 +8,7 @@
   
   <PropertyGroup>
     <PackageId>Melanchall.DryWetMidi</PackageId>
-    <Version>5.1.1</Version>
+    <Version>5.2.0</Version>
     <Authors>melanchall</Authors>
     <Owners>melanchall</Owners>
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/master/LICENSE</licenseUrl>
@@ -18,6 +18,8 @@
     <RepositoryUrl>https://github.com/melanchall/drywetmidi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryBranch>master</RepositoryBranch>
     <Description>
 DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
 
