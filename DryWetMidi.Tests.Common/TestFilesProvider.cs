@@ -74,12 +74,32 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         public static IEnumerable<string> GetValidFilesPaths()
         {
-            return Directory.GetFiles(GetValidFilesDirectory(), "*.*", SearchOption.AllDirectories);
+            return Directory
+                .GetFiles(GetValidFilesDirectory(), "*.*", SearchOption.AllDirectories)
+#if COVERAGE
+                .Take(1)
+#endif
+                ;
         }
 
         public static string GetValidFilesDirectory()
         {
             return Path.Combine(TestContext.CurrentContext.TestDirectory, ValidFilesPath);
+        }
+
+        public static IEnumerable<string> GetInvalidFilesPaths(string directoryName)
+        {
+            return Directory
+                .GetFiles(GetInvalidFilesDirectory(directoryName))
+#if COVERAGE
+                .Take(1)
+#endif
+                ;
+        }
+
+        public static string GetInvalidFilesDirectory(string directoryName)
+        {
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, InvalidFilesPath, directoryName);
         }
 
         #endregion

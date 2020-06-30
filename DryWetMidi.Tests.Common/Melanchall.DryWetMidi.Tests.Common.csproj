@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <Configurations>Debug;Release;Coverage</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Coverage'">
+    <DefineConstants>COVERAGE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

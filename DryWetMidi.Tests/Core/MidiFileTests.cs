@@ -558,7 +558,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void Read_ExtraTrackChunk_Read()
         {
-            foreach (var filePath in GetInvalidFiles(DirectoriesNames.ExtraTrackChunk))
+            foreach (var filePath in TestFilesProvider.GetInvalidFilesPaths(DirectoriesNames.ExtraTrackChunk))
             {
                 var midiFile = MidiFile.Read(filePath, new ReadingSettings
                 {
@@ -572,7 +572,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void Read_ExtraTrackChunk_Skip()
         {
-            foreach (var filePath in GetInvalidFiles(DirectoriesNames.ExtraTrackChunk))
+            foreach (var filePath in TestFilesProvider.GetInvalidFilesPaths(DirectoriesNames.ExtraTrackChunk))
             {
                 var midiFile = MidiFile.Read(filePath, new ReadingSettings
                 {
@@ -1041,9 +1041,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [TestCase(1024)]
-        [TestCase(4096)]
         [TestCase(4)]
+#if !COVERAGE
+        [TestCase(4096)]
         [TestCase(500000)]
+#endif
         public void Read_NonSeekableStream_BufferSize(int bufferSize)
         {
             Read_NonSeekableStream(new ReaderSettings
@@ -1606,9 +1608,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
         }
 
-        #endregion
+#endregion
 
-        #region Private methods
+#region Private methods
 
         private void Read_NonSeekableStream(ReaderSettings readerSettings)
         {
@@ -1635,7 +1637,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         private void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings)
             where TException : Exception
         {
-            foreach (var filePath in GetInvalidFiles(directoryName))
+            foreach (var filePath in TestFilesProvider.GetInvalidFilesPaths(directoryName))
             {
                 MidiFile midiFile = null;
                 Assert.Throws<TException>(() => midiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}'.");
@@ -1666,7 +1668,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private void ReadInvalidFiles(string directoryName, ReadingSettings readingSettings)
         {
-            foreach (var filePath in GetInvalidFiles(directoryName))
+            foreach (var filePath in TestFilesProvider.GetInvalidFilesPaths(directoryName))
             {
                 MidiFile midiFile = null;
                 Assert.DoesNotThrow(() => midiFile = MidiFile.Read(filePath, readingSettings), $"Exception thrown for file '{filePath}'.");
@@ -1695,16 +1697,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        private IEnumerable<string> GetInvalidFiles(string directoryName)
-        {
-            return Directory.GetFiles(GetInvalidFilesDirectory(directoryName));
-        }
-
-        private string GetInvalidFilesDirectory(string directoryName)
-        {
-            return Path.Combine(TestContext.CurrentContext.TestDirectory, TestFilesProvider.InvalidFilesPath, directoryName);
-        }
-
         private void Write_Compression(MidiFile midiFile, CompressionPolicy compressionPolicy, Action<FileInfo, FileInfo> fileInfosAction)
         {
             MidiFileTestUtilities.Write(
@@ -1726,6 +1718,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
         }
 
-        #endregion
+#endregion
     }
 }

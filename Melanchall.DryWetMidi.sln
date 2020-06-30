@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi", "DryWetMidi\Melanchall.DryWetMidi.csproj", "{499FDD77-17E3-4249-AAE5-50941A47D35E}"
 EndProject
@@ -9,26 +9,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi.Benchmarks", "DryWetMidi.Benchmarks\Melanchall.DryWetMidi.Benchmarks.csproj", "{26C03452-F03F-4366-A1FF-D6F7493C2FB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melanchall.DryWetMidi.Tests.Common", "DryWetMidi.Tests.Common\Melanchall.DryWetMidi.Tests.Common.csproj", "{0862D851-D0CB-44D8-B7F0-1013E0347CFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi.Tests.Common", "DryWetMidi.Tests.Common\Melanchall.DryWetMidi.Tests.Common.csproj", "{0862D851-D0CB-44D8-B7F0-1013E0347CFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Coverage|Any CPU = Coverage|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
+		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{499FDD77-17E3-4249-AAE5-50941A47D35E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
+		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
+		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
+		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU

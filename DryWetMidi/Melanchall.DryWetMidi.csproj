@@ -4,6 +4,7 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>6</LangVersion>
+    <Configurations>Debug;Release;Coverage</Configurations>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -33,6 +34,10 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
     </Description>
     <Copyright>Copyright © Melanchall 2020</Copyright>
     <PackageTags>midi smf music composing notes chords device playback record</PackageTags>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)'=='Coverage'">
+    <DefineConstants>COVERAGE</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
