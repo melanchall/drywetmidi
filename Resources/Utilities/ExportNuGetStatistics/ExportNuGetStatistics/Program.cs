@@ -147,6 +147,7 @@ namespace ExportNuGetStatistics
 
             var client = InfluxDBClientFactory.Create(url, token.ToCharArray());
             var timestamp = DateTime.UtcNow;
+            Console.WriteLine($"Current timestamp is {timestamp}");
 
             var totalDownloads = packageSummary.Data[0].TotalDownloads;
             var downloadsPerDay = totalDownloads / (timestamp - versionsStatistics[0].UtcReleaseDate).TotalDays;
@@ -156,15 +157,21 @@ namespace ExportNuGetStatistics
                 for (var i = 0; i < versionsStatistics.Count; i++)
                 {
                     var statistics = versionsStatistics[i];
-                    Console.WriteLine($"Exporting info for version '{statistics.Version}'...");
+                    Console.WriteLine($"Exporting info for version [{statistics.Version}] (released on [{statistics.UtcReleaseDate}])...");
 
                     var versionDownloads = statistics.Downloads;
+                    Console.WriteLine($"    downloads = [{versionDownloads}]");
+
                     var versionDownloadsPerDay = versionDownloads / (timestamp - statistics.UtcReleaseDate).TotalDays;
+                    Console.WriteLine($"    downloads/day = [{versionDownloadsPerDay}]");
 
                     var versionLifeTime = i < versionsStatistics.Count - 1
                         ? versionsStatistics[i + 1].UtcReleaseDate - statistics.UtcReleaseDate
                         : timestamp - statistics.UtcReleaseDate;
+                    Console.WriteLine($"    lifetime = [{versionLifeTime}] [{versionLifeTime.TotalDays} days]");
+
                     var popularity = versionDownloads / versionLifeTime.TotalDays;
+                    Console.WriteLine($"    popularity = [{popularity}]");
 
                     var point = PointData
                         .Measurement(measurement)
