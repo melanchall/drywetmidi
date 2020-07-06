@@ -31,9 +31,9 @@ Solution is to use either [RegularPrecisionTickGenerator](xref:Melanchall.DryWet
 
 ## SetActive can only be called from the main thread in Unity
 
-Sometimes you want to handle [playback events](xref:Melanchall.DryWetMidi.Devices.Playback#events) or use [event](Melanchall.DryWetMidi.Devices.Playback.EventCallback) or [note](Melanchall.DryWetMidi.Devices.Playback.NoteCallback) callbacks. Your code can be executed on separate thread in these cases. It can happen because of `Playback`'s internals (like [tick generator](Tick-generator.md)'s tick handling) work on separate thread.
+Sometimes you want to handle [playback events](xref:Melanchall.DryWetMidi.Devices.Playback#events) or use [event](xref:Melanchall.DryWetMidi.Devices.Playback.EventCallback) or [note](xref:Melanchall.DryWetMidi.Devices.Playback.NoteCallback) callbacks. Your code can be executed on separate thread in these cases. It can happen because of `Playback`'s internals (like [tick generator](Tick-generator.md)'s tick handling) work on separate thread.
 
-But UI related things like call of `SetActive` can be executed on UI thread only. You can use the solution from here: https://stackoverflow.com/a/56715254/2975589.
+But UI related things like call of `SetActive` can be executed on UI thread only. You can use the solution from here: https://stackoverflow.com/a/56715254.
 
 Related issues on GitHub:
 

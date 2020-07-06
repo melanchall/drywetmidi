@@ -1608,9 +1608,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
         }
 
-#endregion
-
-#region Private methods
+        #endregion
+        
+        #region Private methods
 
         private void Read_NonSeekableStream(ReaderSettings readerSettings)
         {
@@ -1718,6 +1718,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
         }
 
-#endregion
+        #endregion
     }
 }

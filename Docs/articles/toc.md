@@ -47,6 +47,7 @@
 ## [Input device](devices/Input-device.md)
 ## [Output device](devices/Output-device.md)
 ## [Devices connector](devices/Devices-connector.md)
+## [Common problems](devices/Common-problems.md)
 
 # Playback
 ## [Overview](playback/Overview.md)
