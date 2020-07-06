@@ -22,6 +22,9 @@ references:
 - uid: a_dev_overview
   name: Overview
   href: articles/devices/Overview.html
+- uid: a_devices_commonproblems
+  name: Common problems
+  href: articles/devices/Common-problems.html
 - uid: a_file_reading
   name: MIDI file reading
   href: articles/file-reading-writing/MIDI-file-reading.html

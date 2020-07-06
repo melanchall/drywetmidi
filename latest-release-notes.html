@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Performance | DryWetMIDI </title>
+    <title>New features | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Performance | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.56.0.0">
+    <meta name="title" content="New features | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.56.1.0">
     
     <link rel="shortcut icon" href="images/favicon.png">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -70,82 +70,26 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="performance">Performance</h1>
-
-<p><code>MidiFile.Read</code> and <code>MidiFile.Write</code> methods now work much faster (#64). For <code>MidiFile.Read</code> new setting <code>ReadingSettings.ReaderSettings.ReadFromMemory</code> was added:</p>
-<pre><code class="lang-csharp">MidiFile.Read(&quot;file.mid&quot;, new ReadingSettings
-{
-    ReaderSettings = new ReaderSettings
-    {
-        ReadFromMemory = true
-    }
-});
-</code></pre>
-<p>With <code>ReadFromMemory</code> set to <code>true</code> entire MIDI file will be put to memory and read from there which gives big speed up.</p>
 <h1 id="new-features">New features</h1>
+
 <ul>
-<li><p>Added <code>IInputDevice</code> interface (#54), all methods that accept <code>InputDevice</code> as an argument accept now <code>IInputDevice</code>, which implemented by <code>InputDevice</code>. This interface gives ability to create custom input device implementations.</p>
-</li>
-<li><p>Added <code>IOutputDevice</code> interface, all methods that accept <code>OutputDevice</code> as an argument accept now <code>IOutputDevice</code>, which implemented by <code>OutputDevice</code>. This interface gives ability to create custom output device implementations.</p>
-</li>
-<li><p>Added <code>BytesToMidiEventConverter</code> class to convert bytes to MIDI events (#55).</p>
-</li>
-<li><p>Added <code>MidiEventToBytesConverter</code> class to convert MIDI events to bytes.</p>
-</li>
-<li><p>Added <code>Interaction.Chord.GetMusicTheoryChord</code> method.</p>
-</li>
-<li><p>Added <code>Interaction.Note.GetMusicTheoryNote</code> method.</p>
-</li>
-<li><p>Added <code>Interval.GetIntervalDefinitions</code> method returning collection of <code>IntervalDefinition</code> which is interval number and quality.</p>
-</li>
-<li><p>Added <code>Interval.FromDefinition</code> method to create <code>Interval</code> from interval number and quality.</p>
-</li>
-<li><p>Added <code>MusicTheory.Chord.GetNames</code> method returning names of a chord (for example, <code>A#</code> or <code>Ddim</code>) (#58).</p>
-</li>
-<li><p>Added General MIDI Level 2 percussion API to <code>Melanchall.DryWetMidi.Standards</code> namespace (#65).</p>
-</li>
-<li><p>Added <code>ReadingHandlers</code> property to <code>ReadingSettings</code> which provides collection of objects that handle MIDI data reading. Also added three handler classes:</p>
-<ul>
-<li><code>TimedEventsReadingHandler</code></li>
-<li><code>NotesReadingHandler</code></li>
-<li><code>TempoMapReadingHandler</code></li>
-</ul>
-<p>These classes can speed up getting MIDI data from a MIDI file since information will be gathered during MIDI data reading rather than after data is read which involves additional iteration over MIDI data.</p>
-<p>You can create custom reading handler and process MIDI file reading stages.</p>
-</li>
-<li><p>Added <code>UnknownChannelEventPolicy</code> property to <code>ReadingSettings</code> (#69) which specifies how reading engine should react on unknown channel event status byte. Also added <code>UnknownChannelEvent</code> property which specifies callback that will be called on unknown channel event if <code>UnknownChannelEventPolicy</code> set to <code>UnknownChannelEventPolicy.UseCallback</code>.</p>
-</li>
-<li><p>Added <code>ReaderSettings</code> property to <code>ReadingSettings</code>. <code>ReaderSettings</code> holds I/O settings for MIDI data reader.</p>
-</li>
-<li><p>Implemented reading MIDI file from non-seekable stream. Settings related to reading from such streams are placed at <code>ReadingSettings.ReaderSettings</code>. Names of properties corresponding to these settings are start with <code>NonSeekableStream</code>.</p>
-</li>
-<li><p>Added <code>Equals</code> static methods for <code>MidiEvent</code>, <code>MidiChunk</code> and <code>MidiFile</code> classes.</p>
-</li>
-<li><p>Added <code>PatternUtilities.TransformNotes</code> accepting <code>NoteSelection</code> which is predicate to select notes to transform.</p>
-</li>
-<li><p>Added <code>PatternUtilities.TransformChords</code> accepting <code>ChordSelection</code> which is predicate to select chords to transform.</p>
-</li>
-<li><p>Added <code>PatternUtilities.SetNotesState</code> method (#74).</p>
-</li>
-<li><p>Added <code>PatternUtilities.SetChordsState</code> method.</p>
-</li>
-<li><p><code>Pattern.Clone</code> creates now deep copy instead of shallow one.</p>
-</li>
-<li><p>Added <code>GetStandardChunkIds</code> static method to <code>MidiChunk</code>.</p>
-</li>
-<li><p>Added <code>GetStandardMetaEventStatusBytes</code> static method to <code>MetaEvent</code>.</p>
-</li>
+<li>Removed <code>interval</code> parameter from <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiClockSettings.html#Melanchall_DryWetMidi_Devices_MidiClockSettings_CreateTickGeneratorCallback"><code>MidiClockSettings.CreateTickGeneratorCallback</code></a>.</li>
+<li>Turned <code>ITickGenerator</code> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.TickGenerator.html"><code>TickGenerator</code></a> abstract class.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_RepeatStarted"><code>RepeatStarted</code></a> event to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a>.</li>
+<li>Made constructors of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html"><code>MidiEventReceivedEventArgs</code></a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.html"><code>MidiEventSentEventArgs</code></a> public to have ability to fire corresponding events in custom input/output devices.</li>
+<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html"><code>DevicesConnector</code></a> now uses <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.IInputDevice.html"><code>IInputDevice</code></a> instead of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.InputDevice.html"><code>InputDevice</code></a>.</li>
+<li>Removed <code>IDisposable</code> from <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html"><code>DevicesConnector</code></a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_AreDevicesConnected"><code>AreDevicesConnected</code></a> property to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html"><code>DevicesConnector</code></a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Octave.html"><code>Parse</code></a>/<a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Octave.html#Melanchall_DryWetMidi_MusicTheory_Octave_TryParse_System_String_Melanchall_DryWetMidi_MusicTheory_Octave__"><code>TryParse</code></a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Octave.html"><code>Octave</code></a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html"><code>INotifyTimeChanged</code></a> interface on <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEvent.html"><code>TimedEvent</code></a>, <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html"><code>Note</code></a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Chord.html"><code>Chord</code></a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html"><code>INotifyLengthChanged</code></a> interface on <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html"><code>Note</code></a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Chord.html"><code>Chord</code></a>.</li>
 </ul>
 <h1 id="small-changes-and-bug-fixes">Small changes and bug fixes</h1>
 <ul>
-<li>Implemented <code>IComparable</code> on <code>Interval</code>.</li>
-<li>Implemented <code>IComparable</code> on <code>MusicTheory.Note</code>.</li>
-<li>Prevent creation of sysex event with status byte as a first data byte.</li>
-<li><strong>Fixed:</strong> <code>Playback</code> looped on current time change inside <code>EventPlayed</code> event handler (#56).</li>
-<li><strong>Fixed:</strong> <code>CsvConverter</code> closes passed stream after data is read or written (#73).</li>
-<li><strong>Fixed:</strong> <code>OutputDevice.Volume</code> get/set fails (#75).</li>
-<li><strong>Fixed:</strong> <code>ResetEvent</code> not received by input device.</li>
-<li><strong>Fixed:</strong> Fixed CSV parsing with <code>\r</code> and <code>\n</code> in texts of meta events.</li>
+<li>Chords parsing uses <a href="https://melanchall.github.io/drywetmidi/articles/music-theory/Chord.html#chords-names-table">CNT</a> now.</li>
+<li><strong>Fixed:</strong> Multi-thread access to active notes metadata inside <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a> can cause exceptions.</li>
+<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_EventPlayed"><code>Playback.EventPlayed</code></a> not fired for meta events (#82).</li>
+<li><strong>Fixed:</strong> Slash chord name contains <em>Sharp</em> instead of <em>#</em> for sharped notes as result of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Chord.html#Melanchall_DryWetMidi_MusicTheory_Chord_GetNames"><code>GetNames</code></a>.</li>
 </ul>
 </article>
           </div>
