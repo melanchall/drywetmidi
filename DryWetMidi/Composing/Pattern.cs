@@ -8,11 +8,11 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Composing
 {
     /// <summary>
-    /// Represents a musical pattern represented as a sequence of actions to create amusical composition.
+    /// Represents a musical pattern represented as a sequence of actions to create a musical composition.
     /// </summary>
     /// <remarks>
     /// <para>Pattern allows to represent musical composition as a set of actions like 'note' or 'program change'.
-    /// It allows in fact to create MIDI file in more musical manner.</para>
+    /// In other words, it allows to create MIDI file in more musical manner.</para>
     /// <para>There are two ways to get an instance of the <see cref="Pattern"/>:</para>
     /// <list type="bullet">
     /// <item>
@@ -23,6 +23,7 @@ namespace Melanchall.DryWetMidi.Composing
     /// by processing existing one.</description>
     /// </item>
     /// </list>
+    /// You can see examples of building musical compositions in <see href="xref:a_composing_pattern"> the corresponding article</see>.
     /// </remarks>
     public sealed class Pattern
     {

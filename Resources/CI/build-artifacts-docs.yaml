@@ -48,7 +48,7 @@ steps:
   displayName: Install docfx
   inputs:
     targetType: 'inline'
-    script: choco install docfx -y
+    script: choco install docfx -y --version $(DocFxVersion)
       
 - task: PowerShell@2
   displayName: Build docs
