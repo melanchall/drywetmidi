@@ -137,16 +137,7 @@
         public static byte[] GetVlqBytes(this long number)
         {
             var result = new byte[number.GetVlqLength()];
-            var i = result.Length - 1;
-
-            result[i--] = (byte)(number & 127);
-
-            while ((number >>= 7) > 0)
-            {
-                result[i] |= 128;
-                result[i--] += (byte)(number & 127);
-            }
-
+            number.GetVlqBytes(result);
             return result;
         }
 
@@ -168,6 +159,21 @@
         public static byte GetFourthByte(this int number)
         {
             return (byte)(number & 0xFF);
+        }
+
+        internal static int GetVlqBytes(this long number, byte[] buffer)
+        {
+            var result = 1;
+            var i = buffer.Length - 1;
+            buffer[i--] = (byte)(number & 127);
+
+            while ((number >>= 7) > 0)
+            {
+                buffer[i--] = (byte)(128 | (number & 127));
+                result++;
+            }
+
+            return result;
         }
 
         #endregion

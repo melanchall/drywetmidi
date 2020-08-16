@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Core
 
         private readonly Stream _stream;
 
-        private readonly byte[] _numberBuffer = new byte[4];
+        private readonly byte[] _numberBuffer = new byte[9];
         
         private readonly bool _useBuffering;
         private readonly byte[] _buffer;
@@ -184,8 +185,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteVlqNumber(long value)
         {
-            var bytes = value.GetVlqBytes();
-            WriteBytes(bytes);
+            var bytesCount = value.GetVlqBytes(_numberBuffer);
+            WriteBytes(_numberBuffer, _numberBuffer.Length - bytesCount, bytesCount);
         }
 
         // TODO: number buffer
@@ -198,16 +199,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void Write3ByteDword(uint value)
         {
-            const int mask = 255;
-            var bytes = new byte[3];
+            _numberBuffer[0] = (byte)((value >> 16) & 0xFF);
+            _numberBuffer[1] = (byte)((value >> 8) & 0xFF);
+            _numberBuffer[2] = (byte)(value & 0xFF);
 
-            for (int i = bytes.Length; --i >= 0;)
-            {
-                bytes[i] = (byte)(value & mask);
-                value >>= 8;
-            }
-
-            WriteBytes(bytes);
+            WriteBytes(_numberBuffer, 0, 3);
         }
 
         private void WriteBytes(byte[] bytes, int offset, int length)
