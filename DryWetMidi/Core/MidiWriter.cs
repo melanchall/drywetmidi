@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
-        private readonly BinaryWriter _binaryWriter;
+        private readonly Stream _stream;
         private readonly byte[] _numberBuffer = new byte[4];
 
         private bool _disposed;
@@ -29,21 +29,12 @@ namespace Melanchall.DryWetMidi.Core
         /// or is already closed.</exception>
         public MidiWriter(Stream stream)
         {
-            _binaryWriter = new BinaryWriter(stream, SmfConstants.DefaultTextEncoding, leaveOpen: true);
+            _stream = stream;
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Clears all buffers for the current writer and causes any buffered data to be
-        /// written to the underlying file.
-        /// </summary>
-        public void Flush()
-        {
-            _binaryWriter.Flush();
-        }
 
         /// <summary>
         /// Writes an unsigned byte to the underlying stream and advances the stream position
@@ -54,7 +45,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteByte(byte value)
         {
-            _binaryWriter.Write(value);
+            _stream.WriteByte(value);
         }
 
         /// <summary>
@@ -68,7 +59,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
 
-            _binaryWriter.Write(bytes);
+            _stream.Write(bytes, 0, bytes.Length);
         }
 
         /// <summary>
@@ -79,7 +70,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteSByte(sbyte value)
         {
-            _binaryWriter.Write(value);
+            _stream.WriteByte((byte)value);
         }
 
         /// <summary>
@@ -94,7 +85,7 @@ namespace Melanchall.DryWetMidi.Core
             _numberBuffer[0] = (byte)((value >> 8) & 0xFF);
             _numberBuffer[1] = (byte)(value & 0xFF);
 
-            _binaryWriter.Write(_numberBuffer, 0, 2);
+            _stream.Write(_numberBuffer, 0, 2);
         }
 
         /// <summary>
@@ -111,7 +102,7 @@ namespace Melanchall.DryWetMidi.Core
             _numberBuffer[2] = (byte)((value >> 8) & 0xFF);
             _numberBuffer[3] = (byte)(value & 0xFF);
 
-            _binaryWriter.Write(_numberBuffer, 0, 4);
+            _stream.Write(_numberBuffer, 0, 4);
         }
 
         /// <summary>
@@ -126,7 +117,7 @@ namespace Melanchall.DryWetMidi.Core
             _numberBuffer[0] = (byte)((value >> 8) & 0xFF);
             _numberBuffer[1] = (byte)(value & 0xFF);
 
-            _binaryWriter.Write(_numberBuffer, 0, 2);
+            _stream.Write(_numberBuffer, 0, 2);
         }
 
         /// <summary>
@@ -138,8 +129,11 @@ namespace Melanchall.DryWetMidi.Core
         public void WriteString(string value)
         {
             var chars = value?.ToCharArray();
-            if (chars != null && chars.Length > 0)
-                _binaryWriter.Write(chars);
+            if (chars == null || chars.Length == 0)
+                return;
+
+            var bytes = SmfConstants.DefaultTextEncoding.GetBytes(chars);
+            WriteBytes(bytes);
         }
 
         /// <summary>
@@ -216,7 +210,7 @@ namespace Melanchall.DryWetMidi.Core
                 return;
 
             if (disposing)
-                _binaryWriter.Dispose();
+                _stream.Flush();
 
             _disposed = true;
         }
