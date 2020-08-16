@@ -12,7 +12,12 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         private readonly Stream _stream;
+
         private readonly byte[] _numberBuffer = new byte[4];
+        
+        private readonly bool _useBuffering;
+        private readonly byte[] _buffer;
+        private int _bufferPosition;
 
         private bool _disposed;
 
@@ -27,9 +32,12 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support writing,
         /// or is already closed.</exception>
-        public MidiWriter(Stream stream)
+        public MidiWriter(Stream stream, WriterSettings settings)
         {
             _stream = stream;
+            _useBuffering = settings.UseBuffering;
+
+            _buffer = new byte[settings.BufferSize];
         }
 
         #endregion
@@ -45,7 +53,16 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteByte(byte value)
         {
-            _stream.WriteByte(value);
+            if (_useBuffering)
+            {
+                if (_bufferPosition == _buffer.Length)
+                    FlushBuffer();
+
+                _buffer[_bufferPosition] = value;
+                _bufferPosition++;
+            }
+            else
+                _stream.WriteByte(value);
         }
 
         /// <summary>
@@ -59,7 +76,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
 
-            _stream.Write(bytes, 0, bytes.Length);
+            WriteBytes(bytes, 0, bytes.Length);
         }
 
         /// <summary>
@@ -70,7 +87,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteSByte(sbyte value)
         {
-            _stream.WriteByte((byte)value);
+            WriteByte((byte)value);
         }
 
         /// <summary>
@@ -85,7 +102,7 @@ namespace Melanchall.DryWetMidi.Core
             _numberBuffer[0] = (byte)((value >> 8) & 0xFF);
             _numberBuffer[1] = (byte)(value & 0xFF);
 
-            _stream.Write(_numberBuffer, 0, 2);
+            WriteBytes(_numberBuffer, 0, 2);
         }
 
         /// <summary>
@@ -102,7 +119,7 @@ namespace Melanchall.DryWetMidi.Core
             _numberBuffer[2] = (byte)((value >> 8) & 0xFF);
             _numberBuffer[3] = (byte)(value & 0xFF);
 
-            _stream.Write(_numberBuffer, 0, 4);
+            WriteBytes(_numberBuffer, 0, 4);
         }
 
         /// <summary>
@@ -117,7 +134,7 @@ namespace Melanchall.DryWetMidi.Core
             _numberBuffer[0] = (byte)((value >> 8) & 0xFF);
             _numberBuffer[1] = (byte)(value & 0xFF);
 
-            _stream.Write(_numberBuffer, 0, 2);
+            WriteBytes(_numberBuffer, 0, 2);
         }
 
         /// <summary>
@@ -171,6 +188,7 @@ namespace Melanchall.DryWetMidi.Core
             WriteBytes(bytes);
         }
 
+        // TODO: number buffer
         /// <summary>
         /// Writes a DWORD value (32-bit unsigned integer) to the underlying stream as three bytes
         /// and advances the current position by three bytes.
@@ -192,6 +210,41 @@ namespace Melanchall.DryWetMidi.Core
             WriteBytes(bytes);
         }
 
+        private void WriteBytes(byte[] bytes, int offset, int length)
+        {
+            if (_useBuffering)
+                WriteBytesWithBuffering(bytes, offset, length);
+            else
+                _stream.Write(bytes, offset, length);
+        }
+
+        private void FlushBuffer()
+        {
+            _stream.Write(_buffer, 0, _bufferPosition);
+            _bufferPosition = 0;
+        }
+
+        private void WriteBytesWithBuffering(byte[] bytes, int offset, int length)
+        {
+            if (_bufferPosition + length <= _buffer.Length)
+            {
+                WriteBytesToBuffer(bytes, offset, length);
+            }
+            else
+            {
+                var firstBytesCount = _buffer.Length - _bufferPosition;
+                WriteBytesToBuffer(bytes, offset, firstBytesCount);
+                FlushBuffer();
+                WriteBytesWithBuffering(bytes, offset + firstBytesCount, length - firstBytesCount);
+            }
+        }
+
+        private void WriteBytesToBuffer(byte[] bytes, int offset, int length)
+        {
+            Buffer.BlockCopy(bytes, offset, _buffer, _bufferPosition, length);
+            _bufferPosition += length;
+        }
+
         #endregion
 
         #region IDisposable
@@ -210,7 +263,12 @@ namespace Melanchall.DryWetMidi.Core
                 return;
 
             if (disposing)
+            {
+                if (_useBuffering)
+                    FlushBuffer();
+                
                 _stream.Flush();
+            }
 
             _disposed = true;
         }

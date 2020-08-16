@@ -55,6 +55,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
 
+        public WriterSettings WriterSettings { get; set; } = new WriterSettings();
+
         #endregion
     }
 }

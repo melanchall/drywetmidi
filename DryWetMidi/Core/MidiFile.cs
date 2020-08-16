@@ -520,7 +520,10 @@ namespace Melanchall.DryWetMidi.Core
             if (settings == null)
                 settings = new WritingSettings();
 
-            using (var writer = new MidiWriter(stream))
+            if (settings.WriterSettings == null)
+                settings.WriterSettings = new WriterSettings();
+
+            using (var writer = new MidiWriter(stream, settings.WriterSettings))
             {
                 var chunksConverter = ChunksConverterFactory.GetConverter(format);
                 var chunks = chunksConverter.Convert(Chunks);

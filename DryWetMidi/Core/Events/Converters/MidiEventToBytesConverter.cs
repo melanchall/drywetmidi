@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNegative(nameof(capacity), capacity, "Capacity is negative.");
 
             _dataBytesStream = new MemoryStream(capacity);
-            _midiWriter = new MidiWriter(_dataBytesStream);
+            _midiWriter = new MidiWriter(_dataBytesStream, new WriterSettings { UseBuffering = false });
         }
 
         /// <summary>
@@ -115,8 +115,8 @@ namespace Melanchall.DryWetMidi.Core
 
             if (disposing)
             {
-                _dataBytesStream.Dispose();
                 _midiWriter.Dispose();
+                _dataBytesStream.Dispose();
             }
 
             _disposed = true;
