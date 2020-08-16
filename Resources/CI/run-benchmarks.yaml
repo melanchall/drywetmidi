@@ -46,7 +46,7 @@ steps:
   inputs:
     buildType: 'specific'
     project: 'd286d31e-d5f6-443f-b126-d81074c91872'
-    definition: '3'
+    definition: '$(System.DefinitionId)'
     buildVersionToDownload: 'latest'
     artifactName: 'BenchmarksResults'
     targetPath: $(Build.ArtifactStagingDirectory)\PreviousResults
