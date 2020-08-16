@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Core
                     break;
             }
 
-            return (byte)((formatByte << FormatOffset) & hours);
+            return (byte)((formatByte << FormatOffset) | hours);
         }
 
         #endregion

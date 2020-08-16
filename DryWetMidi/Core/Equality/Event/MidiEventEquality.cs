@@ -37,7 +37,8 @@ namespace Melanchall.DryWetMidi.Core
                 {
                     var smpteOffsetEvent1 = (SmpteOffsetEvent)e1;
                     var smpteOffsetEvent2 = (SmpteOffsetEvent)e2;
-                    return smpteOffsetEvent1.Hours == smpteOffsetEvent2.Hours &&
+                    return smpteOffsetEvent1.Format == smpteOffsetEvent2.Format &&
+                           smpteOffsetEvent1.Hours == smpteOffsetEvent2.Hours &&
                            smpteOffsetEvent1.Minutes == smpteOffsetEvent2.Minutes &&
                            smpteOffsetEvent1.Seconds == smpteOffsetEvent2.Seconds &&
                            smpteOffsetEvent1.Frames == smpteOffsetEvent2.Frames &&
