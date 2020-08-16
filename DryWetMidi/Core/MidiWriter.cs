@@ -189,7 +189,6 @@ namespace Melanchall.DryWetMidi.Core
             WriteBytes(_numberBuffer, _numberBuffer.Length - bytesCount, bytesCount);
         }
 
-        // TODO: number buffer
         /// <summary>
         /// Writes a DWORD value (32-bit unsigned integer) to the underlying stream as three bytes
         /// and advances the current position by three bytes.
