@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets text contained in the event.
         /// </summary>
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         #endregion
 
@@ -58,13 +58,23 @@ namespace Melanchall.DryWetMidi.Core
         /// negative number.</exception>
         protected sealed override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            ThrowIfArgument.IsNegative(nameof(size),
-                                       size,
-                                       "Text event cannot be read since the size is negative number.");
+            ThrowIfArgument.IsNegative(
+                nameof(size),
+                size,
+                "Text event cannot be read since the size is negative number.");
 
             if (size == 0)
             {
-                Text = string.Empty;
+                switch (settings.NoTextPolicy)
+                {
+                    case NoTextPolicy.ReadAsEmptyString:
+                        Text = string.Empty;
+                        break;
+                    case NoTextPolicy.ReadAsNull:
+                        Text = null;
+                        break;
+                }
+
                 return;
             }
 

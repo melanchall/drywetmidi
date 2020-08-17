@@ -27,6 +27,7 @@ namespace Melanchall.DryWetMidi.Core
         private InvalidSystemCommonEventParameterValuePolicy _invalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.Abort;
         private NotEnoughBytesPolicy _notEnoughBytesPolicy = NotEnoughBytesPolicy.Abort;
         private NoHeaderChunkPolicy _noHeaderChunkPolicy = NoHeaderChunkPolicy.Abort;
+        private NoTextPolicy _noTextPolicy = NoTextPolicy.ReadAsEmptyString;
 
         #endregion
 
@@ -348,6 +349,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <para>If callback is not set, <see cref="TextEncoding"/> will be used.</para>
         /// </remarks>
         public DecodeTextCallback DecodeTextCallback { get; set; }
+
+        public NoTextPolicy NoTextPolicy
+        {
+            get { return _noTextPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _noTextPolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets collection of <see cref="ReadingHandler"/> objects that handle MIDI data reading.
