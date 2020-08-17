@@ -66,6 +66,21 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the reader's underlying stream.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
+            if (size == 0)
+            {
+                switch (settings.ZeroLengthDataPolicy)
+                {
+                    case ZeroLengthDataPolicy.ReadAsEmptyObject:
+                        Data = new byte[0];
+                        break;
+                    case ZeroLengthDataPolicy.ReadAsNull:
+                        Data = null;
+                        break;
+                }
+
+                return;
+            }
+
             var availableSize = reader.Length - reader.Position;
             var bytesCount = availableSize < size ? availableSize : size;
             var bytes = reader.ReadBytes((int)Math.Min(bytesCount, int.MaxValue));

@@ -56,9 +56,25 @@ namespace Melanchall.DryWetMidi.Core
         /// negative number.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
-            ThrowIfArgument.IsNegative(nameof(size),
-                                        size,
-                                        "Sequencer specific event cannot be read since the size is negative number.");
+            ThrowIfArgument.IsNegative(
+                nameof(size),
+                size,
+                "Sequencer specific event cannot be read since the size is negative number.");
+
+            if (size == 0)
+            {
+                switch (settings.ZeroLengthDataPolicy)
+                {
+                    case ZeroLengthDataPolicy.ReadAsEmptyObject:
+                        Data = new byte[0];
+                        break;
+                    case ZeroLengthDataPolicy.ReadAsNull:
+                        Data = null;
+                        break;
+                }
+
+                return;
+            }
 
             Data = reader.ReadBytes(size);
         }

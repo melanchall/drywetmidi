@@ -574,34 +574,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Read_NoText_ReadAsEmptyString()
-        {
-            var midiFile = WriteRead(
-                new MidiFile(new TrackChunk(new TextEvent())),
-                readingSettings: new ReadingSettings
-                {
-                    NoTextPolicy = NoTextPolicy.ReadAsEmptyString
-                });
-
-            var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
-            Assert.AreEqual(string.Empty, textEvent.Text, "Text is not an empty string.");
-        }
-
-        [Test]
-        public void Read_NoText_ReadAsNull()
-        {
-            var midiFile = WriteRead(
-                new MidiFile(new TrackChunk(new TextEvent())),
-                readingSettings: new ReadingSettings
-                {
-                    NoTextPolicy = NoTextPolicy.ReadAsNull
-                });
-
-            var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
-            Assert.IsNull(textEvent.Text, "Text is not null.");
-        }
-
-        [Test]
         public void Read_ReadFromMemory()
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())

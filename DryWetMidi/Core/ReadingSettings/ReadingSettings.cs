@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Core
         private InvalidSystemCommonEventParameterValuePolicy _invalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.Abort;
         private NotEnoughBytesPolicy _notEnoughBytesPolicy = NotEnoughBytesPolicy.Abort;
         private NoHeaderChunkPolicy _noHeaderChunkPolicy = NoHeaderChunkPolicy.Abort;
-        private NoTextPolicy _noTextPolicy = NoTextPolicy.ReadAsEmptyString;
+        private ZeroLengthDataPolicy _zeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsEmptyObject;
 
         #endregion
 
@@ -350,14 +350,14 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public DecodeTextCallback DecodeTextCallback { get; set; }
 
-        public NoTextPolicy NoTextPolicy
+        public ZeroLengthDataPolicy ZeroLengthDataPolicy
         {
-            get { return _noTextPolicy; }
+            get { return _zeroLengthDataPolicy; }
             set
             {
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
-                _noTextPolicy = value;
+                _zeroLengthDataPolicy = value;
             }
         }
 

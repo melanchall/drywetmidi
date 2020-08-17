@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets text contained in the event.
         /// </summary>
-        public string Text { get; set; } = string.Empty;
+        public string Text { get; set; }
 
         #endregion
 
@@ -65,12 +65,12 @@ namespace Melanchall.DryWetMidi.Core
 
             if (size == 0)
             {
-                switch (settings.NoTextPolicy)
+                switch (settings.ZeroLengthDataPolicy)
                 {
-                    case NoTextPolicy.ReadAsEmptyString:
+                    case ZeroLengthDataPolicy.ReadAsEmptyObject:
                         Text = string.Empty;
                         break;
-                    case NoTextPolicy.ReadAsNull:
+                    case ZeroLengthDataPolicy.ReadAsNull:
                         Text = null;
                         break;
                 }

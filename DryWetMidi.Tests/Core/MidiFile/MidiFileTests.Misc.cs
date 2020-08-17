@@ -115,11 +115,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.mid");
 
-            midiFile.Write(filePath, settings: writingSettings);
-            midiFile = MidiFile.Read(filePath, readingSettings);
-
-            File.Delete(filePath);
-            return midiFile;
+            try
+            {
+                midiFile.Write(filePath, settings: writingSettings);
+                midiFile = MidiFile.Read(filePath, readingSettings);
+                return midiFile;
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
         }
 
         #endregion
