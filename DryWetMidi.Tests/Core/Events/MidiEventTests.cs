@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 [typeof(PitchBendEvent)] = (midiEvent, random) =>
                 {
-                    ((PitchBendEvent)midiEvent).PitchValue = (ushort)random.Next(1, 16384);
+                    ((PitchBendEvent)midiEvent).PitchValue = NumbersProvider.GetNonDefaultUShort(PitchBendEvent.MaxPitchValue);
                 },
                 [typeof(ProgramChangeEvent)] = (midiEvent, random) =>
                 {
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 [typeof(SequenceNumberEvent)] = (midiEvent, random) =>
                 {
-                    ((SequenceNumberEvent)midiEvent).Number = (ushort)random.Next(1, ushort.MaxValue + 1);
+                    ((SequenceNumberEvent)midiEvent).Number = NumbersProvider.GetNonDefaultUShort();
                 },
                 [typeof(SetTempoEvent)] = (midiEvent, random) =>
                 {

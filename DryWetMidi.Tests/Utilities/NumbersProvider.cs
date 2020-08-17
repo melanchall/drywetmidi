@@ -33,6 +33,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return validValues[_random.Next(0, validValues.Length)];
         }
 
+        public ushort GetNonDefaultUShort() => GetNonDefaultUShort(ushort.MaxValue);
+
+        public ushort GetNonDefaultUShort(ushort maxValue) => (ushort)_random.Next(1, maxValue + 1);
+
         #endregion
     }
 }

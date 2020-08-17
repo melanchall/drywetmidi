@@ -11,6 +11,13 @@ namespace Melanchall.DryWetMidi.Core
     /// </remarks>
     public sealed class PitchBendEvent : ChannelEvent
     {
+        #region Constants
+
+        public const ushort MinPitchValue = 0;
+        public const ushort MaxPitchValue = (1 << 14) - 1;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -36,7 +43,6 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        // TODO: validate
         /// <summary>
         /// Gets or sets pitch value.
         /// </summary>
@@ -48,6 +54,13 @@ namespace Melanchall.DryWetMidi.Core
             }
             set
             {
+                ThrowIfArgument.IsOutOfRange(
+                    nameof(value),
+                    value,
+                    MinPitchValue,
+                    MaxPitchValue,
+                    $"Pitch value is out of {MinPitchValue}-{MaxPitchValue} range.");
+
                 _dataByte1 = value.GetTail();
                 _dataByte2 = value.GetHead();
             }
