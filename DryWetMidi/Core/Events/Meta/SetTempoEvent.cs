@@ -51,6 +51,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
+        // TODO: validate against 3-byte value
         /// <summary>
         /// Gets or sets number of microseconds per quarter note.
         /// </summary>

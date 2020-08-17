@@ -23,6 +23,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const byte DefaultScale = 0;
 
+        // TODO: public
         private const sbyte MinKey = -7;
         private const sbyte MaxKey = 7;
 

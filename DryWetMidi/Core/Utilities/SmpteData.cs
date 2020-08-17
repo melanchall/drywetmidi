@@ -8,6 +8,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constants
 
+        // TODO: public
         private const byte MaxHours = 23;
         private const byte MaxMinutes = 59;
         private const byte MaxSeconds = 59;

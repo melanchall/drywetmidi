@@ -8,21 +8,13 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public abstract class NoteEvent : ChannelEvent
     {
-        #region Constants
-
-        private const int ParametersCount = 2;
-        private const int NoteNumberParameterIndex = 0;
-        private const int VelocityParameterIndex = 1;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoteEvent"/>.
         /// </summary>
         protected NoteEvent(MidiEventType eventType)
-            : base(eventType, ParametersCount)
+            : base(eventType)
         {
         }
 
@@ -50,8 +42,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public SevenBitNumber NoteNumber
         {
-            get { return this[NoteNumberParameterIndex]; }
-            set { this[NoteNumberParameterIndex] = value; }
+            get { return (SevenBitNumber)_dataByte1; }
+            set { _dataByte1 = value; }
         }
 
         /// <summary>
@@ -59,8 +51,29 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public SevenBitNumber Velocity
         {
-            get { return this[VelocityParameterIndex]; }
-            set { this[VelocityParameterIndex] = value; }
+            get { return (SevenBitNumber)_dataByte2; }
+            set { _dataByte2 = value; }
+        }
+
+        #endregion
+
+        #region Overrides
+
+        internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
+        {
+            _dataByte1 = ReadDataByte(reader, settings);
+            _dataByte2 = ReadDataByte(reader, settings);
+        }
+
+        internal sealed override void Write(MidiWriter writer, WritingSettings settings)
+        {
+            writer.WriteByte(_dataByte1);
+            writer.WriteByte(_dataByte2);
+        }
+
+        internal sealed override int GetSize(WritingSettings settings)
+        {
+            return 2;
         }
 
         #endregion

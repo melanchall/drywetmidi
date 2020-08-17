@@ -10,6 +10,8 @@ namespace Melanchall.DryWetMidi.Core
         private static readonly Dictionary<MidiEventType, Func<MidiEvent, MidiEvent, bool>> Comparers =
             new Dictionary<MidiEventType, Func<MidiEvent, MidiEvent, bool>>
             {
+                // Meta
+
                 [MidiEventType.ChannelPrefix] = (e1, e2) =>
                 {
                     return ((ChannelPrefixEvent)e1).Channel == ((ChannelPrefixEvent)e2).Channel;
@@ -54,6 +56,9 @@ namespace Melanchall.DryWetMidi.Core
                            timeSignatureEvent1.ThirtySecondNotesPerBeat == timeSignatureEvent2.ThirtySecondNotesPerBeat;
                 },
                 [MidiEventType.EndOfTrack] = (e1, e2) => true,
+
+                // System common
+
                 [MidiEventType.MidiTimeCode] = (e1, e2) =>
                 {
                     var midiTimeCodeEvent1 = (MidiTimeCodeEvent)e1;
@@ -117,18 +122,24 @@ namespace Melanchall.DryWetMidi.Core
             {
                 var channelEvent2 = (ChannelEvent)midiEvent2;
 
-                if (!ArrayUtilities.Equals(channelEvent1._parameters, channelEvent2._parameters))
-                {
-                    message = "Channel events parameters are different.";
-                    return false;
-                }
-
                 var channel1 = channelEvent1.Channel;
                 var channel2 = channelEvent2.Channel;
 
                 if (channel1 != channel2)
                 {
-                    message = $"Channel events parameters are different ({channel1} vs {channel2}).";
+                    message = $"Channels of events are different ({channel1} vs {channel2}).";
+                    return false;
+                }
+
+                if (channelEvent1._dataByte1 != channelEvent2._dataByte1)
+                {
+                    message = $"First data bytes of events are different ({channelEvent1._dataByte1} vs {channelEvent2._dataByte1}).";
+                    return false;
+                }
+
+                if (channelEvent1._dataByte2 != channelEvent2._dataByte2)
+                {
+                    message = $"Second data bytes of events are different ({channelEvent1._dataByte2} vs {channelEvent2._dataByte2}).";
                     return false;
                 }
 

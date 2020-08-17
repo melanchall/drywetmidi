@@ -11,21 +11,13 @@ namespace Melanchall.DryWetMidi.Core
     /// </remarks>
     public sealed class ControlChangeEvent : ChannelEvent
     {
-        #region Constants
-
-        private const int ParametersCount = 2;
-        private const int ControlNumberParameterIndex = 0;
-        private const int ControlValueParameterIndex = 1;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ControlChangeEvent"/>.
         /// </summary>
         public ControlChangeEvent()
-            : base(MidiEventType.ControlChange, ParametersCount)
+            : base(MidiEventType.ControlChange)
         {
         }
 
@@ -51,8 +43,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public SevenBitNumber ControlNumber
         {
-            get { return this[ControlNumberParameterIndex]; }
-            set { this[ControlNumberParameterIndex] = value; }
+            get { return (SevenBitNumber)_dataByte1; }
+            set { _dataByte1 = value; }
         }
 
         /// <summary>
@@ -60,13 +52,30 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public SevenBitNumber ControlValue
         {
-            get { return this[ControlValueParameterIndex]; }
-            set { this[ControlValueParameterIndex] = value; }
+            get { return (SevenBitNumber)_dataByte2; }
+            set { _dataByte2 = value; }
         }
 
         #endregion
 
         #region Overrides
+
+        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
+        {
+            _dataByte1 = ReadDataByte(reader, settings);
+            _dataByte2 = ReadDataByte(reader, settings);
+        }
+
+        internal override void Write(MidiWriter writer, WritingSettings settings)
+        {
+            writer.WriteByte(_dataByte1);
+            writer.WriteByte(_dataByte2);
+        }
+
+        internal override int GetSize(WritingSettings settings)
+        {
+            return 2;
+        }
 
         /// <summary>
         /// Clones event by creating a copy of it.

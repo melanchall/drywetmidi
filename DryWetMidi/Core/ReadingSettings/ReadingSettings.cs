@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
+    // TODO: zero length string policy (null or empty)
     /// <summary>
     /// Settings according to which MIDI data should be read.
     /// </summary>

@@ -11,21 +11,13 @@ namespace Melanchall.DryWetMidi.Core
     /// </remarks>
     public sealed class PitchBendEvent : ChannelEvent
     {
-        #region Constants
-
-        private const int ParametersCount = 2;
-        private const int PitchValueLsbParameterIndex = 0;
-        private const int PitchValueMsbParameterIndex = 1;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PitchBendEvent"/>.
         /// </summary>
         public PitchBendEvent()
-            : base(MidiEventType.PitchBend, ParametersCount)
+            : base(MidiEventType.PitchBend)
         {
         }
 
@@ -44,6 +36,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
+        // TODO: validate
         /// <summary>
         /// Gets or sets pitch value.
         /// </summary>
@@ -51,19 +44,35 @@ namespace Melanchall.DryWetMidi.Core
         {
             get
             {
-                return DataTypesUtilities.Combine(this[PitchValueMsbParameterIndex],
-                                                  this[PitchValueLsbParameterIndex]);
+                return DataTypesUtilities.CombineAsSevenBitNumbers(_dataByte2, _dataByte1);
             }
             set
             {
-                this[PitchValueLsbParameterIndex] = value.GetTail();
-                this[PitchValueMsbParameterIndex] = value.GetHead();
+                _dataByte1 = value.GetTail();
+                _dataByte2 = value.GetHead();
             }
         }
 
         #endregion
 
         #region Overrides
+
+        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
+        {
+            _dataByte1 = ReadDataByte(reader, settings);
+            _dataByte2 = ReadDataByte(reader, settings);
+        }
+
+        internal override void Write(MidiWriter writer, WritingSettings settings)
+        {
+            writer.WriteByte(_dataByte1);
+            writer.WriteByte(_dataByte2);
+        }
+
+        internal override int GetSize(WritingSettings settings)
+        {
+            return 2;
+        }
 
         /// <summary>
         /// Clones event by creating a copy of it.

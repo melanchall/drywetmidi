@@ -12,20 +12,13 @@ namespace Melanchall.DryWetMidi.Core
     /// </remarks>
     public sealed class ChannelAftertouchEvent : ChannelEvent
     {
-        #region Constants
-
-        private const int ParametersCount = 1;
-        private const int AftertouchValueParameterIndex = 0;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAftertouchEvent"/>.
         /// </summary>
         public ChannelAftertouchEvent()
-            : base(MidiEventType.ChannelAftertouch, ParametersCount)
+            : base(MidiEventType.ChannelAftertouch)
         {
         }
 
@@ -49,13 +42,28 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public SevenBitNumber AftertouchValue
         {
-            get { return this[AftertouchValueParameterIndex]; }
-            set { this[AftertouchValueParameterIndex] = value; }
+            get { return (SevenBitNumber)_dataByte1; }
+            set { _dataByte1 = value; }
         }
 
         #endregion
 
         #region Overrides
+
+        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
+        {
+            _dataByte1 = ReadDataByte(reader, settings);
+        }
+
+        internal override void Write(MidiWriter writer, WritingSettings settings)
+        {
+            writer.WriteByte(_dataByte1);
+        }
+
+        internal override int GetSize(WritingSettings settings)
+        {
+            return 1;
+        }
 
         /// <summary>
         /// Clones event by creating a copy of it.
