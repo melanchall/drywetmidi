@@ -57,6 +57,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="numerator">Numerator of the time signature.</param>
         /// <param name="denominator">Denominator of the time signature.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="denominator"/> is zero or is not a
+        /// power of two.</exception>
         public TimeSignatureEvent(byte numerator, byte denominator)
             : this(numerator, denominator, DefaultClocksPerClick, DefaultThirtySecondNotesPerBeat)
         {
@@ -71,6 +73,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="denominator">Denominator of the time signature.</param>
         /// <param name="clocksPerClick">Number of MIDI clocks per metronome click.</param>
         /// <param name="thirtySecondNotesPerBeat">Number of 32nd notes per beat.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="denominator"/> is zero or is not a
+        /// power of two.</exception>
         public TimeSignatureEvent(byte numerator, byte denominator, byte clocksPerClick, byte thirtySecondNotesPerBeat)
             : this()
         {
@@ -99,10 +103,11 @@ namespace Melanchall.DryWetMidi.Core
             get { return _denominator; }
             set
             {
-                ThrowIfArgument.DoesntSatisfyCondition(nameof(value),
-                                                       value,
-                                                       MathUtilities.IsPowerOfTwo,
-                                                       "Denominator is zero or is not a power of two.");
+                ThrowIfArgument.DoesntSatisfyCondition(
+                    nameof(value),
+                    value,
+                    MathUtilities.IsPowerOfTwo,
+                    "Denominator is zero or is not a power of two.");
 
                 _denominator = value;
             }

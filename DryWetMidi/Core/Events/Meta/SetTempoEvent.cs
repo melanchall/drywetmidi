@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -16,13 +17,16 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Default tempo.
         /// </summary>
-        public const long DefaultTempo = 500000;
+        public const long DefaultMicrosecondsPerQuarterNote = 500000;
+
+        public const long MinMicrosecondsPerQuarterNote = 1;
+        public const long MaxMicrosecondsPerQuarterNote = (1 << 24) - 1;
 
         #endregion
 
         #region Fields
 
-        private long _microsecondsPerBeat = DefaultTempo;
+        private long _microsecondsPerBeat = DefaultMicrosecondsPerQuarterNote;
 
         #endregion
 
@@ -41,6 +45,8 @@ namespace Melanchall.DryWetMidi.Core
         /// specified number of microseconds per quarter note.
         /// </summary>
         /// <param name="microsecondsPerQuarterNote">Number of microseconds per quarter note.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="microsecondsPerQuarterNote"/> is out of
+        /// [<see cref="MinMicrosecondsPerQuarterNote"/>; <see cref="MaxMicrosecondsPerQuarterNote"/>] range.</exception>
         public SetTempoEvent(long microsecondsPerQuarterNote)
             : this()
         {
@@ -51,18 +57,22 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        // TODO: validate against 3-byte value
         /// <summary>
         /// Gets or sets number of microseconds per quarter note.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of
+        /// [<see cref="MinMicrosecondsPerQuarterNote"/>; <see cref="MaxMicrosecondsPerQuarterNote"/>] range.</exception>
         public long MicrosecondsPerQuarterNote
         {
             get { return _microsecondsPerBeat; }
             set
             {
-                ThrowIfArgument.IsNonpositive(nameof(value),
-                                              value,
-                                              "Value of microseconds per quarter note is zero or negative.");
+                ThrowIfArgument.IsOutOfRange(
+                    nameof(value),
+                    value,
+                    MinMicrosecondsPerQuarterNote,
+                    MaxMicrosecondsPerQuarterNote,
+                    $"Number of microseconds per quarter note is out of [{MinMicrosecondsPerQuarterNote}; {MaxMicrosecondsPerQuarterNote}] range.");
 
                 _microsecondsPerBeat = value;
             }

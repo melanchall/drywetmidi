@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Default tempo which is 500,000 microseconds per quarter note or 120 beats per minute.
         /// </summary>
-        public static readonly Tempo Default = new Tempo(SetTempoEvent.DefaultTempo);
+        public static readonly Tempo Default = new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote);
 
         #endregion
 

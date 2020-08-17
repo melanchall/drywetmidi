@@ -323,7 +323,7 @@ namespace Melanchall.DryWetMidi.Core
                 var setTempoEvent = midiEvent as SetTempoEvent;
                 if (setTempoEvent != null)
                 {
-                    if (setTempoEvent.MicrosecondsPerQuarterNote == SetTempoEvent.DefaultTempo)
+                    if (setTempoEvent.MicrosecondsPerQuarterNote == SetTempoEvent.DefaultMicrosecondsPerQuarterNote)
                         return true;
 
                     skip = false;

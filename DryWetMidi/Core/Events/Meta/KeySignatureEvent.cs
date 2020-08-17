@@ -23,12 +23,11 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const byte DefaultScale = 0;
 
-        // TODO: public
-        private const sbyte MinKey = -7;
-        private const sbyte MaxKey = 7;
+        public const sbyte MinKey = -7;
+        public const sbyte MaxKey = 7;
 
-        private const byte MinScale = 0;
-        private const byte MaxScale = 1;
+        public const byte MinScale = 0;
+        public const byte MaxScale = 1;
 
         #endregion
 
@@ -53,8 +52,20 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="KeySignatureEvent"/> with the
         /// specified key and scale.
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="scale"></param>
+        /// <param name="key">The number of flats (if negative) or
+        /// sharps (if positive).</param>
+        /// <param name="scale">The scale (0 for major or 1 for minor).</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="key"/> is out of [<see cref="MinKey"/>; <see cref="MaxKey"/>] range.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="scale"/> is out of [<see cref="MinScale"/>; <see cref="MaxScale"/>] range.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public KeySignatureEvent(sbyte key, byte scale)
             : this()
         {
@@ -70,13 +81,19 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets key signature in terms of number of flats (if negative) or
         /// sharps (if positive).
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Key is out of range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of
+        /// [<see cref="MinKey"/>; <see cref="MaxKey"/>] range.</exception>
         public sbyte Key
         {
             get { return _key; }
             set
             {
-                ThrowIfArgument.IsOutOfRange(nameof(value), value, MinKey, MaxKey, "Key is out of range.");
+                ThrowIfArgument.IsOutOfRange(
+                    nameof(value),
+                    value,
+                    MinKey,
+                    MaxKey,
+                    $"Key is out of [{MinKey}; {MaxKey}] range.");
 
                 _key = value;
             }
@@ -85,13 +102,19 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets scale (0 for major or 1 for minor).
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Scale is out of range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of
+        /// [<see cref="MinScale"/>; <see cref="MaxScale"/>] range.</exception>
         public byte Scale
         {
             get { return _scale; }
             set
             {
-                ThrowIfArgument.IsOutOfRange(nameof(value), value, MinScale, MaxScale, "Scale is out of range.");
+                ThrowIfArgument.IsOutOfRange(
+                    nameof(value),
+                    value,
+                    MinScale,
+                    MaxScale,
+                    $"Scale is out of {MinScale}-{MaxScale} range.");
 
                 _scale = value;
             }

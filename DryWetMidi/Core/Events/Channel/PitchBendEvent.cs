@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -33,6 +34,8 @@ namespace Melanchall.DryWetMidi.Core
         /// pitch value.
         /// </summary>
         /// <param name="pitchValue">Pitch value.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="pitchValue"/> is out of
+        /// [<see cref="MinPitchValue"/>; <see cref="MaxPitchValue"/>] range.</exception>
         public PitchBendEvent(ushort pitchValue)
             : this()
         {
@@ -46,6 +49,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets pitch value.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of
+        /// [<see cref="MinPitchValue"/>; <see cref="MaxPitchValue"/>] range.</exception>
         public ushort PitchValue
         {
             get
@@ -59,7 +64,7 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinPitchValue,
                     MaxPitchValue,
-                    $"Pitch value is out of {MinPitchValue}-{MaxPitchValue} range.");
+                    $"Pitch value is out of [{MinPitchValue}; {MaxPitchValue}] range.");
 
                 _dataByte1 = value.GetTail();
                 _dataByte2 = value.GetHead();
