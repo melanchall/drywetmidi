@@ -21,8 +21,4 @@
     <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Core\Equality\File\" />
-  </ItemGroup>
-
 </Project>

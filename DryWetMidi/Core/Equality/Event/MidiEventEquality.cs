@@ -227,7 +227,11 @@ namespace Melanchall.DryWetMidi.Core
             if (Comparers.TryGetValue(midiEvent1.EventType, out comparer))
                 return comparer(midiEvent1, midiEvent2);
 
-            return midiEvent1.Equals(midiEvent2);
+            var result = midiEvent1.Equals(midiEvent2);
+            if (!result)
+                message = $"Events {midiEvent1} and {midiEvent2} are not equal by result of Equals call on first event.";
+
+            return result;
         }
 
         #endregion
