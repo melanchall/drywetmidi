@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Core
             }
 
             var channel = ((ChannelEvent)midiEvent).Channel;
-            return DataTypesUtilities.Combine((FourBitNumber)statusByte, channel);
+            return DataTypesUtilities.CombineAsFourBitNumbers(statusByte, channel);
         }
 
         #endregion

@@ -33,13 +33,22 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             [IterationSetup]
             public void IterationSetup()
             {
-                Thread.Sleep(500);
+                Thread.Sleep(250);
             }
 
             [Benchmark]
             public void SendEvent()
             {
                 _outputDevice.SendEvent(_event);
+            }
+
+            [Benchmark]
+            public void SendMultipleEvents()
+            {
+                for (var i = 0; i < 10; i++)
+                {
+                    _outputDevice.SendEvent(_event);
+                }
             }
 
             protected abstract MidiEvent GetMidiEvent();

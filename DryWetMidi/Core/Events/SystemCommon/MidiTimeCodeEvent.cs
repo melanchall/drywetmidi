@@ -114,8 +114,7 @@ namespace Melanchall.DryWetMidi.Core
             var componentValueMask = ComponentValueMasks[component];
             var componentValue = ComponentValue & componentValueMask;
 
-            var data = DataTypesUtilities.Combine((FourBitNumber)(byte)component,
-                                                  (FourBitNumber)(byte)componentValue);
+            var data = DataTypesUtilities.CombineAsFourBitNumbers((byte)component, (byte)componentValue);
 
             writer.WriteByte(data);
         }

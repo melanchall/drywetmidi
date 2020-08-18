@@ -15,7 +15,10 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        private const int ChannelEventBufferSize = 3;
+        private const int ShortEventBufferSize = 3;
+
+        private static readonly IEventWriter ChannelEventWriter = new ChannelEventWriter();
+        private static readonly IEventWriter SystemRealTimeEventWriter = new SystemRealTimeEventWriter();
 
         #endregion
 
@@ -30,7 +33,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ChannelEventBufferSize);
+        private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ShortEventBufferSize);
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter();
 
         private MidiWinApi.MidiMessageCallback _callback;
@@ -344,7 +347,15 @@ namespace Melanchall.DryWetMidi.Devices
 
         private int PackShortEvent(MidiEvent midiEvent)
         {
-            var bytes = _midiEventToBytesConverter.Convert(midiEvent, ChannelEventBufferSize);
+            var channelEvent = midiEvent as ChannelEvent;
+            if (channelEvent != null)
+                return ChannelEventWriter.GetStatusByte(channelEvent) | (channelEvent._dataByte1 << 8) | (channelEvent._dataByte2 << 16);
+
+            var systemRealTimeEvent = midiEvent as SystemRealTimeEvent;
+            if (systemRealTimeEvent != null)
+                return SystemRealTimeEventWriter.GetStatusByte(systemRealTimeEvent);
+
+            var bytes = _midiEventToBytesConverter.Convert(midiEvent, ShortEventBufferSize);
             return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);
         }
 

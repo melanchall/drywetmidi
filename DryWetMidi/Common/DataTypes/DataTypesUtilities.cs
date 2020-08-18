@@ -14,11 +14,6 @@
             return (ushort)((head << 7) | tail);
         }
 
-        public static uint Combine(SevenBitNumber head, SevenBitNumber middle, SevenBitNumber tail)
-        {
-            return (uint)((head << 14) | (middle << 7) | tail);
-        }
-
         public static ushort Combine(byte head, byte tail)
         {
             return (ushort)((head << 8) | tail);
@@ -27,6 +22,11 @@
         public static ushort CombineAsSevenBitNumbers(byte head, byte tail)
         {
             return (ushort)((head << 7) | tail);
+        }
+
+        public static byte CombineAsFourBitNumbers(byte head, byte tail)
+        {
+            return (byte)((head << 4) | tail);
         }
 
         public static uint Combine(ushort head, ushort tail)
