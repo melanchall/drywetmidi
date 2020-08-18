@@ -78,7 +78,11 @@
                 return true;
             }
 
-            return midiChunk1.Equals(midiChunk2);
+            var result = midiChunk1.Equals(midiChunk2);
+            if (!result)
+                message = $"Chunks {midiChunk1} and {midiChunk2} are not equal by result of Equals call on first chunk.";
+
+            return result;
         }
 
         #endregion

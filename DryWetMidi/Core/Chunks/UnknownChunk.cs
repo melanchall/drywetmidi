@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             return new UnknownChunk(ChunkId)
             {
-                Data = (byte[])Data.Clone()
+                Data = Data?.Clone() as byte[]
             };
         }
 
@@ -127,7 +127,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return "Unknown Chunk";
+            return $"Unknown chunk ({ChunkId})";
         }
 
         #endregion

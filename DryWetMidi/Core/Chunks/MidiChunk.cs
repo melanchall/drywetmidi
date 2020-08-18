@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="id"/> is empty, or consists only of white-space characters; or
         /// length of <paramref name="id"/> doesn't equal 4.
         /// </exception>
-        public MidiChunk(string id)
+        protected MidiChunk(string id)
         {
             ThrowIfArgument.IsNull(nameof(id), id);
 
