@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (settings.InvalidSystemCommonEventParameterValuePolicy)
                 {
                     case InvalidSystemCommonEventParameterValuePolicy.Abort:
-                        throw new InvalidSystemCommonEventParameterValueException(GetType(), $"{nameof(ComponentValue)} (component is {Component})", componentValue);
+                        throw new InvalidSystemCommonEventParameterValueException(EventType, $"{nameof(ComponentValue)} (component is {Component})", componentValue);
                     case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
                         componentValue = (FourBitNumber)ComponentValueMasks[Component];
                         break;

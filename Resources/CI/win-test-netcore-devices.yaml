@@ -62,15 +62,3 @@ steps:
     command: 'test'
     projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
     arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp2.1 --verbosity normal'
-
-- task: CopyFiles@2
-  displayName: Copy tests sequence
-  inputs:
-    contents: '**/Sequence*.xml'
-    targetFolder: $(Build.ArtifactStagingDirectory)
-
-- task: PublishPipelineArtifact@1
-  displayName: Publish tests sequence
-  inputs:
-    targetPath: $(Build.ArtifactStagingDirectory)
-    artifact: Tests sequence

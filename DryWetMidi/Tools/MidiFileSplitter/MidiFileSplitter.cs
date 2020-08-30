@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides methods to split a MIDI file.
     /// </summary>
     /// <remarks>
-    /// See <see href="xref:a_file_splitter">MidiFileSplitter</see> article on Wiki to learn more.
+    /// See <see href="xref:a_file_splitter">MidiFileSplitter</see> article to learn more.
     /// </remarks>
     public static class MidiFileSplitter
     {

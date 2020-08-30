@@ -542,7 +542,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 foreach (var chunk in chunks)
                 {
-                    if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownChunks) && chunk is UnknownChunk)
+                    if (chunk is UnknownChunk && settings.DeleteUnknownChunks)
                         continue;
 
                     chunk.Write(writer, settings);

@@ -15,10 +15,10 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constructors
 
-        internal InvalidChunkSizeException(Type chunkType, long expectedSize, long actualSize)
-            : base($"Actual size ({actualSize}) of a chunk of {chunkType} type differs from the one declared in the chunk's header ({expectedSize}).")
+        internal InvalidChunkSizeException(string chunkId, long expectedSize, long actualSize)
+            : base($"Actual size ({actualSize}) of a {chunkId} chunk differs from the one declared in the chunk's header ({expectedSize}).")
         {
-            ChunkType = chunkType;
+            ChunkId = chunkId;
             ExpectedSize = expectedSize;
             ActualSize = actualSize;
         }
@@ -28,9 +28,9 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets the type of a chunk caused this exception.
+        /// Gets the ID of a chunk caused this exception.
         /// </summary>
-        public Type ChunkType { get; }
+        public string ChunkId { get; }
 
         /// <summary>
         /// Gets the expected size of a chunk written in its header.

@@ -7,33 +7,22 @@ namespace Melanchall.DryWetMidi.Common
     {
         #region Methods
 
-        /// <summary>
-        /// Ckecks if a number is a power of 2.
-        /// </summary>
-        /// <param name="value">Value to check.</param>
-        /// <returns><c>true</c> if the number is a power of 2, <c>false</c> - otherwise.</returns>
+        public static int EnsureInBounds(int value, int min, int max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+        }
+
         public static bool IsPowerOfTwo(int value)
         {
             return value != 0 && (value & (value - 1)) == 0;
         }
 
-        /// <summary>
-        /// Calculates least common multiple of two integer numbers.
-        /// </summary>
-        /// <param name="a">First number.</param>
-        /// <param name="b">Second number.</param>
-        /// <returns>Least common multiple of <paramref name="a"/> and <paramref name="b"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="a"/> is zero or negative.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="b"/> is zero or negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
         public static long LeastCommonMultiple(long a, long b)
         {
             ThrowIfArgument.IsNonpositive(nameof(a), a, "First number is zero or negative.");

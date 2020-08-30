@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constructors
 
-        internal InvalidSystemCommonEventParameterValueException(Type eventType, string componentName, int componentValue)
+        internal InvalidSystemCommonEventParameterValueException(MidiEventType eventType, string componentName, int componentValue)
             : base($"{componentValue} is invalid value for the {componentName} property of a system common event of {eventType} type.")
         {
             EventType = eventType;
@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets the type of an event that caused this exception.
         /// </summary>
-        public Type EventType { get; }
+        public MidiEventType EventType { get; }
 
         /// <summary>
         /// Gets the name of MIDI Time Code event's component which value is invalid.

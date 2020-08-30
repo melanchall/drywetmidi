@@ -13,6 +13,9 @@ namespace Melanchall.DryWetMidi.Core
         private int _nonSeekableStreamBufferSize = 1024;
         private int _nonSeekableStreamIncrementalBytesReadingThreshold = 16384;
         private int _nonSeekableStreamIncrementalBytesReadingStep = 2048;
+        
+        private int _bufferSize = 4096;
+        private BufferingPolicy _bufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
 
         #endregion
 
@@ -88,7 +91,36 @@ namespace Melanchall.DryWetMidi.Core
         /// MIDI files it shouldn't be a problem to place entire file to memory since the size of most MIDI
         /// files is relatively small.</para>
         /// </remarks>
-        public bool ReadFromMemory { get; set; }
+        [Obsolete("OBS2")]
+        public bool ReadFromMemory
+        {
+            get { return BufferingPolicy == BufferingPolicy.BufferAllData; }
+            set { BufferingPolicy = BufferingPolicy.BufferAllData; }
+        }
+
+        public BufferingPolicy BufferingPolicy
+        {
+            get { return _bufferingPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _bufferingPolicy = value;
+            }
+        }
+
+        public int BufferSize
+        {
+            get { return _bufferSize; }
+            set
+            {
+                ThrowIfArgument.IsNonpositive(nameof(value), value, "Value is zero or negative.");
+
+                _bufferSize = value;
+            }
+        }
+
+        public byte[] Buffer { get; set; }
 
         #endregion
     }

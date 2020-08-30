@@ -11,13 +11,26 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public sealed class MidiReader : IDisposable
     {
+        #region Constants
+
+        private static readonly byte[] EmptyByteArray = new byte[0];
+
+        #endregion
+
         #region Fields
 
         private readonly ReaderSettings _settings;
 
-        private readonly BinaryReader _binaryReader;
+        private readonly Stream _stream;
         private readonly bool _isStreamWrapped;
-        private readonly MemoryStream _allDataBuffer;
+
+        private readonly bool _useBuffering;
+        private byte[] _buffer;
+        private int _bufferSize;
+        private int _bufferPosition;
+        private long _bufferStart = -1;
+
+        private long _position;
 
         private bool _disposed;
 
@@ -54,17 +67,12 @@ namespace Melanchall.DryWetMidi.Core
                 _isStreamWrapped = true;
             }
 
-            Length = stream.Length;
+            _stream = stream;
+            Length = _stream.Length;
 
-            if (settings.ReadFromMemory && !(stream is MemoryStream))
-            {
-                _allDataBuffer = new MemoryStream();
-                stream.CopyTo(_allDataBuffer);
-                _allDataBuffer.Position = 0;
-                stream = _allDataBuffer;
-            }
-
-            _binaryReader = new BinaryReader(stream, SmfConstants.DefaultTextEncoding, leaveOpen: true);
+            _useBuffering = _settings.BufferingPolicy != BufferingPolicy.DontUseBuffering && !_isStreamWrapped && !(_stream is MemoryStream);
+            if (_useBuffering)
+                PrepareBuffer();
         }
 
         #endregion
@@ -78,8 +86,16 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
         public long Position
         {
-            get { return _binaryReader.BaseStream.Position; }
-            set { _binaryReader.BaseStream.Position = value; }
+            get { return _useBuffering ? _position : _stream.Position; }
+            set
+            {
+                if (_useBuffering)
+                    _bufferPosition += (int)(value - _position);
+                else
+                    _stream.Position = value;
+
+                _position = value;
+            }
         }
 
         /// <summary>
@@ -92,38 +108,11 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
-        public bool EndReached => Position >= Length || (_isStreamWrapped && ((StreamWrapper)_binaryReader.BaseStream).IsEndReached());
+        public bool EndReached => Position >= Length || (_isStreamWrapped && ((StreamWrapper)_stream).IsEndReached());
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Reads all remaining bytes from the underlying stream and moves the current position
-        /// to the stream's end.
-        /// </summary>
-        /// <returns>All bytes read from the underlying stream.</returns>
-        /// <exception cref="EndOfStreamException">The end of the underlying stream is reached.</exception>
-        /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        public byte[] ReadAllBytes()
-        {
-            const int bufferSize = 512;
-
-            using (var memoryStream = new MemoryStream())
-            {
-                var buffer = new byte[bufferSize];
-
-                int count;
-                while ((count = _binaryReader.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    memoryStream.Write(buffer, 0, count);
-                }
-
-                return memoryStream.ToArray();
-            }
-
-        }
 
         /// <summary>
         /// Reads a byte from the underlying stream and advances the current position by one byte.
@@ -134,7 +123,23 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte ReadByte()
         {
-            return _binaryReader.ReadByte();
+            if (_useBuffering)
+            {
+                if (!EnsureBufferIsReadyForReading())
+                    throw new EndOfStreamException();
+
+                var result = _buffer[_bufferPosition];
+                Position++;
+                return result;
+            }
+            else
+            {
+                var result = _stream.ReadByte();
+                if (result < 0)
+                    throw new EndOfStreamException();
+
+                return (byte)result;
+            }
         }
 
         /// <summary>
@@ -146,7 +151,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public sbyte ReadSByte()
         {
-            return _binaryReader.ReadSByte();
+            return (sbyte)ReadByte();
         }
 
         /// <summary>
@@ -168,7 +173,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 while (count > 0)
                 {
-                    var bytes = _binaryReader.ReadBytes(Math.Min(count, _settings.NonSeekableStreamIncrementalBytesReadingStep));
+                    var bytes = ReadBytesInternal(Math.Min(count, _settings.NonSeekableStreamIncrementalBytesReadingStep));
                     if (bytes.Length == 0)
                         break;
 
@@ -179,7 +184,7 @@ namespace Melanchall.DryWetMidi.Core
                 return bytesList.SelectMany(bytes => bytes).ToArray();
             }
 
-            return _binaryReader.ReadBytes(count);
+            return ReadBytesInternal(count);
         }
 
         /// <summary>
@@ -250,8 +255,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public string ReadString(int count)
         {
-            var chars = _binaryReader.ReadChars(count);
-            return new string(chars);
+            var bytes = ReadBytesInternal(count);
+            return SmfConstants.DefaultTextEncoding.GetString(bytes);
         }
 
         /// <summary>
@@ -328,6 +333,145 @@ namespace Melanchall.DryWetMidi.Core
             return (uint)((bytes[0] << 16) + (bytes[1] << 8) + bytes[2]);
         }
 
+        private byte[] ReadBytesInternal(int count)
+        {
+            if (count == 0)
+                return EmptyByteArray;
+
+            if (_useBuffering)
+                return ReadBytesWithBuffering(count);
+            else
+                return ReadBytesWithoutBuffering(count);
+        }
+
+        private byte[] ReadBytesWithBuffering(int count)
+        {
+            if (!EnsureBufferIsReadyForReading())
+                return EmptyByteArray;
+
+            if (_bufferPosition + count <= _bufferSize)
+                return ReadBytesFromBuffer(count);
+
+            var availableBytesCount = _bufferSize - _bufferPosition;
+            if (availableBytesCount == 0)
+                return EmptyByteArray;
+
+            var firstBytes = ReadBytesFromBuffer(availableBytesCount);
+            var lastBytes = ReadBytesWithBuffering(count - availableBytesCount);
+            
+            var fullBytes = new byte[firstBytes.Length + lastBytes.Length];
+            Buffer.BlockCopy(firstBytes, 0, fullBytes, 0, firstBytes.Length);
+            Buffer.BlockCopy(lastBytes, 0, fullBytes, firstBytes.Length, lastBytes.Length);
+
+            return fullBytes;
+        }
+
+        private byte[] ReadBytesFromBuffer(int count)
+        {
+            var result = new byte[count];
+            Buffer.BlockCopy(_buffer, _bufferPosition, result, 0, count);
+            Position += count;
+            return result;
+        }
+
+        private byte[] ReadBytesWithoutBuffering(int count)
+        {
+            var result = new byte[count];
+            var totalReadBytesCount = 0;
+
+            do
+            {
+                var readBytesCount = _stream.Read(result, totalReadBytesCount, count);
+                if (readBytesCount == 0)
+                    break;
+
+                totalReadBytesCount += readBytesCount;
+                count -= readBytesCount;
+            }
+            while (count > 0);
+
+            if (totalReadBytesCount != result.Length)
+            {
+                var copy = new byte[totalReadBytesCount];
+                Buffer.BlockCopy(result, 0, copy, 0, totalReadBytesCount);
+                result = copy;
+            }
+
+            return result;
+        }
+
+        private bool EnsureBufferIsReadyForReading()
+        {
+            if (EndReached)
+                return false;
+
+            if (_position < _bufferStart || _position >= _bufferStart + _bufferSize)
+            {
+                _stream.Position = (_position / _buffer.Length) * _buffer.Length;
+                _bufferStart = _stream.Position;
+
+                var totalReadBytesCount = 0;
+                var count = _buffer.Length;
+
+                do
+                {
+                    var readBytesCount = _stream.Read(_buffer, totalReadBytesCount, count);
+                    if (readBytesCount == 0)
+                        break;
+
+                    totalReadBytesCount += readBytesCount;
+                    count -= readBytesCount;
+                }
+                while (count > 0);
+
+                if (totalReadBytesCount == 0)
+                    return false;
+
+                _bufferPosition = (int)(_position % _buffer.Length);
+                _bufferSize = totalReadBytesCount;
+                return true;
+            }
+
+            return _bufferSize > 0;
+        }
+
+        private void PrepareBuffer()
+        {
+            if (!_useBuffering)
+                return;
+
+            switch (_settings.BufferingPolicy)
+            {
+                case BufferingPolicy.BufferAllData:
+                    {
+                        using (var dataStream = new MemoryStream())
+                        {
+                            _stream.CopyTo(dataStream);
+                            _buffer = dataStream.ToArray();
+                        }
+
+                        _bufferStart = 0;
+                        _bufferSize = _buffer.Length;
+                    }
+                    break;
+
+                case BufferingPolicy.UseFixedSizeBuffer:
+                    {
+                        _buffer = new byte[_settings.BufferSize];
+                    }
+                    break;
+
+                case BufferingPolicy.UseCustomBuffer:
+                    {
+                        if (_settings.Buffer == null)
+                            throw new InvalidOperationException($"Buffer is null for {_settings.BufferingPolicy} buffering policy.");
+                        
+                        _buffer = _settings.Buffer;
+                    }
+                    break;
+            }
+        }
+
         #endregion
 
         #region IDisposable
@@ -347,8 +491,6 @@ namespace Melanchall.DryWetMidi.Core
 
             if (disposing)
             {
-                _allDataBuffer?.Dispose();
-                _binaryReader.Dispose();
             }
 
             _disposed = true;

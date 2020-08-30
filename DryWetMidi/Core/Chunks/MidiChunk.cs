@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Core
 
             var bytesReadCount = reader.Position - readerPosition;
             if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && bytesReadCount != size)
-                throw new InvalidChunkSizeException(GetType(), size, bytesReadCount);
+                throw new InvalidChunkSizeException(ChunkId, size, bytesReadCount);
 
             // Skip unread bytes
 

@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Core
             switch (policy)
             {
                 case InvalidMetaEventParameterValuePolicy.Abort:
-                    throw new InvalidMetaEventParameterValueException(GetType(), property, value);
+                    throw new InvalidMetaEventParameterValueException(EventType, property, value);
                 case InvalidMetaEventParameterValuePolicy.SnapToLimits:
                     return Math.Min(value, max);
             }

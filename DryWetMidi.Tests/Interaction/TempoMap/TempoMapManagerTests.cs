@@ -18,8 +18,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 Assert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
                                 ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.Tempo.Any());
-                Assert.IsFalse(tempoMap.TimeSignature.Any());
+                Assert.IsFalse(tempoMap.GetTempoChanges().Any());
+                Assert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
             }
         }
 
@@ -32,8 +32,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var tempoMap = tempoMapManager.TempoMap;
 
                 Assert.AreEqual(100, ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.Tempo.Any());
-                Assert.IsFalse(tempoMap.TimeSignature.Any());
+                Assert.IsFalse(tempoMap.GetTempoChanges().Any());
+                Assert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
             }
         }
 
@@ -49,15 +49,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
 
-                Assert.IsTrue(tempoMap.Tempo.Any());
-                Assert.IsTrue(tempoMap.TimeSignature.Any());
+                Assert.IsTrue(tempoMap.GetTempoChanges().Any());
+                Assert.IsTrue(tempoMap.GetTimeSignatureChanges().Any());
 
                 tempoMapManager.ReplaceTempoMap(TempoMap.Default);
 
                 Assert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
                                 ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.Tempo.Any());
-                Assert.IsFalse(tempoMap.TimeSignature.Any());
+                Assert.IsFalse(tempoMap.GetTempoChanges().Any());
+                Assert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
             }
         }
     }

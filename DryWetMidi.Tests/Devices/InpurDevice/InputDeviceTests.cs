@@ -119,6 +119,32 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             Assert.AreEqual(17, midiTimeCodeReceived.Frames, "Frames number is invalid.");
         }
 
+        [Test]
+        public void InputDeviceIsReleasedByDispose()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+                Assert.DoesNotThrow(() => inputDevice.StartEventsListening());
+                inputDevice.Dispose();
+            }
+        }
+
+        [Test]
+        public void InputDeviceIsReleasedByFinalizer()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                {
+                    var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+                    Assert.DoesNotThrow(() => inputDevice.StartEventsListening());
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+        }
+
         #endregion
     }
 }

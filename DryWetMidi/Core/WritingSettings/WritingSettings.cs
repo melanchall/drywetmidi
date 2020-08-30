@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -10,13 +9,21 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public class WritingSettings
     {
-        #region Fields
-
-        private CompressionPolicy _compressionPolicy = CompressionPolicy.NoCompression;
-
-        #endregion
-
         #region Properties
+
+        public bool UseRunningStatus { get; set; }
+
+        public bool NoteOffAsSilentNoteOn { get; set; }
+
+        public bool DeleteDefaultTimeSignature { get; set; }
+
+        public bool DeleteDefaultKeySignature { get; set; }
+
+        public bool DeleteDefaultSetTempo { get; set; }
+
+        public bool DeleteUnknownMetaEvents { get; set; }
+
+        public bool DeleteUnknownChunks { get; set; }
 
         /// <summary>
         /// Gets or sets compression rules for the writing engine. The default is
@@ -28,14 +35,45 @@ namespace Melanchall.DryWetMidi.Core
         /// combine separate rules as you want.</para>
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        [Obsolete("OBS1")]
         public CompressionPolicy CompressionPolicy
         {
-            get { return _compressionPolicy; }
+            get
+            {
+                var result = CompressionPolicy.NoCompression;
+
+                if (UseRunningStatus)
+                    result |= CompressionPolicy.UseRunningStatus;
+
+                if (NoteOffAsSilentNoteOn)
+                    result |= CompressionPolicy.NoteOffAsSilentNoteOn;
+
+                if (DeleteDefaultTimeSignature)
+                    result |= CompressionPolicy.DeleteDefaultTimeSignature;
+
+                if (DeleteDefaultKeySignature)
+                    result |= CompressionPolicy.DeleteDefaultKeySignature;
+
+                if (DeleteDefaultSetTempo)
+                    result |= CompressionPolicy.DeleteDefaultSetTempo;
+
+                if (DeleteUnknownMetaEvents)
+                    result |= CompressionPolicy.DeleteUnknownMetaEvents;
+
+                if (DeleteUnknownChunks)
+                    result |= CompressionPolicy.DeleteUnknownChunks;
+
+                return result;
+            }
             set
             {
-                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
-
-                _compressionPolicy = value;
+                UseRunningStatus = value.HasFlag(CompressionPolicy.UseRunningStatus);
+                NoteOffAsSilentNoteOn = value.HasFlag(CompressionPolicy.NoteOffAsSilentNoteOn);
+                DeleteDefaultTimeSignature = value.HasFlag(CompressionPolicy.DeleteDefaultTimeSignature);
+                DeleteDefaultKeySignature = value.HasFlag(CompressionPolicy.DeleteDefaultKeySignature);
+                DeleteDefaultSetTempo = value.HasFlag(CompressionPolicy.DeleteDefaultSetTempo);
+                DeleteUnknownMetaEvents = value.HasFlag(CompressionPolicy.DeleteUnknownMetaEvents);
+                DeleteUnknownChunks = value.HasFlag(CompressionPolicy.DeleteUnknownChunks);
             }
         }
 

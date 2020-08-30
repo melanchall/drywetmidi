@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             //
 
-            var timeSignatureLine = tempoMap.TimeSignature;
+            var timeSignatureLine = tempoMap.TimeSignatureLine;
             var timeSignatureChanges = timeSignatureLine
                 .Where(v => v.Time > time && v.Time < endTime)
                 .ToList();
@@ -52,8 +52,8 @@ namespace Melanchall.DryWetMidi.Interaction
             var firstTime = timeSignatureChanges.FirstOrDefault()?.Time ?? time;
             var lastTime = timeSignatureChanges.LastOrDefault()?.Time ?? time;
 
-            var firstTimeSignature = timeSignatureLine.AtTime(time);
-            var lastTimeSignature = timeSignatureLine.AtTime(lastTime);
+            var firstTimeSignature = timeSignatureLine.GetValueAtTime(time);
+            var lastTimeSignature = timeSignatureLine.GetValueAtTime(lastTime);
 
             long barsBefore, beatsBefore;
             double fractionBefore;
@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 return 0;
 
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
-            var timeSignatureLine = tempoMap.TimeSignature;
+            var timeSignatureLine = tempoMap.TimeSignatureLine;
 
             //
 
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var beats = (long)Math.Truncate(fractionalBeats);
             var fraction = fractionalBeats - Math.Truncate(fractionalBeats);
 
-            var startTimeSignature = timeSignatureLine.AtTime(time);
+            var startTimeSignature = timeSignatureLine.GetValueAtTime(time);
             var startBarLength = BarBeatUtilities.GetBarLength(startTimeSignature, ticksPerQuarterNote);
             var startBeatLength = BarBeatUtilities.GetBeatLength(startTimeSignature, ticksPerQuarterNote);
 
@@ -185,7 +185,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             if (beatsBefore < beats)
             {
-                lastBeatLength = BarBeatUtilities.GetBeatLength(timeSignatureLine.AtTime(lastTime), ticksPerQuarterNote);
+                lastBeatLength = BarBeatUtilities.GetBeatLength(timeSignatureLine.GetValueAtTime(lastTime), ticksPerQuarterNote);
                 lastTime += (beats - beatsBefore) * lastBeatLength;
             }
 
@@ -197,7 +197,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (fractionBefore < fraction)
             {
                 if (lastBeatLength == 0)
-                    lastBeatLength = BarBeatUtilities.GetBeatLength(timeSignatureLine.AtTime(lastTime), ticksPerQuarterNote);
+                    lastBeatLength = BarBeatUtilities.GetBeatLength(timeSignatureLine.GetValueAtTime(lastTime), ticksPerQuarterNote);
 
                 lastTime += ConvertFractionToTicks(fraction - fractionBefore, lastBeatLength);
             }

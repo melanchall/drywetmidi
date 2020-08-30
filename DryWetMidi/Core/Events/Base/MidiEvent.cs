@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Fields
 
-        private long _deltaTime;
+        internal long _deltaTime;
 
         #endregion
 

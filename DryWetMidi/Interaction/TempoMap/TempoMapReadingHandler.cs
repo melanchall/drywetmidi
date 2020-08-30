@@ -95,11 +95,11 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 case MidiEventType.SetTempo:
                     var setTempoEvent = (SetTempoEvent)midiEvent;
-                    _tempoMap.Tempo.SetValue(absoluteTime, new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
+                    _tempoMap.TempoLine.SetValue(absoluteTime, new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
                     break;
                 case MidiEventType.TimeSignature:
                     var timeSignatureEvent = (TimeSignatureEvent)midiEvent;
-                    _tempoMap.TimeSignature.SetValue(absoluteTime, new TimeSignature(timeSignatureEvent.Numerator, timeSignatureEvent.Denominator));
+                    _tempoMap.TimeSignatureLine.SetValue(absoluteTime, new TimeSignature(timeSignatureEvent.Numerator, timeSignatureEvent.Denominator));
                     break;
             }
         }

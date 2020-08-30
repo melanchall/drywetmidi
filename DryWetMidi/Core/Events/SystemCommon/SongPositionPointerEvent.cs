@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (policy)
                 {
                     case InvalidSystemCommonEventParameterValuePolicy.Abort:
-                        throw new InvalidSystemCommonEventParameterValueException(GetType(), property, value);
+                        throw new InvalidSystemCommonEventParameterValueException(EventType, property, value);
                     case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
                         return SevenBitNumber.MaxValue;
                 }

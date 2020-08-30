@@ -864,10 +864,22 @@ namespace Melanchall.DryWetMidi.Devices
 
                 var timedEvent = timedObject as TimedEvent;
                 if (timedEvent != null)
-                    playbackEvents.Add(new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time));
+                {
+                    playbackEvents.Add(GetPlaybackEvent(timedEvent, tempoMap));
+                    continue;
+                }
+
+                var registeredParameter = timedObject as RegisteredParameter;
+                if (registeredParameter != null)
+                    playbackEvents.AddRange(registeredParameter.GetTimedEvents().Select(e => GetPlaybackEvent(e, tempoMap)));
             }
 
             return playbackEvents.OrderBy(e => e, new PlaybackEventsComparer()).ToList();
+        }
+
+        private static PlaybackEvent GetPlaybackEvent(TimedEvent timedEvent, TempoMap tempoMap)
+        {
+            return new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
         }
 
         private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Chord chord, TempoMap tempoMap)

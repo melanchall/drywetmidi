@@ -288,7 +288,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             .ToArray();
 
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
-            CollectionAssert.AreEqual(midiFile.GetTempoMap().Tempo, expectedTempoMap.Tempo, "Invalid tempo map.");
+            CollectionAssert.AreEqual(midiFile.GetTempoMap().GetTempoChanges(), expectedTempoMap.GetTempoChanges(), "Invalid tempo map.");
             Assert.AreEqual(new TicksPerQuarterNoteTimeDivision(500), midiFile.TimeDivision, "Invalid time division.");
             Assert.IsTrue(TimedEventEquality.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false),
                           "Invalid events.");

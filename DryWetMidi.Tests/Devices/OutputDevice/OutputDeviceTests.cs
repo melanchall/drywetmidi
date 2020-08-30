@@ -99,6 +99,32 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void OutputDeviceIsReleasedByDispose()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+                Assert.DoesNotThrow(() => outputDevice.SendEvent(new NoteOnEvent()));
+                outputDevice.Dispose();
+            }
+        }
+
+        [Test]
+        public void OutputDeviceIsReleasedByFinalizer()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                {
+                    var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+                    Assert.DoesNotThrow(() => outputDevice.SendEvent(new NoteOnEvent()));
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+        }
+
         #endregion
 
         #region Private methods

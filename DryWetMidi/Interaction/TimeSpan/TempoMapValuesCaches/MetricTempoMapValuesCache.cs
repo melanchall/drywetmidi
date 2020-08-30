@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var lastTime = 0L;
             var lastTempo = Tempo.Default;
 
-            foreach (var tempoChange in tempoMap.Tempo)
+            foreach (var tempoChange in tempoMap.TempoLine)
             {
                 var tempoChangeTime = tempoChange.Time;
 

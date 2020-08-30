@@ -15,16 +15,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckTempoMapReadingHandler_EmptyFile()
         {
             var handler = ReadWithTempoMapReadingHandler(new MidiFile());
-            CollectionAssert.IsEmpty(handler.TempoMap.Tempo, "Tempo line is not empty.");
-            CollectionAssert.IsEmpty(handler.TempoMap.TimeSignature, "Time signature line is not empty.");
+            CollectionAssert.IsEmpty(handler.TempoMap.GetTempoChanges(), "Tempo changes collection is not empty.");
+            CollectionAssert.IsEmpty(handler.TempoMap.GetTimeSignatureChanges(), "Time signature changes collection is not empty.");
         }
 
         [Test]
         public void CheckTempoMapReadingHandler_EmptyTrackChunks()
         {
             var handler = ReadWithTempoMapReadingHandler(new MidiFile(new TrackChunk(), new TrackChunk()));
-            CollectionAssert.IsEmpty(handler.TempoMap.Tempo, "Tempo line is not empty.");
-            CollectionAssert.IsEmpty(handler.TempoMap.TimeSignature, "Time signature line is not empty.");
+            CollectionAssert.IsEmpty(handler.TempoMap.GetTempoChanges(), "Tempo changes collection is not empty.");
+            CollectionAssert.IsEmpty(handler.TempoMap.GetTimeSignatureChanges(), "Time signature changes collection is not empty.");
         }
 
         [Test]
@@ -49,15 +49,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new ValueChange<Tempo>(0, new Tempo(100000)),
                     new ValueChange<Tempo>(50, new Tempo(200000))
                 },
-                tempoMap.Tempo,
-                "Tempo line contains invalid values.");
+                tempoMap.GetTempoChanges(),
+                "Tempo changes collection contains invalid values.");
             CollectionAssert.AreEqual(
                 new[]
                 {
                     new ValueChange<TimeSignature>(150, new TimeSignature(3, 4))
                 },
-                tempoMap.TimeSignature,
-                "Time signature line contains invalid values.");
+                tempoMap.GetTimeSignatureChanges(),
+                "Time signature changes collection contains invalid values.");
 
             Assert.AreSame(tempoMap, handler.TempoMap, "Tempo map object is changed on second get.");
         }
@@ -119,16 +119,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new ValueChange<Tempo>(0, new Tempo(100000)),
                     new ValueChange<Tempo>(50, new Tempo(300000))
                 },
-                tempoMap.Tempo,
-                "Tempo line contains invalid values.");
+                tempoMap.GetTempoChanges(),
+                "Tempo changes collection contains invalid values.");
             CollectionAssert.AreEqual(
                 new[]
                 {
                     new ValueChange<TimeSignature>(150, new TimeSignature(3, 4)),
                     new ValueChange<TimeSignature>(1050, new TimeSignature(5, 8))
                 },
-                tempoMap.TimeSignature,
-                "Time signature line contains invalid values.");
+                tempoMap.GetTimeSignatureChanges(),
+                "Time signature changes collection contains invalid values.");
 
             Assert.AreSame(tempoMap, handler.TempoMap, "Tempo map object is changed on second get.");
         }

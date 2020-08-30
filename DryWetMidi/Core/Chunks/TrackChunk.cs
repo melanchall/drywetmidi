@@ -248,7 +248,7 @@ namespace Melanchall.DryWetMidi.Core
             //
 
             if (midiEvent != null)
-                midiEvent.DeltaTime = deltaTime;
+                midiEvent._deltaTime = deltaTime;
 
             return midiEvent;
         }
@@ -270,12 +270,12 @@ namespace Melanchall.DryWetMidi.Core
                 if (eventToWrite is SystemCommonEvent || eventToWrite is SystemRealTimeEvent)
                     continue;
 
-                if (eventToWrite.EventType == MidiEventType.UnknownMeta && settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteUnknownMetaEvents))
+                if (eventToWrite.EventType == MidiEventType.UnknownMeta && settings.DeleteUnknownMetaEvents)
                     continue;
 
                 //
 
-                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.NoteOffAsSilentNoteOn))
+                if (settings.NoteOffAsSilentNoteOn)
                 {
                     var noteOffEvent = eventToWrite as NoteOffEvent;
                     if (noteOffEvent != null)
@@ -289,16 +289,13 @@ namespace Melanchall.DryWetMidi.Core
 
                 //
 
-                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultSetTempo) &&
-                    TrySkipDefaultSetTempo(eventToWrite, ref skipSetTempo))
+                if (settings.DeleteDefaultSetTempo && TrySkipDefaultSetTempo(eventToWrite, ref skipSetTempo))
                     continue;
 
-                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultKeySignature) &&
-                    TrySkipDefaultKeySignature(eventToWrite, ref skipKeySignature))
+                if (settings.DeleteDefaultKeySignature && TrySkipDefaultKeySignature(eventToWrite, ref skipKeySignature))
                     continue;
 
-                if (settings.CompressionPolicy.HasFlag(CompressionPolicy.DeleteDefaultTimeSignature) &&
-                    TrySkipDefaultTimeSignature(eventToWrite, ref skipTimeSignature))
+                if (settings.DeleteDefaultTimeSignature && TrySkipDefaultTimeSignature(eventToWrite, ref skipTimeSignature))
                     continue;
 
                 //
@@ -309,7 +306,7 @@ namespace Melanchall.DryWetMidi.Core
                 if (eventToWrite is ChannelEvent)
                 {
                     var statusByte = eventWriter.GetStatusByte(eventToWrite);
-                    writeStatusByte = runningStatus != statusByte || !settings.CompressionPolicy.HasFlag(CompressionPolicy.UseRunningStatus);
+                    writeStatusByte = runningStatus != statusByte || !settings.UseRunningStatus;
                     runningStatus = statusByte;
                 }
                 else

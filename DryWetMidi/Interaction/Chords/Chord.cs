@@ -101,9 +101,9 @@ namespace Melanchall.DryWetMidi.Interaction
         public NotesCollection Notes { get; }
 
         /// <summary>
-        /// Gets absolute time of the chord in units defined by the time division of a MIDI file.
+        /// Gets or sets absolute time of the chord in units defined by the time division of a MIDI file.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Time is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Time
         {
             get { return Notes.FirstOrDefault()?.Time ?? 0; }
@@ -126,9 +126,9 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets length of the chord in units defined by the time division of a MIDI file.
+        /// Gets or sets the length of the chord in units defined by the time division of a MIDI file.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Length is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Length
         {
             get

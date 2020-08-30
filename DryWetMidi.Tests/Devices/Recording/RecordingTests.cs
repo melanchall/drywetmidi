@@ -141,9 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                         recording.Start();
 
-                        var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == expectedTimes.Count, timeout);
-                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                        SpinWait.SpinUntil(() => !sendingThread.IsAlive);
 
                         CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
 

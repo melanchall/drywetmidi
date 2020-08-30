@@ -573,16 +573,115 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
         }
 
+        [Obsolete("OBS2")]
         [Test]
         public void Read_ReadFromMemory()
         {
+            var settings = new ReadingSettings();
+            Assert.AreEqual(BufferingPolicy.UseFixedSizeBuffer, settings.ReaderSettings.BufferingPolicy, "Initial buffering policy is invalid.");
+
+            settings.ReaderSettings.ReadFromMemory = true;
+            Assert.AreEqual(BufferingPolicy.BufferAllData, settings.ReaderSettings.BufferingPolicy, "Buffering policy is invalid after ReadFromMemory set.");
+
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
                 var expectedMidiFile = MidiFile.Read(filePath);
-                var settings = new ReadingSettings();
-                settings.ReaderSettings.ReadFromMemory = true;
                 var midiFile = MidiFile.Read(filePath, settings);
                 MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+            }
+        }
+
+        [Test]
+        public void Read_BufferAllData()
+        {
+            var noBufferingSettings = new ReadingSettings
+            {
+                ReaderSettings = new ReaderSettings
+                {
+                    BufferingPolicy = BufferingPolicy.DontUseBuffering
+                }
+            };
+
+            var bufferAllDataSettings = new ReadingSettings();
+            bufferAllDataSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
+
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
+            {
+                var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
+                var midiFile = MidiFile.Read(filePath, bufferAllDataSettings);
+                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+            }
+        }
+
+        [TestCase(4096)]
+        [TestCase(1)]
+        [TestCase(10000)]
+        [TestCase(123)]
+        public void Read_UseFixedSizeBuffer(int bufferSize)
+        {
+            var noBufferingSettings = new ReadingSettings
+            {
+                ReaderSettings = new ReaderSettings
+                {
+                    BufferingPolicy = BufferingPolicy.DontUseBuffering
+                }
+            };
+
+            var fixedSizeBufferingSettings = new ReadingSettings
+            {
+                ReaderSettings = new ReaderSettings
+                {
+                    BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer,
+                    BufferSize = bufferSize
+                }
+            };
+
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
+            {
+                var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
+                var midiFile = MidiFile.Read(filePath, fixedSizeBufferingSettings);
+                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+            }
+        }
+
+        [TestCase(4096, true)]
+        [TestCase(1, false)]
+        [TestCase(10000, true)]
+        [TestCase(123, true)]
+        public void Read_UseCustomBuffer(int bufferSize, bool checkData)
+        {
+            var noBufferingSettings = new ReadingSettings
+            {
+                ReaderSettings = new ReaderSettings
+                {
+                    BufferingPolicy = BufferingPolicy.DontUseBuffering
+                }
+            };
+
+            var buffer = new byte[bufferSize];
+            var customBufferingSettings = new ReadingSettings
+            {
+                ReaderSettings = new ReaderSettings
+                {
+                    BufferingPolicy = BufferingPolicy.UseCustomBuffer,
+                    Buffer = buffer
+                }
+            };
+
+            var lastBufferData = buffer.ToArray();
+            Assert.IsTrue(buffer.All(b => b == 0), "Initial buffer contains non-zero bytes.");
+
+            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
+            {
+                var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
+                var midiFile = MidiFile.Read(filePath, customBufferingSettings);
+                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+
+                if (checkData)
+                {
+                    CollectionAssert.AreNotEqual(lastBufferData, buffer, "Buffer contains the same data after reading a file.");
+                    lastBufferData = buffer.ToArray();
+                }
             }
         }
 
@@ -593,6 +692,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
         private void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings)
             where TException : Exception
         {
+            readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
+
             foreach (var filePath in TestFilesProvider.GetInvalidFilesPaths(directoryName))
             {
                 MidiFile midiFile = null;
@@ -606,24 +707,37 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var nonSeekableStream = new NonSeekableStream(filePath);
 
                 MidiFile nonSeekableFile = null;
-                Assert.Throws<TException>(() => nonSeekableFile = MidiFile.Read(nonSeekableStream, readingSettings), $"Exception not thrown for file '{filePath}'.");
+                Assert.Throws<TException>(() => nonSeekableFile = MidiFile.Read(nonSeekableStream, readingSettings), $"Exception not thrown for file '{filePath}' read from non-seekable stream.");
                 MidiAsserts.AreFilesEqual(midiFile, nonSeekableFile, true, $"Non-seekable MIDI file '{fileBasePath}' is invalid.");
 
                 //
 
-                readingSettings.ReaderSettings.ReadFromMemory = true;
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
 
                 MidiFile inMemoryMidiFile = null;
-                Assert.Throws<TException>(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}'.");
+                Assert.Throws<TException>(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}' read with putting data in memory.");
 
                 MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
-                readingSettings.ReaderSettings.ReadFromMemory = false;
+                //
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
+
+                MidiFile fixedSizeBufferedMidiFile = null;
+                Assert.Throws<TException>(() => fixedSizeBufferedMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception not thrown for '{filePath}' read with fixed size buffer.");
+
+                MidiAsserts.AreFilesEqual(midiFile, fixedSizeBufferedMidiFile, true, $"Fixed size buffered MIDI file '{fileBasePath}' is invalid.");
+
+                //
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
             }
         }
 
         private void ReadInvalidFiles(string directoryName, ReadingSettings readingSettings)
         {
+            readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
+
             foreach (var filePath in TestFilesProvider.GetInvalidFilesPaths(directoryName))
             {
                 MidiFile midiFile = null;
@@ -642,14 +756,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 //
 
-                readingSettings.ReaderSettings.ReadFromMemory = true;
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
 
                 MidiFile inMemoryMidiFile = null;
                 Assert.DoesNotThrow(() => inMemoryMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception thrown for file '{filePath}'.");
 
                 MidiAsserts.AreFilesEqual(midiFile, inMemoryMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
 
-                readingSettings.ReaderSettings.ReadFromMemory = false;
+                //
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
+
+                MidiFile fixedSizeBufferedMidiFile = null;
+                Assert.DoesNotThrow(() => fixedSizeBufferedMidiFile = MidiFile.Read(filePath, readingSettings), $"Exception thrown for file '{filePath}'.");
+
+                MidiAsserts.AreFilesEqual(midiFile, fixedSizeBufferedMidiFile, true, $"In-memory MIDI file '{fileBasePath}' is invalid.");
+
+                //
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
             }
         }
 

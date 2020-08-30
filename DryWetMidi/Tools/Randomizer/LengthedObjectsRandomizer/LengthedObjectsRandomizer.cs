@@ -84,10 +84,10 @@ namespace Melanchall.DryWetMidi.Tools
             switch (target)
             {
                 case LengthedObjectTarget.Start:
-                    TimeSetter.SetObjectTime(obj, time);
+                    obj.Time = time;
                     break;
                 case LengthedObjectTarget.End:
-                    TimeSetter.SetObjectTime(obj, time - obj.Length);
+                    obj.Time = time - obj.Length;
                     break;
                 default:
                     throw new NotSupportedException($"{target} randomization target is not supported to set time.");
@@ -114,11 +114,11 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 case LengthedObjectTarget.Start:
                     if (settings.FixOppositeEnd)
-                        LengthSetter.SetObjectLength(obj, obj.Time + obj.Length - time);
+                        obj.Length = obj.Time + obj.Length - time;
                     break;
                 case LengthedObjectTarget.End:
                     if (settings.FixOppositeEnd)
-                        LengthSetter.SetObjectLength(obj, time - obj.Time);
+                        obj.Length = time - obj.Time;
                     break;
             }
 

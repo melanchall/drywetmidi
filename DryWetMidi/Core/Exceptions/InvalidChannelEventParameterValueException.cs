@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// The exception that is thrown when the reading engine has encountered an invalid parameter
@@ -15,7 +13,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constructors
 
-        internal InvalidChannelEventParameterValueException(Type eventType, byte value)
+        internal InvalidChannelEventParameterValueException(MidiEventType eventType, byte value)
             : base($"{value} is invalid value for parameter of channel event of {eventType} type.")
         {
             EventType = eventType;
@@ -29,7 +27,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets the type of channel event that caused this exception.
         /// </summary>
-        public Type EventType { get; }
+        public MidiEventType EventType { get; }
 
         /// <summary>
         /// Gets the value of the channel event's parameter that caused this exception.

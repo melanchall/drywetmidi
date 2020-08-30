@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (settings.InvalidChannelEventParameterValuePolicy)
                 {
                     case InvalidChannelEventParameterValuePolicy.Abort:
-                        throw new InvalidChannelEventParameterValueException(GetType(), value);
+                        throw new InvalidChannelEventParameterValueException(EventType, value);
                     case InvalidChannelEventParameterValuePolicy.ReadValid:
                         value &= SevenBitNumber.MaxValue;
                         break;

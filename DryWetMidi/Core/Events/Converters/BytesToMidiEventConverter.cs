@@ -68,7 +68,8 @@ namespace Melanchall.DryWetMidi.Core
             _dataBytesStream.Seek(0, SeekOrigin.Begin);
             if (dataBytes != null)
                 _dataBytesStream.Write(dataBytes, 0, dataBytes.Length);
-            _dataBytesStream.Seek(0, SeekOrigin.Begin);
+            
+            _midiReader.Position = 0;
 
             var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
             return eventReader.Read(_midiReader, ReadingSettings, statusByte);

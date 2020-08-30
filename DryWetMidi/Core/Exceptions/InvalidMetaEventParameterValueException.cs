@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constructors
 
-        internal InvalidMetaEventParameterValueException(Type eventType, string propertyName, int value)
+        internal InvalidMetaEventParameterValueException(MidiEventType eventType, string propertyName, int value)
             : base($"{value} is invalid value for the {propertyName} property of a meta event of {eventType} type.")
         {
             EventType = eventType;
@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets the type of event that caused this exception.
         /// </summary>
-        public Type EventType { get; }
+        public MidiEventType EventType { get; }
 
         /// <summary>
         /// Gets the name of event's property which value is invalid.

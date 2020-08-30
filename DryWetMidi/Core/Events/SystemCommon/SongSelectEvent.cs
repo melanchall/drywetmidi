@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (settings.InvalidSystemCommonEventParameterValuePolicy)
                 {
                     case InvalidSystemCommonEventParameterValuePolicy.Abort:
-                        throw new InvalidSystemCommonEventParameterValueException(GetType(), nameof(Number), number);
+                        throw new InvalidSystemCommonEventParameterValueException(EventType, nameof(Number), number);
                     case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
                         number = SevenBitNumber.MaxValue;
                         break;

@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 throw new ArgumentException("Time division of the tempo map is not supported.", nameof(tempoMap));
 
             var ticks = TimeConverter.ConvertFrom(new BarBeatTicksTimeSpan(bars), tempoMap);
-            var timeSignature = tempoMap.TimeSignature.AtTime(ticks);
+            var timeSignature = tempoMap.TimeSignatureLine.GetValueAtTime(ticks);
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
 
             return Tuple.Create(timeSignature, ticksPerQuarterNote);

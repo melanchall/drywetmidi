@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    // Do internal after O3 lifetime
     /// <summary>
     /// Represents timeline of a parameter's value.
     /// </summary>
@@ -50,29 +51,29 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Time to get a value at.</param>
         /// <returns>Parameter's value at the <paramref name="time"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        [Obsolete("OBS3")]
         public TValue AtTime(long time)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
-            return this.TakeWhile(p => p.Time <= time)
-                       .LastOrDefault()
-                       ?.Value
-                   ?? _defaultValue;
+            return GetValueAtTime(time);
         }
 
-        /// <summary>
-        /// Sets new value at specified time that will last until next value change.
-        /// </summary>
-        /// <param name="time">Time parameter's value should be changed at.</param>
-        /// <param name="value">New parameter's value that will last until next value change.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+        internal TValue GetValueAtTime(long time)
+        {
+            return this
+                .TakeWhile(p => p.Time <= time)
+                .LastOrDefault()
+                ?.Value
+                ?? _defaultValue;
+        }
+
         internal void SetValue(long time, TValue value)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(value), value);
 
-            var currentValue = AtTime(time);
+            var currentValue = GetValueAtTime(time);
             if (currentValue.Equals(value))
                 return;
 

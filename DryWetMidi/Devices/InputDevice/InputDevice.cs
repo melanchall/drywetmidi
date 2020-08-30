@@ -128,9 +128,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            IsListeningForEvents = false;
-
-            ProcessMmResult(MidiInWinApi.midiInStop(_handle));
+            ProcessMmResult(StopEventsListeningSilently());
         }
 
         /// <summary>
@@ -398,6 +396,12 @@ namespace Melanchall.DryWetMidi.Devices
             _midiTimeCodeComponents.Clear();
         }
 
+        private uint StopEventsListeningSilently()
+        {
+            IsListeningForEvents = false;
+            return MidiInWinApi.midiInStop(_handle);
+        }
+
         #endregion
 
         #region Overrides
@@ -418,8 +422,14 @@ namespace Melanchall.DryWetMidi.Devices
                 _bytesToMidiEventConverter.Dispose();
             }
 
-            StopEventsListening();
-            DestroyHandle();
+            //
+
+            if (_handle != IntPtr.Zero)
+            {
+                StopEventsListeningSilently();
+                DestroyHandle();
+            }
+
             UnprepareSysExBuffer(_sysExHeaderPointer);
 
             _disposed = true;

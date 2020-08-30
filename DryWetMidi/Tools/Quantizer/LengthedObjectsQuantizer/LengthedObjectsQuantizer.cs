@@ -62,12 +62,12 @@ namespace Melanchall.DryWetMidi.Tools
                         return result;
                 }
 
-                LengthSetter.SetObjectLength(obj, endTime - time);
+                obj.Length = endTime - time;
             }
             else
             {
                 var length = obj.LengthAs(settings.LengthType, tempoMap);
-                LengthSetter.SetObjectLength(obj, LengthConverter.ConvertFrom(length, time, tempoMap));
+                obj.Length = LengthConverter.ConvertFrom(length, time, tempoMap);
             }
 
             return new TimeProcessingInstruction(time);
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tools
                         return result;
                 }
 
-                LengthSetter.SetObjectLength(obj, time - startTime);
+                obj.Length = time - startTime;
             }
             else
             {
@@ -107,13 +107,13 @@ namespace Melanchall.DryWetMidi.Tools
                         case QuantizingBeyondZeroPolicy.Abort:
                             throw new InvalidOperationException("Object is going to be moved beyond zero.");
                         case QuantizingBeyondZeroPolicy.FixAtZero:
-                            LengthSetter.SetObjectLength(obj, time);
+                            obj.Length = time;
                             break;
                     }
                 }
                 else
                 {
-                    LengthSetter.SetObjectLength(obj, LengthConverter.ConvertFrom(length, newStartTime, tempoMap));
+                    obj.Length = LengthConverter.ConvertFrom(length, newStartTime, tempoMap);
                 }
             }
 
@@ -186,10 +186,10 @@ namespace Melanchall.DryWetMidi.Tools
             switch (target)
             {
                 case LengthedObjectTarget.Start:
-                    TimeSetter.SetObjectTime(obj, time);
+                    obj.Time = time;
                     break;
                 case LengthedObjectTarget.End:
-                    TimeSetter.SetObjectTime(obj, time - obj.Length);
+                    obj.Time = time - obj.Length;
                     break;
                 default:
                     throw new NotSupportedException($"{target} quantization target is not supported to set time.");

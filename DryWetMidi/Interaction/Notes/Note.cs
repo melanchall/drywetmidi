@@ -168,8 +168,9 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Properties
 
         /// <summary>
-        /// Gets absolute time of the note in units defined by the time division of a MIDI file.
+        /// Gets or sets absolute time of the note in units defined by the time division of a MIDI file.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Time
         {
             get { return TimedNoteOnEvent.Time; }
@@ -189,9 +190,9 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets length of the note in units defined by the time division of a MIDI file.
+        /// Gets or sets the length of the note in units defined by the time division of a MIDI file.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Value is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Length
         {
             get { return TimedNoteOffEvent.Time - TimedNoteOnEvent.Time; }

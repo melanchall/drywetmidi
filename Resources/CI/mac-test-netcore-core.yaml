@@ -10,6 +10,9 @@ trigger:
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/mac-test-netcore-core.yaml'
+    exclude:
+    - 'DryWetMidi/Devices/*'
+    - 'DryWetMidi.Tests/Devices/*'
 
 pool:
   vmImage: 'macOS-latest'
@@ -54,15 +57,3 @@ steps:
     command: 'test'
     projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
     arguments: '--blame --no-build --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework netcoreapp2.1 --verbosity normal'
-
-- task: CopyFiles@2
-  displayName: Copy tests sequence
-  inputs:
-    contents: '**/Sequence*.xml'
-    targetFolder: $(Build.ArtifactStagingDirectory)
-
-- task: PublishPipelineArtifact@1
-  displayName: Publish tests sequence
-  inputs:
-    targetPath: $(Build.ArtifactStagingDirectory)
-    artifact: Tests sequence

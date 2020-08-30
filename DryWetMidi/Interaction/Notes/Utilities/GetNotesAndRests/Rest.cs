@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Common;
+﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -7,12 +8,20 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public sealed class Rest : ILengthedObject
     {
+        #region Fields
+
+        private readonly long _time;
+        private readonly long _length;
+
+        #endregion
+
         #region Constructor
 
         internal Rest(long time, long length, FourBitNumber? channel, SevenBitNumber? noteNumber)
         {
-            Time = time;
-            Length = length;
+            _time = time;
+            _length = length;
+
             Channel = channel;
             NoteNumber = noteNumber;
         }
@@ -24,12 +33,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets start time of an object.
         /// </summary>
-        public long Time { get; }
+        public long Time
+        {
+            get { return _time; }
+            set { throw new InvalidOperationException("Setting time of rest is not allowed."); }
+        }
 
         /// <summary>
         /// Gets length of an object.
         /// </summary>
-        public long Length { get; }
+        public long Length
+        {
+            get { return _length; }
+            set { throw new InvalidOperationException("Setting length of rest is not allowed."); }
+        }
 
         /// <summary>
         /// Gets a channel the rest was constructed for.
