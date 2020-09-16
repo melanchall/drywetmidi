@@ -235,21 +235,21 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)50),
                     new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)50)));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => { },
                 (fileInfo1, fileInfo2) => Assert.AreEqual(fileInfo1.Length, fileInfo2.Length, "File size is invalid."));
         }
 
         [Test]
-        public void Write_Compression_NoteOffAsSilentNoteOn()
+        public void Write_NoteOffAsSilentNoteOn()
         {
             var midiFile = new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)50),
                     new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)50)));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => settings.NoteOffAsSilentNoteOn = true,
                 (fileInfo1, fileInfo2) =>
@@ -260,7 +260,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Write_Compression_UseRunningStatus()
+        public void Write_UseRunningStatus()
         {
             var midiFile = new MidiFile(
                 new TrackChunk(
@@ -269,14 +269,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)50),
                     new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)51)));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => settings.UseRunningStatus = true,
                 (fileInfo1, fileInfo2) => Assert.Less(fileInfo2.Length, fileInfo1.Length, "File size is invalid."));
         }
 
         [Test]
-        public void Write_Compression_DeleteUnknownMetaEvents()
+        public void Write_DeleteUnknownMetaEvents()
         {
             var midiFile = new MidiFile(
                 new TrackChunk(
@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)50),
                     new UnknownMetaEvent(254)));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => settings.DeleteUnknownMetaEvents = true,
                 (fileInfo1, fileInfo2) =>
@@ -302,7 +302,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Write_Compression_DeleteDefaultKeySignature()
+        public void Write_DeleteDefaultKeySignature()
         {
             var nonDefaultKeySignatureEvent = new KeySignatureEvent(-5, 1);
 
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new KeySignatureEvent(),
                     nonDefaultKeySignatureEvent));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => settings.DeleteDefaultKeySignature = true,
                 (fileInfo1, fileInfo2) =>
@@ -337,7 +337,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Write_Compression_DeleteDefaultSetTempo()
+        public void Write_DeleteDefaultSetTempo()
         {
             var nonDefaultSetTempoEvent = new SetTempoEvent(100000);
 
@@ -349,7 +349,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new SetTempoEvent(),
                     nonDefaultSetTempoEvent));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => settings.DeleteDefaultSetTempo = true,
                 (fileInfo1, fileInfo2) =>
@@ -372,7 +372,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Write_Compression_DeleteDefaultKeySignature_DeleteDefaultSetTempo()
+        public void Write_DeleteDefaultKeySignature_DeleteDefaultSetTempo()
         {
             var nonDefaultKeySignatureEvent = new KeySignatureEvent(-5, 1);
             var nonDefaultSetTempoEvent = new SetTempoEvent(100000);
@@ -387,7 +387,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new SetTempoEvent(),
                     nonDefaultSetTempoEvent));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings =>
                 {
@@ -432,7 +432,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Write_Compression_DeleteDefaultTimeSignature()
+        public void Write_DeleteDefaultTimeSignature()
         {
             var nonDefaultTimeSignatureEvent = new TimeSignatureEvent(2, 16);
 
@@ -444,7 +444,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new TimeSignatureEvent(),
                     nonDefaultTimeSignatureEvent));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => settings.DeleteDefaultTimeSignature = true,
                 (fileInfo1, fileInfo2) =>
@@ -467,7 +467,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Write_Compression_DeleteUnknownChunks()
+        public void Write_DeleteUnknownChunks()
         {
             var midiFile = new MidiFile(
                 new TrackChunk(
@@ -475,7 +475,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)50)),
                 new UnknownChunk("abcd"));
 
-            Write_Compression(
+            Write(
                 midiFile,
                 settings => settings.DeleteUnknownChunks = true,
                 (fileInfo1, fileInfo2) =>
@@ -489,6 +489,50 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     CollectionAssert.IsEmpty(
                         newMidiFile.Chunks.OfType<UnknownChunk>(),
                         "There are Unknown chunks in new file.");
+                });
+        }
+
+        [Test]
+        public void Write_WriteHeaderChunk()
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)50),
+                    new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)50)));
+
+            Write(
+                midiFile,
+                settings => { },
+                (fileInfo1, fileInfo2) =>
+                {
+                    var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
+                    var newMidiFile = MidiFile.Read(fileInfo2.FullName);
+                    MidiAsserts.AreFilesEqual(originalMidiFile, newMidiFile, true, "New file is invalid.");
+                });
+        }
+
+        [Test]
+        public void Write_DontWriteHeaderChunk()
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)50),
+                    new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)50)));
+
+            Write(
+                midiFile,
+                settings => settings.WriteHeaderChunk = false,
+                (fileInfo1, fileInfo2) =>
+                {
+                    var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
+
+                    Assert.Throws<NoHeaderChunkException>(() => MidiFile.Read(fileInfo2.FullName));
+                    var newMidiFile = MidiFile.Read(fileInfo2.FullName, new ReadingSettings
+                    {
+                        NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore
+                    });
+
+                    MidiAsserts.AreFilesEqual(originalMidiFile, newMidiFile, false, "New file is invalid.");
                 });
         }
 
@@ -529,7 +573,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
         }
 
-        private void Write_Compression(MidiFile midiFile, Action<WritingSettings> setupCompression, Action<FileInfo, FileInfo> fileInfosAction)
+        private void Write(MidiFile midiFile, Action<WritingSettings> setupCompression, Action<FileInfo, FileInfo> fileInfosAction)
         {
             MidiFileTestUtilities.Write(
                 midiFile,

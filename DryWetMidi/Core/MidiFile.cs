@@ -528,17 +528,20 @@ namespace Melanchall.DryWetMidi.Core
                 var chunksConverter = ChunksConverterFactory.GetConverter(format);
                 var chunks = chunksConverter.Convert(Chunks);
 
-                var trackChunksCount = chunks.Count(c => c is TrackChunk);
-                if (trackChunksCount > ushort.MaxValue)
-                    throw new TooManyTrackChunksException(trackChunksCount);
-
-                var headerChunk = new HeaderChunk
+                if (settings.WriteHeaderChunk)
                 {
-                    FileFormat = (ushort)format,
-                    TimeDivision = TimeDivision,
-                    TracksNumber = (ushort)trackChunksCount
-                };
-                headerChunk.Write(writer, settings);
+                    var trackChunksCount = chunks.Count(c => c is TrackChunk);
+                    if (trackChunksCount > ushort.MaxValue)
+                        throw new TooManyTrackChunksException(trackChunksCount);
+
+                    var headerChunk = new HeaderChunk
+                    {
+                        FileFormat = (ushort)format,
+                        TimeDivision = TimeDivision,
+                        TracksNumber = (ushort)trackChunksCount
+                    };
+                    headerChunk.Write(writer, settings);
+                }
 
                 foreach (var chunk in chunks)
                 {

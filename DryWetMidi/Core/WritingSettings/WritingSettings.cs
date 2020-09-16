@@ -25,6 +25,8 @@ namespace Melanchall.DryWetMidi.Core
 
         public bool DeleteUnknownChunks { get; set; }
 
+        public bool WriteHeaderChunk { get; set; } = true;
+
         /// <summary>
         /// Gets or sets compression rules for the writing engine. The default is
         /// <see cref="Core.CompressionPolicy.NoCompression"/>.
