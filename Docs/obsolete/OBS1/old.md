@@ -1,0 +1,2 @@
+* `WritingSettings.CompressionPolicy`
+* `CompressionPolicy`

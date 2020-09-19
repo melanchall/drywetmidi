@@ -23,7 +23,9 @@ using (var tempoMapManager = new TempoMapManager(midiFile.TimeDivision,
 }
 ```
 
-To get tempo map being managed by the current `TempoMapManager` you need to use [TempoMap](xref:Melanchall.DryWetMidi.Interaction.TempoMapManager.TempoMap) property which returns an instance of the [TempoMap](xref:Melanchall.DryWetMidi.Interaction.TempoMap). [Tempo](xref:Melanchall.DryWetMidi.Interaction.TempoMap.Tempo) and [TimeSignature](xref:Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature) properties provide changes of tempo and time signature through the time.
+To get tempo map being managed by the current `TempoMapManager` you need to use [TempoMap](xref:Melanchall.DryWetMidi.Interaction.TempoMapManager.TempoMap) property which returns an instance of the [TempoMap](xref:Melanchall.DryWetMidi.Interaction.TempoMap).
+
+Once you've got an instance of [TempoMap](xref:Melanchall.DryWetMidi.Interaction.TempoMap) you can use [GetTempoChanges](xref:Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoChanges) method to get all tempo changes. Use [GetTimeSignatureChanges](xref:Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureChanges) method to get time signature changes. [GetTempoAtTime](xref:Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoAtTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)) and [GetTimeSignatureAtTime](xref:Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureAtTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)) methods allow to get tempo and time signature at the specified time.
 
 Please read [general information about events managers](Events-managers-overview.md) prior to use `TempoMapManager`.
 
