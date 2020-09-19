@@ -3,6 +3,8 @@
   homepage: index.md
 - name: API
   href: obj/api/
+- name: Obsolete
+  href: obsolete/obsolete.md
 - name: Articles
   href: articles/
 - name: GitHub

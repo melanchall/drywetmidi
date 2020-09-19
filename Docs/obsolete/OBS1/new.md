@@ -1,0 +1,7 @@
+* [WritingSettings.DeleteDefaultKeySignature](xref:Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultKeySignature)
+* [WritingSettings.DeleteDefaultSetTempo](xref:Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultSetTempo)
+* [WritingSettings.DeleteDefaultTimeSignature](xref:Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultTimeSignature)
+* [WritingSettings.DeleteUnknownChunks](xref:Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownChunks)
+* [WritingSettings.DeleteUnknownMetaEvents](xref:Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownMetaEvents)
+* [WritingSettings.NoteOffAsSilentNoteOn](xref:Melanchall.DryWetMidi.Core.WritingSettings.NoteOffAsSilentNoteOn)
+* [WritingSettings.UseRunningStatus](xref:Melanchall.DryWetMidi.Core.WritingSettings.UseRunningStatus)

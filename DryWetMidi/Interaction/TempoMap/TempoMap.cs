@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets an object that holds changes of the tempo through the time.
         /// </summary>
-        [Obsolete("OBS3")]
+        [Obsolete("OBS4")]
         public ValueLine<Tempo> Tempo
         {
             get { return _tempoLine; }

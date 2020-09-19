@@ -12,7 +12,8 @@
       "shouldSkipMarkup": true,
       "properties": {
         "TargetFramework": "netstandard2.0"
-      }
+      },
+      "filter": "filter.yml"
     }
   ],
   "build": {

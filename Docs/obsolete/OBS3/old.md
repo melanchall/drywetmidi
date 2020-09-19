@@ -1,0 +1,1 @@
+* `TempoMap.TimeSignature`

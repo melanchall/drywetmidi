@@ -45,6 +45,12 @@ steps:
       Copy-Item README.md -Destination Docs\index.md
 
 - task: PowerShell@2
+  displayName: Generate obsolete API section
+  inputs:
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API section.ps1'
+
+- task: PowerShell@2
   displayName: Install docfx
   inputs:
     targetType: 'inline'

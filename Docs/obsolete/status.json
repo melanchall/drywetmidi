@@ -1,0 +1,22 @@
+{
+  "OBS1": {
+    "Hint": "Use corresponding properties of WritingSettings.",
+    "ObsoleteFromVersion": "5.2.0",
+    "InLibrary": true
+  },
+  "OBS2": {
+    "Hint": "Use ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData.",
+    "ObsoleteFromVersion": "5.2.0",
+    "InLibrary": true
+  },
+  "OBS3": {
+    "Hint": "Use GetTimeSignatureChanges or GetTimeSignatureAtTime methods of TempoMap.",
+    "ObsoleteFromVersion": "5.2.0",
+    "InLibrary": true
+  },
+  "OBS4": {
+    "Hint": "Use GetTempoChanges or GetTempoAtTime methods of TempoMap.",
+    "ObsoleteFromVersion": "5.2.0",
+    "InLibrary": true
+  }
+}
