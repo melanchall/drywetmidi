@@ -125,6 +125,24 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void OutputDeviceIsInUse()
+        {
+            using (var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                outputDevice1.SendEvent(new NoteOnEvent());
+
+                using (var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+                {
+                    var exception = Assert.Throws<MidiDeviceException>(() => outputDevice2.SendEvent(new NoteOnEvent()));
+                    Assert.AreEqual(
+                        "The specified device is already in use.  Wait until it is free, and then try again.",
+                        exception.Message,
+                        "Exception's message is invalid.");
+                }
+            }
+        }
+
         #endregion
 
         #region Private methods

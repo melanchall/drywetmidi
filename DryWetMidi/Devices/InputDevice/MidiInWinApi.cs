@@ -23,37 +23,37 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        [DllImport("winmm.dll", SetLastError = true)]
+        [DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Ansi, EntryPoint = "midiInGetDevCapsA", ExactSpelling = true)]
         public static extern uint midiInGetDevCaps(IntPtr uDeviceID, ref MIDIINCAPS caps, uint cbMidiInCaps);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", CharSet = CharSet.Ansi, EntryPoint = "midiInGetErrorTextA", ExactSpelling = true)]
         public static extern uint midiInGetErrorText(uint wError, StringBuilder lpText, uint cchText);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInGetNumDevs();
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInOpen(out IntPtr lphMidiIn, int uDeviceID, MidiWinApi.MidiMessageCallback dwCallback, IntPtr dwInstance, uint dwFlags);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInClose(IntPtr hMidiIn);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInStart(IntPtr hMidiIn);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInStop(IntPtr hMidiIn);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInReset(IntPtr hMidiIn);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInPrepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInUnprepareHeader(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
-        [DllImport("winmm.dll")]
+        [DllImport("winmm.dll", ExactSpelling = true)]
         public static extern uint midiInAddBuffer(IntPtr hMidiIn, IntPtr lpMidiInHdr, int cbMidiInHdr);
 
         #endregion
