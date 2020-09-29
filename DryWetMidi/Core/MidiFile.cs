@@ -595,6 +595,12 @@ namespace Melanchall.DryWetMidi.Core
             return Equals(midiFile1, midiFile2, null, out message);
         }
 
+        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings)
+        {
+            string message;
+            return Equals(midiFile1, midiFile2, settings, out message);
+        }
+
         /// <summary>
         /// Determines whether two specified <see cref="MidiFile"/> objects have the same content using
         /// the specified comparison settings.

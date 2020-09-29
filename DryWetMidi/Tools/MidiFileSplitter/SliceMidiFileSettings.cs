@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Core;
+﻿using System;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -39,6 +40,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// If <c>false</c> used, track chunks without events will be removed from the result.
         /// </remarks>
         public bool PreserveTrackChunks { get; set; } = false;
+
+        public SliceMidiFileMarkers Markers { get; set; }
 
         #endregion
     }

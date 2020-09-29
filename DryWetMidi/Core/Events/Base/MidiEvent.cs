@@ -139,6 +139,12 @@ namespace Melanchall.DryWetMidi.Core
             return Equals(midiEvent1, midiEvent2, null, out message);
         }
 
+        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, MidiEventEqualityCheckSettings settings)
+        {
+            string message;
+            return Equals(midiEvent1, midiEvent2, settings, out message);
+        }
+
         /// <summary>
         /// Determines whether two specified <see cref="MidiEvent"/> objects have the same content using
         /// the specified comparison settings.

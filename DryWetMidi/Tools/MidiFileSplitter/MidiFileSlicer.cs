@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             public IEnumerator<TimedEvent> Enumerator { get; }
 
-            public Dictionary<Type, TimedEvent> EventsToCopyToNextPart { get; } = new Dictionary<Type, TimedEvent>();
+            public Dictionary<MidiEventType, TimedEvent> EventsToCopyToNextPart { get; } = new Dictionary<MidiEventType, TimedEvent>();
 
             public List<TimedEvent> EventsToStartNextPart { get; } = new List<TimedEvent>();
 
@@ -63,26 +63,26 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constants
 
-        private static readonly Type[] EventsTypesToCopyToNextPart = new[]
+        private static readonly MidiEventType[] EventsTypesToCopyToNextPart = new[]
         {
-            typeof(ChannelAftertouchEvent),
-            typeof(ControlChangeEvent),
-            typeof(NoteAftertouchEvent),
-            typeof(PitchBendEvent),
-            typeof(ProgramChangeEvent),
+            MidiEventType.ChannelAftertouch,
+            MidiEventType.ControlChange,
+            MidiEventType.NoteAftertouch,
+            MidiEventType.PitchBend,
+            MidiEventType.ProgramChange,
 
-            typeof(ChannelPrefixEvent),
-            typeof(CopyrightNoticeEvent),
-            typeof(DeviceNameEvent),
-            typeof(InstrumentNameEvent),
-            typeof(KeySignatureEvent),
-            typeof(PortPrefixEvent),
-            typeof(ProgramNameEvent),
-            typeof(SequenceNumberEvent),
-            typeof(SequenceTrackNameEvent),
-            typeof(SetTempoEvent),
-            typeof(SmpteOffsetEvent),
-            typeof(TimeSignatureEvent)
+            MidiEventType.ChannelPrefix,
+            MidiEventType.CopyrightNotice,
+            MidiEventType.DeviceName,
+            MidiEventType.InstrumentName,
+            MidiEventType.KeySignature,
+            MidiEventType.PortPrefix,
+            MidiEventType.ProgramName,
+            MidiEventType.SequenceNumber,
+            MidiEventType.SequenceTrackName,
+            MidiEventType.SetTempo,
+            MidiEventType.SmpteOffset,
+            MidiEventType.TimeSignature
         };
 
         #endregion
@@ -118,7 +118,13 @@ namespace Melanchall.DryWetMidi.Tools
 
         public MidiFile GetNextSlice(long endTime, SliceMidiFileSettings settings)
         {
-            var timedEvents = GetNextTimedEvents(endTime, settings.PreserveTimes);
+            var timedEvents = GetNextTimedEvents(
+                endTime,
+                settings.PreserveTimes,
+                settings.Markers?.PartStartMarkerEventFactory,
+                settings.Markers?.PartEndMarkerEventFactory,
+                settings.Markers?.EmptyPartMarkerEventFactory);
+
             var trackChunks = timedEvents.Select(e => e.ToTrackChunk())
                                          .Where(c => settings.PreserveTrackChunks || c.Events.Any())
                                          .ToList();
@@ -131,8 +137,24 @@ namespace Melanchall.DryWetMidi.Tools
             return file;
         }
 
-        private IEnumerable<IEnumerable<TimedEvent>> GetNextTimedEvents(long endTime, bool preserveTimes)
+        public static MidiFileSlicer CreateFromFile(MidiFile midiFile)
         {
+            var timedEventsEnumerators = midiFile.GetTrackChunks()
+                                                 .Select(c => c.GetTimedEvents().GetEnumerator())
+                                                 .ToArray();
+
+            return new MidiFileSlicer(midiFile.TimeDivision, timedEventsEnumerators);
+        }
+
+        private IEnumerable<IEnumerable<TimedEvent>> GetNextTimedEvents(
+            long endTime,
+            bool preserveTimes,
+            Func<MidiEvent> partStartMarkerEventFactory,
+            Func<MidiEvent> partEndMarkerEventFactory,
+            Func<MidiEvent> emptyPartMarkerEventFactory)
+        {
+            var isPartEmpty = true;
+
             for (int i = 0; i < _timedEventsHolders.Length; i++)
             {
                 var timedEventsHolder = _timedEventsHolders[i];
@@ -175,22 +197,36 @@ namespace Melanchall.DryWetMidi.Tools
                 }
                 while (timedEventsEnumerator.MoveNext());
 
+                isPartEmpty &= newEventsStartIndex >= takenTimedEvents.Count;
+
+                //
+
+                if (isPartEmpty && i == _timedEventsHolders.Length - 1 && emptyPartMarkerEventFactory != null)
+                {
+                    takenTimedEvents.Insert(0, new TimedEvent(emptyPartMarkerEventFactory(), preserveTimes ? _lastTime : 0));
+                    newEventsStartIndex++;
+                }
+
+                if (partStartMarkerEventFactory != null)
+                {
+                    takenTimedEvents.Insert(0, new TimedEvent(partStartMarkerEventFactory(), preserveTimes ? _lastTime : 0));
+                    newEventsStartIndex++;
+                }
+
+                if (partEndMarkerEventFactory != null)
+                    takenTimedEvents.Add(new TimedEvent(partEndMarkerEventFactory(), endTime));
+
+                //
+
                 if (!preserveTimes)
                     MoveEventsToStart(takenTimedEvents, newEventsStartIndex, _lastTime);
+
+                //
 
                 yield return takenTimedEvents;
             }
 
             _lastTime = endTime;
-        }
-
-        public static MidiFileSlicer CreateFromFile(MidiFile midiFile)
-        {
-            var timedEventsEnumerators = midiFile.GetTrackChunks()
-                                                 .Select(c => c.GetTimedEvents().GetEnumerator())
-                                                 .ToArray();
-
-            return new MidiFileSlicer(midiFile.TimeDivision, timedEventsEnumerators);
         }
 
         private static void TryToUpdateNotesInformation(MidiEvent midiEvent, List<NoteId> noteOnIds)
@@ -228,7 +264,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         private static List<TimedEvent> PrepareTakenTimedEvents(
-            Dictionary<Type, TimedEvent> eventsToCopyToNextPart,
+            Dictionary<MidiEventType, TimedEvent> eventsToCopyToNextPart,
             List<NoteId> noteOnIds,
             bool preserveTimes,
             List<TimedEvent> eventsToStartNextPart,
@@ -252,9 +288,9 @@ namespace Melanchall.DryWetMidi.Tools
             return takenTimedEvents;
         }
 
-        private static void UpdateEventsToCopyToNextPart(Dictionary<Type, TimedEvent> eventsToCopyToNextPart, TimedEvent timedEvent)
+        private static void UpdateEventsToCopyToNextPart(Dictionary<MidiEventType, TimedEvent> eventsToCopyToNextPart, TimedEvent timedEvent)
         {
-            var midiEventType = timedEvent.Event.GetType();
+            var midiEventType = timedEvent.Event.EventType;
             if (EventsTypesToCopyToNextPart.Contains(midiEventType))
                 eventsToCopyToNextPart[midiEventType] = timedEvent.Clone();
         }
