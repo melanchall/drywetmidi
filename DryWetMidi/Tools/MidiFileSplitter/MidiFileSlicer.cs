@@ -164,9 +164,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var eventsToStartNextPart = timedEventsHolder.EventsToStartNextPart;
 
                 int newEventsStartIndex;
-                var noteOnIds = new List<NoteId>();
                 var takenTimedEvents = PrepareTakenTimedEvents(eventsToCopyToNextPart,
-                                                               noteOnIds,
                                                                preserveTimes,
                                                                eventsToStartNextPart,
                                                                out newEventsStartIndex);
@@ -183,14 +181,12 @@ namespace Melanchall.DryWetMidi.Tools
 
                     if (time == endTime)
                     {
-                        TryToMoveEdgeNoteOffsToPreviousPart(timedEvent,
-                                                            noteOnIds,
-                                                            takenTimedEvents,
-                                                            eventsToStartNextPart);
+                        if (!TryToMoveEdgeNoteOffsToPreviousPart(timedEvent, takenTimedEvents))
+                            eventsToStartNextPart.Add(timedEvent);
+
                         continue;
                     }
 
-                    TryToUpdateNotesInformation(timedEvent.Event, noteOnIds);
                     UpdateEventsToCopyToNextPart(eventsToCopyToNextPart, timedEvent);
 
                     takenTimedEvents.Add(timedEvent);
@@ -229,30 +225,18 @@ namespace Melanchall.DryWetMidi.Tools
             _lastTime = endTime;
         }
 
-        private static void TryToUpdateNotesInformation(MidiEvent midiEvent, List<NoteId> noteOnIds)
-        {
-            var noteOnEvent = midiEvent as NoteOnEvent;
-            if (noteOnEvent != null)
-                noteOnIds.Add(noteOnEvent.GetNoteId());
-            else
-            {
-                var noteOffEvent = midiEvent as NoteOffEvent;
-                if (noteOffEvent != null)
-                    noteOnIds.Remove(noteOffEvent.GetNoteId());
-            }
-        }
-
-        private static void TryToMoveEdgeNoteOffsToPreviousPart(
+        private static bool TryToMoveEdgeNoteOffsToPreviousPart(
             TimedEvent timedEvent,
-            List<NoteId> noteOnIds,
-            List<TimedEvent> takenTimedEvents,
-            List<TimedEvent> eventsToStartNextPart)
+            List<TimedEvent> takenTimedEvents)
         {
             var noteOffEvent = timedEvent.Event as NoteOffEvent;
-            if (noteOffEvent != null && noteOnIds.Remove(noteOffEvent.GetNoteId()))
+            if (noteOffEvent != null)
+            {
                 takenTimedEvents.Add(timedEvent);
-            else
-                eventsToStartNextPart.Add(timedEvent);
+                return true;
+            }
+
+            return false;
         }
 
         private static void MoveEventsToStart(List<TimedEvent> takenTimedEvents, int startIndex, long partStartTime)
@@ -265,7 +249,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static List<TimedEvent> PrepareTakenTimedEvents(
             Dictionary<MidiEventType, TimedEvent> eventsToCopyToNextPart,
-            List<NoteId> noteOnIds,
             bool preserveTimes,
             List<TimedEvent> eventsToStartNextPart,
             out int newEventsStartIndex)
@@ -281,7 +264,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var timedEvent in takenTimedEvents)
             {
-                TryToUpdateNotesInformation(timedEvent.Event, noteOnIds);
                 UpdateEventsToCopyToNextPart(eventsToCopyToNextPart, timedEvent);
             }
 
