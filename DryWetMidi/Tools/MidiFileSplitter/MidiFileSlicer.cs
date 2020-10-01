@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             public IEnumerator<TimedEvent> Enumerator { get; }
 
-            public Dictionary<MidiEventType, TimedEvent> EventsToCopyToNextPart { get; } = new Dictionary<MidiEventType, TimedEvent>();
+            public List<TimedEvent> EventsToCopyToNextPart { get; } = new List<TimedEvent>();
 
             public List<TimedEvent> EventsToStartNextPart { get; } = new List<TimedEvent>();
 
@@ -63,27 +63,59 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constants
 
-        private static readonly MidiEventType[] EventsTypesToCopyToNextPart = new[]
-        {
-            MidiEventType.ChannelAftertouch,
-            MidiEventType.ControlChange,
-            MidiEventType.NoteAftertouch,
-            MidiEventType.PitchBend,
-            MidiEventType.ProgramChange,
+        private static readonly Dictionary<MidiEventType, Func<MidiEvent, MidiEvent, bool>> DefaultUpdatePredicates =
+            new Dictionary<MidiEventType, Func<MidiEvent, MidiEvent, bool>>
+            {
+                [MidiEventType.ChannelAftertouch] = (midiEvent, existingMidiEvent) =>
+                {
+                    var currentChannel = ((ChannelAftertouchEvent)midiEvent).Channel;
+                    return ((ChannelAftertouchEvent)existingMidiEvent).Channel == currentChannel;
+                },
+                [MidiEventType.ControlChange] = (midiEvent, existingMidiEvent) =>
+                {
+                    var currentControlChangeEvent = (ControlChangeEvent)midiEvent;
+                    var currentControlNumber = currentControlChangeEvent.ControlNumber;
+                    var currentChannel = currentControlChangeEvent.Channel;
 
-            MidiEventType.ChannelPrefix,
-            MidiEventType.CopyrightNotice,
-            MidiEventType.DeviceName,
-            MidiEventType.InstrumentName,
-            MidiEventType.KeySignature,
-            MidiEventType.PortPrefix,
-            MidiEventType.ProgramName,
-            MidiEventType.SequenceNumber,
-            MidiEventType.SequenceTrackName,
-            MidiEventType.SetTempo,
-            MidiEventType.SmpteOffset,
-            MidiEventType.TimeSignature
-        };
+                    var existingControlChangeEvent = (ControlChangeEvent)existingMidiEvent;
+
+                    return existingControlChangeEvent.ControlNumber == currentControlNumber &&
+                           existingControlChangeEvent.Channel == currentChannel;
+                },
+                [MidiEventType.NoteAftertouch] = (midiEvent, existingMidiEvent) =>
+                {
+                    var currentNoteAftertouchEvent = (NoteAftertouchEvent)midiEvent;
+                    var currentNoteNumber = currentNoteAftertouchEvent.NoteNumber;
+                    var currentChannel = currentNoteAftertouchEvent.Channel;
+
+                    var existingNoteAftertouchEvent = (NoteAftertouchEvent)existingMidiEvent;
+
+                    return existingNoteAftertouchEvent.NoteNumber == currentNoteNumber &&
+                           existingNoteAftertouchEvent.Channel == currentChannel;
+                },
+                [MidiEventType.PitchBend] = (midiEvent, existingMidiEvent) =>
+                {
+                    var currentChannel = ((PitchBendEvent)midiEvent).Channel;
+                    return ((PitchBendEvent)existingMidiEvent).Channel == currentChannel;
+                },
+                [MidiEventType.ProgramChange] = (midiEvent, existingMidiEvent) =>
+                {
+                    var currentChannel = ((ProgramChangeEvent)midiEvent).Channel;
+                    return ((ProgramChangeEvent)existingMidiEvent).Channel == currentChannel;
+                },
+                [MidiEventType.CopyrightNotice] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.InstrumentName] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.ProgramName] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.SequenceTrackName] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.DeviceName] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.PortPrefix] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.SetTempo] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.ChannelPrefix] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.SequenceNumber] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.KeySignature] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.SmpteOffset] = (midiEvent, existingMidiEvent) => true,
+                [MidiEventType.TimeSignature] = (midiEvent, existingMidiEvent) => true,
+            };
 
         #endregion
 
@@ -164,10 +196,11 @@ namespace Melanchall.DryWetMidi.Tools
                 var eventsToStartNextPart = timedEventsHolder.EventsToStartNextPart;
 
                 int newEventsStartIndex;
-                var takenTimedEvents = PrepareTakenTimedEvents(eventsToCopyToNextPart,
-                                                               preserveTimes,
-                                                               eventsToStartNextPart,
-                                                               out newEventsStartIndex);
+                var takenTimedEvents = PrepareTakenTimedEvents(
+                    eventsToCopyToNextPart,
+                    preserveTimes,
+                    eventsToStartNextPart,
+                    out newEventsStartIndex);
 
                 do
                 {
@@ -247,15 +280,14 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static List<TimedEvent> PrepareTakenTimedEvents(
-            Dictionary<MidiEventType, TimedEvent> eventsToCopyToNextPart,
+        private List<TimedEvent> PrepareTakenTimedEvents(
+            List<TimedEvent> eventsToCopyToNextPart,
             bool preserveTimes,
             List<TimedEvent> eventsToStartNextPart,
             out int newEventsStartIndex)
         {
-            var takenTimedEvents = new List<TimedEvent>(eventsToCopyToNextPart.Values);
-            if (!preserveTimes)
-                takenTimedEvents.ForEach(e => e.Time = 0);
+            var takenTimedEvents = new List<TimedEvent>(eventsToCopyToNextPart);
+            takenTimedEvents.ForEach(e => e.Time = preserveTimes ? _lastTime : 0);
 
             newEventsStartIndex = takenTimedEvents.Count;
 
@@ -270,18 +302,39 @@ namespace Melanchall.DryWetMidi.Tools
             return takenTimedEvents;
         }
 
-        private static void UpdateEventsToCopyToNextPart(Dictionary<MidiEventType, TimedEvent> eventsToCopyToNextPart, TimedEvent timedEvent)
+        private static void UpdateEventsToCopyToNextPart(List<TimedEvent> eventsToCopyToNextPart, TimedEvent timedEvent)
         {
-            var midiEventType = timedEvent.Event.EventType;
-            if (EventsTypesToCopyToNextPart.Contains(midiEventType))
-                eventsToCopyToNextPart[midiEventType] = timedEvent.Clone();
+            var eventType = timedEvent.Event.EventType;
+            var matched = false;
+
+            for (var i = 0; i < eventsToCopyToNextPart.Count && !matched; i++)
+            {
+                var existingTimedEvent = eventsToCopyToNextPart[i];
+                if (existingTimedEvent.Event.EventType != eventType)
+                    continue;
+
+                matched = DefaultUpdatePredicates[eventType](timedEvent.Event, existingTimedEvent.Event);
+                if (matched)
+                {
+                    eventsToCopyToNextPart.RemoveAt(i);
+                    eventsToCopyToNextPart.Insert(i, timedEvent.Clone());
+                }
+            }
+
+            if (!matched && DefaultUpdatePredicates.ContainsKey(eventType))
+                eventsToCopyToNextPart.Add(timedEvent.Clone());
         }
 
         #endregion
 
         #region IDisposable
 
-        void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        private void Dispose(bool disposing)
         {
             if (_disposed)
                 return;
@@ -295,11 +348,6 @@ namespace Melanchall.DryWetMidi.Tools
             }
 
             _disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
         }
 
         #endregion
