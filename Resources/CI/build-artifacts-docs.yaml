@@ -11,6 +11,8 @@ trigger:
     - 'Resources/CI/build-artifacts-docs.yaml'
     - 'README.md'
 
+pr: none
+
 pool:
   vmImage: 'windows-latest'
 

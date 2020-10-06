@@ -9,6 +9,8 @@ trigger:
     - 'Resources/Utilities/ExportStackExchangeStatistics/*'
     - 'Resources/CI/stat-stackexchange.yaml'
 
+pr: none
+
 schedules:
 - cron: '0 0 * * *'
   displayName: Export StackExchange statistics

@@ -9,6 +9,8 @@ trigger:
     - 'DryWetMidi/*'
     - 'Resources/CI/build-artifacts-library.yaml'
 
+pr: none
+
 pool:
   vmImage: 'windows-latest'
 

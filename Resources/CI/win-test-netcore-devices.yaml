@@ -13,6 +13,19 @@ trigger:
     - 'Resources/Utilities/CreateLoopbackPort/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
 
+pr:
+  branches:
+    include:
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'DryWetMidi.Tests/*'
+    - 'DryWetMidi.Tests.Common/*'
+    - 'Resources/CI/win-test-netcore-devices.yaml'
+    - 'Resources/Utilities/CreateLoopbackPort/*'
+    - 'Resources/Scripts/Setup MIDI ports.ps1'
+
 pool:
   vmImage: 'windows-latest'
 

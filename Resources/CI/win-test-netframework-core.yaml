@@ -14,6 +14,20 @@ trigger:
     - 'DryWetMidi/Devices/*'
     - 'DryWetMidi.Tests/Devices/*'
 
+pr:
+  branches:
+    include:
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'DryWetMidi.Tests/*'
+    - 'DryWetMidi.Tests.Common/*'
+    - 'Resources/CI/win-test-netframework-core.yaml'
+    exclude:
+    - 'DryWetMidi/Devices/*'
+    - 'DryWetMidi.Tests/Devices/*'
+
 pool:
   vmImage: 'windows-latest'
 

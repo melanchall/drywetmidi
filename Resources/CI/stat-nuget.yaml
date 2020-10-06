@@ -9,6 +9,8 @@ trigger:
     - 'Resources/Utilities/ExportNuGetStatistics/*'
     - 'Resources/CI/stat-nuget.yaml'
 
+pr: none
+
 schedules:
 - cron: '0 0 * * *'
   displayName: Export NuGet package statistics

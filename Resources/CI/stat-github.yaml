@@ -9,6 +9,8 @@ trigger:
     - 'Resources/Utilities/ExportGitHubStatistics/*'
     - 'Resources/CI/stat-github.yaml'
 
+pr: none
+
 schedules:
 - cron: '0 0 * * *'
   displayName: Export GitHub repo statistics

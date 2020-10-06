@@ -9,6 +9,16 @@ trigger:
     - 'Resources/Scripts/Check links.ps1'
     - 'Resources/CI/check-docs-links.yaml'
 
+pr:
+  branches:
+    include:
+    - develop
+  paths:
+    include:
+    - 'Docs/*'
+    - 'Resources/Scripts/Check links.ps1'
+    - 'Resources/CI/check-docs-links.yaml'
+
 schedules:
 - cron: '0 0,9,15,20 * * *'
   displayName: Check docs links schedule
