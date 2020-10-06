@@ -30,7 +30,7 @@ notesManager.SaveChanges();
 
 ## Simultaneous editing of [EventsCollection](xref:Melanchall.DryWetMidi.Core.EventsCollection)
 
-On saving the manager will rewrite all content of the underlying events collection. So you shouldn't modify collection returned by [Events](xref:Melanchall.DryWetMidi.Core.TrackChunk.Events) proeprty of [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) and any single event while managing events with the manager since all unsaved changes will be lost on manager's `SaveChanges` or `Dispose`.
+On saving the manager will rewrite all content of the underlying events collection. So you shouldn't modify collection returned by [Events](xref:Melanchall.DryWetMidi.Core.TrackChunk.Events) property of [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) and any single event while managing events with the manager since all unsaved changes will be lost on manager's `SaveChanges` or `Dispose`.
 
 For example, this code
 
@@ -54,4 +54,4 @@ var notesManager = trackChunk.ManageNotes();
 timedEventsManager.SaveChanges();
 ```
 
-will cause changes made with the instance of the [NotesManager](xref:Melanchall.DryWetMidi.Interaction.NotesManager) will be lost bacause `SaveChanges` (or `Dispose` in first code snippet) of `timedEventsManager` executed after `SaveChanges` of `notesManager`, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing events with next one.
+will cause changes made with the instance of the [NotesManager](xref:Melanchall.DryWetMidi.Interaction.NotesManager) will be lost because `SaveChanges` (or `Dispose` in first code snippet) of `timedEventsManager` executed after `SaveChanges` of `notesManager`, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing events with next one.
