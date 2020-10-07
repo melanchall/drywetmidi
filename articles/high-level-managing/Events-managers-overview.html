@@ -100,7 +100,7 @@
 notesManager.SaveChanges();
 </code></pre>
 <h2 id="simultaneous-editing-of-eventscollection">Simultaneous editing of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></h2>
-<p>On saving the manager will rewrite all content of the underlying events collection. So you shouldn't modify collection returned by <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html#Melanchall_DryWetMidi_Core_TrackChunk_Events">Events</a> proeprty of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> and any single event while managing events with the manager since all unsaved changes will be lost on manager's <code>SaveChanges</code> or <code>Dispose</code>.</p>
+<p>On saving the manager will rewrite all content of the underlying events collection. So you shouldn't modify collection returned by <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html#Melanchall_DryWetMidi_Core_TrackChunk_Events">Events</a> property of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> and any single event while managing events with the manager since all unsaved changes will be lost on manager's <code>SaveChanges</code> or <code>Dispose</code>.</p>
 <p>For example, this code</p>
 <pre><code class="lang-csharp">using (var timedEventsManager = trackChunk.ManageTimedEvents())
 using (var notesManager = trackChunk.ManageNotes())
@@ -117,7 +117,7 @@ var notesManager = trackChunk.ManageNotes();
 
 timedEventsManager.SaveChanges();
 </code></pre>
-<p>will cause changes made with the instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManager.html">NotesManager</a> will be lost bacause <code>SaveChanges</code> (or <code>Dispose</code> in first code snippet) of <code>timedEventsManager</code> executed after <code>SaveChanges</code> of <code>notesManager</code>, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing events with next one.</p>
+<p>will cause changes made with the instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManager.html">NotesManager</a> will be lost because <code>SaveChanges</code> (or <code>Dispose</code> in first code snippet) of <code>timedEventsManager</code> executed after <code>SaveChanges</code> of <code>notesManager</code>, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing events with next one.</p>
 </article>
           </div>
           

@@ -118,6 +118,9 @@ Represents a Time Signature meta event.
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, String)</a>
     </div>
     <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_">MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings)</a>
+    </div>
+    <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, String)</a>
     </div>
     <div>
@@ -194,6 +197,22 @@ specified numerator and denominator.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">denominator</code> is zero or is not a
+    power of two.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_TimeSignatureEvent__ctor_System_Byte_System_Byte_System_Byte_System_Byte_" data-uid="Melanchall.DryWetMidi.Core.TimeSignatureEvent.#ctor(System.Byte,System.Byte,System.Byte,System.Byte)">TimeSignatureEvent(Byte, Byte, Byte, Byte)</h4>
   <div class="markdown level1 summary">
@@ -235,6 +254,22 @@ and number of 32nd notes per beat.
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td><span class="parametername">thirtySecondNotesPerBeat</span></td>
         <td>Number of 32nd notes per beat.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">denominator</code> is zero or is not a
+    power of two.</td>
       </tr>
     </tbody>
   </table>

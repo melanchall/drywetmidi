@@ -118,6 +118,9 @@ Represents a Key Signature meta event.
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, String)</a>
     </div>
     <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_">MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings)</a>
+    </div>
+    <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, String)</a>
     </div>
     <div>
@@ -185,12 +188,31 @@ specified key and scale.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.sbyte">SByte</a></td>
         <td><span class="parametername">key</span></td>
-        <td></td>
+        <td>The number of flats (if negative) or
+sharps (if positive).</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td><span class="parametername">scale</span></td>
-        <td></td>
+        <td>The scale (0 for major or 1 for minor).</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+One of the following errors occured:
+<ul><li><code data-dev-comment-type="paramref" class="paramref">key</code> is out of [<a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MinKey">MinKey</a>; <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MaxKey">MaxKey</a>] range.</li><li><code data-dev-comment-type="paramref" class="paramref">scale</code> is out of [<a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MinScale">MinScale</a>; <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MaxScale">MaxScale</a>] range.</li></ul>
+</td>
       </tr>
     </tbody>
   </table>
@@ -228,6 +250,94 @@ Default scale (major).
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public const byte DefaultScale = 0</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Core_KeySignatureEvent_MaxKey" data-uid="Melanchall.DryWetMidi.Core.KeySignatureEvent.MaxKey">MaxKey</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const sbyte MaxKey = 7</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.sbyte">SByte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Core_KeySignatureEvent_MaxScale" data-uid="Melanchall.DryWetMidi.Core.KeySignatureEvent.MaxScale">MaxScale</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte MaxScale = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Core_KeySignatureEvent_MinKey" data-uid="Melanchall.DryWetMidi.Core.KeySignatureEvent.MinKey">MinKey</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const sbyte MinKey = -7</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.sbyte">SByte</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Core_KeySignatureEvent_MinScale" data-uid="Melanchall.DryWetMidi.Core.KeySignatureEvent.MinScale">MinScale</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte MinScale = 0</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -283,7 +393,8 @@ sharps (if positive).
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td>Key is out of range.</td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MinKey">MinKey</a>; <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MaxKey">MaxKey</a>] range.</td>
       </tr>
     </tbody>
   </table>
@@ -323,7 +434,8 @@ Gets or sets scale (0 for major or 1 for minor).
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td>Scale is out of range.</td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MinScale">MinScale</a>; <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_MaxScale">MaxScale</a>] range.</td>
       </tr>
     </tbody>
   </table>

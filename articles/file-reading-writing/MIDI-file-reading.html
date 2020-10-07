@@ -90,21 +90,8 @@
 });
 </code></pre>
 <p><code>ReadingSettings</code> has a lot of useful properties. You can read documentation on all of them to learn how you can adjust MIDI file reading.</p>
-<h2 id="fast-reading">Fast reading</h2>
-<p>By default, reading engine reads MIDI data via stream (either <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.filestream" title="System.IO.FileStream">FileStream</a> created by <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_">Read(string, ReadingSettings)</a> or stream passed to <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings_">Read(Stream, ReadingSettings)</a>). So data is being read byte by byte without taking a lot of memory.</p>
-<p>But the process of reading can be significantly speeded up if you set <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory">ReadFromMemory</a> property of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a> to <code>true</code>:</p>
-<pre><code class="lang-csharp">var file = MidiFile.Read(&quot;Some great song.mid&quot;, new ReadingSettings
-{
-    ReaderSettings = new ReaderSettings
-    {
-        ReadFromMemory = true
-    }
-});
-</code></pre>
-<p>Setting <code>ReadFromMemory</code> to <code>true</code> tells reading engine to place entire MIDI file to memory and read from there. This way MIDI file will be read extremely fast, but will take larger amount of memory. However in the vast majority of cases this amount is relatively small so you should consider to use fast reading almost always.</p>
-<p>By default, <code>ReadFromMemory</code> set to <code>false</code>.</p>
 <h2 id="reading-corrupted-files">Reading corrupted files</h2>
-<p>DryWetMIDI allows to read MIDI files with various violations of <a href="https://www.midi.org/specifications-old/category/smf-specifications">SMF</a> standard. Example below shows how to read a MIDI file with all possible errors:</p>
+<p>DryWetMIDI allows to read MIDI files with various violations of <a href="https://www.midi.org/specifications-old/category/smf-specifications">SMF</a> standard. Example below shows how to read a MIDI file with different errors:</p>
 <pre><code class="lang-csharp">var file = MidiFile.Read(&quot;Some great song.mid&quot;, new ReadingSettings
 {
     InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.ReadValid,

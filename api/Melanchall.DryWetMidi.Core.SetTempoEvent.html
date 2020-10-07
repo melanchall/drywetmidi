@@ -118,6 +118,9 @@ Represents a Set Tempo meta event.
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, String)</a>
     </div>
     <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_">MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings)</a>
+    </div>
+    <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_Equals_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Core_MidiEventEqualityCheckSettings_System_String__">MidiEvent.Equals(MidiEvent, MidiEvent, MidiEventEqualityCheckSettings, String)</a>
     </div>
     <div>
@@ -190,16 +193,76 @@ specified number of microseconds per quarter note.
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">microsecondsPerQuarterNote</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Core.SetTempoEvent.html#Melanchall_DryWetMidi_Core_SetTempoEvent_MinMicrosecondsPerQuarterNote">MinMicrosecondsPerQuarterNote</a>; <a class="xref" href="Melanchall.DryWetMidi.Core.SetTempoEvent.html#Melanchall_DryWetMidi_Core_SetTempoEvent_MaxMicrosecondsPerQuarterNote">MaxMicrosecondsPerQuarterNote</a>] range.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="fields">Fields
   </h3>
-  <h4 id="Melanchall_DryWetMidi_Core_SetTempoEvent_DefaultTempo" data-uid="Melanchall.DryWetMidi.Core.SetTempoEvent.DefaultTempo">DefaultTempo</h4>
+  <h4 id="Melanchall_DryWetMidi_Core_SetTempoEvent_DefaultMicrosecondsPerQuarterNote" data-uid="Melanchall.DryWetMidi.Core.SetTempoEvent.DefaultMicrosecondsPerQuarterNote">DefaultMicrosecondsPerQuarterNote</h4>
   <div class="markdown level1 summary">
 Default tempo.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const long DefaultTempo = 500000L</code></pre>
+    <pre><code class="lang-csharp hljs">public const long DefaultMicrosecondsPerQuarterNote = 500000L</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Core_SetTempoEvent_MaxMicrosecondsPerQuarterNote" data-uid="Melanchall.DryWetMidi.Core.SetTempoEvent.MaxMicrosecondsPerQuarterNote">MaxMicrosecondsPerQuarterNote</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const long MaxMicrosecondsPerQuarterNote = 16777215L</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Core_SetTempoEvent_MinMicrosecondsPerQuarterNote" data-uid="Melanchall.DryWetMidi.Core.SetTempoEvent.MinMicrosecondsPerQuarterNote">MinMicrosecondsPerQuarterNote</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const long MinMicrosecondsPerQuarterNote = 1L</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -240,6 +303,22 @@ Gets or sets number of microseconds per quarter note.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Core.SetTempoEvent.html#Melanchall_DryWetMidi_Core_SetTempoEvent_MinMicrosecondsPerQuarterNote">MinMicrosecondsPerQuarterNote</a>; <a class="xref" href="Melanchall.DryWetMidi.Core.SetTempoEvent.html#Melanchall_DryWetMidi_Core_SetTempoEvent_MaxMicrosecondsPerQuarterNote">MaxMicrosecondsPerQuarterNote</a>] range.</td>
       </tr>
     </tbody>
   </table>

@@ -150,31 +150,6 @@ The default tempo map which uses 4/4 time signature and tempo of 500,000 microse
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_TempoMap_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.Tempo*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_Tempo" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.Tempo">Tempo</h4>
-  <div class="markdown level1 summary">
-Gets an object that holds changes of the tempo through the time.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ValueLine&lt;Tempo&gt; Tempo { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ValueLine-1.html">ValueLine</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMap_TimeDivision_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.TimeDivision*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_TimeDivision" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.TimeDivision">TimeDivision</h4>
   <div class="markdown level1 summary">
@@ -196,31 +171,6 @@ Gets the time division used by a tempo map.
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.TimeDivision.html">TimeDivision</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_TempoMap_TimeSignature_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_TimeSignature" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature">TimeSignature</h4>
-  <div class="markdown level1 summary">
-Gets an object that holds changes of the time signature through the time.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ValueLine&lt;TimeSignature&gt; TimeSignature { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ValueLine-1.html">ValueLine</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -692,6 +642,132 @@ default time division (96 ticks per quarter note).
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td><code data-dev-comment-type="paramref" class="paramref">timeSignature</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoAtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoAtTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)">GetTempoAtTime(ITimeSpan)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Tempo GetTempoAtTime(ITimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoChanges*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoChanges">GetTempoChanges()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueChange&lt;Tempo&gt;&gt; GetTempoChanges()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ValueChange-1.html">ValueChange</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureAtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureAtTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)">GetTimeSignatureAtTime(ITimeSpan)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSignature GetTimeSignatureAtTime(ITimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureChanges*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureChanges">GetTimeSignatureChanges()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueChange&lt;TimeSignature&gt;&gt; GetTimeSignatureChanges()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ValueChange-1.html">ValueChange</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a>&gt;&gt;</td>
+        <td></td>
       </tr>
     </tbody>
   </table>

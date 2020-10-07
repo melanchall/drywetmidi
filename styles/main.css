@@ -124,15 +124,8 @@ body .toc {
     padding-bottom: 5px;
 }
 
-    .level0.summary:empty {
-        border: none;
-    }
-
-article h4 {
-    /*border-bottom: 1px solid #5E5E5D;*/
-    border-bottom: 2px solid #EC5508;
-    padding-bottom: 5px;
-    margin-bottom: 15px;
+.level0.summary:empty {
+    border: none;
 }
 
 /*h1[id|="Melanchall_DryWetMidi"] > h4 {
@@ -181,6 +174,10 @@ code, kbd, pre, samp {
     color: #F8F8F8;
     background-color: #3B3A39;
     border-radius: 0px;
+}
+
+a code {
+    background-color: #3B3A39;
 }
 
 hr {
@@ -369,14 +366,6 @@ h5.decalaration + .codewrapper {
 
 /**/
 
-h3#constructors, h3#properties, h3#methods, h3#fields, h3#events, h3#implements, h3#classes, h3#enums, h3#delegates, h3#structs, h3#interfaces, h3#extensionmethods, h3#seealso, h3#operators, h3#eii {
-    padding-bottom: 10px;
-    border-bottom: 5px solid #EC5508;
-    font-weight: bold;
-}
-
-/**/
-
 .markdown.level1.summary {
     margin-bottom: 5px;
 }
@@ -440,8 +429,34 @@ h3#constructors, h3#properties, h3#methods, h3#fields, h3#events, h3#implements,
 }
 
 article h1 {
-    margin-top: 0px;
+    margin-top: 20px;
     margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 10px solid #EC5508;
+    font-weight: bold;
+}
+
+article h2 {
+    padding-bottom: 10px;
+    border-bottom: 5px solid #EC5508;
+    font-weight: normal;
+    margin-top: 40px;
+}
+
+article h3 {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #EC5508;
+    /*border-bottom-style: dashed;*/
+    font-weight: normal;
+}
+
+article h4 {
+    /*border-bottom: 1px solid #5E5E5D;*/
+    /*border-bottom: 2px solid #EC5508;*/
+    /*border-bottom-style: dashed;*/
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-weight: bold;
 }
 
 /* Images exceptions */
@@ -450,4 +465,12 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
     background-color: initial;
     padding: initial;
     border: none;
+}
+
+/* */
+
+#fields, #properties, #methods, #events, #constructors, #classes, #enums, #delegates, #extensionmethods, #structs, #interfaces, #implements, #operators {
+    font-weight: bold;
+    margin-top: 40px;
+    border-bottom: 5px solid #EC5508;
 }

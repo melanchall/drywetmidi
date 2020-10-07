@@ -124,53 +124,6 @@ Settings according to which MIDI data should be written.
   </div>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy">CompressionPolicy</h4>
-  <div class="markdown level1 summary">
-Gets or sets compression rules for the writing engine. The default is
-<a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_NoCompression">NoCompression</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public CompressionPolicy CompressionPolicy { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html">CompressionPolicy</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-<p>You can specify <a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_Default">Default</a> to use basic compression rules.
-<a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy">CompressionPolicy</a> is marked with <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.flagsattribute">FlagsAttribute</a> so you can
-combine separate rules as you want.</p>
-</div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CustomMetaEventTypes*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CustomMetaEventTypes">CustomMetaEventTypes</h4>
   <div class="markdown level1 summary">
@@ -202,6 +155,144 @@ Gets or sets collection of custom meta events types.
 class and have parameterless constructor. No exception will be thrown
 while writing a MIDI file if some types don&apos;t meet these requirements.</p>
 </div>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultKeySignature_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultKeySignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultKeySignature" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultKeySignature">DeleteDefaultKeySignature</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DeleteDefaultKeySignature { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultSetTempo_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultSetTempo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultSetTempo" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultSetTempo">DeleteDefaultSetTempo</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DeleteDefaultSetTempo { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultTimeSignature_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultTimeSignature*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultTimeSignature" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultTimeSignature">DeleteDefaultTimeSignature</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DeleteDefaultTimeSignature { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownChunks_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownChunks*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownChunks" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownChunks">DeleteUnknownChunks</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DeleteUnknownChunks { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownMetaEvents_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownMetaEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownMetaEvents" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownMetaEvents">DeleteUnknownMetaEvents</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DeleteUnknownMetaEvents { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_NoteOffAsSilentNoteOn_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.NoteOffAsSilentNoteOn*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_NoteOffAsSilentNoteOn" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.NoteOffAsSilentNoteOn">NoteOffAsSilentNoteOn</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool NoteOffAsSilentNoteOn { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_TextEncoding_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.TextEncoding*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_TextEncoding" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.TextEncoding">TextEncoding</h4>
   <div class="markdown level1 summary">
@@ -224,6 +315,75 @@ text-based meta event. The default is <a class="xref" href="https://docs.microso
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding">Encoding</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_UseRunningStatus_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.UseRunningStatus*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_UseRunningStatus" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.UseRunningStatus">UseRunningStatus</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool UseRunningStatus { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_WriteHeaderChunk_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriteHeaderChunk*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_WriteHeaderChunk" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriteHeaderChunk">WriteHeaderChunk</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WriteHeaderChunk { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_WriterSettings_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriterSettings*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_WriterSettings" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriterSettings">WriterSettings</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public WriterSettings WriterSettings { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WriterSettings.html">WriterSettings</a></td>
         <td></td>
       </tr>
     </tbody>

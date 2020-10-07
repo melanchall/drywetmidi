@@ -124,6 +124,75 @@ Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.Mid
   </div>
   <h3 id="properties">Properties
   </h3>
+  <a id="Melanchall_DryWetMidi_Core_ReaderSettings_Buffer_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.Buffer*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_Buffer" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.Buffer">Buffer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] Buffer { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferingPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferingPolicy">BufferingPolicy</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BufferingPolicy BufferingPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html">BufferingPolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize">BufferSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int BufferSize { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamBufferSize_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamBufferSize" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize">NonSeekableStreamBufferSize</h4>
   <div class="markdown level1 summary">
@@ -263,38 +332,6 @@ of bytes within such streams, incremental reading can prevent <a class="xref" hr
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory">ReadFromMemory</h4>
-  <div class="markdown level1 summary">
-Gets or sets a value indicating whether all MIDI data should be put to memory and read from there.
-The default value is <code>false</code>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool ReadFromMemory { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-<p>If the property set to <code>true</code>, it can significantly speed up reading MIDI data. For almost all real
-MIDI files it shouldn&apos;t be a problem to place entire file to memory since the size of most MIDI
-files is relatively small.</p>
-</div>
 </article>
           </div>
           

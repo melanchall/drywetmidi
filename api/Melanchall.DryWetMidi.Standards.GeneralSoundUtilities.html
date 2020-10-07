@@ -1,0 +1,2298 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GeneralSoundUtilities
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GeneralSoundUtilities
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities" class="text-break">Class GeneralSoundUtilities
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">GeneralSoundUtilities</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Standards.html">Melanchall.DryWetMidi.Standards</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class GeneralSoundUtilities</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundBrushPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion)">AsSevenBitNumber(GeneralSoundBrushPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion.html">GeneralSoundBrushPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundBrushPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion.html">GeneralSoundBrushPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion.html">GeneralSoundBrushPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundCm6432LPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion)">AsSevenBitNumber(GeneralSoundCm6432LPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion.html">GeneralSoundCm6432LPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundCm6432LPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion.html">GeneralSoundCm6432LPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion.html">GeneralSoundCm6432LPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundElectronicPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion)">AsSevenBitNumber(GeneralSoundElectronicPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion.html">GeneralSoundElectronicPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundElectronicPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion.html">GeneralSoundElectronicPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion.html">GeneralSoundElectronicPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundJazzPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion)">AsSevenBitNumber(GeneralSoundJazzPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion.html">GeneralSoundJazzPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundJazzPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion.html">GeneralSoundJazzPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion.html">GeneralSoundJazzPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundOrchestraPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion)">AsSevenBitNumber(GeneralSoundOrchestraPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion.html">GeneralSoundOrchestraPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundOrchestraPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion.html">GeneralSoundOrchestraPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion.html">GeneralSoundOrchestraPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundPercussionSet_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet)">AsSevenBitNumber(GeneralSoundPercussionSet)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet.html">GeneralSoundPercussionSet</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundPercussionSet percussionSet)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet.html">GeneralSoundPercussionSet</a></td>
+        <td><span class="parametername">percussionSet</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet.html">GeneralSoundPercussionSet</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussionSet</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussionSet</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundPowerPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion)">AsSevenBitNumber(GeneralSoundPowerPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion.html">GeneralSoundPowerPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundPowerPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion.html">GeneralSoundPowerPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion.html">GeneralSoundPowerPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundRoomPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion)">AsSevenBitNumber(GeneralSoundRoomPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion.html">GeneralSoundRoomPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundRoomPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion.html">GeneralSoundRoomPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion.html">GeneralSoundRoomPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundSfxPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion)">AsSevenBitNumber(GeneralSoundSfxPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion.html">GeneralSoundSfxPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundSfxPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion.html">GeneralSoundSfxPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion.html">GeneralSoundSfxPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundStandardPercussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion)">AsSevenBitNumber(GeneralSoundStandardPercussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion.html">GeneralSoundStandardPercussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundStandardPercussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion.html">GeneralSoundStandardPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion.html">GeneralSoundStandardPercussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_AsSevenBitNumber_Melanchall_DryWetMidi_Standards_GeneralSoundTr808Percussion_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.AsSevenBitNumber(Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion)">AsSevenBitNumber(GeneralSoundTr808Percussion)</h4>
+  <div class="markdown level1 summary">
+Converts <a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion.html">GeneralSoundTr808Percussion</a> to the corresponding value of the
+<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> type.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SevenBitNumber AsSevenBitNumber(this GeneralSoundTr808Percussion percussion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion.html">GeneralSoundTr808Percussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion.html">GeneralSoundTr808Percussion</a> to convert to <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a> representing the <code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundBrushPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundBrushPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Brush&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundBrushPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion.html">GeneralSoundBrushPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion.html">GeneralSoundBrushPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundCm6432LPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundCm6432LPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Analog&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundCm6432LPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion.html">GeneralSoundCm6432LPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion.html">GeneralSoundCm6432LPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundElectronicPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundElectronicPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Electronic&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundElectronicPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion.html">GeneralSoundElectronicPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion.html">GeneralSoundElectronicPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundJazzPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundJazzPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Jazz&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundJazzPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion.html">GeneralSoundJazzPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion.html">GeneralSoundJazzPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundOrchestraPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundOrchestraPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Orchestra&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundOrchestraPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion.html">GeneralSoundOrchestraPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion.html">GeneralSoundOrchestraPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundPowerPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundPowerPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Power&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundPowerPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion.html">GeneralSoundPowerPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion.html">GeneralSoundPowerPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundRoomPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundRoomPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Room&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundRoomPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion.html">GeneralSoundRoomPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion.html">GeneralSoundRoomPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundSfxPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundSfxPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;SFX&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundSfxPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion.html">GeneralSoundSfxPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion.html">GeneralSoundSfxPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundStandardPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundStandardPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Standard&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundStandardPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion.html">GeneralSoundStandardPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion.html">GeneralSoundStandardPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOffEvent_Melanchall_DryWetMidi_Standards_GeneralSoundTr808Percussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOffEvent(Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOffEvent(GeneralSoundTr808Percussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Analog&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOffEvent GetNoteOffEvent(this GeneralSoundTr808Percussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion.html">GeneralSoundTr808Percussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion.html">GeneralSoundTr808Percussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundBrushPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundBrushPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Brush&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundBrushPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion.html">GeneralSoundBrushPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundBrushPercussion.html">GeneralSoundBrushPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundCm6432LPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundCm6432LPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Analog&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundCm6432LPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion.html">GeneralSoundCm6432LPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundCm6432LPercussion.html">GeneralSoundCm6432LPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundElectronicPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundElectronicPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Electronic&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundElectronicPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion.html">GeneralSoundElectronicPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundElectronicPercussion.html">GeneralSoundElectronicPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundJazzPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundJazzPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Jazz&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundJazzPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion.html">GeneralSoundJazzPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundJazzPercussion.html">GeneralSoundJazzPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundOrchestraPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundOrchestraPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Orchestra&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundOrchestraPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion.html">GeneralSoundOrchestraPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundOrchestraPercussion.html">GeneralSoundOrchestraPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundPowerPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundPowerPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Power&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundPowerPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion.html">GeneralSoundPowerPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPowerPercussion.html">GeneralSoundPowerPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundRoomPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundRoomPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Room&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundRoomPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion.html">GeneralSoundRoomPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundRoomPercussion.html">GeneralSoundRoomPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundSfxPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundSfxPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;SFX&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundSfxPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion.html">GeneralSoundSfxPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundSfxPercussion.html">GeneralSoundSfxPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundStandardPercussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundStandardPercussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Standard&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundStandardPercussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion.html">GeneralSoundStandardPercussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundStandardPercussion.html">GeneralSoundStandardPercussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetNoteOnEvent_Melanchall_DryWetMidi_Standards_GeneralSoundTr808Percussion_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetNoteOnEvent(Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Common.FourBitNumber)">GetNoteOnEvent(GeneralSoundTr808Percussion, SevenBitNumber, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+General MIDI Level 2 &apos;Analog&apos; percussion.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NoteOnEvent GetNoteOnEvent(this GeneralSoundTr808Percussion percussion, SevenBitNumber velocity, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion.html">GeneralSoundTr808Percussion</a></td>
+        <td><span class="parametername">percussion</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundTr808Percussion.html">GeneralSoundTr808Percussion</a> to get an event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Velocity of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel an event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> corresponding to the specified
+<code data-dev-comment-type="paramref" class="paramref">percussion</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussion</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetPercussionSetEvents_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetPercussionSetEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetPercussionSetEvents_Melanchall_DryWetMidi_Standards_GeneralSoundPercussionSet_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetPercussionSetEvents(Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet,Melanchall.DryWetMidi.Common.FourBitNumber)">GetPercussionSetEvents(GeneralSoundPercussionSet, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets MIDI events sequence to switch to the specified General MIDI Level 2 percussion set.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;MidiEvent&gt; GetPercussionSetEvents(this GeneralSoundPercussionSet percussionSet, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet.html">GeneralSoundPercussionSet</a></td>
+        <td><span class="parametername">percussionSet</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet.html">GeneralSoundPercussionSet</a> to get events for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel events should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td>MIDI events sequence to switch to the <code data-dev-comment-type="paramref" class="paramref">percussionSet</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussionSet</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetProgramEvent_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetProgramEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Standards_GeneralSoundUtilities_GetProgramEvent_Melanchall_DryWetMidi_Standards_GeneralSoundPercussionSet_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Standards.GeneralSoundUtilities.GetProgramEvent(Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet,Melanchall.DryWetMidi.Common.FourBitNumber)">GetProgramEvent(GeneralSoundPercussionSet, FourBitNumber)</h4>
+  <div class="markdown level1 summary">
+Gets Program Change event corresponding to the specified General MIDI Level 2 percussion set.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiEvent GetProgramEvent(this GeneralSoundPercussionSet percussionSet, FourBitNumber channel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet.html">GeneralSoundPercussionSet</a></td>
+        <td><span class="parametername">percussionSet</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Standards.GeneralSoundPercussionSet.html">GeneralSoundPercussionSet</a> to get event for.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td>Channel event should be created for.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td>Program Change event corresponding to the <code data-dev-comment-type="paramref" class="paramref">percussionSet</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">percussionSet</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
