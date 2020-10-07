@@ -86,13 +86,13 @@
 <pre><code class="lang-csharp">file.Write(&quot;Some great song.mid&quot;, overwriteFile: true);
 </code></pre>
 <h2 id="compression">Compression</h2>
-<p>You can set specific policies via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a> to reduce size of an output file. For example, to use running status and thus don't write status bytes of channel events of the same type, set <a href="xref:Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy">CompressionPolicy</a> property according to this code:</p>
+<p>You can set specific policies via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a> to reduce size of an output file. For example, to use running status and thus don't write status bytes of channel events of the same type, set <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy">CompressionPolicy</a> property according to this code:</p>
 <pre><code class="lang-csharp">file.Write(&quot;Some great song.mid&quot;, settings: new WritingSettings
 {
     CompressionPolicy = CompressionPolicy.UseRunningStatus | CompressionPolicy.NoteOffAsSilentNoteOn
 });
 </code></pre>
-<p>Complete list of available compression rules is placed in documentation of <a href="xref:Melanchall.DryWetMidi.Core.CompressionPolicy">CompressionPolicy</a>.</p>
+<p>Complete list of available compression rules is placed in documentation of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.CompressionPolicy.html">CompressionPolicy</a>.</p>
 </article>
           </div>
           

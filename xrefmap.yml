@@ -3553,6 +3553,66 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ChunkTypesCollection.TryGetType
   nameWithType: ChunkTypesCollection.TryGetType
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy
+  name: CompressionPolicy
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html
+  commentId: T:Melanchall.DryWetMidi.Core.CompressionPolicy
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy
+  nameWithType: CompressionPolicy
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.Default
+  name: Default
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_Default
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.Default
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.Default
+  nameWithType: CompressionPolicy.Default
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultKeySignature
+  name: DeleteDefaultKeySignature
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteDefaultKeySignature
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultKeySignature
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultKeySignature
+  nameWithType: CompressionPolicy.DeleteDefaultKeySignature
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultSetTempo
+  name: DeleteDefaultSetTempo
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteDefaultSetTempo
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultSetTempo
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultSetTempo
+  nameWithType: CompressionPolicy.DeleteDefaultSetTempo
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultTimeSignature
+  name: DeleteDefaultTimeSignature
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteDefaultTimeSignature
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultTimeSignature
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteDefaultTimeSignature
+  nameWithType: CompressionPolicy.DeleteDefaultTimeSignature
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteUnknownChunks
+  name: DeleteUnknownChunks
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteUnknownChunks
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteUnknownChunks
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteUnknownChunks
+  nameWithType: CompressionPolicy.DeleteUnknownChunks
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteUnknownMetaEvents
+  name: DeleteUnknownMetaEvents
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_DeleteUnknownMetaEvents
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteUnknownMetaEvents
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.DeleteUnknownMetaEvents
+  nameWithType: CompressionPolicy.DeleteUnknownMetaEvents
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.NoCompression
+  name: NoCompression
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_NoCompression
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.NoCompression
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.NoCompression
+  nameWithType: CompressionPolicy.NoCompression
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.NoteOffAsSilentNoteOn
+  name: NoteOffAsSilentNoteOn
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_NoteOffAsSilentNoteOn
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.NoteOffAsSilentNoteOn
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.NoteOffAsSilentNoteOn
+  nameWithType: CompressionPolicy.NoteOffAsSilentNoteOn
+- uid: Melanchall.DryWetMidi.Core.CompressionPolicy.UseRunningStatus
+  name: UseRunningStatus
+  href: api/Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_UseRunningStatus
+  commentId: F:Melanchall.DryWetMidi.Core.CompressionPolicy.UseRunningStatus
+  fullName: Melanchall.DryWetMidi.Core.CompressionPolicy.UseRunningStatus
+  nameWithType: CompressionPolicy.UseRunningStatus
 - uid: Melanchall.DryWetMidi.Core.ContinueEvent
   name: ContinueEvent
   href: api/Melanchall.DryWetMidi.Core.ContinueEvent.html
@@ -7259,6 +7319,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
   nameWithType: ReaderSettings.NonSeekableStreamIncrementalBytesReadingThreshold
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  name: ReadFromMemory
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory
+  commentId: P:Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  nameWithType: ReaderSettings.ReadFromMemory
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory*
+  name: ReadFromMemory
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_ReadFromMemory_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.ReadFromMemory
+  nameWithType: ReaderSettings.ReadFromMemory
 - uid: Melanchall.DryWetMidi.Core.ReadingHandler
   name: ReadingHandler
   href: api/Melanchall.DryWetMidi.Core.ReadingHandler.html
@@ -9921,6 +9994,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Core.WritingSettings
   fullName: Melanchall.DryWetMidi.Core.WritingSettings
   nameWithType: WritingSettings
+- uid: Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy
+  name: CompressionPolicy
+  href: api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy
+  commentId: P:Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy
+  fullName: Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy
+  nameWithType: WritingSettings.CompressionPolicy
+- uid: Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy*
+  name: CompressionPolicy
+  href: api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy_
+  commentId: Overload:Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy
+  nameWithType: WritingSettings.CompressionPolicy
 - uid: Melanchall.DryWetMidi.Core.WritingSettings.CustomMetaEventTypes
   name: CustomMetaEventTypes
   href: api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes
@@ -18970,6 +19056,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureChanges
   nameWithType: TempoMap.GetTimeSignatureChanges
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.Tempo
+  name: Tempo
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_Tempo
+  commentId: P:Melanchall.DryWetMidi.Interaction.TempoMap.Tempo
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.Tempo
+  nameWithType: TempoMap.Tempo
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.Tempo*
+  name: Tempo
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_Tempo_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMap.Tempo
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.Tempo
+  nameWithType: TempoMap.Tempo
 - uid: Melanchall.DryWetMidi.Interaction.TempoMap.TimeDivision
   name: TimeDivision
   href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_TimeDivision
@@ -18983,6 +19082,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.TempoMap.TimeDivision
   nameWithType: TempoMap.TimeDivision
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature
+  name: TimeSignature
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_TimeSignature
+  commentId: P:Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature
+  nameWithType: TempoMap.TimeSignature
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature*
+  name: TimeSignature
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_TimeSignature_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.TimeSignature
+  nameWithType: TempoMap.TimeSignature
 - uid: Melanchall.DryWetMidi.Interaction.TempoMapManager
   name: TempoMapManager
   href: api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html
@@ -20773,6 +20885,23 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.ValueLine(Of TValue)
   nameWithType: ValueLine<TValue>
   nameWithType.vb: ValueLine(Of TValue)
+- uid: Melanchall.DryWetMidi.Interaction.ValueLine`1.AtTime(System.Int64)
+  name: AtTime(Int64)
+  href: api/Melanchall.DryWetMidi.Interaction.ValueLine-1.html#Melanchall_DryWetMidi_Interaction_ValueLine_1_AtTime_System_Int64_
+  commentId: M:Melanchall.DryWetMidi.Interaction.ValueLine`1.AtTime(System.Int64)
+  fullName: Melanchall.DryWetMidi.Interaction.ValueLine<TValue>.AtTime(System.Int64)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.ValueLine(Of TValue).AtTime(System.Int64)
+  nameWithType: ValueLine<TValue>.AtTime(Int64)
+  nameWithType.vb: ValueLine(Of TValue).AtTime(Int64)
+- uid: Melanchall.DryWetMidi.Interaction.ValueLine`1.AtTime*
+  name: AtTime
+  href: api/Melanchall.DryWetMidi.Interaction.ValueLine-1.html#Melanchall_DryWetMidi_Interaction_ValueLine_1_AtTime_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.ValueLine`1.AtTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.ValueLine<TValue>.AtTime
+  fullName.vb: Melanchall.DryWetMidi.Interaction.ValueLine(Of TValue).AtTime
+  nameWithType: ValueLine<TValue>.AtTime
+  nameWithType.vb: ValueLine(Of TValue).AtTime
 - uid: Melanchall.DryWetMidi.Interaction.ValueLine`1.GetEnumerator
   name: GetEnumerator()
   href: api/Melanchall.DryWetMidi.Interaction.ValueLine-1.html#Melanchall_DryWetMidi_Interaction_ValueLine_1_GetEnumerator

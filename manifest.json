@@ -154,15 +154,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "UidNotFound"
-      ],
       "type": "Conceptual",
       "source_relative_path": "articles/file-reading-writing/MIDI-file-writing.md",
       "output": {
         ".html": {
           "relative_path": "articles/file-reading-writing/MIDI-file-writing.html",
-          "hash": "THn3R1J3PLk2iOQjVlEoEg=="
+          "hash": "vDMN0SYcxpDDpeY1RJofDg=="
         }
       },
       "is_incremental": false,
@@ -1162,6 +1159,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Core.CompressionPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Core.CompressionPolicy.html",
+          "hash": "MuWmbcCr325MyXden9pjBw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Core.ContinueEvent.yml",
       "output": {
         ".html": {
@@ -1898,7 +1907,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.ReaderSettings.html",
-          "hash": "kjrspjq55LD8mx0/GUJDkg=="
+          "hash": "m8CngmKpbjiR0B1rCt6Lmw=="
         }
       },
       "is_incremental": false,
@@ -2426,7 +2435,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.WritingSettings.html",
-          "hash": "ErVYHG84MYMuq5jwuauUbg=="
+          "hash": "Tlrtb9vmDl1+iyHZg4hDDQ=="
         }
       },
       "is_incremental": false,
@@ -2450,7 +2459,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.html",
-          "hash": "yMRyAhliZP/TZfdnhvMIAQ=="
+          "hash": "Xy0t8tcfw+80KN1lKrr2ig=="
         }
       },
       "is_incremental": false,
@@ -3578,7 +3587,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TempoMap.html",
-          "hash": "NelhQvuGFtFOJ+vETd2/7w=="
+          "hash": "V2U1g3ds+lzKUe+iZrkG2g=="
         }
       },
       "is_incremental": false,
@@ -3842,7 +3851,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ValueLine-1.html",
-          "hash": "LPNBbB1JzsuNwkZzlh+1TQ=="
+          "hash": "wRoYeLwDPbEQafMt5IzamQ=="
         }
       },
       "is_incremental": false,
@@ -5078,22 +5087,19 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "+oxQf0i731z9IKG6sVE5bw=="
+          "hash": "f/S0TFfmE17G7NWZAxfcSg=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "log_codes": [
-        "UidNotFound"
-      ],
       "type": "Conceptual",
       "source_relative_path": "obsolete/OBS1/description.md",
       "output": {
         ".html": {
           "relative_path": "obsolete/OBS1/description.html",
-          "hash": "1MRvFfACadxF8K2pV61R0Q=="
+          "hash": "YorzW5s5jvUmt6hC07fTfw=="
         }
       },
       "is_incremental": false,
@@ -5232,15 +5238,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "UidNotFound"
-      ],
       "type": "Conceptual",
       "source_relative_path": "obsolete/obsolete.md",
       "output": {
         ".html": {
           "relative_path": "obsolete/obsolete.html",
-          "hash": "KWpR2KRxdR+gg+Z+m6WLvw=="
+          "hash": "NY2mjBT1f0+HOQw+quSyGw=="
         }
       },
       "is_incremental": false,
@@ -5264,7 +5267,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "IoLMBlmMrd6pU7HQUTM6nA=="
+          "hash": "P/8i2Msq3VtGBN6Y6TVE6g=="
         }
       },
       "is_incremental": false,
@@ -5291,7 +5294,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 352,
+          "total_file_count": 353,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

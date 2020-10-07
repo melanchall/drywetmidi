@@ -124,6 +124,54 @@ Settings according to which MIDI data should be written.
   </div>
   <h3 id="properties">Properties
   </h3>
+  <a id="Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CompressionPolicy">CompressionPolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets compression rules for the writing engine. The default is
+<a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_NoCompression">NoCompression</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS1&quot;)]
+public CompressionPolicy CompressionPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html">CompressionPolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>You can specify <a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_Default">Default</a> to use basic compression rules.
+<a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy">CompressionPolicy</a> is marked with <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.flagsattribute">FlagsAttribute</a> so you can
+combine separate rules as you want.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CustomMetaEventTypes*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_CustomMetaEventTypes" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.CustomMetaEventTypes">CustomMetaEventTypes</h4>
   <div class="markdown level1 summary">
