@@ -548,6 +548,31 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [Test]
+        public void Write_DifferentDeltaTimes()
+        {
+            var originalMidiEvents = new MidiEvent[]
+            {
+                new TextEvent("A") { DeltaTime = 0 },
+                new TextEvent("B") { DeltaTime = 10 },
+                new TextEvent("C") { DeltaTime = 100 },
+                new TextEvent("D") { DeltaTime = 1000 },
+                new TextEvent("E") { DeltaTime = 10000 },
+                new TextEvent("F") { DeltaTime = 100000 }
+            };
+
+            var midiFile = new MidiFile(new TrackChunk(originalMidiEvents));
+
+            Write(
+                midiFile,
+                settings => { },
+                (fileInfo1, fileInfo2) =>
+                {
+                    var newMidiFile = MidiFile.Read(fileInfo2.FullName);
+                    MidiAsserts.AreFilesEqual(midiFile, newMidiFile, false, "File is invalid.");
+                });
+        }
+
         #endregion
 
         #region Private methods

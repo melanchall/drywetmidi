@@ -133,6 +133,70 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
+        [Test]
+        public void PlayRecordedData()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                new EventToSend(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromSeconds(5))
+            };
+
+            MidiFile recordedFile = null;
+
+            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            {
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+
+                using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                {
+                    var receivedEventsNumber = 0;
+
+                    inputDevice.StartEventsListening();
+                    inputDevice.EventReceived += (_, __) => receivedEventsNumber++;
+
+                    using (var recording = new Recording(tempoMap, inputDevice))
+                    {
+                        var sendingThread = new Thread(() =>
+                        {
+                            SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                        });
+
+                        recording.Start();
+                        sendingThread.Start();
+
+                        SpinWait.SpinUntil(() => !sendingThread.IsAlive && receivedEventsNumber == eventsToSend.Length);
+                        recording.Stop();
+
+                        recordedFile = recording.ToFile();
+                    }
+                }
+            }
+
+            CheckPlayback(
+                eventsToSend,
+                1.0,
+                beforePlaybackStarted: NoPlaybackAction,
+                startPlayback: (context, playback) => playback.Start(),
+                afterPlaybackStarted: NoPlaybackAction,
+                waiting: (context, playback) =>
+                {
+                    var timeout = context.ExpectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                },
+                finalChecks: (context, playback) =>
+                {
+                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                },
+                createPlayback: (outputDevice, clockSettings) => recordedFile.GetPlayback(outputDevice, clockSettings));
+        }
+
+        [Retry(RetriesNumber)]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]

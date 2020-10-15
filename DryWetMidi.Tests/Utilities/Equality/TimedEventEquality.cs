@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -14,14 +15,16 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             #region Fields
 
             private readonly bool _compareDeltaTimes;
+            private readonly long _timesEpsilon;
 
             #endregion
 
             #region Constructor
 
-            public TimedEventComparer(bool compareDeltaTimes)
+            public TimedEventComparer(bool compareDeltaTimes, long timesEpsilon = 0)
             {
                 _compareDeltaTimes = compareDeltaTimes;
+                _timesEpsilon = timesEpsilon;
             }
 
             #endregion
@@ -37,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     return false;
 
                 string message;
-                return timedEvent1.Time == timedEvent2.Time &&
+                return Math.Abs(timedEvent1.Time - timedEvent2.Time) <= _timesEpsilon &&
                        MidiEvent.Equals(timedEvent1.Event, timedEvent2.Event, new MidiEventEqualityCheckSettings { CompareDeltaTimes = _compareDeltaTimes }, out message);
             }
 
@@ -58,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return new TimedEventComparer(compareDeltaTimes).Equals(timedEvent1, timedEvent2);
         }
 
-        public static bool AreEqual(IEnumerable<TimedEvent> timedEvents1, IEnumerable<TimedEvent> timedEvents2, bool compareDeltaTimes)
+        public static bool AreEqual(IEnumerable<TimedEvent> timedEvents1, IEnumerable<TimedEvent> timedEvents2, bool compareDeltaTimes, long timesEpsilon = 0)
         {
             if (ReferenceEquals(timedEvents1, timedEvents2))
                 return true;
@@ -66,7 +69,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             if (ReferenceEquals(null, timedEvents1) || ReferenceEquals(null, timedEvents2))
                 return false;
 
-            return timedEvents1.SequenceEqual(timedEvents2, new TimedEventComparer(compareDeltaTimes));
+            return timedEvents1.SequenceEqual(timedEvents2, new TimedEventComparer(compareDeltaTimes, timesEpsilon));
         }
 
         #endregion

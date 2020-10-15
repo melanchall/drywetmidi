@@ -154,11 +154,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 using (var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA))
                 {
-                    var exception = Assert.Throws<MidiDeviceException>(() => inputDevice2.StartEventsListening());
-                    Assert.AreEqual(
-                        "The specified device is already in use.  Wait until it is free, and then try again.",
-                        exception.Message,
-                        "Exception's message is invalid.");
+                    Assert.Throws<MidiDeviceException>(() => inputDevice2.StartEventsListening());
                 }
             }
         }
