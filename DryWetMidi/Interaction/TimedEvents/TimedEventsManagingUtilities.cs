@@ -434,7 +434,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(events), events);
 
-            trackChunk.Events.AddTimedEvents(events);
+            trackChunk.Events.AddTimedEvents(events.Where(e => e.Event is ChannelEvent || e.Event is MetaEvent || e.Event is SysExEvent));
         }
 
         /// <summary>
