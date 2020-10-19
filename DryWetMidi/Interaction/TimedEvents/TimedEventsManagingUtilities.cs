@@ -168,10 +168,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
+        /// system common one.</exception>
         public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, long time)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsOfInvalidType<SystemRealTimeEvent, SystemCommonEvent>(nameof(midiEvent), midiEvent, "Event is either system real-time or system common one.");
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
             eventsCollection.Add(new TimedEvent(midiEvent, time));
@@ -204,10 +207,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
+        /// system common one.</exception>
         public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsOfInvalidType<SystemRealTimeEvent, SystemCommonEvent>(nameof(midiEvent), midiEvent, "Event is either system real-time or system common one.");
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
@@ -389,6 +395,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Adds collection of timed events to the specified <see cref="EventsCollection"/>.
         /// </summary>
+        /// <remarks>
+        /// Note that only MIDI events allowed by SMF specification will be added. So instances of
+        /// <see cref="SystemCommonEvent"/> or <see cref="SystemRealTimeEvent"/> won't be added.
+        /// </remarks>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to add timed events to.</param>
         /// <param name="events">Timed events to add to the <paramref name="eventsCollection"/>.</param>
         /// <exception cref="ArgumentNullException">
@@ -409,13 +419,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
             using (var timedEventsManager = eventsCollection.ManageTimedEvents())
             {
-                timedEventsManager.Events.Add(events);
+                timedEventsManager.Events.Add(events.Where(e => e.Event is ChannelEvent || e.Event is MetaEvent || e.Event is SysExEvent));
             }
         }
 
         /// <summary>
         /// Adds collection of timed events to the specified <see cref="TrackChunk"/>.
         /// </summary>
+        /// <remarks>
+        /// Note that only MIDI events allowed by SMF specification will be added. So instances of
+        /// <see cref="SystemCommonEvent"/> or <see cref="SystemRealTimeEvent"/> won't be added.
+        /// </remarks>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to add timed events to.</param>
         /// <param name="events">Timed events to add to the <paramref name="trackChunk"/>.</param>
         /// <exception cref="ArgumentNullException">
@@ -434,12 +448,16 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(events), events);
 
-            trackChunk.Events.AddTimedEvents(events.Where(e => e.Event is ChannelEvent || e.Event is MetaEvent || e.Event is SysExEvent));
+            trackChunk.Events.AddTimedEvents(events);
         }
 
         /// <summary>
         /// Creates a track chunk with the specified timed events.
         /// </summary>
+        /// <remarks>
+        /// Note that only MIDI events allowed by SMF specification will be added to result track chunk.
+        /// So instances of <see cref="SystemCommonEvent"/> or <see cref="SystemRealTimeEvent"/> won't be added.
+        /// </remarks>
         /// <param name="events">Collection of timed events to create a track chunk.</param>
         /// <returns><see cref="TrackChunk"/> containing the specified timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
@@ -456,6 +474,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Creates a MIDI file with the specified timed events.
         /// </summary>
+        /// <remarks>
+        /// Note that only MIDI events allowed by SMF specification will be added to result MIDI file.
+        /// So instances of <see cref="SystemCommonEvent"/> or <see cref="SystemRealTimeEvent"/> won't be added.
+        /// </remarks>
         /// <param name="events">Collection of timed events to create a MIDI file.</param>
         /// <returns><see cref="MidiFile"/> containing the specified timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>

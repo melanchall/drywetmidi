@@ -170,6 +170,18 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentException(message, parameterName);
         }
 
+        internal static void IsOfInvalidType<TInvalidType>(string parameterName, object parameterValue, string message)
+        {
+            if (parameterValue is TInvalidType)
+                throw new ArgumentException(message, parameterName);
+        }
+
+        internal static void IsOfInvalidType<TInvalidType1, TInvalidType2>(string parameterName, object parameterValue, string message)
+        {
+            if (parameterValue is TInvalidType1 || parameterValue is TInvalidType2)
+                throw new ArgumentException(message, parameterName);
+        }
+
         #endregion
     }
 }
