@@ -6,10 +6,18 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Represents MIDI registered parameter (RPN).
+    /// </summary>
     public abstract class RegisteredParameter : Parameter
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegisteredParameter"/> with the specified
+        /// type of a parameter.
+        /// </summary>
+        /// <param name="parameterType">The type of parameter.</param>
         protected RegisteredParameter(RegisteredParameterType parameterType)
         {
             ParameterType = parameterType;
@@ -20,20 +28,40 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Properties
 
         // TODO: test that each value used for single type
+        /// <summary>
+        /// Gets the type of the current parameter.
+        /// </summary>
         public RegisteredParameterType ParameterType { get; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Returns MSB and LSB that represent data of the current parameter.
+        /// </summary>
+        /// <param name="msb">MSB of parameter's data.</param>
+        /// <param name="lsb">LSB of parameter's data.</param>
         protected abstract void GetData(out SevenBitNumber msb, out SevenBitNumber? lsb);
 
+        /// <summary>
+        /// Returns the number of increment/decrement steps based on the value of the
+        /// current parameter.
+        /// </summary>
+        /// <returns>The number of increment/decrement steps based on the value of the
+        /// current parameter.</returns>
         protected abstract int GetIncrementStepsCount();
 
         #endregion
 
         #region Overrides
 
+        /// <summary>
+        /// Returns the collection of <see cref="TimedEvent"/> objects that represent the current
+        /// parameter. In fact, each <see cref="TimedEvent"/> object will contain <see cref="ControlChangeEvent"/> event.
+        /// </summary>
+        /// <returns>Collection of <see cref="TimedEvent"/> objects that represent the current
+        /// parameter.</returns>
         public override IEnumerable<TimedEvent> GetTimedEvents()
         {
             var controlChanges = new List<Tuple<ControlName, SevenBitNumber>>
@@ -79,6 +107,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 Time));
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"RPN {ParameterType} set to {ValueType}";

@@ -54,6 +54,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of <paramref name="settings"/>
+        /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
+        /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         public MidiReader(Stream stream, ReaderSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);

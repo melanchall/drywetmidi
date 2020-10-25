@@ -1,5 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Standards
 {
+    /// <summary>
+    /// General Sound 'CM-64/CM-32L' percussion.
+    /// </summary>
     public enum GeneralSoundCm6432LPercussion : byte
     {
         /// <summary>
@@ -232,46 +235,109 @@
         /// </summary>
         CarEngine = 87,
 
+        /// <summary>
+        /// 'Car Brakes' General Sound percussion note.
+        /// </summary>
         CarBrakes = 88,
 
+        /// <summary>
+        /// 'Car Passing' General Sound percussion note.
+        /// </summary>
         CarPassing = 89,
 
+        /// <summary>
+        /// 'Car Crash' General Sound percussion note.
+        /// </summary>
         CarCrash = 90,
 
+        /// <summary>
+        /// 'Siren' General Sound percussion note.
+        /// </summary>
         Siren = 91,
 
+        /// <summary>
+        /// 'Train' General Sound percussion note.
+        /// </summary>
         Train = 92,
 
+        /// <summary>
+        /// 'Jet Plane' General Sound percussion note.
+        /// </summary>
         JetPlane = 93,
 
+        /// <summary>
+        /// 'Helicopter' General Sound percussion note.
+        /// </summary>
         Helicopter = 94,
 
+        /// <summary>
+        /// 'Starship' General Sound percussion note.
+        /// </summary>
         Starship = 95,
 
+        /// <summary>
+        /// 'Gun Shot' General Sound percussion note.
+        /// </summary>
         GunShot = 96,
 
+        /// <summary>
+        /// 'Machine Gun' General Sound percussion note.
+        /// </summary>
         MachineGun = 97,
 
+        /// <summary>
+        /// 'Laser Gun' General Sound percussion note.
+        /// </summary>
         LaserGun = 98,
 
+        /// <summary>
+        /// 'Explosion' General Sound percussion note.
+        /// </summary>
         Explosion = 99,
 
+        /// <summary>
+        /// 'Dog Bark' General Sound percussion note.
+        /// </summary>
         DogBark = 100,
 
+        /// <summary>
+        /// 'Horse Gallop' General Sound percussion note.
+        /// </summary>
         HorseGallop = 101,
 
+        /// <summary>
+        /// 'Birds Tweet' General Sound percussion note.
+        /// </summary>
         BirdsTweet = 102,
 
+        /// <summary>
+        /// 'Rain' General Sound percussion note.
+        /// </summary>
         Rain = 103,
 
+        /// <summary>
+        /// 'Thunder' General Sound percussion note.
+        /// </summary>
         Thunder = 104,
 
+        /// <summary>
+        /// 'Wind' General Sound percussion note.
+        /// </summary>
         Wind = 105,
 
+        /// <summary>
+        /// 'Seashore' General Sound percussion note.
+        /// </summary>
         Seashore = 106,
 
+        /// <summary>
+        /// 'Stream' General Sound percussion note.
+        /// </summary>
         Stream = 107,
 
+        /// <summary>
+        /// 'Bubble' General Sound percussion note.
+        /// </summary>
         Bubble = 108
     }
 }

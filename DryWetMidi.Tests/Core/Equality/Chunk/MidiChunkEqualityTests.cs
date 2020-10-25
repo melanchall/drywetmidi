@@ -123,6 +123,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 return A == chunk.A;
             }
 
+            public override int GetHashCode()
+            {
+                return A.GetHashCode();
+            }
+
             #endregion
         }
 

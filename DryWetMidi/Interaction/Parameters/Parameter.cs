@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
     // TODO: override Equals, GetHashCode, == and so on (see TimedEvent for ref)
+    /// <summary>
+    /// Represents parameter (RPN or NRPN) encoded as series of Control Change events.
+    /// </summary>
     public abstract class Parameter : ITimedObject, INotifyTimeChanged
     {
         #region Events
@@ -25,8 +30,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the channel of the current parameter. This channel is in fact
+        /// the channel of Control Change events that represent the parameter.
+        /// </summary>
         public FourBitNumber Channel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the type of the current parameter's value.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public ParameterValueType ValueType
         {
             get { return _valueType; }
@@ -38,6 +51,10 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        /// <summary>
+        /// Gets or sets absolute time of the parameter data in units defined by the time division of a MIDI file.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Time
         {
             get { return _time; }
@@ -59,6 +76,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Returns the collection of <see cref="TimedEvent"/> objects that represent the current
+        /// parameter. In fact, each <see cref="TimedEvent"/> object will contain <see cref="ControlChangeEvent"/> event.
+        /// </summary>
+        /// <returns>Collection of <see cref="TimedEvent"/> objects that represent the current
+        /// parameter.</returns>
         public abstract IEnumerable<TimedEvent> GetTimedEvents();
 
         #endregion

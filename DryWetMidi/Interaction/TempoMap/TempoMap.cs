@@ -124,11 +124,21 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Returns the collection of tempo changes.
+        /// </summary>
+        /// <returns>Collection of tempo changes.</returns>
         public IEnumerable<ValueChange<Tempo>> GetTempoChanges()
         {
             return _tempoLine;
         }
 
+        /// <summary>
+        /// Returns tempo at the specified time.
+        /// </summary>
+        /// <param name="time">Time to get tempo at.</param>
+        /// <returns>Tempo at the time of <paramref name="time"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         public Tempo GetTempoAtTime(ITimeSpan time)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -137,11 +147,21 @@ namespace Melanchall.DryWetMidi.Interaction
             return TempoLine.GetValueAtTime(convertedTime);
         }
 
+        /// <summary>
+        /// Returns the collection of time signature changes.
+        /// </summary>
+        /// <returns>Collection of time signature changes.</returns>
         public IEnumerable<ValueChange<TimeSignature>> GetTimeSignatureChanges()
         {
             return _timeSignatureLine;
         }
 
+        /// <summary>
+        /// Returns time signature at the specified time.
+        /// </summary>
+        /// <param name="time">Time signature to get tempo at.</param>
+        /// <returns>Time signature at the time of <paramref name="time"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         public TimeSignature GetTimeSignatureAtTime(ITimeSpan time)
         {
             ThrowIfArgument.IsNull(nameof(time), time);

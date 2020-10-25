@@ -127,6 +127,14 @@ namespace Melanchall.DryWetMidi.Core
             return Equals(chunk1, chunk2, null, out message);
         }
 
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content.
+        /// </summary>
+        /// <param name="chunk1">The first chunk to compare, or <c>null</c>.</param>
+        /// <param name="chunk2">The second chunk to compare, or <c>null</c>.</param>
+        /// <param name="settings">Settings according to which chunks should be compared.</param>
+        /// <returns><c>true</c> if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
+        /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, MidiChunkEqualityCheckSettings settings)
         {
             string message;

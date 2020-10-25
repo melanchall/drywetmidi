@@ -19,7 +19,14 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const long DefaultMicrosecondsPerQuarterNote = 500000;
 
+        /// <summary>
+        /// Represents the smallest possible microseconds-per-quarter-note value.
+        /// </summary>
         public const long MinMicrosecondsPerQuarterNote = 1;
+
+        /// <summary>
+        /// Represents the largest possible microseconds-per-quarter-note value.
+        /// </summary>
         public const long MaxMicrosecondsPerQuarterNote = (1 << 24) - 1;
 
         #endregion

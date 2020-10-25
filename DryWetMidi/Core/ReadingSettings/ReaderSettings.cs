@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
@@ -98,6 +99,11 @@ namespace Melanchall.DryWetMidi.Core
             set { BufferingPolicy = BufferingPolicy.BufferAllData; }
         }
 
+        /// <summary>
+        /// Gets or sets a rule according to which MIDI data should be buffered before reading.
+        /// The default is <see cref="BufferingPolicy.UseFixedSizeBuffer"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public BufferingPolicy BufferingPolicy
         {
             get { return _bufferingPolicy; }
@@ -109,6 +115,11 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets the size of a buffer that will be used by <see cref="MidiReader"/> in case of
+        /// <see cref="BufferingPolicy.UseFixedSizeBuffer"/> policy used for <see cref="BufferingPolicy"/>.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         public int BufferSize
         {
             get { return _bufferSize; }
@@ -120,6 +131,10 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets the buffer that will be used by <see cref="MidiReader"/> in case of
+        /// <see cref="BufferingPolicy.UseCustomBuffer"/> policy used for <see cref="BufferingPolicy"/>.
+        /// </summary>
         public byte[] Buffer { get; set; }
 
         #endregion

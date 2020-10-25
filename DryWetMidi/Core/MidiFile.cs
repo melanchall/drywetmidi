@@ -227,6 +227,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
         /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
+        /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of <paramref name="settings"/>
+        /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
+        /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         public static MidiFile Read(string filePath, ReadingSettings settings = null)
         {
             using (var fileStream = FileUtilities.OpenFileForRead(filePath))
@@ -349,6 +352,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
         /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
+        /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of <paramref name="settings"/>
+        /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
+        /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         public static MidiFile Read(Stream stream, ReadingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -595,6 +601,14 @@ namespace Melanchall.DryWetMidi.Core
             return Equals(midiFile1, midiFile2, null, out message);
         }
 
+        /// <summary>
+        /// Determines whether two specified <see cref="MidiFile"/> objects have the same content.
+        /// </summary>
+        /// <param name="midiFile1">The first file to compare, or <c>null</c>.</param>
+        /// <param name="midiFile2">The second file to compare, or <c>null</c>.</param>
+        /// <param name="settings">Settings according to which files should be compared.</param>
+        /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
+        /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings)
         {
             string message;

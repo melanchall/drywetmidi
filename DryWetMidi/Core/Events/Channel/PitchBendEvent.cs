@@ -14,7 +14,14 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constants
 
+        /// <summary>
+        /// Represents the smallest possible pitch value.
+        /// </summary>
         public const ushort MinPitchValue = 0;
+
+        /// <summary>
+        /// Represents the largest possible pitch value.
+        /// </summary>
         public const ushort MaxPitchValue = (1 << 14) - 1;
 
         #endregion

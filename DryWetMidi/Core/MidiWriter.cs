@@ -12,12 +12,14 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
+        private readonly WriterSettings _settings;
+
         private readonly Stream _stream;
 
         private readonly byte[] _numberBuffer = new byte[9];
         
         private readonly bool _useBuffering;
-        private readonly byte[] _buffer;
+        private byte[] _buffer;
         private int _bufferPosition;
 
         private bool _disposed;
@@ -30,15 +32,32 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="MidiWriter"/> with the specified stream.
         /// </summary>
         /// <param name="stream">Stream to write MIDI file to.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
+        /// <param name="settings">Settings according to which MIDI data should be written.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="settings"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support writing,
         /// or is already closed.</exception>
         public MidiWriter(Stream stream, WriterSettings settings)
         {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsNull(nameof(settings), settings);
+
+            _settings = settings;
+
             _stream = stream;
             _useBuffering = settings.UseBuffering;
 
-            _buffer = new byte[settings.BufferSize];
+            if (_useBuffering)
+                PrepareBuffer();
         }
 
         #endregion
@@ -203,6 +222,14 @@ namespace Melanchall.DryWetMidi.Core
             _numberBuffer[2] = (byte)(value & 0xFF);
 
             WriteBytes(_numberBuffer, 0, 3);
+        }
+
+        private void PrepareBuffer()
+        {
+            if (!_useBuffering)
+                return;
+
+            _buffer = new byte[_settings.BufferSize];
         }
 
         private void WriteBytes(byte[] bytes, int offset, int length)

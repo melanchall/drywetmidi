@@ -350,6 +350,11 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public DecodeTextCallback DecodeTextCallback { get; set; }
 
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on zero-length objects such as strings or arrays.
+        /// The default is <see cref="ZeroLengthDataPolicy.ReadAsEmptyObject"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public ZeroLengthDataPolicy ZeroLengthDataPolicy
         {
             get { return _zeroLengthDataPolicy; }
