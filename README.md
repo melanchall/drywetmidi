@@ -38,6 +38,8 @@ Here the list of noticeable projects that use DryWetMIDI:
   A collection of virtual musical instruments that features real MIDI output.
 * [Rustissimo](https://store.steampowered.com/app/1222580/Rustissimo)  
   Using Rustissimo you can create a concert with your friends and play instruments with synchronization.
+* [Daybreak 360° Music Video](https://www.chrisjamesjordan.com/360video.html)  
+  A short 360° music video to the song Daybreak by Electric Mantis.
 
 ## Getting Started
 
