@@ -41,6 +41,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         public bool PreserveTrackChunks { get; set; } = false;
 
+        /// <summary>
+        /// Gets or sets <see cref="SliceMidiFileMarkers"/> that holds factory methods to create events
+        /// to mark parts of splitted file.
+        /// </summary>
         public SliceMidiFileMarkers Markers { get; set; }
 
         #endregion

@@ -6,12 +6,15 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Standards
 {
     // TODO: tests
+    /// <summary>
+    /// Provides utilities for General Sound.
+    /// </summary>
     public static class GeneralSoundUtilities
     {
         private const byte RhythmChannelBankMsb = 0x78;
 
         /// <summary>
-        /// Gets MIDI events sequence to switch to the specified General MIDI Level 2 percussion set.
+        /// Gets MIDI events sequence to switch to the specified General Sound percussion set.
         /// </summary>
         /// <param name="percussionSet"><see cref="GeneralSoundPercussionSet"/> to get events for.</param>
         /// <param name="channel">Channel events should be created for.</param>
@@ -30,7 +33,7 @@ namespace Melanchall.DryWetMidi.Standards
         }
 
         /// <summary>
-        /// Gets Program Change event corresponding to the specified General MIDI Level 2 percussion set.
+        /// Gets Program Change event corresponding to the specified General Sound percussion set.
         /// </summary>
         /// <param name="percussionSet"><see cref="GeneralSoundPercussionSet"/> to get event for.</param>
         /// <param name="channel">Channel event should be created for.</param>
@@ -199,7 +202,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Analog' percussion.
+        /// General Sound 'TR-808' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundTr808Percussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -216,7 +219,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Analog' percussion.
+        /// General Sound 'CM-64/CM-32L' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundCm6432LPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -233,7 +236,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Brush' percussion.
+        /// General Sound 'Brush' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundBrushPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -250,7 +253,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Electronic' percussion.
+        /// General Sound 'Electronic' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundElectronicPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -267,7 +270,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Jazz' percussion.
+        /// General Sound 'Jazz' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundJazzPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -284,7 +287,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Orchestra' percussion.
+        /// General Sound 'Orchestra' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundOrchestraPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -301,7 +304,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Power' percussion.
+        /// General Sound 'Power' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundPowerPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -318,7 +321,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Room' percussion.
+        /// General Sound 'Room' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundRoomPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -335,7 +338,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'SFX' percussion.
+        /// General Sound 'SFX' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundSfxPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -352,7 +355,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOnEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Standard' percussion.
+        /// General Sound 'Standard' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundStandardPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOnEvent"/>.</param>
@@ -369,7 +372,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Analog' percussion.
+        /// General Sound 'TR-808' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundTr808Percussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -386,7 +389,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Analog' percussion.
+        /// General Sound 'CM-64/CM-32L' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundCm6432LPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -403,7 +406,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Brush' percussion.
+        /// General Sound 'Brush' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundBrushPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -420,7 +423,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Electronic' percussion.
+        /// General Sound 'Electronic' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundElectronicPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -437,7 +440,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Jazz' percussion.
+        /// General Sound 'Jazz' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundJazzPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -454,7 +457,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Orchestra' percussion.
+        /// General Sound 'Orchestra' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundOrchestraPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -471,7 +474,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Power' percussion.
+        /// General Sound 'Power' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundPowerPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -488,7 +491,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Room' percussion.
+        /// General Sound 'Room' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundRoomPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -505,7 +508,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'SFX' percussion.
+        /// General Sound 'SFX' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundSfxPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>
@@ -522,7 +525,7 @@ namespace Melanchall.DryWetMidi.Standards
 
         /// <summary>
         /// Gets an instance of the <see cref="NoteOffEvent"/> corresponding to the specified
-        /// General MIDI Level 2 'Standard' percussion.
+        /// General Sound 'Standard' percussion.
         /// </summary>
         /// <param name="percussion"><see cref="GeneralSoundStandardPercussion"/> to get an event for.</param>
         /// <param name="velocity">Velocity of the <see cref="NoteOffEvent"/>.</param>

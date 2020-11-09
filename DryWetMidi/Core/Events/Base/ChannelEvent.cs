@@ -38,6 +38,12 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
+        /// <summary>
+        /// Reads channel event's data byte using the specified reader and settings.
+        /// </summary>
+        /// <param name="reader">Reader to read data byte with.</param>
+        /// <param name="settings">Settings according to which a data byte should be read and processed.</param>
+        /// <returns>A data byte read with <paramref name="reader"/>.</returns>
         protected byte ReadDataByte(MidiReader reader, ReadingSettings settings)
         {
             var value = reader.ReadByte();

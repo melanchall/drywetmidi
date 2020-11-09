@@ -23,10 +23,24 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const byte DefaultScale = 0;
 
+        /// <summary>
+        /// Represents the smallest possible key value.
+        /// </summary>
         public const sbyte MinKey = -7;
+
+        /// <summary>
+        /// Represents the largest possible key value.
+        /// </summary>
         public const sbyte MaxKey = 7;
 
+        /// <summary>
+        /// Represents the smallest possible scale value.
+        /// </summary>
         public const byte MinScale = 0;
+
+        /// <summary>
+        /// Represents the largest possible scale value.
+        /// </summary>
         public const byte MaxScale = 1;
 
         #endregion

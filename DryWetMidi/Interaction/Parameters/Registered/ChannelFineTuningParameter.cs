@@ -1,13 +1,24 @@
 ﻿using System;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Channel Fine Tuning registered parameter.
+    /// </summary>
     public sealed class ChannelFineTuningParameter : RegisteredParameter
     {
         #region Constants
 
+        /// <summary>
+        /// Represents the smallest possible number of cents to tune by.
+        /// </summary>
         public const float MinCents = -100f;
+
+        /// <summary>
+        /// Represents the largest possible number of cents to tune by.
+        /// </summary>
         public const float MaxCents = 100f;
 
         private const float CentResolution = 16383 / 200f;
@@ -22,16 +33,36 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelFineTuningParameter"/>.
+        /// </summary>
         public ChannelFineTuningParameter()
             : base(RegisteredParameterType.ChannelFineTuning)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelFineTuningParameter"/> with the specified
+        /// exact number of cents.
+        /// </summary>
+        /// <param name="cents">The number of cents to tune by.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="cents"/> is out of
+        /// [<see cref="MinCents"/>; <see cref="MaxCents"/>] range.</exception>
         public ChannelFineTuningParameter(float cents)
             : this(cents, ParameterValueType.Exact)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelFineTuningParameter"/> with the specified
+        /// number of cents and type of this number.
+        /// </summary>
+        /// <param name="cents">The number of cents to tune by.</param>
+        /// <param name="valueType">The type of parameter's data which defines whether it
+        /// represents exact value, increment or decrement.</param>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="valueType"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="cents"/> is out of
+        /// [<see cref="MinCents"/>; <see cref="MaxCents"/>] range.</exception>
         public ChannelFineTuningParameter(float cents, ParameterValueType valueType)
             : this()
         {
@@ -43,6 +74,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the number of cents to tune by.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of
+        /// [<see cref="MinCents"/>; <see cref="MaxCents"/>] range.</exception>
         public float Cents
         {
             get { return _cents; }
@@ -73,6 +109,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Overrides
 
+        /// <inheritdoc/>
         protected override void GetData(out SevenBitNumber msb, out SevenBitNumber? lsb)
         {
             var data = (ushort)GetSteps();
@@ -80,11 +117,13 @@ namespace Melanchall.DryWetMidi.Interaction
             lsb = data.GetTail();
         }
 
+        /// <inheritdoc/>
         protected override int GetIncrementStepsCount()
         {
             return GetSteps();
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{base.ToString()}: {Cents} cents";
