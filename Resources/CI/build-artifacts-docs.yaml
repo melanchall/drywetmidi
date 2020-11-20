@@ -25,6 +25,12 @@ variables:
 name: $(TeamProject)_$(SourceBranchName)_BuildDocs_$(version)$(Rev:.r)
 
 steps:
+- task: PowerShell@2
+  displayName: Generate obsolete API hints
+  inputs:
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+
 - task: DotNetCoreCLI@2
   displayName: Build project
   inputs:
