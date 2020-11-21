@@ -126,7 +126,10 @@ Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.Mid
   </h3>
   <a id="Melanchall_DryWetMidi_Core_ReaderSettings_Buffer_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.Buffer*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_Buffer" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.Buffer">Buffer</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets the buffer that will be used by <a class="xref" href="Melanchall.DryWetMidi.Core.MidiReader.html">MidiReader</a> in case of
+<a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseCustomBuffer">UseCustomBuffer</a> policy used for <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">BufferingPolicy</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -149,7 +152,10 @@ Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.Mid
   </table>
   <a id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferingPolicy*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferingPolicy">BufferingPolicy</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a rule according to which MIDI data should be buffered before reading.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">UseFixedSizeBuffer</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -170,9 +176,27 @@ Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.Mid
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize_" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize" data-uid="Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize">BufferSize</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets the size of a buffer that will be used by <a class="xref" href="Melanchall.DryWetMidi.Core.MidiReader.html">MidiReader</a> in case of
+<a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">UseFixedSizeBuffer</a> policy used for <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">BufferingPolicy</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -190,6 +214,21 @@ Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.Mid
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is zero or negative.</td>
       </tr>
     </tbody>
   </table>
@@ -341,7 +380,7 @@ The default value is <code>false</code>.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS2&quot;)]
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS2: Use ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs2.&quot;)]
 public bool ReadFromMemory { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>

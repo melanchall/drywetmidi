@@ -438,7 +438,9 @@ Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Cor
   </table>
   <a id="Melanchall_DryWetMidi_Core_MidiFile_Equals_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiFile_Equals_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Core_MidiFileEqualityCheckSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Equals(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings)">Equals(MidiFile, MidiFile, MidiFileEqualityCheckSettings)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> objects have the same content.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -457,17 +459,17 @@ Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Cor
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td><span class="parametername">midiFile1</span></td>
-        <td></td>
+        <td>The first file to compare, or <code>null</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
         <td><span class="parametername">midiFile2</span></td>
-        <td></td>
+        <td>The second file to compare, or <code>null</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html">MidiFileEqualityCheckSettings</a></td>
         <td><span class="parametername">settings</span></td>
-        <td></td>
+        <td>Settings according to which files should be compared.</td>
       </tr>
     </tbody>
   </table>
@@ -482,7 +484,8 @@ Determines whether two specified <a class="xref" href="Melanchall.DryWetMidi.Cor
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
+        <td><code>true</code> if the <code data-dev-comment-type="paramref" class="paramref">midiFile1</code> is equal to the <code data-dev-comment-type="paramref" class="paramref">midiFile2</code>;
+    otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -751,6 +754,12 @@ of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.<
 should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</a> of
 the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_Buffer">Buffer</a> of <code data-dev-comment-type="paramref" class="paramref">settings</code>
+    is <code>null</code> in case of <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">BufferingPolicy</a> set to
+<a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseCustomBuffer">UseCustomBuffer</a>.</td>
+      </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Core_MidiFile_Read_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.Read*"></a>
@@ -908,6 +917,12 @@ of the <code data-dev-comment-type="paramref" class="paramref">settings</code>.<
         <td>Track chunk doesn&apos;t end with <code>End Of Track</code> event and that
 should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</a> of
 the <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_Buffer">Buffer</a> of <code data-dev-comment-type="paramref" class="paramref">settings</code>
+    is <code>null</code> in case of <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">BufferingPolicy</a> set to
+<a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseCustomBuffer">UseCustomBuffer</a>.</td>
       </tr>
     </tbody>
   </table>

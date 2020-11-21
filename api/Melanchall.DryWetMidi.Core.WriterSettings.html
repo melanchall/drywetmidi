@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_WriterSettings" data-uid="Melanchall.DryWetMidi.Core.WriterSettings" class="text-break">Class WriterSettings
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiWriter.html">MidiWriter</a> should write MIDI data.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -124,7 +126,10 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_WriterSettings_BufferSize_" data-uid="Melanchall.DryWetMidi.Core.WriterSettings.BufferSize*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WriterSettings_BufferSize" data-uid="Melanchall.DryWetMidi.Core.WriterSettings.BufferSize">BufferSize</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets the size of a buffer that will be used by <a class="xref" href="Melanchall.DryWetMidi.Core.MidiWriter.html">MidiWriter</a> in case of
+<a class="xref" href="Melanchall.DryWetMidi.Core.WriterSettings.html#Melanchall_DryWetMidi_Core_WriterSettings_UseBuffering">UseBuffering</a> set to <code>true</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -145,9 +150,27 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is zero or negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_WriterSettings_UseBuffering_" data-uid="Melanchall.DryWetMidi.Core.WriterSettings.UseBuffering*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WriterSettings_UseBuffering" data-uid="Melanchall.DryWetMidi.Core.WriterSettings.UseBuffering">UseBuffering</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether <a class="xref" href="Melanchall.DryWetMidi.Core.MidiWriter.html">MidiWriter</a> should use buffer to
+write MIDI data or not. The default value is <code>true</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">

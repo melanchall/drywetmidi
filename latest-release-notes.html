@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>New features | DryWetMIDI </title>
+    <title>Obsolete API | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="New features | DryWetMIDI ">
+    <meta name="title" content="Obsolete API | DryWetMIDI ">
     <meta name="generator" content="docfx 2.56.2.0">
     
     <link rel="shortcut icon" href="images/favicon.png">
@@ -70,26 +70,40 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="new-features">New features</h1>
+<h1 id="obsolete-api">Obsolete API</h1>
 
+<p>New section has been added to <a href="https://melanchall.github.io/drywetmidi">documentation</a> site: <a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html">Obsolete</a>. This section contains the list of methods and classes that are obsolete and thus will be removed by a next release.</p>
+<p>The current list of obsolete API:</p>
 <ul>
-<li>Removed <code>interval</code> parameter from <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiClockSettings.html#Melanchall_DryWetMidi_Devices_MidiClockSettings_CreateTickGeneratorCallback"><code>MidiClockSettings.CreateTickGeneratorCallback</code></a>.</li>
-<li>Turned <code>ITickGenerator</code> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.TickGenerator.html"><code>TickGenerator</code></a> abstract class.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_RepeatStarted"><code>RepeatStarted</code></a> event to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a>.</li>
-<li>Made constructors of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html"><code>MidiEventReceivedEventArgs</code></a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiEventSentEventArgs.html"><code>MidiEventSentEventArgs</code></a> public to have ability to fire corresponding events in custom input/output devices.</li>
-<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html"><code>DevicesConnector</code></a> now uses <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.IInputDevice.html"><code>IInputDevice</code></a> instead of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.InputDevice.html"><code>InputDevice</code></a>.</li>
-<li>Removed <code>IDisposable</code> from <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html"><code>DevicesConnector</code></a>.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_AreDevicesConnected"><code>AreDevicesConnected</code></a> property to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.DevicesConnector.html"><code>DevicesConnector</code></a>.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Octave.html"><code>Parse</code></a>/<a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Octave.html#Melanchall_DryWetMidi_MusicTheory_Octave_TryParse_System_String_Melanchall_DryWetMidi_MusicTheory_Octave__"><code>TryParse</code></a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Octave.html"><code>Octave</code></a>.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html"><code>INotifyTimeChanged</code></a> interface on <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEvent.html"><code>TimedEvent</code></a>, <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html"><code>Note</code></a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Chord.html"><code>Chord</code></a>.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html"><code>INotifyLengthChanged</code></a> interface on <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html"><code>Note</code></a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Chord.html"><code>Chord</code></a>.</li>
+<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs1">OBS1: WritingSettings.CompressionPolicy</a></li>
+<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs2">OBS2: ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData</a></li>
+<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs3">OBS3: TempoMap.TimeSignature</a></li>
+<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs4">OBS4: TempoMap.Tempo</a></li>
+</ul>
+<h1 id="new-features-and-improvements">New features and improvements</h1>
+<ul>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">ReaderSettings.BufferingPolicy</a> property.</li>
+<li>Increased speed of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_">MidiFile.Read</a> method.</li>
+<li>Increased speed of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">MidiFile.Write</a> method.</li>
+<li>Implemented buffered MIDI file writing (see <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WriterSettings.html#Melanchall_DryWetMidi_Core_WriterSettings_UseBuffering">WriterSettings.UseBuffering</a>).</li>
+<li>Decreased memory usage of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiWriter.html#Melanchall_DryWetMidi_Core_MidiWriter_Write3ByteDword_System_UInt32_">MidiWriter.Write3ByteDword</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiWriter.html#Melanchall_DryWetMidi_Core_MidiWriter_WriteVlqNumber_System_Int32_">MidiWriter.WriteVlqNumber</a>.</li>
+<li>Reduced memory usage for <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ChannelEvent.html">ChannelEvent</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ZeroLengthDataPolicy">ReadingSettings.ZeroLengthDataPolicy</a> property.</li>
+<li>Added RPN classes (see <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.RegisteredParameter.html">RegisteredParameter</a>).</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">TempoMap.GetTimeSignatureChanges</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">TempoMap.GetTimeSignatureAtTime</a> methods.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_WriteHeaderChunk">WritingSettings.WriteHeaderChunk</a> property (#94).</li>
+<li>Added GS standard percussion API (#93).</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_Markers">SliceMidiFileSettings.Markers</a> property (#99).</li>
+<li>Non-SMF events will be filtered out on saving to MIDI file or track chunk (#103).</li>
 </ul>
 <h1 id="small-changes-and-bug-fixes">Small changes and bug fixes</h1>
 <ul>
-<li>Chords parsing uses <a href="https://melanchall.github.io/drywetmidi/articles/music-theory/Chord.html#chords-names-table">CNT</a> now.</li>
-<li><strong>Fixed:</strong> Multi-thread access to active notes metadata inside <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html"><code>Playback</code></a> can cause exceptions.</li>
-<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_EventPlayed"><code>Playback.EventPlayed</code></a> not fired for meta events (#82).</li>
-<li><strong>Fixed:</strong> Slash chord name contains <em>Sharp</em> instead of <em>#</em> for sharped notes as result of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.MusicTheory.Chord.html#Melanchall_DryWetMidi_MusicTheory_Chord_GetNames"><code>GetNames</code></a>.</li>
+<li>Added value validation in setters of some MIDI events classes properties.</li>
+<li>Edge Note Off events will always be put to current part on MIDI file splitting (#99).</li>
+<li><strong>Fixed:</strong> Events transferred incorrectly between parts on MIDI file splitting (#99).</li>
+<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html">SmpteOffsetEvent</a> writes in wrong way.</li>
+<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html">SmpteOffsetEvent</a> equality check is wrong.</li>
+<li><strong>Fixed:</strong> Failed to use devices API in UWP app (#95).</li>
 </ul>
 </article>
           </div>

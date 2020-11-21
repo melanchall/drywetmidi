@@ -83,7 +83,9 @@
   
   <h1 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter" class="text-break">Class ChannelFineTuningParameter
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Channel Fine Tuning registered parameter.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -146,7 +148,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter__ctor" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.#ctor">ChannelFineTuningParameter()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html">ChannelFineTuningParameter</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -154,7 +158,10 @@
   </div>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter__ctor_System_Single_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.#ctor(System.Single)">ChannelFineTuningParameter(Single)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html">ChannelFineTuningParameter</a> with the specified
+exact number of cents.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -173,13 +180,32 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.single">Single</a></td>
         <td><span class="parametername">cents</span></td>
-        <td></td>
+        <td>The number of cents to tune by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">cents</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html#Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MinCents">MinCents</a>; <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html#Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MaxCents">MaxCents</a>] range.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter__ctor_System_Single_Melanchall_DryWetMidi_Interaction_ParameterValueType_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.#ctor(System.Single,Melanchall.DryWetMidi.Interaction.ParameterValueType)">ChannelFineTuningParameter(Single, ParameterValueType)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html">ChannelFineTuningParameter</a> with the specified
+number of cents and type of this number.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -198,19 +224,42 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.single">Single</a></td>
         <td><span class="parametername">cents</span></td>
-        <td></td>
+        <td>The number of cents to tune by.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ParameterValueType.html">ParameterValueType</a></td>
         <td><span class="parametername">valueType</span></td>
-        <td></td>
+        <td>The type of parameter&apos;s data which defines whether it
+represents exact value, increment or decrement.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">valueType</code> specified an invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">cents</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html#Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MinCents">MinCents</a>; <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html#Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MaxCents">MaxCents</a>] range.</td>
       </tr>
     </tbody>
   </table>
   <h3 id="fields">Fields
   </h3>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MaxCents" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.MaxCents">MaxCents</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Represents the largest possible number of cents to tune by.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -232,7 +281,9 @@
     </tbody>
   </table>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MinCents" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.MinCents">MinCents</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Represents the smallest possible number of cents to tune by.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -257,7 +308,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_Cents_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.Cents*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_Cents" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.Cents">Cents</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets the number of cents to tune by.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -278,11 +331,29 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is out of
+    [<a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html#Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MinCents">MinCents</a>; <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html#Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_MaxCents">MaxCents</a>] range.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_GetData_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.GetData*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_GetData_Melanchall_DryWetMidi_Common_SevenBitNumber__System_Nullable_Melanchall_DryWetMidi_Common_SevenBitNumber___" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.GetData(Melanchall.DryWetMidi.Common.SevenBitNumber@,System.Nullable{Melanchall.DryWetMidi.Common.SevenBitNumber}@)">GetData(out SevenBitNumber, out Nullable&lt;SevenBitNumber&gt;)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns MSB and LSB that represent data of the current parameter.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -301,12 +372,12 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
         <td><span class="parametername">msb</span></td>
-        <td></td>
+        <td>MSB of parameter&apos;s data.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>&gt;</td>
         <td><span class="parametername">lsb</span></td>
-        <td></td>
+        <td>LSB of parameter&apos;s data.</td>
       </tr>
     </tbody>
   </table>
@@ -314,7 +385,10 @@
   <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.RegisteredParameter.html#Melanchall_DryWetMidi_Interaction_RegisteredParameter_GetData_Melanchall_DryWetMidi_Common_SevenBitNumber__System_Nullable_Melanchall_DryWetMidi_Common_SevenBitNumber___">RegisteredParameter.GetData(out SevenBitNumber, out Nullable&lt;SevenBitNumber&gt;)</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_GetIncrementStepsCount_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.GetIncrementStepsCount*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_GetIncrementStepsCount" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.GetIncrementStepsCount">GetIncrementStepsCount()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns the number of increment/decrement steps based on the value of the
+current parameter.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -331,7 +405,8 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td></td>
+        <td>The number of increment/decrement steps based on the value of the
+current parameter.</td>
       </tr>
     </tbody>
   </table>
@@ -339,7 +414,9 @@
   <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.RegisteredParameter.html#Melanchall_DryWetMidi_Interaction_RegisteredParameter_GetIncrementStepsCount">RegisteredParameter.GetIncrementStepsCount()</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_ToString_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelFineTuningParameter_ToString" data-uid="Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.ToString">ToString()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns a string that represents the current object.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -356,7 +433,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
+        <td>A string that represents the current object.</td>
       </tr>
     </tbody>
   </table>

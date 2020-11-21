@@ -185,6 +185,11 @@ when it will be placed into the <code data-dev-comment-type="paramref" class="pa
 <ul><li><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is either system real-time or
+    system common one.</td>
+      </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent*"></a>
@@ -246,6 +251,11 @@ when it will be placed into the <code data-dev-comment-type="paramref" class="pa
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
         <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is either system real-time or
+    system common one.</td>
+      </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddTimedEvents*"></a>
@@ -280,6 +290,11 @@ Adds collection of timed events to the specified <a class="xref" href="Melanchal
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that only MIDI events allowed by SMF specification will be added. So instances of
+<a class="xref" href="Melanchall.DryWetMidi.Core.SystemCommonEvent.html">SystemCommonEvent</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">SystemRealTimeEvent</a> won&apos;t be added.
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -330,6 +345,11 @@ Adds collection of timed events to the specified <a class="xref" href="Melanchal
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that only MIDI events allowed by SMF specification will be added. So instances of
+<a class="xref" href="Melanchall.DryWetMidi.Core.SystemCommonEvent.html">SystemCommonEvent</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">SystemRealTimeEvent</a> won&apos;t be added.
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -1287,6 +1307,11 @@ Creates a MIDI file with the specified timed events.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that only MIDI events allowed by SMF specification will be added to result MIDI file.
+So instances of <a class="xref" href="Melanchall.DryWetMidi.Core.SystemCommonEvent.html">SystemCommonEvent</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">SystemRealTimeEvent</a> won&apos;t be added.
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -1344,6 +1369,11 @@ Creates a track chunk with the specified timed events.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that only MIDI events allowed by SMF specification will be added to result track chunk.
+So instances of <a class="xref" href="Melanchall.DryWetMidi.Core.SystemCommonEvent.html">SystemCommonEvent</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">SystemRealTimeEvent</a> won&apos;t be added.
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>

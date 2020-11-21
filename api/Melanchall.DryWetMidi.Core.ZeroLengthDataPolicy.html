@@ -83,7 +83,10 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_ZeroLengthDataPolicy" data-uid="Melanchall.DryWetMidi.Core.ZeroLengthDataPolicy" class="text-break">Enum ZeroLengthDataPolicy
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Specifies how reading engine should read zero-length objects such as strings or arrays.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.ZeroLengthDataPolicy.html#Melanchall_DryWetMidi_Core_ZeroLengthDataPolicy_ReadAsEmptyObject">ReadAsEmptyObject</a>.
+</div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -103,11 +106,15 @@
     <tbody>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_ZeroLengthDataPolicy_ReadAsEmptyObject">ReadAsEmptyObject</td>
-        <td></td>
+        <td>
+Read as an object with length of zero.
+</td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_ZeroLengthDataPolicy_ReadAsNull">ReadAsNull</td>
-        <td></td>
+        <td>
+Read as <code>null</code>.
+</td>
       </tr>
     </tbody>
   </thead></thead></table>

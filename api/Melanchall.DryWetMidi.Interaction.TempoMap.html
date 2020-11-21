@@ -158,7 +158,7 @@ Gets an object that holds changes of the tempo through the time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS4&quot;)]
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS4: Use GetTempoChanges or GetTempoAtTime methods of TempoMap. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs4.&quot;)]
 public ValueLine&lt;Tempo&gt; Tempo { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -209,7 +209,7 @@ Gets an object that holds changes of the time signature through the time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS3&quot;)]
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS3: Use GetTimeSignatureChanges or GetTimeSignatureAtTime methods of TempoMap. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs3.&quot;)]
 public ValueLine&lt;TimeSignature&gt; TimeSignature { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -699,7 +699,9 @@ default time division (96 ticks per quarter note).
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoAtTime*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoAtTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)">GetTempoAtTime(ITimeSpan)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns tempo at the specified time.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -718,7 +720,7 @@ default time division (96 ticks per quarter note).
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td><span class="parametername">time</span></td>
-        <td></td>
+        <td>Time to get tempo at.</td>
       </tr>
     </tbody>
   </table>
@@ -733,13 +735,30 @@ default time division (96 ticks per quarter note).
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
-        <td></td>
+        <td>Tempo at the time of <code data-dev-comment-type="paramref" class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoChanges*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoChanges">GetTempoChanges()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns the collection of tempo changes.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -756,13 +775,15 @@ default time division (96 ticks per quarter note).
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ValueChange-1.html">ValueChange</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a>&gt;&gt;</td>
-        <td></td>
+        <td>Collection of tempo changes.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureAtTime*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureAtTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)">GetTimeSignatureAtTime(ITimeSpan)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns time signature at the specified time.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -781,7 +802,7 @@ default time division (96 ticks per quarter note).
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td><span class="parametername">time</span></td>
-        <td></td>
+        <td>Time signature to get tempo at.</td>
       </tr>
     </tbody>
   </table>
@@ -796,13 +817,30 @@ default time division (96 ticks per quarter note).
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a></td>
-        <td></td>
+        <td>Time signature at the time of <code data-dev-comment-type="paramref" class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureChanges*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges" data-uid="Melanchall.DryWetMidi.Interaction.TempoMap.GetTimeSignatureChanges">GetTimeSignatureChanges()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns the collection of time signature changes.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -819,7 +857,7 @@ default time division (96 ticks per quarter note).
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ValueChange-1.html">ValueChange</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a>&gt;&gt;</td>
-        <td></td>
+        <td>Collection of time signature changes.</td>
       </tr>
     </tbody>
   </table>

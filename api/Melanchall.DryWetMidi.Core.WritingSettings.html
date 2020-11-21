@@ -133,7 +133,7 @@ Gets or sets compression rules for the writing engine. The default is
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS1&quot;)]
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS1: Use corresponding properties of WritingSettings. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs1.&quot;)]
 public CompressionPolicy CompressionPolicy { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -205,7 +205,10 @@ while writing a MIDI file if some types don&apos;t meet these requirements.</p>
 </div>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultKeySignature_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultKeySignature*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultKeySignature" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultKeySignature">DeleteDefaultKeySignature</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether Key Signature events with default data should be deleted
+if there are no non-default ones before them, or not. The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -228,7 +231,10 @@ while writing a MIDI file if some types don&apos;t meet these requirements.</p>
   </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultSetTempo_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultSetTempo*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultSetTempo" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultSetTempo">DeleteDefaultSetTempo</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether Set Tempo events with default data should be deleted
+if there are no non-default ones before them, or not. The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -251,7 +257,10 @@ while writing a MIDI file if some types don&apos;t meet these requirements.</p>
   </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultTimeSignature_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultTimeSignature*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteDefaultTimeSignature" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteDefaultTimeSignature">DeleteDefaultTimeSignature</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether Time Signature events with default data should be deleted
+if there are no non-default ones before them, or not. The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -274,7 +283,10 @@ while writing a MIDI file if some types don&apos;t meet these requirements.</p>
   </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownChunks_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownChunks*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownChunks" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownChunks">DeleteUnknownChunks</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether chunks of <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a> type should be
+deleted or not. The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -297,7 +309,10 @@ while writing a MIDI file if some types don&apos;t meet these requirements.</p>
   </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownMetaEvents_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownMetaEvents*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_DeleteUnknownMetaEvents" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.DeleteUnknownMetaEvents">DeleteUnknownMetaEvents</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether events of <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownMetaEvent.html">UnknownMetaEvent</a> type should be
+deleted or not. The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -320,7 +335,11 @@ while writing a MIDI file if some types don&apos;t meet these requirements.</p>
   </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_NoteOffAsSilentNoteOn_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.NoteOffAsSilentNoteOn*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_NoteOffAsSilentNoteOn" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.NoteOffAsSilentNoteOn">NoteOffAsSilentNoteOn</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether Note Off events should be written as Note On ones
+with velocity of zero, or not. In conjunction with <a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_UseRunningStatus">UseRunningStatus</a> set to <code>true</code>
+can give some compression of MIDI data. The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -369,7 +388,10 @@ text-based meta event. The default is <a class="xref" href="https://docs.microso
   </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_UseRunningStatus_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.UseRunningStatus*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_UseRunningStatus" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.UseRunningStatus">UseRunningStatus</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether &apos;running status&apos; (to turn off writing of the status
+bytes of consecutive events of the same type) should be used or not. The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -392,7 +414,10 @@ text-based meta event. The default is <a class="xref" href="https://docs.microso
   </table>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_WriteHeaderChunk_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriteHeaderChunk*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_WriteHeaderChunk" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriteHeaderChunk">WriteHeaderChunk</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether header chunk should be written to a MIDI file or not.
+The default value is <code>true</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -413,9 +438,16 @@ text-based meta event. The default is <a class="xref" href="https://docs.microso
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_WritingSettings_WriteHeaderChunk_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that missed header chunk violates SMF specification and thus applications may not read
+such files.
+</div>
   <a id="Melanchall_DryWetMidi_Core_WritingSettings_WriterSettings_" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriterSettings*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_WritingSettings_WriterSettings" data-uid="Melanchall.DryWetMidi.Core.WritingSettings.WriterSettings">WriterSettings</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiWriter.html">MidiWriter</a> should write MIDI data.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -436,6 +468,10 @@ text-based meta event. The default is <a class="xref" href="https://docs.microso
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Core_WritingSettings_WriterSettings_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>These settings specify reading binary data without knowledge about MIDI data structures.</p>
+</div>
 </article>
           </div>
           

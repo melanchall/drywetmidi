@@ -75,7 +75,14 @@
 <p>Here the table of current API that is obsolete and thus will be removed from the library by a next release.</p>
 <h3 id="obs1">OBS1</h3>
 <p><a class="xref" href="../api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_CompressionPolicy">WritingSettings.CompressionPolicy</a> has been replaced by corresponding properties of <a class="xref" href="../api/Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a>. No compression applied by default, as before.</p>
-<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p>For example, to write using running status and write Note Off events as Note On ones with zero velocity we need to write:</p>
+<pre><code class="lang-csharp">midiFile.Write(&quot;Great MIDI file.mid&quot;, settings: new WritingSettings
+{
+    UseRunningStatus = true,
+    NoteOffAsSilentNoteOn = true
+});
+</code></pre>
+<p>Obsolete from version <strong>5.1.2</strong>.</p>
 <p><strong>Old API</strong></p>
 <ul>
 <li><code>WritingSettings.CompressionPolicy</code></li>
@@ -92,8 +99,16 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_UseRunningStatus">WritingSettings.UseRunningStatus</a></li>
 </ul>
 <h3 id="obs2">OBS2</h3>
-<p>Now MIDI file reading uses buffering by default so <code>ReaderSettings.ReadFromMemory</code> property is deprecated. By default buffering policy is <a class="xref" href="../api/Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">BufferingPolicy.UseFixedSizeBuffer</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a> is <code>4096</code> which gives the same reading speed as putting all data in memory. But if you want, you can specify <code>BufferingPolicy = BufferingPolicy.BufferAllData</code> to achieve the same behavior as with <code>ReadFromMemory</code>.</p>
-<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p>Now MIDI file reading uses buffering by default so <code>ReaderSettings.ReadFromMemory</code> property is deprecated. By default buffering policy is <a class="xref" href="../api/Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">BufferingPolicy.UseFixedSizeBuffer</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a> is <code>4096</code> which gives the same reading speed as putting all data in memory. But if you want, you can specify <code>BufferingPolicy = BufferingPolicy.BufferAllData</code> to achieve the same behavior as with <code>ReadFromMemory</code>:</p>
+<pre><code class="lang-csharp">MidiFile.Read(&quot;Great MIDI file.mid&quot;, new ReadingSettings
+{
+    ReaderSettings = new ReaderSettings
+    {
+        BufferingPolicy = BufferingPolicy.BufferAllData
+    }
+});
+</code></pre>
+<p>Obsolete from version <strong>5.1.2</strong>.</p>
 <p><strong>Old API</strong></p>
 <ul>
 <li><code>ReaderSettings.ReadFromMemory</code></li>
@@ -105,8 +120,18 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_BufferAllData">BufferingPolicy.BufferAllData</a></li>
 </ul>
 <h3 id="obs3">OBS3</h3>
-<p><code>TempoMap.TimeSignature</code> property has been replaced with more explicit and straightforward methods: <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">GetTimeSignatureChanges</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTimeSignatureAtTime</a>.</p>
-<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p><code>TempoMap.TimeSignature</code> property has been replaced with more explicit and straightforward methods: <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">GetTimeSignatureChanges</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTimeSignatureAtTime</a>:</p>
+<pre><code class="lang-csharp">foreach (var timeSignatureChange in tempoMap.GetTimeSignatureChanges())
+{
+    var time = timeSignatureChange.Time;
+    var timeSignature = timeSignatureChange.Value;
+}
+
+// ...
+
+tempoMap.GetTimeSignatureAtTime(MusicalTimeSpan.Whole);
+</code></pre>
+<p>Obsolete from version <strong>5.1.2</strong>.</p>
 <p><strong>Old API</strong></p>
 <ul>
 <li><code>TempoMap.TimeSignature</code></li>
@@ -117,8 +142,18 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">TempoMap.GetTimeSignatureAtTime</a></li>
 </ul>
 <h3 id="obs4">OBS4</h3>
-<p><code>TempoMap.Tempo</code> property has been replaced with more explicit and straightforward methods: <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">GetTempoChanges</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTempoAtTime</a>.</p>
-<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p><code>TempoMap.Tempo</code> property has been replaced with more explicit and straightforward methods: <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">GetTempoChanges</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTempoAtTime</a>:</p>
+<pre><code class="lang-csharp">foreach (var tempoChange in tempoMap.GetTempoChanges())
+{
+    var time = tempoChange.Time;
+    var timeSignature = tempoChange.Value;
+}
+
+// ...
+
+tempoMap.GetTempoAtTime(MusicalTimeSpan.Whole);
+</code></pre>
+<p>Obsolete from version <strong>5.1.2</strong>.</p>
 <p><strong>Old API</strong></p>
 <ul>
 <li><code>TempoMap.Tempo</code></li>

@@ -83,7 +83,10 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_BufferingPolicy" data-uid="Melanchall.DryWetMidi.Core.BufferingPolicy" class="text-break">Enum BufferingPolicy
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Specifies how reading engine should buffer incoming MIDI data before reading it.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">UseFixedSizeBuffer</a>.
+</div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -103,19 +106,27 @@
     <tbody>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_BufferingPolicy_BufferAllData">BufferAllData</td>
-        <td></td>
+        <td>
+Put entire MIDI data to buffer in memory and read it from here.
+</td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_BufferingPolicy_DontUseBuffering">DontUseBuffering</td>
-        <td></td>
+        <td>
+Don&apos;t buffer data and read it from stream as is.
+</td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_BufferingPolicy_UseCustomBuffer">UseCustomBuffer</td>
-        <td></td>
+        <td>
+Use buffer specified by <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_Buffer">Buffer</a>.
+</td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">UseFixedSizeBuffer</td>
-        <td></td>
+        <td>
+Use buffer of fixed size specified by <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a>.
+</td>
       </tr>
     </tbody>
   </thead></thead></table>
