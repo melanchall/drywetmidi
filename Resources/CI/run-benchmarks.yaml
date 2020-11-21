@@ -41,7 +41,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '5.1.2'
+  version: '5.1.3'
 
 name: $(TeamProject)_$(SourceBranchName)_RunBenchmarks_$(ApiArea)_$(version)$(Rev:.r)
 
