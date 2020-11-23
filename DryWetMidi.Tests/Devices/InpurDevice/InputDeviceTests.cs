@@ -159,6 +159,39 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void DisableEnableInputDevice()
+        {
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                Assert.IsTrue(inputDevice.IsEnabled, "Device is not enabled initially.");
+
+                var receivedEventsCount = 0;
+
+                inputDevice.StartEventsListening();
+                inputDevice.EventReceived += (_, __) => receivedEventsCount++;
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                var eventReceived = SpinWait.SpinUntil(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not received.");
+
+                inputDevice.IsEnabled = false;
+                Assert.IsFalse(inputDevice.IsEnabled, "Device is enabled after disabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = SpinWait.SpinUntil(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
+                Assert.IsFalse(eventReceived, "Event is received after device disabled.");
+
+                inputDevice.IsEnabled = true;
+                Assert.IsTrue(inputDevice.IsEnabled, "Device is disabled after enabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = SpinWait.SpinUntil(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
+            }
+        }
+
         #endregion
     }
 }

@@ -143,6 +143,37 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void DisableEnableOutputDevice()
+        {
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                Assert.IsTrue(outputDevice.IsEnabled, "Device is not enabled initially.");
+
+                var sentEventsCount = 0;
+
+                outputDevice.EventSent += (_, __) => sentEventsCount++;
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                var eventReceived = SpinWait.SpinUntil(() => sentEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not sent.");
+
+                outputDevice.IsEnabled = false;
+                Assert.IsFalse(outputDevice.IsEnabled, "Device is enabled after disabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = SpinWait.SpinUntil(() => sentEventsCount > 1, TimeSpan.FromSeconds(5));
+                Assert.IsFalse(eventReceived, "Event is sent after device disabled.");
+
+                outputDevice.IsEnabled = true;
+                Assert.IsTrue(outputDevice.IsEnabled, "Device is disabled after enabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = SpinWait.SpinUntil(() => sentEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not sent after enabling again.");
+            }
+        }
+
         #endregion
 
         #region Private methods

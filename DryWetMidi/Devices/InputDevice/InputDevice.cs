@@ -297,7 +297,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
-            if (!IsListeningForEvents)
+            if (!IsListeningForEvents || !IsEnabled)
                 return;
 
             switch (wMsg)

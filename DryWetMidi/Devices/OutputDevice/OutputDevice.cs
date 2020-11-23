@@ -164,6 +164,9 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
+            if (!IsEnabled)
+                return;
+
             EnsureDeviceIsNotDisposed();
             EnsureHandleIsCreated();
 

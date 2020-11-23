@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Represents a MIDI device.
     /// </summary>
-    public abstract class MidiDevice : IDisposable
+    public abstract class MidiDevice : IMidiDevice, IDisposable
     {
         #region Events
 
@@ -53,6 +53,8 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Properties
+
+        public bool IsEnabled { get; set; } = true;
 
         /// <summary>
         /// Gets the ID of a MIDI device.
