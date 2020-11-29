@@ -6,6 +6,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Data related to MIDI note.
     /// </summary>
+    /// <seealso cref="NoteCallback"/>
     public sealed class NotePlaybackData
     {
         #region Constants

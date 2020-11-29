@@ -330,11 +330,48 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets or sets callback used to process note to be played.
         /// </summary>
+        /// <example>
+        /// In the following example every note to be played will be transposed by 10 half-steps up:
+        /// <code language="csharp">
+        /// var playback = midiFile.GetPlayback(outputDevice);
+        /// playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
+        ///     new NotePlaybackData(
+        ///         (SevenBitNumber)(rawNoteData.NoteNumber + 10),
+        ///         rawNoteData.Velocity,     // leave velocity as is
+        ///         rawNoteData.OffVelocity,  // leave off velocity as is
+        ///         rawNoteData.Channel);     // leave channel as is
+        /// 
+        /// playback.Start();
+        /// </code>
+        /// Next example shows how you can filter out notes with velocity below 100:
+        /// <code language="csharp">
+        /// playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
+        ///     rawNoteData.Velocity &lt; 100
+        ///         ? null
+        ///         : rawNoteData;
+        /// </code>
+        /// </example>
         public NoteCallback NoteCallback { get; set; }
 
         /// <summary>
         /// Gets or sets callback used to process MIDI event to be played.
         /// </summary>
+        /// <example>
+        /// The following example filters out all Program Change events:
+        /// <code language="csharp">
+        /// playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+        ///     midiEvent.EventType == MidiEventType.ProgramChange
+        ///         ? null
+        ///         : midiEvent;
+        /// </code>
+        /// Next example shows how to replace program 1 in all Program Change events to program 2:
+        /// <code language="csharp">
+        /// playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+        ///     ((midiEvent is ProgramChangeEvent programChangeEvent) &amp;&amp; programChangeEvent.ProgramNumber == 1)
+        ///         ? new ProgramChangeEvent((SevenBitNumber)2) { Channel = programChangeEvent.Channel }
+        ///         : midiEvent;
+        /// </code>
+        /// </example>
         public EventCallback EventCallback { get; set; }
 
         #endregion

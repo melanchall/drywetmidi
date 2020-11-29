@@ -11,5 +11,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <param name="playbackTime">Current time of the playback.</param>
     /// <returns>Data of the new note which is <paramref name="rawNoteData"/> processed by the callback;
     /// or <c>null</c> if note should be ignored.</returns>
+    /// <seealso cref="Playback"/>
+    /// <seealso cref="Playback.NoteCallback"/>
     public delegate NotePlaybackData NoteCallback(NotePlaybackData rawNoteData, long rawTime, long rawLength, TimeSpan playbackTime);
 }

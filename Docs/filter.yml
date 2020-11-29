@@ -1,4 +1,11 @@
 apiRules:
 - exclude:
-    hasAttribute:
-      uid: System.ObsoleteAttribute
+    uidRegex: ^Melanchall\.DryWetMidi\.Interaction\.ChordBuilderSettings
+- exclude:
+    uidRegex: ^Melanchall\.DryWetMidi\.Interaction\.ObjectsBuildingSettings
+- exclude:
+    uidRegex: ^Melanchall\.DryWetMidi\.Devices\.IMidiDevice
+- exclude:
+    uidRegex: ^Melanchall\.DryWetMidi\.Devices\.MidiDevice\.IsEnabled
+- exclude:
+    uidRegex: ^Melanchall\.DryWetMidi\.Interaction\.BuildObjectsUtilities

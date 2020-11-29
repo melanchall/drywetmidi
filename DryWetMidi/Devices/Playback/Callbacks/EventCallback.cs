@@ -11,5 +11,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <param name="playbackTime">Current time of the playback.</param>
     /// <returns>New MIDI event which is <paramref name="rawEvent"/> processed by the callback;
     /// or <c>null</c> if event should be ignored.</returns>
+    /// <seealso cref="Playback"/>
+    /// <seealso cref="Playback.EventCallback"/>
     public delegate MidiEvent EventCallback(MidiEvent rawEvent, long rawTime, TimeSpan playbackTime);
 }
