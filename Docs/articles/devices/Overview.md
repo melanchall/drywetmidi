@@ -4,8 +4,6 @@ uid: a_dev_overview
 
 # Overview
 
-**Please note that Devices API is supported for Windows only at now.**
-
 DryWetMIDI provides ability to send MIDI data to or receive it from MIDI devices. For that purpose there are following types:
 
 * [IInputDevice](xref:Melanchall.DryWetMidi.Devices.IInputDevice) (see [Input device](Input-device.md));
@@ -13,6 +11,9 @@ DryWetMIDI provides ability to send MIDI data to or receive it from MIDI devices
 * [DevicesConnector](xref:Melanchall.DryWetMidi.Devices.DevicesConnector) (see [Devices connector](Devices-connector.md)).
 
 The library provides implementations for both `IInputDevice` and `IOutputDevice`: [InputDevice](xref:Melanchall.DryWetMidi.Devices.InputDevice) and [OutputDevice](xref:Melanchall.DryWetMidi.Devices.OutputDevice) correspondingly which represent MIDI devices visible by the operating system. Both classes implement [IDisposable](xref:System.IDisposable) interface so you should always dispose them to free devices for using by another applications.
+
+> [!IMPORTANT]
+> You can use `InputDevice` and `OutputDevice` built-in implementations of `IInputDevice` and `IOutputDevice` on Windows only. Of course you can create your own implementations of `IInputDevice` and `IOutputDevice`.
 
 All classes that interact with devices work with interfaces mentioned above, so you can create custom implementation of your devices (see examples in [Input device](Input-device.md) and [Output device](Output-device.md) articles) and use it for playback or recording, for example.
 

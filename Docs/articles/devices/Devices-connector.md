@@ -4,8 +4,6 @@ uid: a_dev_connector
 
 # Devices connector
 
-**Please note that Devices API is supported for Windows only at now.**
-
 You can redirect MIDI events from [input device](Input-device.md) to [output device(s)](Output-device.md) using [DevicesConnector](xref:Melanchall.DryWetMidi.Devices.DevicesConnector) class. To understand what input and output MIDI device is in DryWetMIDI, please read [Overview](Overview.md) article.
 
 Device connector connects an instance of the [IInputDevice](xref:Melanchall.DryWetMidi.Devices.IInputDevice) to one or multiple instances of the [IOutputDevice](xref:Melanchall.DryWetMidi.Devices.IOutputDevice). To get an instance of `DevicesConnector` class you can use either its constructor or `Connect` extension method on `IInputDevice`. In first case you need to call [Connect](xref:Melanchall.DryWetMidi.Devices.DevicesConnector.Connect) method after you get `DevicesConnector` instance. In second case the method will be called automatically.

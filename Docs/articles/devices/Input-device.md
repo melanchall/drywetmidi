@@ -4,11 +4,12 @@ uid: a_dev_input
 
 # Input device
 
-**Please note that Devices API is supported for Windows only at now.**
-
 In DryWetMIDI an input MIDI device is represented by [IInputDevice](xref:Melanchall.DryWetMidi.Devices.IInputDevice) interface. It allows to receive events from a MIDI device. To understand what an input MIDI device is in DryWetMIDI, please read [Overview](Overview.md) article.
 
 The library provides built-in implementation of `IInputDevice`: [InputDevice](xref:Melanchall.DryWetMidi.Devices.InputDevice) class. To get an instance of `InputDevice` you can use either [GetByName](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetByName(System.String)) or [GetById](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetById(System.Int32)) static methods. ID of a MIDI device is a number from `0` to _devices count minus one_. To get count of input MIDI devices presented in the system there is the [GetDevicesCount](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetDevicesCount) method. You can get all input MIDI devices with [GetAll](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetAll) method.
+
+> [!IMPORTANT]
+> You can use `InputDevice` built-in implementation of `IInputDevice` on Windows only. Of course you can create your own implementation of `IInputDevice` as described in [Custom input device](#custom-input-device) section below.
 
 After an instance of `InputDevice` is obtained, call [StartEventsListening](xref:Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening) to start listening incoming MIDI events going from an input MIDI device. If you don't need to listen for events anymore, call [StopEventsListening](xref:Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening). Also this method will be called automatically on [Dispose](xref:Melanchall.DryWetMidi.Devices.MidiDevice.Dispose). To check whether `InputDevice` is currently listening for events or not use [IsListeningForEvents](xref:Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents) property.
 
@@ -47,9 +48,10 @@ namespace InputDeviceExample
 }
 ```
 
-Note that you should always take care about disposing an `InputDevice`, so use it inside `using` block or call `Dispose` manually. Without it all resources taken by the device will live until GC collect them via finalizer of the `InputDevice`. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.
+> [!IMPORTANT]
+> You should always take care about disposing an `InputDevice`, so use it inside `using` block or call `Dispose` manually. Without it all resources taken by the device will live until GC collect them via finalizer of the `InputDevice`. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.
 
-`InputDevice` always has [MidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.MidiTimeCodeReceived) event which, by default, will be fired only when **all** MIDI Time Code components (separate [MidiTimeCodeEvent](xref:Melanchall.DryWetMidi.Core.MidiTimeCodeEvent) events) are received forming _hours:minutes:seconds:frames_ timestamp. You can turn this behavior off by setting [RaiseMidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.RaiseMidiTimeCodeReceived) to `false`.
+`InputDevice` has [MidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.MidiTimeCodeReceived) event which, by default, will be fired only when **all** MIDI Time Code components (separate [MidiTimeCodeEvent](xref:Melanchall.DryWetMidi.Core.MidiTimeCodeEvent) events) are received forming _hours:minutes:seconds:frames_ timestamp. You can turn this behavior off by setting [RaiseMidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.RaiseMidiTimeCodeReceived) to `false`.
 
 If an invalid [channel](xref:Melanchall.DryWetMidi.Core.ChannelEvent), [system common](xref:Melanchall.DryWetMidi.Core.SystemCommonEvent) or [system real-time](xref:Melanchall.DryWetMidi.Core.SystemRealTimeEvent) event received, [InvalidShortEventReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.InvalidShortEventReceived) event will be fired holding the bytes that form the invalid event. If invalid system exclusive event received, [InvalidSysExEventReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.InvalidSysExEventReceived) event will be fired holding sysex data.
 
