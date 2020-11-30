@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/devices/Devices-connector.html",
-          "hash": "1SGtXceJXqkoMo7raYAvOA=="
+          "hash": "Bo2j8Aff6A8JSMHVtjXKaA=="
         }
       },
       "is_incremental": false,
@@ -78,7 +78,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/devices/Input-device.html",
-          "hash": "ltixSv8uOz8xaNBiw84Rkg=="
+          "hash": "4ALo5SU7bR46CfgvWEXYwA=="
         }
       },
       "is_incremental": false,
@@ -90,7 +90,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/devices/Output-device.html",
-          "hash": "0hApZ0KIaIdHNrCvIWgxcA=="
+          "hash": "jSQVWlTqsyMRod8FOhmUNw=="
         }
       },
       "is_incremental": false,
@@ -102,7 +102,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/devices/Overview.html",
-          "hash": "EM/RnNeg/og+Vgq803F20A=="
+          "hash": "dUZNbhCotBIhVF5gPrYO/A=="
         }
       },
       "is_incremental": false,
@@ -2507,7 +2507,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.EventCallback.html",
-          "hash": "wlhXHDcQkDGt0YDpxvx12Q=="
+          "hash": "GZaZvoOjvVv9vRnq3JR1SQ=="
         }
       },
       "is_incremental": false,
@@ -2567,7 +2567,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.InputDevice.html",
-          "hash": "0VgiuP4Tv4C1Q9iZ/8lGPQ=="
+          "hash": "QwCHZ13M30Zmj7TVJynTuA=="
         }
       },
       "is_incremental": false,
@@ -2639,7 +2639,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.MidiDevice.html",
-          "hash": "fFtjPmsFJ2um2/SJ7yw5Bw=="
+          "hash": "6E5qBolj1h4yxzpDYbcB7w=="
         }
       },
       "is_incremental": false,
@@ -2711,7 +2711,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.NoteCallback.html",
-          "hash": "EDHshkZ/cpPu56vCH8YBdw=="
+          "hash": "XHYtlP0oNSOg2Vz6U7PxlA=="
         }
       },
       "is_incremental": false,
@@ -2723,7 +2723,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.NotePlaybackData.html",
-          "hash": "DLejfud5f470/CuKcWW8Ng=="
+          "hash": "sPxJ8Fl8+Sng2VshXf/1fg=="
         }
       },
       "is_incremental": false,
@@ -2747,7 +2747,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.OutputDevice.html",
-          "hash": "CDTPoGTAWPGyWn/UiM4T2Q=="
+          "hash": "AxuleROWZT5llLoHwmXWBA=="
         }
       },
       "is_incremental": false,
@@ -2771,7 +2771,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.Playback.html",
-          "hash": "gA7sZUlKd5ooyXLuPorwtw=="
+          "hash": "OxAy0pIQq5HgFxrh+CNnKQ=="
         }
       },
       "is_incremental": false,
@@ -3535,6 +3535,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.RestBuilderSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.RestBuilderSettings.html",
+          "hash": "T7hEamv1z5H7BLOA1DIXJw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.yml",
       "output": {
         ".html": {
@@ -3863,7 +3875,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.html",
-          "hash": "x6ppnvFkUktc7uaz8ipZZg=="
+          "hash": "r09Z9WjWMMBbu13jQJbT8Q=="
         }
       },
       "is_incremental": false,
@@ -5087,7 +5099,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "f/S0TFfmE17G7NWZAxfcSg=="
+          "hash": "MQC4j5q4CNY2g0pF+jQxoQ=="
         }
       },
       "is_incremental": false,
@@ -5294,7 +5306,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 353,
+          "total_file_count": 354,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

@@ -507,6 +507,19 @@ Gets or sets callback used to process MIDI event to be played.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Devices_Playback_EventCallback_examples">Examples</h5>
+  
+The following example filters out all Program Change events:
+<pre><code class="lang-csharp">playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+    midiEvent.EventType == MidiEventType.ProgramChange
+        ? null
+        : midiEvent;</code></pre>
+Next example shows how to replace program 1 in all Program Change events to program 2:
+<pre><code class="lang-csharp">playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+    ((midiEvent is ProgramChangeEvent programChangeEvent) &amp;&amp; programChangeEvent.ProgramNumber == 1)
+        ? new ProgramChangeEvent((SevenBitNumber)2) { Channel = programChangeEvent.Channel }
+        : midiEvent;</code></pre>
+
   <a id="Melanchall_DryWetMidi_Devices_Playback_InterruptNotesOnStop_" data-uid="Melanchall.DryWetMidi.Devices.Playback.InterruptNotesOnStop*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_Playback_InterruptNotesOnStop" data-uid="Melanchall.DryWetMidi.Devices.Playback.InterruptNotesOnStop">InterruptNotesOnStop</h4>
   <div class="markdown level1 summary">
@@ -609,6 +622,24 @@ Gets or sets callback used to process note to be played.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Devices_Playback_NoteCallback_examples">Examples</h5>
+  
+In the following example every note to be played will be transposed by 10 half-steps up:
+<pre><code class="lang-csharp">var playback = midiFile.GetPlayback(outputDevice);
+playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
+    new NotePlaybackData(
+        (SevenBitNumber)(rawNoteData.NoteNumber + 10),
+        rawNoteData.Velocity,     // leave velocity as is
+        rawNoteData.OffVelocity,  // leave off velocity as is
+        rawNoteData.Channel);     // leave channel as is
+
+playback.Start();</code></pre>
+Next example shows how you can filter out notes with velocity below 100:
+<pre><code class="lang-csharp">playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
+    rawNoteData.Velocity &lt; 100
+        ? null
+        : rawNoteData;</code></pre>
+
   <a id="Melanchall_DryWetMidi_Devices_Playback_OutputDevice_" data-uid="Melanchall.DryWetMidi.Devices.Playback.OutputDevice*"></a>
   <h4 id="Melanchall_DryWetMidi_Devices_Playback_OutputDevice" data-uid="Melanchall.DryWetMidi.Devices.Playback.OutputDevice">OutputDevice</h4>
   <div class="markdown level1 summary">

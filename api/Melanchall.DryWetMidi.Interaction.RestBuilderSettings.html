@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Delegate NoteCallback
+    <title>Class RestBuilderSettings
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Delegate NoteCallback
+    <meta name="title" content="Class RestBuilderSettings
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.56.2.0">
     
@@ -78,54 +78,59 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Devices.NoteCallback">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.RestBuilderSettings">
   
   
-  <h1 id="Melanchall_DryWetMidi_Devices_NoteCallback" data-uid="Melanchall.DryWetMidi.Devices.NoteCallback" class="text-break">Delegate NoteCallback
+  <h1 id="Melanchall_DryWetMidi_Interaction_RestBuilderSettings" data-uid="Melanchall.DryWetMidi.Interaction.RestBuilderSettings" class="text-break">Class RestBuilderSettings
   </h1>
-  <div class="markdown level0 summary">
-Callback used to process note to be played by <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>.
-</div>
+  <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a></h6>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">RestBuilderSettings</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Devices_NoteCallback_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Interaction_RestBuilderSettings_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public delegate NotePlaybackData NoteCallback(NotePlaybackData rawNoteData, long rawTime, long rawLength, TimeSpan playbackTime);</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class RestBuilderSettings</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.NotePlaybackData.html">NotePlaybackData</a></td>
-        <td><span class="parametername">rawNoteData</span></td>
-        <td>Data of the note to process.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">rawTime</span></td>
-        <td>Absolute time of note to process.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">rawLength</span></td>
-        <td>Length of note to process.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
-        <td><span class="parametername">playbackTime</span></td>
-        <td>Current time of the playback.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_RestBuilderSettings_RestSeparationPolicy_" data-uid="Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestBuilderSettings_RestSeparationPolicy" data-uid="Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy">RestSeparationPolicy</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RestSeparationPolicy RestSeparationPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -135,17 +140,11 @@ Callback used to process note to be played by <a class="xref" href="Melanchall.D
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.NotePlaybackData.html">NotePlaybackData</a></td>
-        <td>Data of the new note which is <code data-dev-comment-type="paramref" class="paramref">rawNoteData</code> processed by the callback;
-or <code>null</code> if note should be ignored.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html">RestSeparationPolicy</a></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="seealso">See Also</h3>
-  <div class="seealso">
-      <div><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></div>
-      <div><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_NoteCallback">NoteCallback</a></div>
-  </div>
 </article>
           </div>
           

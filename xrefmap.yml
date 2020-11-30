@@ -18633,6 +18633,25 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Rest.ToString
   nameWithType: Rest.ToString
+- uid: Melanchall.DryWetMidi.Interaction.RestBuilderSettings
+  name: RestBuilderSettings
+  href: api/Melanchall.DryWetMidi.Interaction.RestBuilderSettings.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.RestBuilderSettings
+  fullName: Melanchall.DryWetMidi.Interaction.RestBuilderSettings
+  nameWithType: RestBuilderSettings
+- uid: Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy
+  name: RestSeparationPolicy
+  href: api/Melanchall.DryWetMidi.Interaction.RestBuilderSettings.html#Melanchall_DryWetMidi_Interaction_RestBuilderSettings_RestSeparationPolicy
+  commentId: P:Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy
+  fullName: Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy
+  nameWithType: RestBuilderSettings.RestSeparationPolicy
+- uid: Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy*
+  name: RestSeparationPolicy
+  href: api/Melanchall.DryWetMidi.Interaction.RestBuilderSettings.html#Melanchall_DryWetMidi_Interaction_RestBuilderSettings_RestSeparationPolicy_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.RestBuilderSettings.RestSeparationPolicy
+  nameWithType: RestBuilderSettings.RestSeparationPolicy
 - uid: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy
   name: RestSeparationPolicy
   href: api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html

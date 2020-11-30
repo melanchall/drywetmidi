@@ -79,7 +79,6 @@
             <article class="content wrap" id="_content" data-uid="a_dev_output">
 <h1 id="output-device">Output device</h1>
 
-<p><strong>Please note that Devices API is supported for Windows only at now.</strong></p>
 <p>In DryWetMIDI an output MIDI device is represented by <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a> interface. It allows to send events to a MIDI device. To understand what an output MIDI device is in DryWetMIDI, please read <a href="Overview.html">Overview</a> article.</p>
 <p>The library provides built-in implementation of <code>IOutputDevice</code>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>. To get an instance of <code>OutputDevice</code> you can use either <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_GetByName_System_String_">GetByName</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_GetById_System_Int32_">GetById</a> static methods. ID of a MIDI device is a number from <code>0</code> to <em>devices count minus one</em>. To retrieve count of output MIDI devices presented in the system there is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_GetDevicesCount">GetDevicesCount</a> method. You can get all output MIDI devices with <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_GetAll">GetAll</a> method:</p>
 <pre><code class="lang-csharp">using System;
@@ -92,6 +91,10 @@ foreach (var outputDevice in OutputDevice.GetAll())
     Console.WriteLine(outputDevice.Name);
 }
 </code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>You can use <code>OutputDevice</code> built-in implementation of <code>IOutputDevice</code> on Windows only. Of course you can create your own implementation of <code>IOutputDevice</code> as described in <a href="#custom-output-device">Custom output device</a> section below.</p>
+</div>
 <p>After an instance of <code>OutputDevice</code> is obtained, you can send MIDI events to device via <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_SendEvent_Melanchall_DryWetMidi_Core_MidiEvent_">SendEvent</a> method. You cannot send <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html">meta events</a> since such events can be inside a MIDI file only. If you pass an instance of meta event class, <code>SendEvent</code> will do nothing. <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html#Melanchall_DryWetMidi_Devices_IOutputDevice_EventSent">EventSent</a> event will be fired for each event sent with <code>SendEvent</code> (except meta events) holding the MIDI event sent. The value of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_DeltaTime">DeltaTime</a> property of MIDI events will be ignored, events will be sent to device immediately. To take delta-times into account, use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> class.</p>
 <p>If you need to interrupt all currently sounding notes, call the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html#Melanchall_DryWetMidi_Devices_OutputDevice_TurnAllNotesOff">TurnAllNotesOff</a> method which will send <em>Note Off</em> events on all channels for all note numbers (kind of &quot;panic&quot; button on MIDI devices).</p>
 <p>Small example that shows sending MIDI data:</p>
@@ -117,7 +120,10 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
     Console.WriteLine($&quot;Event sent to '{midiDevice.Name}' at {DateTime.Now}: {e.Event}&quot;);
 }
 </code></pre>
-<p>Note that you should always take care about disposing an <code>OutputDevice</code>, so use it inside <code>using</code> block or call <code>Dispose</code> manually. Without it all resources taken by the device will live until GC collect them via finalizer of the <code>OutputDevice</code>. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>You should always take care about disposing an <code>OutputDevice</code>, so use it inside <code>using</code> block or call <code>Dispose</code> manually. Without it all resources taken by the device will live until GC collect them via finalizer of the <code>OutputDevice</code>. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.</p>
+</div>
 <p>First call of <code>SendEvent</code> method can take some time for allocating resources for device, so if you want to eliminate this operation on sending a MIDI event, you can call <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html#Melanchall_DryWetMidi_Devices_IOutputDevice_PrepareForEventsSending">PrepareForEventsSending</a> method before any MIDI event will be sent.</p>
 <h2 id="custom-output-device">Custom output device</h2>
 <p>You can create your own output device implementation and use it in your app. For example, let's create super simple device that just outputs MIDI events to console:</p>

@@ -79,7 +79,6 @@
             <article class="content wrap" id="_content" data-uid="a_dev_overview">
 <h1 id="overview">Overview</h1>
 
-<p><strong>Please note that Devices API is supported for Windows only at now.</strong></p>
 <p>DryWetMIDI provides ability to send MIDI data to or receive it from MIDI devices. For that purpose there are following types:</p>
 <ul>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IInputDevice.html">IInputDevice</a> (see <a href="Input-device.html">Input device</a>);</li>
@@ -87,6 +86,10 @@
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.DevicesConnector.html">DevicesConnector</a> (see <a href="Devices-connector.html">Devices connector</a>).</li>
 </ul>
 <p>The library provides implementations for both <code>IInputDevice</code> and <code>IOutputDevice</code>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a> correspondingly which represent MIDI devices visible by the operating system. Both classes implement <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> interface so you should always dispose them to free devices for using by another applications.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>You can use <code>InputDevice</code> and <code>OutputDevice</code> built-in implementations of <code>IInputDevice</code> and <code>IOutputDevice</code> on Windows only. Of course you can create your own implementations of <code>IInputDevice</code> and <code>IOutputDevice</code>.</p>
+</div>
 <p>All classes that interact with devices work with interfaces mentioned above, so you can create custom implementation of your devices (see examples in <a href="Input-device.html">Input device</a> and <a href="Output-device.html">Output device</a> articles) and use it for playback or recording, for example.</p>
 <p>MIDI devices API classes are placed in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a> namespace.</p>
 <p>To understand what is input and output device in DryWetMIDI take a look at following image:</p>

@@ -469,8 +469,21 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
 
 /* */
 
-#fields, #properties, #methods, #events, #constructors, #classes, #enums, #delegates, #extensionmethods, #structs, #interfaces, #implements, #operators {
+#fields, #properties, #methods, #events, #constructors, #classes, #enums, #delegates, #extensionmethods, #structs, #interfaces, #implements, #operators, #seealso {
     font-weight: bold;
     margin-top: 40px;
     border-bottom: 5px solid #EC5508;
+}
+
+/* */
+
+.alert-danger {
+    color: #F8F8F8;
+    border-radius: 0px;
+    background-color: transparent;
+    border-color: #EC5508;
+}
+
+.alert h5 {
+    color: #EC5508;
 }
