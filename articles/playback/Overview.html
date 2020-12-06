@@ -80,7 +80,7 @@
 <h1 id="playback---overview">Playback - Overview</h1>
 
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> class allows to play MIDI events via an <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a> (see <a class="xref" href="../devices/Output-device.html">Output device</a> article) or without a device at all (see <a href="#playback-without-device">Playback without device</a>). To get an instance of the <code>Playback</code> you can use its <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#constructors">constructors</a> or <code>GetPlayback</code> extension methods in <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html">PlaybackUtilities</a>.</p>
-<p>Following example shows simple console app where specified MIDI file is played until end of the file reached or B note is about to be played. So in our example B note means to stop playback.</p>
+<p>Following example shows simple console app where specified MIDI file is played until end of the file reached or <code>B</code> note is about to be played. So in our example <code>B</code> note means to stop playback.</p>
 <pre><code class="lang-csharp">using System;
 using System.Linq;
 using System.Threading;
@@ -135,7 +135,9 @@ namespace SimplePlaybackApp
 </code></pre>
 <h2 id="non-blocking-playback">Non-blocking playback</h2>
 <p>Is you call <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Start">Start</a> method of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>, execution of the calling thread will continue immediately after the method is called. To stop playback use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Stop">Stop</a> method. Note that there is no any pausing method since it's useless. <code>Stop</code> leaves playback at the point where the method was called. To move to the start of the playback use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_MoveToStart">MoveToStart</a> method.</p>
-<p>You should be very careful with this approach and <code>using</code> block. Example below shows the case where <strong>part of MIDI data will not be played because of playback is disposed before the last MIDI event will be played</strong>:</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>You should be very careful with this approach and <code>using</code> block. Example below shows the case where part of MIDI data <strong>will not be played</strong> because of playback is disposed before the last MIDI event will be played:</p>
 <pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
 using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(outputDevice))
 {
@@ -144,7 +146,8 @@ using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(
     // ...
 }
 </code></pre>
-<p>With non-blocking approach you should call <code>Dispose</code> manually after you've finished work with playback object.</p>
+<p>With non-blocking approach you must call <code>Dispose</code> manually after you've finished work with playback object.</p>
+</div>
 </article>
           </div>
           

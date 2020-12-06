@@ -80,8 +80,12 @@
 <h1 id="tick-generator">Tick generator</h1>
 
 <p>Playback uses timer under the hood. In DryWetMIDI this timer called tick generator. On every tick of timer playback looks what objects should be played by the current time, plays them and advances position within objects list waiting for next tick.</p>
-<p>To make playback smooth and correct, precision of timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> which is the best option in terms of CPU usage, memory usage and precision. Unfortunately this tick generator is supported for Windows only at now.</p>
-<p>But you can also use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> which uses standard <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timers.timer">Timer</a> and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.</p>
+<p>To make playback smooth and correct, precision of timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> which is the best option in terms of CPU usage, memory usage and precision.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p><code>HighPrecisionTickGenerator</code> is supported for Windows only at now.</p>
+</div>
+<p>You can also use <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> which uses standard <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timers.timer">Timer</a> and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.</p>
 <p>Tick generator can be specified via <code>clockSettings</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>'s constructors or <code>GetPlayback</code> extension methods within <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html">PlaybackUtilities</a>:</p>
 <pre><code class="lang-csharp">var playback = midiFile.GetPlayback(new MidiClockSettings
 {
