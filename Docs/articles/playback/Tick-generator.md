@@ -6,9 +6,12 @@ uid: a_playback_tickgen
 
 Playback uses timer under the hood. In DryWetMIDI this timer called tick generator. On every tick of timer playback looks what objects should be played by the current time, plays them and advances position within objects list waiting for next tick.
 
-To make playback smooth and correct, precision of timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator) which is the best option in terms of CPU usage, memory usage and precision. Unfortunately this tick generator is supported for Windows only at now.
+To make playback smooth and correct, precision of timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator) which is the best option in terms of CPU usage, memory usage and precision.
 
-But you can also use [RegularPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator) which uses standard [Timer](xref:System.Timers.Timer) and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.
+> [!IMPORTANT]
+> `HighPrecisionTickGenerator` is supported for Windows only at now.
+
+You can also use [RegularPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator) which uses standard [Timer](xref:System.Timers.Timer) and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.
 
 Tick generator can be specified via `clockSettings` parameter of [Playback](xref:Melanchall.DryWetMidi.Devices.Playback)'s constructors or `GetPlayback` extension methods within [PlaybackUtilities](xref:Melanchall.DryWetMidi.Devices.PlaybackUtilities):
 

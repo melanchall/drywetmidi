@@ -6,7 +6,7 @@ uid: a_playback_overview
 
 [Playback](xref:Melanchall.DryWetMidi.Devices.Playback) class allows to play MIDI events via an [IOutputDevice](xref:Melanchall.DryWetMidi.Devices.IOutputDevice) (see [Output device](xref:a_dev_output) article) or without a device at all (see [Playback without device](#playback-without-device)). To get an instance of the `Playback` you can use its [constructors](xref:Melanchall.DryWetMidi.Devices.Playback#constructors) or `GetPlayback` extension methods in [PlaybackUtilities](xref:Melanchall.DryWetMidi.Devices.PlaybackUtilities).
 
-Following example shows simple console app where specified MIDI file is played until end of the file reached or B note is about to be played. So in our example B note means to stop playback.
+Following example shows simple console app where specified MIDI file is played until end of the file reached or `B` note is about to be played. So in our example `B` note means to stop playback.
 
 ```csharp
 using System;
@@ -75,16 +75,17 @@ using (var outputDevice = OutputDevice.GetByName("Output MIDI device"))
 
 Is you call [Start](xref:Melanchall.DryWetMidi.Devices.Playback.Start) method of the [Playback](xref:Melanchall.DryWetMidi.Devices.Playback), execution of the calling thread will continue immediately after the method is called. To stop playback use [Stop](xref:Melanchall.DryWetMidi.Devices.Playback.Stop) method. Note that there is no any pausing method since it's useless. `Stop` leaves playback at the point where the method was called. To move to the start of the playback use [MoveToStart](xref:Melanchall.DryWetMidi.Devices.Playback.MoveToStart) method.
 
-You should be very careful with this approach and `using` block. Example below shows the case where **part of MIDI data will not be played because of playback is disposed before the last MIDI event will be played**:
-
-```csharp
-using (var outputDevice = OutputDevice.GetByName("Output MIDI device"))
-using (var playback = MidiFile.Read("Some MIDI file.mid").GetPlayback(outputDevice))
-{
-    playback.Start();
-
-    // ...
-}
-```
-
-With non-blocking approach you should call `Dispose` manually after you've finished work with playback object.
+> [!IMPORTANT]
+> You should be very careful with this approach and `using` block. Example below shows the case where part of MIDI data **will not be played** because of playback is disposed before the last MIDI event will be played:
+> 
+> ```csharp
+> using (var outputDevice = OutputDevice.GetByName("Output MIDI device"))
+> using (var playback = MidiFile.Read("Some MIDI file.mid").GetPlayback(outputDevice))
+> {
+>     playback.Start();
+> 
+>     // ...
+> }
+> ```
+> 
+> With non-blocking approach you must call `Dispose` manually after you've finished work with playback object.
