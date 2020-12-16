@@ -164,6 +164,11 @@ namespace Melanchall.DryWetMidi.Devices
             return GetActiveSnapPoints().SkipWhile(p => p.Time <= time).FirstOrDefault();
         }
 
+        internal SnapPoint<TData> GetNextSnapPoint<TData>(TimeSpan time, TData data)
+        {
+            return (SnapPoint<TData>)GetActiveSnapPoints().SkipWhile(p => p.Time <= time).FirstOrDefault(p => IsSnapPointWithData(p, data));
+        }
+
         internal SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
             return GetActiveSnapPoints(snapPointsGroup).TakeWhile(p => p.Time < time).LastOrDefault();
@@ -172,6 +177,17 @@ namespace Melanchall.DryWetMidi.Devices
         internal SnapPoint GetPreviousSnapPoint(TimeSpan time)
         {
             return GetActiveSnapPoints().TakeWhile(p => p.Time < time).LastOrDefault();
+        }
+
+        internal SnapPoint<TData> GetPreviousSnapPoint<TData>(TimeSpan time, TData data)
+        {
+            return (SnapPoint<TData>)GetActiveSnapPoints().TakeWhile(p => p.Time < time).LastOrDefault(p => IsSnapPointWithData(p, data));
+        }
+
+        private bool IsSnapPointWithData<TData>(SnapPoint snapPoint, TData data)
+        {
+            var snapPointWithData = snapPoint as SnapPoint<TData>;
+            return snapPointWithData != null && snapPointWithData.Data.Equals(data);
         }
 
         private SnapPointsGroup SnapToNoteEvents(bool snapToNoteOn)

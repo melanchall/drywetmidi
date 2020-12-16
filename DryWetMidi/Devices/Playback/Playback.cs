@@ -555,6 +555,15 @@ namespace Melanchall.DryWetMidi.Devices
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
         }
 
+        public void MoveToPreviousSnapPoint<TData>(TData data)
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, data);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
         /// <summary>
         /// Sets playback position to the time of the next snap point (relative to the current
         /// time of playback) that belongs to the specified <see cref="SnapPointsGroup"/>.
@@ -585,6 +594,15 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime);
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+        }
+
+        public void MoveToNextSnapPoint<TData>(TData data)
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, data);
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
         }

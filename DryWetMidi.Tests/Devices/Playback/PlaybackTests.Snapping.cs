@@ -331,6 +331,59 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [Test]
+        public void MoveToPreviousSnapPoint_ByData()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            var snapPointTime1 = TimeSpan.FromSeconds(1);
+            var snapPointTime2 = TimeSpan.FromMilliseconds(1500);
+            var snapPointTime3 = TimeSpan.FromMilliseconds(2300);
+
+            var firstAfterResumeDelay = TimeSpan.FromSeconds(1);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(600);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+
+            var endTime = TimeSpan.FromSeconds(4);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), endTime)
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) =>
+                {
+                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime1, "X");
+                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Y");
+                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime3, "X");
+                    playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 2400), "Y");
+                },
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint("X"),
+                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
+                runningAfterResume: new[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    {
+                        playback.MoveToPreviousSnapPoint("X");
+                        CheckCurrentTime(playback, snapPointTime3, "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime3 + thirdAfterResumeDelay, "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void MoveToNextSnapPoint_ByGroup()
         {
             var stopAfter = TimeSpan.FromSeconds(1);
@@ -419,6 +472,58 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
                     {
                         playback.MoveToNextSnapPoint();
+                        CheckCurrentTime(playback, snapPointTime3, "resumed");
+                    }),
+                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime3 + thirdAfterResumeDelay, "resumed"))
+                },
+                explicitExpectedTimes: new[]
+                {
+                    TimeSpan.Zero,
+                    endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void MoveToNextSnapPoint_ByData()
+        {
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(1100);
+
+            var snapPointTime1 = TimeSpan.FromMilliseconds(1200);
+            var snapPointTime2 = TimeSpan.FromSeconds(2000);
+            var snapPointTime3 = TimeSpan.FromMilliseconds(2900);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(300);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(600);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+
+            var endTime = TimeSpan.FromSeconds(4);
+
+            CheckPlaybackStop(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), endTime)
+                },
+                eventsWillBeSent: new EventToSend[] { },
+                stopAfter: stopAfter,
+                stopPeriod: stopPeriod,
+                setupPlayback: (context, playback) =>
+                {
+                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime1, "X");
+                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Y");
+                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime3, "X");
+                },
+                afterStart: NoPlaybackAction,
+                afterStop: (context, playback) => playback.MoveToNextSnapPoint("X"),
+                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
+                runningAfterResume: new[]
+                {
+                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    {
+                        playback.MoveToNextSnapPoint("X");
                         CheckCurrentTime(playback, snapPointTime3, "resumed");
                     }),
                     Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime3 + thirdAfterResumeDelay, "resumed"))
