@@ -883,7 +883,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             TimeSpanType noteLengthType = TimeSpanType.Midi)
         {
             var filePath = Path.GetTempFileName();
-            File.WriteAllLines(filePath, csvLines);
+            FileOperations.WriteAllLinesToFile(filePath, csvLines);
 
             var settings = new MidiFileCsvConversionSettings
             {
@@ -902,7 +902,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
             finally
             {
-                File.Delete(filePath);
+                FileOperations.DeleteFile(filePath);
             }
         }
 
@@ -929,12 +929,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             try
             {
                 new CsvConverter().ConvertMidiFileToCsv(midiFile, filePath, true, settings);
-                var actualCsvLines = File.ReadAllLines(filePath);
+                var actualCsvLines = FileOperations.ReadAllFileLines(filePath);
                 CollectionAssert.AreEqual(expectedCsvLines, actualCsvLines, StringComparer.OrdinalIgnoreCase);
             }
             finally
             {
-                File.Delete(filePath);
+                FileOperations.DeleteFile(filePath);
             }
         }
 
@@ -955,7 +955,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             char delimiter = ',')
         {
             var filePath = Path.GetTempFileName();
-            File.WriteAllLines(filePath, csvLines);
+            FileOperations.WriteAllLinesToFile(filePath, csvLines);
 
             var settings = new NoteCsvConversionSettings
             {
@@ -975,7 +975,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
             finally
             {
-                File.Delete(filePath);
+                FileOperations.DeleteFile(filePath);
             }
         }
 
@@ -1002,12 +1002,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             try
             {
                 new CsvConverter().ConvertNotesToCsv(expectedNotes.Select(n => n.GetNote(tempoMap)), filePath, tempoMap, true, settings);
-                var actualCsvLines = File.ReadAllLines(filePath);
+                var actualCsvLines = FileOperations.ReadAllFileLines(filePath);
                 CollectionAssert.AreEqual(expectedCsvLines, actualCsvLines, StringComparer.OrdinalIgnoreCase);
             }
             finally
             {
-                File.Delete(filePath);
+                FileOperations.DeleteFile(filePath);
             }
         }
 

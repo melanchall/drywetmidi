@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             public NonSeekableStream(string filePath)
             {
-                _memoryStream = new MemoryStream(File.ReadAllBytes(filePath));
+                _memoryStream = new MemoryStream(FileOperations.ReadAllFileBytes(filePath));
                 _memoryStream.Position = 0;
             }
 

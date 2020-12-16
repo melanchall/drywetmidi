@@ -4,6 +4,7 @@ using System.IO;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Core
@@ -49,7 +50,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Core
             {
                 foreach (var newFilePath in _files.Values)
                 {
-                    File.Delete(newFilePath);
+                    FileOperations.DeleteFile(newFilePath);
                 }
             }
 

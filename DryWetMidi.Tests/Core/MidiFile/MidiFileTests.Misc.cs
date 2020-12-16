@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
             finally
             {
-                File.Delete(filePath);
+                FileOperations.DeleteFile(filePath);
             }
         }
 

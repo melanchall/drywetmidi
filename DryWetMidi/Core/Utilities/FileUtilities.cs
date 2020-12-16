@@ -47,10 +47,7 @@ namespace Melanchall.DryWetMidi.Core
             }
             catch (PathTooLongException)
             {
-                SafeFileHandle fileHandle = GetFileHandle(filePath,
-                                                          GENERIC_READ,
-                                                          OPEN_EXISTING);
-
+                var fileHandle = GetFileHandle(filePath, GENERIC_READ, OPEN_EXISTING);
                 return new FileStream(fileHandle, FileAccess.Read);
             }
         }
@@ -65,11 +62,7 @@ namespace Melanchall.DryWetMidi.Core
             }
             catch (PathTooLongException)
             {
-                SafeFileHandle fileHandle = GetFileHandle(filePath,
-                                                          GENERIC_WRITE,
-                                                          overwriteFile ? CREATE_ALWAYS
-                                                                        : CREATE_NEW);
-
+                var fileHandle = GetFileHandle(filePath, GENERIC_WRITE, overwriteFile ? CREATE_ALWAYS : CREATE_NEW);
                 return new FileStream(fileHandle, FileAccess.Write);
             }
         }
@@ -84,7 +77,7 @@ namespace Melanchall.DryWetMidi.Core
                                                    0,
                                                    IntPtr.Zero);
 
-            int lastWin32Error = Marshal.GetLastWin32Error();
+            var lastWin32Error = Marshal.GetLastWin32Error();
             if (fileHandle.IsInvalid)
                 throw new Win32Exception(lastWin32Error);
 

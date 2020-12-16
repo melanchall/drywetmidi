@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             }
             finally
             {
-                File.Delete(filePath);
+                FileOperations.DeleteFile(filePath);
             }
         }
 
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             }
             finally
             {
-                File.Delete(filePath);
+                FileOperations.DeleteFile(filePath);
             }
         }
 

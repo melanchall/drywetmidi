@@ -29,11 +29,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public static MidiFile GetValidFileReference(string midiFilePath, out bool noFile)
         {
             var referencePath = midiFilePath.Replace("Valid", "ValidReferences").Replace(".mid", ".txt");
-            noFile = !File.Exists(referencePath);
+            noFile = !FileOperations.IsFileExist(referencePath);
             if (noFile)
                 return null;
 
-            var constructionCode = File.ReadAllText(referencePath);
+            var constructionCode = FileOperations.ReadAllFileText(referencePath);
 
             var scriptOptions = ScriptOptions.Default
                 .WithReferences(
