@@ -16,17 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void CheckSnapPoints()
         {
-            var tempoMap = TempoMap.Default;
-
-            var eventsToSend = new[]
-            {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
-            };
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = Get10SecondsPlayback())
             {
                 Assert.IsNotNull(playback.Snapping, "Snapping is null.");
                 CollectionAssert.IsEmpty(playback.Snapping.SnapPoints, "Snap points collection is not empty on start.");
@@ -50,17 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void EnableDisableSnapPointsGroup()
         {
-            var tempoMap = TempoMap.Default;
-
-            var eventsToSend = new[]
-            {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
-            };
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = Get10SecondsPlayback())
             {
                 var snapPointsGroup = playback.Snapping.SnapToGrid(new SteppedGrid(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 4)));
                 Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
@@ -82,17 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void AddSnapPoint_WithoutData()
         {
-            var tempoMap = TempoMap.Default;
-
-            var eventsToSend = new[]
-            {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
-            };
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = Get10SecondsPlayback())
             {
                 var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
                 Assert.IsNotNull(snapPoint, "Snap point is null.");
@@ -104,17 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void AddSnapPoint_WithData()
         {
-            var tempoMap = TempoMap.Default;
-
-            var eventsToSend = new[]
-            {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
-            };
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = Get10SecondsPlayback())
             {
                 var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "Data");
                 Assert.IsNotNull(snapPoint, "Snap point is null.");
@@ -126,17 +86,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void RemoveSnapPoint()
         {
-            var tempoMap = TempoMap.Default;
-
-            var eventsToSend = new[]
-            {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
-            };
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = Get10SecondsPlayback())
             {
                 var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
                 CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint, "Snap points doesn't contain the snap point.");
@@ -149,17 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void RemoveSnapPointsByData()
         {
-            var tempoMap = TempoMap.Default;
-
-            var eventsToSend = new[]
-            {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
-            };
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = Get10SecondsPlayback())
             {
                 var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "DataX");
                 var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 2), "DataY");
@@ -228,6 +168,19 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Test]
+        public void MoveToSnapPoint_CheckReturnValue()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
+                Assert.IsTrue(playback.MoveToSnapPoint(snapPoint), "Failed to move to snap point.");
+
+                snapPoint.IsEnabled = false;
+                Assert.IsFalse(playback.MoveToSnapPoint(snapPoint), "Position changed to disabled snap point's time.");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void MoveToPreviousSnapPoint_ByGroup()
@@ -274,6 +227,26 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     TimeSpan.Zero,
                     endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime2)
                 });
+        }
+
+        [Test]
+        public void MoveToPreviousSnapPoint_ByGroup_CheckReturnValue()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPointsGroup = playback.Snapping.SnapToGrid(new ArbitraryGrid(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 5)));
+
+                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
+                Assert.IsTrue(playback.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
+                Assert.IsTrue(playback.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
+                Assert.IsFalse(playback.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
+
+                snapPointsGroup.IsEnabled = false;
+                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
+                Assert.IsFalse(
+                    playback.MoveToPreviousSnapPoint(snapPointsGroup),
+                    "Position changed to the time of a snap point within disabled snap point group.");
+            }
         }
 
         [Retry(RetriesNumber)]
@@ -329,6 +302,30 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Test]
+        public void MoveToPreviousSnapPoint_Global_CheckReturnValue()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
+                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5));
+
+                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
+                Assert.IsTrue(playback.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
+                Assert.IsTrue(playback.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                Assert.IsFalse(playback.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+
+                snapPoint2.IsEnabled = false;
+                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
+                Assert.IsTrue(playback.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                Assert.IsFalse(playback.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+
+                snapPoint1.IsEnabled = false;
+                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
+                Assert.IsFalse(playback.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void MoveToPreviousSnapPoint_ByData()
@@ -382,6 +379,24 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Test]
+        public void MoveToPreviousSnapPoint_ByData_CheckReturnValue()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "X");
+                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5), "Y");
+
+                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
+                Assert.IsTrue(playback.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
+                Assert.IsFalse(playback.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
+
+                snapPoint1.IsEnabled = false;
+                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
+                Assert.IsFalse(playback.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void MoveToNextSnapPoint_ByGroup()
@@ -428,6 +443,25 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     TimeSpan.Zero,
                     endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
                 });
+        }
+
+        [Test]
+        public void MoveToNextSnapPoint_ByGroup_CheckReturnValue()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPointsGroup = playback.Snapping.SnapToGrid(new ArbitraryGrid(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 5)));
+
+                Assert.IsTrue(playback.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to first next snap point.");
+                Assert.IsTrue(playback.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to second next snap point.");
+                Assert.IsFalse(playback.MoveToNextSnapPoint(snapPointsGroup), "Position changed beyond last snap point of the group.");
+
+                snapPointsGroup.IsEnabled = false;
+                playback.MoveToStart();
+                Assert.IsFalse(
+                    playback.MoveToNextSnapPoint(snapPointsGroup),
+                    "Position changed to the time of a snap point within disabled snap point group.");
+            }
         }
 
         [Retry(RetriesNumber)]
@@ -483,6 +517,29 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
         }
 
+        [Test]
+        public void MoveToNextSnapPoint_Global_CheckReturnValue()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
+                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5));
+
+                Assert.IsTrue(playback.MoveToNextSnapPoint(), "Failed to move to first next snap point.");
+                Assert.IsTrue(playback.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
+                Assert.IsFalse(playback.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
+
+                snapPoint2.IsEnabled = false;
+                playback.MoveToStart();
+                Assert.IsTrue(playback.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
+                Assert.IsFalse(playback.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
+
+                snapPoint1.IsEnabled = false;
+                playback.MoveToStart();
+                Assert.IsFalse(playback.MoveToNextSnapPoint(), "Position changed without any snap point enabled.");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void MoveToNextSnapPoint_ByData()
@@ -533,6 +590,23 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     TimeSpan.Zero,
                     endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
                 });
+        }
+
+        [Test]
+        public void MoveToNextSnapPoint_ByData_CheckReturnValue()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "Y");
+                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5), "X");
+
+                Assert.IsTrue(playback.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
+                Assert.IsFalse(playback.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
+
+                snapPoint2.IsEnabled = false;
+                playback.MoveToStart();
+                Assert.IsFalse(playback.MoveToNextSnapPoint("X"), "Position changed without any snap point enabled.");
+            }
         }
 
         [Retry(RetriesNumber)]
@@ -653,6 +727,25 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay,
                     endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
                 });
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private Playback Get10SecondsPlayback()
+        {
+            var tempoMap = TempoMap.Default;
+
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
+            };
+
+            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+
+            return new Playback(eventsForPlayback, tempoMap);
         }
 
         #endregion

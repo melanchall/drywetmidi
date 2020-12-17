@@ -507,18 +507,21 @@ namespace Melanchall.DryWetMidi.Devices
         /// Sets playback position to the time of the specified snap point.
         /// </summary>
         /// <param name="snapPoint">Snap point to move to.</param>
+        /// <returns><c>true</c> if playback position successfully changed to the time of <paramref name="snapPoint"/>;
+        /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public void MoveToSnapPoint(SnapPoint snapPoint)
+        public bool MoveToSnapPoint(SnapPoint snapPoint)
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
             EnsureIsNotDisposed();
 
             if (!snapPoint.IsEnabled)
-                return;
+                return false;
 
             MoveToTime((MetricTimeSpan)snapPoint.Time);
+            return true;
         }
 
         /// <summary>
@@ -527,10 +530,12 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
         /// select the one from.</param>
+        /// <returns><c>true</c> if playback position successfully changed to the time of a previous snap point
+        /// within <paramref name="snapPointsGroup"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public void MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)
+        public bool MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
@@ -538,30 +543,38 @@ namespace Melanchall.DryWetMidi.Devices
             var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            return snapPoint != null;
         }
 
         /// <summary>
         /// Sets playback position to the time of the previous snap point (relative to the current
         /// time of playback).
         /// </summary>
+        /// <returns><c>true</c> if playback position successfully changed to the time of a previous snap point;
+        /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public void MoveToPreviousSnapPoint()
+        public bool MoveToPreviousSnapPoint()
         {
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime);
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            return snapPoint != null;
         }
 
-        public void MoveToPreviousSnapPoint<TData>(TData data)
+        public bool MoveToPreviousSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, data);
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            return snapPoint != null;
         }
 
         /// <summary>
@@ -570,10 +583,12 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
         /// select the one from.</param>
+        /// <returns><c>true</c> if playback position successfully changed to the time of a next snap point
+        /// within <paramref name="snapPointsGroup"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public void MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)
+        public bool MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
@@ -581,30 +596,38 @@ namespace Melanchall.DryWetMidi.Devices
             var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            return snapPoint != null;
         }
 
         /// <summary>
         /// Sets playback position to the time of the next snap point (relative to the current
         /// time of playback).
         /// </summary>
+        /// <returns><c>true</c> if playback position successfully changed to the time of a next snap point;
+        /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public void MoveToNextSnapPoint()
+        public bool MoveToNextSnapPoint()
         {
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime);
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            return snapPoint != null;
         }
 
-        public void MoveToNextSnapPoint<TData>(TData data)
+        public bool MoveToNextSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, data);
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            return snapPoint != null;
         }
 
         /// <summary>
