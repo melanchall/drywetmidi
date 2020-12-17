@@ -133,6 +133,155 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
+        [TestCase(1.0)]
+        [TestCase(2.0)]
+        [TestCase(0.5)]
+        public void CheckPlayback_NonBlocking_CustomPlaybackStart(double speed)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+                
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero)
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromSeconds(1.5),
+                TimeSpan.FromSeconds(1.5)
+            };
+
+            CheckPlayback(
+                eventsToSend,
+                speed,
+                beforePlaybackStarted: (context, playback) => playback.PlaybackStart = new MetricTimeSpan(0, 0, 1, 500),
+                startPlayback: (context, playback) => playback.Start(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                },
+                finalChecks: (context, playback) =>
+                {
+                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                },
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1.0)]
+        [TestCase(2.0)]
+        [TestCase(0.5)]
+        public void CheckPlayback_NonBlocking_CustomPlaybackEnd(double speed)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+                
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero)
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.Zero,
+                TimeSpan.FromSeconds(1),
+            };
+
+            CheckPlayback(
+                eventsToSend,
+                speed,
+                beforePlaybackStarted: (context, playback) => playback.PlaybackEnd = new MetricTimeSpan(0, 0, 1, 500),
+                startPlayback: (context, playback) => playback.Start(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                },
+                finalChecks: (context, playback) =>
+                {
+                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(0.5), speed) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                },
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1.0)]
+        [TestCase(2.0)]
+        [TestCase(0.5)]
+        public void CheckPlayback_NonBlocking_CustomPlaybackStartAndEnd(double speed)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+                
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(1))
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromSeconds(1.5)
+            };
+
+            CheckPlayback(
+                eventsToSend,
+                speed,
+                beforePlaybackStarted: (context, playback) =>
+                {
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 1, 500);
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 3, 500);
+                },
+                startPlayback: (context, playback) => playback.Start(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                },
+                finalChecks: (context, playback) =>
+                {
+                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(0.5), speed) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                },
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
         [Test]
         public void PlayRecordedData()
         {
@@ -230,6 +379,137 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
+        [TestCase(1.0)]
+        [TestCase(2.0)]
+        [TestCase(0.5)]
+        public void CheckPlayback_Blocking_CustomPlaybackStart(double speed)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero)
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromSeconds(1.5),
+                TimeSpan.FromSeconds(1.5)
+            };
+
+            CheckPlayback(
+                eventsToSend,
+                speed,
+                beforePlaybackStarted: (context, playback) => playback.PlaybackStart = new MetricTimeSpan(0, 0, 1, 500),
+                startPlayback: (context, playback) => playback.Play(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.GreaterOrEqual(context.Stopwatch.Elapsed, expectedEventsTimes.Last(), "Playback doesn't block current thread.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received.");
+                },
+                finalChecks: NoPlaybackAction,
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1.0)]
+        [TestCase(2.0)]
+        [TestCase(0.5)]
+        public void CheckPlayback_Blocking_CustomPlaybackEnd(double speed)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero)
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.Zero,
+                TimeSpan.FromSeconds(1),
+            };
+
+            CheckPlayback(
+                eventsToSend,
+                speed,
+                beforePlaybackStarted: (context, playback) => playback.PlaybackEnd = new MetricTimeSpan(0, 0, 1, 500),
+                startPlayback: (context, playback) => playback.Play(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.GreaterOrEqual(context.Stopwatch.Elapsed, expectedEventsTimes.Last(), "Playback doesn't block current thread.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received.");
+                },
+                finalChecks: NoPlaybackAction,
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1.0)]
+        [TestCase(2.0)]
+        [TestCase(0.5)]
+        public void CheckPlayback_Blocking_CustomPlaybackStartAndEnd(double speed)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(1))
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromSeconds(1.5)
+            };
+
+            CheckPlayback(
+                eventsToSend,
+                speed,
+                beforePlaybackStarted: (context, playback) =>
+                {
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 1, 500);
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 3, 500);
+                },
+                startPlayback: (context, playback) => playback.Play(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.GreaterOrEqual(context.Stopwatch.Elapsed, expectedEventsTimes.Last(), "Playback doesn't block current thread.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received.");
+                },
+                finalChecks: NoPlaybackAction,
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(5)]
@@ -284,6 +564,209 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         Assert.IsTrue(groupedReceivedEvents.All(g => g.Count() >= repetitionsNumber), $"Events are not repeated {repetitionsNumber} times.");
                     }
                 });
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        public void CheckPlaybackLooping_CustomPlaybackStart(int repetitionsNumber)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero)
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromSeconds(1.5),
+                TimeSpan.FromSeconds(1.5)
+            };
+
+            var originalExpectedTimes = expectedEventsTimes.ToList();
+
+            for (int i = 1; i < repetitionsNumber; i++)
+            {
+                var lastTime = expectedEventsTimes.Last();
+                expectedEventsTimes.AddRange(originalExpectedTimes.Select(t => lastTime + t));
+            }
+
+            CheckPlayback(
+                eventsToSend,
+                speed: 1.0,
+                beforePlaybackStarted: (context, playback) =>
+                {
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 1, 500);
+                    playback.Loop = true;
+                },
+                startPlayback: (context, playback) => playback.Start(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                },
+                finalChecks: (context, playback) =>
+                {
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running.");
+                    playback.Stop();
+                    Assert.IsFalse(playback.IsRunning, "Playback is running after stop.");
+
+                    lock (context.ReceivedEventsLockObject)
+                    {
+                        var groupedReceivedEvents = context.ReceivedEvents.GroupBy(e => e.Event, new MidiEventEqualityComparer(new MidiEventEqualityCheckSettings { CompareDeltaTimes = false })).Take(eventsToSend.Length).ToArray();
+                        Assert.IsTrue(groupedReceivedEvents.All(g => g.Count() >= repetitionsNumber), $"Events are not repeated {repetitionsNumber} times.");
+                    }
+                },
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        public void CheckPlaybackLooping_CustomPlaybackEnd(int repetitionsNumber)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero)
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.Zero,
+                TimeSpan.FromSeconds(1),
+            };
+
+            var originalExpectedTimes = expectedEventsTimes.ToList();
+
+            for (int i = 1; i < repetitionsNumber; i++)
+            {
+                var lastTime = expectedEventsTimes.Last() + TimeSpan.FromMilliseconds(500);
+                expectedEventsTimes.AddRange(originalExpectedTimes.Select(t => lastTime + t));
+            }
+
+            CheckPlayback(
+                eventsToSend,
+                speed: 1.0,
+                beforePlaybackStarted: (context, playback) =>
+                {
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 1, 500);
+                    playback.Loop = true;
+                },
+                startPlayback: (context, playback) => playback.Start(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                },
+                finalChecks: (context, playback) =>
+                {
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running.");
+                    playback.Stop();
+                    Assert.IsFalse(playback.IsRunning, "Playback is running after stop.");
+
+                    lock (context.ReceivedEventsLockObject)
+                    {
+                        var groupedReceivedEvents = context.ReceivedEvents.GroupBy(e => e.Event, new MidiEventEqualityComparer(new MidiEventEqualityCheckSettings { CompareDeltaTimes = false })).Take(eventsToSend.Length).ToArray();
+                        Assert.IsTrue(groupedReceivedEvents.All(g => g.Count() >= repetitionsNumber), $"Events are not repeated {repetitionsNumber} times.");
+                    }
+                },
+                expectedEventsTimes: expectedEventsTimes);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        public void CheckPlaybackLooping_CustomPlaybackStartAndEnd(int repetitionsNumber)
+        {
+            var eventsToSend = new[]
+            {
+                new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOnEvent(), TimeSpan.FromSeconds(1)),
+                new EventToSend(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.Zero),
+                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+
+                new EventToSend(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(1))
+            };
+
+            var expectedEventsTimes = new List<TimeSpan>
+            {
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromSeconds(1.5)
+            };
+
+            var originalExpectedTimes = expectedEventsTimes.ToList();
+
+            for (int i = 1; i < repetitionsNumber; i++)
+            {
+                var lastTime = expectedEventsTimes.Last() + TimeSpan.FromMilliseconds(500);
+                expectedEventsTimes.AddRange(originalExpectedTimes.Select(t => lastTime + t));
+            }
+
+            CheckPlayback(
+                eventsToSend,
+                speed: 1.0,
+                beforePlaybackStarted: (context, playback) =>
+                {
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 1, 500);
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 3, 500);
+                    playback.Loop = true;
+                },
+                startPlayback: (context, playback) => playback.Start(),
+                afterPlaybackStarted: (context, playback) =>
+                {
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, SendReceiveUtilities.MaximumEventSendReceiveDelay, "Playback blocks current thread.");
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
+                },
+                waiting: (context, playback) =>
+                {
+                    var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
+                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                },
+                finalChecks: (context, playback) =>
+                {
+                    Assert.IsTrue(playback.IsRunning, "Playback is not running.");
+                    playback.Stop();
+                    Assert.IsFalse(playback.IsRunning, "Playback is running after stop.");
+
+                    lock (context.ReceivedEventsLockObject)
+                    {
+                        var groupedReceivedEvents = context.ReceivedEvents.GroupBy(e => e.Event, new MidiEventEqualityComparer(new MidiEventEqualityCheckSettings { CompareDeltaTimes = false })).Take(eventsToSend.Length).ToArray();
+                        Assert.IsTrue(groupedReceivedEvents.All(g => g.Count() >= repetitionsNumber), $"Events are not repeated {repetitionsNumber} times.");
+                    }
+                },
+                expectedEventsTimes: expectedEventsTimes);
         }
 
         [Retry(RetriesNumber)]

@@ -19,6 +19,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private static readonly TimeSpan ClockInterval = TimeSpan.FromMilliseconds(1);
 
+        private static readonly TimeSpan MinPlaybackTime = TimeSpan.Zero;
+        private static readonly TimeSpan MaxPlaybackTime = TimeSpan.MaxValue;
+
         #endregion
 
         #region Events
@@ -68,6 +71,13 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly IEnumerator<PlaybackEvent> _eventsEnumerator;
         private readonly TimeSpan _duration;
         private readonly long _durationInTicks;
+        
+        private ITimeSpan _playbackStart;
+        private TimeSpan _playbackStartMetric = MinPlaybackTime;
+        private ITimeSpan _playbackEnd;
+        private TimeSpan _playbackEndMetric = MaxPlaybackTime;
+
+        private bool _hasBeenStarted;
 
         private readonly MidiClock _clock;
 
@@ -374,6 +384,30 @@ namespace Melanchall.DryWetMidi.Devices
         /// </example>
         public EventCallback EventCallback { get; set; }
 
+        public ITimeSpan PlaybackStart
+        {
+            get { return _playbackStart; }
+            set
+            {
+                _playbackStart = value;
+                _playbackStartMetric = _playbackStart != null
+                    ? (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(_playbackStart, TempoMap)
+                    : MinPlaybackTime;
+            }
+        }
+
+        public ITimeSpan PlaybackEnd
+        {
+            get { return _playbackEnd; }
+            set
+            {
+                _playbackEnd = value;
+                _playbackEndMetric = _playbackEnd != null
+                    ? (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(_playbackEnd, TempoMap)
+                    : MaxPlaybackTime;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -443,10 +477,14 @@ namespace Melanchall.DryWetMidi.Devices
             if (_clock.IsRunning)
                 return;
 
+            if (!_hasBeenStarted)
+                MoveToStart();
+
             OutputDevice?.PrepareForEventsSending();
             StopStartNotes();
             _clock.Start();
 
+            _hasBeenStarted = true;
             OnStarted();
         }
 
@@ -639,7 +677,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             EnsureIsNotDisposed();
 
-            MoveToTime(new MetricTimeSpan());
+            MoveToTime(PlaybackStart ?? new MetricTimeSpan());
         }
 
         /// <summary>
@@ -779,6 +817,8 @@ namespace Melanchall.DryWetMidi.Devices
             do
             {
                 var time = _clock.CurrentTime;
+                if (time >= _playbackEndMetric)
+                    break;
 
                 var playbackEvent = _eventsEnumerator.Current;
                 if (playbackEvent == null)
@@ -831,8 +871,9 @@ namespace Melanchall.DryWetMidi.Devices
             _eventsEnumerator.Reset();
             _eventsEnumerator.MoveNext();
 
-            OnRepeatStarted();
+            MoveToStart();
             _clock.Start();
+            OnRepeatStarted();
         }
 
         private void EnsureIsNotDisposed()

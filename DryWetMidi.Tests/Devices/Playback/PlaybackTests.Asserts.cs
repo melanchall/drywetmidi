@@ -377,7 +377,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             PlaybackAction waiting,
             PlaybackAction finalChecks,
             Func<TickGenerator> createTickGeneratorCallback = null,
-            Func<OutputDevice, MidiClockSettings, Playback> createPlayback = null)
+            Func<OutputDevice, MidiClockSettings, Playback> createPlayback = null,
+            List<TimeSpan> expectedEventsTimes = null)
         {
             var playbackContext = new PlaybackContext();
 
@@ -387,7 +388,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var tempoMap = playbackContext.TempoMap;
 
             var eventsForPlayback = new List<MidiEvent>();
-            var expectedTimes = playbackContext.ExpectedTimes;
+            var expectedTimes = expectedEventsTimes ?? playbackContext.ExpectedTimes;
             var currentTime = TimeSpan.Zero;
 
             foreach (var eventToSend in eventsToSend.Where(e => !(e.Event is MetaEvent)))
@@ -396,7 +397,17 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 midiEvent.DeltaTime = LengthConverter.ConvertFrom((MetricTimeSpan)eventToSend.Delay, (MetricTimeSpan)currentTime, tempoMap);
                 currentTime += eventToSend.Delay;
                 eventsForPlayback.Add(midiEvent);
-                expectedTimes.Add(TimeSpan.FromTicks(MathUtilities.RoundToLong(currentTime.Ticks / speed)));
+
+                if (expectedEventsTimes == null)
+                    expectedTimes.Add(ApplySpeedToTimeSpan(currentTime, speed));
+            }
+
+            if (expectedEventsTimes != null)
+            {
+                for (var i = 0; i < expectedTimes.Count; i++)
+                {
+                    expectedTimes[i] = ApplySpeedToTimeSpan(expectedTimes[i], speed);
+                }
             }
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
@@ -649,6 +660,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         private static TimeSpan ScaleTimeSpan(TimeSpan timeSpan, double scaleValue)
         {
             return TimeSpan.FromTicks(MathUtilities.RoundToLong(timeSpan.Ticks * scaleValue));
+        }
+
+        private static TimeSpan ApplySpeedToTimeSpan(TimeSpan timeSpan, double speed)
+        {
+            return TimeSpan.FromTicks(MathUtilities.RoundToLong(timeSpan.Ticks / speed));
         }
     }
 }
