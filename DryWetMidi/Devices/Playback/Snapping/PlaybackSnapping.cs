@@ -114,6 +114,11 @@ namespace Melanchall.DryWetMidi.Devices
             });
         }
 
+        public void Clear()
+        {
+            _snapPoints.Clear();
+        }
+
         /// <summary>
         /// Adds snap points at times defined by the specified grid.
         /// </summary>

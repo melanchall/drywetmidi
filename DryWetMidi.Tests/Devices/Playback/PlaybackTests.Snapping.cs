@@ -137,6 +137,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void Clear()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "DataX");
+                playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 2), "DataY");
+                playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 3), "Something");
+                CollectionAssert.IsNotEmpty(playback.Snapping.SnapPoints, "No snap points after adding them.");
+
+                playback.Snapping.Clear();
+                CollectionAssert.IsEmpty(playback.Snapping.SnapPoints, "There are snap points after clear.");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void MoveToSnapPoint()
