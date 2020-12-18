@@ -878,6 +878,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             TimeSpanTestUtilities.TestClone(new MetricTimeSpan(5, 4, 6, 8));
         }
 
+        [Test]
+        public void Clone_3()
+        {
+            TimeSpanTestUtilities.TestClone(new MetricTimeSpan(new TimeSpan(1)));
+        }
+
         #endregion
 
         #region Compare

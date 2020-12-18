@@ -646,6 +646,17 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void MoveToNextSnapPoint_ByData_CheckReturnValue_AtZero()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                playback.Snapping.AddSnapPoint(new MetricTimeSpan(), "X");
+                Assert.IsTrue(playback.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
+                Assert.IsFalse(playback.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void SnapToNotesStarts()

@@ -558,8 +558,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (!snapPoint.IsEnabled)
                 return false;
 
-            MoveToTime((MetricTimeSpan)snapPoint.Time);
-            return true;
+            return TryToMoveToSnapPoint(snapPoint);
         }
 
         /// <summary>
@@ -579,10 +578,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
-            if (snapPoint != null)
-                MoveToTime((MetricTimeSpan)snapPoint.Time);
-
-            return snapPoint != null;
+            return TryToMoveToSnapPoint(snapPoint);
         }
 
         /// <summary>
@@ -598,10 +594,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime);
-            if (snapPoint != null)
-                MoveToTime((MetricTimeSpan)snapPoint.Time);
-
-            return snapPoint != null;
+            return TryToMoveToSnapPoint(snapPoint);
         }
 
         public bool MoveToPreviousSnapPoint<TData>(TData data)
@@ -609,10 +602,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, data);
-            if (snapPoint != null)
-                MoveToTime((MetricTimeSpan)snapPoint.Time);
-
-            return snapPoint != null;
+            return TryToMoveToSnapPoint(snapPoint);
         }
 
         /// <summary>
@@ -632,10 +622,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
-            if (snapPoint != null)
-                MoveToTime((MetricTimeSpan)snapPoint.Time);
-
-            return snapPoint != null;
+            return TryToMoveToSnapPoint(snapPoint);
         }
 
         /// <summary>
@@ -651,10 +638,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime);
-            if (snapPoint != null)
-                MoveToTime((MetricTimeSpan)snapPoint.Time);
-
-            return snapPoint != null;
+            return TryToMoveToSnapPoint(snapPoint);
         }
 
         public bool MoveToNextSnapPoint<TData>(TData data)
@@ -662,10 +646,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, data);
-            if (snapPoint != null)
-                MoveToTime((MetricTimeSpan)snapPoint.Time);
-
-            return snapPoint != null;
+            return TryToMoveToSnapPoint(snapPoint);
         }
 
         /// <summary>
@@ -738,6 +719,14 @@ namespace Melanchall.DryWetMidi.Devices
             MoveToTime(TimeConverter.ConvertTo<MetricTimeSpan>(step, TempoMap) > currentTime
                 ? new MetricTimeSpan()
                 : currentTime.Subtract(step, TimeSpanMode.TimeLength));
+        }
+
+        private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
+        {
+            if (snapPoint != null)
+                MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            return snapPoint != null;
         }
 
         private void StopStartNotes()

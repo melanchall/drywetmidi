@@ -527,7 +527,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Copy of the current time span.</returns>
         public ITimeSpan Clone()
         {
-            return new MetricTimeSpan(TotalMicroseconds);
+            return new MetricTimeSpan(_timeSpan);
         }
 
         /// <summary>

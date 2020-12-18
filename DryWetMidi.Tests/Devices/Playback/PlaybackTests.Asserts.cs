@@ -16,17 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     {
         private IEnumerable<SnapPoint> GetActiveSnapPoints(Playback playback)
         {
-            var time = TimeSpan.Zero;
-            var result = new List<SnapPoint>();
-            SnapPoint snapPoint = null;
-
-            while ((snapPoint = playback.Snapping.GetNextSnapPoint(time)) != null)
-            {
-                result.Add(snapPoint);
-                time = snapPoint.Time;
-            }
-
-            return result;
+            return playback.Snapping.GetActiveSnapPoints().ToList();
         }
 
         private void CheckEventCallback(

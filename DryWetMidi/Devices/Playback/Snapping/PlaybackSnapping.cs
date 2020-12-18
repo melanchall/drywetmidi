@@ -62,7 +62,10 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ThrowIfArgument.IsNull(nameof(time), time);
 
-            var metricTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, _tempoMap);
+            TimeSpan metricTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, _tempoMap);
+            if (metricTime == TimeSpan.Zero)
+                metricTime = new TimeSpan(1);
+
             var snapPoint = new SnapPoint<TData>(metricTime, data);
 
             _snapPoints.Add(snapPoint);
@@ -137,6 +140,9 @@ namespace Melanchall.DryWetMidi.Devices
                 if (metricTime > _maxTime)
                     break;
 
+                if (metricTime == TimeSpan.Zero)
+                    metricTime = new TimeSpan(1);
+
                 _snapPoints.Add(new SnapPoint(metricTime) { SnapPointsGroup = snapPointsGroup });
             }
 
@@ -163,32 +169,49 @@ namespace Melanchall.DryWetMidi.Devices
 
         internal SnapPoint GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
-            return GetActiveSnapPoints(snapPointsGroup).SkipWhile(p => p.Time <= time).FirstOrDefault();
+            return GetNextSnapPoints(GetActiveSnapPoints(snapPointsGroup), time).FirstOrDefault();
         }
 
         internal SnapPoint GetNextSnapPoint(TimeSpan time)
         {
-            return GetActiveSnapPoints().SkipWhile(p => p.Time <= time).FirstOrDefault();
+            return GetNextSnapPoints(GetActiveSnapPoints(), time).FirstOrDefault();
         }
 
         internal SnapPoint<TData> GetNextSnapPoint<TData>(TimeSpan time, TData data)
         {
-            return (SnapPoint<TData>)GetActiveSnapPoints().SkipWhile(p => p.Time <= time).FirstOrDefault(p => IsSnapPointWithData(p, data));
+            return (SnapPoint<TData>)GetNextSnapPoints(GetActiveSnapPoints(), time).FirstOrDefault(p => IsSnapPointWithData(p, data));
         }
 
         internal SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
-            return GetActiveSnapPoints(snapPointsGroup).TakeWhile(p => p.Time < time).LastOrDefault();
+            return GetPreviousSnapPoints(GetActiveSnapPoints(snapPointsGroup), time).LastOrDefault();
         }
 
         internal SnapPoint GetPreviousSnapPoint(TimeSpan time)
         {
-            return GetActiveSnapPoints().TakeWhile(p => p.Time < time).LastOrDefault();
+            return GetPreviousSnapPoints(GetActiveSnapPoints(), time).LastOrDefault();
         }
 
         internal SnapPoint<TData> GetPreviousSnapPoint<TData>(TimeSpan time, TData data)
         {
-            return (SnapPoint<TData>)GetActiveSnapPoints().TakeWhile(p => p.Time < time).LastOrDefault(p => IsSnapPointWithData(p, data));
+            return (SnapPoint<TData>)GetPreviousSnapPoints(GetActiveSnapPoints(), time).LastOrDefault(p => IsSnapPointWithData(p, data));
+        }
+
+        internal IEnumerable<SnapPoint> GetActiveSnapPoints()
+        {
+            return !IsEnabled
+                ? Enumerable.Empty<SnapPoint>()
+                : _snapPoints.Where(p => p.IsEnabled && p.SnapPointsGroup?.IsEnabled != false).OrderBy(p => p.Time);
+        }
+
+        private IEnumerable<SnapPoint> GetNextSnapPoints(IEnumerable<SnapPoint> snapPoints, TimeSpan time)
+        {
+            return snapPoints.SkipWhile(p => p.Time <= time);
+        }
+
+        private IEnumerable<SnapPoint> GetPreviousSnapPoints(IEnumerable<SnapPoint> snapPoints, TimeSpan time)
+        {
+            return snapPoints.TakeWhile(p => p.Time < time);
         }
 
         private bool IsSnapPointWithData<TData>(SnapPoint snapPoint, TData data)
@@ -211,13 +234,6 @@ namespace Melanchall.DryWetMidi.Devices
             }
 
             return SnapToGrid(new ArbitraryGrid(times));
-        }
-
-        private IEnumerable<SnapPoint> GetActiveSnapPoints()
-        {
-            return !IsEnabled
-                ? Enumerable.Empty<SnapPoint>()
-                : _snapPoints.Where(p => p.IsEnabled && p.SnapPointsGroup?.IsEnabled != false).OrderBy(p => p.Time);
         }
 
         private IEnumerable<SnapPoint> GetActiveSnapPoints(SnapPointsGroup snapPointsGroup)
