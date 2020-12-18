@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Gets an instance of the <see cref="SnapPointsGroup"/> the current <see cref="SnapPoint"/>
-        /// belongs to.
+        /// belongs to; or <c>null</c> if the snap point doesn't belong to a group.
         /// </summary>
         public SnapPointsGroup SnapPointsGroup { get; internal set; }
 

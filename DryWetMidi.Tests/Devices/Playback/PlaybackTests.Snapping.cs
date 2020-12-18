@@ -60,6 +60,28 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
+        public void EnableDisableSnapping()
+        {
+            using (var playback = Get10SecondsPlayback())
+            {
+                playback.Snapping.SnapToGrid(new SteppedGrid(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 4)));
+                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
+                Assert.IsTrue(playback.Snapping.IsEnabled, "Snap points group is not enabled on start.");
+                Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active.");
+
+                playback.Snapping.IsEnabled = false;
+                Assert.IsFalse(playback.Snapping.IsEnabled, "Snap points group is not disabled.");
+                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled after group disabled.");
+                CollectionAssert.IsEmpty(GetActiveSnapPoints(playback), "Some snap points are active after group disabled.");
+
+                playback.Snapping.IsEnabled = true;
+                Assert.IsTrue(playback.Snapping.IsEnabled, "Snap points group is not enabled.");
+                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
+                Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active after group enabled.");
+            }
+        }
+
+        [Test]
         public void AddSnapPoint_WithoutData()
         {
             using (var playback = Get10SecondsPlayback())

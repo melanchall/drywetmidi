@@ -43,6 +43,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public IEnumerable<SnapPoint> SnapPoints => _snapPoints.AsReadOnly();
 
+        public bool IsEnabled { get; set; } = true;
+
         #endregion
 
         #region Methods
@@ -208,7 +210,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private IEnumerable<SnapPoint> GetActiveSnapPoints()
         {
-            return _snapPoints.Where(p => p.IsEnabled && p.SnapPointsGroup?.IsEnabled != false).OrderBy(p => p.Time);
+            return !IsEnabled
+                ? Enumerable.Empty<SnapPoint>()
+                : _snapPoints.Where(p => p.IsEnabled && p.SnapPointsGroup?.IsEnabled != false).OrderBy(p => p.Time);
         }
 
         private IEnumerable<SnapPoint> GetActiveSnapPoints(SnapPointsGroup snapPointsGroup)
