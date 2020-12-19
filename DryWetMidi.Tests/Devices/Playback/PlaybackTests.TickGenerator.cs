@@ -77,8 +77,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             CheckPlayback_TickGenerator(() => new HighPrecisionTickGenerator(), TimeSpan.FromMilliseconds(30));
         }
 
-        [Retry(RetriesNumber)]
-        [Test]
+        //[Retry(RetriesNumber)]
+        //[Test]
         public void CheckPlayback_HighPrecisionTickGenerator_DiscardResolutionIncreasingOnStop()
         {
             var processId = Process.GetCurrentProcess().Id;
