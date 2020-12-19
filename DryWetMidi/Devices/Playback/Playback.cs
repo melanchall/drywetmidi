@@ -855,7 +855,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
             }
 
-            _clock.Stop();
+            _clock.StopShortly();
             _clock.ResetCurrentTime();
             _eventsEnumerator.Reset();
             _eventsEnumerator.MoveNext();

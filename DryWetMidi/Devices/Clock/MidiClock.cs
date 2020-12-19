@@ -34,8 +34,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         private double _speed = DefaultSpeed;
 
-        private bool _started;
-
         private readonly TickGenerator _tickGenerator;
 
         #endregion
@@ -136,15 +134,11 @@ namespace Melanchall.DryWetMidi.Devices
             if (IsRunning)
                 return;
 
-            if (!_started)
-                _tickGenerator?.TryStart(Interval);
-
+            _tickGenerator?.TryStart(Interval);
             _stopwatch.Start();
 
             if (_startImmediately)
                 OnTicked();
-
-            _started = true;
         }
 
         /// <summary>
@@ -156,6 +150,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureIsNotDisposed();
 
             _stopwatch.Stop();
+            _tickGenerator?.TryStop();
         }
 
         /// <summary>
@@ -206,6 +201,11 @@ namespace Melanchall.DryWetMidi.Devices
 
             CurrentTime = _startTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
             OnTicked();
+        }
+
+        internal void StopShortly()
+        {
+            _stopwatch.Stop();
         }
 
         private void OnTickGenerated(object sender, EventArgs e)

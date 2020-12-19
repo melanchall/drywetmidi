@@ -51,6 +51,11 @@ namespace Melanchall.DryWetMidi.Devices
             _timer.Start();
         }
 
+        protected override void Stop()
+        {
+            _timer.Stop();
+        }
+
         #endregion
 
         #region Methods

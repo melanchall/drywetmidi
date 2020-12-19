@@ -6,6 +6,9 @@ using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 using System.Diagnostics;
+using Melanchall.DryWetMidi.Interaction;
+using System.IO;
+using Melanchall.DryWetMidi.Tests.Common;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
@@ -22,9 +25,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             protected override void Start(TimeSpan interval)
             {
-                if (_thread != null)
-                    return;
-
                 _thread = new Thread(() =>
                 {
                     var stopwatch = new Stopwatch();
@@ -45,6 +45,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 });
 
                 _thread.Start();
+            }
+
+            protected override void Stop()
+            {
+                _isRunning = false;
             }
 
             protected override void Dispose(bool disposing)
@@ -70,6 +75,32 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         public void CheckPlayback_HighPrecisionTickGenerator()
         {
             CheckPlayback_TickGenerator(() => new HighPrecisionTickGenerator(), TimeSpan.FromMilliseconds(30));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlayback_HighPrecisionTickGenerator_DiscardResolutionIncreasingOnStop()
+        {
+            var processId = Process.GetCurrentProcess().Id;
+
+            using (var playback = new Playback(new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 100000 } }, TempoMap.Default))
+            {
+                Assert.IsFalse(IsProcessIdInPowerCfgReport(processId), "Process ID is in PowerCfg report before playback started.");
+
+                playback.Start();
+                Assert.IsTrue(IsProcessIdInPowerCfgReport(processId), "Process ID isn't in PowerCfg report after playback started.");
+
+                playback.Stop();
+                Assert.IsFalse(IsProcessIdInPowerCfgReport(processId), "Process ID is in PowerCfg report after playback stopped.");
+
+                playback.Start();
+                Assert.IsTrue(IsProcessIdInPowerCfgReport(processId), "Process ID isn't in PowerCfg report after playback started again.");
+
+                playback.Stop();
+                Assert.IsFalse(IsProcessIdInPowerCfgReport(processId), "Process ID is in PowerCfg report after playback stopped again.");
+            }
+
+            Assert.IsFalse(IsProcessIdInPowerCfgReport(processId), "Process ID is in PowerCfg report after playback disposed.");
         }
 
         [Retry(RetriesNumber)]
@@ -142,6 +173,30 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         #endregion
 
         #region Private methods
+
+        private bool IsProcessIdInPowerCfgReport(int processId)
+        {
+            var reportFilePath = Path.Combine(Path.GetTempPath(), "powercfg_report.html");
+
+            try
+            {
+                var process = Process.Start(new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/C powercfg /energy /output \"{reportFilePath}\" /duration 3"
+                });
+                Assert.IsNotNull(process, "PowerCfg process is null.");
+
+                process.WaitForExit();
+
+                var report = FileOperations.ReadAllFileText(reportFilePath);
+                return report.Contains(processId.ToString());
+            }
+            finally
+            {
+                FileOperations.DeleteFile(reportFilePath);
+            }
+        }
 
         private void CheckPlayback_TickGenerator(Func<TickGenerator> createTickGeneratorCallback, TimeSpan maximumEventSendReceiveDelay)
         {

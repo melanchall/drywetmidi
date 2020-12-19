@@ -82,6 +82,12 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        protected override void Stop()
+        {
+            MidiTimerWinApi.timeEndPeriod(_resolution);
+            MidiTimerWinApi.timeKillEvent(_timerId);
+        }
+
         #endregion
 
         #region Methods
@@ -130,10 +136,7 @@ namespace Melanchall.DryWetMidi.Devices
             }
 
             if (IsRunning)
-            {
-                MidiTimerWinApi.timeEndPeriod(_resolution);
-                MidiTimerWinApi.timeKillEvent(_timerId);
-            }
+                Stop();
 
             _disposed = true;
         }

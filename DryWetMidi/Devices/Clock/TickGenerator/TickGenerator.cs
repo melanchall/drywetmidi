@@ -33,6 +33,15 @@ namespace Melanchall.DryWetMidi.Devices
             IsRunning = true;
         }
 
+        internal void TryStop()
+        {
+            if (!IsRunning)
+                return;
+
+            Stop();
+            IsRunning = false;
+        }
+
         /// <summary>
         /// Generates a tick firing the <see cref="TickGenerated"/> event.
         /// </summary>
@@ -46,6 +55,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="interval">Interval between ticks.</param>
         protected abstract void Start(TimeSpan interval);
+
+        protected abstract void Stop();
 
         #endregion
 
