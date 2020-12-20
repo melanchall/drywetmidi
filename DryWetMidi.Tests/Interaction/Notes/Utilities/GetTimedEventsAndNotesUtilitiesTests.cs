@@ -181,7 +181,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note((SevenBitNumber)1, 30, 10) { Velocity = (SevenBitNumber)100 },
                 new Note((SevenBitNumber)2, 0, 20) { Velocity = (SevenBitNumber)70, OffVelocity = (SevenBitNumber)1 },
                 new Note((SevenBitNumber)2, 10, 20) { Velocity = (SevenBitNumber)0 },
-                null
             };
 
             CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());

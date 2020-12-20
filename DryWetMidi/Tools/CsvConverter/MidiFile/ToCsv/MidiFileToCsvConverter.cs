@@ -26,7 +26,11 @@ namespace Melanchall.DryWetMidi.Tools
                     var timedEvents = trackChunk.GetTimedEvents();
                     var timedObjects = settings.CsvLayout == MidiFileCsvLayout.MidiCsv || settings.NoteFormat == NoteFormat.Events
                         ? timedEvents
-                        : timedEvents.GetTimedEventsAndNotes();
+                        : timedEvents.BuildObjects(new ObjectsBuildingSettings
+                        {
+                            BuildTimedEvents = true,
+                            BuildNotes = true
+                        });
 
                     foreach (var timedObject in timedObjects)
                     {

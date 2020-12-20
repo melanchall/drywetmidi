@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -15,12 +16,33 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(settings), settings);
 
-            timedObjects = timedObjects.OrderBy(o => o.Time);
+            timedObjects = timedObjects.Where(o => o != null).OrderBy(o => o.Time);
 
             var result = BuildObjects(timedObjects, settings, 0);
             result = AddObjectsByPostBuilders(timedObjects, result, settings);
 
             return result;
+        }
+
+        public static IEnumerable<ITimedObject> BuildObjects(this TrackChunk trackChunk, ObjectsBuildingSettings settings)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+
+            return trackChunk.GetTimedEvents().BuildObjects(settings);
+        }
+
+        public static IEnumerable<ITimedObject> BuildObjects(this IEnumerable<TrackChunk> trackChunks, ObjectsBuildingSettings settings)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            return trackChunks.GetTimedEvents().BuildObjects(settings);
+        }
+
+        public static IEnumerable<ITimedObject> BuildObjects(this MidiFile midiFile, ObjectsBuildingSettings settings)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            return midiFile.GetTimedEvents().BuildObjects(settings);
         }
 
         private static IEnumerable<ITimedObject> AddObjectsByPostBuilders(

@@ -18,5 +18,10 @@
     "Hint": "Use GetTempoChanges or GetTempoAtTime methods of TempoMap.",
     "ObsoleteFromVersion": "5.1.2",
     "InLibrary": true
+  },
+  "OBS5": {
+    "Hint": "Use BuildObjects methods from BuildObjectsUtilities.",
+    "ObsoleteFromVersion": "5.1.3",
+    "InLibrary": true
   }
 }

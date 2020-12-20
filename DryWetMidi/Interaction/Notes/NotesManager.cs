@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static IEnumerable<Note> CreateNotes(IEnumerable<TimedEvent> events)
         {
-            return events.GetTimedEventsAndNotes().OfType<Note>();
+            return events.BuildObjects(new ObjectsBuildingSettings { BuildNotes = true }).OfType<Note>();
         }
 
         private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)

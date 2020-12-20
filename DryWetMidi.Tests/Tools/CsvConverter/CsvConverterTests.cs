@@ -361,7 +361,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
-            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.GetTimedEvents().GetTimedEventsAndNotes(), false),
+            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.BuildObjects(new ObjectsBuildingSettings { BuildTimedEvents = true, BuildNotes = true }), false),
                           "Invalid objects.");
         }
 
@@ -406,7 +406,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
-            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.GetTimedEvents().GetTimedEventsAndNotes(), false),
+            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.BuildObjects(new ObjectsBuildingSettings { BuildTimedEvents = true, BuildNotes = true }), false),
                           "Invalid objects.");
         }
 

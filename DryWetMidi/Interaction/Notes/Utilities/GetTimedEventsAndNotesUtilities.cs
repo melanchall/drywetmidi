@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    [Obsolete("OBS5")]
     /// <summary>
     /// Provides a way to iterate through a collection of <see cref="TimedEvent"/> returning
     /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -74,6 +74,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the specified collection of <see cref="TimedEvent"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -91,23 +92,14 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
 
-            var noteEventsDescriptors = new List<NoteEventsDescriptor>();
-            var eventsTail = new ObjectWrapper<List<TimedEvent>>();
-
-            foreach (var timedEvent in timedEvents)
+            return timedEvents.BuildObjects(new ObjectsBuildingSettings
             {
-                foreach (var timedObject in GetTimedEventsAndNotes(timedEvent, noteEventsDescriptors, eventsTail))
-                {
-                    yield return timedObject;
-                }
-            }
-
-            foreach (var timedObject in noteEventsDescriptors.SelectMany(d => d.GetTimedObjects()))
-            {
-                yield return timedObject;
-            }
+                BuildTimedEvents = true,
+                BuildNotes = true
+            });
         }
 
+        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the events contained in the specified <see cref="TrackChunk"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -128,6 +120,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.GetTimedEvents().GetTimedEventsAndNotes();
         }
 
+        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the events contained in the specified collection of <see cref="TrackChunk"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -148,6 +141,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunks.GetTimedEvents().GetTimedEventsAndNotes();
         }
 
+        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the events contained in the specified <see cref="MidiFile"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -166,55 +160,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
             return midiFile.GetTimedEvents().GetTimedEventsAndNotes();
-        }
-
-        internal static IEnumerable<ITimedObject> GetTimedEventsAndNotes(TimedEvent timedEvent, List<NoteEventsDescriptor>  noteEventsDescriptors, ObjectWrapper<List<TimedEvent>> eventsTail)
-        {
-            var midiEvent = timedEvent?.Event;
-
-            var noteOnEvent = midiEvent as NoteOnEvent;
-            if (noteOnEvent != null)
-            {
-                noteEventsDescriptors.Add(new NoteEventsDescriptor(timedEvent, eventsTail.Object = new List<TimedEvent>()));
-                yield break;
-            }
-
-            var noteOffEvent = midiEvent as NoteOffEvent;
-            if (noteOffEvent != null)
-            {
-                var noteEventsDescriptor = noteEventsDescriptors.FirstOrDefault(d => d.IsCorrespondingNoteOffEvent(noteOffEvent));
-                if (noteEventsDescriptor != null)
-                {
-                    noteEventsDescriptor.CompleteNote(timedEvent);
-                    if (noteEventsDescriptors.First() != noteEventsDescriptor)
-                        yield break;
-
-                    for (int i = 0; i < noteEventsDescriptors.Count; i++)
-                    {
-                        var descriptor = noteEventsDescriptors[i];
-                        if (!descriptor.IsNoteCompleted)
-                            break;
-
-                        foreach (var timedObject in descriptor.GetTimedObjects())
-                        {
-                            yield return timedObject;
-                        }
-
-                        noteEventsDescriptors.RemoveAt(i);
-                        i--;
-                    }
-
-                    if (!noteEventsDescriptors.Any())
-                        eventsTail.Object = null;
-
-                    yield break;
-                }
-            }
-
-            if (eventsTail.Object != null)
-                eventsTail.Object.Add(timedEvent);
-            else
-                yield return timedEvent;
         }
 
         #endregion

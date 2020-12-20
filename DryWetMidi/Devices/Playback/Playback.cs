@@ -1025,7 +1025,11 @@ namespace Melanchall.DryWetMidi.Devices
             return events.Where(e => e != null)
                          .SelectMany(e => e.Where(midiEvent => midiEvent != null)
                                            .GetTimedEvents()
-                                           .GetTimedEventsAndNotes());
+                                           .BuildObjects(new ObjectsBuildingSettings
+                                           {
+                                               BuildTimedEvents = true,
+                                               BuildNotes = true
+                                           }));
         }
 
         #endregion
