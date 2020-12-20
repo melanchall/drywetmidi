@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 
@@ -367,43 +365,12 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Gets collection of <see cref="ReadingHandler"/> objects that handle MIDI data reading.
-        /// </summary>
-        public ICollection<ReadingHandler> ReadingHandlers { get; } = new List<ReadingHandler>();
-
-        /// <summary>
         /// Gets or sets settings according to which <see cref="MidiReader"/> should read MIDI data.
         /// </summary>
         /// <remarks>
         /// <para>These settings specify reading binary data without knowledge about MIDI data structures.</para>
         /// </remarks>
         public ReaderSettings ReaderSettings { get; set; } = new ReaderSettings();
-
-        internal bool UseReadingHandlers { get; private set; }
-
-        internal ICollection<ReadingHandler> FileReadingHandlers { get; private set; }
-
-        internal ICollection<ReadingHandler> TrackChunkReadingHandlers { get; private set; }
-
-        internal ICollection<ReadingHandler> EventReadingHandlers { get; private set; }
-
-        #endregion
-
-        #region Methods
-
-        internal void PrepareReadingHandlers()
-        {
-            UseReadingHandlers = ReadingHandlers.Any();
-
-            foreach (var handler in ReadingHandlers)
-            {
-                handler.Initialize();
-            }
-
-            FileReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.File)).ToArray();
-            TrackChunkReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.TrackChunk)).ToArray();
-            EventReadingHandlers = ReadingHandlers.Where(h => h.Scope.HasFlag(ReadingHandler.TargetScope.Event)).ToArray();
-        }
 
         #endregion
     }

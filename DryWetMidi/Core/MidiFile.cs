@@ -370,21 +370,7 @@ namespace Melanchall.DryWetMidi.Core
             if (settings.ReaderSettings == null)
                 settings.ReaderSettings = new ReaderSettings();
 
-            settings.PrepareReadingHandlers();
-
-            var useReadingHandlers = settings.UseReadingHandlers;
-            var fileReadingHandlers = settings.FileReadingHandlers;
-            var trackChunkReadingHandlers = settings.TrackChunkReadingHandlers;
-
             //
-
-            if (useReadingHandlers)
-            {
-                foreach (var handler in fileReadingHandlers)
-                {
-                    handler.OnStartFileReading();
-                }
-            }
 
             var file = new MidiFile();
 
@@ -421,7 +407,7 @@ namespace Melanchall.DryWetMidi.Core
                     {
                         // Read chunk
 
-                        var chunk = ReadChunk(reader, settings, actualTrackChunksCount, expectedTrackChunksCount, trackChunkReadingHandlers);
+                        var chunk = ReadChunk(reader, settings, actualTrackChunksCount, expectedTrackChunksCount);
                         if (chunk == null)
                             continue;
 
@@ -435,14 +421,6 @@ namespace Melanchall.DryWetMidi.Core
                                 expectedTrackChunksCount = headerChunk.TracksNumber;
                                 file.TimeDivision = headerChunk.TimeDivision;
                                 file._originalFormat = headerChunk.FileFormat;
-
-                                if (useReadingHandlers)
-                                {
-                                    foreach (var handler in fileReadingHandlers)
-                                    {
-                                        handler.OnFinishHeaderChunkReading(headerChunk.TimeDivision);
-                                    }
-                                }
                             }
 
                             headerChunkIsRead = true;
@@ -480,16 +458,6 @@ namespace Melanchall.DryWetMidi.Core
             catch (EndOfStreamException ex)
             {
                 ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, ex);
-            }
-
-            //
-
-            if (useReadingHandlers)
-            {
-                foreach (var handler in fileReadingHandlers)
-                {
-                    handler.OnFinishFileReading(file);
-                }
             }
 
             return file;
@@ -631,7 +599,7 @@ namespace Melanchall.DryWetMidi.Core
             return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);
         }
 
-        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount, ICollection<ReadingHandler> trackChunkReadingHandlers)
+        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
             MidiChunk chunk = null;
 
@@ -659,14 +627,6 @@ namespace Melanchall.DryWetMidi.Core
                         chunk = new HeaderChunk();
                         break;
                     case TrackChunk.Id:
-                        if (settings.UseReadingHandlers)
-                        {
-                            foreach (var handler in trackChunkReadingHandlers)
-                            {
-                                handler.OnStartTrackChunkReading();
-                            }
-                        }
-
                         chunk = new TrackChunk();
                         break;
                     default:
@@ -715,14 +675,6 @@ namespace Melanchall.DryWetMidi.Core
                 //
 
                 chunk?.Read(reader, settings);
-
-                if (settings.UseReadingHandlers && chunkId == TrackChunk.Id)
-                {
-                    foreach (var handler in trackChunkReadingHandlers)
-                    {
-                        handler.OnFinishTrackChunkReading((TrackChunk)chunk);
-                    }
-                }
             }
             catch (NotEnoughBytesException ex)
             {
