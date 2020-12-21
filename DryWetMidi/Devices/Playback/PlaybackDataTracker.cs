@@ -16,6 +16,11 @@ namespace Melanchall.DryWetMidi.Devices
             .Select(n => new ValueLine<SevenBitNumber>(SevenBitNumber.MinValue))
             .ToArray();
 
+        private readonly ushort?[] _currentPitchValues = new ushort?[FourBitNumber.MaxValue + 1];
+        private readonly ValueLine<ushort>[] _pitchValueLines = FourBitNumber.Values
+            .Select(n => new ValueLine<ushort>(ushort.MinValue))
+            .ToArray();
+
         private readonly TempoMap _tempoMap;
 
         #endregion
@@ -33,6 +38,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public bool TrackProgram { get; set; }
 
+        public bool TrackPitchValue { get; set; }
+
         #endregion
 
         #region Methods
@@ -40,17 +47,20 @@ namespace Melanchall.DryWetMidi.Devices
         public void InitializeData(MidiEvent midiEvent, long time)
         {
             InitializeProgramChangeData(midiEvent as ProgramChangeEvent, time);
+            InitializePitchBendDData(midiEvent as PitchBendEvent, time);
         }
 
         public void UpdateCurrentData(MidiEvent midiEvent)
         {
             UpdateCurrentProgramChangeData(midiEvent as ProgramChangeEvent);
+            UpdateCurrentPitchBendData(midiEvent as PitchBendEvent);
         }
 
         public IEnumerable<MidiEvent> GetEventsAtTime(TimeSpan time)
         {
             var convertedTime = TimeConverter.ConvertFrom((MetricTimeSpan)time, _tempoMap);
-            return GetProgramChangeEventsAtTime(convertedTime);
+            return GetProgramChangeEventsAtTime(convertedTime)
+                .Concat(GetPitchBendEventsAtTime(convertedTime));
         }
 
         private void UpdateCurrentProgramChangeData(ProgramChangeEvent programChangeEvent)
@@ -84,6 +94,41 @@ namespace Melanchall.DryWetMidi.Devices
                         yield return new ProgramChangeEvent(programNumberAtTime) { Channel = channel };
                     else
                         _currentProgramNumbers[channel] = programNumberAtTime;
+                }
+            }
+        }
+
+        private void UpdateCurrentPitchBendData(PitchBendEvent pitchBendEvent)
+        {
+            if (pitchBendEvent == null)
+                return;
+
+            _currentPitchValues[pitchBendEvent.Channel] = pitchBendEvent.PitchValue;
+        }
+
+        private void InitializePitchBendDData(PitchBendEvent pitchBendEvent, long time)
+        {
+            if (pitchBendEvent == null)
+                return;
+
+            _pitchValueLines[pitchBendEvent.Channel].SetValue(time, pitchBendEvent.PitchValue);
+        }
+
+        private IEnumerable<MidiEvent> GetPitchBendEventsAtTime(long time)
+        {
+            if (!TrackPitchValue)
+                yield break;
+
+            foreach (var channel in FourBitNumber.Values)
+            {
+                var pitchValueAtTime = _pitchValueLines[channel].GetValueAtTime(time);
+                var currentPitchValue = _currentPitchValues[channel];
+                if (pitchValueAtTime != currentPitchValue)
+                {
+                    if (currentPitchValue != null)
+                        yield return new PitchBendEvent(pitchValueAtTime) { Channel = channel };
+                    else
+                        _currentPitchValues[channel] = pitchValueAtTime;
                 }
             }
         }

@@ -328,6 +328,12 @@ namespace Melanchall.DryWetMidi.Devices
             set { _playbackDataTracker.TrackProgram = value; }
         }
 
+        public bool TrackPitchValue
+        {
+            get { return _playbackDataTracker.TrackPitchValue; }
+            set { _playbackDataTracker.TrackPitchValue = value; }
+        }
+
         /// <summary>
         /// Gets or sets the speed of events playing. 1 means normal speed. For example, to play
         /// events twice slower this property should be set to 0.5.
