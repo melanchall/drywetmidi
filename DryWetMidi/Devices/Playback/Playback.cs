@@ -84,6 +84,8 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly ConcurrentDictionary<NotePlaybackEventMetadata, byte> _activeNotesMetadata = new ConcurrentDictionary<NotePlaybackEventMetadata, byte>();
         private readonly List<NotePlaybackEventMetadata> _notesMetadata;
 
+        private readonly PlaybackDataTracker _playbackDataTracker;
+
         private bool _disposed = false;
 
         #endregion
@@ -233,6 +235,12 @@ namespace Melanchall.DryWetMidi.Devices
             _clock.Ticked += OnClockTicked;
 
             Snapping = new PlaybackSnapping(playbackEvents, tempoMap);
+
+            _playbackDataTracker = new PlaybackDataTracker(TempoMap);
+            foreach (var playbackEvent in playbackEvents)
+            {
+                _playbackDataTracker.InitializeData(playbackEvent.Event, playbackEvent.RawTime);
+            }
         }
 
         /// <summary>
@@ -313,6 +321,12 @@ namespace Melanchall.DryWetMidi.Devices
         /// will be treated as just Note On/Note Off events.
         /// </summary>
         public bool TrackNotes { get; set; }
+
+        public bool TrackProgram
+        {
+            get { return _playbackDataTracker.TrackProgram; }
+            set { _playbackDataTracker.TrackProgram = value; }
+        }
 
         /// <summary>
         /// Gets or sets the speed of events playing. 1 means normal speed. For example, to play
@@ -481,6 +495,7 @@ namespace Melanchall.DryWetMidi.Devices
                 MoveToStart();
 
             OutputDevice?.PrepareForEventsSending();
+            SendTrackedData();
             StopStartNotes();
             _clock.Start();
 
@@ -682,6 +697,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (isRunning)
             {
+                SendTrackedData();
                 StopStartNotes();
                 _clock.Start();
             }
@@ -727,6 +743,14 @@ namespace Melanchall.DryWetMidi.Devices
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
 
             return snapPoint != null;
+        }
+
+        private void SendTrackedData()
+        {
+            foreach (var midiEvent in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime))
+            {
+                SendEvent(midiEvent);
+            }
         }
 
         private void StopStartNotes()
@@ -883,6 +907,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void SendEvent(MidiEvent midiEvent)
         {
+            _playbackDataTracker.UpdateCurrentData(midiEvent);
+
             OutputDevice?.SendEvent(midiEvent);
             OnEventPlayed(midiEvent);
         }
@@ -950,7 +976,7 @@ namespace Melanchall.DryWetMidi.Devices
             return true;
         }
 
-        private static ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
+        private ICollection<PlaybackEvent> GetPlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
         {
             var playbackEvents = new List<PlaybackEvent>();
 

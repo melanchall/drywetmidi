@@ -12,7 +12,6 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     /// <typeparam name="TValue">Type of values.</typeparam>
     public sealed class ValueLine<TValue> : IEnumerable<ValueChange<TValue>>
-        where TValue : class
     {
         #region Events
 
@@ -24,6 +23,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private readonly List<ValueChange<TValue>> _values = new List<ValueChange<TValue>>();
         private readonly TValue _defaultValue;
+        private readonly ValueChange<TValue> _defaultValueChange;
 
         private bool _valuesChanged = true;
 
@@ -39,6 +39,7 @@ namespace Melanchall.DryWetMidi.Interaction
         internal ValueLine(TValue defaultValue)
         {
             _defaultValue = defaultValue;
+            _defaultValueChange = new ValueChange<TValue>(0, defaultValue);
         }
 
         #endregion
@@ -63,9 +64,9 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             return this
                 .TakeWhile(p => p.Time <= time)
+                .DefaultIfEmpty(_defaultValueChange)
                 .LastOrDefault()
-                ?.Value
-                ?? _defaultValue;
+                .Value;
         }
 
         internal void SetValue(long time, TValue value)
