@@ -131,6 +131,41 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Retry(RetriesNumber)]
         [TestCase(true)]
         [TestCase(false)]
+        public void TrackControlValue_ControlChangesAtZero_MoveToStart(bool useOutputDevice)
+        {
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var controlNumber1 = (SevenBitNumber)100;
+            var controlValue1 = (SevenBitNumber)70;
+
+            var controlNumber2 = (SevenBitNumber)10;
+            var controlValue2 = (SevenBitNumber)80;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.Zero;
+
+            CheckTrackControlValue(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
+                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
+                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
         public void TrackControlValue_FromBeforeControlChange_ToBeforeControlChange(bool useOutputDevice)
         {
             var controlChangeTime = TimeSpan.FromMilliseconds(800);

@@ -588,6 +588,22 @@ namespace Melanchall.DryWetMidi.Devices
             return TryToMoveToSnapPoint(snapPoint);
         }
 
+        public bool MoveToFirstSnapPoint()
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetNextSnapPoint(TimeSpan.Zero);
+            return TryToMoveToSnapPoint(snapPoint);
+        }
+
+        public bool MoveToFirstSnapPoint<TData>(TData data)
+        {
+            EnsureIsNotDisposed();
+
+            var snapPoint = Snapping.GetNextSnapPoint(TimeSpan.Zero, data);
+            return TryToMoveToSnapPoint(snapPoint);
+        }
+
         /// <summary>
         /// Sets playback position to the time of the previous snap point (relative to the current
         /// time of playback) that belongs to the specified <see cref="SnapPointsGroup"/>.

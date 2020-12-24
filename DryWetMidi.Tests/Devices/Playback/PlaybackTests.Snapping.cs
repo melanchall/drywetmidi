@@ -218,6 +218,110 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void MoveToFirstSnapPoint_CheckReturnValue()
+        {
+            var snapPoint1Time = new MetricTimeSpan(0, 0, 1);
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 2);
+
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time);
+                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time);
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                CheckCurrentTime(playback, snapPoint1Time, "moved first time");
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
+                CheckCurrentTime(playback, snapPoint1Time, "moved second time");
+
+                snapPoint1.IsEnabled = false;
+                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
+            }
+        }
+
+        [Test]
+        public void MoveToFirstSnapPoint_AtZero_CheckReturnValue()
+        {
+            var snapPoint1Time = new MetricTimeSpan();
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 2);
+
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time);
+                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time);
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                CheckCurrentTime(playback, snapPoint1Time, "moved first time");
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
+                CheckCurrentTime(playback, snapPoint1Time, "moved second time");
+
+                snapPoint1.IsEnabled = false;
+                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
+            }
+        }
+
+        [Test]
+        public void MoveToFirstSnapPoint_ByData_CheckReturnValue()
+        {
+            var snapPoint1Time = new MetricTimeSpan(0, 0, 1);
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 2);
+            var snapPoint3Time = new MetricTimeSpan(0, 0, 3);
+
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time, "X");
+                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time, "Y");
+                var snapPoint3 = playback.Snapping.AddSnapPoint(snapPoint3Time, "Z");
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved first time");
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved second time");
+
+                snapPoint2.IsEnabled = false;
+                Assert.IsFalse(playback.MoveToFirstSnapPoint("Y"), "Moves to disabled snap point.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
+
+                playback.MoveToTime(new MetricTimeSpan(0, 0, 5));
+                Assert.IsTrue(playback.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
+                CheckCurrentTime(playback, snapPoint3Time, "moved fourth time");
+            }
+        }
+
+        [Test]
+        public void MoveToFirstSnapPoint_ByData_AtZero_CheckReturnValue()
+        {
+            var snapPoint1Time = new MetricTimeSpan(0, 0, 1);
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 0);
+            var snapPoint3Time = new MetricTimeSpan(0, 0, 3);
+
+            using (var playback = Get10SecondsPlayback())
+            {
+                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time, "X");
+                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time, "Y");
+                var snapPoint3 = playback.Snapping.AddSnapPoint(snapPoint3Time, "Z");
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved first time");
+
+                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved second time");
+
+                snapPoint2.IsEnabled = false;
+                Assert.IsFalse(playback.MoveToFirstSnapPoint("Y"), "Moves to disabled snap point.");
+                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
+
+                playback.MoveToTime(new MetricTimeSpan(0, 0, 5));
+                Assert.IsTrue(playback.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
+                CheckCurrentTime(playback, snapPoint3Time, "moved fourth time");
+            }
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void MoveToPreviousSnapPoint_ByGroup()

@@ -186,9 +186,10 @@ namespace Melanchall.DryWetMidi.Devices
                         continue;
 
                     var controlValueAtTime = controlValueLine.GetValueAtTime(time);
-                    var currentControlValue = controlsValues != null
-                        ? controlsValues[controlNumber]
-                        : null;
+
+                    SevenBitNumber? currentControlValue = null;
+                    if (controlsValues != null)
+                        controlsValues.TryGetValue(controlNumber, out currentControlValue);
 
                     if (controlValueAtTime != currentControlValue)
                     {
