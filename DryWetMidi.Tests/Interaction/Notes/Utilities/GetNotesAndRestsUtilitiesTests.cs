@@ -168,14 +168,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var expectedObjects = new ILengthedObject[]
             {
                 new Rest(0, 10, channel1, null),
-                new Note((SevenBitNumber)noteNumber1, 100, 10) { Channel = channel1 },
                 new Rest(0, 30, channel2, null),
+                new Note((SevenBitNumber)noteNumber1, 100, 10) { Channel = channel1 },
                 new Note((SevenBitNumber)noteNumber1, 100, 30) { Channel = channel2 },
                 new Rest(110, 190, channel1, null),
-                new Note((SevenBitNumber)noteNumber2, 50, 300) { Channel = channel1 },
                 new Rest(130, 870, channel2, null),
-                new Note((SevenBitNumber)noteNumber1, 500, 1000) { Channel = channel2 },
+                new Note((SevenBitNumber)noteNumber2, 50, 300) { Channel = channel1 },
                 new Rest(350, 850, channel1, null),
+                new Note((SevenBitNumber)noteNumber1, 500, 1000) { Channel = channel2 },
                 new Note((SevenBitNumber)noteNumber2, 150, 1200) { Channel = channel1 },
                 new Note((SevenBitNumber)noteNumber1, 1000, 1300) { Channel = channel2 },
             };
@@ -242,8 +242,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Rest(0, 30, null, noteNumber2),
                 new Note(noteNumber2, 100, 30) { Channel = (FourBitNumber)channel1 },
                 new Rest(100, 200, null, noteNumber1),
-                new Note(noteNumber1, 50, 300) { Channel = (FourBitNumber)channel2 },
                 new Rest(130, 870, null, noteNumber2),
+                new Note(noteNumber1, 50, 300) { Channel = (FourBitNumber)channel2 },
                 new Note(noteNumber2, 500, 1000) { Channel = (FourBitNumber)channel1 },
             };
 
@@ -272,16 +272,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var expectedObjects = new ILengthedObject[]
             {
                 new Rest(0, 10, channel1, noteNumber1),
-                new Note(noteNumber1, 100, 10) { Channel = channel1 },
                 new Rest(0, 30, channel1, noteNumber2),
-                new Note(noteNumber2, 100, 30) { Channel = channel1 },
                 new Rest(0, 300, channel2, noteNumber1),
-                new Note(noteNumber1, 50, 300) { Channel = channel2 },
                 new Rest(0, 1000, channel2, noteNumber2),
-                new Note(noteNumber2, 500, 1000) { Channel = channel2 },
+                new Note(noteNumber1, 100, 10) { Channel = channel1 },
+                new Note(noteNumber2, 100, 30) { Channel = channel1 },
                 new Rest(110, 1090, channel1, noteNumber1),
-                new Note(noteNumber1, 150, 1200) { Channel = channel1 },
                 new Rest(130, 1170, channel1, noteNumber2),
+                new Note(noteNumber1, 50, 300) { Channel = channel2 },
+                new Note(noteNumber2, 500, 1000) { Channel = channel2 },
+                new Note(noteNumber1, 150, 1200) { Channel = channel1 },
                 new Note(noteNumber2, 1000, 1300) { Channel = channel1 },
             };
 

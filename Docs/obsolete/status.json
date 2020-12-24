@@ -23,5 +23,10 @@
     "Hint": "Use BuildObjects methods from BuildObjectsUtilities.",
     "ObsoleteFromVersion": "5.1.3",
     "InLibrary": true
+  },
+  "OBS6": {
+    "Hint": "Use BuildObjects methods from BuildObjectsUtilities.",
+    "ObsoleteFromVersion": "5.1.3",
+    "InLibrary": true
   }
 }

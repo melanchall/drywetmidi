@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    [Obsolete("OBS6")]
     /// <summary>
     /// Provides methods for getting single collection of notes and rests by the specified
     /// collection of notes.
     /// </summary>
     public static class GetNotesAndRestsUtilities
     {
-        #region Constants
-
-        private static readonly object NoSeparationNoteDescriptor = new object();
-
-        #endregion
-
         #region Methods
 
+        [Obsolete("OBS6")]
         /// <summary>
         /// Iterates through the specified collection of <see cref="Note"/> returning instances of <see cref="Note"/>
         /// and <see cref="Rest"/> where rests calculated using the specified policy.
@@ -37,33 +32,20 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsInvalidEnumValue(nameof(restSeparationPolicy), restSeparationPolicy);
 
-            switch (restSeparationPolicy)
-            {
-                case RestSeparationPolicy.NoSeparation:
-                    return GetNotesAndRests(notes,
-                                            n => NoSeparationNoteDescriptor,
-                                            setRestChannel: false,
-                                            setRestNoteNumber: false);
-                case RestSeparationPolicy.SeparateByChannel:
-                    return GetNotesAndRests(notes,
-                                            n => n.Channel,
-                                            setRestChannel: true,
-                                            setRestNoteNumber: false);
-                case RestSeparationPolicy.SeparateByNoteNumber:
-                    return GetNotesAndRests(notes,
-                                            n => n.NoteNumber,
-                                            setRestChannel: false,
-                                            setRestNoteNumber: true);
-                case RestSeparationPolicy.SeparateByChannelAndNoteNumber:
-                    return GetNotesAndRests(notes,
-                                            n => n.GetNoteId(),
-                                            setRestChannel: true,
-                                            setRestNoteNumber: true);
-            }
-
-            throw new NotSupportedException($"Rest separation policy {restSeparationPolicy} is not supported.");
+            return notes
+                .BuildObjects(new ObjectsBuildingSettings
+                {
+                    BuildNotes = true,
+                    BuildRests = true,
+                    RestBuilderSettings = new RestBuilderSettings
+                    {
+                        RestSeparationPolicy = restSeparationPolicy
+                    }
+                })
+                .OfType<ILengthedObject>();
         }
 
+        [Obsolete("OBS6")]
         /// <summary>
         /// Iterates through the notes contained in the specified <see cref="TrackChunk"/> returning
         /// instances of <see cref="Note"/> and <see cref="Rest"/> where rests calculated using the specified policy.
@@ -83,6 +65,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.GetNotes().GetNotesAndRests(restSeparationPolicy);
         }
 
+        [Obsolete("OBS6")]
         /// <summary>
         /// Iterates through the notes contained in the specified collection of <see cref="TrackChunk"/>
         /// returning instances of <see cref="Note"/> and <see cref="Rest"/> where rests calculated
@@ -103,6 +86,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunks.GetNotes().GetNotesAndRests(restSeparationPolicy);
         }
 
+        [Obsolete("OBS6")]
         /// <summary>
         /// Iterates through the collection of notes contained in the specified <see cref="MidiFile"/>
         /// returning instances of <see cref="Note"/> and <see cref="Rest"/> where rests calculated
@@ -121,33 +105,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(restSeparationPolicy), restSeparationPolicy);
 
             return midiFile.GetNotes().GetNotesAndRests(restSeparationPolicy);
-        }
-
-        private static IEnumerable<ILengthedObject> GetNotesAndRests<TDescriptor>(
-            IEnumerable<Note> notes,
-            Func<Note, TDescriptor> noteDescriptorGetter,
-            bool setRestChannel,
-            bool setRestNoteNumber)
-        {
-            var lastEndTimes = new Dictionary<TDescriptor, long>();
-
-            foreach (var note in notes.Where(n => n != null).OrderBy(n => n.Time))
-            {
-                var noteDescriptor = noteDescriptorGetter(note);
-
-                long lastEndTime;
-                lastEndTimes.TryGetValue(noteDescriptor, out lastEndTime);
-
-                if (note.Time > lastEndTime)
-                    yield return new Rest(lastEndTime,
-                                          note.Time - lastEndTime,
-                                          setRestChannel ? (FourBitNumber?)note.Channel : null,
-                                          setRestNoteNumber ? (SevenBitNumber?)note.NoteNumber : null);
-
-                yield return note.Clone();
-
-                lastEndTimes[noteDescriptor] = Math.Max(lastEndTime, note.Time + note.Length);
-            }
         }
 
         #endregion

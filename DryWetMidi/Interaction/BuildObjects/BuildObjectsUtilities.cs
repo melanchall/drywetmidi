@@ -28,6 +28,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
+            // TODO: build from raw events without wrapping to timed events first
             return trackChunk.GetTimedEvents().BuildObjects(settings);
         }
 
@@ -35,6 +36,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
+            // TODO: build from raw events without wrapping to timed events first
             return trackChunks.GetTimedEvents().BuildObjects(settings);
         }
 
@@ -42,6 +44,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
+            // TODO: build from raw events without wrapping to timed events first
             return midiFile.GetTimedEvents().BuildObjects(settings);
         }
 
