@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -87,10 +88,19 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(events), events);
 
-            var eventsCollection = new EventsCollection();
-            eventsCollection.AddRange(events);
+            var capacity = 100;
 
-            return eventsCollection.ManageTimedEvents().Events.ToList();
+            var eventsAsTypedCollection = events as ICollection<MidiEvent>;
+            if (eventsAsTypedCollection != null)
+                capacity = eventsAsTypedCollection.Count;
+            else
+            {
+                var eventsAsCollection = events as ICollection;
+                if (eventsAsCollection != null)
+                    capacity = eventsAsCollection.Count;
+            }
+
+            return GetTimedEvents(events, capacity);
         }
 
         /// <summary>
@@ -103,7 +113,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection.ManageTimedEvents().Events.ToList();
+            return GetTimedEvents(eventsCollection, eventsCollection.Count);
         }
 
         /// <summary>
@@ -486,6 +496,20 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(events), events);
 
             return new MidiFile(events.ToTrackChunk());
+        }
+
+        private static IEnumerable<TimedEvent> GetTimedEvents(this IEnumerable<MidiEvent> events, int capacity)
+        {
+            var result = new List<TimedEvent>(capacity);
+            var time = 0L;
+
+            foreach (var midiEvent in events)
+            {
+                time += midiEvent.DeltaTime;
+                result.Add(new TimedEvent(midiEvent.Clone(), time));
+            }
+
+            return result;
         }
 
         #endregion
