@@ -139,8 +139,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            // TODO: nulls
-            var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCollectionsCount = eventsCollections.Length;
 
             if (eventsCollectionsCount == 0)
@@ -541,9 +540,11 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<TimedEvent>(capacity);
             var time = 0L;
 
-            // TODO: nulls
             foreach (var midiEvent in events)
             {
+                if (midiEvent == null)
+                    continue;
+
                 time += midiEvent.DeltaTime;
                 result.Add(new TimedEvent(midiEvent.Clone(), time));
             }
