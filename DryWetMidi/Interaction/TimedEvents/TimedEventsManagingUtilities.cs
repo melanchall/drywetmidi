@@ -139,10 +139,48 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            return trackChunks.Where(c => c != null)
-                              .SelectMany(GetTimedEvents)
-                              .OrderBy(e => e.Time)
-                              .ToList();
+            // TODO: nulls
+            var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
+            var eventsCollectionsCount = eventsCollections.Length;
+
+            if (eventsCollectionsCount == 0)
+                return Enumerable.Empty<TimedEvent>();
+            else if (eventsCollectionsCount == 1)
+                return eventsCollections[0].GetTimedEvents();
+
+            var eventsCollectionIndices = new int[eventsCollectionsCount];
+            var eventsCollectionMaxIndices = eventsCollections.Select(c => c.Count - 1).ToArray();
+            var eventsCollectionTimes = new long[eventsCollectionsCount];
+
+            var eventsCount = eventsCollections.Sum(c => c.Count);
+            var result = new List<TimedEvent>(eventsCount);
+
+            for (var i = 0; i < eventsCount; i++)
+            {
+                var eventsCollectionIndex = 0;
+                var minTime = long.MaxValue;
+
+                for (var j = 0; j < eventsCollectionsCount; j++)
+                {
+                    var index = eventsCollectionIndices[j];
+                    if (index > eventsCollectionMaxIndices[j])
+                        continue;
+
+                    var eventTime = eventsCollections[j][index].DeltaTime + eventsCollectionTimes[j];
+                    if (eventTime < minTime)
+                    {
+                        minTime = eventTime;
+                        eventsCollectionIndex = j;
+                    }
+                }
+
+                result.Add(new TimedEvent(eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]], minTime));
+
+                eventsCollectionTimes[eventsCollectionIndex] = minTime;
+                eventsCollectionIndices[eventsCollectionIndex]++;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -503,6 +541,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<TimedEvent>(capacity);
             var time = 0L;
 
+            // TODO: nulls
             foreach (var midiEvent in events)
             {
                 time += midiEvent.DeltaTime;
