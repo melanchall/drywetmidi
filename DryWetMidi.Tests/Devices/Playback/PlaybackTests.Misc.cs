@@ -965,7 +965,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                                 playback.OutputDevice = outputDeviceB;
                                 Assert.AreSame(outputDeviceB, playback.OutputDevice, "Output device was not changed to Device B.");
 
-                                var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, firstEventDelay + secondEventDelay - changeDeviceAfter + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                                var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, firstEventDelay + secondEventDelay + SendReceiveUtilities.MaximumEventSendReceiveDelay);
                                 Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                             }
                         }
