@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Collection of <see cref="MidiEvent"/> objects.
     /// </summary>
-    public sealed class EventsCollection : IEnumerable<MidiEvent>
+    public sealed class EventsCollection : IEnumerable<MidiEvent>, ICollection<MidiEvent>
     {
         #region Fields
 
@@ -59,6 +59,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the number of events contained in the collection.
         /// </summary>
         public int Count => _events.Count;
+
+        public bool IsReadOnly { get; } = false;
 
         #endregion
 
@@ -242,6 +244,20 @@ namespace Melanchall.DryWetMidi.Core
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _events.GetEnumerator();
+        }
+
+        #endregion
+
+        #region ICollection<MidiEvent>
+
+        public bool Contains(MidiEvent item)
+        {
+            return _events.Contains(item);
+        }
+
+        public void CopyTo(MidiEvent[] array, int arrayIndex)
+        {
+            _events.CopyTo(array, arrayIndex);
         }
 
         #endregion

@@ -16,36 +16,60 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(settings), settings);
 
-            timedObjects = timedObjects.Where(o => o != null).OrderBy(o => o.Time);
+            return timedObjects.BuildObjects(settings, true);
+        }
 
-            var result = BuildObjects(timedObjects, settings, 0);
-            result = AddObjectsByPostBuilders(timedObjects, result, settings);
+        public static IEnumerable<ITimedObject> BuildObjects(this IEnumerable<MidiEvent> midiEvents, ObjectsBuildingSettings settings)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-            return result;
+            return midiEvents.GetTimedEventsLazy().BuildObjects(settings, false);
+        }
+
+        public static IEnumerable<ITimedObject> BuildObjects(this EventsCollection eventsCollection, ObjectsBuildingSettings settings)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+
+            return ((IEnumerable<MidiEvent>)eventsCollection).BuildObjects(settings);
         }
 
         public static IEnumerable<ITimedObject> BuildObjects(this TrackChunk trackChunk, ObjectsBuildingSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            // TODO: build from raw events without wrapping to timed events first
-            return trackChunk.GetTimedEvents().BuildObjects(settings);
+            return trackChunk.Events.BuildObjects(settings);
         }
 
         public static IEnumerable<ITimedObject> BuildObjects(this IEnumerable<TrackChunk> trackChunks, ObjectsBuildingSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            // TODO: build from raw events without wrapping to timed events first
-            return trackChunks.GetTimedEvents().BuildObjects(settings);
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(c => c.Count);
+
+            return eventsCollections.GetTimedEventsLazy(eventsCount).BuildObjects(settings, false);
         }
 
         public static IEnumerable<ITimedObject> BuildObjects(this MidiFile midiFile, ObjectsBuildingSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            // TODO: build from raw events without wrapping to timed events first
-            return midiFile.GetTimedEvents().BuildObjects(settings);
+            return midiFile.GetTrackChunks().BuildObjects(settings);
+        }
+
+        private static IEnumerable<ITimedObject> BuildObjects(
+            this IEnumerable<ITimedObject> timedObjects,
+            ObjectsBuildingSettings settings,
+            bool sortObjects)
+        {
+            timedObjects = timedObjects.Where(o => o != null);
+            if (sortObjects)
+                timedObjects = timedObjects.OrderBy(o => o.Time);
+
+            var result = BuildObjects(timedObjects, settings, 0);
+            result = AddObjectsByPostBuilders(timedObjects, result, settings);
+
+            return result;
         }
 
         private static IEnumerable<ITimedObject> AddObjectsByPostBuilders(

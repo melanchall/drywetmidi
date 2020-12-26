@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Collection of <see cref="MidiChunk"/> objects.
     /// </summary>
-    public sealed class ChunksCollection : IEnumerable<MidiChunk>
+    public sealed class ChunksCollection : IEnumerable<MidiChunk>, ICollection<MidiChunk>
     {
         #region Fields
 
@@ -50,6 +50,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the number of chunks contained in the collection.
         /// </summary>
         public int Count => _chunks.Count;
+
+        public bool IsReadOnly { get; } = false;
 
         #endregion
 
@@ -233,6 +235,20 @@ namespace Melanchall.DryWetMidi.Core
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _chunks.GetEnumerator();
+        }
+
+        #endregion
+
+        #region ICollection<MidiChunk>
+
+        public bool Contains(MidiChunk item)
+        {
+            return _chunks.Contains(item);
+        }
+
+        public void CopyTo(MidiChunk[] array, int arrayIndex)
+        {
+            _chunks.CopyTo(array, arrayIndex);
         }
 
         #endregion

@@ -100,7 +100,14 @@ namespace Melanchall.DryWetMidi.Interaction
                     capacity = eventsAsCollection.Count;
             }
 
-            return GetTimedEvents(events, capacity);
+            var result = new List<TimedEvent>(capacity);
+
+            foreach (var timedEvent in events.GetTimedEventsLazy())
+            {
+                result.Add(timedEvent);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -113,7 +120,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return GetTimedEvents(eventsCollection, eventsCollection.Count);
+            return ((IEnumerable<MidiEvent>)eventsCollection).GetTimedEvents();
         }
 
         /// <summary>
@@ -140,43 +147,12 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
-            var eventsCollectionsCount = eventsCollections.Length;
-
-            if (eventsCollectionsCount == 0)
-                return Enumerable.Empty<TimedEvent>();
-            else if (eventsCollectionsCount == 1)
-                return eventsCollections[0].GetTimedEvents();
-
-            var eventsCollectionIndices = new int[eventsCollectionsCount];
-            var eventsCollectionMaxIndices = eventsCollections.Select(c => c.Count - 1).ToArray();
-            var eventsCollectionTimes = new long[eventsCollectionsCount];
-
             var eventsCount = eventsCollections.Sum(c => c.Count);
             var result = new List<TimedEvent>(eventsCount);
 
-            for (var i = 0; i < eventsCount; i++)
+            foreach (var timedEvent in eventsCollections.GetTimedEventsLazy(eventsCount))
             {
-                var eventsCollectionIndex = 0;
-                var minTime = long.MaxValue;
-
-                for (var j = 0; j < eventsCollectionsCount; j++)
-                {
-                    var index = eventsCollectionIndices[j];
-                    if (index > eventsCollectionMaxIndices[j])
-                        continue;
-
-                    var eventTime = eventsCollections[j][index].DeltaTime + eventsCollectionTimes[j];
-                    if (eventTime < minTime)
-                    {
-                        minTime = eventTime;
-                        eventsCollectionIndex = j;
-                    }
-                }
-
-                result.Add(new TimedEvent(eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]], minTime));
-
-                eventsCollectionTimes[eventsCollectionIndex] = minTime;
-                eventsCollectionIndices[eventsCollectionIndex]++;
+                result.Add(timedEvent);
             }
 
             return result;
@@ -535,9 +511,55 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MidiFile(events.ToTrackChunk());
         }
 
-        private static IEnumerable<TimedEvent> GetTimedEvents(this IEnumerable<MidiEvent> events, int capacity)
+        internal static IEnumerable<TimedEvent> GetTimedEventsLazy(this EventsCollection[] eventsCollections, int eventsCount)
         {
-            var result = new List<TimedEvent>(capacity);
+            var eventsCollectionsCount = eventsCollections.Length;
+
+            if (eventsCollectionsCount == 0)
+                yield break;
+
+            if (eventsCollectionsCount == 1)
+            {
+                foreach (var timedEvent in eventsCollections[0].GetTimedEvents())
+                {
+                    yield return timedEvent;
+                }
+
+                yield break;
+            }
+
+            var eventsCollectionIndices = new int[eventsCollectionsCount];
+            var eventsCollectionMaxIndices = eventsCollections.Select(c => c.Count - 1).ToArray();
+            var eventsCollectionTimes = new long[eventsCollectionsCount];
+
+            for (var i = 0; i < eventsCount; i++)
+            {
+                var eventsCollectionIndex = 0;
+                var minTime = long.MaxValue;
+
+                for (var j = 0; j < eventsCollectionsCount; j++)
+                {
+                    var index = eventsCollectionIndices[j];
+                    if (index > eventsCollectionMaxIndices[j])
+                        continue;
+
+                    var eventTime = eventsCollections[j][index].DeltaTime + eventsCollectionTimes[j];
+                    if (eventTime < minTime)
+                    {
+                        minTime = eventTime;
+                        eventsCollectionIndex = j;
+                    }
+                }
+
+                yield return new TimedEvent(eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]], minTime);
+
+                eventsCollectionTimes[eventsCollectionIndex] = minTime;
+                eventsCollectionIndices[eventsCollectionIndex]++;
+            }
+        }
+
+        internal static IEnumerable<TimedEvent> GetTimedEventsLazy(this IEnumerable<MidiEvent> events)
+        {
             var time = 0L;
 
             foreach (var midiEvent in events)
@@ -546,10 +568,8 @@ namespace Melanchall.DryWetMidi.Interaction
                     continue;
 
                 time += midiEvent.DeltaTime;
-                result.Add(new TimedEvent(midiEvent.Clone(), time));
+                yield return new TimedEvent(midiEvent.Clone(), time);
             }
-
-            return result;
         }
 
         #endregion
