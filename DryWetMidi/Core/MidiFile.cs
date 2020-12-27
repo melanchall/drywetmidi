@@ -658,8 +658,6 @@ namespace Melanchall.DryWetMidi.Core
 
                 if (chunk is TrackChunk && expectedTrackChunksCount != null && actualTrackChunksCount >= expectedTrackChunksCount)
                 {
-                    ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount.Value);
-
                     switch (settings.ExtraTrackChunkPolicy)
                     {
                         case ExtraTrackChunkPolicy.Read:
@@ -706,7 +704,7 @@ namespace Melanchall.DryWetMidi.Core
                     break;
 
                 case UnexpectedTrackChunksCountPolicy.Abort:
-                    throw new UnexpectedTrackChunksCountException(actualTrackChunksCount, expectedTrackChunksCount);
+                    throw new UnexpectedTrackChunksCountException(expectedTrackChunksCount, actualTrackChunksCount);
             }
         }
 

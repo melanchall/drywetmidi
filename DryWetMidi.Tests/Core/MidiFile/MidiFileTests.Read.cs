@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -38,14 +40,30 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         #region Test methods
 
-        [Test]
-        public void Read_UnexpectedTrackChunksCount_Abort()
+        [TestCase(0, 1)]
+        [TestCase(1, 0)]
+        [TestCase(1, 2)]
+        [TestCase(2, 1)]
+        public void Read_UnexpectedTrackChunksCount_Abort(byte countInHeaderChunk, byte actualCount)
         {
-            ReadFilesWithException<UnexpectedTrackChunksCountException>(
-                DirectoriesNames.UnexpectedTrackChunksCount,
+            // TODO: track chunks without events are excluded...
+            ReadFileWithException<UnexpectedTrackChunksCountException>(
+                new MidiFile(Enumerable.Range(0, actualCount).Select(i => new TrackChunk(new ProgramChangeEvent { Channel = (FourBitNumber)i }))),
+                MidiFileFormat.MultiTrack,
+                null,
                 new ReadingSettings
                 {
                     UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Abort
+                },
+                new Dictionary<int, byte>
+                {
+                    [10] = 0,
+                    [11] = countInHeaderChunk,
+                },
+                exception =>
+                {
+                    Assert.AreEqual(actualCount, exception.ActualCount, "Expected count of chunks is invalid.");
+                    Assert.AreEqual(countInHeaderChunk, exception.ExpectedCount, "Actual count of chunks is invalid.");
                 });
         }
 
@@ -74,29 +92,69 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        [Test]
-        public void Read_ExtraTrackChunk_Skip()
+        [TestCase(1, 2)]
+        [TestCase(0, 1)]
+        [TestCase(0, 5)]
+        public void Read_ExtraTrackChunk_Skip(byte countInHeaderChunk, byte actualCount)
         {
-            foreach (var filePath in TestFilesProvider.GetInvalidFilesPaths(DirectoriesNames.ExtraTrackChunk))
-            {
-                var midiFile = MidiFile.Read(filePath, new ReadingSettings
+            ReadInvalidFile(
+                new MidiFile(Enumerable.Range(0, actualCount).Select(i => new TrackChunk(new ProgramChangeEvent { Channel = (FourBitNumber)i }))),
+                MidiFileFormat.MultiTrack,
+                null,
+                new ReadingSettings
                 {
                     ExtraTrackChunkPolicy = ExtraTrackChunkPolicy.Skip
-                });
-
-                CollectionAssert.IsEmpty(midiFile.GetTrackChunks(), "Track chunks count is invalid.");
-            }
+                },
+                new Dictionary<int, byte>
+                {
+                    [10] = 0,
+                    [11] = countInHeaderChunk,
+                },
+                midiFile => Assert.AreEqual(countInHeaderChunk, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
         }
 
-        [Test]
-        public void Read_UnknownChunkId_Abort()
+        [TestCase(" Thc")]
+        [TestCase("MTrm")]
+        public void Read_UnknownChunkId_FirstChunk_Abort(string chunkId)
         {
-            ReadFilesWithException<UnknownChunkException>(
-                DirectoriesNames.UnknownChunkId,
+            ReadFileWithException<UnknownChunkException>(
+                new MidiFile(new TrackChunk(new ProgramChangeEvent())),
+                MidiFileFormat.SingleTrack,
+                null,
                 new ReadingSettings
                 {
                     UnknownChunkIdPolicy = UnknownChunkIdPolicy.Abort
-                });
+                },
+                new Dictionary<int, byte>
+                {
+                    [0] = Convert.ToByte(chunkId[0]),
+                    [1] = Convert.ToByte(chunkId[1]),
+                    [2] = Convert.ToByte(chunkId[2]),
+                    [3] = Convert.ToByte(chunkId[3]),
+                },
+                exception => Assert.AreEqual(chunkId, exception.ChunkId, "Chunk ID is invalid in exception."));
+        }
+
+        [TestCase(" Thc")]
+        [TestCase("MTrm")]
+        public void Read_UnknownChunkId_SecondChunk_Abort(string chunkId)
+        {
+            ReadFileWithException<UnknownChunkException>(
+                new MidiFile(new TrackChunk(new ProgramChangeEvent())),
+                MidiFileFormat.SingleTrack,
+                null,
+                new ReadingSettings
+                {
+                    UnknownChunkIdPolicy = UnknownChunkIdPolicy.Abort
+                },
+                new Dictionary<int, byte>
+                {
+                    [14] = Convert.ToByte(chunkId[0]),
+                    [15] = Convert.ToByte(chunkId[1]),
+                    [16] = Convert.ToByte(chunkId[2]),
+                    [17] = Convert.ToByte(chunkId[3]),
+                },
+                exception => Assert.AreEqual(chunkId, exception.ChunkId, "Chunk ID is invalid in exception."));
         }
 
         [Test]
@@ -688,6 +746,101 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Private methods
+
+        private void ReadFileWithException<TException>(
+            MidiFile midiFile,
+            MidiFileFormat format,
+            WritingSettings writingSettings,
+            ReadingSettings readingSettings,
+            Dictionary<int, byte> dataBytesReplacements,
+            Action<TException> checkException)
+            where TException : Exception
+        {
+            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
+            try
+            {
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
+
+                midiFile.Write(filePath, format: format, settings: writingSettings);
+
+                var bytes = FileOperations.ReadAllFileBytes(filePath);
+                foreach (var byteReplacement in dataBytesReplacements)
+                {
+                    bytes[byteReplacement.Key] = byteReplacement.Value;
+                }
+
+                FileOperations.WriteAllBytesToFile(filePath, bytes);
+
+                //
+
+                var exception = Assert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), "Exception not thrown.");
+                checkException(exception);
+
+                var nonSeekableStream = new NonSeekableStream(filePath);
+                Assert.Throws<TException>(() => MidiFile.Read(nonSeekableStream, readingSettings), $"Exception not thrown for the file read from non-seekable stream.");
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
+                Assert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with putting data in memory.");
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
+                Assert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with fixed size buffer.");
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
+            }
+            finally
+            {
+                FileOperations.DeleteFile(filePath);
+            }
+        }
+
+        private void ReadInvalidFile(
+            MidiFile midiFile,
+            MidiFileFormat format,
+            WritingSettings writingSettings,
+            ReadingSettings readingSettings,
+            Dictionary<int, byte> dataBytesReplacements,
+            Action<MidiFile> checkFile)
+        {
+            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
+            try
+            {
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
+
+                midiFile.Write(filePath, format: format, settings: writingSettings);
+
+                var bytes = FileOperations.ReadAllFileBytes(filePath);
+                foreach (var byteReplacement in dataBytesReplacements)
+                {
+                    bytes[byteReplacement.Key] = byteReplacement.Value;
+                }
+
+                FileOperations.WriteAllBytesToFile(filePath, bytes);
+
+                //
+
+                var newMidiFile = MidiFile.Read(filePath, readingSettings);
+                checkFile(newMidiFile);
+
+                var newMidiFileFromNonSeekableStream = MidiFile.Read(new NonSeekableStream(filePath), readingSettings);
+                MidiAsserts.AreFilesEqual(newMidiFile, newMidiFileFromNonSeekableStream, true, "The file from non-seekable stream is invalid.");
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
+                var newMidiFileWithBufferAllData = MidiFile.Read(filePath, readingSettings);
+                MidiAsserts.AreFilesEqual(newMidiFile, newMidiFileWithBufferAllData, true, "The file with buffer all data is invalid.");
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
+                var newMidiFileWithFixedSizeBuffer = MidiFile.Read(filePath, readingSettings);
+                MidiAsserts.AreFilesEqual(newMidiFile, newMidiFileWithFixedSizeBuffer, true, "The file with fixed-size buffer is invalid.");
+
+                readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
+            }
+            finally
+            {
+                FileOperations.DeleteFile(filePath);
+            }
+        }
 
         private void ReadFilesWithException<TException>(string directoryName, ReadingSettings readingSettings)
             where TException : Exception

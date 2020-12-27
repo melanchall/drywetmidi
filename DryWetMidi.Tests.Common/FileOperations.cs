@@ -32,6 +32,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
             File.WriteAllLines(filePath, content);
         }
 
+        public static void WriteAllBytesToFile(string filePath, byte[] bytes)
+        {
+            File.WriteAllBytes(filePath, bytes);
+        }
+
         public static string[] ReadAllFileLines(string filePath)
         {
             return File.ReadAllLines(filePath);
