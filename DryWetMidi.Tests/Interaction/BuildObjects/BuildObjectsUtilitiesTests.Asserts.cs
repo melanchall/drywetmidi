@@ -81,10 +81,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void CheckObjectsBuilding(
             IEnumerable<ITimedObject> inputObjects,
             IEnumerable<ITimedObject> outputObjects,
+            ObjectType objectType,
             ObjectsBuildingSettings settings)
         {
             var actualObjects = inputObjects
-                .BuildObjects(settings)
+                .BuildObjects(objectType, settings)
                 .ToList();
 
             CollectionAssert.AreEqual(outputObjects, actualObjects, new TimedObjectComparer());

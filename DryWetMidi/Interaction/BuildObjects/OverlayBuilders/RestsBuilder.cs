@@ -18,11 +18,12 @@ namespace Melanchall.DryWetMidi.Interaction
         public IEnumerable<ITimedObject> BuildObjects(
             IEnumerable<ITimedObject> inputTimedObjects,
             IEnumerable<ITimedObject> resultTimedObjects,
+            ObjectType objectType,
             ObjectsBuildingSettings settings)
         {
-            var notes = settings.BuildNotes
+            var notes = objectType.HasFlag(ObjectType.Note)
                 ? resultTimedObjects.OfType<Note>()
-                : inputTimedObjects.BuildObjects(new ObjectsBuildingSettings { BuildNotes = true }).OfType<Note>();
+                : inputTimedObjects.BuildObjects(ObjectType.Note).OfType<Note>();
 
             var restBuildingSettings = settings.RestBuilderSettings ?? new RestBuilderSettings();
 

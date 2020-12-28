@@ -33,10 +33,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(restSeparationPolicy), restSeparationPolicy);
 
             return notes
-                .BuildObjects(new ObjectsBuildingSettings
+                .BuildObjects(ObjectType.Note | ObjectType.Rest, new ObjectsBuildingSettings
                 {
-                    BuildNotes = true,
-                    BuildRests = true,
                     RestBuilderSettings = new RestBuilderSettings
                     {
                         RestSeparationPolicy = restSeparationPolicy

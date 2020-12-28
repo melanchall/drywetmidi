@@ -468,10 +468,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckObjectsBuilding(
                 inputObjects,
                 outputObjects,
+                ObjectType.Note | ObjectType.Rest,
                 new ObjectsBuildingSettings
                 {
-                    BuildNotes = true,
-                    BuildRests = true,
                     RestBuilderSettings = new RestBuilderSettings
                     {
                         RestSeparationPolicy = restSeparationPolicy

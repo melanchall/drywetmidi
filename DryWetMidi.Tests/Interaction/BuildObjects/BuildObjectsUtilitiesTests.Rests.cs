@@ -418,9 +418,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckObjectsBuilding(
                 inputObjects,
                 outputObjects,
+                ObjectType.Rest,
                 new ObjectsBuildingSettings
                 {
-                    BuildRests = true,
                     RestBuilderSettings = new RestBuilderSettings
                     {
                         RestSeparationPolicy = restSeparationPolicy

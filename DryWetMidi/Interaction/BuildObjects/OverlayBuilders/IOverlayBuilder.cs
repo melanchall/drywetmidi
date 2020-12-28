@@ -9,6 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
         IEnumerable<ITimedObject> BuildObjects(
             IEnumerable<ITimedObject> inputTimedObjects,
             IEnumerable<ITimedObject> resultTimedObjects,
+            ObjectType objectType,
             ObjectsBuildingSettings settings);
 
         #endregion

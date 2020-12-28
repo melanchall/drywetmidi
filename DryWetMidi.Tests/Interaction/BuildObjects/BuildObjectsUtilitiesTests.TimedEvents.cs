@@ -178,9 +178,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckObjectsBuilding(
                 inputObjects,
                 outputObjects,
+                ObjectType.TimedEvent,
                 new ObjectsBuildingSettings
                 {
-                    BuildTimedEvents = true
                 });
         }
 

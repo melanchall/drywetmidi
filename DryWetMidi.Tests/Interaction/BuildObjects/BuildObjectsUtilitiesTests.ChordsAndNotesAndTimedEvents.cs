@@ -75,11 +75,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckObjectsBuilding(
                 inputObjects,
                 outputObjects,
+                ObjectType.TimedEvent | ObjectType.Note | ObjectType.Chord,
                 new ObjectsBuildingSettings
                 {
-                    BuildTimedEvents = true,
-                    BuildNotes = true,
-                    BuildChords = true,
                     ChordBuilderSettings = new ChordBuilderSettings
                     {
                         NotesTolerance = notesTolerance

@@ -11,63 +11,82 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public static IEnumerable<ITimedObject> BuildObjects(
             this IEnumerable<ITimedObject> timedObjects,
-            ObjectsBuildingSettings settings)
+            ObjectType objectType,
+            ObjectsBuildingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
-            ThrowIfArgument.IsNull(nameof(settings), settings);
 
-            return timedObjects.BuildObjects(settings, true);
+            return timedObjects.BuildObjects(objectType, settings, true);
         }
 
-        public static IEnumerable<ITimedObject> BuildObjects(this IEnumerable<MidiEvent> midiEvents, ObjectsBuildingSettings settings)
+        public static IEnumerable<ITimedObject> BuildObjects(
+            this IEnumerable<MidiEvent> midiEvents,
+            ObjectType objectType,
+            ObjectsBuildingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-            return midiEvents.GetTimedEventsLazy().BuildObjects(settings, false);
+            return midiEvents.GetTimedEventsLazy().BuildObjects(objectType, settings, false);
         }
 
-        public static IEnumerable<ITimedObject> BuildObjects(this EventsCollection eventsCollection, ObjectsBuildingSettings settings)
+        public static IEnumerable<ITimedObject> BuildObjects(
+            this EventsCollection eventsCollection,
+            ObjectType objectType,
+            ObjectsBuildingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return ((IEnumerable<MidiEvent>)eventsCollection).BuildObjects(settings);
+            return ((IEnumerable<MidiEvent>)eventsCollection).BuildObjects(objectType, settings);
         }
 
-        public static IEnumerable<ITimedObject> BuildObjects(this TrackChunk trackChunk, ObjectsBuildingSettings settings)
+        public static IEnumerable<ITimedObject> BuildObjects(
+            this TrackChunk trackChunk,
+            ObjectType objectType,
+            ObjectsBuildingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.Events.BuildObjects(settings);
+            return trackChunk.Events.BuildObjects(objectType, settings);
         }
 
-        public static IEnumerable<ITimedObject> BuildObjects(this IEnumerable<TrackChunk> trackChunks, ObjectsBuildingSettings settings)
+        public static IEnumerable<ITimedObject> BuildObjects(
+            this IEnumerable<TrackChunk> trackChunks,
+            ObjectType objectType,
+            ObjectsBuildingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
-            return eventsCollections.GetTimedEventsLazy(eventsCount).BuildObjects(settings, false);
+            return eventsCollections.GetTimedEventsLazy(eventsCount).BuildObjects(objectType, settings, false);
         }
 
-        public static IEnumerable<ITimedObject> BuildObjects(this MidiFile midiFile, ObjectsBuildingSettings settings)
+        public static IEnumerable<ITimedObject> BuildObjects(
+            this MidiFile midiFile,
+            ObjectType objectType,
+            ObjectsBuildingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            return midiFile.GetTrackChunks().BuildObjects(settings);
+            return midiFile.GetTrackChunks().BuildObjects(objectType, settings);
         }
 
         private static IEnumerable<ITimedObject> BuildObjects(
             this IEnumerable<ITimedObject> timedObjects,
+            ObjectType objectType,
             ObjectsBuildingSettings settings,
             bool sortObjects)
         {
+            if (settings == null)
+                settings = new ObjectsBuildingSettings();
+
             timedObjects = timedObjects.Where(o => o != null);
             if (sortObjects)
                 timedObjects = timedObjects.OrderBy(o => o.Time);
 
-            var result = BuildObjects(timedObjects, settings, 0);
-            result = AddObjectsByPostBuilders(timedObjects, result, settings);
+            var result = BuildObjects(timedObjects, objectType, settings, 0);
+            result = AddObjectsByPostBuilders(timedObjects, result, objectType, settings);
 
             return result;
         }
@@ -75,11 +94,12 @@ namespace Melanchall.DryWetMidi.Interaction
         private static IEnumerable<ITimedObject> AddObjectsByPostBuilders(
             IEnumerable<ITimedObject> inputTimedObjects,
             IEnumerable<ITimedObject> resultTimedObjects,
+            ObjectType objectType,
             ObjectsBuildingSettings settings)
         {
             var builders = new IOverlayBuilder[]
             {
-                settings.BuildRests ? new RestsBuilder() : null
+                objectType.HasFlag(ObjectType.Rest) ? new RestsBuilder() : null
             }
             .Where(b => b != null)
             .ToArray();
@@ -90,7 +110,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var builder in builders)
                 {
-                    resultList.AddRange(builder.BuildObjects(inputTimedObjects, resultTimedObjects, settings));
+                    resultList.AddRange(builder.BuildObjects(inputTimedObjects, resultTimedObjects, objectType, settings));
                 }
 
                 resultTimedObjects = resultList.OrderBy(o => o.Time);
@@ -101,6 +121,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static IEnumerable<ITimedObject> BuildObjects(
             this IEnumerable<ITimedObject> timedObjects,
+            ObjectType objectType,
             ObjectsBuildingSettings settings,
             int buildersStartIndex)
         {
@@ -108,10 +129,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var builders = new ISequentialObjectsBuilder[]
             {
-                settings.BuildChords ? new ChordsBuilder(objectsBags, settings) : null,
-                settings.BuildNotes ? new NotesBuilder(objectsBags, settings) : null,
-                settings.BuildRegisteredParameters ? new RegisteredParametersBuilder(objectsBags, settings) : null,
-                settings.BuildTimedEvents ? new TimedEventsBuilder(objectsBags, settings) : null,
+                objectType.HasFlag(ObjectType.Chord) ? new ChordsBuilder(objectsBags, settings) : null,
+                objectType.HasFlag(ObjectType.Note) ? new NotesBuilder(objectsBags, settings) : null,
+                objectType.HasFlag(ObjectType.RegisteredParameter) ? new RegisteredParametersBuilder(objectsBags, settings) : null,
+                objectType.HasFlag(ObjectType.TimedEvent) ? new TimedEventsBuilder(objectsBags, settings) : null,
             }
             .Where(b => b != null)
             .Skip(buildersStartIndex)
@@ -140,7 +161,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return objectsBags
                 .SelectMany(b => b.IsCompleted
                     ? b.GetObjects()
-                    : BuildObjects(b.GetRawObjects(), settings, buildersStartIndex + 1))
+                    : BuildObjects(b.GetRawObjects(), objectType, settings, buildersStartIndex + 1))
                 .OrderBy(o => o.Time);
         }
 
