@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private readonly List<ValueChange<TValue>> _values = new List<ValueChange<TValue>>();
+        private readonly List<ValueChange<TValue>> _valuesChanges = new List<ValueChange<TValue>>();
         private readonly TValue _defaultValue;
         private readonly ValueChange<TValue> _defaultValueChange;
 
@@ -62,11 +62,19 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal TValue GetValueAtTime(long time)
         {
-            return this
-                .TakeWhile(p => p.Time <= time)
-                .DefaultIfEmpty(_defaultValueChange)
-                .LastOrDefault()
-                .Value;
+            var lastValueChange = _defaultValueChange;
+            var valuesChangesCount = _valuesChanges.Count;
+
+            for (var i = 0; i < valuesChangesCount; i++)
+            {
+                var valueChange = _valuesChanges[i];
+                if (valueChange.Time > time)
+                    break;
+
+                lastValueChange = valueChange;
+            }
+
+            return lastValueChange.Value;
         }
 
         internal void SetValue(long time, TValue value)
@@ -78,8 +86,8 @@ namespace Melanchall.DryWetMidi.Interaction
             if (currentValue.Equals(value))
                 return;
 
-            _values.RemoveAll(v => v.Time == time);
-            _values.Add(new ValueChange<TValue>(time, value));
+            _valuesChanges.RemoveAll(v => v.Time == time);
+            _valuesChanges.Add(new ValueChange<TValue>(time, value));
 
             OnValuesChanged();
         }
@@ -115,22 +123,22 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
             ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
-            _values.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
+            _valuesChanges.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
 
             OnValuesChanged();
         }
 
         internal void Clear()
         {
-            _values.Clear();
+            _valuesChanges.Clear();
 
             OnValuesChanged();
         }
 
         internal void ReplaceValues(ValueLine<TValue> valueLine)
         {
-            _values.Clear();
-            _values.AddRange(valueLine._values);
+            _valuesChanges.Clear();
+            _valuesChanges.AddRange(valueLine._valuesChanges);
 
             OnValuesChanged();
         }
@@ -144,7 +152,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());
 
             var result = new ValueLine<TValue>(_defaultValue);
-            result._values.AddRange(values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)));
+            result._valuesChanges.AddRange(values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)));
 
             return result;
         }
@@ -177,11 +185,11 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             if (_valuesChanged)
             {
-                _values.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
+                _valuesChanges.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
                 OnValuesSortingCompleted();
             }
 
-            return _values.GetEnumerator();
+            return _valuesChanges.GetEnumerator();
         }
 
         /// <summary>
