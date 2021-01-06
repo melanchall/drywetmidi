@@ -87,36 +87,6 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets tempo map represented by the specified events collections and time division.
-        /// </summary>
-        /// <param name="eventsCollections">Collection of <see cref="EventsCollection"/> which hold events
-        /// that represent tempo map of a MIDI file.</param>
-        /// <param name="timeDivision">MIDI file time division which specifies the meaning of the time
-        /// used by events of the file.</param>
-        /// <returns>Tempo map represented by the <paramref name="eventsCollections"/> and
-        /// <paramref name="timeDivision"/>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="eventsCollections"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static TempoMap GetTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
-        {
-            ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
-            ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
-
-            return eventsCollections.Any()
-                ? eventsCollections.ManageTempoMap(timeDivision).TempoMap
-                : new TempoMap(timeDivision);
-        }
-
-        /// <summary>
         /// Gets tempo map represented by the specified time division and events collections of
         /// the specified track chunks.
         /// </summary>
@@ -141,9 +111,38 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
-            return trackChunks.Any()
-                ? trackChunks.ManageTempoMap(timeDivision).TempoMap
-                : new TempoMap(timeDivision);
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(c => c.Count);
+            var result = new TempoMap(timeDivision);
+
+            foreach (var timedEvent in eventsCollections.GetTimedEventsLazy(eventsCount))
+            {
+                var midiEvent = timedEvent.Event;
+
+                switch (midiEvent.EventType)
+                {
+                    case MidiEventType.TimeSignature:
+                        {
+                            var timeSignatureEvent = (TimeSignatureEvent)midiEvent;
+                            result.TimeSignatureLine.SetValue(
+                                timedEvent.Time,
+                                new TimeSignature(
+                                    timeSignatureEvent.Numerator,
+                                    timeSignatureEvent.Denominator));
+                        }
+                        break;
+                    case MidiEventType.SetTempo:
+                        {
+                            var setTempoEvent = (SetTempoEvent)midiEvent;
+                            result.TempoLine.SetValue(
+                                timedEvent.Time,
+                                new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
+                        }
+                        break;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -156,9 +155,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
-            return file.GetTrackChunks().Any()
-                ? file.ManageTempoMap().TempoMap
-                : new TempoMap(file.TimeDivision);
+            return file.GetTrackChunks().GetTempoMap(file.TimeDivision);
         }
 
         /// <summary>

@@ -21,9 +21,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private readonly List<ValueChange<TValue>> _valuesChanges = new List<ValueChange<TValue>>();
+        private readonly List<ValueChange<TValue>> _valueChanges = new List<ValueChange<TValue>>();
         private readonly TValue _defaultValue;
-        private readonly ValueChange<TValue> _defaultValueChange;
 
         private bool _valuesChanged = true;
 
@@ -31,15 +30,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValueLine{TValue}"/> with the specified
-        /// default value.
-        /// </summary>
-        /// <param name="defaultValue">Default value of a parameter.</param>
         internal ValueLine(TValue defaultValue)
         {
             _defaultValue = defaultValue;
-            _defaultValueChange = new ValueChange<TValue>(0, defaultValue);
         }
 
         #endregion
@@ -62,19 +55,20 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal TValue GetValueAtTime(long time)
         {
-            var lastValueChange = _defaultValueChange;
-            var valuesChangesCount = _valuesChanges.Count;
+            var lastValue = _defaultValue;
+            var valuesChangesCount = _valueChanges.Count;
 
+            // TODO: sort?
             for (var i = 0; i < valuesChangesCount; i++)
             {
-                var valueChange = _valuesChanges[i];
+                var valueChange = _valueChanges[i];
                 if (valueChange.Time > time)
                     break;
 
-                lastValueChange = valueChange;
+                lastValue = valueChange.Value;
             }
 
-            return lastValueChange.Value;
+            return lastValue;
         }
 
         internal void SetValue(long time, TValue value)
@@ -86,59 +80,38 @@ namespace Melanchall.DryWetMidi.Interaction
             if (currentValue.Equals(value))
                 return;
 
-            _valuesChanges.RemoveAll(v => v.Time == time);
-            _valuesChanges.Add(new ValueChange<TValue>(time, value));
+            _valueChanges.RemoveAll(v => v.Time == time);
+            _valueChanges.Add(new ValueChange<TValue>(time, value));
 
             OnValuesChanged();
         }
 
-        /// <summary>
-        /// Deletes all parameter's value changes after the specified time.
-        /// </summary>
-        /// <param name="startTime">Time value changes should be deleted after.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative.</exception>
         internal void DeleteValues(long startTime)
         {
             DeleteValues(startTime, long.MaxValue);
         }
 
-        /// <summary>
-        /// Deletes all parameter's value changes in the specified time range.
-        /// </summary>
-        /// <param name="startTime">Start time of the time range where value changes should be deleted.</param>
-        /// <param name="endTime">End time of the time range where value changes should be deleted.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="startTime"/> is negative.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="endTime"/> is negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
         internal void DeleteValues(long startTime, long endTime)
         {
             ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
             ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
 
-            _valuesChanges.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
+            _valueChanges.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
 
             OnValuesChanged();
         }
 
         internal void Clear()
         {
-            _valuesChanges.Clear();
+            _valueChanges.Clear();
 
             OnValuesChanged();
         }
 
         internal void ReplaceValues(ValueLine<TValue> valueLine)
         {
-            _valuesChanges.Clear();
-            _valuesChanges.AddRange(valueLine._valuesChanges);
+            _valueChanges.Clear();
+            _valueChanges.AddRange(valueLine._valueChanges);
 
             OnValuesChanged();
         }
@@ -152,7 +125,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());
 
             var result = new ValueLine<TValue>(_defaultValue);
-            result._valuesChanges.AddRange(values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)));
+            result._valueChanges.AddRange(values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)));
 
             return result;
         }
@@ -185,11 +158,11 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             if (_valuesChanged)
             {
-                _valuesChanges.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
+                _valueChanges.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
                 OnValuesSortingCompleted();
             }
 
-            return _valuesChanges.GetEnumerator();
+            return _valueChanges.GetEnumerator();
         }
 
         /// <summary>
