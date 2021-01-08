@@ -83,8 +83,20 @@ namespace Melanchall.DryWetMidi.Interaction
             if (currentValue.Equals(value))
                 return;
 
-            // TODO: remove first
-            _valueChanges.RemoveAll(v => v.Time == time);
+            var indexToRemove = -1;
+
+            for (var i = _valueChanges.Count - 1; i >= 0; i--)
+            {
+                if (_valueChanges[i].Time != time)
+                    continue;
+
+                indexToRemove = i;
+                break;
+            }
+
+            if (indexToRemove >= 0)
+                _valueChanges.RemoveAt(indexToRemove);
+
             _valueChanges.Add(new ValueChange<TValue>(time, value));
 
             var forceSort = time < _maxTime;
