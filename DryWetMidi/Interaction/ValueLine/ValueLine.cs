@@ -21,10 +21,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
+        private readonly TimedObjectsComparer<ValueChange<TValue>> _comparer = new TimedObjectsComparer<ValueChange<TValue>>();
         private readonly List<ValueChange<TValue>> _valueChanges = new List<ValueChange<TValue>>();
         private readonly TValue _defaultValue;
 
         private bool _valuesChanged = true;
+        private long _maxTime = long.MinValue;
 
         #endregion
 
@@ -55,10 +57,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal TValue GetValueAtTime(long time)
         {
+            SortValueChanges();
+
             var lastValue = _defaultValue;
             var valuesChangesCount = _valueChanges.Count;
 
-            // TODO: sort?
             for (var i = 0; i < valuesChangesCount; i++)
             {
                 var valueChange = _valueChanges[i];
@@ -80,10 +83,15 @@ namespace Melanchall.DryWetMidi.Interaction
             if (currentValue.Equals(value))
                 return;
 
+            // TODO: remove first
             _valueChanges.RemoveAll(v => v.Time == time);
             _valueChanges.Add(new ValueChange<TValue>(time, value));
 
-            OnValuesChanged();
+            var forceSort = time < _maxTime;
+            if (time > _maxTime)
+                _maxTime = time;
+
+            OnValuesChanged(forceSort);
         }
 
         internal void DeleteValues(long startTime)
@@ -130,20 +138,31 @@ namespace Melanchall.DryWetMidi.Interaction
             return result;
         }
 
-        private void OnValuesChanged()
+        private void OnValuesChanged(bool forceSort = true)
         {
-            OnValuesNeedSorting();
+            if (forceSort)
+                OnValueChangesNeedSorting();
+
             ValuesChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnValuesNeedSorting()
+        private void OnValueChangesNeedSorting()
         {
             _valuesChanged = true;
         }
 
-        private void OnValuesSortingCompleted()
+        private void OnValueChangesSortingCompleted()
         {
             _valuesChanged = false;
+        }
+
+        private void SortValueChanges()
+        {
+            if (_valuesChanged)
+            {
+                _valueChanges.Sort(_comparer);
+                OnValueChangesSortingCompleted();
+            }
         }
 
         #endregion
@@ -156,12 +175,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<ValueChange<TValue>> GetEnumerator()
         {
-            if (_valuesChanged)
-            {
-                _valueChanges.Sort(new TimedObjectsComparer<ValueChange<TValue>>());
-                OnValuesSortingCompleted();
-            }
-
+            SortValueChanges();
             return _valueChanges.GetEnumerator();
         }
 
