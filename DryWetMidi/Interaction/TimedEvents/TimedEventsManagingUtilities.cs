@@ -243,6 +243,7 @@ namespace Melanchall.DryWetMidi.Interaction
             eventsCollection.AddEvent(midiEvent, TimeConverter.ConvertFrom(time, tempoMap));
         }
 
+        // TODO: times unchanged
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="EventsCollection"/>.
         /// </summary>
@@ -250,6 +251,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
+        /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -261,20 +263,41 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static void ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            using (var timedEventsManager = eventsCollection.ManageTimedEvents())
-            {
-                foreach (var timedEvent in timedEventsManager.Events.Where(e => match?.Invoke(e) != false))
-                {
-                    action(timedEvent);
-                }
-            }
+            return eventsCollection.ProcessTimedEvents(
+                (timedEvent, iTotal, iMatched) => action(timedEvent),
+                match == null ? (Func<TimedEvent, int, bool>)null : ((timedEvent, iTotal) => match(timedEvent)));
         }
 
+        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent, int, int> action, Func<TimedEvent, int, bool> match = null)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
+
+            var iTotal = 0;
+            var iMatched = 0;
+
+            foreach (var timedEvent in eventsCollection.GetTimedEventsLazy(false))
+            {
+                if (match?.Invoke(timedEvent, iTotal) != false)
+                {
+                    var deltaTime = timedEvent.Event.DeltaTime;
+                    action(timedEvent, iTotal, iMatched);
+                    timedEvent.Event.DeltaTime = deltaTime;
+                    iMatched++;
+                }
+
+                iTotal++;
+            }
+
+            return iMatched;
+        }
+
+        // TODO: times unchanged
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="TrackChunk"/>.
         /// </summary>
@@ -282,6 +305,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
+        /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -293,12 +317,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static void ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            trackChunk.Events.ProcessTimedEvents(action, match);
+            return trackChunk.Events.ProcessTimedEvents(action, match);
+        }
+
+        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent, int, int> action, Func<TimedEvent, int, bool> match = null)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(action), action);
+
+            return trackChunk.Events.ProcessTimedEvents(action, match);
         }
 
         /// <summary>
@@ -558,7 +590,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        internal static IEnumerable<TimedEvent> GetTimedEventsLazy(this IEnumerable<MidiEvent> events)
+        internal static IEnumerable<TimedEvent> GetTimedEventsLazy(this IEnumerable<MidiEvent> events, bool cloneEvent = true)
         {
             var time = 0L;
 
@@ -568,7 +600,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     continue;
 
                 time += midiEvent.DeltaTime;
-                yield return new TimedEvent(midiEvent.Clone(), time);
+                yield return new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent, time);
             }
         }
 

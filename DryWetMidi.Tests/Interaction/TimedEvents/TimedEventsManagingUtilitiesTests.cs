@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -2443,9 +2445,593 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region ProcessTimedEvents
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_EmptyTrackChunk()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[0],
+                action: e => { },
+                expectedMidiEvents: new MidiEvent[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_OneEvent_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => { },
+                expectedMidiEvents: new[] { new NoteOnEvent() });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_OneEvent_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteOnEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                expectedMidiEvents: new[] { new NoteOnEvent { NoteNumber = (SevenBitNumber)23 } });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_MultipleEvents_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_MultipleEvents_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent { NoteNumber = (SevenBitNumber)23 },
+                    new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_EmptyTrackChunk()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[0],
+                action: e => { },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[0],
+                expectedProcessedCount: 0);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_OneEvent_Matched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => { },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 1);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_OneEvent_NotMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => { },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 0);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_OneEvent_Matched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteOnEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent { NoteNumber = (SevenBitNumber)23 } },
+                expectedProcessedCount: 1);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_OneEvent_NotMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteOnEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 0);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_AllMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                expectedProcessedCount: 2);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_SomeMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                match: e => e.Event is NoteOffEvent,
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                expectedProcessedCount: 1);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_NotMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                expectedProcessedCount: 0);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_AllMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent { NoteNumber = (SevenBitNumber)23 },
+                    new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                },
+                expectedProcessedCount: 2);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_SomeMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is NoteOffEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                },
+                expectedProcessedCount: 1);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_NotMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                expectedProcessedCount: 0);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_EmptyTrackChunk()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[0],
+                action: e => { },
+                expectedMidiEvents: new MidiEvent[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_OneEvent_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => { },
+                expectedMidiEvents: new[] { new NoteOnEvent() });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_OneEvent_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteOnEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                expectedMidiEvents: new[] { new NoteOnEvent { NoteNumber = (SevenBitNumber)23 } });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_MultipleEvents_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_MultipleEvents_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent { NoteNumber = (SevenBitNumber)23 },
+                    new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_EmptyTrackChunk()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[0],
+                action: e => { },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[0],
+                expectedProcessedCount: 0,
+                expectedMatchedTotalIndices: new int[0],
+                expectedMatchedIndices: new int[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_OneEvent_Matched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => { },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 1,
+                expectedMatchedTotalIndices: new int[] { 0 },
+                expectedMatchedIndices: new int[] { 0 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_OneEvent_NotMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => { },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 0,
+                expectedMatchedTotalIndices: new int[0],
+                expectedMatchedIndices: new int[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_OneEvent_Matched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteOnEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent { NoteNumber = (SevenBitNumber)23 } },
+                expectedProcessedCount: 1,
+                expectedMatchedTotalIndices: new int[] { 0 },
+                expectedMatchedIndices: new int[] { 0 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_OneEvent_NotMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteOnEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 0,
+                expectedMatchedTotalIndices: new int[0],
+                expectedMatchedIndices: new int[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_AllMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                expectedProcessedCount: 2,
+                expectedMatchedTotalIndices: new int[] { 0, 1 },
+                expectedMatchedIndices: new int[] { 0, 1 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_SomeMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                match: e => e.Event is NoteOffEvent,
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                expectedProcessedCount: 1,
+                expectedMatchedTotalIndices: new int[] { 1 },
+                expectedMatchedIndices: new int[] { 0 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_NotMatched_NoProcessing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                action: e => { },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 1000 } },
+                expectedProcessedCount: 0,
+                expectedMatchedTotalIndices: new int[0],
+                expectedMatchedIndices: new int[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_AllMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent { NoteNumber = (SevenBitNumber)23 },
+                    new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                },
+                expectedProcessedCount: 2,
+                expectedMatchedTotalIndices: new int[] { 0, 1 },
+                expectedMatchedIndices: new int[] { 0, 1 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_SomeMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is NoteOffEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                },
+                expectedProcessedCount: 1,
+                expectedMatchedTotalIndices: new int[] { 1 },
+                expectedMatchedIndices: new int[] { 0 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_NotMatched_Processing()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e =>
+                {
+                    var noteOnEvent = (NoteEvent)e.Event;
+                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
+                    noteOnEvent.DeltaTime = 100;
+                },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                expectedProcessedCount: 0,
+                expectedMatchedTotalIndices: new int[0],
+                expectedMatchedIndices: new int[0]);
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
+
+        private void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+            ICollection<MidiEvent> midiEvents,
+            Action<TimedEvent> action,
+            Predicate<TimedEvent> match,
+            ICollection<MidiEvent> expectedMidiEvents,
+            int expectedProcessedCount,
+            ICollection<int> expectedMatchedTotalIndices,
+            ICollection<int> expectedMatchedIndices)
+        {
+            var trackChunk = new TrackChunk(midiEvents);
+
+            var matchedTotalIndices = new List<int>();
+            var matchedIndices = new List<int>();
+
+            var totalIndices = new List<int>();
+
+            Assert.AreEqual(
+                expectedProcessedCount,
+                trackChunk.ProcessTimedEvents(
+                    (timedEvent, iTotal, iMatched) =>
+                    {
+                        matchedTotalIndices.Add(iTotal);
+                        matchedIndices.Add(iMatched);
+                        action(timedEvent);
+                    },
+                    (timedEvent, iTotal) =>
+                    {
+                        totalIndices.Add(iTotal);
+                        return match(timedEvent);
+                    }),
+                "Invalid count of processed timed events.");
+            Assert.IsTrue(MidiChunk.Equals(new TrackChunk(expectedMidiEvents), trackChunk, out var message), message);
+
+            CollectionAssert.AreEqual(Enumerable.Range(0, midiEvents.Count), totalIndices, "Invalid total indices.");
+
+            CollectionAssert.AreEqual(expectedMatchedTotalIndices, matchedTotalIndices, "Invalid matched total indices.");
+            CollectionAssert.AreEqual(expectedMatchedIndices, matchedIndices, "Invalid matched indices.");
+        }
+
+        private void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+            ICollection<MidiEvent> midiEvents,
+            Action<TimedEvent> action,
+            ICollection<MidiEvent> expectedMidiEvents)
+        {
+            var trackChunk = new TrackChunk(midiEvents);
+
+            var totalIndices = new List<int>();
+            var matchedIndices = new List<int>();
+
+            Assert.AreEqual(
+                midiEvents.Count,
+                trackChunk.ProcessTimedEvents((timedEvent, iTotal, iMatched) =>
+                {
+                    totalIndices.Add(iTotal);
+                    matchedIndices.Add(iMatched);
+                    action(timedEvent);
+                }),
+                "Invalid count of processed timed events.");
+            Assert.IsTrue(MidiChunk.Equals(new TrackChunk(expectedMidiEvents), trackChunk, out var message), message);
+
+            CollectionAssert.AreEqual(Enumerable.Range(0, midiEvents.Count), totalIndices, "Invalid total indices.");
+            CollectionAssert.AreEqual(Enumerable.Range(0, midiEvents.Count), matchedIndices, "Invalid matched indices.");
+        }
+
+        private void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+            ICollection<MidiEvent> midiEvents,
+            Action<TimedEvent> action,
+            Predicate<TimedEvent> match,
+            ICollection<MidiEvent> expectedMidiEvents,
+            int expectedProcessedCount)
+        {
+            var trackChunk = new TrackChunk(midiEvents);
+            Assert.AreEqual(
+                expectedProcessedCount,
+                trackChunk.ProcessTimedEvents(action, match),
+                "Invalid count of processed timed events.");
+            Assert.IsTrue(MidiChunk.Equals(new TrackChunk(expectedMidiEvents), trackChunk, out var message), message);
+        }
+
+        private void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+            ICollection<MidiEvent> midiEvents,
+            Action<TimedEvent> action,
+            ICollection<MidiEvent> expectedMidiEvents)
+        {
+            var trackChunk = new TrackChunk(midiEvents);
+            Assert.AreEqual(
+                midiEvents.Count,
+                trackChunk.ProcessTimedEvents(action),
+                "Invalid count of processed timed events.");
+            Assert.IsTrue(MidiChunk.Equals(new TrackChunk(expectedMidiEvents), trackChunk, out var message), message);
+        }
 
         private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
             long aDeltaTime1, long aDeltaTime2, long bDeltaTime1, long bDeltaTime2, IEnumerable<TimedEvent> expectedTimedEvents)
