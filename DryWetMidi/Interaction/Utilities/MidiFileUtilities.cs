@@ -141,7 +141,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static void ResizeByRatio(MidiFile midiFile, double ratio)
         {
-            midiFile.ProcessTimedEvents(e => e.Time = MathUtilities.RoundToLong(e.Time * ratio));
+            foreach (var trackChunk in midiFile.GetTrackChunks())
+            {
+                using (var timedEventsManager = trackChunk.ManageTimedEvents())
+                {
+                    foreach (var timedEvent in timedEventsManager.Events)
+                    {
+                        timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio);
+                    }
+                }
+            }
         }
 
         #endregion

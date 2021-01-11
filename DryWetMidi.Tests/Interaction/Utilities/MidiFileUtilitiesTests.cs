@@ -123,8 +123,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsTrue(TimedEventEquality.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false));
         }
 
-        // TODO: fix
-        //[Test]
+        [Test]
         public void Resize_Midi()
         {
             var timedEvents = new[]
@@ -160,7 +159,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsTrue(TimedEventEquality.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false));
         }
 
-        // TODO: fix
         [Test]
         public void ResizeByRatio_Midi()
         {
