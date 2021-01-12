@@ -281,17 +281,41 @@ namespace Melanchall.DryWetMidi.Interaction
             var iTotal = 0;
             var iMatched = 0;
 
+            var timesChanged = false;
+            var timedEvents = new List<TimedEvent>(eventsCollection.Count);
+
             foreach (var timedEvent in eventsCollection.GetTimedEventsLazy(false))
             {
                 if (match?.Invoke(timedEvent, iTotal) != false)
                 {
                     var deltaTime = timedEvent.Event.DeltaTime;
+                    var time = timedEvent.Time;
+
                     action(timedEvent, iTotal, iMatched);
                     timedEvent.Event.DeltaTime = deltaTime;
+
+                    timesChanged = timedEvent.Time != time;
+
                     iMatched++;
                 }
 
+                timedEvents.Add(timedEvent);
                 iTotal++;
+            }
+
+            if (timesChanged)
+            {
+                var time = 0L;
+                var i = 0;
+
+                foreach (var e in timedEvents.OrderBy(e => e.Time))
+                {
+                    var midiEvent = e.Event;
+                    midiEvent.DeltaTime = e.Time - time;
+                    eventsCollection[i++] = midiEvent;
+
+                    time = e.Time;
+                }
             }
 
             return iMatched;

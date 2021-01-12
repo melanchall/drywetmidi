@@ -2480,6 +2480,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_OneEvent_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => e.Time = 100,
+                expectedMidiEvents: new[] { new NoteOnEvent { DeltaTime = 100 } });
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_MultipleEvents_NoProcessing()
         {
             ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
@@ -2507,6 +2516,42 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent { NoteNumber = (SevenBitNumber)23 },
                     new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_MultipleEvents_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOnEvent { DeltaTime = 90 },
+                });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate_MultipleEvents_Processing_Time_Stable()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 80 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 0 },
+                    new NoteOnEvent { DeltaTime = 90 },
                 });
         }
 
@@ -2560,6 +2605,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_OneEvent_Matched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => e.Time = 100,
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent { DeltaTime = 100 } },
+                expectedProcessedCount: 1);
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_OneEvent_NotMatched_Processing()
         {
             ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
@@ -2570,6 +2626,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     noteOnEvent.NoteNumber = (SevenBitNumber)23;
                     noteOnEvent.DeltaTime = 100;
                 },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 0);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_OneEvent_NotMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => e.Time = 100,
                 match: e => e.Event is TextEvent,
                 expectedMidiEvents: new[] { new NoteOnEvent() },
                 expectedProcessedCount: 0);
@@ -2633,6 +2700,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_AllMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOnEvent { DeltaTime = 90 },
+                },
+                expectedProcessedCount: 2);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_AllMatched_Processing_Time_Stable()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 900 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 0 },
+                    new NoteOnEvent { DeltaTime = 90 },
+                },
+                expectedProcessedCount: 3);
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_SomeMatched_Processing()
         {
             ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
@@ -2657,6 +2764,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_SomeMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                match: e => e.Event is NoteOnEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent { DeltaTime = 900 },
+                },
+                expectedProcessedCount: 1);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_SomeMatched_Processing_Time_Stable()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { NoteNumber = (SevenBitNumber)90 },
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                match: e => e.Event is NoteOnEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 0 },
+                    new NoteOffEvent { DeltaTime = 900 },
+                },
+                expectedProcessedCount: 2);
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_NotMatched_Processing()
         {
             ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
@@ -2671,6 +2818,25 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     noteOnEvent.NoteNumber = (SevenBitNumber)23;
                     noteOnEvent.DeltaTime = 100;
                 },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                expectedProcessedCount: 0);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate_MultipleEvents_NotMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithoutIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = 700,
                 match: e => e.Event is TextEvent,
                 expectedMidiEvents: new MidiEvent[]
                 {
@@ -2713,6 +2879,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_OneEvent_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => e.Time = 100,
+                expectedMidiEvents: new[] { new NoteOnEvent { DeltaTime = 100 } });
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_MultipleEvents_NoProcessing()
         {
             ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
@@ -2740,6 +2915,42 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent { NoteNumber = (SevenBitNumber)23 },
                     new NoteOffEvent { DeltaTime = 1000, NoteNumber = (SevenBitNumber)23 }
+                });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_MultipleEvents_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOnEvent { DeltaTime = 90 },
+                });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate_MultipleEvents_Processing_Time_Stable()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithoutPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 80 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 0 },
+                    new NoteOnEvent { DeltaTime = 90 },
                 });
         }
 
@@ -2801,6 +3012,19 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_OneEvent_Matched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => e.Time = 100,
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent { DeltaTime = 100 } },
+                expectedProcessedCount: 1,
+                expectedMatchedTotalIndices: new int[] { 0 },
+                expectedMatchedIndices: new int[] { 0 });
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_OneEvent_NotMatched_Processing()
         {
             ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
@@ -2811,6 +3035,19 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     noteOnEvent.NoteNumber = (SevenBitNumber)23;
                     noteOnEvent.DeltaTime = 100;
                 },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new[] { new NoteOnEvent() },
+                expectedProcessedCount: 0,
+                expectedMatchedTotalIndices: new int[0],
+                expectedMatchedIndices: new int[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_OneEvent_NotMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new[] { new NoteOnEvent() },
+                action: e => e.Time = 100,
                 match: e => e.Event is TextEvent,
                 expectedMidiEvents: new[] { new NoteOnEvent() },
                 expectedProcessedCount: 0,
@@ -2884,6 +3121,50 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_AllMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOnEvent { DeltaTime = 90 },
+                },
+                expectedProcessedCount: 2,
+                expectedMatchedTotalIndices: new int[] { 0, 1 },
+                expectedMatchedIndices: new int[] { 0, 1 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_AllMatched_Processing_Time_Stable()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 80 },
+                },
+                action: e => e.Time = (e.Event.EventType == MidiEventType.NoteOn ? 100 : 10),
+                match: e => e.Event is NoteEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90, DeltaTime = 0 },
+                    new NoteOnEvent { DeltaTime = 90 },
+                },
+                expectedProcessedCount: 3,
+                expectedMatchedTotalIndices: new int[] { 0, 1, 2 },
+                expectedMatchedIndices: new int[] { 0, 1, 2 });
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_SomeMatched_Processing()
         {
             ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
@@ -2910,6 +3191,50 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_SomeMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = 100,
+                match: e => e.Event is NoteOffEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 }
+                },
+                expectedProcessedCount: 1,
+                expectedMatchedTotalIndices: new int[] { 1 },
+                expectedMatchedIndices: new int[] { 0 });
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_SomeMatched_Processing_Time_Stable()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90 },
+                },
+                action: e => e.Time = 100,
+                match: e => e.Event is NoteOffEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 },
+                    new NoteOffEvent { NoteNumber = (SevenBitNumber)90 }
+                },
+                expectedProcessedCount: 2,
+                expectedMatchedTotalIndices: new int[] { 1, 2 },
+                expectedMatchedIndices: new int[] { 0, 1 });
+        }
+
+        [Test]
         public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_NotMatched_Processing()
         {
             ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
@@ -2924,6 +3249,27 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     noteOnEvent.NoteNumber = (SevenBitNumber)23;
                     noteOnEvent.DeltaTime = 100;
                 },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                expectedProcessedCount: 0,
+                expectedMatchedTotalIndices: new int[0],
+                expectedMatchedIndices: new int[0]);
+        }
+
+        [Test]
+        public void ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate_MultipleEvents_NotMatched_Processing_Time()
+        {
+            ProcessTimedEvents_TrackChunk_WithIndices_WithPredicate(
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 1000 }
+                },
+                action: e => e.Time = 100,
                 match: e => e.Event is TextEvent,
                 expectedMidiEvents: new MidiEvent[]
                 {

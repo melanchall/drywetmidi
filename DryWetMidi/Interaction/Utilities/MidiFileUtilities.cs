@@ -143,13 +143,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             foreach (var trackChunk in midiFile.GetTrackChunks())
             {
-                using (var timedEventsManager = trackChunk.ManageTimedEvents())
-                {
-                    foreach (var timedEvent in timedEventsManager.Events)
-                    {
-                        timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio);
-                    }
-                }
+                trackChunk.ProcessTimedEvents(timedEvent => timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio));
             }
         }
 
