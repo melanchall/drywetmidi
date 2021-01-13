@@ -43,23 +43,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region GetTimedEvents
 
         [Test]
-        public void GetTimedEvents_MidiEventsCollection_Materialized_Empty()
+        public void GetTimedEvents_EventsCollection_Empty()
         {
-            var timedEvents = Enumerable.Empty<MidiEvent>().GetTimedEvents();
+            var timedEvents = new EventsCollection().GetTimedEvents();
             CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
         }
 
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(100000)]
-        public void GetTimedEvents_MidiEventsCollection_Materialized_OneEvent(long deltaTime)
+        public void GetTimedEvents_EventsCollection_OneEvent(long deltaTime)
         {
-            var midiEvents = new MidiEvent[]
+            var eventsCollection = new EventsCollection
             {
                 new NoteOnEvent { DeltaTime = deltaTime }
             };
 
-            var timedEvents = midiEvents.GetTimedEvents();
+            var timedEvents = eventsCollection.GetTimedEvents();
             Assert.IsTrue(
                 TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
                 "Timed events are invalid.");
@@ -69,47 +69,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(0, 100)]
         [TestCase(100, 0)]
         [TestCase(100, 100)]
-        public void GetTimedEvents_MidiEventsCollection_Materialized_MultipleEvents(long deltaTime1, long deltaTime2)
+        public void GetTimedEvents_EventsCollection_MultipleEvents(long deltaTime1, long deltaTime2)
         {
-            var midiEvents = new MidiEvent[]
+            var eventsCollection = new EventsCollection
             {
                 new NoteOnEvent { DeltaTime = deltaTime1 },
                 new NoteOffEvent { DeltaTime = deltaTime2 },
             };
 
-            var timedEvents = midiEvents.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
-                "Timed events are invalid.");
-        }
-
-        [Test]
-        public void GetTimedEvents_MidiEventsCollection_NonMaterialized_Empty()
-        {
-            var timedEvents = GetNonMaterializedEmptyMidiEventsCollection().GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_MidiEventsCollection_NonMaterialized_OneEvent(long deltaTime)
-        {
-            var midiEvents = GetNonMaterializedSingleMidiEventsCollection(deltaTime);
-            var timedEvents = midiEvents.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_MidiEventsCollection_NonMaterialized_MultipleEvents(long deltaTime1, long deltaTime2)
-        {
-            var midiEvents = GetNonMaterializedMultipleMidiEventsCollection(deltaTime1, deltaTime2);
-            var timedEvents = midiEvents.GetTimedEvents();
+            var timedEvents = eventsCollection.GetTimedEvents();
             Assert.IsTrue(
                 TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
                 "Timed events are invalid.");

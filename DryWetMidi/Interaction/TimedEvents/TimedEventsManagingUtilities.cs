@@ -79,38 +79,6 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets collection of <see cref="MidiEvent"/> as a collection of timed events.
-        /// </summary>
-        /// <param name="events">Collection of <see cref="MidiEvent"/> to get timed events for.</param>
-        /// <returns>Collection of timed events contained in <paramref name="events"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
-        public static IEnumerable<TimedEvent> GetTimedEvents(this IEnumerable<MidiEvent> events)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            var capacity = 100;
-
-            var eventsAsTypedCollection = events as ICollection<MidiEvent>;
-            if (eventsAsTypedCollection != null)
-                capacity = eventsAsTypedCollection.Count;
-            else
-            {
-                var eventsAsCollection = events as ICollection;
-                if (eventsAsCollection != null)
-                    capacity = eventsAsCollection.Count;
-            }
-
-            var result = new List<TimedEvent>(capacity);
-
-            foreach (var timedEvent in events.GetTimedEventsLazy())
-            {
-                result.Add(timedEvent);
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Gets timed events contained in the specified <see cref="EventsCollection"/>.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events.</param>
@@ -120,7 +88,14 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return ((IEnumerable<MidiEvent>)eventsCollection).GetTimedEvents();
+            var result = new List<TimedEvent>(eventsCollection.Count);
+
+            foreach (var timedEvent in eventsCollection.GetTimedEventsLazy())
+            {
+                result.Add(timedEvent);
+            }
+
+            return result;
         }
 
         /// <summary>
