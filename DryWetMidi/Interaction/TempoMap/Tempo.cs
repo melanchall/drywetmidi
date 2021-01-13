@@ -129,6 +129,38 @@ namespace Melanchall.DryWetMidi.Interaction
             return !(tempo1 == tempo2);
         }
 
+        public static bool operator >(Tempo tempo1, Tempo tempo2)
+        {
+            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
+            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+
+            return tempo1.MicrosecondsPerQuarterNote > tempo2.MicrosecondsPerQuarterNote;
+        }
+
+        public static bool operator >=(Tempo tempo1, Tempo tempo2)
+        {
+            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
+            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+
+            return tempo1.MicrosecondsPerQuarterNote >= tempo2.MicrosecondsPerQuarterNote;
+        }
+
+        public static bool operator <(Tempo tempo1, Tempo tempo2)
+        {
+            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
+            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+
+            return tempo1.MicrosecondsPerQuarterNote < tempo2.MicrosecondsPerQuarterNote;
+        }
+
+        public static bool operator <=(Tempo tempo1, Tempo tempo2)
+        {
+            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
+            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+
+            return tempo1.MicrosecondsPerQuarterNote <= tempo2.MicrosecondsPerQuarterNote;
+        }
+
         #endregion
 
         #region Overrides

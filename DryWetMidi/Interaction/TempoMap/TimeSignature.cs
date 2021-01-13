@@ -101,6 +101,38 @@ namespace Melanchall.DryWetMidi.Interaction
             return !(timeSignature1 == timeSignature2);
         }
 
+        public static bool operator <(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
+            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+
+            return timeSignature1.Numerator / (double)timeSignature1.Denominator < timeSignature2.Numerator / (double)timeSignature2.Denominator;
+        }
+
+        public static bool operator <=(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
+            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+
+            return timeSignature1.Numerator / (double)timeSignature1.Denominator <= timeSignature2.Numerator / (double)timeSignature2.Denominator;
+        }
+
+        public static bool operator >(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
+            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+
+            return timeSignature1.Numerator / (double)timeSignature1.Denominator > timeSignature2.Numerator / (double)timeSignature2.Denominator;
+        }
+
+        public static bool operator >=(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        {
+            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
+            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+
+            return timeSignature1.Numerator / (double)timeSignature1.Denominator >= timeSignature2.Numerator / (double)timeSignature2.Denominator;
+        }
+
         #endregion
 
         #region Overrides
