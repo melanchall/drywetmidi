@@ -115,8 +115,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCount = eventsCollections.Sum(c => c.Count);
             var result = new TempoMap(timeDivision);
 
-            foreach (var timedEvent in eventsCollections.GetTimedEventsLazy(eventsCount))
+            foreach (var timedEventTuple in eventsCollections.GetTimedEventsLazy(eventsCount))
             {
+                var timedEvent = timedEventTuple.Item1;
                 var midiEvent = timedEvent.Event;
 
                 switch (midiEvent.EventType)

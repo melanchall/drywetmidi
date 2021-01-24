@@ -29,30 +29,7 @@
             if (trackChunk1 != null)
             {
                 var trackChunk2 = (TrackChunk)midiChunk2;
-
-                var events1 = trackChunk1.Events;
-                var events2 = trackChunk2.Events;
-
-                if (events1.Count != events2.Count)
-                {
-                    message = $"Counts of events in track chunks are different ({events1.Count} vs {events2.Count}).";
-                    return false;
-                }
-
-                for (var i = 0; i < events1.Count; i++)
-                {
-                    var event1 = events1[i];
-                    var event2 = events2[i];
-
-                    string eventsComparingMessage;
-                    if (!MidiEvent.Equals(event1, event2, settings.EventEqualityCheckSettings, out eventsComparingMessage))
-                    {
-                        message = $"Events at position {i} in track chunks are different. {eventsComparingMessage}";
-                        return false;
-                    }
-                }
-
-                return true;
+                return EventsCollectionEquality.Equals(trackChunk1.Events, trackChunk2.Events, settings.EventEqualityCheckSettings, out message);
             }
 
             var unknownChunk1 = midiChunk1 as UnknownChunk;

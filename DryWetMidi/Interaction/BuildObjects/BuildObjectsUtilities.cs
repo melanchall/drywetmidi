@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
-            return eventsCollections.GetTimedEventsLazy(eventsCount).BuildObjects(objectType, settings, false);
+            return eventsCollections.GetTimedEventsLazy(eventsCount).Select(e => e.Item1).BuildObjects(objectType, settings, false);
         }
 
         public static IEnumerable<ITimedObject> BuildObjects(

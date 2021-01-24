@@ -80,6 +80,8 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        internal object Tag { get; set; }
+
         #endregion
 
         #region Methods
