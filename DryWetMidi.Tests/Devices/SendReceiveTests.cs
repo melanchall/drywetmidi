@@ -50,8 +50,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             SendReceiveUtilities.CheckEventsReceiving(events.Select(e => new EventToSend(e, TimeSpan.Zero)).ToArray());
         }
 
-        [Retry(RetriesNumber)]
-        [Test]
+        // TODO
+        //[Retry(RetriesNumber)]
+        //[Test]
         public void CheckFileEventsReceiving()
         {
             var filesToTestCount = 5;

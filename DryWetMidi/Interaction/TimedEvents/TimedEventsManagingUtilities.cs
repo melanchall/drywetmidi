@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -218,6 +217,14 @@ namespace Melanchall.DryWetMidi.Interaction
             eventsCollection.AddEvent(midiEvent, TimeConverter.ConvertFrom(time, tempoMap));
         }
 
+        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
+
+            return eventsCollection.ProcessTimedEvents(action, timedEvent => true);
+        }
+
         // TODO: times unchanged
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="EventsCollection"/>.
@@ -238,20 +245,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return eventsCollection.ProcessTimedEvents(
                 (timedEvent, _, __, ___) => action(timedEvent),
                 match == null ? default(ProcessTimedEventPredicate) : ((timedEvent, _, __) => match(timedEvent)));
         }
 
-        public static int ProcessTimedEvents(this EventsCollection eventsCollection, ProcessTimedEventAction action, ProcessTimedEventPredicate match = null)
+        // TODO: do via multuple collections
+        public static int ProcessTimedEvents(this EventsCollection eventsCollection, ProcessTimedEventAction action, ProcessTimedEventPredicate match)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             var iTotal = 0;
             var iMatched = 0;
@@ -296,6 +306,14 @@ namespace Melanchall.DryWetMidi.Interaction
             return iMatched;
         }
 
+        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(action), action);
+
+            return trackChunk.ProcessTimedEvents(action, timedEvent => true);
+        }
+
         // TODO: times unchanged
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="TrackChunk"/>.
@@ -316,22 +334,32 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return trackChunk.ProcessTimedEvents(
                 (timedEvent, _, __, ___) => action(timedEvent),
                 match == null ? default(ProcessTimedEventPredicate) : ((timedEvent, _, __) => match(timedEvent)));
         }
 
-        public static int ProcessTimedEvents(this TrackChunk trackChunk, ProcessTimedEventAction action, ProcessTimedEventPredicate match = null)
+        public static int ProcessTimedEvents(this TrackChunk trackChunk, ProcessTimedEventAction action, ProcessTimedEventPredicate match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return trackChunk.Events.ProcessTimedEvents(action, match);
+        }
+
+        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(action), action);
+
+            return trackChunks.ProcessTimedEvents(action, timedEvent => true);
         }
 
         /// <summary>
@@ -354,20 +382,22 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return trackChunks.ProcessTimedEvents(
                 (timedEvent, _, __, ___) => action(timedEvent),
                 match == null ? default(ProcessTimedEventPredicate) : ((timedEvent, _, __) => match(timedEvent)));
         }
 
-        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, ProcessTimedEventAction action, ProcessTimedEventPredicate match = null)
+        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, ProcessTimedEventAction action, ProcessTimedEventPredicate match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
@@ -416,6 +446,11 @@ namespace Melanchall.DryWetMidi.Interaction
             return iMatched;
         }
 
+        public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action)
+        {
+            return file.ProcessTimedEvents(action, timedEvent => true);
+        }
+
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="MidiFile"/>.
         /// </summary>
@@ -435,20 +470,29 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match = null)
+        public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return file.GetTrackChunks().ProcessTimedEvents(action, match);
         }
 
-        public static int ProcessTimedEvents(this MidiFile file, ProcessTimedEventAction action, ProcessTimedEventPredicate match = null)
+        public static int ProcessTimedEvents(this MidiFile file, ProcessTimedEventAction action, ProcessTimedEventPredicate match)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
             return file.GetTrackChunks().ProcessTimedEvents(action, match);
+        }
+
+        public static int RemoveTimedEvents(this EventsCollection eventsCollection)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+
+            return eventsCollection.RemoveTimedEvents(timedEvent => true);
         }
 
         /// <summary>
@@ -456,15 +500,63 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static void RemoveTimedEvents(this EventsCollection eventsCollection, Predicate<TimedEvent> match = null)
+        public static int RemoveTimedEvents(this EventsCollection eventsCollection, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            using (var timedEventsManager = eventsCollection.ManageTimedEvents())
+            return eventsCollection.RemoveTimedEvents(match == null
+                ? default(ProcessTimedEventPredicate)
+                : ((timedEvent, _, __) => match(timedEvent)));
+        }
+
+        public static int RemoveTimedEvents(this EventsCollection eventsCollection, ProcessTimedEventPredicate match)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            var eventsCount = eventsCollection.Count;
+
+            if (match == null)
             {
-                timedEventsManager.Events.RemoveAll(match ?? (e => true));
+                eventsCollection.Clear();
+                return eventsCount;
             }
+
+            var removedEventsCount = 0;
+            var time = 0L;
+            var latestTime = 0L;
+
+            var events = eventsCollection._events;
+
+            for (var i = 0; i < eventsCount; i++)
+            {
+                time += events[i].DeltaTime;
+                var timedEvent = new TimedEvent(events[i], time);
+
+                if (match(timedEvent, 0, i))
+                    removedEventsCount++;
+                else
+                {
+                    events[i].DeltaTime = time - latestTime;
+                    events[i - removedEventsCount] = events[i];
+                    latestTime = time;
+                }
+            }
+
+            if (removedEventsCount > 0)
+                events.RemoveRange(eventsCount - removedEventsCount, removedEventsCount);
+
+            return removedEventsCount;
+        }
+
+        public static int RemoveTimedEvents(this TrackChunk trackChunk)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+
+            return trackChunk.RemoveTimedEvents(timedEvent => true);
         }
 
         /// <summary>
@@ -472,12 +564,29 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static void RemoveTimedEvents(this TrackChunk trackChunk, Predicate<TimedEvent> match = null)
+        public static int RemoveTimedEvents(this TrackChunk trackChunk, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            trackChunk.Events.RemoveTimedEvents(match);
+            return trackChunk.Events.RemoveTimedEvents(match);
+        }
+
+        public static int RemoveTimedEvents(this TrackChunk trackChunk, ProcessTimedEventPredicate match)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            return trackChunk.Events.RemoveTimedEvents(match);
+        }
+
+        public static int RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            return trackChunks.RemoveTimedEvents(timedEvent => true);
         }
 
         /// <summary>
@@ -485,15 +594,100 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        public static void RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match = null)
+        public static int RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            foreach (var trackChunk in trackChunks)
+            return trackChunks.RemoveTimedEvents(match == null
+                ? default(ProcessTimedEventPredicate)
+                : ((timedEvent, _, __) => match(timedEvent)));
+        }
+
+        public static int RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, ProcessTimedEventPredicate match)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(c => c.Count);
+
+            if (match == null)
             {
-                trackChunk?.RemoveTimedEvents(match);
+                foreach (var eventsCollection in eventsCollections)
+                {
+                    eventsCollection.Clear();
+                }
+
+                return eventsCount;
             }
+
+            var eventsCollectionsCount = eventsCollections.Length;
+
+            if (eventsCollectionsCount == 0)
+                return 0;
+
+            if (eventsCollectionsCount == 1)
+                return eventsCollections[0].RemoveTimedEvents(match);
+
+            var eventsCollectionIndices = new int[eventsCollectionsCount];
+            var eventsCollectionMaxIndices = eventsCollections.Select(c => c.Count - 1).ToArray();
+            var eventsCollectionTimes = new long[eventsCollectionsCount];
+            var eventsCollectionLatestTimes = new long[eventsCollectionsCount];
+            var removedEventsCounts = new int[eventsCollectionsCount];
+
+            for (var i = 0; i < eventsCount; i++)
+            {
+                var eventsCollectionIndex = 0;
+                var minTime = long.MaxValue;
+
+                for (var j = 0; j < eventsCollectionsCount; j++)
+                {
+                    var index = eventsCollectionIndices[j];
+                    if (index > eventsCollectionMaxIndices[j])
+                        continue;
+
+                    var eventTime = eventsCollections[j][index].DeltaTime + eventsCollectionTimes[j];
+                    if (eventTime < minTime)
+                    {
+                        minTime = eventTime;
+                        eventsCollectionIndex = j;
+                    }
+                }
+
+                var midiEvent = eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]];
+
+                var timedEvent = new TimedEvent(midiEvent, minTime);
+                if (match(timedEvent, eventsCollectionIndex, i))
+                    removedEventsCounts[eventsCollectionIndex]++;
+                else
+                {
+                    midiEvent.DeltaTime = minTime - eventsCollectionLatestTimes[eventsCollectionIndex];
+                    eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex] - removedEventsCounts[eventsCollectionIndex]] = midiEvent;
+                    eventsCollectionLatestTimes[eventsCollectionIndex] = minTime;
+                }
+
+                eventsCollectionTimes[eventsCollectionIndex] = minTime;
+                eventsCollectionIndices[eventsCollectionIndex]++;
+            }
+
+            for (var i = 0; i < eventsCollectionsCount; i++)
+            {
+                var removedEventsCount = removedEventsCounts[i];
+                if (removedEventsCount > 0)
+                    eventsCollections[i]._events.RemoveRange(eventsCollections[i].Count - removedEventsCount, removedEventsCount);
+            }
+
+            return removedEventsCounts.Sum();
+        }
+
+        public static int RemoveTimedEvents(this MidiFile file)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+
+            return file.RemoveTimedEvents(timedEvent => true);
         }
 
         /// <summary>
@@ -501,12 +695,22 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        public static void RemoveTimedEvents(this MidiFile file, Predicate<TimedEvent> match = null)
+        public static int RemoveTimedEvents(this MidiFile file, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            file.GetTrackChunks().RemoveTimedEvents(match);
+            return file.GetTrackChunks().RemoveTimedEvents(match);
+        }
+
+        public static int RemoveTimedEvents(this MidiFile file, ProcessTimedEventPredicate match)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            return file.GetTrackChunks().RemoveTimedEvents(match);
         }
 
         /// <summary>

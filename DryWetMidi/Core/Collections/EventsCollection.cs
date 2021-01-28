@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
-        private readonly List<MidiEvent> _events = new List<MidiEvent>();
+        internal readonly List<MidiEvent> _events = new List<MidiEvent>();
 
         #endregion
 
