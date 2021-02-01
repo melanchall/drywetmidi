@@ -377,6 +377,7 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddNotes(notes);
         }
 
+        [Obsolete("OBS7")]
         /// <summary>
         /// Creates a track chunk with the specified notes.
         /// </summary>
@@ -387,12 +388,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            var trackChunk = new TrackChunk();
-            trackChunk.AddNotes(notes);
-
-            return trackChunk;
+            return ((IEnumerable<ITimedObject>)notes).ToTrackChunk();
         }
 
+        [Obsolete("OBS8")]
         /// <summary>
         /// Creates a MIDI file with the specified notes.
         /// </summary>
@@ -403,7 +402,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            return new MidiFile(notes.ToTrackChunk());
+            return ((IEnumerable<ITimedObject>)notes).ToFile();
         }
 
         /// <summary>

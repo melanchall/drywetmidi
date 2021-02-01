@@ -455,6 +455,7 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddChords(chords);
         }
 
+        [Obsolete("OBS7")]
         /// <summary>
         /// Creates a track chunk with the specified chords.
         /// </summary>
@@ -465,12 +466,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
 
-            var trackChunk = new TrackChunk();
-            trackChunk.AddChords(chords);
-
-            return trackChunk;
+            return ((IEnumerable<ITimedObject>)chords).ToTrackChunk();
         }
 
+        [Obsolete("OBS8")]
         /// <summary>
         /// Creates a MIDI file with the specified chords.
         /// </summary>
@@ -481,7 +480,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
 
-            return new MidiFile(chords.ToTrackChunk());
+            return ((IEnumerable<ITimedObject>)chords).ToFile();
         }
 
         /// <summary>

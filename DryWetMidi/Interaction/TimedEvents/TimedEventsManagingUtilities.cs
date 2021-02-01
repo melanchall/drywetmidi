@@ -772,6 +772,7 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddTimedEvents(events);
         }
 
+        [Obsolete("OBS7")]
         /// <summary>
         /// Creates a track chunk with the specified timed events.
         /// </summary>
@@ -786,12 +787,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(events), events);
 
-            var trackChunk = new TrackChunk();
-            trackChunk.AddTimedEvents(events);
-
-            return trackChunk;
+            return ((IEnumerable<ITimedObject>)events).ToTrackChunk();
         }
 
+        [Obsolete("OBS8")]
         /// <summary>
         /// Creates a MIDI file with the specified timed events.
         /// </summary>
@@ -806,7 +805,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(events), events);
 
-            return new MidiFile(events.ToTrackChunk());
+            return ((IEnumerable<ITimedObject>)events).ToFile();
         }
 
         internal static IEnumerable<Tuple<TimedEvent, int>> GetTimedEventsLazy(this EventsCollection[] eventsCollections, int eventsCount, bool cloneEvent = true)
