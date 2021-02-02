@@ -147,10 +147,13 @@ namespace Melanchall.DryWetMidi.Interaction
             foreach (TimedEvent timedEvent in timedObjects.BuildObjects(ObjectType.TimedEvent))
             {
                 var midiEvent = timedEvent.Event;
-                midiEvent.DeltaTime = timedEvent.Time - time;
-                events.Add(midiEvent);
+                if (midiEvent is ChannelEvent || midiEvent is MetaEvent || midiEvent is SysExEvent)
+                {
+                    midiEvent.DeltaTime = timedEvent.Time - time;
+                    events.Add(midiEvent);
 
-                time = timedEvent.Time;
+                    time = timedEvent.Time;
+                }
             }
 
             return trackChunk;
