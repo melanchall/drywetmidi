@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed class TimedObjectUtilitiesTests
+    public sealed partial class TimedObjectUtilitiesTests
     {
         #region Test methods
 
@@ -809,7 +809,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ToTrackChunkOrFile_MultipleObjects_Mixed_4([Values] bool toFile, [Values(40, 50)] long length)
+        public void ToTrackChunkOrFile_MultipleObjects_Mixed_4([Values] bool toFile)
         {
             ToTrackChunkOrFile(
                 toFile,

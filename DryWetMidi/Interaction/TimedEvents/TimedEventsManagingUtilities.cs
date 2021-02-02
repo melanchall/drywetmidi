@@ -713,6 +713,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().RemoveTimedEvents(match);
         }
 
+        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of timed events to the specified <see cref="EventsCollection"/>.
         /// </summary>
@@ -744,6 +745,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of timed events to the specified <see cref="TrackChunk"/>.
         /// </summary>

@@ -326,6 +326,7 @@ namespace Melanchall.DryWetMidi.Interaction
             file.GetTrackChunks().RemoveNotes(match);
         }
 
+        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of notes to the specified <see cref="EventsCollection"/>.
         /// </summary>
@@ -353,6 +354,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of notes to the specified <see cref="TrackChunk"/>.
         /// </summary>

@@ -404,6 +404,7 @@ namespace Melanchall.DryWetMidi.Interaction
             file.GetTrackChunks().RemoveChords(match, notesTolerance);
         }
 
+        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of chords to the specified <see cref="EventsCollection"/>.
         /// </summary>
@@ -431,6 +432,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of chords to the specified <see cref="TrackChunk"/>.
         /// </summary>

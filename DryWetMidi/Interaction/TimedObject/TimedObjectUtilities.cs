@@ -134,37 +134,65 @@ namespace Melanchall.DryWetMidi.Interaction
             return AtTime(objects, convertedTime);
         }
 
-        // TODO: test
         public static TrackChunk ToTrackChunk(this IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
             var trackChunk = new TrackChunk();
-            var events = trackChunk.Events._events;
-
-            var time = 0L;
-
-            foreach (TimedEvent timedEvent in timedObjects.BuildObjects(ObjectType.TimedEvent))
-            {
-                var midiEvent = timedEvent.Event;
-                if (midiEvent is ChannelEvent || midiEvent is MetaEvent || midiEvent is SysExEvent)
-                {
-                    midiEvent.DeltaTime = timedEvent.Time - time;
-                    events.Add(midiEvent);
-
-                    time = timedEvent.Time;
-                }
-            }
-
+            trackChunk.AddObjects(timedObjects);
             return trackChunk;
         }
 
-        // TODO: test
         public static MidiFile ToFile(this IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
             return new MidiFile(timedObjects.ToTrackChunk());
+        }
+
+        public static void AddObjects(this EventsCollection eventsCollection, IEnumerable<ITimedObject> timedObjects)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+
+            var timedEventsObjects = timedObjects.BuildObjects(ObjectType.TimedEvent);
+            if (timedEventsObjects.Count == 0)
+                return;
+
+            var eventsCollectionToAdd = new EventsCollection();
+            AddTimedEventsToEventsCollection(eventsCollectionToAdd, timedEventsObjects);
+
+            var newEventsCount = eventsCollection.Count + eventsCollectionToAdd.Count;
+            var allTimedEvents = new[] { eventsCollection, eventsCollectionToAdd }
+                .GetTimedEventsLazy(newEventsCount, false)
+                .Select(e => e.Item1)
+                .ToArray();
+
+            eventsCollection.Clear();
+            AddTimedEventsToEventsCollection(eventsCollection, allTimedEvents);
+        }
+
+        public static void AddObjects(this TrackChunk trackChunk, IEnumerable<ITimedObject> timedObjects)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+
+            trackChunk.Events.AddObjects(timedObjects);
+        }
+
+        private static void AddTimedEventsToEventsCollection(EventsCollection eventsCollection, IEnumerable<ITimedObject> timedObjects)
+        {
+            var time = 0L;
+
+            foreach (TimedEvent timedEvent in timedObjects)
+            {
+                var midiEvent = timedEvent.Event;
+                if (midiEvent is ChannelEvent || midiEvent is MetaEvent || midiEvent is SysExEvent)
+                {
+                    midiEvent.DeltaTime = timedEvent.Time - time;
+                    eventsCollection._events.Add(midiEvent);
+
+                    time = timedEvent.Time;
+                }
+            }
         }
 
         #endregion

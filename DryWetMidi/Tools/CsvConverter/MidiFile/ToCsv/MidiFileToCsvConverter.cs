@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -25,7 +26,7 @@ namespace Melanchall.DryWetMidi.Tools
                     var time = 0L;
                     var timedEvents = trackChunk.GetTimedEvents();
                     var timedObjects = settings.CsvLayout == MidiFileCsvLayout.MidiCsv || settings.NoteFormat == NoteFormat.Events
-                        ? timedEvents
+                        ? (IEnumerable<ITimedObject>)timedEvents
                         : timedEvents.BuildObjects(ObjectType.TimedEvent | ObjectType.Note);
 
                     foreach (var timedObject in timedObjects)
