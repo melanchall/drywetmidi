@@ -281,6 +281,27 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(tempo1 >= tempo2, "First tempo greater than or equals to second one.");
         }
 
+        [Test]
+        public void CreateFromBpm()
+        {
+            var tempo = Tempo.FromBeatsPerMinute(0.5);
+            Assert.AreEqual(0.5, tempo.BeatsPerMinute, 0.00001, "BPM is invalid.");
+        }
+
+        [Test]
+        public void CreateFromMillisecondsPerQuarterNote_GetBpm_1()
+        {
+            var tempo = Tempo.FromMillisecondsPerQuarterNote(1000);
+            Assert.AreEqual(60, tempo.BeatsPerMinute, "BPM is invalid.");
+        }
+
+        [Test]
+        public void CreateFromMillisecondsPerQuarterNote_GetBpm_2()
+        {
+            var tempo = Tempo.FromMillisecondsPerQuarterNote(40000);
+            Assert.AreEqual(1.5, tempo.BeatsPerMinute, "BPM is invalid.");
+        }
+
         #endregion
     }
 }

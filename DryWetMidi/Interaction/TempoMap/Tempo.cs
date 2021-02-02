@@ -53,9 +53,9 @@ namespace Melanchall.DryWetMidi.Interaction
         public long MicrosecondsPerQuarterNote { get; }
 
         /// <summary>
-        /// Gets number of beats per minute.
+        /// Gets the number of beats per minute.
         /// </summary>
-        public long BeatsPerMinute => MicrosecondsInMinute / MicrosecondsPerQuarterNote;
+        public double BeatsPerMinute => (double)MicrosecondsInMinute / MicrosecondsPerQuarterNote;
 
         #endregion
 
@@ -88,13 +88,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// number of beats per minute.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="beatsPerMinute"/>
         /// is zero or negative.</exception>
-        public static Tempo FromBeatsPerMinute(int beatsPerMinute)
+        public static Tempo FromBeatsPerMinute(double beatsPerMinute)
         {
             ThrowIfArgument.IsNonpositive(nameof(beatsPerMinute),
                                           beatsPerMinute,
                                           "Number of beats per minute is zero or negative.");
 
-            return new Tempo(MathUtilities.RoundToLong((double)MicrosecondsInMinute / beatsPerMinute));
+            return new Tempo(MathUtilities.RoundToLong(MicrosecondsInMinute / beatsPerMinute));
         }
 
         #endregion
