@@ -11,6 +11,32 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public static class NotesManagingUtilities
     {
+        #region Nested classes
+
+        private sealed class NoteDescriptor
+        {
+            public NoteDescriptor(NoteId noteId, TimedEvent noteOnTimedEvent)
+            {
+                NoteId = noteId;
+                NoteOnTimedEvent = noteOnTimedEvent;
+            }
+
+            public NoteId NoteId { get; }
+
+            public TimedEvent NoteOnTimedEvent { get; }
+
+            public TimedEvent NoteOffTimedEvent { get; set; }
+
+            public bool IsCompleted => NoteOffTimedEvent != null;
+
+            public Note GetNote()
+            {
+                return new Note(NoteOnTimedEvent, NoteOffTimedEvent);
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -83,20 +109,18 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
         }
 
-        /// <summary>
-        /// Gets notes contained in the specified collection of <see cref="MidiEvent"/>.
-        /// </summary>
-        /// <param name="events">Collection of<see cref="MidiFile"/> to search for notes.</param>
-        /// <returns>Collection of notes contained in <paramref name="events"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
-        public static IEnumerable<Note> GetNotes(this IEnumerable<MidiEvent> events)
+        public static IEnumerable<Note> GetNotes(this IEnumerable<MidiEvent> midiEvents)
         {
-            ThrowIfArgument.IsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-            var eventsCollection = new EventsCollection();
-            eventsCollection.AddRange(events);
+            var result = new List<Note>();
 
-            return eventsCollection.ManageNotes().Notes.ToList();
+            foreach (var note in GetNotesLazy(midiEvents.GetTimedEventsLazy()))
+            {
+                result.Add(note);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -109,7 +133,14 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection.ManageNotes().Notes.ToList();
+            var result = new List<Note>(eventsCollection.Count / 2);
+
+            foreach (var note in GetNotesLazy(eventsCollection.GetTimedEventsLazy()))
+            {
+                result.Add(note);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -135,10 +166,17 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            return trackChunks.Where(c => c != null)
-                              .SelectMany(GetNotes)
-                              .OrderBy(n => n.Time)
-                              .ToList();
+            var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(e => e.Count);
+
+            var result = new List<Note>(eventsCount);
+
+            foreach (var note in GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount).Select(e => e.Item1)))
+            {
+                result.Add(note);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -418,6 +456,67 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(note), note);
 
             return note.UnderlyingNote;
+        }
+
+        internal static IEnumerable<Note> GetNotesLazy(IEnumerable<TimedEvent> timedEvents)
+        {
+            var notesDescriptors = new LinkedList<NoteDescriptor>();
+
+            foreach (var timedEvent in timedEvents)
+            {
+                switch (timedEvent.Event.EventType)
+                {
+                    case MidiEventType.NoteOn:
+                        {
+                            notesDescriptors.AddLast(new NoteDescriptor(((NoteOnEvent)timedEvent.Event).GetNoteId(), timedEvent));
+                        }
+                        break;
+                    case MidiEventType.NoteOff:
+                        {
+                            var noteId = ((NoteOffEvent)timedEvent.Event).GetNoteId();
+                            var node = FindNoteDescriptorFromEnd(notesDescriptors, noteId);
+                            if (node == null)
+                                break;
+
+                            node.Value.NoteOffTimedEvent = timedEvent;
+
+                            var previousNode = node.Previous;
+                            if (previousNode != null)
+                                break;
+
+                            for (var n = node; n != null;)
+                            {
+                                if (!n.Value.IsCompleted)
+                                    break;
+
+                                yield return n.Value.GetNote();
+                                var next = n.Next;
+                                notesDescriptors.Remove(n);
+                                n = next;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            foreach (var noteDescriptor in notesDescriptors)
+            {
+                if (!noteDescriptor.IsCompleted)
+                    continue;
+
+                yield return noteDescriptor.GetNote();
+            }
+        }
+
+        private static LinkedListNode<NoteDescriptor> FindNoteDescriptorFromEnd(LinkedList<NoteDescriptor> notesDescriptors, NoteId noteId)
+        {
+            for (var node = notesDescriptors.Last; node != null; node = node.Previous)
+            {
+                if (node.Value.NoteId.Equals(noteId))
+                    return node;
+            }
+
+            return null;
         }
 
         #endregion

@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
     {
         #region Nested classes
 
-        private sealed class NoteComparer : IEqualityComparer<Note>
+        public sealed class NoteComparer : IEqualityComparer<Note>
         {
             #region IEqualityComparer<Note>
 

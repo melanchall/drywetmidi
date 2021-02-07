@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
@@ -7,6 +9,30 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
     internal static class MidiAsserts
     {
         #region Methods
+
+        public static void AreEqual(IEnumerable<Note> expectedNotes, IEnumerable<Note> actualNotes, string message)
+        {
+            var expectedCount = expectedNotes.Count();
+            var actualCount = actualNotes.Count();
+
+            Assert.AreEqual(expectedCount, actualCount, "Notes count is invalid.");
+
+            var expectedNotesEnumerator = expectedNotes.GetEnumerator();
+            var actualNotesEnumerator = actualNotes.GetEnumerator();
+
+            var i = 0;
+            var comparer = new NoteEquality.NoteComparer();
+
+            while (expectedNotesEnumerator.MoveNext() && actualNotesEnumerator.MoveNext())
+            {
+                var expectedNote = expectedNotesEnumerator.Current;
+                var actualNote = actualNotesEnumerator.Current;
+
+                Assert.IsTrue(comparer.Equals(expectedNote, actualNote), $"{message} Note {i} is invalid.");
+
+                i++;
+            }
+        }
 
         public static void AreEqual(EventsCollection eventsCollection1, EventsCollection eventsCollection2, bool compareDeltaTimes, string message = null)
         {
