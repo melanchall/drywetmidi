@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
@@ -37,6 +36,14 @@ namespace Melanchall.DryWetMidi.Interaction
         private static readonly Expression<Func<Note, FourBitNumber>> ChannelPropertySelector = n => n.Channel;
         private static readonly Expression<Func<Note, SevenBitNumber>> VelocityPropertySelector = n => n.Velocity;
         private static readonly Expression<Func<Note, SevenBitNumber>> OffVelocityPropertySelector = n => n.OffVelocity;
+
+        #endregion
+
+        #region Fields
+
+        private FourBitNumber? _channel;
+        private SevenBitNumber? _velocity;
+        private SevenBitNumber? _offVelocity;
 
         #endregion
 
@@ -185,8 +192,33 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </exception>
         public FourBitNumber Channel
         {
-            get { return GetNotesProperty(ChannelPropertySelector); }
-            set { SetNotesProperty(ChannelPropertySelector, value); }
+            get
+            {
+                if (_channel != null)
+                    return _channel.Value;
+
+                FourBitNumber? channel = null;
+
+                foreach (var note in Notes)
+                {
+                    if (channel != null && note.Channel != channel)
+                        throw new InvalidOperationException($"Chord's notes have different channels.");
+
+                    channel = note.Channel;
+                }
+
+                if (channel == null)
+                    throw new InvalidOperationException($"Chord is empty.");
+
+                return (_channel = channel).Value;
+            }
+            set
+            {
+                foreach (var note in Notes)
+                {
+                    note.Channel = value;
+                }
+            }
         }
 
         /// <summary>
@@ -205,8 +237,33 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </exception>
         public SevenBitNumber Velocity
         {
-            get { return GetNotesProperty(VelocityPropertySelector); }
-            set { SetNotesProperty(VelocityPropertySelector, value); }
+            get
+            {
+                if (_velocity != null)
+                    return _velocity.Value;
+
+                SevenBitNumber? velocity = null;
+
+                foreach (var note in Notes)
+                {
+                    if (velocity != null && note.Velocity != velocity)
+                        throw new InvalidOperationException($"Chord's notes have different velocities.");
+
+                    velocity = note.Velocity;
+                }
+
+                if (velocity == null)
+                    throw new InvalidOperationException($"Chord is empty.");
+
+                return (_velocity = velocity).Value;
+            }
+            set
+            {
+                foreach (var note in Notes)
+                {
+                    note.Velocity = value;
+                }
+            }
         }
 
         /// <summary>
@@ -225,8 +282,33 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </exception>
         public SevenBitNumber OffVelocity
         {
-            get { return GetNotesProperty(OffVelocityPropertySelector); }
-            set { SetNotesProperty(OffVelocityPropertySelector, value); }
+            get
+            {
+                if (_offVelocity != null)
+                    return _offVelocity.Value;
+
+                SevenBitNumber? offVelocity = null;
+
+                foreach (var note in Notes)
+                {
+                    if (offVelocity != null && note.OffVelocity != offVelocity)
+                        throw new InvalidOperationException($"Chord's notes have different off-velocities.");
+
+                    offVelocity = note.OffVelocity;
+                }
+
+                if (offVelocity == null)
+                    throw new InvalidOperationException($"Chord is empty.");
+
+                return (_offVelocity = offVelocity).Value;
+            }
+            set
+            {
+                foreach (var note in Notes)
+                {
+                    note.OffVelocity = value;
+                }
+            }
         }
 
         #endregion
@@ -281,53 +363,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)
         {
+            _channel = null;
+            _velocity = null;
+            _offVelocity = null;
+
             NotesCollectionChanged?.Invoke(collection, args);
-        }
-
-        /// <summary>
-        /// Gets value of the specified note's property.
-        /// </summary>
-        /// <typeparam name="TValue">Type of a note's property.</typeparam>
-        /// <param name="propertySelector">Expression that represent a note's property.</param>
-        /// <returns>Value of the specified note's property.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description>Chord doesn't contain notes.</description>
-        /// </item>
-        /// <item>
-        /// <description>Chord's notes have different values of the specified property.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        private TValue GetNotesProperty<TValue>(Expression<Func<Note, TValue>> propertySelector)
-        {
-            if (!Notes.Any())
-                throw new InvalidOperationException("Chord doesn't contain notes.");
-
-            var propertyInfo = GetPropertyInfo(propertySelector);
-
-            var values = Notes.Select(n => (TValue)propertyInfo.GetValue(n)).Distinct().ToArray();
-            if (values.Length > 1)
-                throw new InvalidOperationException($"Chord's notes have different values of the {propertyInfo.Name} property.");
-
-            return values.First();
-        }
-
-        private void SetNotesProperty<TValue>(Expression<Func<Note, TValue>> propertySelector, TValue value)
-        {
-            var propertyInfo = GetPropertyInfo(propertySelector);
-
-            foreach (var note in Notes)
-            {
-                propertyInfo.SetValue(note, value);
-            }
-        }
-
-        private static PropertyInfo GetPropertyInfo<TValue>(Expression<Func<Note, TValue>> propertySelector)
-        {
-            return (propertySelector.Body as MemberExpression)?.Member as PropertyInfo;
         }
 
         #endregion

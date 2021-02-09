@@ -240,6 +240,30 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreEqual(500, chord.Length);
         }
 
+        [Test]
+        public void CheckLengthChangedEvent_ZeroTime_NoChange()
+        {
+            CheckLengthChangedEvent_NoChange(GetChord_ZeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_NonZeroTime_NoChange()
+        {
+            CheckLengthChangedEvent_NoChange(GetChord_NonzeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_ZeroTime_Changed()
+        {
+            CheckLengthChangedEvent_Changed(GetChord_ZeroTime());
+        }
+
+        [Test]
+        public void CheckLengthChangedEvent_NonZeroTime_Changed()
+        {
+            CheckLengthChangedEvent_Changed(GetChord_NonzeroTime());
+        }
+
         #endregion
 
         #region Clone
@@ -437,30 +461,254 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
-        #region Length
+        #region Channel
 
         [Test]
-        public void CheckLengthChangedEvent_ZeroTime_NoChange()
+        public void GetChannel_EmptyChord()
         {
-            CheckLengthChangedEvent_NoChange(GetChord_ZeroTime());
+            var chord = new Chord();
+            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for empty chord on first get.");
+            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for empty chord on second get.");
         }
 
         [Test]
-        public void CheckLengthChangedEvent_NonZeroTime_NoChange()
+        public void GetChannel_ByNotes_OneNote()
         {
-            CheckLengthChangedEvent_NoChange(GetChord_NonzeroTime());
+            var channel = (FourBitNumber)5;
+            var chord = new Chord(new Note(SevenBitNumber.MaxValue) { Channel = channel });
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
         }
 
         [Test]
-        public void CheckLengthChangedEvent_ZeroTime_Changed()
+        public void GetChannel_ByNotes_MultipleNotes_SameChannel()
         {
-            CheckLengthChangedEvent_Changed(GetChord_ZeroTime());
+            var channel = (FourBitNumber)5;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { Channel = channel },
+                new Note(SevenBitNumber.MinValue) { Channel = channel });
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
         }
 
         [Test]
-        public void CheckLengthChangedEvent_NonZeroTime_Changed()
+        public void GetChannel_ByNotes_MultipleNotes_DifferentChannels()
         {
-            CheckLengthChangedEvent_Changed(GetChord_NonzeroTime());
+            var channel1 = (FourBitNumber)5;
+            var channel2 = (FourBitNumber)3;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { Channel = channel1 },
+                new Note(SevenBitNumber.MinValue) { Channel = channel2 });
+            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for chord with notes with different channels on first get.");
+            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for chord with notes with different channels on second get.");
+        }
+
+        [Test]
+        public void GetChannel_AfterSet_OneNote()
+        {
+            var channel = (FourBitNumber)5;
+            var chord = new Chord(new Note(SevenBitNumber.MaxValue));
+            chord.Channel = channel;
+
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+        }
+
+        [Test]
+        public void GetChannel_AfterSet_MultipleNotes()
+        {
+            var channel = (FourBitNumber)5;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue),
+                new Note(SevenBitNumber.MinValue));
+            chord.Channel = channel;
+
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+        }
+
+        [Test]
+        public void GetChannel_AfterSet_MultipleNotes_DifferentChannels()
+        {
+            var channel1 = (FourBitNumber)5;
+            var channel2 = (FourBitNumber)3;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { Channel = channel1 },
+                new Note(SevenBitNumber.MinValue) { Channel = channel2 });
+
+            var channel = (FourBitNumber)7;
+            chord.Channel = channel;
+
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+        }
+
+        #endregion
+
+        #region Velocity
+
+        [Test]
+        public void GetVelocity_EmptyChord()
+        {
+            var chord = new Chord();
+            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for empty chord on first get.");
+            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for empty chord on second get.");
+        }
+
+        [Test]
+        public void GetVelocity_ByNotes_OneNote()
+        {
+            var velocity = (SevenBitNumber)5;
+            var chord = new Chord(new Note(SevenBitNumber.MaxValue) { Velocity = velocity });
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetVelocity_ByNotes_MultipleNotes_SameVelocity()
+        {
+            var velocity = (SevenBitNumber)5;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { Velocity = velocity },
+                new Note(SevenBitNumber.MinValue) { Velocity = velocity });
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetVelocity_ByNotes_MultipleNotes_DifferentVelocities()
+        {
+            var velocity1 = (SevenBitNumber)5;
+            var velocity2 = (SevenBitNumber)3;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { Velocity = velocity1 },
+                new Note(SevenBitNumber.MinValue) { Velocity = velocity2 });
+            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for chord with notes with different velocities on first get.");
+            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for chord with notes with different velocities on second get.");
+        }
+
+        [Test]
+        public void GetVelocity_AfterSet_OneNote()
+        {
+            var velocity = (SevenBitNumber)5;
+            var chord = new Chord(new Note(SevenBitNumber.MaxValue));
+            chord.Velocity = velocity;
+
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetVelocity_AfterSet_MultipleNotes()
+        {
+            var velocity = (SevenBitNumber)5;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue),
+                new Note(SevenBitNumber.MinValue));
+            chord.Velocity = velocity;
+
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetVelocity_AfterSet_MultipleNotes_DifferentVelocities()
+        {
+            var velocity1 = (SevenBitNumber)5;
+            var velocity2 = (SevenBitNumber)3;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { Velocity = velocity1 },
+                new Note(SevenBitNumber.MinValue) { Velocity = velocity2 });
+
+            var velocity = (SevenBitNumber)7;
+            chord.Velocity = velocity;
+
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+        }
+
+        #endregion
+
+        #region OffVelocity
+
+        [Test]
+        public void GetOffVelocity_EmptyChord()
+        {
+            var chord = new Chord();
+            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for empty chord on first get.");
+            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for empty chord on second get.");
+        }
+
+        [Test]
+        public void GetOffVelocity_ByNotes_OneNote()
+        {
+            var offVelocity = (SevenBitNumber)5;
+            var chord = new Chord(new Note(SevenBitNumber.MaxValue) { OffVelocity = offVelocity });
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetOffVelocity_ByNotes_MultipleNotes_SameOffVelocity()
+        {
+            var offVelocity = (SevenBitNumber)5;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { OffVelocity = offVelocity },
+                new Note(SevenBitNumber.MinValue) { OffVelocity = offVelocity });
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetOffVelocity_ByNotes_MultipleNotes_DifferentOffVelocities()
+        {
+            var offVelocity1 = (SevenBitNumber)5;
+            var offVelocity2 = (SevenBitNumber)3;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { OffVelocity = offVelocity1 },
+                new Note(SevenBitNumber.MinValue) { OffVelocity = offVelocity2 });
+            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for chord with notes with different off-velocities on first get.");
+            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for chord with notes with different off-velocities on second get.");
+        }
+
+        [Test]
+        public void GetOffVelocity_AfterSet_OneNote()
+        {
+            var offVelocity = (SevenBitNumber)5;
+            var chord = new Chord(new Note(SevenBitNumber.MaxValue));
+            chord.OffVelocity = offVelocity;
+
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetOffVelocity_AfterSet_MultipleNotes()
+        {
+            var offVelocity = (SevenBitNumber)5;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue),
+                new Note(SevenBitNumber.MinValue));
+            chord.OffVelocity = offVelocity;
+
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+        }
+
+        [Test]
+        public void GetOffVelocity_AfterSet_MultipleNotes_DifferentOffVelocities()
+        {
+            var offVelocity1 = (SevenBitNumber)5;
+            var offVelocity2 = (SevenBitNumber)3;
+            var chord = new Chord(
+                new Note(SevenBitNumber.MaxValue) { OffVelocity = offVelocity1 },
+                new Note(SevenBitNumber.MinValue) { OffVelocity = offVelocity2 });
+
+            var offVelocity = (SevenBitNumber)7;
+            chord.OffVelocity = offVelocity;
+
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
         }
 
         #endregion
