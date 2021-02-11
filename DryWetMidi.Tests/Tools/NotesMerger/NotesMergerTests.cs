@@ -375,27 +375,30 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var actualNotes = new NotesMerger().Merge(inputNotes, tempoMap, settings);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),
-                                                    actualNotes.OrderBy(n => n.Time),
-                                                    "Merging detached notes failed.");
+            MidiAsserts.AreEqual(
+                expectedNotes.OrderBy(n => n.Time),
+                actualNotes.OrderBy(n => n.Time),
+                "Merging detached notes failed.");
 
             //
 
             var trackChunk = inputNotes.ToTrackChunk();
             trackChunk.MergeNotes(tempoMap, settings);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),
-                                                    trackChunk.GetNotes(),
-                                                    "Merging notes inside a track chunk failed.");
+            MidiAsserts.AreEqual(
+                expectedNotes.OrderBy(n => n.Time),
+                trackChunk.GetNotes(),
+                "Merging notes inside a track chunk failed.");
 
             //
 
             var midiFile = inputNotes.ToFile();
             midiFile.MergeNotes(settings);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedNotes.OrderBy(n => n.Time),
-                                                    midiFile.GetNotes(),
-                                                    "Merging notes inside a file failed.");
+            MidiAsserts.AreEqual(
+                expectedNotes.OrderBy(n => n.Time),
+                midiFile.GetNotes(),
+                "Merging notes inside a file failed.");
         }
 
         private IEnumerable<Note> CreateNotes(string[] timesAndLengths,

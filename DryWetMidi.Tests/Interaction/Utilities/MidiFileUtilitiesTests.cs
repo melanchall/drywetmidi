@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var midiFile = new MidiFile();
             midiFile.Resize(new MetricTimeSpan(1, 0, 0));
-            Assert.IsTrue(TimedEventEquality.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false));
+            MidiAsserts.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false, 0, "Events are invalid.");
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var midiFile = timedEvents.ToFile();
             midiFile.Resize((ITimeSpan)(MidiTimeSpan)15000);
 
-            Assert.IsTrue(TimedEventEquality.AreEqual(
+            MidiAsserts.AreEqual(
                 midiFile.GetTimedEvents(),
                 new[]
                 {
@@ -148,7 +148,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new TimedEvent(new TextEvent("Text"), 10000),
                     new TimedEvent(new TextEvent("Text 2"), 15000),
                 },
-                false));
+                false,
+                0,
+                "Events are invalid.");
         }
 
         [Test]
@@ -156,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var midiFile = new MidiFile();
             midiFile.Resize(2.0);
-            Assert.IsTrue(TimedEventEquality.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false));
+            MidiAsserts.AreEqual(midiFile.GetTimedEvents(), Enumerable.Empty<TimedEvent>(), false, 0, "Events are invalid.");
         }
 
         [Test]
@@ -174,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var midiFile = timedEvents.ToFile();
             midiFile.Resize(2.0);
 
-            Assert.IsTrue(TimedEventEquality.AreEqual(
+            MidiAsserts.AreEqual(
                 midiFile.GetTimedEvents(),
                 new[]
                 {
@@ -184,7 +186,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new TimedEvent(new TextEvent("Text"), 200),
                     new TimedEvent(new TextEvent("Text 2"), 300),
                 },
-                false));
+                false,
+                0,
+                "Events are invalid.");
         }
 
         #endregion

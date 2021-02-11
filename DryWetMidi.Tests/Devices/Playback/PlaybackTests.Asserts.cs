@@ -136,8 +136,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
 
-            Assert.IsTrue(NoteEquality.AreEqual(notesStarted, expectedNotesStarted), "Invalid notes started.");
-            Assert.IsTrue(NoteEquality.AreEqual(notesFinished, expectedNotesFinished), "Invalid notes finished.");
+            MidiAsserts.AreEqual(notesStarted, expectedNotesStarted, "Invalid notes started.");
+            MidiAsserts.AreEqual(notesFinished, expectedNotesFinished, "Invalid notes finished.");
         }
 
         private void CheckEventPlayedEvent(
@@ -264,8 +264,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             CompareSentReceivedEvents(sentEvents, receivedEvents, eventsWillBeSent.ToList());
 
-            Assert.IsTrue(NoteEquality.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i])), "Invalid notes started.");
-            Assert.IsTrue(NoteEquality.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i])), "Invalid notes finished.");
+            MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
+            MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
         }
 
         private void CheckTrackNotesWithoutOutputDevice(
@@ -307,8 +307,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 Assert.IsTrue(playbackStopped, "Playback is running after completed.");
             }
 
-            Assert.IsTrue(NoteEquality.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i])), "Invalid notes started.");
-            Assert.IsTrue(NoteEquality.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i])), "Invalid notes finished.");
+            MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
+            MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
         }
 
         private void CheckPlaybackEvents(

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -12,37 +10,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed class GetTimedEventsAndNotesUtilitiesTests
     {
-        #region Nested classes
-
-        private sealed class TimedObjectComparer : IComparer
-        {
-            #region IComparer
-
-            public int Compare(object x, object y)
-            {
-                var timedObject1 = x as ITimedObject;
-                var timedObject2 = y as ITimedObject;
-
-                if (ReferenceEquals(timedObject1, timedObject2))
-                    return 1;
-
-                if (ReferenceEquals(timedObject1, null))
-                    return -1;
-
-                if (ReferenceEquals(timedObject2, null))
-                    return 1;
-
-                var timesDifference = timedObject1.Time - timedObject2.Time;
-                if (timesDifference != 0)
-                    return Math.Sign(timesDifference);
-
-                return TimedObjectEquality.AreEqual(timedObject1, timedObject2, false) ? 0 : -1;
-            }
-
-            #endregion
-        }
-
-        #endregion
 
         #region Test methods
 
@@ -67,7 +34,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var actualObjects = timedEvents.GetTimedEventsAndNotes().ToList();
             var expectedObjects = Enumerable.Empty<TimedEvent>();
 
-            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+            MidiAsserts.AreEqual(expectedObjects, actualObjects, true, 0, "Objects are invalid.");
         }
 
         [Test]
@@ -111,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TimedEvent(new CuePointEvent("Point"), 80)
             };
 
-            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+            MidiAsserts.AreEqual(expectedObjects, actualObjects, false, 0, "Objects are invalid.");
         }
 
         [Test]
@@ -156,7 +123,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TimedEvent(new NoteOffEvent((SevenBitNumber)78, (SevenBitNumber)0) { Channel = (FourBitNumber)11 }, 100)
             };
 
-            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+            MidiAsserts.AreEqual(expectedObjects, actualObjects, false, 0, "Objects are invalid.");
         }
 
         [Test]
@@ -183,7 +150,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note((SevenBitNumber)2, 10, 20) { Velocity = (SevenBitNumber)0 },
             };
 
-            CollectionAssert.AreEqual(expectedObjects, actualObjects, new TimedObjectComparer());
+            MidiAsserts.AreEqual(expectedObjects, actualObjects, true, 0, "Objects are invalid.");
         }
 
         #endregion

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 
@@ -7,25 +6,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     public sealed class ChordMethods : LengthedObjectMethods<Chord>
     {
-        #region Nested classes
-
-        private sealed class ChordComparer : IComparer
-        {
-            #region IComparer
-
-            public int Compare(object x, object y)
-            {
-                var xChord = (Chord)x;
-                var yChord = (Chord)y;
-
-                return ChordEquality.AreEqual(xChord, yChord) ? 0 : -1;
-            }
-
-            #endregion
-        }
-
-        #endregion
-
         #region Fields
 
         private readonly Random _random = new Random();
@@ -33,8 +13,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
         #endregion
 
         #region Overrides
-
-        protected override IComparer Comparer { get; } = new ChordComparer();
 
         public override void SetTime(Chord obj, long time)
         {

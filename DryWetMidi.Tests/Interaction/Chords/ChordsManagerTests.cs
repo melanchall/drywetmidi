@@ -10,12 +10,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed class ChordsManagerTests
     {
-        #region Constants
-
-        private static readonly ChordMethods ChordMethods = new ChordMethods();
-
-        #endregion
-
         #region Test methods
 
         [Test]
@@ -40,7 +34,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var notes = Enumerable.Empty<Note>();
             var chords = notes.GetChords();
-            ChordMethods.AssertCollectionsAreEqual(Enumerable.Empty<Chord>(), chords);
+            MidiAsserts.AreEqual(Enumerable.Empty<Chord>(), chords, "Chords are invalid.");
         }
 
         [Test]
@@ -54,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note((SevenBitNumber)30, 100, 10)
             };
             var chords = notes.GetChords();
-            ChordMethods.AssertCollectionsAreEqual(
+            MidiAsserts.AreEqual(
                 new[]
                 {
                     new Chord(
@@ -64,7 +58,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         new Note((SevenBitNumber)100, 100, 10),
                         new Note((SevenBitNumber)30, 100, 10))
                 },
-                chords);
+                chords,
+                "Chords are invalid.");
         }
 
         [Test]
@@ -80,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note((SevenBitNumber)6, 100, 1000)
             };
             var chords = notes.GetChords();
-            ChordMethods.AssertCollectionsAreEqual(
+            MidiAsserts.AreEqual(
                 new[]
                 {
                     new Chord(
@@ -93,7 +88,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         new Note((SevenBitNumber)5, 100, 1000),
                         new Note((SevenBitNumber)6, 100, 1000))
                 },
-                chords);
+                chords,
+                "Chords are invalid.");
         }
 
         #endregion

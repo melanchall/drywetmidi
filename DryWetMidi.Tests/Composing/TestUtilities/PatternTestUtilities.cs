@@ -50,17 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             .ToArray();
 
             var actualNotes = midiFile.GetNotes().ToArray();
-            Assert.AreEqual(expectedNotes.Length, actualNotes.Length, "Notes count is invalid.");
-
-            var j = 0;
-            foreach (var expectedActual in expectedNotes.Zip(actualNotes, (e, a) => new { Expected = e, Actual = a }))
-            {
-                var expectedNote = expectedActual.Expected;
-                var actualNote = expectedActual.Actual;
-
-                Assert.IsTrue(NoteEquality.AreEqual(expectedNote, actualNote), $"Note {j} is invalid. Expected: {expectedNote}; actual: {actualNote}.");
-                j++;
-            }
+            MidiAsserts.AreEqual(expectedNotes, actualNotes, "Notes are invalid.");
 
             return midiFile;
         }
@@ -89,11 +79,12 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var actualTimedEvents = midiFile.GetTimedEvents();
 
-            foreach (var expectedEvent in expectedTimedEvents)
-            {
-                Assert.IsTrue(actualTimedEvents.Any(actual => TimedEventEquality.AreEqual(expectedEvent, actual, false)),
-                              $"There are no event: {expectedEvent}");
-            }
+            MidiAsserts.AreEqual(
+                expectedTimedEvents,
+                actualTimedEvents.Where(e => expectedTimedEvents.Any(ee => ee.Event.EventType == e.Event.EventType)),
+                false,
+                0,
+                "Events are invalid.");
         }
 
         public static void TestTimedEventsWithExactOrder(
@@ -119,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var actualTimedEvents = midiFile.GetTimedEvents();
 
-            Assert.IsTrue(TimedEventEquality.AreEqual(expectedTimedEvents, actualTimedEvents, false), "Events have invalid order.");
+            MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Events have invalid order.");
         }
 
         #endregion

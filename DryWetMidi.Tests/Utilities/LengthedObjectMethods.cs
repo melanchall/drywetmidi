@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Melanchall.DryWetMidi.Interaction;
-using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
@@ -35,11 +34,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             }
 
             return result;
-        }
-
-        public void AssertCollectionsAreEqual(IEnumerable<TObject> expected, IEnumerable<TObject> actual, string message = null)
-        {
-            CollectionAssert.AreEqual(expected, actual, Comparer, message);
         }
 
         public abstract TObject Create(long time, long length);

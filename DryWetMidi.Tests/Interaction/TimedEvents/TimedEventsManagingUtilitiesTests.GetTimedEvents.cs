@@ -30,9 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             };
 
             var timedEvents = eventsCollection.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -48,8 +46,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             };
 
             var timedEvents = eventsCollection.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -71,9 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = trackChunk.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -89,8 +88,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = trackChunk.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -108,9 +110,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(GetNonMaterializedSingleMidiEventsCollection(deltaTime));
             var timedEvents = trackChunk.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -121,8 +121,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(GetNonMaterializedMultipleMidiEventsCollection(deltaTime1, deltaTime2));
             var timedEvents = trackChunk.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -151,9 +154,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new[] { trackChunk }.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -169,8 +170,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new[] { trackChunk }.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -192,9 +196,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new[] { trackChunk, new TrackChunk() }.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -210,8 +212,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new[] { trackChunk, new TrackChunk() }.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -905,9 +910,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetTimedEvents_TrackChunksCollection_NonMaterialized_OneTrackChunk_OneEvent(long deltaTime)
         {
             var timedEvents = GetNonMaterializedSingleMidiEventSingleTrackChunksCollection(deltaTime).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -917,8 +920,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetTimedEvents_TrackChunksCollection_NonMaterialized_OneTrackChunk_MultipleEvents(long deltaTime1, long deltaTime2)
         {
             var timedEvents = GetNonMaterializedMultipleMidiEventsSingleTrackChunksCollection(deltaTime1, deltaTime2).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -935,9 +941,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_Empty(long deltaTime)
         {
             var timedEvents = GetNonMaterializedMultipleTrackChunksCollection_FirstWithOneEvent(deltaTime).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -947,8 +951,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_Empty(long deltaTime1, long deltaTime2)
         {
             var timedEvents = GetNonMaterializedMultipleTrackChunksCollection_FirstWithMultipleEvents(deltaTime1, deltaTime2).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -1647,9 +1654,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new MidiFile(trackChunk).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -1665,8 +1670,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new MidiFile(trackChunk).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -1688,9 +1696,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new MidiFile(trackChunk, new TrackChunk()).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         [TestCase(0, 0)]
@@ -1706,8 +1712,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new MidiFile(trackChunk, new TrackChunk()).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) }, timedEvents, false),
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
+                timedEvents,
+                false,
+                0,
                 "Timed events are invalid.");
         }
 
@@ -2401,9 +2410,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new[] { aTrackChunk, bTrackChunk }.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_MidiFile_MultipleTrackChunks_MultipleEvents_MultipleEvents(
@@ -2422,9 +2429,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new MidiFile(aTrackChunk, bTrackChunk).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
@@ -2445,9 +2450,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
 
             var timedEvents = GetTrackChunks().GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
@@ -2465,9 +2468,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new[] { aTrackChunk, bTrackChunk }.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_MidiFile_MultipleTrackChunks_MultipleEvents_OneEvent(
@@ -2485,9 +2486,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new MidiFile(aTrackChunk, bTrackChunk).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
@@ -2507,9 +2506,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
 
             var timedEvents = GetTrackChunks().GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
@@ -2527,9 +2524,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new[] { aTrackChunk, bTrackChunk }.GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_MidiFile_MultipleTrackChunks_OneEvent_MultipleEvents(
@@ -2547,9 +2542,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             var timedEvents = new MidiFile(aTrackChunk, bTrackChunk).GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
@@ -2569,9 +2562,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
 
             var timedEvents = GetTrackChunks().GetTimedEvents();
-            Assert.IsTrue(
-                TimedEventEquality.AreEqual(expectedTimedEvents, timedEvents, false),
-                "Timed events are invalid.");
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
         }
 
         private IEnumerable<MidiEvent> GetNonMaterializedEmptyMidiEventsCollection()

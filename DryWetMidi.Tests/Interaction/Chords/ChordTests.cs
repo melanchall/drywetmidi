@@ -274,8 +274,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var chord = GetChord_NoNotes();
 
-            Assert.IsTrue(ChordEquality.AreEqual(chord, chord.Clone()),
-                          "Clone of a chord doesn't equal to the original one.");
+            MidiAsserts.AreEqual(chord, chord.Clone(), "Clone of a chord doesn't equal to the original one.");
         }
 
         [Test]
@@ -284,8 +283,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var chord = GetChord_NonzeroTime();
 
-            Assert.IsTrue(ChordEquality.AreEqual(chord, chord.Clone()),
-                          "Clone of a chord doesn't equal to the original one.");
+            MidiAsserts.AreEqual(chord, chord.Clone(), "Clone of a chord doesn't equal to the original one.");
         }
 
         #endregion
@@ -307,8 +305,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotSame(parts.LeftPart,
                               chord,
                               "Left part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.LeftPart),
-                          "Left part doesn't equal to the original chord.");
+            MidiAsserts.AreEqual(chordCreator(), parts.LeftPart, "Left part doesn't equal to the original chord.");
         }
 
         [Test]
@@ -326,8 +323,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotSame(parts.RightPart,
                               chord,
                               "Right part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.RightPart),
-                          "Right part doesn't equal to the original chord.");
+            MidiAsserts.AreEqual(chordCreator(), parts.RightPart, "Right part doesn't equal to the original chord.");
         }
 
         [Test]
@@ -345,8 +341,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotSame(parts.RightPart,
                               chord,
                               "Right part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.RightPart),
-                          "Right part doesn't equal to the original chord.");
+            MidiAsserts.AreEqual(chordCreator(), parts.RightPart, "Right part doesn't equal to the original chord.");
         }
 
         [Test]
@@ -364,8 +359,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotSame(parts.LeftPart,
                               chord,
                               "Left part refers to the same object as the original chord.");
-            Assert.IsTrue(ChordEquality.AreEqual(chordCreator(), parts.LeftPart),
-                          "Left part doesn't equal to the original chord.");
+            MidiAsserts.AreEqual(chordCreator(), parts.LeftPart, "Left part doesn't equal to the original chord.");
         }
 
         [Test]
@@ -383,10 +377,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var expectedRightChord = new Chord(new Note((SevenBitNumber)100, 150, 150),
                                                new Note((SevenBitNumber)110, 280, 150));
 
-            Assert.IsTrue(ChordEquality.AreEqual(expectedLeftChord, parts.LeftPart),
-                          "Left part is invalid.");
-            Assert.IsTrue(ChordEquality.AreEqual(expectedRightChord, parts.RightPart),
-                          "Right part is invalid.");
+            MidiAsserts.AreEqual(expectedLeftChord, parts.LeftPart, "Left part is invalid.");
+            MidiAsserts.AreEqual(expectedRightChord, parts.RightPart, "Right part is invalid.");
         }
 
         [Test]
@@ -403,10 +395,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var expectedRightChord = new Chord(new Note((SevenBitNumber)100, 180, 120),
                                                new Note((SevenBitNumber)110, 300, 130));
 
-            Assert.IsTrue(ChordEquality.AreEqual(expectedLeftChord, parts.LeftPart),
-                          "Left part is invalid.");
-            Assert.IsTrue(ChordEquality.AreEqual(expectedRightChord, parts.RightPart),
-                          "Right part is invalid.");
+            MidiAsserts.AreEqual(expectedLeftChord, parts.LeftPart, "Left part is invalid.");
+            MidiAsserts.AreEqual(expectedRightChord, parts.RightPart, "Right part is invalid.");
         }
 
         #endregion

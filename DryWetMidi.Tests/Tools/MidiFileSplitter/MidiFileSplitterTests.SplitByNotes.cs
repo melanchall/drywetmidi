@@ -58,19 +58,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var notes = midiFile.GetNotes().ToList();
 
-            Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[0].GetNotes(), new[] { notes[0] }));
-            Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[1].GetNotes(), new[] { notes[1] }));
+            MidiAsserts.AreEqual(new[] { notes[0] }, filesByNotes[0].GetNotes(), "Notes of first file are invalid.");
+            MidiAsserts.AreEqual(new[] { notes[1] }, filesByNotes[1].GetNotes(), "Notes of second file are invalid.");
 
             var timedEvents = midiFile.GetTimedEvents().Where(e => !(e.Event is NoteEvent)).ToList();
 
-            Assert.IsTrue(TimedEventEquality.AreEqual(filesByNotes[0].GetTimedEvents()
-                                                                     .Where(e => !(e.Event is NoteEvent)),
-                                                      timedEvents,
-                                                      false));
-            Assert.IsTrue(TimedEventEquality.AreEqual(filesByNotes[1].GetTimedEvents()
-                                                                     .Where(e => !(e.Event is NoteEvent)),
-                                                      timedEvents,
-                                                      false));
+            MidiAsserts.AreEqual(
+                filesByNotes[0].GetTimedEvents().Where(e => !(e.Event is NoteEvent)),
+                timedEvents,
+                false,
+                0,
+                "Events 0 are invalid.");
+            MidiAsserts.AreEqual(
+                filesByNotes[1].GetTimedEvents().Where(e => !(e.Event is NoteEvent)),
+                timedEvents,
+                false,
+                0,
+                "Events 1 are invalid.");
         }
 
         [Test]
@@ -107,10 +111,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var filesByNotes = midiFile.SplitByNotes().ToList();
             Assert.AreEqual(4, filesByNotes.Count, "New files count is invalid.");
 
-            Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[0].GetNotes(), new[] { notes[0] }));
-            Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[1].GetNotes(), new[] { notes[1] }));
-            Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[2].GetNotes(), new[] { notes[2] }));
-            Assert.IsTrue(NoteEquality.AreEqual(filesByNotes[3].GetNotes(), new[] { notes[3] }));
+            MidiAsserts.AreEqual(new[] { notes[0] }, filesByNotes[0].GetNotes(), "Notes 0 are invalid.");
+            MidiAsserts.AreEqual(new[] { notes[1] }, filesByNotes[1].GetNotes(), "Notes 1 are invalid.");
+            MidiAsserts.AreEqual(new[] { notes[2] }, filesByNotes[2].GetNotes(), "Notes 2 are invalid.");
+            MidiAsserts.AreEqual(new[] { notes[3] }, filesByNotes[3].GetNotes(), "Notes 3 are invalid.");
         }
 
         [Test]

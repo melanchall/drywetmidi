@@ -16,8 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void Clone()
         {
             var timedEvent = new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)50));
-            Assert.IsTrue(TimedEventEquality.AreEqual(timedEvent, timedEvent.Clone(), true),
-                          "Clone of a timed event doesn't equal to the original one.");
+            MidiAsserts.AreEqual(timedEvent, timedEvent.Clone(), true, 0, "Clone of a timed event doesn't equal to the original one.");
         }
 
         [Test]

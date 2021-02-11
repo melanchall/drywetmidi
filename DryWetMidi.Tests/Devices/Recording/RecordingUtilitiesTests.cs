@@ -70,9 +70,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                             new TimedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(6.1), tempoMap))
                         };
 
-                        Assert.IsTrue(
-                            TimedEventEquality.AreEqual(expectedEvents, timedEvents, false, 10),
-                            "Timed events saved incorrectly.");
+                        MidiAsserts.AreEqual(expectedEvents, timedEvents, false, 10, "Timed events saved incorrectly.");
                     }
                 }
             }

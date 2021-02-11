@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -11,42 +9,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed class GetNotesAndRestsUtilitiesTests
     {
-        #region Nested classes
-
-        private sealed class LengthedObjectComparer : IComparer
-        {
-            #region IComparer
-
-            public int Compare(object x, object y)
-            {
-                var lengthedObject1 = x as ILengthedObject;
-                var lengthedObject2 = y as ILengthedObject;
-
-                if (ReferenceEquals(lengthedObject1, lengthedObject2))
-                    return 1;
-
-                if (ReferenceEquals(lengthedObject1, null))
-                    return -1;
-
-                if (ReferenceEquals(lengthedObject2, null))
-                    return 1;
-
-                var timesDifference = lengthedObject1.Time - lengthedObject2.Time;
-                if (timesDifference != 0)
-                    return Math.Sign(timesDifference);
-
-                var lengthsDifference = lengthedObject1.Length - lengthedObject2.Length;
-                if (lengthsDifference != 0)
-                    return Math.Sign(lengthsDifference);
-
-                return TimedObjectEquality.AreEqual(lengthedObject1, lengthedObject2, false) ? 0 : -1;
-            }
-
-            #endregion
-        }
-
-        #endregion
-
         #region Test methods
 
         [OneTimeSetUp]
@@ -299,10 +261,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var actualObjects = inputNotes.GetNotesAndRests(restSeparationPolicy);
 
-            CollectionAssert.AreEqual(
-                expectedObjects,
-                actualObjects,
-                new LengthedObjectComparer());
+            MidiAsserts.AreEqual(expectedObjects, actualObjects, true, 0, "Objects are invalid");
         }
 
         #endregion

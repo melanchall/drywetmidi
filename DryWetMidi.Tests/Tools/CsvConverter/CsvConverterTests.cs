@@ -195,8 +195,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
-            Assert.IsTrue(TimedEventEquality.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false),
-                          "Invalid events.");
+            MidiAsserts.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false, 0, "Invalid events.");
         }
 
         [TestCase(MidiFileCsvLayout.DryWetMidi, true, new[]
@@ -290,8 +289,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
             CollectionAssert.AreEqual(midiFile.GetTempoMap().GetTempoChanges(), expectedTempoMap.GetTempoChanges(), "Invalid tempo map.");
             Assert.AreEqual(new TicksPerQuarterNoteTimeDivision(500), midiFile.TimeDivision, "Invalid time division.");
-            Assert.IsTrue(TimedEventEquality.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false),
-                          "Invalid events.");
+            MidiAsserts.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false, 0, "Invalid events.");
         }
 
         [TestCase(MidiFileCsvLayout.DryWetMidi, new[]
@@ -323,8 +321,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TimedEvent(new TextEvent($"Test{Environment.NewLine} text with new line and{Environment.NewLine} new \"line again"), 200),
             };
 
-            Assert.IsTrue(TimedEventEquality.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false),
-                          "Invalid events.");
+            MidiAsserts.AreEqual(expectedEvents, midiFile.GetTimedEvents(), false, 0, "Invalid events.");
         }
 
         [TestCase(NoteNumberFormat.NoteNumber, new[]
@@ -361,8 +358,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
-            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.BuildObjects(ObjectType.TimedEvent | ObjectType.Note), false),
-                          "Invalid objects.");
+            MidiAsserts.AreEqual(
+                expectedObjects,
+                midiFile.BuildObjects(ObjectType.TimedEvent | ObjectType.Note),
+                false,
+                0,
+                "Invalid objects.");
         }
 
         [TestCase(NoteNumberFormat.NoteNumber, new[]
@@ -406,8 +407,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
-            Assert.IsTrue(TimedObjectEquality.AreEqual(expectedObjects, midiFile.BuildObjects(ObjectType.TimedEvent | ObjectType.Note), false),
-                          "Invalid objects.");
+            MidiAsserts.AreEqual(
+                expectedObjects,
+                midiFile.BuildObjects(ObjectType.TimedEvent | ObjectType.Note),
+                false,
+                0,
+                "Invalid objects.");
         }
 
         #endregion
@@ -969,7 +974,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             try
             {
                 var actualNotes = new CsvConverter().ConvertCsvToNotes(filePath, tempoMap, settings).ToList();
-                _noteMethods.AssertCollectionsAreEqual(expectedNotes.Select(n => n.GetNote(tempoMap)), actualNotes);
+                MidiAsserts.AreEqual(expectedNotes.Select(n => n.GetNote(tempoMap)), actualNotes, "Notes are invalid.");
 
                 ConvertNotesToFromCsv(actualNotes, tempoMap, filePath, settings);
             }

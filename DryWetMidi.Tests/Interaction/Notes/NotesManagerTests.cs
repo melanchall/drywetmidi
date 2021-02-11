@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             using (var notesManager = trackChunk.ManageNotes())
             {
                 var notes = notesManager.Notes;
-                Assert.IsTrue(TimedObjectEquality.AreEqual(expectedNotes, notes, true));
+                MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
             }
         }
 

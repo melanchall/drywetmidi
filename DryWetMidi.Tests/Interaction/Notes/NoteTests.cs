@@ -25,8 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 OffVelocity = (SevenBitNumber)54
             };
 
-            Assert.IsTrue(NoteEquality.AreEqual(note, note.Clone()),
-                          "Clone of a note doesn't equal to the original one.");
+            MidiAsserts.AreEqual(note, note.Clone(), "Clone of a note doesn't equal to the original one.");
         }
 
         #endregion
@@ -48,8 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotSame(parts.RightPart,
                               note,
                               "Right part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.RightPart),
-                          "Right part doesn't equal to the original note.");
+            MidiAsserts.AreEqual(noteCreator(), parts.RightPart, "Right part doesn't equal to the original note.");
         }
 
         [Test]
@@ -67,8 +65,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotSame(parts.RightPart,
                               note,
                               "Right part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.RightPart),
-                          "Right part doesn't equal to the original note.");
+            MidiAsserts.AreEqual(noteCreator(), parts.RightPart, "Right part doesn't equal to the original note.");
         }
 
         [Test]
@@ -86,8 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.AreNotSame(parts.LeftPart,
                               note,
                               "Left part refers to the same object as the original note.");
-            Assert.IsTrue(NoteEquality.AreEqual(noteCreator(), parts.LeftPart),
-                          "Left part doesn't equal to the original note.");
+            MidiAsserts.AreEqual(noteCreator(), parts.LeftPart, "Left part doesn't equal to the original note.");
         }
 
         [Test]
@@ -98,10 +94,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 120;
 
             var parts = note.Split(time);
-            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 20, 100), parts.LeftPart),
-                          "Left part is invalid.");
-            Assert.IsTrue(NoteEquality.AreEqual(new Note((SevenBitNumber)100, 180, 120), parts.RightPart),
-                          "Right part is invalid.");
+            MidiAsserts.AreEqual(new Note((SevenBitNumber)100, 20, 100), parts.LeftPart, "Left part is invalid.");
+            MidiAsserts.AreEqual(new Note((SevenBitNumber)100, 180, 120), parts.RightPart, "Right part is invalid.");
         }
 
         #endregion

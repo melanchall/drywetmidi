@@ -53,8 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var sortedEvents = events.ToList();
 
-                var eventsSortedProperly = TimedEventEquality.AreEqual(expectedTimedEvents, sortedEvents, false);
-                Assert.IsFalse(eventsSortedProperly, "Events have valid order without custom same-time comparison.");
+                MidiAsserts.AreEqual(originalTimedEvents, sortedEvents, false, 0, "Events have invalid order without custom same-time comparison.");
             }
 
             //
@@ -77,8 +76,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var sortedEvents = events.ToList();
 
-                var eventsSortedProperly = TimedEventEquality.AreEqual(expectedTimedEvents, sortedEvents, false);
-                Assert.IsTrue(eventsSortedProperly, "Events have invalid order with custom same-time comparison.");
+                MidiAsserts.AreEqual(expectedTimedEvents, sortedEvents, false, 0, "Events have invalid order with custom same-time comparison.");
             }
         }
 

@@ -18,10 +18,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             IEnumerable<TimedEvent> expectedTimedEvents,
             string message)
         {
-            Assert.IsTrue(TimedEventEquality.AreEqual(
+            MidiAsserts.AreEqual(
                 actualTimedEvents,
                 expectedTimedEvents,
-                false),
+                false,
+                0,
                 message);
         }
 

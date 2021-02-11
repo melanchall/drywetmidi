@@ -83,7 +83,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = Enumerable.Empty<TObject>();
             var actualObjects = Splitter.SplitByStep(inputObjects, step, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -97,7 +102,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = new[] { default(TObject), default(TObject) };
             var actualObjects = Splitter.SplitByStep(inputObjects, step, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -123,7 +133,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitByStep(inputObjects, (MidiTimeSpan)step, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -137,7 +152,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitByStep(inputObjects, (MidiTimeSpan)step, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -157,7 +177,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                             "Parts count is invalid.");
             Assert.IsTrue(actualObjects.All(o => o.Length == step),
                           "Length of some objects doesn't equal to the step.");
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -186,7 +211,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                                            .Last()
                                                            .Length < step),
                           "Last object's length is not less than the step.");
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         #endregion
@@ -204,7 +234,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = Enumerable.Empty<TObject>();
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -218,7 +253,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = new[] { default(TObject), default(TObject) };
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -232,7 +272,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -246,7 +291,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.SelectMany(o => Enumerable.Range(0, partsNumber).Select(i => ObjectMethods.Clone(o)));
             var actualObjects = Splitter.SplitByPartsNumber(inputObjects, partsNumber, TimeSpanType.Midi, tempoMap).ToArray();
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -716,7 +766,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = Enumerable.Empty<TObject>();
             var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [TestCase(LengthedObjectTarget.Start)]
@@ -730,7 +785,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = new[] { default(TObject), default(TObject) };
             var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [TestCase(LengthedObjectTarget.Start)]
@@ -744,7 +804,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [TestCase(LengthedObjectTarget.Start)]
@@ -758,7 +823,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -771,7 +841,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + distance }));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, LengthedObjectTarget.Start, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -784,7 +859,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + o.Length - distance }));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, LengthedObjectTarget.End, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [TestCase(LengthedObjectTarget.Start)]
@@ -798,7 +878,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = Enumerable.Empty<TObject>();
             var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [TestCase(LengthedObjectTarget.Start)]
@@ -812,7 +897,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = new[] { default(TObject), default(TObject) };
             var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [TestCase(LengthedObjectTarget.Start)]
@@ -826,7 +916,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [TestCase(LengthedObjectTarget.Start)]
@@ -840,7 +935,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => ObjectMethods.Clone(o));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, from, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -853,7 +953,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + 100 }));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, LengthedObjectTarget.Start, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         [Test]
@@ -866,7 +971,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + o.Length - 100 }));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, LengthedObjectTarget.End, tempoMap);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         #endregion
@@ -898,7 +1008,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var actualObjects = Splitter.SplitByGrid(inputObjects, new SteppedGrid(gridStart, gridSteps), tempoMap).ToArray();
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         private void SplitByGrid_OneStep_SinglePart(ITimeSpan gridStart, ITimeSpan step, TempoMap tempoMap)
@@ -932,7 +1047,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var expectedObjects = inputObjects.Select(o => o == null ? default(TObject) : ObjectMethods.Clone(o)).ToArray();
             var actualObjects = Splitter.SplitByGrid(inputObjects, new SteppedGrid(gridStart, gridSteps), tempoMap).ToArray();
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
 
             return new SplitData(inputObjects, expectedObjects, actualObjects);
         }
@@ -962,7 +1082,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.AreEqual(inputObjects.Length * partsNumber,
                             actualObjects.Length,
                             "Parts count is invalid.");
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
 
             return new SplitData(inputObjects, expectedObjects, actualObjects);
         }

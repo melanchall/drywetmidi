@@ -1268,7 +1268,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             quantizer.Quantize(actualObjects, grid, tempoMap, settings);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         private void Quantize_End(IEnumerable<TObject> actualObjects,
@@ -1326,7 +1331,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             quantizer.Quantize(actualObjects, grid, tempoMap, settings);
 
-            ObjectMethods.AssertCollectionsAreEqual(expectedObjects, actualObjects);
+            MidiAsserts.AreEqual(
+                expectedObjects.OfType<ITimedObject>(),
+                actualObjects.OfType<ITimedObject>(),
+                true,
+                0,
+                "Objects are invalid.");
         }
 
         private IEnumerable<TimeAndLength> GetExpectedTimesAndLengths(IEnumerable<TObject> actualObjects, IEnumerable<ITimeSpan> expectedTimes)
