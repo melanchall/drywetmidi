@@ -2498,6 +2498,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -2512,6 +2515,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var expectedEventsCollection = new EventsCollection();
                 expectedEventsCollection.AddRange(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                Assert.IsTrue(
+                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
 
             CollectionAssert.AreEqual(Enumerable.Range(0, midiEvents.Count), totalIndices, "Invalid total indices.");
@@ -2539,6 +2545,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -2553,6 +2562,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var expectedEventsCollection = new EventsCollection();
                 expectedEventsCollection.AddRange(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                Assert.IsTrue(
+                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 
@@ -2573,6 +2585,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -2587,6 +2602,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var expectedEventsCollection = new EventsCollection();
                 expectedEventsCollection.AddRange(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                Assert.IsTrue(
+                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 
@@ -2636,6 +2654,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreFilesEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
+                Assert.IsTrue(
+                    midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -2645,6 +2666,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
 
             CollectionAssert.AreEqual(Enumerable.Range(0, midiEvents.Sum(e => e.Count)), totalIndices, "Invalid total indices.");
@@ -2675,6 +2699,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreFilesEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
+                Assert.IsTrue(
+                    midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -2684,6 +2711,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 
@@ -2705,6 +2735,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreFilesEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
+                Assert.IsTrue(
+                    midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -2714,6 +2747,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 

@@ -107,10 +107,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_EventsCollection_WithoutIndices_WithPredicate(
                 wrapToTrackChunk,
-                midiEvents: Enumerable.Range(0, 50000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray(),
+                midiEvents: Enumerable.Range(0, 5000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray(),
                 match: e => e.Event is NoteOnEvent,
-                expectedMidiEvents: Enumerable.Range(0, 50000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray(),
-                expectedRemovedCount: 50000);
+                expectedMidiEvents: Enumerable.Range(0, 5000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray(),
+                expectedRemovedCount: 5000);
         }
 
         [Test]
@@ -118,10 +118,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_EventsCollection_WithoutIndices_WithPredicate(
                 wrapToTrackChunk,
-                midiEvents: Enumerable.Range(0, 100000).Select(i => new NoteOnEvent()).ToArray(),
+                midiEvents: Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray(),
                 match: e => e.Event is NoteOnEvent,
                 expectedMidiEvents: new MidiEvent[0],
-                expectedRemovedCount: 100000);
+                expectedRemovedCount: 10000);
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_EventsCollection_WithoutIndices_WithoutPredicate(
                 wrapToTrackChunk,
-                midiEvents: Enumerable.Range(0, 100000).Select(i => new NoteOnEvent()).ToArray());
+                midiEvents: Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray());
         }
 
         [Test]
@@ -249,10 +249,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_EventsCollection_WithIndices_WithPredicate(
                 wrapToTrackChunk,
-                midiEvents: Enumerable.Range(0, 50000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray(),
+                midiEvents: Enumerable.Range(0, 5000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray(),
                 match: e => e.Event is NoteOnEvent,
-                expectedMidiEvents: Enumerable.Range(0, 50000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray(),
-                expectedRemovedCount: 50000);
+                expectedMidiEvents: Enumerable.Range(0, 5000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray(),
+                expectedRemovedCount: 5000);
         }
 
         [Test]
@@ -260,10 +260,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_EventsCollection_WithIndices_WithPredicate(
                 wrapToTrackChunk,
-                midiEvents: Enumerable.Range(0, 100000).Select(i => new NoteOnEvent()).ToArray(),
+                midiEvents: Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray(),
                 match: e => e.Event is NoteOnEvent,
                 expectedMidiEvents: new MidiEvent[0],
-                expectedRemovedCount: 100000);
+                expectedRemovedCount: 10000);
         }
 
         [Test]
@@ -483,11 +483,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_TrackChunks_WithIndices_WithPredicate(
                 wrapToFile,
-                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 50000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray()).ToArray(),
+                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 5000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray()).ToArray(),
                 match: e => e.Event is NoteOnEvent,
-                expectedMidiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 50000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray()).ToArray(),
-                expectedRemovedCount: 500000,
-                expectedTotalChunkIndices: Enumerable.Range(0, 50000).SelectMany(i => Enumerable.Range(0, 10).SelectMany(j => new[] { j, j })).ToArray());
+                expectedMidiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 5000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray()).ToArray(),
+                expectedRemovedCount: 50000,
+                expectedTotalChunkIndices: Enumerable.Range(0, 5000).SelectMany(i => Enumerable.Range(0, 10).SelectMany(j => new[] { j, j })).ToArray());
         }
 
         [Test]
@@ -495,11 +495,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_TrackChunks_WithIndices_WithPredicate(
                 wrapToFile,
-                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 100000).Select(i => new NoteOnEvent()).ToArray()).ToArray(),
+                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray()).ToArray(),
                 match: e => e.Event is NoteOnEvent,
                 expectedMidiEvents: Enumerable.Range(0, 10).Select(i => new MidiEvent[0]).ToArray(),
-                expectedRemovedCount: 1000000,
-                expectedTotalChunkIndices: Enumerable.Range(0, 10).SelectMany(i => Enumerable.Range(0, 100000).Select(j => i)).ToArray());
+                expectedRemovedCount: 100000,
+                expectedTotalChunkIndices: Enumerable.Range(0, 10).SelectMany(i => Enumerable.Range(0, 10000).Select(j => i)).ToArray());
         }
 
         [Test]
@@ -706,10 +706,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_TrackChunks_WithoutIndices_WithPredicate(
                 wrapToFile,
-                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 50000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray()).ToArray(),
+                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 5000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray()).ToArray(),
                 match: e => e.Event is NoteOnEvent,
-                expectedMidiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 50000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray()).ToArray(),
-                expectedRemovedCount: 500000);
+                expectedMidiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 5000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray()).ToArray(),
+                expectedRemovedCount: 50000);
         }
 
         [Test]
@@ -717,10 +717,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_TrackChunks_WithoutIndices_WithPredicate(
                 wrapToFile,
-                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 100000).Select(i => new NoteOnEvent()).ToArray()).ToArray(),
+                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray()).ToArray(),
                 match: e => e.Event is NoteOnEvent,
                 expectedMidiEvents: Enumerable.Range(0, 10).Select(i => new MidiEvent[0]).ToArray(),
-                expectedRemovedCount: 1000000);
+                expectedRemovedCount: 100000);
         }
 
         [Test]
@@ -796,7 +796,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             RemoveTimedEvents_TrackChunks_WithoutIndices_WithoutPredicate(
                 wrapToFile,
-                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 100000).Select(i => new NoteOnEvent()).ToArray()).ToArray());
+                midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray()).ToArray());
         }
 
         #endregion
@@ -830,6 +830,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -844,6 +847,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var expectedEventsCollection = new EventsCollection();
                 expectedEventsCollection.AddRange(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                Assert.IsTrue(
+                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
 
             CollectionAssert.AreEqual(Enumerable.Range(0, midiEvents.Count), totalIndices, "Invalid total indices.");
@@ -867,6 +873,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -881,6 +890,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var expectedEventsCollection = new EventsCollection();
                 expectedEventsCollection.AddRange(expectedMidiEvents);
                 MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                Assert.IsTrue(
+                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 
@@ -899,6 +911,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var expectedTrackChunk = new TrackChunk();
                 MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -912,6 +927,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var expectedEventsCollection = new EventsCollection();
                 MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                Assert.IsTrue(
+                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 
@@ -945,6 +963,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreFilesEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
+                Assert.IsTrue(
+                    midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -954,6 +975,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
 
             CollectionAssert.AreEqual(Enumerable.Range(0, midiEvents.Sum(e => e.Count)), totalIndices, "Invalid total indices.");
@@ -979,6 +1003,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreFilesEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
+                Assert.IsTrue(
+                    midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -988,6 +1015,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 
@@ -1007,6 +1037,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreFilesEqual(new MidiFile(midiEvents.Select(e => new TrackChunk())), midiFile, false, "Events are invalid.");
+                Assert.IsTrue(
+                    midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
             else
             {
@@ -1016,6 +1049,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreEqual(midiEvents.Select(e => new TrackChunk()), trackChunks, true, "Events are invalid.");
+                Assert.IsTrue(
+                    trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
+                    "There are new events references.");
             }
         }
 
