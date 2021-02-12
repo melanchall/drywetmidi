@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
@@ -43,7 +42,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             _eventsCollection = eventsCollection;
-            Events = new TimedEventsCollection(CreateTimedEvents(eventsCollection), sameTimeEventsComparison);
+            Events = new TimedEventsCollection(eventsCollection.GetTimedEventsLazy(), sameTimeEventsComparison);
         }
 
         #endregion
@@ -83,19 +82,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 _eventsCollection.Add(midiEvent);
 
                 time = e.Time;
-            }
-        }
-
-        private static IEnumerable<TimedEvent> CreateTimedEvents(EventsCollection events)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            var time = 0L;
-
-            foreach (var midiEvent in events)
-            {
-                time += midiEvent.DeltaTime;
-                yield return new TimedEvent(midiEvent.Clone(), time);
             }
         }
 
