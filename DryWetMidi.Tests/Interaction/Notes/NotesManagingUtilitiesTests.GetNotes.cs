@@ -164,6 +164,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void GetNotes_EventsCollection_NotesWithinUncompletedOne_1([Values] bool wrapToTrackChunk)
+        {
+            GetNotes_EventsCollection(
+                wrapToTrackChunk,
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50 },
+                    new NoteOnEvent((SevenBitNumber)7, (SevenBitNumber)10),
+                    new NoteOffEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 150 },
+                },
+                expectedNotes: new[]
+                {
+                    new Note((SevenBitNumber)70) { Velocity = (SevenBitNumber)10, Length = 50 },
+                    new Note((SevenBitNumber)7) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)10, Time = 50, Length = 150 },
+                });
+        }
+
+        [Test]
+        public void GetNotes_EventsCollection_NotesWithinUncompletedOne_2([Values] bool wrapToTrackChunk)
+        {
+            GetNotes_EventsCollection(
+                wrapToTrackChunk,
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50 },
+                    new NoteOnEvent((SevenBitNumber)7, (SevenBitNumber)10),
+                    new NoteOffEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 150 },
+                    new NoteOffEvent()
+                },
+                expectedNotes: new[]
+                {
+                    new Note((SevenBitNumber)70) { Velocity = (SevenBitNumber)10, Length = 50 },
+                    new Note((SevenBitNumber)7) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)10, Time = 50, Length = 150 },
+                });
+        }
+
+        [Test]
         public void GetNotes_EventsCollection_OverllappedWithDifferentIds([Values] bool wrapToTrackChunk)
         {
             GetNotes_EventsCollection(
@@ -344,6 +384,52 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void GetNotes_TrackChunks_OneTrackChunk_NotesWithinUncompletedOne_1([Values] bool wrapToFile)
+        {
+            GetNotes_TrackChunks(
+                wrapToFile,
+                midiEvents: new[]
+                {
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent(),
+                        new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10),
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50 },
+                        new NoteOnEvent((SevenBitNumber)7, (SevenBitNumber)10),
+                        new NoteOffEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 150 },
+                    }
+                },
+                expectedNotes: new[]
+                {
+                    new Note((SevenBitNumber)70) { Velocity = (SevenBitNumber)10, Length = 50 },
+                    new Note((SevenBitNumber)7) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)10, Time = 50, Length = 150 },
+                });
+        }
+
+        [Test]
+        public void GetNotes_TrackChunks_OneTrackChunk_NotesWithinUncompletedOne_2([Values] bool wrapToFile)
+        {
+            GetNotes_TrackChunks(
+                wrapToFile,
+                midiEvents: new[]
+                {
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10),
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50 },
+                        new NoteOnEvent((SevenBitNumber)7, (SevenBitNumber)10),
+                        new NoteOffEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 150 },
+                        new NoteOffEvent()
+                    }
+                },
+                expectedNotes: new[]
+                {
+                    new Note((SevenBitNumber)70) { Velocity = (SevenBitNumber)10, Length = 50 },
+                    new Note((SevenBitNumber)7) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)10, Time = 50, Length = 150 },
+                });
+        }
+
+        [Test]
         public void GetNotes_TrackChunks_OneTrackChunk_OverllappedWithDifferentIds([Values] bool wrapToFile)
         {
             GetNotes_TrackChunks(
@@ -408,6 +494,58 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Channel = (FourBitNumber)5, Time = 10, Length = 70 },
                     new Note((SevenBitNumber)10) { Velocity = SevenBitNumber.MaxValue, Length = 10, Time = 30 },
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100, Time = 50 },
+                });
+        }
+
+        [Test]
+        public void GetNotes_TrackChunks_MultipleTrackChunks_NotesWithinUncompletedOne_1([Values] bool wrapToFile)
+        {
+            GetNotes_TrackChunks(
+                wrapToFile,
+                midiEvents: new[]
+                {
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent(),
+                        new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10),
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50 }
+                    },
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 50 },
+                        new NoteOffEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 150 },
+                    }
+                },
+                expectedNotes: new[]
+                {
+                    new Note((SevenBitNumber)70) { Velocity = (SevenBitNumber)10, Length = 50 },
+                    new Note((SevenBitNumber)7) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)10, Time = 50, Length = 150 },
+                });
+        }
+
+        [Test]
+        public void GetNotes_TrackChunks_MultipleTrackChunks_NotesWithinUncompletedOne_2([Values] bool wrapToFile)
+        {
+            GetNotes_TrackChunks(
+                wrapToFile,
+                midiEvents: new[]
+                {
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10),
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50 }
+                    },
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 50 },
+                        new NoteOffEvent((SevenBitNumber)7, (SevenBitNumber)10) { DeltaTime = 150 },
+                        new NoteOffEvent()
+                    }
+                },
+                expectedNotes: new[]
+                {
+                    new Note((SevenBitNumber)70) { Velocity = (SevenBitNumber)10, Length = 50 },
+                    new Note((SevenBitNumber)7) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)10, Time = 50, Length = 150 },
                 });
         }
 
