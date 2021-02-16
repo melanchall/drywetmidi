@@ -278,9 +278,15 @@ namespace Melanchall.DryWetMidi.Composing
 
             var patternBuilder = new PatternBuilder();
 
-            foreach (var pattern in patterns.Where(p => p != null))
+            using (var enumerator = patterns.Where(p => p != null).GetEnumerator())
             {
-                patternBuilder.Pattern(pattern).MoveToPreviousTime();
+                if (enumerator.MoveNext())
+                {
+                    patternBuilder.Pattern(enumerator.Current);
+
+                    while (enumerator.MoveNext())
+                        patternBuilder.MoveToPreviousTime().Pattern(enumerator.Current);
+                }
             }
 
             return patternBuilder.Build();
