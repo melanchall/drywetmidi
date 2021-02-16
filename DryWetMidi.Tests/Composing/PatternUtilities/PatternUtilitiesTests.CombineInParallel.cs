@@ -54,10 +54,8 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             });
         }
 
-        /// <summary>
-        /// This test ensures that the final operation when combining patterns in parallel does not end with a move back to the previous time.
-        /// </summary>
         [Test]
+        [Description("This test ensures that the final operation when combining patterns in parallel does not end with a move back to the previous time.")]
         public void CombineInParallel_No_Final_Move()
         {
             var pattern1 = new PatternBuilder()
@@ -74,9 +72,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var parallelPatterns = new[] { pattern1, pattern2 }.CombineInParallel();
 
             var pattern = new PatternBuilder()
-                    .Pattern(parallelPatterns)
-                    .Note(Notes.C4) // <-- this note should play AFTER the end of the parallel patterns
-                    .Build();
+                .Pattern(parallelPatterns)
+                .Note(Notes.C4) // <-- this note should play AFTER the end of the parallel patterns
+                .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
