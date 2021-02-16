@@ -73,11 +73,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var parallelPatterns = new[] { pattern1, pattern2 }.CombineInParallel();
 
-            var pattern3 = new PatternBuilder()
+            var pattern = new PatternBuilder()
+                    .Pattern(parallelPatterns)
                     .Note(Notes.C4)
                     .Build();
-
-            var pattern = new[] { parallelPatterns, pattern3 }.CombineInSequence();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
