@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var pattern = new PatternBuilder()
                     .Pattern(parallelPatterns)
-                    .Note(Notes.C4)
+                    .Note(Notes.C4) // <-- this note should play AFTER the end of the parallel patterns
                     .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 new NoteInfo(NoteName.A, 4, null, noteLength),
                 new NoteInfo(NoteName.ASharp, 4, noteLength, noteLength),
 
-                new NoteInfo(NoteName.C, 4, noteLength*2, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.C, 4, noteLength * 2, PatternBuilder.DefaultNoteLength),
             });
         }
 
