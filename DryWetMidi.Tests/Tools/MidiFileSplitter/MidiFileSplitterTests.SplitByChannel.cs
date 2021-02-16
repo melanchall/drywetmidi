@@ -2,7 +2,9 @@
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 
@@ -26,6 +28,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     .Select(e => e.Channel)
                     .Distinct()
                     .ToArray();
+                if (!originalChannels.Any())
+                    continue;
 
                 var filesByChannel = midiFile.SplitByChannel().ToList();
                 var allChannels = new List<FourBitNumber>(FourBitNumber.Values.Length);
@@ -59,6 +63,183 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     originalChannels.OrderBy(c => c),
                     allChannels,
                     "Channels from new files differs from those from original one.");
+            }
+        }
+
+        [Test]
+        public void SplitByChannel_EmptyFile()
+        {
+            SplitByChannel(
+                timedEvents: new TimedEvent[0],
+                expectedTimedEvents: new[] { new TimedEvent[0] });
+        }
+
+        [Test]
+        public void SplitByChannel_SingleEvent_NonChannel()
+        {
+            SplitByChannel(
+                timedEvents: new[] { new TimedEvent(new TextEvent("A")) },
+                expectedTimedEvents: new[] { new[] { new TimedEvent(new TextEvent("A")) } });
+        }
+
+        [Test]
+        public void SplitByChannel_SingleEvent_Channel()
+        {
+            SplitByChannel(
+                timedEvents: new[] { new TimedEvent(new NoteOnEvent()) },
+                expectedTimedEvents: new[] { new[] { new TimedEvent(new NoteOnEvent()) } });
+        }
+
+        [Test]
+        public void SplitByChannel_OnlyChannelEvents_SingleChannel()
+        {
+            SplitByChannel(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new NoteOffEvent()),
+                    }
+                });
+        }
+
+        [Test]
+        public void SplitByChannel_OnlyChannelEvents_MultipleChannels()
+        {
+            SplitByChannel(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new NoteOffEvent()),
+                    },
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    }
+                });
+        }
+
+        [Test]
+        public void SplitByChannel_ChannelAndNonChannelEvents_SingleChannel()
+        {
+            SplitByChannel(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOffEvent()),
+                    }
+                });
+        }
+
+        [Test]
+        public void SplitByChannel_ChannelAndNonChannelEvents_MultipleChannels()
+        {
+            SplitByChannel(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOffEvent()),
+                    },
+                    new[]
+                    {
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    }
+                });
+        }
+
+        [Test]
+        public void SplitByChannel_ChannelAndNonChannelEvents_MultipleChannels_CustomTimeDivision()
+        {
+            SplitByChannel(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOffEvent()),
+                    },
+                    new[]
+                    {
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    }
+                },
+                timeDivision: new TicksPerQuarterNoteTimeDivision(10000));
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void SplitByChannel(
+            ICollection<TimedEvent> timedEvents,
+            ICollection<ICollection<TimedEvent>> expectedTimedEvents,
+            TimeDivision timeDivision = null)
+        {
+            var midiFile = timedEvents.ToFile();
+            if (timeDivision != null)
+                midiFile.TimeDivision = timeDivision;
+
+            var midiFilesByChannel = midiFile.SplitByChannel().ToList();
+
+            Assert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
+
+            var expectedTimedEventsEnumerator = expectedTimedEvents.GetEnumerator();
+            var newMidiFilesEnumerator = midiFilesByChannel.GetEnumerator();
+
+            var i = 0;
+
+            while (expectedTimedEventsEnumerator.MoveNext() && newMidiFilesEnumerator.MoveNext())
+            {
+                var expectedEvents = expectedTimedEventsEnumerator.Current;
+                var actualEvents = newMidiFilesEnumerator.Current.GetTimedEvents();
+
+                MidiAsserts.AreEqual(expectedEvents, actualEvents, $"Invalid events of file {i}.");
+                Assert.AreEqual(midiFile.TimeDivision, newMidiFilesEnumerator.Current.TimeDivision, $"Invalid time division of file {i}.");
+
+                i++;
             }
         }
 

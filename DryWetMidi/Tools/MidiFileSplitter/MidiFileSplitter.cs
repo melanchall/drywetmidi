@@ -32,31 +32,39 @@ namespace Melanchall.DryWetMidi.Tools
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            var timedEvents = FourBitNumber.Values.Select(channel => new List<TimedEvent>()).ToArray();
+            var timedEventsByChannel = FourBitNumber.Values.ToDictionary(channel => channel, channel => new List<TimedEvent>());
+            var channelsUsed = new bool[FourBitNumber.MaxValue + 1];
 
             foreach (var timedEvent in midiFile.GetTimedEvents())
             {
                 var channelEvent = timedEvent.Event as ChannelEvent;
                 if (channelEvent != null)
                 {
-                    timedEvents[channelEvent.Channel].Add(timedEvent.Clone());
-                    continue;
+                    timedEventsByChannel[channelEvent.Channel].Add(timedEvent);
+                    channelsUsed[channelEvent.Channel] = true;
                 }
-
-                foreach (var timedEventsByChannel in timedEvents)
+                else
                 {
-                    timedEventsByChannel.Add(timedEvent.Clone());
+                    foreach (var channel in FourBitNumber.Values)
+                    {
+                        timedEventsByChannel[channel].Add(timedEvent);
+                    }
                 }
             }
 
-            return timedEvents
-                .Where(events => events.Select(e => e.Event).OfType<ChannelEvent>().Any())
-                .Select(events =>
-                {
-                    var file = events.ToFile();
-                    file.TimeDivision = midiFile.TimeDivision.Clone();
-                    return file;
-                });
+            if (Array.TrueForAll(channelsUsed, c => !c))
+            {
+                yield return midiFile.Clone();
+                yield break;
+            }
+
+            foreach (var channel in FourBitNumber.Values.Where(c => channelsUsed[c]))
+            {
+                var newFile = timedEventsByChannel[channel].ToFile();
+                newFile.TimeDivision = midiFile.TimeDivision.Clone();
+
+                yield return newFile;
+            }
         }
 
         /// <summary>
