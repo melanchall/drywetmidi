@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -209,6 +210,300 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timeDivision: new TicksPerQuarterNoteTimeDivision(10000));
         }
 
+        [Test]
+        public void SplitByChannel_AllChannels()
+        {
+            SplitByChannel(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)0 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)1 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)2 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)3 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)4 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)6 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)7 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)8 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)9 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)10 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)11 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)12 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)13 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)14 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)15 }),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)0 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)1 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)2 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)3 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)4 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)6 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)7 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)8 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)9 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)10 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)11 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)12 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)13 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)14 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)15 }) },
+                },
+                timeDivision: new TicksPerQuarterNoteTimeDivision(10000));
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_EmptyFile([Values] bool copyNonChannelEventsToEachFile)
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new TimedEvent[0],
+                expectedTimedEvents: new[] { new TimedEvent[0] },
+                copyNonChannelEventsToEachFile: copyNonChannelEventsToEachFile);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_SingleEvent_NonChannel([Values] bool copyNonChannelEventsToEachFile)
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[] { new TimedEvent(new TextEvent("A")) },
+                expectedTimedEvents: new[] { new[] { new TimedEvent(new TextEvent("A")) } },
+                copyNonChannelEventsToEachFile: copyNonChannelEventsToEachFile);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_SingleEvent_Channel([Values] bool copyNonChannelEventsToEachFile)
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[] { new TimedEvent(new NoteOnEvent()) },
+                expectedTimedEvents: new[] { new[] { new TimedEvent(new NoteOnEvent()) } },
+                copyNonChannelEventsToEachFile: copyNonChannelEventsToEachFile);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_OnlyChannelEvents_SingleChannel([Values] bool copyNonChannelEventsToEachFile)
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new NoteOffEvent()),
+                    }
+                },
+                copyNonChannelEventsToEachFile: copyNonChannelEventsToEachFile);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_OnlyChannelEvents_MultipleChannels([Values] bool copyNonChannelEventsToEachFile)
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new NoteOffEvent()),
+                    },
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    }
+                },
+                copyNonChannelEventsToEachFile: copyNonChannelEventsToEachFile);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_ChannelAndNonChannelEvents_SingleChannel_Copy()
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOffEvent()),
+                    }
+                },
+                copyNonChannelEventsToEachFile: true);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_ChannelAndNonChannelEvents_SingleChannel_DontCopy()
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new NoteOffEvent()),
+                    }
+                },
+                copyNonChannelEventsToEachFile: false);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_ChannelAndNonChannelEvents_MultipleChannels_Copy()
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOffEvent()),
+                    },
+                    new[]
+                    {
+                        new TimedEvent(new TextEvent("A")),
+                        new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    }
+                },
+                copyNonChannelEventsToEachFile: true);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_ChannelAndNonChannelEvents_MultipleChannels_DontCopy()
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOffEvent()),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent()),
+                        new TimedEvent(new NoteOffEvent()),
+                    },
+                    new[]
+                    {
+                        new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    }
+                },
+                copyNonChannelEventsToEachFile: false);
+        }
+
+        [Test]
+        public void SplitByChannel_CopyNonChannelEventsToEachFile_AllChannels([Values] bool copyNonChannelEventsToEachFile)
+        {
+            SplitByChannel_CopyNonChannelEventsToEachFile(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)0 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)1 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)2 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)3 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)4 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)6 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)7 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)8 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)9 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)10 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)11 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)12 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)13 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)14 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)15 }),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)0 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)1 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)2 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)3 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)4 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)6 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)7 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)8 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)9 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)10 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)11 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)12 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)13 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)14 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)15 }) },
+                },
+                copyNonChannelEventsToEachFile: copyNonChannelEventsToEachFile);
+        }
+
+        [Test]
+        public void SplitByChannel_TimedEventsFilter_AllChannels()
+        {
+            SplitByChannel_TimedEventsFilter(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)0 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)1 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)2 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)3 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)4 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)6 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)7 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)8 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)9 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)10 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)11 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)12 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)13 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)14 }),
+                    new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)15 }),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)0 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)1 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)2 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)3 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)4 }) },
+                    new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }) },
+                },
+                timedEventsFilter: e => (e.Event as ChannelEvent)?.Channel < 6);
+        }
+
         #endregion
 
         #region Private methods
@@ -238,6 +533,64 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
                 MidiAsserts.AreEqual(expectedEvents, actualEvents, $"Invalid events of file {i}.");
                 Assert.AreEqual(midiFile.TimeDivision, newMidiFilesEnumerator.Current.TimeDivision, $"Invalid time division of file {i}.");
+
+                i++;
+            }
+        }
+
+        private void SplitByChannel_CopyNonChannelEventsToEachFile(
+            ICollection<TimedEvent> timedEvents,
+            ICollection<ICollection<TimedEvent>> expectedTimedEvents,
+            bool copyNonChannelEventsToEachFile)
+        {
+            SplitByChannel_WithSettings(
+                timedEvents,
+                expectedTimedEvents,
+                copyNonChannelEventsToEachFile,
+                null);
+        }
+
+        private void SplitByChannel_TimedEventsFilter(
+            ICollection<TimedEvent> timedEvents,
+            ICollection<ICollection<TimedEvent>> expectedTimedEvents,
+            Predicate<TimedEvent> timedEventsFilter)
+        {
+            SplitByChannel_WithSettings(
+                timedEvents,
+                expectedTimedEvents,
+                true,
+                timedEventsFilter);
+        }
+
+        private void SplitByChannel_WithSettings(
+            ICollection<TimedEvent> timedEvents,
+            ICollection<ICollection<TimedEvent>> expectedTimedEvents,
+            bool copyNonChannelEventsToEachFile,
+            Predicate<TimedEvent> timedEventsFilter)
+        {
+            var midiFile = timedEvents.ToFile();
+
+            var midiFilesByChannel = midiFile
+                .SplitByChannel(new SplitFileByChannelSettings
+                {
+                    CopyNonChannelEventsToEachFile = copyNonChannelEventsToEachFile,
+                    TimedEventsFilter = timedEventsFilter
+                })
+                .ToList();
+
+            Assert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
+
+            var expectedTimedEventsEnumerator = expectedTimedEvents.GetEnumerator();
+            var newMidiFilesEnumerator = midiFilesByChannel.GetEnumerator();
+
+            var i = 0;
+
+            while (expectedTimedEventsEnumerator.MoveNext() && newMidiFilesEnumerator.MoveNext())
+            {
+                var expectedEvents = expectedTimedEventsEnumerator.Current;
+                var actualEvents = newMidiFilesEnumerator.Current.GetTimedEvents();
+
+                MidiAsserts.AreEqual(expectedEvents, actualEvents, $"Invalid events of file {i}.");
 
                 i++;
             }

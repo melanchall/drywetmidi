@@ -28,22 +28,34 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile)
+        public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile, SplitFileByChannelSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            var timedEventsByChannel = FourBitNumber.Values.ToDictionary(channel => channel, channel => new List<TimedEvent>());
-            var channelsUsed = new bool[FourBitNumber.MaxValue + 1];
+            settings = settings ?? new SplitFileByChannelSettings();
 
-            foreach (var timedEvent in midiFile.GetTimedEvents())
+            var channelsUsed = new bool[FourBitNumber.MaxValue + 1];
+            var timedEventsByChannel = FourBitNumber.Values.ToDictionary(
+                channel => channel,
+                channel => new List<TimedEvent>());
+
+            var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy();
+
+            var timedEventsFilter = settings.TimedEventsFilter;
+            if (timedEventsFilter != null)
+                timedEvents = timedEvents.Where(e => timedEventsFilter(e.Item1));
+
+            foreach (var timedEventTuple in timedEvents)
             {
+                var timedEvent = timedEventTuple.Item1;
+
                 var channelEvent = timedEvent.Event as ChannelEvent;
                 if (channelEvent != null)
                 {
                     timedEventsByChannel[channelEvent.Channel].Add(timedEvent);
                     channelsUsed[channelEvent.Channel] = true;
                 }
-                else
+                else if (settings.CopyNonChannelEventsToEachFile)
                 {
                     foreach (var channel in FourBitNumber.Values)
                     {

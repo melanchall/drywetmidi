@@ -729,6 +729,16 @@ namespace Melanchall.DryWetMidi.Interaction
             return ((IEnumerable<ITimedObject>)events).ToFile();
         }
 
+        internal static IEnumerable<Tuple<TimedEvent, int>> GetTimedEventsLazy(this IEnumerable<TrackChunk> trackChunks, bool cloneEvent = true)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(c => c.Count);
+
+            return eventsCollections.GetTimedEventsLazy(eventsCount, cloneEvent);
+        }
+
         internal static IEnumerable<Tuple<TimedEvent, int>> GetTimedEventsLazy(this EventsCollection[] eventsCollections, int eventsCount, bool cloneEvent = true)
         {
             var eventsCollectionsCount = eventsCollections.Length;
