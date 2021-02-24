@@ -470,6 +470,25 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void SplitByChannel_TimedEventsFilter_NonChannel()
+        {
+            SplitByChannel_TimedEventsFilter(
+                timedEvents: new[]
+                {
+                    new TimedEvent(new TextEvent("A")),
+                    new TimedEvent(new TextEvent("B")),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new[]
+                    {
+                        new TimedEvent(new TextEvent("A")),
+                    }
+                },
+                timedEventsFilter: e => e.Event is TextEvent textEvent && textEvent.Text == "A");
+        }
+
+        [Test]
         public void SplitByChannel_TimedEventsFilter_AllChannels()
         {
             SplitByChannel_TimedEventsFilter(

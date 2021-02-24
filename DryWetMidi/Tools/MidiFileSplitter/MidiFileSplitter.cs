@@ -66,7 +66,11 @@ namespace Melanchall.DryWetMidi.Tools
 
             if (Array.TrueForAll(channelsUsed, c => !c))
             {
-                yield return midiFile.Clone();
+                var midiFileClone = midiFile.Clone();
+                if (timedEventsFilter != null)
+                    midiFileClone.RemoveTimedEvents(e => !timedEventsFilter(e));
+
+                yield return midiFileClone;
                 yield break;
             }
 
@@ -90,38 +94,15 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note number.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile)
+        public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile, SplitFileByNotesSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            var notesIds = new HashSet<NoteId>(midiFile.GetTimedEvents()
-                                                       .Select(e => e.Event)
-                                                       .OfType<NoteEvent>()
-                                                       .Select(e => e.GetNoteId()));
-            var timedEventsMap = notesIds.ToDictionary(id => id,
-                                                       id => new List<TimedEvent>());
+            settings = settings ?? new SplitFileByNotesSettings();
 
-            foreach (var timedEvent in midiFile.GetTimedEvents())
-            {
-                var noteEvent = timedEvent.Event as NoteEvent;
-                if (noteEvent != null)
-                {
-                    timedEventsMap[noteEvent.GetNoteId()].Add(timedEvent);
-                    continue;
-                }
-
-                foreach (var timedObjects in timedEventsMap.Values)
-                {
-                    timedObjects.Add(timedEvent);
-                }
-            }
-
-            foreach (var timedObjects in timedEventsMap.Values)
-            {
-                var file = timedObjects.ToFile();
-                file.TimeDivision = midiFile.TimeDivision.Clone();
-                yield return file;
-            }
+            return settings.IgnoreChannel
+                ? midiFile.SplitByNotes(noteEvent => noteEvent.NoteNumber, settings.TimedEventsFilter, settings.CopyNonNoteEventsToEachFile)
+                : midiFile.SplitByNotes(noteEvent => noteEvent.GetNoteId(), settings.TimedEventsFilter, settings.CopyNonNoteEventsToEachFile);
         }
 
         /// <summary>
@@ -297,6 +278,69 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 slicer.GetNextSlice(times[0], settings);
                 return slicer.GetNextSlice(times[1], settings);
+            }
+        }
+
+        private static IEnumerable<MidiFile> SplitByNotes<TNoteId>(
+            this MidiFile midiFile,
+            Func<NoteEvent, TNoteId> getNoteId,
+            Predicate<TimedEvent> timedEventsFilter,
+            bool copyNonNoteEventsToEachFile)
+        {
+            var timedEventsByIds = new Dictionary<TNoteId, List<TimedEvent>>();
+            var nonNoteEvents = new List<TimedEvent>();
+
+            var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy();
+            if (timedEventsFilter != null)
+                timedEvents = timedEvents.Where(e => timedEventsFilter(e.Item1));
+
+            foreach (var timedEventTuple in timedEvents)
+            {
+                var timedEvent = timedEventTuple.Item1;
+
+                var noteEvent = timedEvent.Event as NoteEvent;
+                if (noteEvent != null)
+                {
+                    var noteId = getNoteId(noteEvent);
+
+                    List<TimedEvent> timedEventsById;
+                    if (!timedEventsByIds.TryGetValue(noteId, out timedEventsById))
+                    {
+                        timedEventsByIds.Add(noteId, timedEventsById = new List<TimedEvent>());
+
+                        if (copyNonNoteEventsToEachFile)
+                            timedEventsById.AddRange(nonNoteEvents);
+                    }
+
+                    timedEventsById.Add(timedEvent);
+                }
+                else if (copyNonNoteEventsToEachFile)
+                {
+                    foreach (var timedEventsById in timedEventsByIds)
+                    {
+                        timedEventsById.Value.Add(timedEvent);
+                    }
+
+                    nonNoteEvents.Add(timedEvent);
+                }
+            }
+
+            if (!timedEventsByIds.Any())
+            {
+                var midiFileClone = midiFile.Clone();
+                if (timedEventsFilter != null)
+                    midiFileClone.RemoveTimedEvents(e => !timedEventsFilter(e));
+                
+                yield return midiFileClone;
+                yield break;
+            }
+
+            foreach (var timedEventsById in timedEventsByIds)
+            {
+                var newFile = timedEventsById.Value.ToFile();
+                newFile.TimeDivision = midiFile.TimeDivision.Clone();
+
+                yield return newFile;
             }
         }
 
