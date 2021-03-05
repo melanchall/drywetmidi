@@ -225,7 +225,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return eventsCollection.ProcessTimedEvents(action, timedEvent => true);
         }
 
-        // TODO: times unchanged
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="EventsCollection"/>.
         /// </summary>
@@ -260,6 +259,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 if (match?.Invoke(timedEvent) != false)
                 {
+                    // TODO: remove
                     var deltaTime = timedEvent.Event.DeltaTime;
                     var time = timedEvent.Time;
 
@@ -366,7 +366,6 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
-            var iTotal = 0;
             var iMatched = 0;
 
             var timesChanged = false;
@@ -389,7 +388,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
 
                 timedEvents.Add(timedEventTuple);
-                iTotal++;
             }
 
             if (timesChanged)
@@ -412,6 +410,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action)
         {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(action), action);
+
             return file.ProcessTimedEvents(action, timedEvent => true);
         }
 

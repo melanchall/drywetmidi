@@ -1074,12 +1074,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private static IEnumerable<ITimedObject> GetTimedObjects(IEnumerable<IEnumerable<MidiEvent>> events)
         {
-            ThrowIfArgument.IsNull(nameof(events), events);
-
-            return events.Where(e => e != null)
-                         .SelectMany(e =>  e.Where(midiEvent => midiEvent != null)
-                                            .GetTimedEventsLazy()
-                                            .BuildObjects(ObjectType.TimedEvent | ObjectType.Note));
+            return events
+                .Where(e => e != null)
+                .SelectMany(e =>  e.Where(midiEvent => midiEvent != null).GetTimedEventsLazy().GetNotesAndTimedEventsLazy());
         }
 
         #endregion
