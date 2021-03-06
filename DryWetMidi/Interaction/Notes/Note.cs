@@ -128,8 +128,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Absolute time of the note in units defined by the time division of a MIDI file.</param>
         public Note(SevenBitNumber noteNumber, long length, long time)
         {
-            UnderlyingNote = MusicTheory.Note.Get(noteNumber);
-
+            NoteNumber = noteNumber;
             Length = length;
             Time = time;
         }
@@ -216,23 +215,44 @@ namespace Melanchall.DryWetMidi.Interaction
         public SevenBitNumber NoteNumber
         {
             get { return UnderlyingNote.NoteNumber; }
-            set { UnderlyingNote = MusicTheory.Note.Get(value); }
+            set
+            {
+                UnderlyingNote = MusicTheory.Note.Get(value);
+                ((NoteOnEvent)TimedNoteOnEvent.Event).NoteNumber = value;
+                ((NoteOffEvent)TimedNoteOffEvent.Event).NoteNumber = value;
+            }
         }
 
         /// <summary>
         /// Gets or sets velocity of the underlying <see cref="NoteOnEvent"/>.
         /// </summary>
-        public SevenBitNumber Velocity { get; set; } = DefaultVelocity;
+        public SevenBitNumber Velocity
+        {
+            get { return ((NoteOnEvent)TimedNoteOnEvent.Event).Velocity; }
+            set { ((NoteOnEvent)TimedNoteOnEvent.Event).Velocity = value; }
+        }
 
         /// <summary>
         /// Gets or sets velocity of the underlying <see cref="NoteOffEvent"/>.
         /// </summary>
-        public SevenBitNumber OffVelocity { get; set; }
+        public SevenBitNumber OffVelocity
+        {
+            get { return ((NoteOffEvent)TimedNoteOffEvent.Event).Velocity; }
+            set { ((NoteOffEvent)TimedNoteOffEvent.Event).Velocity = value; }
+        }
 
         /// <summary>
         /// Gets or sets channel to play the note on.
         /// </summary>
-        public FourBitNumber Channel { get; set; }
+        public FourBitNumber Channel
+        {
+            get { return ((NoteOnEvent)TimedNoteOnEvent.Event).Channel; }
+            set
+            {
+                ((NoteOnEvent)TimedNoteOnEvent.Event).Channel = value;
+                ((NoteOffEvent)TimedNoteOffEvent.Event).Channel = value;
+            }
+        }
 
         /// <summary>
         /// Gets name of the note.
@@ -247,7 +267,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets Note On timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent());
+        internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent { Velocity = DefaultVelocity });
 
         /// <summary>
         /// Gets Note Off timed event of the note.
@@ -266,9 +286,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note On' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOnEvent()
         {
-            return new TimedEvent(
-                new NoteOnEvent(NoteNumber, Velocity) { Channel = Channel },
-                Time);
+            return TimedNoteOnEvent.Clone();
         }
 
         /// <summary>
@@ -277,9 +295,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note Off' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOffEvent()
         {
-            return new TimedEvent(
-                new NoteOffEvent(NoteNumber, OffVelocity) { Channel = Channel },
-                Time + Length);
+            return TimedNoteOffEvent.Clone();
         }
 
         /// <summary>
@@ -297,7 +313,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// name and octave.</exception>
         public void SetNoteNameAndOctave(NoteName noteName, int octave)
         {
-            UnderlyingNote = MusicTheory.Note.Get(noteName, octave);
+            NoteNumber = NoteUtilities.GetNoteNumber(noteName, octave);
         }
 
         /// <summary>
@@ -306,11 +322,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Copy of the note.</returns>
         public Note Clone()
         {
-            return new Note(NoteNumber, Length, Time)
+            return new Note(GetTimedNoteOnEvent(), GetTimedNoteOffEvent())
             {
-                Channel = Channel,
-                Velocity = Velocity,
-                OffVelocity = OffVelocity
+                Time = Time,
+                Length = Length
             };
         }
 

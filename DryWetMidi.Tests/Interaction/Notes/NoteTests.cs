@@ -254,6 +254,128 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region Properties
+
+        [Test]
+        public void CheckNoteChannel()
+        {
+            var initialChannel = (FourBitNumber)0;
+
+            var note = new Note((SevenBitNumber)70);
+            Assert.AreEqual(initialChannel, note.Channel, "Invalid channel after note created.");
+            Assert.AreEqual(initialChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after note created.");
+            Assert.AreEqual(initialChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
+
+            var newChannel = (FourBitNumber)6;
+            note.Channel = newChannel;
+
+            Assert.AreEqual(newChannel, note.Channel, "Invalid channel after update.");
+            Assert.AreEqual(newChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after update.");
+            Assert.AreEqual(newChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
+        }
+
+        [Test]
+        public void CheckNoteVelocity()
+        {
+            var initialVelocity = Note.DefaultVelocity;
+
+            var note = new Note((SevenBitNumber)70);
+            Assert.AreEqual(initialVelocity, note.Velocity, "Invalid velocity after note created.");
+            Assert.AreEqual(initialVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after note created.");
+            Assert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
+
+            var newVelocity = (SevenBitNumber)60;
+            note.Velocity = newVelocity;
+
+            Assert.AreEqual(newVelocity, note.Velocity, "Invalid velocity after update.");
+            Assert.AreEqual(newVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after update.");
+            Assert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
+        }
+
+        [Test]
+        public void CheckNoteOffVelocity()
+        {
+            var initialOffVelocity = SevenBitNumber.MinValue;
+
+            var note = new Note((SevenBitNumber)70);
+            Assert.AreEqual(initialOffVelocity, note.OffVelocity, "Invalid off velocity after note created.");
+            Assert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after note created.");
+            Assert.AreEqual(initialOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
+
+            var newOffVelocity = (SevenBitNumber)60;
+            note.OffVelocity = newOffVelocity;
+
+            Assert.AreEqual(newOffVelocity, note.OffVelocity, "Invalid off velocity after update.");
+            Assert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after update.");
+            Assert.AreEqual(newOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
+        }
+
+        [Test]
+        public void CheckNoteNumber()
+        {
+            var initialNoteNumber = (SevenBitNumber)80;
+
+            var note = new Note(initialNoteNumber);
+            Assert.AreEqual(initialNoteNumber, note.NoteNumber, "Invalid note number after note created.");
+            Assert.AreEqual(initialNoteNumber, ((NoteOnEvent)note.TimedNoteOnEvent.Event).NoteNumber, "Invalid note number of Note On timed event after note created.");
+            Assert.AreEqual(initialNoteNumber, ((NoteOffEvent)note.TimedNoteOffEvent.Event).NoteNumber, "Invalid note number of Note Off timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
+
+            var newNoteNumber = (SevenBitNumber)60;
+            note.NoteNumber = newNoteNumber;
+
+            Assert.AreEqual(newNoteNumber, note.NoteNumber, "Invalid note number after update.");
+            Assert.AreEqual(newNoteNumber, ((NoteOnEvent)note.TimedNoteOnEvent.Event).NoteNumber, "Invalid note number of Note On timed event after update.");
+            Assert.AreEqual(newNoteNumber, ((NoteOffEvent)note.TimedNoteOffEvent.Event).NoteNumber, "Invalid note number of Note Off timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
+        }
+
+        [Test]
+        public void CheckNoteNameAndOctave()
+        {
+            var initialNoteName = DryWetMidi.MusicTheory.NoteName.A;
+            var initialOctave = 4;
+
+            var note = new Note(initialNoteName, initialOctave);
+            Assert.AreEqual(initialNoteName, note.NoteName, "Invalid note name after note created.");
+            Assert.AreEqual(initialOctave, note.Octave, "Invalid octave after note created.");
+            Assert.AreEqual(initialNoteName, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteName(), "Invalid note name of Note On timed event after note created.");
+            Assert.AreEqual(initialOctave, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteOctave(), "Invalid octave of Note On timed event after note created.");
+            Assert.AreEqual(initialNoteName, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteName(), "Invalid note name of Note Off timed event after note created.");
+            Assert.AreEqual(initialOctave, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteOctave(), "Invalid octave of Note Off timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
+
+            var newNoteName = DryWetMidi.MusicTheory.NoteName.B;
+            var newOctave = 3;
+            note.SetNoteNameAndOctave(newNoteName, newOctave);
+
+            Assert.AreEqual(newNoteName, note.NoteName, "Invalid note name after update.");
+            Assert.AreEqual(newOctave, note.Octave, "Invalid octave after update.");
+            Assert.AreEqual(newNoteName, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteName(), "Invalid note name of Note On timed event after update.");
+            Assert.AreEqual(newOctave, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteOctave(), "Invalid octave of Note On timed event after update.");
+            Assert.AreEqual(newNoteName, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteName(), "Invalid note name of Note Off timed event after update.");
+            Assert.AreEqual(newOctave, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteOctave(), "Invalid octave of Note Off timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
+            MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods

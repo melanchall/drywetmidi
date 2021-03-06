@@ -307,18 +307,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
                     action(note);
 
-                    // TODO: manipulate from note
-
-                    var noteOnEvent = (NoteOnEvent)note.TimedNoteOnEvent.Event;
-                    noteOnEvent.NoteNumber = note.NoteNumber;
-                    noteOnEvent.Velocity = note.Velocity;
-                    noteOnEvent.Channel = note.Channel;
-
-                    var noteOffEvent = (NoteOffEvent)note.TimedNoteOffEvent.Event;
-                    noteOffEvent.NoteNumber = note.NoteNumber;
-                    noteOffEvent.Velocity = note.OffVelocity;
-                    noteOffEvent.Channel = note.Channel;
-
                     timesChanged = note.Time != time;
                     lengthsChanged = note.Length != length;
 
@@ -439,18 +427,6 @@ namespace Melanchall.DryWetMidi.Interaction
                     var length = note.Length;
 
                     action(note);
-
-                    // TODO: manipulate from note
-
-                    var noteOnEvent = (NoteOnEvent)note.TimedNoteOnEvent.Event;
-                    noteOnEvent.NoteNumber = note.NoteNumber;
-                    noteOnEvent.Velocity = note.Velocity;
-                    noteOnEvent.Channel = note.Channel;
-
-                    var noteOffEvent = (NoteOffEvent)note.TimedNoteOffEvent.Event;
-                    noteOffEvent.NoteNumber = note.NoteNumber;
-                    noteOffEvent.Velocity = note.OffVelocity;
-                    noteOffEvent.Channel = note.Channel;
 
                     timesChanged = note.Time != time;
                     lengthsChanged = note.Length != length;
