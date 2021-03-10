@@ -209,6 +209,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 containerType,
                 midiEvents: new MidiEvent[]
                 {
+                    new TextEvent("A"),
                     new NoteOnEvent(),
                     new NoteOnEvent { Channel = (FourBitNumber)4 },
                     new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
@@ -217,6 +218,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOffEvent { Channel = (FourBitNumber)4 },
                     new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { Channel = (FourBitNumber)8 },
+                    new TextEvent("B"),
                 },
                 expectedNotes: new[]
                 {
@@ -410,6 +412,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
+                        new TextEvent("A"),
+                        new TextEvent("B"),
                         new NoteOnEvent(),
                         new NoteOnEvent((SevenBitNumber)80, SevenBitNumber.MaxValue)
                     },

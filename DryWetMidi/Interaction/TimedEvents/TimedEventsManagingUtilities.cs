@@ -250,6 +250,10 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
+
             var iMatched = 0;
 
             var timesChanged = false;
@@ -259,18 +263,12 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 if (match?.Invoke(timedEvent) != false)
                 {
-                    // TODO: remove
-                    var deltaTime = timedEvent.Event.DeltaTime;
                     var time = timedEvent.Time;
-
                     action(timedEvent);
-                    timedEvent.Event.DeltaTime = deltaTime;
-
                     timesChanged = timedEvent.Time != time;
-
                     iMatched++;
                 }
-
+                
                 timedEvents.Add(timedEvent);
             }
 

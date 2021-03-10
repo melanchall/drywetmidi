@@ -291,53 +291,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            var iMatched = 0;
-
-            var timesChanged = false;
-            var lengthsChanged = false;
-            var timedEvents = new List<TimedEvent>(eventsCollection.Count);
-
-            foreach (var timedObject in eventsCollection.GetTimedEventsLazy(false).GetNotesAndTimedEventsLazy())
-            {
-                var note = timedObject as Note;
-                if (note != null && match?.Invoke(note) != false)
-                {
-                    var time = note.Time;
-                    var length = note.Length;
-
-                    action(note);
-
-                    timesChanged = note.Time != time;
-                    lengthsChanged = note.Length != length;
-
-                    iMatched++;
-                }
-
-                if (note != null)
-                {
-                    timedEvents.Add(note.TimedNoteOnEvent);
-                    timedEvents.Add(note.TimedNoteOffEvent);
-                }
-                else
-                    timedEvents.Add((TimedEvent)timedObject);
-            }
-
-            if (timesChanged || lengthsChanged)
-            {
-                var time = 0L;
-                var i = 0;
-
-                foreach (var e in timedEvents.OrderBy(e => e.Time))
-                {
-                    var midiEvent = e.Event;
-                    midiEvent.DeltaTime = e.Time - time;
-                    eventsCollection[i++] = midiEvent;
-
-                    time = e.Time;
-                }
-            }
-
-            return iMatched;
+            return eventsCollection.ProcessNotes(action, match, true);
         }
 
         public static int ProcessNotes(this TrackChunk trackChunk, Action<Note> action)
@@ -409,58 +363,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
-            var eventsCount = eventsCollections.Sum(c => c.Count);
-
-            var iMatched = 0;
-
-            var timesChanged = false;
-            var lengthsChanged = false;
-            var timedEvents = new List<Tuple<TimedEvent, int>>(eventsCount);
-
-            foreach (var timedObjectTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false).GetNotesAndTimedEventsLazy())
-            {
-                var note = timedObjectTuple.Item1 as Note;
-                if (note != null && match?.Invoke(note) != false)
-                {
-                    var time = note.Time;
-                    var length = note.Length;
-
-                    action(note);
-
-                    timesChanged = note.Time != time;
-                    lengthsChanged = note.Length != length;
-
-                    iMatched++;
-                }
-
-                if (note != null)
-                {
-                    timedEvents.Add(Tuple.Create(note.TimedNoteOnEvent, timedObjectTuple.Item2));
-                    timedEvents.Add(Tuple.Create(note.TimedNoteOffEvent, timedObjectTuple.Item3));
-                }
-                else
-                    timedEvents.Add(Tuple.Create((TimedEvent)timedObjectTuple.Item1, timedObjectTuple.Item2));
-            }
-
-            // TODO: unify with timed events managing
-
-            if (timesChanged || lengthsChanged)
-            {
-                var times = new long[eventsCollections.Length];
-                var indices = new int[eventsCollections.Length];
-
-                foreach (var e in timedEvents.OrderBy(e => e.Item1.Time))
-                {
-                    var midiEvent = e.Item1.Event;
-                    midiEvent.DeltaTime = e.Item1.Time - times[e.Item2];
-                    eventsCollections[e.Item2][indices[e.Item2]++] = midiEvent;
-
-                    times[e.Item2] = e.Item1.Time;
-                }
-            }
-
-            return iMatched;
+            return trackChunks.ProcessNotes(action, match, true);
         }
 
         public static int ProcessNotes(this MidiFile file, Action<Note> action)
@@ -499,20 +402,43 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().ProcessNotes(action, match);
         }
 
+        public static int RemoveNotes(this EventsCollection eventsCollection)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+
+            return eventsCollection.RemoveNotes(note => true);
+        }
+
         /// <summary>
         /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static void RemoveNotes(this EventsCollection eventsCollection, Predicate<Note> match = null)
+        public static int RemoveNotes(this EventsCollection eventsCollection, Predicate<Note> match)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            using (var notesManager = eventsCollection.ManageNotes())
-            {
-                notesManager.Notes.RemoveAll(match ?? (n => true));
-            }
+            var tag = new object();
+            var notesToRemoveCount = eventsCollection.ProcessNotes(
+                n => n.TimedNoteOnEvent.Event.Tag = n.TimedNoteOffEvent.Event.Tag = tag,
+                match,
+                false);
+
+            if (notesToRemoveCount == 0)
+                return 0;
+
+            eventsCollection.RemoveTimedEvents(e => e.Event.Tag == tag);
+            return notesToRemoveCount;
+        }
+
+        public static int RemoveNotes(this TrackChunk trackChunk)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+
+            return trackChunk.RemoveNotes(note => true);
         }
 
         /// <summary>
@@ -520,12 +446,21 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static void RemoveNotes(this TrackChunk trackChunk, Predicate<Note> match = null)
+        public static int RemoveNotes(this TrackChunk trackChunk, Predicate<Note> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            trackChunk.Events.RemoveNotes(match);
+            return trackChunk.Events.RemoveNotes(match);
+        }
+
+        public static int RemoveNotes(this IEnumerable<TrackChunk> trackChunks)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            return trackChunks.RemoveNotes(note => true);
         }
 
         /// <summary>
@@ -533,28 +468,47 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        public static void RemoveNotes(this IEnumerable<TrackChunk> trackChunks, Predicate<Note> match = null)
+        public static int RemoveNotes(this IEnumerable<TrackChunk> trackChunks, Predicate<Note> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk?.RemoveNotes(match);
-            }
+            var tag = new object();
+            var notesToRemoveCount = trackChunks.ProcessNotes(
+                n => n.TimedNoteOnEvent.Event.Tag = n.TimedNoteOffEvent.Event.Tag = tag,
+                match,
+                false);
+
+            if (notesToRemoveCount == 0)
+                return 0;
+
+            trackChunks.RemoveTimedEvents(e => e.Event.Tag == tag);
+            return notesToRemoveCount;
         }
 
+        public static int RemoveNotes(this MidiFile file)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+
+            return file.RemoveNotes(note => true);
+        }
+
+        // TODO: exception in ///
         /// <summary>
         /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
+        /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        public static void RemoveNotes(this MidiFile file, Predicate<Note> match = null)
+        public static int RemoveNotes(this MidiFile file, Predicate<Note> match)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(match), match);
 
-            file.GetTrackChunks().RemoveNotes(match);
+            return file.GetTrackChunks().RemoveNotes(match);
         }
 
         [Obsolete("OBS9")]
@@ -651,6 +605,119 @@ namespace Melanchall.DryWetMidi.Interaction
             return note.UnderlyingNote;
         }
 
+        internal static int ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, Predicate<Note> match, bool canTimeOrLengthBeChanged)
+        {
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(c => c.Count);
+
+            var iMatched = 0;
+
+            var timesChanged = false;
+            var lengthsChanged = false;
+            var timedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
+
+            foreach (var timedObjectTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false).GetNotesAndTimedEventsLazy())
+            {
+                var note = timedObjectTuple.Item1 as Note;
+                if (note != null && match?.Invoke(note) != false)
+                {
+                    var time = note.Time;
+                    var length = note.Length;
+
+                    action(note);
+
+                    timesChanged = note.Time != time;
+                    lengthsChanged = note.Length != length;
+
+                    iMatched++;
+                }
+
+                if (canTimeOrLengthBeChanged)
+                {
+                    if (note != null)
+                    {
+                        timedEvents.Add(Tuple.Create(note.TimedNoteOnEvent, timedObjectTuple.Item2));
+                        timedEvents.Add(Tuple.Create(note.TimedNoteOffEvent, timedObjectTuple.Item3));
+                    }
+                    else
+                        timedEvents.Add(Tuple.Create((TimedEvent)timedObjectTuple.Item1, timedObjectTuple.Item2));
+                }
+            }
+
+            // TODO: unify with timed events managing
+
+            if (timesChanged || lengthsChanged)
+            {
+                var times = new long[eventsCollections.Length];
+                var indices = new int[eventsCollections.Length];
+
+                foreach (var e in timedEvents.OrderBy(e => e.Item1.Time))
+                {
+                    var midiEvent = e.Item1.Event;
+                    midiEvent.DeltaTime = e.Item1.Time - times[e.Item2];
+                    eventsCollections[e.Item2][indices[e.Item2]++] = midiEvent;
+
+                    times[e.Item2] = e.Item1.Time;
+                }
+            }
+
+            return iMatched;
+        }
+
+        internal static int ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, Predicate<Note> match, bool canTimeOrLengthBeChanged)
+        {
+            var iMatched = 0;
+
+            var timesChanged = false;
+            var lengthsChanged = false;
+            var timedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
+
+            foreach (var timedObject in eventsCollection.GetTimedEventsLazy(false).GetNotesAndTimedEventsLazy())
+            {
+                var note = timedObject as Note;
+                if (note != null && match?.Invoke(note) != false)
+                {
+                    var time = note.Time;
+                    var length = note.Length;
+
+                    action(note);
+
+                    timesChanged = note.Time != time;
+                    lengthsChanged = note.Length != length;
+
+                    iMatched++;
+                }
+
+                if (canTimeOrLengthBeChanged)
+                {
+                    if (note != null)
+                    {
+                        timedEvents.Add(note.TimedNoteOnEvent);
+                        timedEvents.Add(note.TimedNoteOffEvent);
+                    }
+                    else
+                        timedEvents.Add((TimedEvent)timedObject);
+                }
+            }
+
+            if (timesChanged || lengthsChanged)
+            {
+                var time = 0L;
+                var i = 0;
+
+                foreach (var e in timedEvents.OrderBy(e => e.Time))
+                {
+                    var midiEvent = e.Event;
+                    midiEvent.DeltaTime = e.Time - time;
+                    eventsCollection[i++] = midiEvent;
+
+                    time = e.Time;
+                }
+            }
+
+            return iMatched;
+        }
+
         internal static IEnumerable<Tuple<ITimedObject, int, int>> GetNotesAndTimedEventsLazy(this IEnumerable<Tuple<TimedEvent, int>> timedEvents)
         {
             var objectsDescriptors = new LinkedList<IObjectDescriptorIndexed>();
@@ -709,7 +776,10 @@ namespace Melanchall.DryWetMidi.Interaction
                         break;
                     default:
                         {
-                            objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.Item2));
+                            if (objectsDescriptors.Count == 0)
+                                yield return Tuple.Create((ITimedObject)timedEvent, timedEventTuple.Item2, timedEventTuple.Item2);
+                            else
+                                objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.Item2));
                         }
                         break;
                 }
@@ -776,7 +846,10 @@ namespace Melanchall.DryWetMidi.Interaction
                         break;
                     default:
                         {
-                            objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
+                            if (objectsDescriptors.Count == 0)
+                                yield return timedEvent;
+                            else
+                                objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
                         }
                         break;
                 }

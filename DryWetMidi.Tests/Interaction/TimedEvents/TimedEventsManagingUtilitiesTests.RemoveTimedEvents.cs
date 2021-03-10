@@ -15,10 +15,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Test methods
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_EmptyCollection([Values] bool wrapToTrackChunk, [Values] bool predicateValue)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_EmptyCollection([Values] ContainerType containerType, [Values] bool predicateValue)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[0],
                 match: e => predicateValue,
                 expectedMidiEvents: new MidiEvent[0],
@@ -26,10 +26,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_OneEvent_Matched([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_OneEvent_Matched([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new[] { new NoteOnEvent() },
                 match: e => e.Event.EventType == MidiEventType.NoteOn,
                 expectedMidiEvents: new MidiEvent[0],
@@ -37,10 +37,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_OneEvent_NotMatched([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_OneEvent_NotMatched([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 new[] { new NoteOnEvent() },
                 match: e => e.Event.EventType == MidiEventType.NoteOff,
                 expectedMidiEvents: new[] { new NoteOnEvent() },
@@ -48,10 +48,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_AllMatched([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_AllMatched([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent() },
                 match: e => e.Event is NoteEvent,
                 expectedMidiEvents: new MidiEvent[0],
@@ -59,10 +59,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_SomeMatched_1([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_SomeMatched_1([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() },
                 match: e => e.Event is NoteOnEvent,
                 expectedMidiEvents: new[] { new NoteOffEvent { DeltaTime = 100 } },
@@ -70,10 +70,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_SomeMatched_2([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_SomeMatched_2([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 200 } },
                 match: e => e.Event is NoteOffEvent,
                 expectedMidiEvents: new[] { new NoteOnEvent { DeltaTime = 100 } },
@@ -81,10 +81,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_SomeMatched_3([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_SomeMatched_3([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 200 }, new NoteOffEvent { DeltaTime = 150 }, new NoteOnEvent { NoteNumber = (SevenBitNumber)23 } },
                 match: e => e.Event is NoteOffEvent,
                 expectedMidiEvents: new[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOnEvent { DeltaTime = 350, NoteNumber = (SevenBitNumber)23 } },
@@ -92,10 +92,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_NotMatched([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_MultipleEvents_NotMatched([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() },
                 match: e => e.Event is TextEvent,
                 expectedMidiEvents: new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() },
@@ -103,10 +103,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_Big_RemoveHalf([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_Big_RemoveHalf([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: Enumerable.Range(0, 5000).SelectMany(i => new MidiEvent[] { new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent() }).ToArray(),
                 match: e => e.Event is NoteOnEvent,
                 expectedMidiEvents: Enumerable.Range(0, 5000).Select(i => new NoteOffEvent { DeltaTime = 100 }).ToArray(),
@@ -114,10 +114,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithPredicate_Big_RemoveAll([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithPredicate_Big_RemoveAll([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray(),
                 match: e => e.Event is NoteOnEvent,
                 expectedMidiEvents: new MidiEvent[0],
@@ -125,34 +125,34 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_EmptyCollection([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_EmptyCollection([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithoutPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[0]);
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_OneEvent([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_OneEvent([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithoutPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new[] { new NoteOnEvent() });
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_MultipleEvents([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_MultipleEvents([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithoutPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent() });
         }
 
         [Test]
-        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_Big_RemoveAll([Values] bool wrapToTrackChunk)
+        public void RemoveTimedEvents_EventsCollection_WithoutPredicate_Big_RemoveAll([Values] ContainerType containerType)
         {
             RemoveTimedEvents_EventsCollection_WithoutPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray());
         }
 
@@ -458,80 +458,109 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Private methods
 
         private void RemoveTimedEvents_EventsCollection_WithPredicate(
-            bool wrapToTrackChunk,
+            ContainerType containerType,
             ICollection<MidiEvent> midiEvents,
             Predicate<TimedEvent> match,
             ICollection<MidiEvent> expectedMidiEvents,
             int expectedRemovedCount)
         {
-            if (wrapToTrackChunk)
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(midiEvents);
+
+            switch (containerType)
             {
-                var trackChunk = new TrackChunk(midiEvents);
+                case ContainerType.EventsCollection:
+                    {
+                        Assert.AreEqual(
+                            expectedRemovedCount,
+                            eventsCollection.RemoveTimedEvents(match),
+                            "Invalid count of removed timed events.");
 
-                Assert.AreEqual(
-                    expectedRemovedCount,
-                    trackChunk.RemoveTimedEvents(match),
-                    "Invalid count of removed timed events.");
+                        var expectedEventsCollection = new EventsCollection();
+                        expectedEventsCollection.AddRange(expectedMidiEvents);
+                        MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                        Assert.IsTrue(
+                            eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                            "There are new events references.");
+                    }
+                    break;
+                case ContainerType.TrackChunk:
+                    {
+                        var trackChunk = new TrackChunk(eventsCollection);
 
-                var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
-                MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
-                Assert.IsTrue(
-                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
-                    "There are new events references.");
-            }
-            else
-            {
-                var eventsCollection = new EventsCollection();
-                eventsCollection.AddRange(midiEvents);
+                        Assert.AreEqual(
+                            expectedRemovedCount,
+                            trackChunk.RemoveTimedEvents(match),
+                            "Invalid count of removed timed events.");
 
-                Assert.AreEqual(
-                    expectedRemovedCount,
-                    eventsCollection.RemoveTimedEvents(match),
-                    "Invalid count of removed timed events.");
-
-                var expectedEventsCollection = new EventsCollection();
-                expectedEventsCollection.AddRange(expectedMidiEvents);
-                MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
-                Assert.IsTrue(
-                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
-                    "There are new events references.");
+                        var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
+                        MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                        Assert.IsTrue(
+                            trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                            "There are new events references.");
+                    }
+                    break;
+                case ContainerType.TrackChunks:
+                case ContainerType.File:
+                    {
+                        RemoveTimedEvents_TrackChunks_WithPredicate(
+                            containerType == ContainerType.File,
+                            new[] { midiEvents },
+                            match,
+                            new[] { expectedMidiEvents },
+                            expectedRemovedCount);
+                    }
+                    break;
             }
         }
 
         private void RemoveTimedEvents_EventsCollection_WithoutPredicate(
-            bool wrapToTrackChunk,
+            ContainerType containerType,
             ICollection<MidiEvent> midiEvents)
         {
-            if (wrapToTrackChunk)
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(midiEvents);
+
+            switch (containerType)
             {
-                var trackChunk = new TrackChunk(midiEvents);
+                case ContainerType.EventsCollection:
+                    {
+                        Assert.AreEqual(
+                            midiEvents.Count,
+                            eventsCollection.RemoveTimedEvents(),
+                            "Invalid count of removed timed events.");
 
-                Assert.AreEqual(
-                    midiEvents.Count,
-                    trackChunk.RemoveTimedEvents(),
-                    "Invalid count of removed timed events.");
+                        var expectedEventsCollection = new EventsCollection();
+                        MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                        Assert.IsTrue(
+                            eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                            "There are new events references.");
+                    }
+                    break;
+                case ContainerType.TrackChunk:
+                    {
+                        var trackChunk = new TrackChunk(eventsCollection);
 
-                var expectedTrackChunk = new TrackChunk();
-                MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
-                Assert.IsTrue(
-                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
-                    "There are new events references.");
-            }
-            else
-            {
-                var eventsCollection = new EventsCollection();
-                eventsCollection.AddRange(midiEvents);
+                        Assert.AreEqual(
+                            midiEvents.Count,
+                            trackChunk.RemoveTimedEvents(),
+                            "Invalid count of removed timed events.");
 
-                Assert.AreEqual(
-                    midiEvents.Count,
-                    eventsCollection.RemoveTimedEvents(),
-                    "Invalid count of removed timed events.");
-
-                var expectedEventsCollection = new EventsCollection();
-                MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
-                Assert.IsTrue(
-                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
-                    "There are new events references.");
+                        var expectedTrackChunk = new TrackChunk();
+                        MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                        Assert.IsTrue(
+                            trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                            "There are new events references.");
+                    }
+                    break;
+                case ContainerType.TrackChunks:
+                case ContainerType.File:
+                    {
+                        RemoveTimedEvents_TrackChunks_WithoutPredicate(
+                            containerType == ContainerType.File,
+                            new[] { midiEvents });
+                    }
+                    break;
             }
         }
 

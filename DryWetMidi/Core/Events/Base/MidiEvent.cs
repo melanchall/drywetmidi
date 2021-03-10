@@ -69,6 +69,8 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        internal object Tag { get; set; }
+
         #endregion
 
         #region Methods

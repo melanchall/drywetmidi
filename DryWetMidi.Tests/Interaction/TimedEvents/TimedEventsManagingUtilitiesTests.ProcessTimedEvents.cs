@@ -40,12 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ProcessTimedEvents_EventsCollection_WithoutPredicate(
                 wrapToTrackChunks,
                 midiEvents: new[] { new NoteOnEvent() },
-                action: e =>
-                {
-                    var noteOnEvent = (NoteOnEvent)e.Event;
-                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
-                    noteOnEvent.DeltaTime = 100;
-                },
+                action: e => ((NoteOnEvent)e.Event).NoteNumber = (SevenBitNumber)23,
                 expectedMidiEvents: new[] { new NoteOnEvent { NoteNumber = (SevenBitNumber)23 } });
         }
 
@@ -79,12 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOnEvent(),
                     new NoteOffEvent { DeltaTime = 1000 }
                 },
-                action: e =>
-                {
-                    var noteOnEvent = (NoteEvent)e.Event;
-                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
-                    noteOnEvent.DeltaTime = 100;
-                },
+                action: e => ((NoteEvent)e.Event).NoteNumber = (SevenBitNumber)23,
                 expectedMidiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent { NoteNumber = (SevenBitNumber)23 },
@@ -172,12 +162,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ProcessTimedEvents_EventsCollection_WithPredicate(
                 wrapToTrackChunk,
                 midiEvents: new[] { new NoteOnEvent() },
-                action: e =>
-                {
-                    var noteOnEvent = (NoteOnEvent)e.Event;
-                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
-                    noteOnEvent.DeltaTime = 100;
-                },
+                action: e => ((NoteOnEvent)e.Event).NoteNumber = (SevenBitNumber)23,
                 match: e => e.Event is NoteEvent,
                 expectedMidiEvents: new[] { new NoteOnEvent { NoteNumber = (SevenBitNumber)23 } },
                 expectedProcessedCount: 1);
@@ -270,12 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOnEvent(),
                     new NoteOffEvent { DeltaTime = 1000 }
                 },
-                action: e =>
-                {
-                    var noteOnEvent = (NoteEvent)e.Event;
-                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
-                    noteOnEvent.DeltaTime = 100;
-                },
+                action: e => ((NoteEvent)e.Event).NoteNumber = (SevenBitNumber)23,
                 match: e => e.Event is NoteEvent,
                 expectedMidiEvents: new MidiEvent[]
                 {
@@ -337,12 +317,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOnEvent(),
                     new NoteOffEvent { DeltaTime = 1000 }
                 },
-                action: e =>
-                {
-                    var noteOnEvent = (NoteEvent)e.Event;
-                    noteOnEvent.NoteNumber = (SevenBitNumber)23;
-                    noteOnEvent.DeltaTime = 100;
-                },
+                action: e => ((NoteEvent)e.Event).NoteNumber = (SevenBitNumber)23,
                 match: e => e.Event is NoteOffEvent,
                 expectedMidiEvents: new MidiEvent[]
                 {
