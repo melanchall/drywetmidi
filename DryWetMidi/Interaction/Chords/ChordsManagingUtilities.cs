@@ -11,6 +11,117 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public static class ChordsManagingUtilities
     {
+        #region Nested classes
+
+        private interface IObjectDescriptor
+        {
+            bool ChordStart { get; }
+
+            ITimedObject TimedObject { get; }
+        }
+
+        private interface IObjectDescriptorIndexed : IObjectDescriptor
+        {
+            Tuple<ITimedObject, int, int> IndexedTimedObject { get; }
+        }
+
+        private class TimedEventDescriptor : IObjectDescriptor
+        {
+            public TimedEventDescriptor(TimedEvent timedEvent)
+            {
+                TimedObject = timedEvent;
+            }
+
+            public bool ChordStart { get; } = false;
+
+            public ITimedObject TimedObject { get; }
+        }
+
+        private sealed class TimedEventDescriptorIndexed : TimedEventDescriptor, IObjectDescriptorIndexed
+        {
+            private readonly int _index;
+
+            public TimedEventDescriptorIndexed(TimedEvent timedEvent, int index)
+                : base(timedEvent)
+            {
+                _index = index;
+            }
+
+            public Tuple<ITimedObject, int, int> IndexedTimedObject => Tuple.Create(TimedObject, _index, _index);
+        }
+
+        private class NoteDescriptor : IObjectDescriptor
+        {
+            public NoteDescriptor(Note note, bool chordStart)
+            {
+                TimedObject = note;
+                ChordStart = chordStart;
+            }
+
+            public bool ChordStart { get; } = false;
+
+            public ITimedObject TimedObject { get; }
+        }
+
+        private class NoteDescriptorIndexed : NoteDescriptor, IObjectDescriptorIndexed
+        {
+            private readonly int _noteOnIndex;
+            private readonly int _noteOffIndex;
+
+            public NoteDescriptorIndexed(Note note, int noteOnIndex, int noteOffIndex, bool chordStart)
+                : base(note, chordStart)
+            {
+                _noteOnIndex = noteOnIndex;
+                _noteOffIndex = noteOffIndex;
+            }
+
+            public Tuple<ITimedObject, int, int> IndexedTimedObject => Tuple.Create(TimedObject, _noteOnIndex, _noteOffIndex);
+        }
+
+        private sealed class ChordDescriptor
+        {
+            private readonly int _notesMinCount;
+
+            public ChordDescriptor(long time, LinkedListNode<IObjectDescriptor> firstNoteNode, int notesMinCount)
+            {
+                Time = time;
+                NotesNodes.Add(firstNoteNode);
+
+                _notesMinCount = notesMinCount;
+            }
+
+            public long Time { get; }
+
+            public List<LinkedListNode<IObjectDescriptor>> NotesNodes { get; }  = new List<LinkedListNode<IObjectDescriptor>>(3);
+
+            public bool IsSealed { get; set; }
+
+            public bool IsCompleted => NotesNodes.Count >= _notesMinCount;
+        }
+
+        private sealed class ChordDescriptorIndexed
+        {
+            private readonly int _notesMinCount;
+
+            public ChordDescriptorIndexed(long time, LinkedListNode<IObjectDescriptorIndexed> firstNoteNode, int notesMinCount)
+            {
+                Time = time;
+                NotesNodes.Add(firstNoteNode);
+
+                _notesMinCount = notesMinCount;
+            }
+
+            public long Time { get; }
+
+            public List<LinkedListNode<IObjectDescriptorIndexed>> NotesNodes { get; } = new List<LinkedListNode<IObjectDescriptorIndexed>>(3);
+
+            public bool IsSealed { get; set; }
+
+            public bool IsCompleted => NotesNodes.Count >= _notesMinCount;
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -94,20 +205,24 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets chords contained in the specified collection of <see cref="MidiEvent"/>.
         /// </summary>
-        /// <param name="events">Collection of<see cref="MidiFile"/> to search for chords.</param>
+        /// <param name="midiEvents">Collection of<see cref="MidiFile"/> to search for chords.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
-        /// <returns>Collection of chords contained in <paramref name="events"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
-        public static IEnumerable<Chord> GetChords(this IEnumerable<MidiEvent> events, long notesTolerance = 0)
+        /// <returns>Collection of chords contained in <paramref name="midiEvents"/> ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
+        public static IEnumerable<Chord> GetChords(this IEnumerable<MidiEvent> midiEvents, long notesTolerance = 0)
         {
-            ThrowIfArgument.IsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            var eventsCollection = new EventsCollection();
-            eventsCollection.AddRange(events);
+            var result = new List<Chord>();
 
-            return eventsCollection.ManageChords(notesTolerance).Chords.ToList();
+            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(), new ChordDetectionSettings { NotesTolerance = (MidiTimeSpan)notesTolerance }).OfType<Chord>())
+            {
+                result.Add(chord);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -124,7 +239,14 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            return eventsCollection.ManageChords(notesTolerance).Chords.ToList();
+            var result = new List<Chord>(eventsCollection.Count / 2);
+
+            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(eventsCollection.GetTimedEventsLazy(), new ChordDetectionSettings { NotesTolerance = (MidiTimeSpan)notesTolerance }).OfType<Chord>())
+            {
+                result.Add(chord);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -158,10 +280,17 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            return trackChunks.Where(c => c != null)
-                              .SelectMany(c => c.GetChords(notesTolerance))
-                              .OrderBy(c => c.Time)
-                              .ToList();
+            var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(e => e.Count);
+
+            var result = new List<Chord>(eventsCount / 2);
+
+            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(eventsCollections.GetTimedEventsLazy(eventsCount).Select(e => e.Item1), new ChordDetectionSettings { NotesTolerance = notesTolerance }).OfType<Chord>())
+            {
+                result.Add(chord);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -181,6 +310,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().GetChords(notesTolerance);
         }
 
+        // TODO
         /// <summary>
         /// Creates chords from notes.
         /// </summary>
@@ -496,6 +626,248 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
             return new MusicTheory.Chord(chord.Notes.OrderBy(n => n.NoteNumber).Select(n => n.NoteName).ToArray());
+        }
+
+        internal static IEnumerable<Tuple<ITimedObject, int[]>> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<Tuple<TimedEvent, int>> timedEvents, ChordDetectionSettings settings)
+        {
+            var timedObjects = new LinkedList<IObjectDescriptorIndexed>();
+            var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
+            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
+
+            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy())
+            {
+                var timedObject = timedObjectTuple.Item1;
+
+                var timedEvent = timedObject as TimedEvent;
+                if (timedEvent != null)
+                {
+                    if (timedObjects.Count == 0)
+                        yield return Tuple.Create(timedObject, new[] { timedObjectTuple.Item2 });
+                    else
+                        timedObjects.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedObjectTuple.Item2));
+
+                    continue;
+                }
+
+                var note = (Note)timedObject;
+                var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
+
+                if (timedObjects.Count == 0 || chordDescriptorNode == null || chordDescriptorNode.List == null)
+                {
+                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.Item2, timedObjectTuple.Item3, settings);
+                }
+                else
+                {
+                    var chordDescriptor = chordDescriptorNode.Value;
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, settings.NotesTolerance))
+                    {
+                        var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, timedObjectTuple.Item2, timedObjectTuple.Item3, false));
+                        chordDescriptor.NotesNodes.Add(noteNode);
+                    }
+                    else
+                    {
+                        chordDescriptor.IsSealed = true;
+
+                        if (chordDescriptorNode.Previous == null)
+                        {
+                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true))
+                            {
+                                yield return timedObjectX;
+                            }
+                        }
+
+                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.Item2, timedObjectTuple.Item3, settings);
+                    }
+                }
+            }
+
+            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false))
+            {
+                yield return timedObject;
+            }
+        }
+
+        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<TimedEvent> timedEvents, ChordDetectionSettings settings)
+        {
+            var timedObjects = new LinkedList<IObjectDescriptor>();
+            var chordsDescriptors = new LinkedList<ChordDescriptor>();
+            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptor>[FourBitNumber.MaxValue + 1];
+
+            foreach (var timedObject in timedEvents.GetNotesAndTimedEventsLazy())
+            {
+                var timedEvent = timedObject as TimedEvent;
+                if (timedEvent != null)
+                {
+                    if (timedObjects.Count == 0)
+                        yield return timedObject;
+                    else
+                        timedObjects.AddLast(new TimedEventDescriptor(timedEvent));
+
+                    continue;
+                }
+
+                var note = (Note)timedObject;
+                var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
+
+                if (timedObjects.Count == 0 || chordDescriptorNode == null || chordDescriptorNode.List == null)
+                {
+                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, settings);
+                }
+                else
+                {
+                    var chordDescriptor = chordDescriptorNode.Value;
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, settings.NotesTolerance))
+                    {
+                        var noteNode = timedObjects.AddLast(new NoteDescriptor(note, false));
+                        chordDescriptor.NotesNodes.Add(noteNode);
+                    }
+                    else
+                    {
+                        chordDescriptor.IsSealed = true;
+
+                        if (chordDescriptorNode.Previous == null)
+                        {
+                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true))
+                            {
+                                yield return timedObjectX;
+                            }
+                        }
+
+                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, settings);
+                    }
+                }
+            }
+
+            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false))
+            {
+                yield return timedObject;
+            }
+        }
+
+        private static IEnumerable<ITimedObject> GetTimedObjects(
+            LinkedListNode<ChordDescriptor> startChordDescriptorNode,
+            LinkedList<ChordDescriptor> chordsDescriptors,
+            LinkedList<IObjectDescriptor> timedObjects,
+            bool getSealedOnly)
+        {
+            for (var chordDescriptorNode = startChordDescriptorNode; chordDescriptorNode != null;)
+            {
+                var chordDescriptor = chordDescriptorNode.Value;
+                if (getSealedOnly && !chordDescriptor.IsSealed)
+                    break;
+
+                foreach (var noteNode in chordDescriptor.NotesNodes)
+                {
+                    timedObjects.Remove(noteNode);
+                }
+
+                if (chordDescriptor.IsCompleted)
+                {
+                    yield return new Chord(chordDescriptor.NotesNodes.Select(n => (Note)((NoteDescriptor)n.Value).TimedObject));
+                }
+
+                for (var node = timedObjects.First; node != null && !node.Value.ChordStart;)
+                {
+                    yield return node.Value.TimedObject;
+
+                    var nextNode = node.Next;
+                    timedObjects.Remove(node);
+                    node = nextNode;
+                }
+
+                var nextChordDescriptorNode = chordDescriptorNode.Next;
+                chordsDescriptors.Remove(chordDescriptorNode);
+                chordDescriptorNode = nextChordDescriptorNode;
+            }
+        }
+
+        private static IEnumerable<Tuple<ITimedObject, int[]>> GetTimedObjects(
+            LinkedListNode<ChordDescriptorIndexed> startChordDescriptorNode,
+            LinkedList<ChordDescriptorIndexed> chordsDescriptors,
+            LinkedList<IObjectDescriptorIndexed> timedObjects,
+            bool getSealedOnly)
+        {
+            for (var chordDescriptorNode = startChordDescriptorNode; chordDescriptorNode != null;)
+            {
+                var chordDescriptor = chordDescriptorNode.Value;
+                if (getSealedOnly && !chordDescriptor.IsSealed)
+                    break;
+
+                foreach (var noteNode in chordDescriptor.NotesNodes)
+                {
+                    timedObjects.Remove(noteNode);
+                }
+
+                if (chordDescriptor.IsCompleted)
+                {
+                    var notesCount = chordDescriptor.NotesNodes.Count;
+                    var notes = new Note[notesCount];
+                    var indices = new int[notesCount * 2];
+
+                    for (var i = 0; i < notesCount; i++)
+                    {
+                        var objectDescriptor = chordDescriptor.NotesNodes[i].Value;
+
+                        notes[i] = (Note)objectDescriptor.TimedObject;
+                        indices[i * 2] = objectDescriptor.IndexedTimedObject.Item2;
+                        indices[i * 2 + 1] = objectDescriptor.IndexedTimedObject.Item3;
+                    }
+
+                    yield return Tuple.Create((ITimedObject)new Chord(notes), indices);
+                }
+
+                for (var node = timedObjects.First; node != null && !node.Value.ChordStart;)
+                {
+                    var timedObject = node.Value.IndexedTimedObject;
+                    yield return Tuple.Create(timedObject.Item1, new[] { timedObject.Item2, timedObject.Item3 });
+
+                    var nextNode = node.Next;
+                    timedObjects.Remove(node);
+                    node = nextNode;
+                }
+
+                var nextChordDescriptorNode = chordDescriptorNode.Next;
+                chordsDescriptors.Remove(chordDescriptorNode);
+                chordDescriptorNode = nextChordDescriptorNode;
+            }
+        }
+
+        private static ChordDescriptor CreateChordDescriptor(
+            LinkedList<ChordDescriptor> chordsDescriptors,
+            LinkedListNode<ChordDescriptor>[] chordsDescriptorsByChannel,
+            LinkedList<IObjectDescriptor> timedObjects,
+            Note note,
+            ChordDetectionSettings settings)
+        {
+            var noteNode = timedObjects.AddLast(new NoteDescriptor(note, true));
+            var chordDescriptor = new ChordDescriptor(note.Time, noteNode, settings.NotesMinCount);
+            chordsDescriptorsByChannel[note.Channel] = chordsDescriptors.AddLast(chordDescriptor);
+            return chordDescriptor;
+        }
+
+        private static ChordDescriptorIndexed CreateChordDescriptor(
+            LinkedList<ChordDescriptorIndexed> chordsDescriptors,
+            LinkedListNode<ChordDescriptorIndexed>[] chordsDescriptorsByChannel,
+            LinkedList<IObjectDescriptorIndexed> timedObjects,
+            Note note,
+            int noteOnIndex,
+            int noteOffIndex,
+            ChordDetectionSettings settings)
+        {
+            var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, noteOnIndex, noteOffIndex, true));
+            var chordDescriptor = new ChordDescriptorIndexed(note.Time, noteNode, settings.NotesMinCount);
+            chordsDescriptorsByChannel[note.Channel] = chordsDescriptors.AddLast(chordDescriptor);
+            return chordDescriptor;
+        }
+
+        private static bool CanNoteBeAddedToChord(ChordDescriptor chordDescriptor, Note note, long notesTolerance)
+        {
+            return note.Time - chordDescriptor.Time <= notesTolerance;
+        }
+
+        private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance)
+        {
+            return note.Time - chordDescriptor.Time <= notesTolerance;
         }
 
         #endregion

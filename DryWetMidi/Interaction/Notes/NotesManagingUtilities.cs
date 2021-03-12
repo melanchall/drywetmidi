@@ -22,8 +22,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private interface IObjectDescriptorIndexed : IObjectDescriptor
         {
-            bool IsCompleted { get; }
-
             Tuple<ITimedObject, int, int> GetIndexedObject();
         }
 
@@ -189,6 +187,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return result;
         }
 
+        // TODO: unify with prev
         /// <summary>
         /// Gets notes contained in the specified <see cref="EventsCollection"/>.
         /// </summary>
@@ -831,7 +830,7 @@ namespace Melanchall.DryWetMidi.Interaction
                             if (previousNode != null)
                                 break;
 
-                            for (var n = node; n != null;)
+                            for (var n = node; n != null; )
                             {
                                 if (!n.Value.IsCompleted)
                                     break;

@@ -218,6 +218,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     note.Channel = value;
                 }
+
+                _channel = value;
             }
         }
 
@@ -263,6 +265,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     note.Velocity = value;
                 }
+
+                _velocity = value;
             }
         }
 
@@ -308,6 +312,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     note.OffVelocity = value;
                 }
+
+                _offVelocity = value;
             }
         }
 

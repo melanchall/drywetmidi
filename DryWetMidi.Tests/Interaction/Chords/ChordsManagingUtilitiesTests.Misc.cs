@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed class ChordsManagingUtilitiesTests
+    public sealed partial class ChordsManagingUtilitiesTests
     {
         #region Constants
 
