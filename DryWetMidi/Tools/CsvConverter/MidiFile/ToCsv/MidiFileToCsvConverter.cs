@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tools
                     WriteTrackChunkStart(csvWriter, trackNumber, settings, tempoMap);
 
                     var time = 0L;
-                    var timedEvents = trackChunk.GetTimedEvents();
+                    var timedEvents = trackChunk.Events.GetTimedEventsLazy(false);
                     var timedObjects = settings.CsvLayout == MidiFileCsvLayout.MidiCsv || settings.NoteFormat == NoteFormat.Events
                         ? (IEnumerable<ITimedObject>)timedEvents
                         : timedEvents.BuildObjects(ObjectType.TimedEvent | ObjectType.Note);

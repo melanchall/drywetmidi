@@ -210,7 +210,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <returns>Collection of chords contained in <paramref name="midiEvents"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
-        public static IEnumerable<Chord> GetChords(this IEnumerable<MidiEvent> midiEvents, long notesTolerance = 0)
+        public static ICollection<Chord> GetChords(this IEnumerable<MidiEvent> midiEvents, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static IEnumerable<Chord> GetChords(this EventsCollection eventsCollection, long notesTolerance = 0)
+        public static ICollection<Chord> GetChords(this EventsCollection eventsCollection, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
@@ -258,7 +258,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static IEnumerable<Chord> GetChords(this TrackChunk trackChunk, long notesTolerance = 0)
+        public static ICollection<Chord> GetChords(this TrackChunk trackChunk, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
@@ -275,7 +275,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static IEnumerable<Chord> GetChords(this IEnumerable<TrackChunk> trackChunks, long notesTolerance = 0)
+        public static ICollection<Chord> GetChords(this IEnumerable<TrackChunk> trackChunks, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
@@ -302,7 +302,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static IEnumerable<Chord> GetChords(this MidiFile file, long notesTolerance = 0)
+        public static ICollection<Chord> GetChords(this MidiFile file, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);

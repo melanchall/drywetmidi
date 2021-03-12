@@ -172,7 +172,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiFileSlicer CreateFromFile(MidiFile midiFile)
         {
             var timedEventsEnumerators = midiFile.GetTrackChunks()
-                                                 .Select(c => c.GetTimedEvents().GetEnumerator())
+                                                 .Select(c => c.Events.GetTimedEvents().GetEnumerator())
                                                  .ToArray();
 
             return new MidiFileSlicer(midiFile.TimeDivision, timedEventsEnumerators);

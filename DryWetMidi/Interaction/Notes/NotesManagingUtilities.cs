@@ -173,7 +173,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
         }
 
-        public static IEnumerable<Note> GetNotes(this IEnumerable<MidiEvent> midiEvents)
+        public static ICollection<Note> GetNotes(this IEnumerable<MidiEvent> midiEvents)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
@@ -194,7 +194,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static IEnumerable<Note> GetNotes(this EventsCollection eventsCollection)
+        public static ICollection<Note> GetNotes(this EventsCollection eventsCollection)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -214,7 +214,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static IEnumerable<Note> GetNotes(this TrackChunk trackChunk)
+        public static ICollection<Note> GetNotes(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -227,7 +227,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunks">Track chunks to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        public static IEnumerable<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks)
+        public static ICollection<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -250,7 +250,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="file"><see cref="MidiFile"/> to search for notes.</param>
         /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        public static IEnumerable<Note> GetNotes(this MidiFile file)
+        public static ICollection<Note> GetNotes(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 

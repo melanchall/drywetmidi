@@ -29,8 +29,11 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
             var tempoMap = midiFile.GetTempoMap();
-            return midiFile.GetTimedEvents().LastOrDefault()?.TimeAs<TTimeSpan>(tempoMap) ??
-                   TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+            return midiFile
+                .GetTrackChunks()
+                .GetTimedEventsLazy(false)
+                .Select(e => e.Item1)
+                .LastOrDefault()?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
         }
 
         /// <summary>
@@ -49,8 +52,11 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
 
             var tempoMap = midiFile.GetTempoMap();
-            return midiFile.GetTimedEvents().LastOrDefault()?.TimeAs(durationType, tempoMap) ??
-                   TimeSpanUtilities.GetZeroTimeSpan(durationType);
+            return midiFile
+                .GetTrackChunks()
+                .GetTimedEventsLazy(false)
+                .Select(e => e.Item1)
+                .LastOrDefault()?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
         }
 
         /// <summary>

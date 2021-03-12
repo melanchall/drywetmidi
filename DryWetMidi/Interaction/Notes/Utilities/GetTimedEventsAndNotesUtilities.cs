@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
@@ -113,7 +114,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.GetTimedEvents().GetTimedEventsAndNotes();
+            return trackChunk.Events.GetTimedEventsLazy().GetTimedEventsAndNotes();
         }
 
         [Obsolete("OBS5")]
@@ -134,7 +135,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            return trackChunks.GetTimedEvents().GetTimedEventsAndNotes();
+            return trackChunks.GetTimedEventsLazy().Select(e => e.Item1).GetTimedEventsAndNotes();
         }
 
         [Obsolete("OBS5")]
@@ -155,7 +156,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            return midiFile.GetTimedEvents().GetTimedEventsAndNotes();
+            return midiFile.GetTrackChunks().GetTimedEventsLazy().Select(e => e.Item1).GetTimedEventsAndNotes();
         }
 
         #endregion
