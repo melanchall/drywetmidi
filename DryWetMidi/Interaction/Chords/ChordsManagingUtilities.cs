@@ -330,6 +330,14 @@ namespace Melanchall.DryWetMidi.Interaction
                                 .ToList();
         }
 
+        public static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
+
+            return eventsCollection.ProcessChords(action, chord => true, notesTolerance);
+        }
+
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="EventsCollection"/>.
         /// </summary>
@@ -339,6 +347,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -351,19 +360,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            using (var chordsManager = eventsCollection.ManageChords(notesTolerance))
-            {
-                foreach (var chord in chordsManager.Chords.Where(c => match?.Invoke(c) != false))
-                {
-                    action(chord);
-                }
-            }
+            return eventsCollection.ProcessChords(action, match, notesTolerance, true);
+        }
+
+        public static int ProcessChords(this TrackChunk trackChunk, Action<Chord> action, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return trackChunk.ProcessChords(action, chord => true, notesTolerance);
         }
 
         /// <summary>
@@ -375,6 +388,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -387,13 +401,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void ProcessChords(this TrackChunk trackChunk, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int ProcessChords(this TrackChunk trackChunk, Action<Chord> action, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            trackChunk.Events.ProcessChords(action, match, notesTolerance);
+            return trackChunk.Events.ProcessChords(action, match, notesTolerance);
+        }
+
+        public static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return trackChunks.ProcessChords(action, chord => true, notesTolerance);
         }
 
         /// <summary>
@@ -406,6 +430,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -418,16 +443,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk?.ProcessChords(action, match, notesTolerance);
-            }
+            return trackChunks.ProcessChords(action, match, notesTolerance, true);
+        }
+
+        public static int ProcessChords(this MidiFile file, Action<Chord> action, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return file.ProcessChords(action, chord => true, notesTolerance);
         }
 
         /// <summary>
@@ -439,6 +471,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -451,13 +484,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void ProcessChords(this MidiFile file, Action<Chord> action, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int ProcessChords(this MidiFile file, Action<Chord> action, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            file.GetTrackChunks().ProcessChords(action, match, notesTolerance);
+            return file.GetTrackChunks().ProcessChords(action, match, notesTolerance);
         }
 
         /// <summary>
@@ -742,6 +776,147 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 yield return timedObject;
             }
+        }
+
+        internal static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match, long notesTolerance, bool canTimeOrLengthBeChanged)
+        {
+            var iMatched = 0;
+
+            var timesChanged = false;
+            var lengthsChanged = false;
+            var timedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
+
+            foreach (var timedObject in eventsCollection.GetTimedEventsLazy(false).GetChordsAndNotesAndTimedEventsLazy(new ChordDetectionSettings { NotesTolerance = notesTolerance }))
+            {
+                var chord = timedObject as Chord;
+                if (chord != null && match?.Invoke(chord) != false)
+                {
+                    var time = chord.Time;
+                    var length = chord.Length;
+
+                    action(chord);
+
+                    timesChanged = chord.Time != time;
+                    lengthsChanged = chord.Length != length;
+
+                    iMatched++;
+                }
+
+                if (canTimeOrLengthBeChanged)
+                {
+                    if (chord != null)
+                    {
+                        foreach (var note in chord.Notes)
+                        {
+                            timedEvents.Add(note.TimedNoteOnEvent);
+                            timedEvents.Add(note.TimedNoteOffEvent);
+                        }
+                    }
+                    else
+                    {
+                        var note = timedObject as Note;
+                        if (note != null)
+                        {
+                            timedEvents.Add(note.TimedNoteOnEvent);
+                            timedEvents.Add(note.TimedNoteOffEvent);
+                        }
+                        else
+                            timedEvents.Add((TimedEvent)timedObject);
+                    }
+                }
+            }
+
+            if (timesChanged || lengthsChanged)
+            {
+                var time = 0L;
+                var i = 0;
+
+                foreach (var e in timedEvents.OrderBy(e => e.Time))
+                {
+                    var midiEvent = e.Event;
+                    midiEvent.DeltaTime = e.Time - time;
+                    eventsCollection[i++] = midiEvent;
+
+                    time = e.Time;
+                }
+            }
+
+            return iMatched;
+        }
+
+        internal static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match, long notesTolerance, bool canTimeOrLengthBeChanged)
+        {
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCount = eventsCollections.Sum(c => c.Count);
+
+            var iMatched = 0;
+
+            var timesChanged = false;
+            var lengthsChanged = false;
+            var timedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
+
+            foreach (var timedObjectTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false).GetChordsAndNotesAndTimedEventsLazy(new ChordDetectionSettings { NotesTolerance = notesTolerance }))
+            {
+                var chord = timedObjectTuple.Item1 as Chord;
+                if (chord != null && match?.Invoke(chord) != false)
+                {
+                    var time = chord.Time;
+                    var length = chord.Length;
+
+                    action(chord);
+
+                    timesChanged = chord.Time != time;
+                    lengthsChanged = chord.Length != length;
+
+                    iMatched++;
+                }
+
+                if (canTimeOrLengthBeChanged)
+                {
+                    if (chord != null)
+                    {
+                        var i = 0;
+
+                        foreach (var note in chord.Notes)
+                        {
+                            timedEvents.Add(Tuple.Create(note.TimedNoteOnEvent, timedObjectTuple.Item2[i * 2]));
+                            timedEvents.Add(Tuple.Create(note.TimedNoteOffEvent, timedObjectTuple.Item2[i * 2 + 1]));
+
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        var note = timedObjectTuple.Item1 as Note;
+                        if (note != null)
+                        {
+                            timedEvents.Add(Tuple.Create(note.TimedNoteOnEvent, timedObjectTuple.Item2[0]));
+                            timedEvents.Add(Tuple.Create(note.TimedNoteOffEvent, timedObjectTuple.Item2[1]));
+                        }
+                        else
+                            timedEvents.Add(Tuple.Create((TimedEvent)timedObjectTuple.Item1, timedObjectTuple.Item2[0]));
+                    }
+                }
+            }
+
+            // TODO: unify with timed events managing
+
+            if (timesChanged || lengthsChanged)
+            {
+                var times = new long[eventsCollections.Length];
+                var indices = new int[eventsCollections.Length];
+
+                foreach (var e in timedEvents.OrderBy(e => e.Item1.Time))
+                {
+                    var midiEvent = e.Item1.Event;
+                    midiEvent.DeltaTime = e.Item1.Time - times[e.Item2];
+                    eventsCollections[e.Item2][indices[e.Item2]++] = midiEvent;
+
+                    times[e.Item2] = e.Item1.Time;
+                }
+            }
+
+            return iMatched;
         }
 
         private static IEnumerable<ITimedObject> GetTimedObjects(

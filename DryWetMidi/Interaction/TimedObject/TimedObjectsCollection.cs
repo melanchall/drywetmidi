@@ -43,6 +43,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
+        #region Properties
+
+        public int Count => _objects.Count;
+
+        #endregion
+
         #region Methods
 
         /// <summary>

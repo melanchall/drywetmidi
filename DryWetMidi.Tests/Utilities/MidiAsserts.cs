@@ -165,6 +165,8 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             var trackChunksEnumerator1 = trackChunks1.GetEnumerator();
             var trackChunksEnumerator2 = trackChunks2.GetEnumerator();
 
+            var i = 0;
+
             while (true)
             {
                 var trackChunksEnumerated1 = !trackChunksEnumerator1.MoveNext();
@@ -185,7 +187,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     },
                     out chunksComparingMessage);
 
-                Assert.IsTrue(areEqual, $"{message} {chunksComparingMessage}");
+                Assert.IsTrue(areEqual, $"{message} Track chunk {i} is invalid. {chunksComparingMessage}");
+
+                i++;
             }
 
             Assert.IsTrue(trackChunksEnumerator1.Current == null && trackChunksEnumerator2.Current == null, $"{message} Chunks collections have different length.");
