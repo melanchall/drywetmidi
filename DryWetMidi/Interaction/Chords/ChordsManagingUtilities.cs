@@ -494,6 +494,14 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().ProcessChords(action, match, notesTolerance);
         }
 
+        public static int RemoveChords(this EventsCollection eventsCollection, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return eventsCollection.RemoveChords(chord => true, notesTolerance);
+        }
+
         /// <summary>
         /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
         /// </summary>
@@ -501,17 +509,41 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void RemoveChords(this EventsCollection eventsCollection, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int RemoveChords(this EventsCollection eventsCollection, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            using (var chordsManager = eventsCollection.ManageChords(notesTolerance))
-            {
-                chordsManager.Chords.RemoveAll(match ?? (c => true));
-            }
+            var tag = new object();
+            var chordsToRemoveCount = eventsCollection.ProcessChords(
+                c =>
+                {
+                    foreach (var note in c.Notes)
+                    {
+                        note.TimedNoteOnEvent.Event.Tag = note.TimedNoteOffEvent.Event.Tag = tag;
+                    }
+                },
+                match,
+                notesTolerance,
+                false);
+
+            if (chordsToRemoveCount == 0)
+                return 0;
+
+            eventsCollection.RemoveTimedEvents(e => e.Event.Tag == tag);
+            return chordsToRemoveCount;
+        }
+
+        public static int RemoveChords(this TrackChunk trackChunk, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return trackChunk.RemoveChords(note => true, notesTolerance);
         }
 
         /// <summary>
@@ -521,14 +553,24 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void RemoveChords(this TrackChunk trackChunk, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int RemoveChords(this TrackChunk trackChunk, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            trackChunk.Events.RemoveChords(match, notesTolerance);
+            return trackChunk.Events.RemoveChords(match, notesTolerance);
+        }
+
+        public static int RemoveChords(this IEnumerable<TrackChunk> trackChunks, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return trackChunks.RemoveChords(note => true, notesTolerance);
         }
 
         /// <summary>
@@ -538,17 +580,41 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void RemoveChords(this IEnumerable<TrackChunk> trackChunks, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int RemoveChords(this IEnumerable<TrackChunk> trackChunks, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk?.RemoveChords(match, notesTolerance);
-            }
+            var tag = new object();
+            var chordsToRemoveCount = trackChunks.ProcessChords(
+                c =>
+                {
+                    foreach (var note in c.Notes)
+                    {
+                        note.TimedNoteOnEvent.Event.Tag = note.TimedNoteOffEvent.Event.Tag = tag;
+                    }
+                },
+                match,
+                notesTolerance,
+                false);
+
+            if (chordsToRemoveCount == 0)
+                return 0;
+
+            trackChunks.RemoveTimedEvents(e => e.Event.Tag == tag);
+            return chordsToRemoveCount;
+        }
+
+        public static int RemoveChords(this MidiFile file, long notesTolerance = 0)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
+
+            return file.RemoveChords(chord => true, notesTolerance);
         }
 
         /// <summary>
@@ -558,14 +624,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void RemoveChords(this MidiFile file, Predicate<Chord> match = null, long notesTolerance = 0)
+        public static int RemoveChords(this MidiFile file, Predicate<Chord> match, long notesTolerance = 0)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(match), match);
             ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            file.GetTrackChunks().RemoveChords(match, notesTolerance);
+            return file.GetTrackChunks().RemoveChords(match, notesTolerance);
         }
 
         [Obsolete("OBS9")]
