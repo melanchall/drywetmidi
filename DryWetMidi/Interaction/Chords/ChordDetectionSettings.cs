@@ -42,6 +42,8 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
+
         #endregion
     }
 }

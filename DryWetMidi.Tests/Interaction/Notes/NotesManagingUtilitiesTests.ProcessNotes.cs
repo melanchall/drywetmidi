@@ -411,10 +411,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_EmptyCollection([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_EmptyCollection([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[0],
                 action: n => { },
                 match: n => n.NoteNumber == 70,
@@ -423,10 +423,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_NoProcessing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_NoProcessing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent() },
                 action: n => { },
                 match: n => true,
@@ -435,10 +435,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_NoProcessing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_NoProcessing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent() },
                 action: n => { },
                 match: n => false,
@@ -447,10 +447,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -467,10 +467,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing_Time([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing_Time([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -487,10 +487,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing_Length([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing_Length([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -507,10 +507,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing_TimeAndLength([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_Matched_Processing_TimeAndLength([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -531,10 +531,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -551,10 +551,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing_Time([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing_Time([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -571,10 +571,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing_Length([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing_Length([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -591,10 +591,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing_TimeAndLength([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_OneNote_NotMatched_Processing_TimeAndLength([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -615,10 +615,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_NoProcessing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_NoProcessing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -641,10 +641,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_NoProcessing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_NoProcessing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -667,10 +667,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_NoProcessing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_NoProcessing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -695,10 +695,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -723,10 +723,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing_Time([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing_Time([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -751,10 +751,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing_Length([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing_Length([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -779,10 +779,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing_TimeAndLength([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_AllMatched_Processing_TimeAndLength([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -811,10 +811,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -839,10 +839,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_Time([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_Time([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -867,10 +867,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_Length([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_Length([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -895,10 +895,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_TimeAndLength([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_TimeAndLength([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -927,10 +927,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -955,10 +955,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing_Time([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing_Time([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -983,10 +983,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing_Length([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing_Length([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -1011,10 +1011,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing_TimeAndLength([Values] bool wrapToTrackChunk)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_NotMatched_Processing_TimeAndLength([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
-                wrapToTrackChunk,
+                containerType,
                 midiEvents: new MidiEvent[]
                 {
                     new NoteOnEvent(),
@@ -2467,44 +2467,61 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Private methods
 
         private void ProcessNotes_EventsCollection_WithPredicate(
-            bool wrapToTrackChunk,
+            ContainerType containerType,
             ICollection<MidiEvent> midiEvents,
             Action<Note> action,
             Predicate<Note> match,
             ICollection<MidiEvent> expectedMidiEvents,
             int expectedProcessedCount)
         {
-            if (wrapToTrackChunk)
+            var eventsCollection = new EventsCollection();
+            eventsCollection.AddRange(midiEvents);
+
+            switch (containerType)
             {
-                var trackChunk = new TrackChunk(midiEvents);
+                case ContainerType.EventsCollection:
+                    {
+                        Assert.AreEqual(
+                            expectedProcessedCount,
+                            eventsCollection.ProcessNotes(action, match),
+                            "Invalid count of processed notes.");
 
-                Assert.AreEqual(
-                    expectedProcessedCount,
-                    trackChunk.ProcessNotes(action, match),
-                    "Invalid count of processed notes.");
+                        var expectedEventsCollection = new EventsCollection();
+                        expectedEventsCollection.AddRange(expectedMidiEvents);
+                        MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
+                        Assert.IsTrue(
+                            eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                            "There are new events references.");
+                    }
+                    break;
+                case ContainerType.TrackChunk:
+                    {
+                        var trackChunk = new TrackChunk(eventsCollection);
 
-                var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
-                MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
-                Assert.IsTrue(
-                    trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
-                    "There are new events references.");
-            }
-            else
-            {
-                var eventsCollection = new EventsCollection();
-                eventsCollection.AddRange(midiEvents);
+                        Assert.AreEqual(
+                            expectedProcessedCount,
+                            trackChunk.ProcessNotes(action, match),
+                            "Invalid count of processed notes.");
 
-                Assert.AreEqual(
-                    expectedProcessedCount,
-                    eventsCollection.ProcessNotes(action, match),
-                    "Invalid count of processed notes.");
-
-                var expectedEventsCollection = new EventsCollection();
-                expectedEventsCollection.AddRange(expectedMidiEvents);
-                MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
-                Assert.IsTrue(
-                    eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
-                    "There are new events references.");
+                        var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
+                        MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
+                        Assert.IsTrue(
+                            trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
+                            "There are new events references.");
+                    }
+                    break;
+                case ContainerType.TrackChunks:
+                case ContainerType.File:
+                    {
+                        ProcessNotes_TrackChunks_WithPredicate(
+                            containerType == ContainerType.File,
+                            new[] { midiEvents },
+                            action,
+                            match,
+                            new[] { expectedMidiEvents },
+                            expectedProcessedCount);
+                    }
+                    break;
             }
         }
 

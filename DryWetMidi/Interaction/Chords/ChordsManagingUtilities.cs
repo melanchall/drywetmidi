@@ -736,7 +736,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
 
-            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy())
+            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings()))
             {
                 var timedObject = timedObjectTuple.Item1;
 
@@ -795,7 +795,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var chordsDescriptors = new LinkedList<ChordDescriptor>();
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptor>[FourBitNumber.MaxValue + 1];
 
-            foreach (var timedObject in timedEvents.GetNotesAndTimedEventsLazy())
+            foreach (var timedObject in timedEvents.GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings()))
             {
                 var timedEvent = timedObject as TimedEvent;
                 if (timedEvent != null)

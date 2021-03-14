@@ -1074,9 +1074,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         private static IEnumerable<ITimedObject> GetTimedObjects(IEnumerable<IEnumerable<MidiEvent>> events)
         {
+            // TODO: note detection settings -> playback settings
             return events
                 .Where(e => e != null)
-                .SelectMany(e =>  e.Where(midiEvent => midiEvent != null).GetTimedEventsLazy().GetNotesAndTimedEventsLazy());
+                .SelectMany(e =>  e.Where(midiEvent => midiEvent != null).GetTimedEventsLazy().GetNotesAndTimedEventsLazy(new NoteDetectionSettings()));
         }
 
         #endregion
