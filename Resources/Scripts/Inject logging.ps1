@@ -10,7 +10,7 @@ foreach ($file in $files)
 
 	if ($matched)
 	{
-		$content = $content -Replace "// LOGREAD: ([\w \-\+_<\{\.\}>\(\)]+)","Melanchall.DryWetMidi.Common.Logger.Instance.WriteLine(`"readlog.log`", $`"## [{reader.Position}] `$1 ##`");"
+		$content = $content -Replace "// LOGREAD: ([\w \-\+_<\{\.\}>\(\)]+)","Melanchall.DryWetMidi.Common.Logger.Instance.Write(`"readlog.log`", $`"## [{reader.Position}] `$1 ##`");"
 		$content = $content -Replace "// LOGREADEND","Melanchall.DryWetMidi.Common.Logger.Instance.Dispose();"
 		Write-Host "    writing updated content..." -NoNewLine
 		[System.IO.File]::WriteAllText($file.FullName, $content, $encoding)

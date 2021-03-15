@@ -42,19 +42,29 @@ namespace Melanchall.DryWetMidi.Common
 
         public void WriteLine(string filePath, string line)
         {
-            if (_streamWriter == null)
-            {
-                _fileStream = File.OpenWrite(filePath);
-                _streamWriter = new StreamWriter(_fileStream);
-            }
-
+            EnsureStreamCreated(filePath);
             _streamWriter.WriteLine(line);
+        }
+
+        public void Write(string filePath, string text)
+        {
+            EnsureStreamCreated(filePath);
+            _streamWriter.Write(text);
         }
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public void EnsureStreamCreated(string filePath)
+        {
+            if (_streamWriter == null)
+            {
+                _fileStream = File.OpenWrite(filePath);
+                _streamWriter = new StreamWriter(_fileStream);
+            }
         }
 
         private void Dispose(bool disposing)
@@ -67,6 +77,8 @@ namespace Melanchall.DryWetMidi.Common
                     _fileStream.Dispose();
                 }
 
+                _fileStream = null;
+                _streamWriter = null;
                 _disposed = true;
             }
         }
