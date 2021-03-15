@@ -385,7 +385,7 @@ namespace Melanchall.DryWetMidi.Core
                     if (reader.EndReached)
                         throw new ArgumentException("Stream is already read.", nameof(stream));
 
-                    // LOGREAD: file start
+                    // LOGREAD: f a
 
                     // Read RIFF header
 
@@ -437,7 +437,7 @@ namespace Melanchall.DryWetMidi.Core
                         file.Chunks.Add(chunk);
                     }
 
-                    // LOGREAD: file end
+                    // LOGREAD: f e
                     // LOGREADEND
 
                     if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)
@@ -608,7 +608,7 @@ namespace Melanchall.DryWetMidi.Core
 
             try
             {
-                // LOGREAD: chunk ID start
+                // LOGREAD: c id a
 
                 var chunkId = reader.ReadString(MidiChunk.IdLength);
                 if (chunkId.Length < MidiChunk.IdLength)
@@ -624,7 +624,7 @@ namespace Melanchall.DryWetMidi.Core
                     }
                 }
 
-                // LOGREAD: chunk ID end <{chunkId}>
+                // LOGREAD: c id z <{chunkId}>
 
                 switch (chunkId)
                 {

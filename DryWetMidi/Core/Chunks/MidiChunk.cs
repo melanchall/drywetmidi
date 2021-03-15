@@ -173,12 +173,12 @@ namespace Melanchall.DryWetMidi.Core
         /// underlying stream doesn't have enough bytes.</exception>
         internal void Read(MidiReader reader, ReadingSettings settings)
         {
-            // LOGREAD: chunk start
-            // LOGREAD: chunk size start
+            // LOGREAD: c a
+            // LOGREAD: c s a
 
             var size = reader.ReadDword();
 
-            // LOGREAD: chunk size end <{size}>
+            // LOGREAD: c s z <{size}>
 
             var readerPosition = reader.Position;
             ReadContent(reader, settings, size);
@@ -193,7 +193,7 @@ namespace Melanchall.DryWetMidi.Core
             if (bytesUnread > 0)
                 reader.Position += Math.Min(bytesUnread, reader.Length);
 
-            // LOGREAD: chunk end <{ToString()}>
+            // LOGREAD: c z <{ToString()}>
         }
 
         /// <summary>

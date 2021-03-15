@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
-            // LOGREAD: header chunk content start
+            // LOGREAD: hc c a
 
             var fileFormat = reader.ReadWord();
             if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), fileFormat))
@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Core
             TracksNumber = reader.ReadWord();
             TimeDivision = TimeDivisionFactory.GetTimeDivision(reader.ReadInt16());
 
-            // LOGREAD: header chunk content end
+            // LOGREAD: hc c z
         }
 
         /// <summary>
