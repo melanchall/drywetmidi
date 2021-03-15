@@ -80,6 +80,11 @@ namespace Melanchall.DryWetMidi.Core
             throw new NotSupportedException("Cloning of a header chunk isnot supported.");
         }
 
+        public override string ToString()
+        {
+            return $"Header chunk (file format = {FileFormat}, time division = {TimeDivision}, tracks number = {TracksNumber})";
+        }
+
         /// <summary>
         /// Reads content of a <see cref="HeaderChunk"/>.
         /// </summary>
@@ -96,6 +101,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
+            // LOGREAD: header chunk content start
+
             var fileFormat = reader.ReadWord();
             if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), fileFormat))
                 throw new UnknownFileFormatException(fileFormat);
@@ -103,6 +110,8 @@ namespace Melanchall.DryWetMidi.Core
             FileFormat = fileFormat;
             TracksNumber = reader.ReadWord();
             TimeDivision = TimeDivisionFactory.GetTimeDivision(reader.ReadInt16());
+
+            // LOGREAD: header chunk content end
         }
 
         /// <summary>

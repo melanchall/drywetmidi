@@ -370,8 +370,6 @@ namespace Melanchall.DryWetMidi.Core
             if (settings.ReaderSettings == null)
                 settings.ReaderSettings = new ReaderSettings();
 
-            //
-
             var file = new MidiFile();
 
             int? expectedTrackChunksCount = null;
@@ -386,6 +384,8 @@ namespace Melanchall.DryWetMidi.Core
                 {
                     if (reader.EndReached)
                         throw new ArgumentException("Stream is already read.", nameof(stream));
+
+                    // LOGREAD: file start
 
                     // Read RIFF header
 
@@ -436,6 +436,9 @@ namespace Melanchall.DryWetMidi.Core
 
                         file.Chunks.Add(chunk);
                     }
+
+                    // LOGREAD: file end
+                    // LOGREADEND
 
                     if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)
                         ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount.Value);
@@ -605,6 +608,8 @@ namespace Melanchall.DryWetMidi.Core
 
             try
             {
+                // LOGREAD: chunk ID start
+
                 var chunkId = reader.ReadString(MidiChunk.IdLength);
                 if (chunkId.Length < MidiChunk.IdLength)
                 {
@@ -619,7 +624,7 @@ namespace Melanchall.DryWetMidi.Core
                     }
                 }
 
-                //
+                // LOGREAD: chunk ID end <{chunkId}>
 
                 switch (chunkId)
                 {
@@ -669,8 +674,6 @@ namespace Melanchall.DryWetMidi.Core
                             return null;
                     }
                 }
-
-                //
 
                 chunk?.Read(reader, settings);
             }
