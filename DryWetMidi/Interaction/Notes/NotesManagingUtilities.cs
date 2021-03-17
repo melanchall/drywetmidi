@@ -715,8 +715,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
                     action(note);
 
-                    timesChanged = note.Time != time;
-                    lengthsChanged = note.Length != length;
+                    timesChanged |= note.Time != time;
+                    lengthsChanged |= note.Length != length;
 
                     iMatched++;
                 }
@@ -733,22 +733,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            // TODO: unify with timed events managing
-
             if (timesChanged || lengthsChanged)
-            {
-                var times = new long[eventsCollections.Length];
-                var indices = new int[eventsCollections.Length];
-
-                foreach (var e in timedEvents.OrderBy(e => e.Item1.Time))
-                {
-                    var midiEvent = e.Item1.Event;
-                    midiEvent.DeltaTime = e.Item1.Time - times[e.Item2];
-                    eventsCollections[e.Item2][indices[e.Item2]++] = midiEvent;
-
-                    times[e.Item2] = e.Item1.Time;
-                }
-            }
+                eventsCollections.SortAndUpdateEvents(timedEvents);
 
             return iMatched;
         }
@@ -776,8 +762,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
                     action(note);
 
-                    timesChanged = note.Time != time;
-                    lengthsChanged = note.Length != length;
+                    timesChanged |= note.Time != time;
+                    lengthsChanged |= note.Length != length;
 
                     iMatched++;
                 }
@@ -795,19 +781,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             if (timesChanged || lengthsChanged)
-            {
-                var time = 0L;
-                var i = 0;
-
-                foreach (var e in timedEvents.OrderBy(e => e.Time))
-                {
-                    var midiEvent = e.Event;
-                    midiEvent.DeltaTime = e.Time - time;
-                    eventsCollection[i++] = midiEvent;
-
-                    time = e.Time;
-                }
-            }
+                eventsCollection.SortAndUpdateEvents(timedEvents);
 
             return iMatched;
         }

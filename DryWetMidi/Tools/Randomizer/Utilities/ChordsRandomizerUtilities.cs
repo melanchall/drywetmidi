@@ -37,14 +37,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void RandomizeChords(this TrackChunk trackChunk, IBounds bounds, TempoMap tempoMap, long notesTolerance = 0, ChordsRandomizingSettings settings = null)
+        public static void RandomizeChords(this TrackChunk trackChunk, IBounds bounds, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null, ChordsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(bounds), bounds);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            using (var chordsManager = trackChunk.ManageChords(notesTolerance))
+            using (var chordsManager = trackChunk.ManageChords(chordDetectionSettings))
             {
                 new ChordsRandomizer().Randomize(chordsManager.Chords, bounds, tempoMap, settings);
             }
@@ -74,16 +73,15 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void RandomizeChords(this IEnumerable<TrackChunk> trackChunks, IBounds bounds, TempoMap tempoMap, long notesTolerance = 0, ChordsRandomizingSettings settings = null)
+        public static void RandomizeChords(this IEnumerable<TrackChunk> trackChunks, IBounds bounds, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null, ChordsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(bounds), bounds);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.RandomizeChords(bounds, tempoMap, notesTolerance, settings);
+                trackChunk.RandomizeChords(bounds, tempoMap, chordDetectionSettings, settings);
             }
         }
 
@@ -107,15 +105,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void RandomizeChords(this MidiFile midiFile, IBounds bounds, long notesTolerance = 0, ChordsRandomizingSettings settings = null)
+        public static void RandomizeChords(this MidiFile midiFile, IBounds bounds, ChordDetectionSettings chordDetectionSettings = null, ChordsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(bounds), bounds);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
 
-            midiFile.GetTrackChunks().RandomizeChords(bounds, tempoMap, notesTolerance, settings);
+            midiFile.GetTrackChunks().RandomizeChords(bounds, tempoMap, chordDetectionSettings, settings);
         }
 
         #endregion

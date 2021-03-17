@@ -79,6 +79,30 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessNotes_EventsCollection_WithoutPredicate_Time([Values] ContainerType containerType)
+        {
+            ProcessNotes_EventsCollection_WithoutPredicate(
+                containerType,
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("A"),
+                    new NoteOffEvent(),
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent(),
+                },
+                action: n => n.Time = 10,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                });
+        }
+
+        [Test]
         public void ProcessNotes_EventsCollection_WithoutPredicate_ProcessChannel([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithoutPredicate(
@@ -839,7 +863,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_Time([Values] ContainerType containerType)
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_Time_1([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithPredicate(
                 containerType,
@@ -861,6 +885,36 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     new NoteOffEvent { DeltaTime = 900 },
                     new TextEvent("A"),
+                    new ControlChangeEvent()
+                },
+                expectedProcessedCount: 1);
+        }
+
+        [Test]
+        public void ProcessNotes_EventsCollection_WithPredicate_MultipleNotes_SomeMatched_Processing_Time_2([Values] ContainerType containerType)
+        {
+            ProcessNotes_EventsCollection_WithPredicate(
+                containerType,
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("A"),
+                    new NoteOffEvent(),
+                    new TextEvent("B"),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100 },
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new ControlChangeEvent()
+                },
+                action: n => n.Time = 10,
+                match: n => n.Time == 0,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 90 },
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     new ControlChangeEvent()
                 },
                 expectedProcessedCount: 1);

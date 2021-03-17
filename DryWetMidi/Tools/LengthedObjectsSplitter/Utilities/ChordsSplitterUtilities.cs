@@ -44,14 +44,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByStep(chords, step, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByStep(chords, step, tempoMap), settings);
         }
 
         /// <summary>
@@ -83,16 +82,15 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsByStep(step, tempoMap, notesTolerance);
+                trackChunk.SplitChordsByStep(step, tempoMap, settings);
             }
         }
 
@@ -121,15 +119,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, long notesTolerance = 0)
+        public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(step), step);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
-
-            midiFile.GetTrackChunks().SplitChordsByStep(step, tempoMap, notesTolerance);
+            midiFile.GetTrackChunks().SplitChordsByStep(step, tempoMap, settings);
         }
 
         /// <summary>
@@ -168,15 +164,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByPartsNumber(chords, partsNumber, lengthType, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByPartsNumber(chords, partsNumber, lengthType, tempoMap), settings);
         }
 
         /// <summary>
@@ -215,17 +210,16 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static void SplitChordsByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, notesTolerance);
+                trackChunk.SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, settings);
             }
         }
 
@@ -254,16 +248,15 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, long notesTolerance = 0)
+        public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
 
-            midiFile.GetTrackChunks().SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, notesTolerance);
+            midiFile.GetTrackChunks().SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, settings);
         }
 
         /// <summary>
@@ -289,14 +282,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByGrid(chords, grid, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByGrid(chords, grid, tempoMap), settings);
         }
 
         /// <summary>
@@ -323,16 +315,15 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsByGrid(grid, tempoMap, notesTolerance);
+                trackChunk.SplitChordsByGrid(grid, tempoMap, settings);
             }
         }
 
@@ -345,15 +336,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
         /// <exception cref="ArgumentNullException"><paramref name="grid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsByGrid(this MidiFile midiFile, IGrid grid, long notesTolerance = 0)
+        public static void SplitChordsByGrid(this MidiFile midiFile, IGrid grid, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
-
-            midiFile.GetTrackChunks().SplitChordsByGrid(grid, tempoMap, notesTolerance);
+            midiFile.GetTrackChunks().SplitChordsByGrid(grid, tempoMap, settings);
         }
 
         /// <summary>
@@ -382,15 +371,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, distance, from, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, distance, from, tempoMap), settings);
         }
 
         /// <summary>
@@ -419,17 +407,16 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsAtDistance(distance, from, tempoMap, notesTolerance);
+                trackChunk.SplitChordsAtDistance(distance, from, tempoMap, settings);
             }
         }
 
@@ -455,16 +442,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, long notesTolerance = 0)
+        public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
-
-            midiFile.GetTrackChunks().SplitChordsAtDistance(distance, from, tempoMap, notesTolerance);
+            midiFile.GetTrackChunks().SplitChordsAtDistance(distance, from, tempoMap, settings);
         }
 
         /// <summary>
@@ -512,7 +497,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -523,9 +508,8 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, ratio, lengthType, from, tempoMap), notesTolerance);
+            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, ratio, lengthType, from, tempoMap), settings);
         }
 
         /// <summary>
@@ -573,7 +557,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, long notesTolerance = 0)
+        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -584,11 +568,10 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsAtDistance(ratio, lengthType, from, tempoMap, notesTolerance);
+                trackChunk.SplitChordsAtDistance(ratio, lengthType, from, tempoMap, settings);
             }
         }
 
@@ -626,7 +609,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, long notesTolerance = 0)
+        public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -636,16 +619,14 @@ namespace Melanchall.DryWetMidi.Tools
                                          $"Ratio is out of [{LengthedObjectsSplitter<Chord>.ZeroRatio}; {LengthedObjectsSplitter<Chord>.FullLengthRatio}] range.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             var tempoMap = midiFile.GetTempoMap();
-
-            midiFile.GetTrackChunks().SplitChordsAtDistance(ratio, lengthType, from, tempoMap, notesTolerance);
+            midiFile.GetTrackChunks().SplitChordsAtDistance(ratio, lengthType, from, tempoMap, settings);
         }
 
-        private static void SplitTrackChunkChords(TrackChunk trackChunk, Func<ChordsSplitter, IEnumerable<Chord>, IEnumerable<Chord>> splitOperation, long notesTolerance)
+        private static void SplitTrackChunkChords(TrackChunk trackChunk, Func<ChordsSplitter, IEnumerable<Chord>, IEnumerable<Chord>> splitOperation, ChordDetectionSettings settings)
         {
-            using (var chordsManager = trackChunk.ManageChords(notesTolerance))
+            using (var chordsManager = trackChunk.ManageChords(settings))
             {
                 var chords = chordsManager.Chords;
 

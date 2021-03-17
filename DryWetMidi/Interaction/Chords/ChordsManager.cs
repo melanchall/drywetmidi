@@ -39,14 +39,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
-        public ChordsManager(EventsCollection eventsCollection, long notesTolerance = 0, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public ChordsManager(EventsCollection eventsCollection, ChordDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
-            ThrowIfNotesTolerance.IsNegative(nameof(notesTolerance), notesTolerance);
 
             _notesManager = eventsCollection.ManageNotes(sameTimeEventsComparison);
 
-            Chords = new ChordsCollection(CreateChords(_notesManager.Notes, notesTolerance));
+            Chords = new ChordsCollection(_notesManager.Notes.GetChords(settings));
             Chords.CollectionChanged += OnChordsCollectionChanged;
         }
 
@@ -138,41 +137,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
             _notesManager.Notes.Remove(notes);
-        }
-
-        internal static IEnumerable<Chord> CreateChords(IEnumerable<Note> notes, long notesTolerance)
-        {
-            ThrowIfArgument.IsNull(nameof(notes), notes);
-
-            var channelsCount = FourBitNumber.Values.Length;
-            var lastNoteEndTimes = Enumerable.Range(0, channelsCount).Select(i => long.MinValue).ToArray();
-            var chords = new Chord[channelsCount];
-
-            foreach (var note in notes)
-            {
-                var channel = note.Channel;
-
-                var lastNoteEndTime = lastNoteEndTimes[channel];
-                var chord = chords[channel];
-
-                var noteTime = note.Time;
-                if (noteTime >= lastNoteEndTime || noteTime - chord.Time > notesTolerance)
-                {
-                    if (chord != null)
-                        yield return chord;
-
-                    chords[channel] = chord = new Chord();
-                }
-
-                chord.Notes.Add(note);
-
-                lastNoteEndTimes[channel] = noteTime + note.Length;
-            }
-
-            foreach (var chord in chords.Where(c => c != null && c.Notes.Any()))
-            {
-                yield return chord;
-            }
         }
 
         #endregion

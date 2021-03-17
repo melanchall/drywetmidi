@@ -273,19 +273,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             if (timesChanged)
-            {
-                var time = 0L;
-                var i = 0;
-
-                foreach (var e in timedEvents.OrderBy(e => e.Time))
-                {
-                    var midiEvent = e.Event;
-                    midiEvent.DeltaTime = e.Time - time;
-                    eventsCollection[i++] = midiEvent;
-
-                    time = e.Time;
-                }
-            }
+                eventsCollection.SortAndUpdateEvents(timedEvents);
 
             return iMatched;
         }
@@ -389,19 +377,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             if (timesChanged)
-            {
-                var times = new long[eventsCollections.Length];
-                var indices = new int[eventsCollections.Length];
-
-                foreach (var e in timedEvents.OrderBy(e => e.Item1.Time))
-                {
-                    var midiEvent = e.Item1.Event;
-                    midiEvent.DeltaTime = e.Item1.Time - times[e.Item2];
-                    eventsCollections[e.Item2][indices[e.Item2]++] = midiEvent;
-
-                    times[e.Item2] = e.Item1.Time;
-                }
-            }
+                eventsCollections.SortAndUpdateEvents(timedEvents);
 
             return iMatched;
         }
@@ -797,6 +773,36 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 time += midiEvent.DeltaTime;
                 yield return new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent, time);
+            }
+        }
+
+        internal static void SortAndUpdateEvents(this EventsCollection eventsCollection, IEnumerable<TimedEvent> timedEvents)
+        {
+            var time = 0L;
+            var i = 0;
+
+            foreach (var e in timedEvents.OrderBy(e => e.Time))
+            {
+                var midiEvent = e.Event;
+                midiEvent.DeltaTime = e.Time - time;
+                eventsCollection[i++] = midiEvent;
+
+                time = e.Time;
+            }
+        }
+
+        internal static void SortAndUpdateEvents(this EventsCollection[] eventsCollections, IEnumerable<Tuple<TimedEvent, int>> timedEvents)
+        {
+            var times = new long[eventsCollections.Length];
+            var indices = new int[eventsCollections.Length];
+
+            foreach (var e in timedEvents.OrderBy(e => e.Item1.Time))
+            {
+                var midiEvent = e.Item1.Event;
+                midiEvent.DeltaTime = e.Item1.Time - times[e.Item2];
+                eventsCollections[e.Item2][indices[e.Item2]++] = midiEvent;
+
+                times[e.Item2] = e.Item1.Time;
             }
         }
 
