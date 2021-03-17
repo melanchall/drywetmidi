@@ -771,11 +771,9 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             settings = settings ?? new ChordDetectionSettings();
 
-            var timedObjects = new LinkedList<IObjectDescriptor>();
-            var chordsDescriptors = new LinkedList<ChordDescriptor>();
-            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptor>[FourBitNumber.MaxValue + 1];
-
-            return timedEvents.GetChordsAndNotesAndTimedEventsLazy(settings);
+            return timedEvents
+                .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings())
+                .GetChordsAndNotesAndTimedEventsLazy(settings);
         }
 
         internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<ITimedObject> notesAndTimedEvents, ChordDetectionSettings settings)
