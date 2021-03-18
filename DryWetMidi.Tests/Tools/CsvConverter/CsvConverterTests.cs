@@ -863,7 +863,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     csvConverter.ConvertMidiFileToCsv(midiFile, outputFilePath, true, settings);
                     var convertedFile = csvConverter.ConvertCsvToMidiFile(outputFilePath, settings);
 
-                    MidiAsserts.AreFilesEqual(midiFile, convertedFile, true, $"Conversion of '{filePath}' is invalid.");
+                    MidiAsserts.AreEqual(midiFile, convertedFile, true, $"Conversion of '{filePath}' is invalid.");
                 }
             }
             finally

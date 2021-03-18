@@ -17,6 +17,21 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
+        public static IEnumerable<MidiFile> SplitByChunks(this MidiFile midiFile, SplitFileByChunksSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+
+            settings = settings ?? new SplitFileByChunksSettings();
+
+            foreach (var midiChunk in midiFile.Chunks.Where(c => settings.Filter?.Invoke(c) != false))
+            {
+                yield return new MidiFile(midiChunk.Clone())
+                {
+                    TimeDivision = midiFile.TimeDivision.Clone()
+                };
+            }
+        }
+
         /// <summary>
         /// Splits <see cref="MidiFile"/> by channel.
         /// </summary>

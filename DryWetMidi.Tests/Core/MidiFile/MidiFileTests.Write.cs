@@ -507,7 +507,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName);
-                    MidiAsserts.AreFilesEqual(originalMidiFile, newMidiFile, true, "New file is invalid.");
+                    MidiAsserts.AreEqual(originalMidiFile, newMidiFile, true, "New file is invalid.");
                 });
         }
 
@@ -532,7 +532,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore
                     });
 
-                    MidiAsserts.AreFilesEqual(originalMidiFile, newMidiFile, false, "New file is invalid.");
+                    MidiAsserts.AreEqual(originalMidiFile, newMidiFile, false, "New file is invalid.");
                 });
         }
 
@@ -569,7 +569,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 (fileInfo1, fileInfo2) =>
                 {
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName);
-                    MidiAsserts.AreFilesEqual(midiFile, newMidiFile, false, "File is invalid.");
+                    MidiAsserts.AreEqual(midiFile, newMidiFile, false, "File is invalid.");
                 });
         }
 

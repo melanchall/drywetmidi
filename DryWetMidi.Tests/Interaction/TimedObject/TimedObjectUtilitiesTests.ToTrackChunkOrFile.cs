@@ -848,7 +848,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             if (toFile)
             {
                 var midiFile = timedObjects.ToFile();
-                MidiAsserts.AreFilesEqual(new MidiFile(new TrackChunk(expectedMidiEvents)), midiFile, true, "Events are invalid.");
+                MidiAsserts.AreEqual(new MidiFile(new TrackChunk(expectedMidiEvents)), midiFile, true, "Events are invalid.");
             }
             else
             {

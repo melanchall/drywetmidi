@@ -2554,7 +2554,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     midiFile.ProcessChords(action, match),
                     "Invalid count of processed chords.");
 
-                MidiAsserts.AreFilesEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
+                MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
                 Assert.IsTrue(
                     midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
                     "There are new events references.");
@@ -2591,7 +2591,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     midiFile.ProcessChords(action),
                     "Invalid count of processed chords.");
 
-                MidiAsserts.AreFilesEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
+                MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
                 Assert.IsTrue(
                     midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
                     "There are new events references.");

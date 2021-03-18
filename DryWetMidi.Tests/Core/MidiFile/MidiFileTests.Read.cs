@@ -1206,7 +1206,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var expectedMidiFile = MidiFile.Read(filePath);
                 var midiFile = MidiFile.Read(filePath, settings);
-                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+                MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
             }
         }
 
@@ -1228,7 +1228,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
                 var midiFile = MidiFile.Read(filePath, bufferAllDataSettings);
-                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+                MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
             }
         }
 
@@ -1259,7 +1259,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
                 var midiFile = MidiFile.Read(filePath, fixedSizeBufferingSettings);
-                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+                MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
             }
         }
 
@@ -1294,7 +1294,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
                 var midiFile = MidiFile.Read(filePath, customBufferingSettings);
-                MidiAsserts.AreFilesEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
+                MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
 
                 if (checkData)
                 {
@@ -1393,15 +1393,15 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 checkFile(newMidiFile);
 
                 var newMidiFileFromNonSeekableStream = MidiFile.Read(new NonSeekableStream(filePath), readingSettings);
-                MidiAsserts.AreFilesEqual(newMidiFile, newMidiFileFromNonSeekableStream, true, "The file from non-seekable stream is invalid.");
+                MidiAsserts.AreEqual(newMidiFile, newMidiFileFromNonSeekableStream, true, "The file from non-seekable stream is invalid.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
                 var newMidiFileWithBufferAllData = MidiFile.Read(filePath, readingSettings);
-                MidiAsserts.AreFilesEqual(newMidiFile, newMidiFileWithBufferAllData, true, "The file with buffer all data is invalid.");
+                MidiAsserts.AreEqual(newMidiFile, newMidiFileWithBufferAllData, true, "The file with buffer all data is invalid.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
                 var newMidiFileWithFixedSizeBuffer = MidiFile.Read(filePath, readingSettings);
-                MidiAsserts.AreFilesEqual(newMidiFile, newMidiFileWithFixedSizeBuffer, true, "The file with fixed-size buffer is invalid.");
+                MidiAsserts.AreEqual(newMidiFile, newMidiFileWithFixedSizeBuffer, true, "The file with fixed-size buffer is invalid.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
             }

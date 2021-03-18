@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
         }
 
-        public static void AreFilesEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
+        public static void AreEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
         {
             string filesComparingMessage;
             var areEqual = MidiFile.Equals(
@@ -219,7 +219,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(areEqual, $"{message} {filesComparingMessage}");
         }
 
-        public static void AreFilesNotEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
+        public static void AreNotEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
         {
             string filesComparingMessage;
             var areEqual = MidiFile.Equals(

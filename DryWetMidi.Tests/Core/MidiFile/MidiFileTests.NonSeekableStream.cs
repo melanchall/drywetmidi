@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var nonSeekableStream = new NonSeekableStream(filePath);
                 var midiFile2 = MidiFile.Read(nonSeekableStream);
 
-                MidiAsserts.AreFilesEqual(midiFile, midiFile2, true, $"File '{filePath}' is invalid.");
+                MidiAsserts.AreEqual(midiFile, midiFile2, true, $"File '{filePath}' is invalid.");
             }
         }
 
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var nonSeekableStream = new NonSeekableStream(filePath);
             var midiFile2 = MidiFile.Read(nonSeekableStream, new ReadingSettings { ReaderSettings = readerSettings });
 
-            MidiAsserts.AreFilesEqual(midiFile, midiFile2, true, $"File is invalid.");
+            MidiAsserts.AreEqual(midiFile, midiFile2, true, $"File is invalid.");
         }
 
         #endregion

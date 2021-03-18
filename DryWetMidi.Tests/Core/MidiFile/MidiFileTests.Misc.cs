@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var midiFile = MidiFile.Read(filePath);
                 var clonedMidiFile = midiFile.Clone();
 
-                MidiAsserts.AreFilesEqual(clonedMidiFile, midiFile, true, $"Clone of the '{filePath}' doesn't equal to the original file.");
+                MidiAsserts.AreEqual(clonedMidiFile, midiFile, true, $"Clone of the '{filePath}' doesn't equal to the original file.");
             }
         }
 
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     $"Read/Write/Read failed for '{filePath}'.");
 
                 Assert.IsNotNull(midiFile, "MIDI file is null.");
-                MidiAsserts.AreFilesEqual(midiFile, midiFile2, true, $"Reread failed for '{filePath}'.");
+                MidiAsserts.AreEqual(midiFile, midiFile2, true, $"Reread failed for '{filePath}'.");
             }
         }
 
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     continue;
 
                 var midiFile = MidiFile.Read(filePath);
-                MidiAsserts.AreFilesEqual(midiFile, referenceMidiFile, false, $"File '{filePath}' read wrong.");
+                MidiAsserts.AreEqual(midiFile, referenceMidiFile, false, $"File '{filePath}' read wrong.");
             }
         }
 
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var midiFile1 = MidiFile.Read(filePath);
                 var midiFile2 = MidiFile.Read(filePath);
-                MidiAsserts.AreFilesEqual(midiFile1, midiFile2, true, $"File '{filePath}' isn't equal to self.");
+                MidiAsserts.AreEqual(midiFile1, midiFile2, true, $"File '{filePath}' isn't equal to self.");
             }
         }
 
@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     var jFilePath = filesPaths[j];
                     var jMidiFile = MidiFile.Read(jFilePath);
 
-                    MidiAsserts.AreFilesNotEqual(iMidiFile, jMidiFile, true, $"File '{iFilePath}' equals to another one '{jFilePath}'.");
+                    MidiAsserts.AreNotEqual(iMidiFile, jMidiFile, true, $"File '{iFilePath}' equals to another one '{jFilePath}'.");
                 }
             }
         }
