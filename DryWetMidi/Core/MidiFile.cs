@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Core
     /// (<see cref="Write(string, bool, MidiFileFormat, WritingSettings)"/> or
     /// <see cref="Write(Stream, MidiFileFormat, WritingSettings)"/>).</para>
     /// <para>
-    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// See <see href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files"/> for detailed MIDI file specification.
     /// </para>
     /// </remarks>
     /// <seealso cref="ReadingSettings"/>

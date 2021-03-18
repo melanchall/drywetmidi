@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     /// <remarks>
     /// <para>
-    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// See <see href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files"/> for detailed MIDI file specification.
     /// </para>
     /// </remarks>
     public abstract class MidiEvent

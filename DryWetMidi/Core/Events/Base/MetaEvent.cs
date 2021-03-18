@@ -19,7 +19,7 @@
     /// See <see href="xref:a_custom_meta_event">Custom meta events</see> article to learn more.
     /// </para>
     /// <para>
-    /// See <see href="https://www.midi.org/specifications-old/category/smf-specifications"/> for detailed MIDI file specification.
+    /// See <see href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files"/> for detailed MIDI file specification.
     /// </para>
     /// </remarks>
     public abstract class MetaEvent : MidiEvent
