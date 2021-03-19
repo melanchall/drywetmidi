@@ -37,6 +37,18 @@ namespace Melanchall.DryWetMidi.Interaction
             public ITimedObject TimedObject { get; }
         }
 
+        private class CompleteChordDescriptor : IObjectDescriptor
+        {
+            public CompleteChordDescriptor(Chord chord)
+            {
+                TimedObject = chord;
+            }
+
+            public bool ChordStart { get; } = false;
+
+            public ITimedObject TimedObject { get; }
+        }
+
         private sealed class TimedEventDescriptorIndexed : TimedEventDescriptor, IObjectDescriptorIndexed
         {
             private readonly int _index;
@@ -778,6 +790,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<ITimedObject> notesAndTimedEvents, ChordDetectionSettings settings)
         {
+            return notesAndTimedEvents.GetChordsAndNotesAndTimedEventsLazy(settings, false);
+        }
+
+        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<ITimedObject> notesAndTimedEvents, ChordDetectionSettings settings, bool chordsAllowed)
+        {
             settings = settings ?? new ChordDetectionSettings();
 
             var timedObjects = new LinkedList<IObjectDescriptor>();
@@ -786,6 +803,20 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in notesAndTimedEvents)
             {
+                if (chordsAllowed)
+                {
+                    var chord = timedObject as Chord;
+                    if (chord != null)
+                    {
+                        if (timedObjects.Count == 0)
+                            yield return chord;
+                        else
+                            timedObjects.AddLast(new CompleteChordDescriptor(chord));
+
+                        continue;
+                    }
+                }
+
                 var timedEvent = timedObject as TimedEvent;
                 if (timedEvent != null)
                 {

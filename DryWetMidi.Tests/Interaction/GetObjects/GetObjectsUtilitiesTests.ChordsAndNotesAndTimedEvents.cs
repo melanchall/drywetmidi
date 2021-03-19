@@ -6,15 +6,16 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
+    // TODO: notes min count tests
     [TestFixture]
-    public sealed partial class BuildObjectsUtilitiesTests
+    public sealed partial class GetObjectsUtilitiesTests
     {
         #region Test methods
 
         [Test]
-        public void BuildChordsAndNotesAndTimedEvents_FromTimedEvents_SameTime_UncompletedNote()
+        public void GetObjects_ChordsAndNotesAndTimedEvents_FromTimedEvents_SameTime_UncompletedNote()
         {
-            CheckBuildingChordsAndNotesAndTimedEvents(
+            GetObjects_ChordsAndNotesAndTimedEvents(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), 0),
@@ -29,10 +30,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 outputObjects: new ITimedObject[]
                 {
-                    new Note((SevenBitNumber)50, 30, 0),
-                    new Note((SevenBitNumber)70, 40, 0),
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), 0),
+                    new Chord(
+                        new Note((SevenBitNumber)50, 30, 0),
+                        new Note((SevenBitNumber)70, 40, 0)),
                     new TimedEvent(new TextEvent("B"), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), 0),
                     new TimedEvent(new TextEvent("A"), 10),
                     new TimedEvent(new TextEvent("C"), 30),
                     new TimedEvent(new TextEvent("D"), 30),
@@ -40,9 +42,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildChordsAndNotesAndTimedEvents_FromTimedEvents_SameTime_AllNotesUncompleted()
+        public void GetObjects_ChordsAndNotesAndTimedEvents_FromTimedEvents_SameTime_AllNotesUncompleted()
         {
-            CheckBuildingChordsAndNotesAndTimedEvents(
+            GetObjects_ChordsAndNotesAndTimedEvents(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), 0),
@@ -67,18 +69,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Private methods
 
-        private void CheckBuildingChordsAndNotesAndTimedEvents(
+        private void GetObjects_ChordsAndNotesAndTimedEvents(
             IEnumerable<ITimedObject> inputObjects,
             IEnumerable<ITimedObject> outputObjects,
             long notesTolerance = 0)
         {
-            CheckObjectsBuilding(
+            GetObjects(
                 inputObjects,
                 outputObjects,
                 ObjectType.TimedEvent | ObjectType.Note | ObjectType.Chord,
-                new ObjectsBuildingSettings
+                new ObjectDetectionSettings
                 {
-                    ChordBuilderSettings = new ChordBuilderSettings
+                    ChordDetectionSettings = new ChordDetectionSettings
                     {
                         NotesTolerance = notesTolerance
                     }

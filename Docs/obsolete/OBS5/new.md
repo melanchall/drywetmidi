@@ -1,1 +1,1 @@
-* [BuildObjectsUtilities.BuildObjects](xref:TODO)
+* [GetObjectsUtilities.GetObjects](xref:TODO)

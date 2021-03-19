@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed partial class BuildObjectsUtilitiesTests
+    public sealed partial class GetObjectsUtilitiesTests
     {
         #region Test methods
 
@@ -15,13 +15,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(10, 2, 50, 50)]
         [TestCase(10, 10, 50, 100)]
         [TestCase(10, 2, 50, 100)]
-        public void BuildNotesAndRests_NoSeparation_FromNotes(
+        public void GetObjects_NotesAndRests_NoSeparation_FromNotes(
             byte channel1,
             byte channel2,
             byte noteNumber1,
             byte noteNumber2)
         {
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.NoSeparation,
                 inputObjects: new ITimedObject[]
                 {
@@ -59,13 +59,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildNotesAndRests_SeparateByChannel_SingleChannel_FromNotes(
+        public void GetObjects_NotesAndRests_SeparateByChannel_SingleChannel_FromNotes(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel = (FourBitNumber)10;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -95,14 +95,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildNotesAndRests_SeparateByChannel_DifferentChannels_FromNotes(
+        public void GetObjects_NotesAndRests_SeparateByChannel_DifferentChannels_FromNotes(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -131,13 +131,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildNotesAndRests_SeparateByNoteNumber_SingleNoteNumber_FromNotes(
+        public void GetObjects_NotesAndRests_SeparateByNoteNumber_SingleNoteNumber_FromNotes(
             byte channel1,
             byte channel2)
         {
             var noteNumber = (SevenBitNumber)10;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -164,14 +164,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildNotesAndRests_SeparateByNoteNumber_DifferentNoteNumbers_FromNotes(
+        public void GetObjects_NotesAndRests_SeparateByNoteNumber_DifferentNoteNumbers_FromNotes(
             byte channel1,
             byte channel2)
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -193,14 +193,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildNotesAndRests_SeparateByChannelAndNoteNumber_FromNotes()
+        public void GetObjects_NotesAndRests_SeparateByChannelAndNoteNumber_FromNotes()
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannelAndNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -232,13 +232,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(10, 2, 50, 50)]
         [TestCase(10, 10, 50, 100)]
         [TestCase(10, 2, 50, 100)]
-        public void BuildNotesAndRests_NoSeparation_FromNotesAndTimedEvents(
+        public void GetObjects_NotesAndRests_NoSeparation_FromNotesAndTimedEvents(
             byte channel1,
             byte channel2,
             byte noteNumber1,
             byte noteNumber2)
         {
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.NoSeparation,
                 inputObjects: new ITimedObject[]
                 {
@@ -278,13 +278,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildNotesAndRests_SeparateByChannel_SingleChannel_FromNotesAndTimedEvents(
+        public void GetObjects_NotesAndRests_SeparateByChannel_SingleChannel_FromNotesAndTimedEvents(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel = (FourBitNumber)10;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -312,19 +312,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note((SevenBitNumber)noteNumber1, 1000, 1300) { Channel = channel },
                     new Rest(2300, 7700, channel, null),
                     new Note((SevenBitNumber)noteNumber2, 1000, 10000) { Channel = channel },
-                });
+                },
+                noteDetectionSettings: new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn });
         }
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildNotesAndRests_SeparateByChannel_DifferentChannels_FromNotesAndTimedEvents(
+        public void GetObjects_NotesAndRests_SeparateByChannel_DifferentChannels_FromNotesAndTimedEvents(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -355,13 +356,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildNotesAndRests_SeparateByNoteNumber_SingleNoteNumber_FromNotesAndTimedEvents(
+        public void GetObjects_NotesAndRests_SeparateByNoteNumber_SingleNoteNumber_FromNotesAndTimedEvents(
             byte channel1,
             byte channel2)
         {
             var noteNumber = (SevenBitNumber)10;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -390,14 +391,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildNotesAndRests_SeparateByNoteNumber_DifferentNoteNumbers_FromNotesAndTimedEvents(
+        public void GetObjects_NotesAndRests_SeparateByNoteNumber_DifferentNoteNumbers_FromNotesAndTimedEvents(
             byte channel1,
             byte channel2)
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -420,14 +421,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildNotesAndRests_SeparateByChannelAndNoteNumber_FromNotesAndTimedEvents()
+        public void GetObjects_NotesAndRests_SeparateByChannelAndNoteNumber_FromNotesAndTimedEvents()
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingNotesAndRests(
+            GetObjects_NotesAndRests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannelAndNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -460,21 +461,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Private methods
 
-        private void CheckBuildingNotesAndRests(
+        private void GetObjects_NotesAndRests(
             RestSeparationPolicy restSeparationPolicy,
             IEnumerable<ITimedObject> inputObjects,
-            IEnumerable<ITimedObject> outputObjects)
+            IEnumerable<ITimedObject> outputObjects,
+            NoteDetectionSettings noteDetectionSettings = null)
         {
-            CheckObjectsBuilding(
+            GetObjects(
                 inputObjects,
                 outputObjects,
                 ObjectType.Note | ObjectType.Rest,
-                new ObjectsBuildingSettings
+                new ObjectDetectionSettings
                 {
-                    RestBuilderSettings = new RestBuilderSettings
+                    RestDetectionSettings = new RestDetectionSettings
                     {
                         RestSeparationPolicy = restSeparationPolicy
-                    }
+                    },
+                    NoteDetectionSettings = noteDetectionSettings ?? new NoteDetectionSettings()
                 });
         }
 

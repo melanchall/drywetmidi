@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
 
-            return timedEvents.BuildObjects(ObjectType.TimedEvent | ObjectType.Note);
+            return timedEvents.GetObjects(ObjectType.TimedEvent | ObjectType.Note);
         }
 
         [Obsolete("OBS5")]

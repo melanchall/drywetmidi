@@ -8,4 +8,4 @@ apiRules:
 - exclude:
     uidRegex: ^Melanchall\.DryWetMidi\.Devices\.MidiDevice\.IsEnabled
 - exclude:
-    uidRegex: ^Melanchall\.DryWetMidi\.Interaction\.BuildObjectsUtilities
+    uidRegex: ^Melanchall\.DryWetMidi\.Interaction\.GetObjectsUtilities

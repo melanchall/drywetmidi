@@ -154,7 +154,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            var timedEventsObjects = timedObjects.BuildObjects(ObjectType.TimedEvent);
+            var timedEventsObjects = timedObjects.GetObjects(ObjectType.TimedEvent);
             if (timedEventsObjects.Count == 0)
                 return;
 

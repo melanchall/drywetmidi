@@ -130,6 +130,23 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        private class CompleteNoteDescriptor : IObjectDescriptor
+        {
+            private readonly Note _note;
+
+            public CompleteNoteDescriptor(Note note)
+            {
+                _note = note;
+            }
+
+            public bool IsCompleted { get; } = true;
+
+            public ITimedObject GetObject()
+            {
+                return _note;
+            }
+        }
+
         private sealed class NoteDescriptorIndexed : NoteDescriptor, IObjectDescriptorIndexed
         {
             private readonly int _noteOnIndex;
@@ -865,11 +882,35 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<TimedEvent> timedEvents,
             NoteDetectionSettings settings)
         {
+            return GetNotesAndTimedEventsLazy(timedEvents, settings, false);
+        }
+
+        internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
+            this IEnumerable<ITimedObject> timedObjects,
+            NoteDetectionSettings settings,
+            bool notesAllowed)
+        {
             var objectsDescriptors = new LinkedList<IObjectDescriptor>();
             var notesDescriptorsNodes = new Dictionary<NoteId, NoteOnsHolder>();
 
-            foreach (var timedEvent in timedEvents)
+            foreach (var timedObject in timedObjects)
             {
+                if (notesAllowed)
+                {
+                    var note = timedObject as Note;
+                    if (note != null)
+                    {
+                        if (objectsDescriptors.Count == 0)
+                            yield return note;
+                        else
+                            objectsDescriptors.AddLast(new CompleteNoteDescriptor(note));
+
+                        continue;
+                    }
+                }
+
+                var timedEvent = (TimedEvent)timedObject;
+
                 switch (timedEvent.Event.EventType)
                 {
                     case MidiEventType.NoteOn:

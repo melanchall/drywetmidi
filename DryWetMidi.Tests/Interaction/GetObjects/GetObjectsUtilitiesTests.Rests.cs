@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed partial class BuildObjectsUtilitiesTests
+    public sealed partial class GetObjectsUtilitiesTests
     {
         #region Test methods
 
@@ -15,13 +15,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(10, 2, 50, 50)]
         [TestCase(10, 10, 50, 100)]
         [TestCase(10, 2, 50, 100)]
-        public void BuildRests_NoSeparation_FromNotes(
+        public void GetObjects_Rests_NoSeparation_FromNotes(
             byte channel1,
             byte channel2,
             byte noteNumber1,
             byte noteNumber2)
         {
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.NoSeparation,
                 inputObjects: new ITimedObject[]
                 {
@@ -49,13 +49,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildRests_SeparateByChannel_SingleChannel_FromNotes(
+        public void GetObjects_Rests_SeparateByChannel_SingleChannel_FromNotes(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel = (FourBitNumber)10;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -78,14 +78,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildRests_SeparateByChannel_DifferentChannels_FromNotes(
+        public void GetObjects_Rests_SeparateByChannel_DifferentChannels_FromNotes(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -108,13 +108,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildRests_SeparateByNoteNumber_SingleNoteNumber_FromNotes(
+        public void GetObjects_Rests_SeparateByNoteNumber_SingleNoteNumber_FromNotes(
             byte channel1,
             byte channel2)
         {
             var noteNumber = (SevenBitNumber)10;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -135,14 +135,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildRests_SeparateByNoteNumber_DifferentNoteNumbers_FromNotes(
+        public void GetObjects_Rests_SeparateByNoteNumber_DifferentNoteNumbers_FromNotes(
             byte channel1,
             byte channel2)
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -160,14 +160,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildRests_SeparateByChannelAndNoteNumber_FromNotes()
+        public void GetObjects_Rests_SeparateByChannelAndNoteNumber_FromNotes()
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannelAndNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -193,13 +193,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(10, 2, 50, 50)]
         [TestCase(10, 10, 50, 100)]
         [TestCase(10, 2, 50, 100)]
-        public void BuildRests_NoSeparation_FromTimedEvents(
+        public void GetObjects_Rests_NoSeparation_FromTimedEvents(
             byte channel1,
             byte channel2,
             byte noteNumber1,
             byte noteNumber2)
         {
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.NoSeparation,
                 inputObjects: new ITimedObject[]
                 {
@@ -237,13 +237,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildRests_SeparateByChannel_SingleChannel_FromTimedEvents(
+        public void GetObjects_Rests_SeparateByChannel_SingleChannel_FromTimedEvents(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel = (FourBitNumber)10;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -273,14 +273,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 50)]
-        public void BuildRests_SeparateByChannel_DifferentChannels_FromTimedEvents(
+        public void GetObjects_Rests_SeparateByChannel_DifferentChannels_FromTimedEvents(
             byte noteNumber1,
             byte noteNumber2)
         {
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
                 inputObjects: new ITimedObject[]
                 {
@@ -309,13 +309,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildRests_SeparateByNoteNumber_SingleNoteNumber_FromTimedEvents(
+        public void GetObjects_Rests_SeparateByNoteNumber_SingleNoteNumber_FromTimedEvents(
             byte channel1,
             byte channel2)
         {
             var noteNumber = (SevenBitNumber)10;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -342,14 +342,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [TestCase(10, 10)]
         [TestCase(10, 5)]
-        public void BuildRests_SeparateByNoteNumber_DifferentNoteNumbers_FromTimedEvents(
+        public void GetObjects_Rests_SeparateByNoteNumber_DifferentNoteNumbers_FromTimedEvents(
             byte channel1,
             byte channel2)
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -371,14 +371,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildRests_SeparateByChannelAndNoteNumber_FromTimedEvents()
+        public void GetObjects_Rests_SeparateByChannelAndNoteNumber_FromTimedEvents()
         {
             var noteNumber1 = (SevenBitNumber)10;
             var noteNumber2 = (SevenBitNumber)100;
             var channel1 = (FourBitNumber)10;
             var channel2 = (FourBitNumber)2;
 
-            CheckBuildingRests(
+            GetObjects_Rests(
                 restSeparationPolicy: RestSeparationPolicy.SeparateByChannelAndNoteNumber,
                 inputObjects: new ITimedObject[]
                 {
@@ -410,18 +410,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Private methods
 
-        private void CheckBuildingRests(
+        private void GetObjects_Rests(
             RestSeparationPolicy restSeparationPolicy,
             IEnumerable<ITimedObject> inputObjects,
             IEnumerable<ITimedObject> outputObjects)
         {
-            CheckObjectsBuilding(
+            GetObjects(
                 inputObjects,
                 outputObjects,
                 ObjectType.Rest,
-                new ObjectsBuildingSettings
+                new ObjectDetectionSettings
                 {
-                    RestBuilderSettings = new RestBuilderSettings
+                    RestDetectionSettings = new RestDetectionSettings
                     {
                         RestSeparationPolicy = restSeparationPolicy
                     }

@@ -8,22 +8,22 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed partial class BuildObjectsUtilitiesTests
+    public sealed partial class GetObjectsUtilitiesTests
     {
         #region Test methods
 
         [Test]
-        public void BuildTimedEventsAndNotes_Empty()
+        public void GetObjects_TimedEventsAndNotes_Empty()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: Enumerable.Empty<ITimedObject>(),
                 outputObjects: Enumerable.Empty<ITimedObject>());
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromTimedEvents_Mixed()
+        public void GetObjects_TimedEventsAndNotes_FromTimedEvents_Mixed()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new TextEvent("A"), 0),
@@ -38,9 +38,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromTimedEvents_Mixed_Unordered()
+        public void GetObjects_TimedEventsAndNotes_FromTimedEvents_Mixed_Unordered()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new TextEvent("A"), 0),
@@ -55,9 +55,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromTimedEvents_OnlyNoteEvents()
+        public void GetObjects_TimedEventsAndNotes_FromTimedEvents_OnlyNoteEvents()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new NoteOnEvent(), 20),
@@ -70,9 +70,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromTimedEvents_OnlyNonNoteEvents()
+        public void GetObjects_TimedEventsAndNotes_FromTimedEvents_OnlyNonNoteEvents()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new TextEvent("A"), 0),
@@ -84,9 +84,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromNotes()
+        public void GetObjects_TimedEventsAndNotes_FromNotes()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new Note((SevenBitNumber)50, 80, 100),
@@ -100,9 +100,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromNotesAndTimedEvents()
+        public void GetObjects_TimedEventsAndNotes_FromNotesAndTimedEvents()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new Note((SevenBitNumber)50, 80, 180),
@@ -118,9 +118,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromChords()
+        public void GetObjects_TimedEventsAndNotes_FromChords()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new Chord(
@@ -135,9 +135,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_FromChordsAndNotesAndTimedEvents()
+        public void GetObjects_TimedEventsAndNotes_FromChordsAndNotesAndTimedEvents()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new Chord(
@@ -156,9 +156,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_AllProcessed()
+        public void GetObjects_TimedEventsAndNotes_AllProcessed()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new SetTempoEvent(1234), 0),
@@ -194,9 +194,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_NotAllProcessed()
+        public void GetObjects_TimedEventsAndNotes_NotAllProcessed()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new SetTempoEvent(1234), 0),
@@ -233,9 +233,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void BuildTimedEventsAndNotes_SameNotesInTail()
+        public void GetObjects_TimedEventsAndNotes_SameNotesInTail()
         {
-            CheckBuildingTimedEventsAndNotes(
+            GetObjects_TimedEventsAndNotes(
                 inputObjects: new ITimedObject[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)1, (SevenBitNumber)100), 10),
@@ -257,15 +257,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Private methods
 
-        private void CheckBuildingTimedEventsAndNotes(
+        private void GetObjects_TimedEventsAndNotes(
             IEnumerable<ITimedObject> inputObjects,
             IEnumerable<ITimedObject> outputObjects)
         {
-            CheckObjectsBuilding(
+            GetObjects(
                 inputObjects,
                 outputObjects,
                 ObjectType.TimedEvent | ObjectType.Note,
-                new ObjectsBuildingSettings
+                new ObjectDetectionSettings
                 {
                 });
         }

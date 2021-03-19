@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed partial class BuildObjectsUtilitiesTests
+    public sealed partial class GetObjectsUtilitiesTests
     {
         #region Setup
 
@@ -28,14 +28,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Private methods
 
-        private void CheckObjectsBuilding(
+        private void GetObjects(
             IEnumerable<ITimedObject> inputObjects,
             IEnumerable<ITimedObject> outputObjects,
             ObjectType objectType,
-            ObjectsBuildingSettings settings)
+            ObjectDetectionSettings settings)
         {
             var actualObjects = inputObjects
-                .BuildObjects(objectType, settings)
+                .GetObjects(objectType, settings)
                 .ToList();
 
             MidiAsserts.AreEqual(outputObjects, actualObjects, true, 0, "Objects are invalid.");

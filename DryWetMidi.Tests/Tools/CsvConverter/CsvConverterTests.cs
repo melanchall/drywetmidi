@@ -360,7 +360,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
             MidiAsserts.AreEqual(
                 expectedObjects,
-                midiFile.BuildObjects(ObjectType.TimedEvent | ObjectType.Note),
+                midiFile.GetObjects(ObjectType.TimedEvent | ObjectType.Note),
                 false,
                 0,
                 "Invalid objects.");
@@ -409,7 +409,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
             MidiAsserts.AreEqual(
                 expectedObjects,
-                midiFile.BuildObjects(ObjectType.TimedEvent | ObjectType.Note),
+                midiFile.GetObjects(ObjectType.TimedEvent | ObjectType.Note),
                 false,
                 0,
                 "Invalid objects.");

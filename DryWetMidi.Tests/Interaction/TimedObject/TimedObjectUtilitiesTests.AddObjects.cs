@@ -280,9 +280,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void AddObjects_EmptyBaseEventsCollection_MultipleObjects_Note_7([Values] bool toTrackChunk, [Values(0, 50, 100)] long length)
+        public void AddObjects_EmptyBaseEventsCollection_MultipleObjects_Note_7([Values] bool toTrackChunk, [Values(0, 50, 99)] long length)
         {
-            //    |====|
+            //     |====|
             // |==|
 
             AddObjects(
@@ -298,6 +298,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity),
                     new NoteOffEvent((SevenBitNumber)60, SevenBitNumber.MinValue) { DeltaTime = length },
                     new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity) { DeltaTime = 100 - length },
+                    new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue) { DeltaTime = 200 }
+                });
+        }
+
+        [Test]
+        public void AddObjects_EmptyBaseEventsCollection_MultipleObjects_Note_8([Values] bool toTrackChunk)
+        {
+            //    |====|
+            // |==|
+
+            AddObjects(
+                toTrackChunk,
+                baseMidiEvents: new MidiEvent[0],
+                timedObjectsToAdd: new[]
+                {
+                    new Note((SevenBitNumber)80, 200, 100),
+                    new Note((SevenBitNumber)60, 100, 0),
+                },
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity),
+                    new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity) { DeltaTime = 100 },
+                    new NoteOffEvent((SevenBitNumber)60, SevenBitNumber.MinValue),
                     new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue) { DeltaTime = 200 }
                 });
         }
@@ -474,9 +497,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void AddObjects_EmptyBaseEventsCollection_MultipleObjects_Chord_OneNote_7([Values] bool toTrackChunk, [Values(0, 50, 100)] long length)
+        public void AddObjects_EmptyBaseEventsCollection_MultipleObjects_Chord_OneNote_7([Values] bool toTrackChunk, [Values(0, 50, 99)] long length)
         {
-            //    |====|
+            //     |====|
             // |==|
 
             AddObjects(
@@ -492,6 +515,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity),
                     new NoteOffEvent((SevenBitNumber)60, SevenBitNumber.MinValue) { DeltaTime = length },
                     new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity) { DeltaTime = 100 - length },
+                    new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue) { DeltaTime = 200 }
+                });
+        }
+
+        [Test]
+        public void AddObjects_EmptyBaseEventsCollection_MultipleObjects_Chord_OneNote_8([Values] bool toTrackChunk)
+        {
+            //    |====|
+            // |==|
+
+            AddObjects(
+                toTrackChunk,
+                baseMidiEvents: new MidiEvent[0],
+                timedObjectsToAdd: new[]
+                {
+                    new Chord(new Note((SevenBitNumber)80, 200, 100)),
+                    new Chord(new Note((SevenBitNumber)60, 100, 0)),
+                },
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity),
+                    new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity) { DeltaTime = 100 },
+                    new NoteOffEvent((SevenBitNumber)60, SevenBitNumber.MinValue),
                     new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue) { DeltaTime = 200 }
                 });
         }
@@ -837,7 +883,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
-        // TODO: stable sort?
         [Test]
         public void AddObjects_EmptyBaseEventsCollection_MultipleObjects_Mixed_3([Values] bool toTrackChunk, [Values(40, 50)] long length)
         {
@@ -860,9 +905,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity) { DeltaTime = 20 },
                     new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity) { DeltaTime = 10 },
                     new NoteOffEvent((SevenBitNumber)75, SevenBitNumber.MinValue) { DeltaTime = 10 },
-                    new NoteOffEvent((SevenBitNumber)60, SevenBitNumber.MinValue) { DeltaTime = 30 },
-                    new NoteOffEvent(length == 40 ? (SevenBitNumber)70: (SevenBitNumber)80, SevenBitNumber.MinValue),
-                    new NoteOffEvent(length == 50 ? (SevenBitNumber)70: (SevenBitNumber)80, SevenBitNumber.MinValue) { DeltaTime = 60 + length - 100 },
+                    new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue) { DeltaTime = 30 },
+                    new NoteOffEvent((SevenBitNumber)60, SevenBitNumber.MinValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 60 + length - 100 },
                 });
         }
 
