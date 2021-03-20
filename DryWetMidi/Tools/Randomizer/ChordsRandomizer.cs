@@ -7,6 +7,11 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public sealed class ChordsRandomizingSettings : LengthedObjectsRandomizingSettings<Chord>
     {
+        #region Properties
+
+        public ChordDetectionSettings ChordDetectionSettings { get; set; } = new ChordDetectionSettings();
+
+        #endregion
     }
 
     /// <summary>

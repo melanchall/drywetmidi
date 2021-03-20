@@ -7,6 +7,11 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public class ChordsQuantizingSettings : LengthedObjectsQuantizingSettings<Chord>
     {
+        #region Properties
+
+        public ChordDetectionSettings ChordDetectionSettings { get; set; } = new ChordDetectionSettings();
+
+        #endregion
     }
 
     /// <summary>
