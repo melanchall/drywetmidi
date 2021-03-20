@@ -249,11 +249,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
         /// notes represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static NotesManager ManageNotes(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static NotesManager ManageNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return new NotesManager(eventsCollection, sameTimeEventsComparison);
+            return new NotesManager(eventsCollection, settings, sameTimeEventsComparison);
         }
 
         /// <summary>
@@ -266,11 +266,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
         /// notes represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static NotesManager ManageNotes(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static NotesManager ManageNotes(this TrackChunk trackChunk, NoteDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.Events.ManageNotes(sameTimeEventsComparison);
+            return trackChunk.Events.ManageNotes(settings, sameTimeEventsComparison);
         }
 
         public static ICollection<Note> GetNotes(this IEnumerable<MidiEvent> midiEvents, NoteDetectionSettings settings = null)
@@ -890,6 +890,8 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings settings,
             bool notesAllowed)
         {
+            settings = settings ?? new NoteDetectionSettings();
+
             var objectsDescriptors = new LinkedList<IObjectDescriptor>();
             var notesDescriptorsNodes = new Dictionary<NoteId, NoteOnsHolder>();
 

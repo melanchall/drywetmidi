@@ -69,6 +69,10 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        public Predicate<Note> Filter { get; set; }
+
+        public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
+
         #endregion
     }
 }

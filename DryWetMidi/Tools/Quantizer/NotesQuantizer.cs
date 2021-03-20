@@ -7,6 +7,11 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public class NotesQuantizingSettings : LengthedObjectsQuantizingSettings<Note>
     {
+        #region Properties
+
+        public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
+
+        #endregion
     }
 
     /// <summary>

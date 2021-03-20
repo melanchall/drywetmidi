@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(bounds), bounds);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            using (var notesManager = trackChunk.ManageNotes())
+            using (var notesManager = trackChunk.ManageNotes(settings?.NoteDetectionSettings))
             {
                 new NotesRandomizer().Randomize(notesManager.Notes, bounds, tempoMap, settings);
             }

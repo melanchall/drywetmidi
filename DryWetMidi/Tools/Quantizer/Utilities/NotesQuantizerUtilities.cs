@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            using (var notesManager = trackChunk.ManageNotes())
+            using (var notesManager = trackChunk.ManageNotes(settings?.NoteDetectionSettings))
             {
                 new NotesQuantizer().Quantize(notesManager.Notes, grid, tempoMap, settings);
             }

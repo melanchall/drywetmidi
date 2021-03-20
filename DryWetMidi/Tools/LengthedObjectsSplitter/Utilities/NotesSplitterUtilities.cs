@@ -41,13 +41,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap)
+        public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitByStep(notes, step, tempoMap));
+            SplitTrackChunkNotes(trackChunk, noteDetectionSettings,(splitter, notes) => splitter.SplitByStep(notes, step, tempoMap));
         }
 
         /// <summary>
@@ -144,14 +144,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
+        public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitByPartsNumber(notes, partsNumber, lengthType, tempoMap));
+            SplitTrackChunkNotes(trackChunk, noteDetectionSettings, (splitter, notes) => splitter.SplitByPartsNumber(notes, partsNumber, lengthType, tempoMap));
         }
 
         /// <summary>
@@ -235,13 +235,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap)
+        public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitByGrid(notes, grid, tempoMap));
+            SplitTrackChunkNotes(trackChunk, noteDetectionSettings, (splitter, notes) => splitter.SplitByGrid(notes, grid, tempoMap));
         }
 
         /// <summary>
@@ -316,14 +316,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
+        public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitAtDistance(notes, distance, from, tempoMap));
+            SplitTrackChunkNotes(trackChunk, noteDetectionSettings, (splitter, notes) => splitter.SplitAtDistance(notes, distance, from, tempoMap));
         }
 
         /// <summary>
@@ -425,7 +425,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
+        public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -437,7 +437,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkNotes(trackChunk, (splitter, notes) => splitter.SplitAtDistance(notes, ratio, lengthType, from, tempoMap));
+            SplitTrackChunkNotes(trackChunk, noteDetectionSettings, (splitter, notes) => splitter.SplitAtDistance(notes, ratio, lengthType, from, tempoMap));
         }
 
         /// <summary>
@@ -529,9 +529,9 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitNotesAtDistance(ratio, lengthType, from, tempoMap);
         }
 
-        private static void SplitTrackChunkNotes(TrackChunk trackChunk, Func<NotesSplitter, IEnumerable<Note>, IEnumerable<Note>> splitOperation)
+        private static void SplitTrackChunkNotes(TrackChunk trackChunk, NoteDetectionSettings noteDetectionSettings, Func<NotesSplitter, IEnumerable<Note>, IEnumerable<Note>> splitOperation)
         {
-            using (var notesManager = trackChunk.ManageNotes())
+            using (var notesManager = trackChunk.ManageNotes(noteDetectionSettings))
             {
                 var notes = notesManager.Notes;
 

@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            _notesManager = eventsCollection.ManageNotes(sameTimeEventsComparison);
+            _notesManager = eventsCollection.ManageNotes(settings?.NoteDetectionSettings, sameTimeEventsComparison);
 
             Chords = new ChordsCollection(_notesManager.Notes.GetChords(settings));
             Chords.CollectionChanged += OnChordsCollectionChanged;

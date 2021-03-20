@@ -58,23 +58,9 @@ namespace Melanchall.DryWetMidi.Composing
             var context = new PatternContext(tempoMap, channel);
             var result = InvokeActions(0, context);
 
-            //
-
-            var trackChunk = new TrackChunk();
-
-            using (var eventsManager = trackChunk.ManageTimedEvents())
-            {
-                eventsManager.Events.Add(result.Events ?? Enumerable.Empty<TimedEvent>());
-            }
-
-            using (var notesManager = trackChunk.ManageNotes())
-            {
-                notesManager.Notes.Add(result.Notes ?? Enumerable.Empty<Note>());
-            }
-
-            //
-
-            return trackChunk;
+            return ((IEnumerable<ITimedObject>)result.Events ?? Enumerable.Empty<TimedEvent>())
+                .Concat(result.Notes ?? Enumerable.Empty<Note>())
+                .ToTrackChunk();
         }
 
         /// <summary>

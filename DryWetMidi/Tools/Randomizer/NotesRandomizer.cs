@@ -7,6 +7,11 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public sealed class NotesRandomizingSettings : LengthedObjectsRandomizingSettings<Note>
     {
+        #region Properties
+
+        public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
+
+        #endregion
     }
 
     /// <summary>

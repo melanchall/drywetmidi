@@ -41,13 +41,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// If you want to specify custom order of such events you need to specify appropriate comparison delegate.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public NotesManager(EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public NotesManager(EventsCollection eventsCollection, NoteDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             _timedEventsManager = eventsCollection.ManageTimedEvents(sameTimeEventsComparison);
 
-            Notes = new NotesCollection(CreateNotes(_timedEventsManager.Events));
+            Notes = new NotesCollection(_timedEventsManager.Events.GetNotesAndTimedEventsLazy(settings).OfType<Note>());
             Notes.CollectionChanged += OnNotesCollectionChanged;
         }
 
@@ -99,11 +99,6 @@ namespace Melanchall.DryWetMidi.Interaction
             var removedNotes = args.RemovedNotes;
             if (removedNotes != null)
                 _timedEventsManager.Events.Remove(GetNotesTimedEvents(removedNotes));
-        }
-
-        private static IEnumerable<Note> CreateNotes(IEnumerable<TimedEvent> events)
-        {
-            return events.GetObjects(ObjectType.Note).OfType<Note>();
         }
 
         private static IEnumerable<TimedEvent> GetNotesTimedEvents(IEnumerable<Note> notes)
