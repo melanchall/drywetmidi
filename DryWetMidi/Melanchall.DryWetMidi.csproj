@@ -34,15 +34,29 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
     </Description>
     <Copyright>Copyright © Melanchall 2021</Copyright>
     <PackageTags>midi smf music composing notes chords device playback record</PackageTags>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)'=='Coverage'">
     <DefineConstants>COVERAGE</DefineConstants>
   </PropertyGroup>
   
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Folder Include="Properties\" />
     <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
