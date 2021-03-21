@@ -595,8 +595,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 expectedNotes: new[]
                 {
-                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 200 },
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 200 },
                 });
         }
 

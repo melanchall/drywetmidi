@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Fields
 
-        private NoteStartDetectionPolicy _noteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn;
+        private NoteStartDetectionPolicy _noteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn;
 
         #endregion
 
