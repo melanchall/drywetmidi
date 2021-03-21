@@ -2414,6 +2414,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = new[] { aTrackChunk, bTrackChunk }.GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_MidiFile_MultipleTrackChunks_MultipleEvents_MultipleEvents(
@@ -2436,6 +2442,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = new[] { aTrackChunk, bTrackChunk }.GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
@@ -2460,6 +2472,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 GetTrackChunks().SelectMany(c => c.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = GetTrackChunks().GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
@@ -2481,6 +2499,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = new[] { aTrackChunk, bTrackChunk }.GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_MidiFile_MultipleTrackChunks_MultipleEvents_OneEvent(
@@ -2502,6 +2526,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = new[] { aTrackChunk, bTrackChunk }.GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
@@ -2525,6 +2555,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 GetTrackChunks().SelectMany(c => c.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = GetTrackChunks().GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
@@ -2546,6 +2582,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = new[] { aTrackChunk, bTrackChunk }.GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_MidiFile_MultipleTrackChunks_OneEvent_MultipleEvents(
@@ -2567,6 +2609,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = new[] { aTrackChunk, bTrackChunk }.GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
@@ -2590,6 +2638,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 GetTrackChunks().SelectMany(c => c.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
+
+            var timedObjects = GetTrackChunks().GetObjects(ObjectType.TimedEvent);
+            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
+            Assert.IsFalse(
+                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
+                "There are original events references from GetObjects.");
         }
 
         private IEnumerable<MidiEvent> GetNonMaterializedEmptyMidiEventsCollection()

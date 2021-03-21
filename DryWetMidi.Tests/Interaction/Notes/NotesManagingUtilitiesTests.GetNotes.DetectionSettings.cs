@@ -522,15 +522,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         var eventsCollection = new EventsCollection();
                         eventsCollection.AddRange(midiEvents);
+                        
                         var notes = eventsCollection.GetNotes(settings);
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+
+                        var timedObjects = eventsCollection.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+                        MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
                     }
                     break;
                 case ContainerType.TrackChunk:
                     {
                         var trackChunk = new TrackChunk(midiEvents);
+
                         var notes = trackChunk.GetNotes(settings);
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+
+                        var timedObjects = trackChunk.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+                        MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
                     }
                     break;
                 case ContainerType.TrackChunks:
@@ -562,6 +570,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 notes = trackChunks.GetNotes(settings);
 
             MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+
+            //
+
+            IEnumerable<ITimedObject> timedObjects;
+
+            if (wrapToFile)
+                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+            else
+                timedObjects = trackChunks.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+
+            MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid.");
         }
 
         #endregion

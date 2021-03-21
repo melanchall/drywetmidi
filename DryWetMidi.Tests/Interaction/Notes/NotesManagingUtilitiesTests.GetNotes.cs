@@ -711,15 +711,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         var eventsCollection = new EventsCollection();
                         eventsCollection.AddRange(midiEvents);
+
                         var notes = eventsCollection.GetNotes();
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+
+                        var timedObjects = eventsCollection.GetObjects(ObjectType.Note);
+                        MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
                     }
                     break;
                 case ContainerType.TrackChunk:
                     {
                         var trackChunk = new TrackChunk(midiEvents);
+
                         var notes = trackChunk.GetNotes();
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+
+                        var timedObjects = trackChunk.GetObjects(ObjectType.Note);
+                        MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
                     }
                     break;
                 case ContainerType.TrackChunks:
@@ -749,6 +757,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 notes = trackChunks.GetNotes();
 
             MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+
+            //
+
+            IEnumerable<ITimedObject> timedObjects;
+
+            if (wrapToFile)
+                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Note);
+            else
+                timedObjects = trackChunks.GetObjects(ObjectType.Note);
+
+            MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
         }
 
         #endregion

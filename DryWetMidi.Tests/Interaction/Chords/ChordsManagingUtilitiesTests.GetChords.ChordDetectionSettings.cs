@@ -465,15 +465,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         var eventsCollection = new EventsCollection();
                         eventsCollection.AddRange(midiEvents);
-                        var notes = eventsCollection.GetChords(settings);
-                        MidiAsserts.AreEqual(expectedChords, notes, "Chords are invalid.");
+                        
+                        var chords = eventsCollection.GetChords(settings);
+                        MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
+
+                        var timedObjets = eventsCollection.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                        MidiAsserts.AreEqual(expectedChords, timedObjets, "Chords are invalid from GetObjects.");
                     }
                     break;
                 case ContainerType.TrackChunk:
                     {
                         var trackChunk = new TrackChunk(midiEvents);
-                        var notes = trackChunk.GetChords(settings);
-                        MidiAsserts.AreEqual(expectedChords, notes, "Chords are invalid.");
+                        
+                        var chords = trackChunk.GetChords(settings);
+                        MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
+
+                        var timedObjets = trackChunk.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                        MidiAsserts.AreEqual(expectedChords, timedObjets, "Chords are invalid from GetObjects.");
                     }
                     break;
                 case ContainerType.TrackChunks:
@@ -505,6 +513,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 chords = trackChunks.GetChords(settings);
 
             MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
+
+            //
+
+            IEnumerable<ITimedObject> timedObjects;
+
+            if (wrapToFile)
+                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+            else
+                timedObjects = trackChunks.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+
+            MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
         }
 
         #endregion
