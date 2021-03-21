@@ -9,6 +9,5 @@ namespace Melanchall.DryWetMidi.Interaction
         Note = 1 << 1,
         Chord = 1 << 2,
         Rest = 1 << 3,
-        RegisteredParameter = 1 << 4
     }
 }

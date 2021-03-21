@@ -123,8 +123,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 var processed =
                     TryProcessTimedEvent(timedObject as TimedEvent, processedTimedObjects) ||
                     TryProcessNote(timedObject as Note, processedTimedObjects, getNotes, getChords) ||
-                    TryProcessChord(timedObject as Chord, processedTimedObjects, getNotes, getChords) ||
-                    TryProcessRegisteredParameter(timedObject as RegisteredParameter, processedTimedObjects);
+                    TryProcessChord(timedObject as Chord, processedTimedObjects, getNotes, getChords);
 
                 if (processed)
                     resultCollectionSize++;
@@ -180,15 +179,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            return true;
-        }
-
-        private static bool TryProcessRegisteredParameter(RegisteredParameter registeredParameter, List<ITimedObject> processedTimedObjects)
-        {
-            if (registeredParameter == null)
-                return false;
-
-            processedTimedObjects.AddRange(registeredParameter.GetTimedEvents());
             return true;
         }
 
