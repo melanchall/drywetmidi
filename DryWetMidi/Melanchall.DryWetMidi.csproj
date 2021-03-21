@@ -20,7 +20,6 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryBranch>master</RepositoryBranch>
     <Description>
 DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
 

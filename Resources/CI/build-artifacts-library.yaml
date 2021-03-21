@@ -45,6 +45,7 @@ steps:
     outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
     packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
     nobuild: true
+    buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
 
 - task: PublishPipelineArtifact@1
   displayName: Publish 'NuGetPackage' artifact
