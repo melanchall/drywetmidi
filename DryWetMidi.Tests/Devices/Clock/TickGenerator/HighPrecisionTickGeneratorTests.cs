@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 var time = elapsedTimes[0];
                 var maxDelta = 0L;
-                var tolerance = interval * 0.2;
+                var tolerance = interval * 0.5;
 
                 foreach (var t in elapsedTimes)
                 {
