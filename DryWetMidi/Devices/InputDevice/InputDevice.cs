@@ -96,6 +96,17 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public bool IsListeningForEvents { get; private set; }
 
+        public SilentNoteOnPolicy SilentNoteOnPolicy
+        {
+            get { return _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = value;
+            }
+        }
+
         #endregion
 
         #region Methods

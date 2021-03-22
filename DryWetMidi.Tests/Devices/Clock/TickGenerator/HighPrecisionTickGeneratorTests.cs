@@ -12,8 +12,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
     {
         #region Test methods
 
-        [Retry(5)]
-        [Test]
+        //[Retry(5)]
+        //[Test]
         public void CheckInterval([Values(1, 10, 100)] int interval)
         {
             using (var tickGenerator = new HighPrecisionTickGenerator())
