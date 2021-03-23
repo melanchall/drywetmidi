@@ -315,7 +315,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().GetChords(settings);
         }
 
-        // TODO
         /// <summary>
         /// Creates chords from notes.
         /// </summary>
@@ -329,7 +328,6 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            // TODO: ToArray -> capacity
             return notes.GetChordsAndNotesAndTimedEventsLazy(settings).OfType<Chord>().ToArray();
         }
 
@@ -879,7 +877,7 @@ namespace Melanchall.DryWetMidi.Interaction
             foreach (var timedObject in eventsCollection.GetTimedEventsLazy(false).GetChordsAndNotesAndTimedEventsLazy(settings))
             {
                 var chord = timedObject as Chord;
-                if (chord != null && match?.Invoke(chord) != false)
+                if (chord != null && match(chord))
                 {
                     var time = chord.Time;
                     var length = chord.Length;
@@ -938,7 +936,7 @@ namespace Melanchall.DryWetMidi.Interaction
             foreach (var timedObjectTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false).GetChordsAndNotesAndTimedEventsLazy(settings))
             {
                 var chord = timedObjectTuple.Item1 as Chord;
-                if (chord != null && match?.Invoke(chord) != false)
+                if (chord != null && match(chord))
                 {
                     var time = chord.Time;
                     var length = chord.Length;
@@ -1073,7 +1071,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        private static ChordDescriptor CreateChordDescriptor(
+        private static void CreateChordDescriptor(
             LinkedList<ChordDescriptor> chordsDescriptors,
             LinkedListNode<ChordDescriptor>[] chordsDescriptorsByChannel,
             LinkedList<IObjectDescriptor> timedObjects,
@@ -1083,10 +1081,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var noteNode = timedObjects.AddLast(new NoteDescriptor(note, true));
             var chordDescriptor = new ChordDescriptor(note.Time, noteNode, settings.NotesMinCount);
             chordsDescriptorsByChannel[note.Channel] = chordsDescriptors.AddLast(chordDescriptor);
-            return chordDescriptor;
         }
 
-        private static ChordDescriptorIndexed CreateChordDescriptor(
+        private static void CreateChordDescriptor(
             LinkedList<ChordDescriptorIndexed> chordsDescriptors,
             LinkedListNode<ChordDescriptorIndexed>[] chordsDescriptorsByChannel,
             LinkedList<IObjectDescriptorIndexed> timedObjects,
@@ -1098,7 +1095,6 @@ namespace Melanchall.DryWetMidi.Interaction
             var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, noteOnIndex, noteOffIndex, true));
             var chordDescriptor = new ChordDescriptorIndexed(note.Time, noteNode, settings.NotesMinCount);
             chordsDescriptorsByChannel[note.Channel] = chordsDescriptors.AddLast(chordDescriptor);
-            return chordDescriptor;
         }
 
         private static bool CanNoteBeAddedToChord(ChordDescriptor chordDescriptor, Note note, long notesTolerance)

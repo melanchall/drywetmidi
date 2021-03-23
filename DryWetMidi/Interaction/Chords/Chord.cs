@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
@@ -28,14 +27,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Occurs when the length of an object has been changed.
         /// </summary>
         public event EventHandler<LengthChangedEventArgs> LengthChanged;
-
-        #endregion
-
-        #region Constants
-
-        private static readonly Expression<Func<Note, FourBitNumber>> ChannelPropertySelector = n => n.Channel;
-        private static readonly Expression<Func<Note, SevenBitNumber>> VelocityPropertySelector = n => n.Velocity;
-        private static readonly Expression<Func<Note, SevenBitNumber>> OffVelocityPropertySelector = n => n.OffVelocity;
 
         #endregion
 

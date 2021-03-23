@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Collection of <see cref="MidiChunk"/> objects.
     /// </summary>
-    public sealed class ChunksCollection : IEnumerable<MidiChunk>, ICollection<MidiChunk>
+    public sealed class ChunksCollection : ICollection<MidiChunk>
     {
         #region Fields
 

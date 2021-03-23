@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// The exception that is thrown when the actual size of a MIDI file chunk differs from

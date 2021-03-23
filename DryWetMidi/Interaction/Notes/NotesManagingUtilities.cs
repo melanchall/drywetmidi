@@ -612,7 +612,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().RemoveNotes(match, settings);
         }
 
-        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of notes to the specified <see cref="EventsCollection"/>.
         /// </summary>
@@ -629,6 +628,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS9")]
         public static void AddNotes(this EventsCollection eventsCollection, IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -640,7 +640,6 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of notes to the specified <see cref="TrackChunk"/>.
         /// </summary>
@@ -657,6 +656,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS9")]
         public static void AddNotes(this TrackChunk trackChunk, IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -665,13 +665,13 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddNotes(notes);
         }
 
-        [Obsolete("OBS7")]
         /// <summary>
         /// Creates a track chunk with the specified notes.
         /// </summary>
         /// <param name="notes">Collection of notes to create a track chunk.</param>
         /// <returns><see cref="TrackChunk"/> containing the specified notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
+        [Obsolete("OBS7")]
         public static TrackChunk ToTrackChunk(this IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -679,13 +679,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return ((IEnumerable<ITimedObject>)notes).ToTrackChunk();
         }
 
-        [Obsolete("OBS8")]
         /// <summary>
         /// Creates a MIDI file with the specified notes.
         /// </summary>
         /// <param name="notes">Collection of notes to create a MIDI file.</param>
         /// <returns><see cref="MidiFile"/> containing the specified notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
+        [Obsolete("OBS8")]
         public static MidiFile ToFile(this IEnumerable<Note> notes)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -725,7 +725,7 @@ namespace Melanchall.DryWetMidi.Interaction
             foreach (var timedObjectTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false).GetNotesAndTimedEventsLazy(noteDetectionSettings ?? new NoteDetectionSettings()))
             {
                 var note = timedObjectTuple.Item1 as Note;
-                if (note != null && match?.Invoke(note) != false)
+                if (note != null && match(note))
                 {
                     var time = note.Time;
                     var length = note.Length;
@@ -772,7 +772,7 @@ namespace Melanchall.DryWetMidi.Interaction
             foreach (var timedObject in eventsCollection.GetTimedEventsLazy(false).GetNotesAndTimedEventsLazy(noteDetectionSettings ?? new NoteDetectionSettings()))
             {
                 var note = timedObject as Note;
-                if (note != null && match?.Invoke(note) != false)
+                if (note != null && match(note))
                 {
                     var time = note.Time;
                     var length = note.Length;

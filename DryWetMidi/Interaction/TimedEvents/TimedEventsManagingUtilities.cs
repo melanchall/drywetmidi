@@ -250,10 +250,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
-            ThrowIfArgument.IsNull(nameof(action), action);
-            ThrowIfArgument.IsNull(nameof(match), match);
-
             var iMatched = 0;
 
             var timesChanged = false;
@@ -261,7 +257,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedEvent in eventsCollection.GetTimedEventsLazy(false))
             {
-                if (match?.Invoke(timedEvent) != false)
+                if (match(timedEvent))
                 {
                     var time = timedEvent.Time;
                     action(timedEvent);
@@ -286,7 +282,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.ProcessTimedEvents(action, timedEvent => true);
         }
 
-        // TODO: times unchanged
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="TrackChunk"/>.
         /// </summary>
@@ -360,7 +355,7 @@ namespace Melanchall.DryWetMidi.Interaction
             foreach (var timedEventTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false))
             {
                 var timedEvent = timedEventTuple.Item1;
-                if (match?.Invoke(timedEvent) != false)
+                if (match(timedEvent))
                 {
                     var deltaTime = timedEvent.Event.DeltaTime;
                     var time = timedEvent.Time;
@@ -422,7 +417,9 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection.RemoveTimedEvents(timedEvent => true);
+            var result = eventsCollection.Count;
+            eventsCollection.Clear();
+            return result;
         }
 
         /// <summary>
@@ -438,12 +435,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(match), match);
 
             var eventsCount = eventsCollection.Count;
-
-            if (match == null)
-            {
-                eventsCollection.Clear();
-                return eventsCount;
-            }
 
             var removedEventsCount = 0;
             var time = 0L;
@@ -476,7 +467,9 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.RemoveTimedEvents(timedEvent => true);
+            var result = trackChunk.Events.Count;
+            trackChunk.Events.Clear();
+            return result;
         }
 
         /// <summary>
@@ -498,7 +491,14 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            return trackChunks.RemoveTimedEvents(timedEvent => true);
+            var result = 0;
+
+            foreach (var trackChunk in trackChunks)
+            {
+                result += trackChunk.RemoveTimedEvents();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -515,16 +515,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
-
-            if (match == null)
-            {
-                foreach (var eventsCollection in eventsCollections)
-                {
-                    eventsCollection.Clear();
-                }
-
-                return eventsCount;
-            }
 
             var eventsCollectionsCount = eventsCollections.Length;
 
@@ -589,7 +579,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
-            return file.RemoveTimedEvents(timedEvent => true);
+            return file.GetTrackChunks().RemoveTimedEvents();
         }
 
         /// <summary>
@@ -607,7 +597,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().RemoveTimedEvents(match);
         }
 
-        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of timed events to the specified <see cref="EventsCollection"/>.
         /// </summary>
@@ -628,6 +617,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS9")]
         public static void AddTimedEvents(this EventsCollection eventsCollection, IEnumerable<TimedEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -639,7 +629,6 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of timed events to the specified <see cref="TrackChunk"/>.
         /// </summary>
@@ -660,6 +649,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS9")]
         public static void AddTimedEvents(this TrackChunk trackChunk, IEnumerable<TimedEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -668,7 +658,6 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddTimedEvents(events);
         }
 
-        [Obsolete("OBS7")]
         /// <summary>
         /// Creates a track chunk with the specified timed events.
         /// </summary>
@@ -679,6 +668,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="events">Collection of timed events to create a track chunk.</param>
         /// <returns><see cref="TrackChunk"/> containing the specified timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
+        [Obsolete("OBS7")]
         public static TrackChunk ToTrackChunk(this IEnumerable<TimedEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
@@ -686,7 +676,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return ((IEnumerable<ITimedObject>)events).ToTrackChunk();
         }
 
-        [Obsolete("OBS8")]
         /// <summary>
         /// Creates a MIDI file with the specified timed events.
         /// </summary>
@@ -697,6 +686,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="events">Collection of timed events to create a MIDI file.</param>
         /// <returns><see cref="MidiFile"/> containing the specified timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
+        [Obsolete("OBS8")]
         public static MidiFile ToFile(this IEnumerable<TimedEvent> events)
         {
             ThrowIfArgument.IsNull(nameof(events), events);

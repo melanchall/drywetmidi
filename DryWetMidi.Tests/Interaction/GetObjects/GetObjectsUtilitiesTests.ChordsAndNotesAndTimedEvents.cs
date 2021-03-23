@@ -6,7 +6,6 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
-    // TODO: notes min count tests
     [TestFixture]
     public sealed partial class GetObjectsUtilitiesTests
     {

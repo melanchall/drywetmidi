@@ -6,12 +6,12 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    [Obsolete("OBS5")]
     /// <summary>
     /// Provides a way to iterate through a collection of <see cref="TimedEvent"/> returning
     /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
     /// for all other events.
     /// </summary>
+    [Obsolete("OBS5")]
     public static class GetTimedEventsAndNotesUtilities
     {
         #region Nested classes
@@ -75,7 +75,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the specified collection of <see cref="TimedEvent"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -89,6 +88,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timedEvents"/> is <c>null</c>.</exception>
+        [Obsolete("OBS5")]
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TimedEvent> timedEvents)
         {
             ThrowIfArgument.IsNull(nameof(timedEvents), timedEvents);
@@ -96,7 +96,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return timedEvents.GetObjects(ObjectType.TimedEvent | ObjectType.Note);
         }
 
-        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the events contained in the specified <see cref="TrackChunk"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -110,6 +109,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
+        [Obsolete("OBS5")]
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -117,7 +117,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.GetTimedEventsLazy().GetTimedEventsAndNotes();
         }
 
-        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the events contained in the specified collection of <see cref="TrackChunk"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -131,6 +130,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
+        [Obsolete("OBS5")]
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -138,7 +138,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunks.GetTimedEventsLazy().Select(e => e.Item1).GetTimedEventsAndNotes();
         }
 
-        [Obsolete("OBS5")]
         /// <summary>
         /// Iterates through the events contained in the specified <see cref="MidiFile"/> returning
         /// <see cref="Note"/> for Note On/Note Off event pairs and original <see cref="TimedEvent"/>
@@ -152,6 +151,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Collection of <see cref="ITimedObject"/> where an element either <see cref="TimedEvent"/>
         /// or <see cref="Note"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        [Obsolete("OBS5")]
         public static IEnumerable<ITimedObject> GetTimedEventsAndNotes(this MidiFile midiFile)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

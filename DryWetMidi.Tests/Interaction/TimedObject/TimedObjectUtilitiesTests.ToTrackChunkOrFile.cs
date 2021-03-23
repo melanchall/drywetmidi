@@ -824,7 +824,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
-        // TODO: stable sort?
         [Test]
         public void ToTrackChunkOrFile_MultipleObjects_Mixed_3([Values] bool toFile, [Values(40, 50)] long length)
         {

@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Collection of <see cref="MidiEvent"/> objects.
     /// </summary>
-    public sealed class EventsCollection : IEnumerable<MidiEvent>, ICollection<MidiEvent>
+    public sealed class EventsCollection : ICollection<MidiEvent>
     {
         #region Fields
 

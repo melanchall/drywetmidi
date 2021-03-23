@@ -112,8 +112,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var getChords = objectType.HasFlag(ObjectType.Chord);
             var getNotes = objectType.HasFlag(ObjectType.Note);
-            var getRests = objectType.HasFlag(ObjectType.Rest);
-            var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
 
             var resultCollectionSize = 0;
             var processedTimedObjects = new List<ITimedObject>();
@@ -204,10 +202,9 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 var notesAndTimedEvents = processedTimedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true);
 
-                if (getChords)
-                    timedObjects = notesAndTimedEvents.GetChordsAndNotesAndTimedEventsLazy(chordDetectionSettings, true);
-                else if (getNotes || getRests)
-                    timedObjects = notesAndTimedEvents;
+                timedObjects = getChords
+                    ? notesAndTimedEvents.GetChordsAndNotesAndTimedEventsLazy(chordDetectionSettings, true)
+                    : notesAndTimedEvents;
             }
 
             //

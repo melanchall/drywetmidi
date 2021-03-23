@@ -55,7 +55,6 @@ namespace Melanchall.DryWetMidi.Common
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         public void EnsureStreamCreated(string filePath)

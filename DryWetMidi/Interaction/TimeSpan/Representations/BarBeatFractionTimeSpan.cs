@@ -10,6 +10,12 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public sealed class BarBeatFractionTimeSpan : ITimeSpan, IComparable<BarBeatFractionTimeSpan>, IEquatable<BarBeatFractionTimeSpan>
     {
+        #region Constants
+
+        private const double FractionEpsilon = 0.00001;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -526,8 +532,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 return false;
 
             return Bars == other.Bars &&
-                   // TODO: epsilon
-                   Beats == other.Beats;
+                   Math.Abs(Beats - other.Beats) < FractionEpsilon;
         }
 
         #endregion

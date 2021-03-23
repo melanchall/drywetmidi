@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Core
 {

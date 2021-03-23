@@ -382,24 +382,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             //
 
-            // TODO: NoteDetectionSettings to NotesManager
-            //var trackChunk = inputNotes.ToTrackChunk();
-            //trackChunk.MergeNotes(tempoMap, settings);
+            var trackChunk = inputNotes.ToTrackChunk();
+            trackChunk.MergeNotes(tempoMap, settings);
 
-            //MidiAsserts.AreEqual(
-            //    expectedNotes.OrderBy(n => n.Time),
-            //    trackChunk.GetNotes(),
-            //    "Merging notes inside a track chunk failed.");
+            MidiAsserts.AreEqual(
+                expectedNotes.OrderBy(n => n.Time),
+                trackChunk.GetNotes(),
+                "Merging notes inside a track chunk failed.");
 
-            ////
+            //
 
-            //var midiFile = inputNotes.ToFile();
-            //midiFile.MergeNotes(settings);
+            var midiFile = inputNotes.ToFile();
+            midiFile.MergeNotes(settings);
 
-            //MidiAsserts.AreEqual(
-            //    expectedNotes.OrderBy(n => n.Time),
-            //    midiFile.GetNotes(),
-            //    "Merging notes inside a file failed.");
+            MidiAsserts.AreEqual(
+                expectedNotes.OrderBy(n => n.Time),
+                midiFile.GetNotes(),
+                "Merging notes inside a file failed.");
         }
 
         private IEnumerable<Note> CreateNotes(string[] timesAndLengths,
