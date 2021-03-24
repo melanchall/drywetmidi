@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Devices
         public event EventHandler Finished;
 
         /// <summary>
-        /// Occurs when playback started new cycle of the data playing in case of <see cref="Loop"/> set to <see langword="true"/>.
+        /// Occurs when playback started new cycle of the data playing in case of <see cref="Loop"/> set to <c>true</c>.
         /// </summary>
         public event EventHandler RepeatStarted;
 
@@ -318,22 +318,37 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Gets or sets a value indicating whether notes must be tracked or not. If <c>false</c>, notes
-        /// will be treated as just Note On/Note Off events.
+        /// will be treated as just Note On/Note Off events. The default value is <c>false</c>.
         /// </summary>
         public bool TrackNotes { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether program must be tracked or not. If <c>true</c>, any jump
+        /// in time will force playback send <see cref="ProgramChangeEvent"/> corresponding to the program at new time,
+        /// if needed. The default value is <c>false</c>.
+        /// </summary>
         public bool TrackProgram
         {
             get { return _playbackDataTracker.TrackProgram; }
             set { _playbackDataTracker.TrackProgram = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether pitch value must be tracked or not. If <c>true</c>, any jump
+        /// in time will force playback send <see cref="PitchBendEvent"/> corresponding to the pitch value at new time,
+        /// if needed. The default value is <c>false</c>.
+        /// </summary>
         public bool TrackPitchValue
         {
             get { return _playbackDataTracker.TrackPitchValue; }
             set { _playbackDataTracker.TrackPitchValue = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether controller values must be tracked or not. If <c>true</c>, any jump
+        /// in time will force playback send <see cref="ControlChangeEvent"/> corresponding to the controller value at new time,
+        /// if needed. The default value is <c>false</c>.
+        /// </summary>
         public bool TrackControlValue
         {
             get { return _playbackDataTracker.TrackControlValue; }
@@ -410,6 +425,15 @@ namespace Melanchall.DryWetMidi.Devices
         /// </example>
         public EventCallback EventCallback { get; set; }
 
+        /// <summary>
+        /// Gets or sets the start time of the current playback. It defines start time of
+        /// the region to play back.
+        /// </summary>
+        /// <remarks>
+        /// In conjunction with <see cref="PlaybackEnd"/> you can define a region within the
+        /// current playback which will be played. If you set the property to <c>null</c> the
+        /// start of playback (zero) will be used.
+        /// </remarks>
         public ITimeSpan PlaybackStart
         {
             get { return _playbackStart; }
@@ -422,6 +446,15 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Gets or sets the end time of the current playback. It defines end time of
+        /// the region to play back.
+        /// </summary>
+        /// <remarks>
+        /// In conjunction with <see cref="PlaybackStart"/> you can define a region within the
+        /// current playback which will be played. If you set the property to <c>null</c> the
+        /// end of playback will be used.
+        /// </remarks>
         public ITimeSpan PlaybackEnd
         {
             get { return _playbackEnd; }
@@ -588,6 +621,13 @@ namespace Melanchall.DryWetMidi.Devices
             return TryToMoveToSnapPoint(snapPoint);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of first snap point.
+        /// </summary>
+        /// <returns><c>true</c> if playback position successfully changed to the time of first snap point;
+        /// otherwise, <c>false</c>.</returns>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public bool MoveToFirstSnapPoint()
         {
             EnsureIsNotDisposed();
@@ -596,6 +636,14 @@ namespace Melanchall.DryWetMidi.Devices
             return TryToMoveToSnapPoint(snapPoint);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of first snap point holding the specified data.
+        /// </summary>
+        /// <param name="data">Data of a snap point to move to.</param>
+        /// <returns><c>true</c> if playback position successfully changed to the time of first snap point
+        /// with the specified data; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public bool MoveToFirstSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
@@ -625,7 +673,7 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Sets playback position to the time of the previous snap point (relative to the current
+        /// Sets playback position to the time of previous snap point (relative to the current
         /// time of playback).
         /// </summary>
         /// <returns><c>true</c> if playback position successfully changed to the time of a previous snap point;
@@ -640,6 +688,15 @@ namespace Melanchall.DryWetMidi.Devices
             return TryToMoveToSnapPoint(snapPoint);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of previous snap point (relative to the current
+        /// time of playback) holding the specified data.
+        /// </summary>
+        /// <param name="data">Data of a snap point to move to.</param>
+        /// <returns><c>true</c> if playback position successfully changed to the time of a previous snap point
+        /// with the specified data; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public bool MoveToPreviousSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
@@ -649,7 +706,7 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Sets playback position to the time of the next snap point (relative to the current
+        /// Sets playback position to the time of next snap point (relative to the current
         /// time of playback) that belongs to the specified <see cref="SnapPointsGroup"/>.
         /// </summary>
         /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> that defines snap points to
@@ -669,7 +726,7 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Sets playback position to the time of the next snap point (relative to the current
+        /// Sets playback position to the time of next snap point (relative to the current
         /// time of playback).
         /// </summary>
         /// <returns><c>true</c> if playback position successfully changed to the time of a next snap point;
@@ -684,6 +741,14 @@ namespace Melanchall.DryWetMidi.Devices
             return TryToMoveToSnapPoint(snapPoint);
         }
 
+        /// <summary>
+        /// Sets playback position to the time of next snap point (relative to the current
+        /// time of playback) holding the specified data.
+        /// </summary>
+        /// <returns><c>true</c> if playback position successfully changed to the time of a next snap point
+        /// with the specified data; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public bool MoveToNextSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();

@@ -470,9 +470,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void SplitByChannel_TimedEventsFilter_NonChannel()
+        public void SplitByChannel_Filter_NonChannel()
         {
-            SplitByChannel_TimedEventsFilter(
+            SplitByChannel_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new TextEvent("A")),
@@ -485,13 +485,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new TextEvent("A")),
                     }
                 },
-                timedEventsFilter: e => e.Event is TextEvent textEvent && textEvent.Text == "A");
+                filter: e => e.Event is TextEvent textEvent && textEvent.Text == "A");
         }
 
         [Test]
-        public void SplitByChannel_TimedEventsFilter_AllChannels()
+        public void SplitByChannel_Filter_AllChannels()
         {
-            SplitByChannel_TimedEventsFilter(
+            SplitByChannel_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)0 }),
@@ -520,7 +520,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)4 }) },
                     new[] { new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }) },
                 },
-                timedEventsFilter: e => (e.Event as ChannelEvent)?.Channel < 6);
+                filter: e => (e.Event as ChannelEvent)?.Channel < 6);
         }
 
         #endregion
@@ -569,23 +569,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 null);
         }
 
-        private void SplitByChannel_TimedEventsFilter(
+        private void SplitByChannel_Filter(
             ICollection<TimedEvent> timedEvents,
             ICollection<ICollection<TimedEvent>> expectedTimedEvents,
-            Predicate<TimedEvent> timedEventsFilter)
+            Predicate<TimedEvent> filter)
         {
             SplitByChannel_WithSettings(
                 timedEvents,
                 expectedTimedEvents,
                 true,
-                timedEventsFilter);
+                filter);
         }
 
         private void SplitByChannel_WithSettings(
             ICollection<TimedEvent> timedEvents,
             ICollection<ICollection<TimedEvent>> expectedTimedEvents,
             bool copyNonChannelEventsToEachFile,
-            Predicate<TimedEvent> timedEventsFilter)
+            Predicate<TimedEvent> filter)
         {
             var midiFile = timedEvents.ToFile();
 
@@ -593,7 +593,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 .SplitByChannel(new SplitFileByChannelSettings
                 {
                     CopyNonChannelEventsToEachFile = copyNonChannelEventsToEachFile,
-                    TimedEventsFilter = timedEventsFilter
+                    Filter = filter
                 })
                 .ToList();
 

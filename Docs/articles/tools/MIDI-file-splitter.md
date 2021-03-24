@@ -28,7 +28,7 @@ Splitting can be adjusted via `settings` parameter of the [SliceMidiFileSettings
 
 ### SplitNotes
 
-[SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) indicates whether notes should be splitted in points of grid intersection or not. The default value is `true`. If `false` used, notes treated as just Note On / Note Off events rather than note objects. Splitting notes produces new Note On / Note Off events at points of grid intersecting notes if the property set to `true`. The following image shows splitting by grid if `SplitNotes` set to `false`:
+[SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) indicates whether notes should be split in points of grid intersection or not. The default value is `true`. If `false` used, notes treated as just Note On / Note Off events rather than note objects. Splitting notes produces new Note On / Note Off events at points of grid intersecting notes if the property set to `true`. The following image shows splitting by grid if `SplitNotes` set to `false`:
 
 ![Split MIDI file by grid without splitting notes](images/MidiFileSplitter/SplitByGridDontSplitNotes.png)
 

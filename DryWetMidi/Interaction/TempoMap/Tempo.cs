@@ -129,6 +129,24 @@ namespace Melanchall.DryWetMidi.Interaction
             return !(tempo1 == tempo2);
         }
 
+        /// <summary>
+        /// Indicates whether a specified <see cref="Tempo"/> is greater than another one.
+        /// </summary>
+        /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
+        /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
+        /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is greater than the value of
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator >(Tempo tempo1, Tempo tempo2)
         {
             ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
@@ -137,6 +155,25 @@ namespace Melanchall.DryWetMidi.Interaction
             return tempo1.MicrosecondsPerQuarterNote > tempo2.MicrosecondsPerQuarterNote;
         }
 
+        /// <summary>
+        /// Indicates whether a specified <see cref="Tempo"/> is greater than or equal to
+        /// another one.
+        /// </summary>
+        /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
+        /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
+        /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is greater than or equal to the value of
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator >=(Tempo tempo1, Tempo tempo2)
         {
             ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
@@ -145,6 +182,24 @@ namespace Melanchall.DryWetMidi.Interaction
             return tempo1.MicrosecondsPerQuarterNote >= tempo2.MicrosecondsPerQuarterNote;
         }
 
+        /// <summary>
+        /// Indicates whether a specified <see cref="Tempo"/> is less than another one.
+        /// </summary>
+        /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
+        /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
+        /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is less than the value of
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator <(Tempo tempo1, Tempo tempo2)
         {
             ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
@@ -153,6 +208,25 @@ namespace Melanchall.DryWetMidi.Interaction
             return tempo1.MicrosecondsPerQuarterNote < tempo2.MicrosecondsPerQuarterNote;
         }
 
+        /// <summary>
+        /// Indicates whether a specified <see cref="Tempo"/> is less than or equal to
+        /// another one.
+        /// </summary>
+        /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
+        /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
+        /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is less than or equal to the value of
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static bool operator <=(Tempo tempo1, Tempo tempo2)
         {
             ThrowIfArgument.IsNull(nameof(tempo1), tempo1);

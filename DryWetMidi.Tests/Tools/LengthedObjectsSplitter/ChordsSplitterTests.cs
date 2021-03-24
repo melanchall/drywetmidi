@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 };
         }
 
-        protected override SplittedLengthedObject<Chord> SplitObject(Chord obj, long time)
+        protected override SplitLengthedObject<Chord> SplitObject(Chord obj, long time)
         {
             return obj.Split(time);
         }

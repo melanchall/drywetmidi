@@ -82,6 +82,9 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Stops a tick generator.
+        /// </summary>
         protected override void Stop()
         {
             MidiTimerWinApi.timeEndPeriod(_resolution);

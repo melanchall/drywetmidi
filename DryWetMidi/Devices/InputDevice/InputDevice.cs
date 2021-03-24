@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -96,6 +97,11 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public bool IsListeningForEvents { get; private set; }
 
+        /// <summary>
+        /// Gets or sets reaction of the input device on <c>Note On</c> events with velocity of zero.
+        /// The default is <see cref="SilentNoteOnPolicy.NoteOn"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public SilentNoteOnPolicy SilentNoteOnPolicy
         {
             get { return _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy; }

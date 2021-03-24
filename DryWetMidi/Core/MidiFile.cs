@@ -689,16 +689,6 @@ namespace Melanchall.DryWetMidi.Core
             return chunk;
         }
 
-        /// <summary>
-        /// Does nothing if difference between expected track chunks count and the actual one should not
-        /// be treated as error; or throws the <see cref="UnexpectedTrackChunksCountException"/> if this
-        /// difference is unallowable.
-        /// </summary>
-        /// <param name="policy">The policy according to which the method should operate.</param>
-        /// <param name="actualTrackChunksCount">Actual count of track chunks.</param>
-        /// <param name="expectedTrackChunksCount">Expected count of track chunks.</param>
-        /// <exception cref="UnexpectedTrackChunksCountException">Difference between expected track chunks
-        /// count and the actual one is unallowable due to the <paramref name="policy"/>.</exception>
         private static void ReactOnUnexpectedTrackChunksCount(UnexpectedTrackChunksCountPolicy policy, int actualTrackChunksCount, int expectedTrackChunksCount)
         {
             switch (policy)
@@ -711,29 +701,12 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        /// <summary>
-        /// Does nothing if lack of bytes in the reader's underlying stream needed to read a value should
-        /// not be treated as error; or throws the <see cref="NotEnoughBytesException"/> if this is
-        /// unallowable.
-        /// </summary>
-        /// <param name="policy">The policy according to which the method should operate.</param>
-        /// <param name="exception">Initial exception.</param>
-        /// <exception cref="NotEnoughBytesException">Lack of bytes in the reader's underlying stream needed to
-        /// read a value is unallowable due to the <paramref name="policy"/>.</exception>
         private static void ReactOnNotEnoughBytes(NotEnoughBytesPolicy policy, Exception exception)
         {
             if (policy == NotEnoughBytesPolicy.Abort)
                 throw new NotEnoughBytesException("MIDI file cannot be read since the reader's underlying stream doesn't have enough bytes.", exception);
         }
 
-        /// <summary>
-        /// Tries to create an instance of a chunk type that has specified ID.
-        /// </summary>
-        /// <param name="chunkId">ID of the chunk that need to be created.</param>
-        /// <param name="chunksTypes">Collection of the chunks types to search for the one with
-        /// <paramref name="chunkId"/> ID.</param>
-        /// <returns>An instance of the chunk type with the specified ID or <c>null</c> if <paramref name="chunksTypes"/>
-        /// doesn't contain chunk type with it.</returns>
         private static MidiChunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
         {
             Type type = null;
@@ -742,15 +715,6 @@ namespace Melanchall.DryWetMidi.Core
                 : null;
         }
 
-        /// <summary>
-        /// Checks if a type represents a MIDI-file chunk.
-        /// </summary>
-        /// <param name="type">Type to check whether it represents a chunk or not.</param>
-        /// <returns>True if passed type represents a MIDI-file chunk; <c>false</c> - otherwise.</returns>
-        /// <remarks>
-        /// Type represents a chunk if it is derived from the <see cref="MidiChunk"/> class and has
-        /// parameterless constructor.
-        /// </remarks>
         private static bool IsChunkType(Type type)
         {
             return type != null &&

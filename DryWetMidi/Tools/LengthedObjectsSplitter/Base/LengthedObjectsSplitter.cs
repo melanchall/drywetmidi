@@ -24,12 +24,12 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Splits objects by the specified step so every object will be splitted at points
+        /// Splits objects by the specified step so every object will be split at points
         /// equally distanced from each other starting from the object's start time.
         /// </summary>
         /// <remarks>
         /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
-        /// will not be splitted and will be returned as clones of the input objects.
+        /// will not be split and will be returned as clones of the input objects.
         /// </remarks>
         /// <param name="objects">Objects to split.</param>
         /// <param name="step">Step to split objects by.</param>
@@ -96,8 +96,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// Splits objects into the specified number of parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// Nulls will not be splitted and will be returned as <c>null</c>s. If an object has zero length,
-        /// it will be splitted into the specified number of parts of zero length.
+        /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
+        /// it will be split into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="objects">Objects to split.</param>
         /// <param name="partsNumber">The number of parts to split objects into.</param>
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Splits objects by the specified grid.
         /// </summary>
         /// <remarks>
-        /// Nulls will not be splitted and will be returned as <c>null</c>s.
+        /// Nulls will not be split and will be returned as <c>null</c>s.
         /// </remarks>
         /// <param name="objects">Objects to split.</param>
         /// <param name="grid">Grid to split objects by.</param>
@@ -363,10 +363,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="obj">Object to split.</param>
         /// <param name="time">Time to split <paramref name="obj"/> by.</param>
-        /// <returns>An object containing left and right parts of the splitted object.</returns>
-        protected abstract SplittedLengthedObject<TObject> SplitObject(TObject obj, long time);
+        /// <returns>An object containing left and right parts of the split object.</returns>
+        protected abstract SplitLengthedObject<TObject> SplitObject(TObject obj, long time);
 
-        private SplittedLengthedObject<TObject> SplitObjectAtDistance(TObject obj, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
+        private SplitLengthedObject<TObject> SplitObjectAtDistance(TObject obj, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
             var time = from == LengthedObjectTarget.Start
                 ? ((MidiTimeSpan)obj.Time).Add(distance, TimeSpanMode.TimeLength)

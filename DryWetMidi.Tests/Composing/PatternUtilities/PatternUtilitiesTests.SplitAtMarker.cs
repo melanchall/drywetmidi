@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         {
             var pattern = new PatternBuilder().Build();
             var patterns = pattern.SplitAtMarker("A");
-            CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
+            CollectionAssert.IsEmpty(patterns, "Pattern split incorrectly.");
         }
 
         [TestCase(true)]
@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var patterns = pattern.SplitAtMarker(marker, removeEmptyPatterns).ToList();
 
             if (removeEmptyPatterns)
-                CollectionAssert.IsEmpty(patterns, "Pattern splitted incorrectly.");
+                CollectionAssert.IsEmpty(patterns, "Pattern split incorrectly.");
             else
             {
                 Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");

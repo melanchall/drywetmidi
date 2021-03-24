@@ -17,18 +17,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits chords contained in the specified <see cref="TrackChunk"/> by the specified step so
-        /// every chord will be splitted at points equally distanced from each other starting from
+        /// every chord will be split at points equally distanced from each other starting from
         /// the chord's start time.
         /// </summary>
         /// <remarks>
         /// Chords with zero length and chords with length smaller than <paramref name="step"/>
-        /// will not be splitted.
+        /// will not be split.
         /// </remarks>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="step">Step to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -43,7 +42,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -55,18 +53,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits chords contained in the specified collection of <see cref="TrackChunk"/> by the
-        /// specified step so every chord will be splitted at points equally distanced from each
+        /// specified step so every chord will be split at points equally distanced from each
         /// other starting from the chord's start time.
         /// </summary>
         /// <remarks>
         /// Chords with zero length and chords with length smaller than <paramref name="step"/>
-        /// will not be splitted.
+        /// will not be split.
         /// </remarks>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="step">Step to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -81,7 +78,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -96,17 +92,16 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits chords contained in the specified <see cref="MidiFile"/> by the specified
-        /// step so every chord will be splitted at points equally distanced from each other
+        /// step so every chord will be split at points equally distanced from each other
         /// starting from the chord's start time.
         /// </summary>
         /// <remarks>
         /// Chords with zero length and chords with length smaller than <paramref name="step"/>
-        /// will not be splitted.
+        /// will not be split.
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
         /// <param name="step">Step to split chords by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -118,7 +113,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -133,14 +127,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// of parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// If a chord has zero length, it will be splitted into the specified number of parts of zero length.
+        /// If a chord has zero length, it will be split into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="partsNumber">The number of parts to split chords into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -152,17 +145,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="partsNumber"/> is zero or negative.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="notesTolerance"/> is negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
@@ -179,14 +162,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// specified number of parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// If a chord has zero length, it will be splitted into the specified number of parts of zero length.
+        /// If a chord has zero length, it will be split into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="partsNumber">The number of parts to split chords into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -198,17 +180,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="partsNumber"/> is zero or negative.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="notesTolerance"/> is negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitChordsByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
@@ -228,25 +200,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// If a chord has zero length, it will be splitted into the specified number of parts of zero length.
+        /// If a chord has zero length, it will be split into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
         /// <param name="partsNumber">The number of parts to split chords into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="partsNumber"/> is zero or negative.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="notesTolerance"/> is negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, ChordDetectionSettings settings = null)
         {
@@ -265,8 +226,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="grid">Grid to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -281,7 +241,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -298,8 +257,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="grid">Grid to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -314,7 +272,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -332,10 +289,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
         /// <param name="grid">Grid to split chords by.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="grid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsByGrid(this MidiFile midiFile, IGrid grid, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -353,8 +308,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split chords at.</param>
         /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -370,7 +324,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -389,8 +342,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split chords at.</param>
         /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -406,7 +358,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -427,8 +378,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
         /// <param name="distance">Distance to split chords at.</param>
         /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -441,7 +391,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -462,8 +411,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a chord's length should be processed according to.</param>
         /// <param name="from">Point of a chord distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -475,17 +423,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="ratio"/> is out of valid range.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="notesTolerance"/> is negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -522,8 +460,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a chord's length should be processed according to.</param>
         /// <param name="from">Point of a chord distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -535,17 +472,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="ratio"/> is out of valid range.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="notesTolerance"/> is negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -584,20 +511,9 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="ratio">Ratio of a chord's length to split by. Valid values are from 0 to 1.</param>
         /// <param name="lengthType">The type a chord's length should be processed according to.</param>
         /// <param name="from">Point of a chord distance should be measured from.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="ratio"/> is out of valid range.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="notesTolerance"/> is negative.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">

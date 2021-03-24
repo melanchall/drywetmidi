@@ -9,6 +9,9 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets settings which define how chords should be detected and built.
+        /// </summary>
         public ChordDetectionSettings ChordDetectionSettings { get; set; } = new ChordDetectionSettings();
 
         #endregion

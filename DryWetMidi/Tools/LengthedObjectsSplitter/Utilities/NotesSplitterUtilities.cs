@@ -17,16 +17,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits notes contained in the specified <see cref="TrackChunk"/> by the specified step so
-        /// every note will be splitted at points equally distanced from each other starting from
+        /// every note will be split at points equally distanced from each other starting from
         /// the note's start time.
         /// </summary>
         /// <remarks>
         /// Notes with zero length and notes with length smaller than <paramref name="step"/>
-        /// will not be splitted.
+        /// will not be split.
         /// </remarks>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -47,17 +48,17 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkNotes(trackChunk, noteDetectionSettings,(splitter, notes) => splitter.SplitByStep(notes, step, tempoMap));
+            SplitTrackChunkNotes(trackChunk, noteDetectionSettings, (splitter, notes) => splitter.SplitByStep(notes, step, tempoMap));
         }
 
         /// <summary>
         /// Splits notes contained in the specified collection of <see cref="TrackChunk"/> by the
-        /// specified step so every note will be splitted at points equally distanced from each
+        /// specified step so every note will be split at points equally distanced from each
         /// other starting from the note's start time.
         /// </summary>
         /// <remarks>
         /// Notes with zero length and notes with length smaller than <paramref name="step"/>
-        /// will not be splitted.
+        /// will not be split.
         /// </remarks>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
@@ -90,12 +91,12 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits notes contained in the specified <see cref="MidiFile"/> by the specified
-        /// step so every note will be splitted at points equally distanced from each other
+        /// step so every note will be split at points equally distanced from each other
         /// starting from the note's start time.
         /// </summary>
         /// <remarks>
         /// Notes with zero length and notes with length smaller than <paramref name="step"/>
-        /// will not be splitted.
+        /// will not be split.
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
@@ -125,12 +126,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// of parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// If a note has zero length, it will be splitted into the specified number of parts of zero length.
+        /// If a note has zero length, it will be split into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="partsNumber">The number of parts to split notes into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -159,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// specified number of parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// If a note has zero length, it will be splitted into the specified number of parts of zero length.
+        /// If a note has zero length, it will be split into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="partsNumber">The number of parts to split notes into.</param>
@@ -196,7 +198,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// parts of the equal length.
         /// </summary>
         /// <remarks>
-        /// If a note has zero length, it will be splitted into the specified number of parts of zero length.
+        /// If a note has zero length, it will be split into the specified number of parts of zero length.
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="partsNumber">The number of parts to split notes into.</param>
@@ -221,6 +223,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="grid">Grid to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -301,6 +304,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split notes at.</param>
         /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -402,6 +406,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a note's length should be processed according to.</param>
         /// <param name="from">Point of a note distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">

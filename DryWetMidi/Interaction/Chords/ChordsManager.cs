@@ -33,11 +33,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// collection, notes tolerance and comparison delegate for events that have same time.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds chord events to manage.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public ChordsManager(EventsCollection eventsCollection, ChordDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);

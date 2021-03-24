@@ -43,6 +43,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public IEnumerable<SnapPoint> SnapPoints => _snapPoints.AsReadOnly();
 
+        /// <summary>
+        /// Gets or sets a value indicating whether playback snapping is enabled or not. The property
+        /// lets turn on or off all snap points at once.
+        /// </summary>
         public bool IsEnabled { get; set; } = true;
 
         #endregion
@@ -117,6 +121,9 @@ namespace Melanchall.DryWetMidi.Devices
             });
         }
 
+        /// <summary>
+        /// Removes all snap points.
+        /// </summary>
         public void Clear()
         {
             _snapPoints.Clear();

@@ -17,6 +17,14 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
+        /// <summary>
+        /// Splits <see cref="MidiFile"/> by chunks within it.
+        /// </summary>
+        /// <param name="settings">Settings accoridng to which MIDI file should be split.</param>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
+        /// <returns>Collection of <see cref="MidiFile"/> where each file contains single chunk from
+        /// the original file.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<MidiFile> SplitByChunks(this MidiFile midiFile, SplitFileByChunksSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -35,13 +43,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Splits <see cref="MidiFile"/> by channel.
         /// </summary>
-        /// <remarks>
-        /// Channel events will be separated by channel and copied to corresponding new files. All
-        /// meta and system exclusive events will be copied to all the new files. Non-track chunks
-        /// will not be copied to any of the new files.
-        /// </remarks>
+        /// <param name="settings">Settings accoridng to which MIDI file should be split.</param>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
-        /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel.</returns>
+        /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel
+        /// and meta and sysex ones as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile, SplitFileByChannelSettings settings = null)
         {
@@ -56,9 +61,9 @@ namespace Melanchall.DryWetMidi.Tools
 
             var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy();
 
-            var timedEventsFilter = settings.TimedEventsFilter;
-            if (timedEventsFilter != null)
-                timedEvents = timedEvents.Where(e => timedEventsFilter(e.Item1));
+            var filter = settings.Filter;
+            if (filter != null)
+                timedEvents = timedEvents.Where(e => filter(e.Item1));
 
             foreach (var timedEventTuple in timedEvents)
             {
@@ -82,8 +87,8 @@ namespace Melanchall.DryWetMidi.Tools
             if (Array.TrueForAll(channelsUsed, c => !c))
             {
                 var midiFileClone = midiFile.Clone();
-                if (timedEventsFilter != null)
-                    midiFileClone.RemoveTimedEvents(e => !timedEventsFilter(e));
+                if (filter != null)
+                    midiFileClone.RemoveTimedEvents(e => !filter(e));
 
                 yield return midiFileClone;
                 yield break;
@@ -101,13 +106,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Splits <see cref="MidiFile"/> by notes.
         /// </summary>
-        /// <remarks>
-        /// Note events will be separated by note number and copied to corresponding new files. All other
-        /// channel events, meta and system exclusive events will be copied to all the new files. Non-track
-        /// chunks will not be copied to any of the new files.
-        /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
-        /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note number.</returns>
+        /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
+        /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note and
+        /// other events as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile, SplitFileByNotesSettings settings = null)
         {
@@ -116,8 +118,8 @@ namespace Melanchall.DryWetMidi.Tools
             settings = settings ?? new SplitFileByNotesSettings();
 
             return settings.IgnoreChannel
-                ? midiFile.SplitByNotes(noteEvent => noteEvent.NoteNumber, settings.TimedEventsFilter, settings.CopyNonNoteEventsToEachFile)
-                : midiFile.SplitByNotes(noteEvent => noteEvent.GetNoteId(), settings.TimedEventsFilter, settings.CopyNonNoteEventsToEachFile);
+                ? midiFile.SplitByNotes(noteEvent => noteEvent.NoteNumber, settings.Filter, settings.CopyNonNoteEventsToEachFile)
+                : midiFile.SplitByNotes(noteEvent => noteEvent.GetNoteId(), settings.Filter, settings.CopyNonNoteEventsToEachFile);
         }
 
         /// <summary>
@@ -128,7 +130,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <param name="grid">Grid to split <paramref name="midiFile"/> by.</param>
-        /// <param name="settings">Settings according to which file should be splitted.</param>
+        /// <param name="settings">Settings according to which file should be split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> produced during splitting the input file by grid.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -179,7 +181,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to skip part of.</param>
         /// <param name="partLength">The length of part to skip.</param>
         /// <param name="settings">Settings according to which <paramref name="midiFile"/>
-        /// should be splitted.</param>
+        /// should be split.</param>
         /// <returns><see cref="MidiFile"/> which is result of skipping a part of the <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -219,7 +221,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to take part of.</param>
         /// <param name="partLength">The length of part to take.</param>
         /// <param name="settings">Settings according to which <paramref name="midiFile"/>
-        /// should be splitted.</param>
+        /// should be split.</param>
         /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -259,7 +261,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partStart">The start time of part to take.</param>
         /// <param name="partLength">The length of part to take.</param>
         /// <param name="settings">Settings according to which <paramref name="midiFile"/>
-        /// should be splitted.</param>
+        /// should be split.</param>
         /// <returns><see cref="MidiFile"/> which is part of the <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -299,15 +301,15 @@ namespace Melanchall.DryWetMidi.Tools
         private static IEnumerable<MidiFile> SplitByNotes<TNoteId>(
             this MidiFile midiFile,
             Func<NoteEvent, TNoteId> getNoteId,
-            Predicate<TimedEvent> timedEventsFilter,
+            Predicate<TimedEvent> filter,
             bool copyNonNoteEventsToEachFile)
         {
             var timedEventsByIds = new Dictionary<TNoteId, List<TimedEvent>>();
             var nonNoteEvents = new List<TimedEvent>();
 
             var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy();
-            if (timedEventsFilter != null)
-                timedEvents = timedEvents.Where(e => timedEventsFilter(e.Item1));
+            if (filter != null)
+                timedEvents = timedEvents.Where(e => filter(e.Item1));
 
             foreach (var timedEventTuple in timedEvents)
             {
@@ -343,8 +345,8 @@ namespace Melanchall.DryWetMidi.Tools
             if (!timedEventsByIds.Any())
             {
                 var midiFileClone = midiFile.Clone();
-                if (timedEventsFilter != null)
-                    midiFileClone.RemoveTimedEvents(e => !timedEventsFilter(e));
+                if (filter != null)
+                    midiFileClone.RemoveTimedEvents(e => !filter(e));
                 
                 yield return midiFileClone;
                 yield break;

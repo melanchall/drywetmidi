@@ -24,8 +24,8 @@ using Melanchall.DryWetMidi.Devices;
 using (var inputDevice = InputDevice.GetByName("MIDI In"))
 using (var outputDevice1 = OutputDevice.GetByName("MIDI Out 1"))
 using (var outputDevice2 = OutputDevice.GetByName("MIDI Out 2"))
-using (var devicesConnector = new DevicesConnector(inputDevice, outputDevice1, outputDevice2))
 {
+    var devicesConnector = new DevicesConnector(inputDevice, outputDevice1, outputDevice2)
     devicesConnector.Connect();
 }
 ```

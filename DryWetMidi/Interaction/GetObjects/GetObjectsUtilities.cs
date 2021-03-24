@@ -6,6 +6,9 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Provides utilities to extract objects of different types at once.
+    /// </summary>
     public static class GetObjectsUtilities
     {
         #region Constants
@@ -43,6 +46,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Extracts objects of the specified types from a collection of <see cref="MidiEvent"/>.
+        /// </summary>
+        /// <param name="midiEvents">Collection of <see cref="MidiEvent"/> to extract objects from.</param>
+        /// <param name="objectType">Combination of desired objects types.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <returns>Collection of objects of the specified types extracted from <paramref name="midiEvents"/>.
+        /// Objects are ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
             this IEnumerable<MidiEvent> midiEvents,
             ObjectType objectType,
@@ -55,6 +67,15 @@ namespace Melanchall.DryWetMidi.Interaction
                 .GetObjectsFromSortedTimedObjects(0, objectType, settings);
         }
 
+        /// <summary>
+        /// Extracts objects of the specified types from a <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to extract objects from.</param>
+        /// <param name="objectType">Combination of desired objects types.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <returns>Collection of objects of the specified types extracted from <paramref name="eventsCollection"/>.
+        /// Objects are ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
             this EventsCollection eventsCollection,
             ObjectType objectType,
@@ -67,6 +88,15 @@ namespace Melanchall.DryWetMidi.Interaction
                 .GetObjectsFromSortedTimedObjects(eventsCollection.Count / 2, objectType, settings);
         }
 
+        /// <summary>
+        /// Extracts objects of the specified types from a <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to extract objects from.</param>
+        /// <param name="objectType">Combination of desired objects types.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <returns>Collection of objects of the specified types extracted from <paramref name="trackChunk"/>.
+        /// Objects are ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -77,6 +107,15 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.GetObjects(objectType, settings);
         }
 
+        /// <summary>
+        /// Extracts objects of the specified types from a collection of <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to extract objects from.</param>
+        /// <param name="objectType">Combination of desired objects types.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <returns>Collection of objects of the specified types extracted from <paramref name="trackChunks"/>.
+        /// Objects are ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
@@ -93,6 +132,15 @@ namespace Melanchall.DryWetMidi.Interaction
                 .GetObjectsFromSortedTimedObjects(eventsCount / 2, objectType, settings);
         }
 
+        /// <summary>
+        /// Extracts objects of the specified types from a <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to extract objects from.</param>
+        /// <param name="objectType">Combination of desired objects types.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <returns>Collection of objects of the specified types extracted from <paramref name="midiFile"/>.
+        /// Objects are ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -103,6 +151,15 @@ namespace Melanchall.DryWetMidi.Interaction
             return midiFile.GetTrackChunks().GetObjects(objectType, settings);
         }
 
+        /// <summary>
+        /// Extracts objects of the specified types from a collection of <see cref="ITimedObject"/>.
+        /// </summary>
+        /// <param name="timedObjects">Collection of <see cref="ITimedObject"/> to extract objects from.</param>
+        /// <param name="objectType">Combination of desired objects types.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <returns>Collection of objects of the specified types extracted from <paramref name="timedObjects"/>.
+        /// Objects are ordered by time.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
             this IEnumerable<ITimedObject> timedObjects,
             ObjectType objectType,

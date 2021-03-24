@@ -56,6 +56,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="interval">Interval between ticks.</param>
         protected abstract void Start(TimeSpan interval);
 
+        /// <summary>
+        /// Stops a tick generator.
+        /// </summary>
         protected abstract void Stop();
 
         #endregion

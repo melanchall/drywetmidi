@@ -1344,54 +1344,54 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_EmptyFile()
+        public void SplitByNotes_Filter_EmptyFile()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new TimedEvent[0],
                 expectedTimedEvents: new[] { new TimedEvent[0] },
-                timedEventsFilter: e => false);
+                filter: e => false);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_OneEvent_NonNote_1()
+        public void SplitByNotes_Filter_OneEvent_NonNote_1()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[] { new TimedEvent(new TextEvent("A")) },
                 expectedTimedEvents: new[] { new[] { new TimedEvent(new TextEvent("A")) } },
-                timedEventsFilter: e => true);
+                filter: e => true);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_OneEvent_NonNote_2()
+        public void SplitByNotes_Filter_OneEvent_NonNote_2()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[] { new TimedEvent(new ControlChangeEvent()) },
                 expectedTimedEvents: new[] { new TimedEvent[0] },
-                timedEventsFilter: e => e.Event.EventType != MidiEventType.ControlChange);
+                filter: e => e.Event.EventType != MidiEventType.ControlChange);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_OneEvent_NoteOn()
+        public void SplitByNotes_Filter_OneEvent_NoteOn()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[] { new TimedEvent(new NoteOnEvent()) },
                 expectedTimedEvents: new[] { new[] { new TimedEvent(new NoteOnEvent()) } },
-                timedEventsFilter: e => true);
+                filter: e => true);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_OneEvent_NoteOff()
+        public void SplitByNotes_Filter_OneEvent_NoteOff()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[] { new TimedEvent(new NoteOffEvent()) },
                 expectedTimedEvents: new[] { new TimedEvent[0] },
-                timedEventsFilter: e => false);
+                filter: e => false);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_NonNote()
+        public void SplitByNotes_Filter_MultipleEvents_NonNote()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new TextEvent("A")),
@@ -1405,13 +1405,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new TextEvent("A")),
                     }
                 },
-                timedEventsFilter: e => e.Event.EventType == MidiEventType.Text);
+                filter: e => e.Event.EventType == MidiEventType.Text);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Note_SingleChannel_SingleNoteNumber()
+        public void SplitByNotes_Filter_MultipleEvents_Note_SingleChannel_SingleNoteNumber()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1427,13 +1427,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new NoteOnEvent()),
                     }
                 },
-                timedEventsFilter: e => e.Event.EventType == MidiEventType.NoteOn);
+                filter: e => e.Event.EventType == MidiEventType.NoteOn);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Note_SingleChannel_DifferentNoteNumbers()
+        public void SplitByNotes_Filter_MultipleEvents_Note_SingleChannel_DifferentNoteNumbers()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1454,13 +1454,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new NoteOffEvent((SevenBitNumber)30, SevenBitNumber.MinValue)),
                     }
                 },
-                timedEventsFilter: e => true);
+                filter: e => true);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Note_DifferentChannels_SingleNoteNumber()
+        public void SplitByNotes_Filter_MultipleEvents_Note_DifferentChannels_SingleNoteNumber()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new NoteOnEvent { Channel = (FourBitNumber)5 }),
@@ -1476,13 +1476,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new NoteOffEvent() { Channel = (FourBitNumber)5 }),
                     }
                 },
-                timedEventsFilter: e => e.Event is NoteEvent noteEvent && noteEvent.Channel == 5);
+                filter: e => e.Event is NoteEvent noteEvent && noteEvent.Channel == 5);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Note_DifferentChannels_DifferentNoteNumbers()
+        public void SplitByNotes_Filter_MultipleEvents_Note_DifferentChannels_DifferentNoteNumbers()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1517,13 +1517,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new NoteOffEvent((SevenBitNumber)30, SevenBitNumber.MinValue) { Channel = (FourBitNumber)5 }),
                     },
                 },
-                timedEventsFilter: e => true);
+                filter: e => true);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Mixed_SingleChannel_SingleNoteNumber()
+        public void SplitByNotes_Filter_MultipleEvents_Mixed_SingleChannel_SingleNoteNumber()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new TextEvent("A")),
@@ -1544,13 +1544,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new NoteOffEvent()),
                     }
                 },
-                timedEventsFilter: e => e.Event.EventType != MidiEventType.Text);
+                filter: e => e.Event.EventType != MidiEventType.Text);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Mixed_SingleChannel_DifferentNoteNumbers()
+        public void SplitByNotes_Filter_MultipleEvents_Mixed_SingleChannel_DifferentNoteNumbers()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1574,13 +1574,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new NoteOffEvent((SevenBitNumber)30, SevenBitNumber.MinValue)),
                     }
                 },
-                timedEventsFilter: e => true);
+                filter: e => true);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Mixed_DifferentChannels_SingleNoteNumber()
+        public void SplitByNotes_Filter_MultipleEvents_Mixed_DifferentChannels_SingleNoteNumber()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new TextEvent("A")),
@@ -1590,13 +1590,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimedEvent(new NoteOffEvent { Channel = (FourBitNumber)5 }),
                 },
                 expectedTimedEvents: new[] { new TimedEvent[0] },
-                timedEventsFilter: e => false);
+                filter: e => false);
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Mixed_DifferentChannels_DifferentNoteNumbers()
+        public void SplitByNotes_Filter_MultipleEvents_Mixed_DifferentChannels_DifferentNoteNumbers()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1637,13 +1637,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TimedEvent(new NoteOffEvent((SevenBitNumber)30, SevenBitNumber.MinValue) { Channel = (FourBitNumber)5 }),
                     },
                 },
-                timedEventsFilter: e => !(e.Event is TextEvent textEvent) || textEvent.Text != "B");
+                filter: e => !(e.Event is TextEvent textEvent) || textEvent.Text != "B");
         }
 
         [Test]
-        public void SplitByNotes_TimedEventsFilter_MultipleEvents_Note_AllNoteNumbers_AllChannels()
+        public void SplitByNotes_Filter_MultipleEvents_Note_AllNoteNumbers_AllChannels()
         {
-            SplitByNotes_TimedEventsFilter(
+            SplitByNotes_Filter(
                 timedEvents: FourBitNumber.Values.SelectMany(channel => SevenBitNumber.Values.SelectMany(noteNumber => new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber, SevenBitNumber.MaxValue) { Channel = channel }),
@@ -1654,7 +1654,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimedEvent(new NoteOnEvent(noteNumber, SevenBitNumber.MaxValue) { Channel = channel }),
                     new TimedEvent(new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = channel }),
                 }).ToArray()).ToArray(),
-                timedEventsFilter: e => e.Event is ChannelEvent channelEvent && channelEvent.Channel < 5);
+                filter: e => e.Event is ChannelEvent channelEvent && channelEvent.Channel < 5);
         }
 
         #endregion
@@ -1717,16 +1717,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 false);
         }
 
-        private void SplitByNotes_TimedEventsFilter(
+        private void SplitByNotes_Filter(
             ICollection<TimedEvent> timedEvents,
             ICollection<ICollection<TimedEvent>> expectedTimedEvents,
-            Predicate<TimedEvent> timedEventsFilter)
+            Predicate<TimedEvent> filter)
         {
             SplitByNotes_WithSettings(
                 timedEvents,
                 expectedTimedEvents,
                 true,
-                timedEventsFilter,
+                filter,
                 false);
         }
 
@@ -1734,7 +1734,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<TimedEvent> timedEvents,
             ICollection<ICollection<TimedEvent>> expectedTimedEvents,
             bool copyNonNoteEventsToEachFile,
-            Predicate<TimedEvent> timedEventsFilter,
+            Predicate<TimedEvent> filter,
             bool ignoreChannel)
         {
             var midiFile = timedEvents.ToFile();
@@ -1743,7 +1743,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 .SplitByNotes(new SplitFileByNotesSettings
                 {
                     CopyNonNoteEventsToEachFile = copyNonNoteEventsToEachFile,
-                    TimedEventsFilter = timedEventsFilter,
+                    Filter = filter,
                     IgnoreChannel = ignoreChannel
                 })
                 .ToList();

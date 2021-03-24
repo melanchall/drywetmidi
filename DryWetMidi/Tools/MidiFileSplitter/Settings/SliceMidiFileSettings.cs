@@ -3,18 +3,18 @@
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Settings according to which a <see cref="MidiFile"/> should be splitted.
+    /// Settings according to which a <see cref="MidiFile"/> should be split.
     /// </summary>
     public class SliceMidiFileSettings
     {
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether notes should be splitted in points of
+        /// Gets or sets a value indicating whether notes should be split in points of
         /// grid intersection or not. The default value is <c>true</c>.
         /// </summary>
         /// <remarks>
-        /// False means notes treated as just Note On / Note Off events rather than note objects
+        /// <c>false</c> means notes treated as just Note On / Note Off events rather than note objects
         /// for <c>true</c>. Splitting notes produces new Note On / Note Off events at points of grid
         /// intersecting notes.
         /// </remarks>
@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets <see cref="SliceMidiFileMarkers"/> that holds factory methods to create events
-        /// to mark parts of splitted file.
+        /// to mark parts of split file.
         /// </summary>
         public SliceMidiFileMarkers Markers { get; set; }
 

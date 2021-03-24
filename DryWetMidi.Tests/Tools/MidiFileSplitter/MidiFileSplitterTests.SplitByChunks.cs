@@ -43,6 +43,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 return obj is CustomChunk;
             }
+
+            public override int GetHashCode()
+            {
+                return ChunkId.GetHashCode();
+            }
         }
 
         #endregion

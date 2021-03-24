@@ -987,7 +987,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         protected abstract IEnumerable<TObject> CreateInputObjects(long length);
 
-        protected abstract SplittedLengthedObject<TObject> SplitObject(TObject obj, long time);
+        protected abstract SplitLengthedObject<TObject> SplitObject(TObject obj, long time);
 
         #endregion
 

@@ -338,10 +338,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// will be <c>null</c>.
         /// </remarks>
         /// <param name="time">Time to split the note by.</param>
-        /// <returns>An object containing left and right parts of the splitted <see cref="Note"/>.
+        /// <returns>An object containing left and right parts of the split <see cref="Note"/>.
         /// Both parts are instances of <see cref="Note"/> too.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        public SplittedLengthedObject<Note> Split(long time)
+        public SplitLengthedObject<Note> Split(long time)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
@@ -351,10 +351,10 @@ namespace Melanchall.DryWetMidi.Interaction
             var endTime = startTime + Length;
 
             if (time <= startTime)
-                return new SplittedLengthedObject<Note>(null, Clone());
+                return new SplitLengthedObject<Note>(null, Clone());
 
             if (time >= endTime)
-                return new SplittedLengthedObject<Note>(Clone(), null);
+                return new SplitLengthedObject<Note>(Clone(), null);
 
             //
 
@@ -365,7 +365,7 @@ namespace Melanchall.DryWetMidi.Interaction
             rightPart.Time = time;
             rightPart.Length = endTime - time;
 
-            return new SplittedLengthedObject<Note>(leftPart, rightPart);
+            return new SplitLengthedObject<Note>(leftPart, rightPart);
         }
 
         #endregion

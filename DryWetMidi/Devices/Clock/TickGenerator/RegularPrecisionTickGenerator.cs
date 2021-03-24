@@ -51,6 +51,9 @@ namespace Melanchall.DryWetMidi.Devices
             _timer.Start();
         }
 
+        /// <summary>
+        /// Stops a tick generator.
+        /// </summary>
         protected override void Stop()
         {
             _timer.Stop();

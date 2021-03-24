@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
         }
 
-        protected override SplittedLengthedObject<Note> SplitObject(Note obj, long time)
+        protected override SplitLengthedObject<Note> SplitObject(Note obj, long time)
         {
             return obj.Split(time);
         }

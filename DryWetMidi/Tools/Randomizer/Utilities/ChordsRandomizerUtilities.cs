@@ -20,8 +20,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="bounds">Bounds to randomize time within.</param>
         /// <param name="tempoMap">Tempo map used to calculate time bounds to randomize within.</param>
         /// <param name="settings">Settings according to which chords should be randomized.</param>
-        /// <param name="notesTolerance">Chords tolerance that defines maximum distance of chords from the
-        /// start of the first chord of a chord. Chords within this tolerance will be considered as a chord.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -36,7 +34,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void RandomizeChords(this TrackChunk trackChunk, IBounds bounds, TempoMap tempoMap, ChordsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -56,8 +53,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="bounds">Bounds to randomize time within.</param>
         /// <param name="tempoMap">Tempo map used to calculate time bounds to randomize within.</param>
         /// <param name="settings">Settings according to which chords should be randomized.</param>
-        /// <param name="notesTolerance">Chords tolerance that defines maximum distance of chords from the
-        /// start of the first chord of a chord. Chords within this tolerance will be considered as a chord.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -72,7 +67,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void RandomizeChords(this IEnumerable<TrackChunk> trackChunks, IBounds bounds, TempoMap tempoMap, ChordsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -91,8 +85,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to randomize chords in.</param>
         /// <param name="bounds">Bounds to randomize time within.</param>
         /// <param name="settings">Settings according to which chords should be randomized.</param>
-        /// <param name="notesTolerance">Chords tolerance that defines maximum distance of chords from the
-        /// start of the first chord of a chord. Chords within this tolerance will be considered as a chord.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -104,7 +96,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void RandomizeChords(this MidiFile midiFile, IBounds bounds, ChordsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

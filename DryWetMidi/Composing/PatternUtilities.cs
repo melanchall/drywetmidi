@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
         /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
-        /// splitted at <paramref name="anchor"/>.</returns>
+        /// split at <paramref name="anchor"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -181,7 +181,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
         /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
-        /// splitted at anchors.</returns>
+        /// split at anchors.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
         public static IEnumerable<Pattern> SplitAtAllAnchors(this Pattern pattern, bool removeEmptyPatterns = true)
         {
@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <param name="stringComparison">Value that specifies how the marker strings will be compared.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
-        /// splitted at <paramref name="marker"/>.</returns>
+        /// split at <paramref name="marker"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
         /// automatically removed or not. The default value is <c>true</c>.</param>
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
-        /// splitted at markers.</returns>
+        /// split at markers.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
         public static IEnumerable<Pattern> SplitAtAllMarkers(this Pattern pattern, bool removeEmptyPatterns = true)
         {

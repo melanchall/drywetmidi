@@ -34,6 +34,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// collection and comparison delegate for events that have same time.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds note events to manage.</param>
+        /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <remarks>
         /// If the <paramref name="sameTimeEventsComparison"/> is not specified events with the same time

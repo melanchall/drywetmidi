@@ -134,6 +134,17 @@ namespace Melanchall.DryWetMidi.Interaction
             return AtTime(objects, convertedTime);
         }
 
+        /// <summary>
+        /// Creates a track chunk with the specified objects.
+        /// </summary>
+        /// <remarks>
+        /// Note that only MIDI events allowed by SMF specification will be added to result track chunk.
+        /// So instances of <see cref="TimedEvent"/> containing <see cref="SystemCommonEvent"/> or
+        /// <see cref="SystemRealTimeEvent"/> won't be added.
+        /// </remarks>
+        /// <param name="timedObjects">Collection of objects to create a track chunk from.</param>
+        /// <returns><see cref="TrackChunk"/> containing the <paramref name="timedObjects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static TrackChunk ToTrackChunk(this IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -143,6 +154,17 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk;
         }
 
+        /// <summary>
+        /// Creates a MIDI file with the specified timed objects.
+        /// </summary>
+        /// <remarks>
+        /// Note that only MIDI events allowed by SMF specification will be added to result MIDI file.
+        /// So instances of <see cref="TimedEvent"/> containing <see cref="SystemCommonEvent"/> or
+        /// <see cref="SystemRealTimeEvent"/> won't be added.
+        /// </remarks>
+        /// <param name="timedObjects">Collection of objects to create a MIDI file from.</param>
+        /// <returns><see cref="MidiFile"/> containing the <paramref name="timedObjects"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static MidiFile ToFile(this IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -150,9 +172,26 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MidiFile(timedObjects.ToTrackChunk());
         }
 
+        /// <summary>
+        /// Adds the specified collection of objects to <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to add objects to.</param>
+        /// <param name="timedObjects">Objects to add to <paramref name="eventsCollection"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void AddObjects(this EventsCollection eventsCollection, IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
             var timedEventsObjects = timedObjects.GetObjects(ObjectType.TimedEvent);
             if (timedEventsObjects.Count == 0)
@@ -171,9 +210,26 @@ namespace Melanchall.DryWetMidi.Interaction
             AddTimedEventsToEventsCollection(eventsCollection, allTimedEvents);
         }
 
+        /// <summary>
+        /// Adds the specified collection of objects to <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to add objects to.</param>
+        /// <param name="timedObjects">Objects to add to <paramref name="trackChunk"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void AddObjects(this TrackChunk trackChunk, IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
             trackChunk.Events.AddObjects(timedObjects);
         }

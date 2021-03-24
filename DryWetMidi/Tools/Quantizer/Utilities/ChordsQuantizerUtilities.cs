@@ -20,8 +20,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to quantize by.</param>
         /// <param name="settings">Settings according to which chords should be quantized.</param>
-        /// <param name="notesTolerance">Chords tolerance that defines maximum distance of chords from the
-        /// start of the first chord of a chord. Chords within this tolerance will be considered as a chord.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -47,7 +45,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void QuantizeChords(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -67,8 +64,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to quantize by.</param>
         /// <param name="settings">Settings according to which chords should be quantized.</param>
-        /// <param name="notesTolerance">Chords tolerance that defines maximum distance of chords from the
-        /// start of the first chord of a chord. Chords within this tolerance will be considered as a chord.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -94,7 +89,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void QuantizeChords(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, ChordsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -113,8 +107,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to quantize chords in.</param>
         /// <param name="grid">Grid to quantize objects by.</param>
         /// <param name="settings">Settings according to which chords should be quantized.</param>
-        /// <param name="notesTolerance">Chords tolerance that defines maximum distance of chords from the
-        /// start of the first chord of a chord. Chords within this tolerance will be considered as a chord.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -137,7 +129,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static void QuantizeChords(this MidiFile midiFile, IGrid grid, ChordsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

@@ -217,6 +217,24 @@ namespace Melanchall.DryWetMidi.Interaction
             eventsCollection.AddEvent(midiEvent, TimeConverter.ConvertFrom(time, tempoMap));
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to process.</param>
+        /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
+        /// <paramref name="eventsCollection"/>.</param>
+        /// <returns>Count of processed timed events.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -241,6 +259,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -274,6 +295,24 @@ namespace Melanchall.DryWetMidi.Interaction
             return iMatched;
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to process.</param>
+        /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
+        /// <paramref name="trackChunk"/>.</param>
+        /// <returns>Count of processed timed events.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -299,6 +338,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
         /// </list>
         /// </exception>
         public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match)
@@ -310,6 +352,25 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.ProcessTimedEvents(action, match);
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="TimedEvent"/> contained in the collection of
+        /// <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to process.</param>
+        /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
+        /// <paramref name="trackChunks"/>.</param>
+        /// <returns>Count of processed timed events.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -335,6 +396,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -377,6 +441,24 @@ namespace Melanchall.DryWetMidi.Interaction
             return iMatched;
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for events to process.</param>
+        /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
+        /// <paramref name="file"/>.</param>
+        /// <returns>Count of processed timed events.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -402,6 +484,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
         /// </list>
         /// </exception>
         public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match)
@@ -413,6 +498,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().ProcessTimedEvents(action, match);
         }
 
+        /// <summary>
+        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static int RemoveTimedEvents(this EventsCollection eventsCollection)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -428,7 +519,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
         /// <returns>Count of removed timed events.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveTimedEvents(this EventsCollection eventsCollection, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -463,6 +564,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return removedEventsCount;
         }
 
+        /// <summary>
+        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static int RemoveTimedEvents(this TrackChunk trackChunk)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -478,7 +585,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
         /// <returns>Count of removed timed events.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveTimedEvents(this TrackChunk trackChunk, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -487,6 +604,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.RemoveTimedEvents(match);
         }
 
+        /// <summary>
+        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static int RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -507,7 +630,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
         /// <returns>Count of removed timed events.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -575,6 +708,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return removedEventsCounts.Sum();
         }
 
+        /// <summary>
+        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for events to remove.</param>
+        /// <returns>Count of removed timed events.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static int RemoveTimedEvents(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -588,7 +727,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="file"><see cref="MidiFile"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
         /// <returns>Count of removed timed events.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveTimedEvents(this MidiFile file, Predicate<TimedEvent> match)
         {
             ThrowIfArgument.IsNull(nameof(file), file);

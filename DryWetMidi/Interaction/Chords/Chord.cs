@@ -330,10 +330,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// will be <c>null</c>.
         /// </remarks>
         /// <param name="time">Time to split the chord by.</param>
-        /// <returns>An object containing left and right parts of the splitted <see cref="Chord"/>.
+        /// <returns>An object containing left and right parts of the split <see cref="Chord"/>.
         /// Both parts are instances of <see cref="Chord"/> too.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        public SplittedLengthedObject<Chord> Split(long time)
+        public SplitLengthedObject<Chord> Split(long time)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
 
@@ -343,10 +343,10 @@ namespace Melanchall.DryWetMidi.Interaction
             var endTime = startTime + Length;
 
             if (time <= startTime)
-                return new SplittedLengthedObject<Chord>(null, Clone());
+                return new SplitLengthedObject<Chord>(null, Clone());
 
             if (time >= endTime)
-                return new SplittedLengthedObject<Chord>(Clone(), null);
+                return new SplitLengthedObject<Chord>(Clone(), null);
 
             //
 
@@ -355,7 +355,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var leftPart = new Chord(parts.Select(p => p.LeftPart).Where(p => p != null));
             var rightPart = new Chord(parts.Select(p => p.RightPart).Where(p => p != null));
 
-            return new SplittedLengthedObject<Chord>(leftPart, rightPart);
+            return new SplitLengthedObject<Chord>(leftPart, rightPart);
         }
 
         private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)

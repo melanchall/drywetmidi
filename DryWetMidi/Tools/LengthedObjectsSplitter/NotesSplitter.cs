@@ -27,8 +27,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="obj">Object to split.</param>
         /// <param name="time">Time to split <paramref name="obj"/> by.</param>
-        /// <returns>An object containing left and right parts of the splitted object.</returns>
-        protected override SplittedLengthedObject<Note> SplitObject(Note obj, long time)
+        /// <returns>An object containing left and right parts of the split object.</returns>
+        protected override SplitLengthedObject<Note> SplitObject(Note obj, long time)
         {
             return obj.Split(time);
         }

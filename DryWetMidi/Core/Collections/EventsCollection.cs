@@ -60,6 +60,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public int Count => _events.Count;
 
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="EventsCollection"/> is read-only.
+        /// </summary>
         public bool IsReadOnly { get; } = false;
 
         #endregion
@@ -250,11 +253,29 @@ namespace Melanchall.DryWetMidi.Core
 
         #region ICollection<MidiEvent>
 
+        /// <summary>
+        /// Determines whether the <see cref="EventsCollection"/> contains a specific event.
+        /// </summary>
+        /// <param name="item">The event to locate in the <see cref="EventsCollection"/>.</param>
+        /// <returns><c>true</c> if event is found in the <see cref="EventsCollection"/>; otherwise, <c>false</c>.</returns>
         public bool Contains(MidiEvent item)
         {
             return _events.Contains(item);
         }
 
+        /// <summary>
+        /// Copies the elements of the <see cref="EventsCollection"/> to an <see cref="Array"/>,
+        /// starting at a particular index.
+        /// </summary>
+        /// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of
+        /// the elements copied from <see cref="EventsCollection"/>. The array must have zero-based
+        /// indexing.</param>
+        /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception>
+        /// <exception cref="ArgumentException">The number of elements in the source <see cref="EventsCollection"/>
+        /// is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination
+        /// array.</exception>
         public void CopyTo(MidiEvent[] array, int arrayIndex)
         {
             _events.CopyTo(array, arrayIndex);

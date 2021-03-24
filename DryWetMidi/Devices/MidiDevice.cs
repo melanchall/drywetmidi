@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Represents a MIDI device.
     /// </summary>
-    public abstract class MidiDevice : IMidiDevice, IDisposable
+    public abstract class MidiDevice : IDisposable
     {
         #region Events
 
@@ -54,6 +54,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether a device is enabled (i.e. operable) or not.
+        /// </summary>
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>

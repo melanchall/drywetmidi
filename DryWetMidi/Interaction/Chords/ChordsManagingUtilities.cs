@@ -178,13 +178,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// specified events collection, notes tolerance and comparison delegate for events that have same time.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds chords to manage.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <returns>An instance of the <see cref="ChordsManager"/> that can be used to manage chords
         /// represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ChordsManager ManageChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -198,13 +196,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// that have same time.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds chords to manage.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
         /// <returns>An instance of the <see cref="ChordsManager"/> that can be used to manage
         /// chords represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ChordsManager ManageChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -216,8 +212,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets chords contained in the specified collection of <see cref="MidiEvent"/>.
         /// </summary>
         /// <param name="midiEvents">Collection of<see cref="MidiFile"/> to search for chords.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="midiEvents"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public static ICollection<Chord> GetChords(this IEnumerable<MidiEvent> midiEvents, ChordDetectionSettings settings = null)
@@ -238,11 +233,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets chords contained in the specified <see cref="EventsCollection"/>.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ICollection<Chord> GetChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -261,11 +254,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets chords contained in the specified <see cref="TrackChunk"/>.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ICollection<Chord> GetChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -277,11 +268,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets chords contained in the specified collection of <see cref="TrackChunk"/>.
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for chords.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ICollection<Chord> GetChords(this IEnumerable<TrackChunk> trackChunks, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -303,11 +292,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets chords contained in the specified <see cref="MidiFile"/>.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static ICollection<Chord> GetChords(this MidiFile file, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -319,11 +306,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Creates chords from notes.
         /// </summary>
         /// <param name="notes">Notes to create chords from.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords made up from <paramref name="notes"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static IEnumerable<Chord> GetChords(this IEnumerable<Note> notes, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -331,6 +316,25 @@ namespace Melanchall.DryWetMidi.Interaction
             return notes.GetChordsAndNotesAndTimedEventsLazy(settings).OfType<Chord>().ToArray();
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="EventsCollection"/>.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
+        /// <paramref name="eventsCollection"/>.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of processed chords.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -346,8 +350,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -358,9 +361,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -370,6 +375,25 @@ namespace Melanchall.DryWetMidi.Interaction
             return eventsCollection.ProcessChords(action, match, settings, true);
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
+        /// <paramref name="trackChunk"/>.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of processed chords.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessChords(this TrackChunk trackChunk, Action<Chord> action, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -385,8 +409,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -397,9 +420,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static int ProcessChords(this TrackChunk trackChunk, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -409,6 +434,26 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.ProcessChords(action, match, settings);
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Chord"/> contained in the collection of
+        /// <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
+        /// <paramref name="trackChunks"/>.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of processed chords.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -425,8 +470,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -437,9 +481,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -449,6 +495,25 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunks.ProcessChords(action, match, settings, true);
         }
 
+        /// <summary>
+        /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for chords to process.</param>
+        /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
+        /// <paramref name="file"/>.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of processed chords.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessChords(this MidiFile file, Action<Chord> action, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -464,8 +529,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -476,9 +540,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <item>
         /// <description><paramref name="action"/> is <c>null</c>.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
         public static int ProcessChords(this MidiFile file, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -488,6 +554,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().ProcessChords(action, match, settings);
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to remove.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of removed chords.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static int RemoveChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -500,11 +573,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveChords(this EventsCollection eventsCollection, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -530,6 +611,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return chordsToRemoveCount;
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to remove.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of removed chords.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static int RemoveChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -542,11 +630,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveChords(this TrackChunk trackChunk, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -555,6 +651,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.RemoveChords(match, settings);
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to remove.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of removed chords.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static int RemoveChords(this IEnumerable<TrackChunk> trackChunks, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -567,11 +670,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveChords(this IEnumerable<TrackChunk> trackChunks, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -597,6 +708,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return chordsToRemoveCount;
         }
 
+        /// <summary>
+        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for chords to remove.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <returns>Count of removed chords.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static int RemoveChords(this MidiFile file, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -609,11 +727,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="notesTolerance">Notes tolerance that defines maximum distance of notes from the
-        /// start of the first note of a chord. Notes within this tolerance will be considered as a chord.</param>
+        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="notesTolerance"/> is negative.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int RemoveChords(this MidiFile file, Predicate<Chord> match, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -622,7 +748,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().RemoveChords(match, settings);
         }
 
-        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of chords to the specified <see cref="EventsCollection"/>.
         /// </summary>
@@ -639,6 +764,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS9")]
         public static void AddChords(this EventsCollection eventsCollection, IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -650,7 +776,6 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        [Obsolete("OBS9")]
         /// <summary>
         /// Adds collection of chords to the specified <see cref="TrackChunk"/>.
         /// </summary>
@@ -667,6 +792,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS9")]
         public static void AddChords(this TrackChunk trackChunk, IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -675,13 +801,13 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddChords(chords);
         }
 
-        [Obsolete("OBS7")]
         /// <summary>
         /// Creates a track chunk with the specified chords.
         /// </summary>
         /// <param name="chords">Collection of chords to create a track chunk.</param>
         /// <returns><see cref="TrackChunk"/> containing the specified chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
+        [Obsolete("OBS7")]
         public static TrackChunk ToTrackChunk(this IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
@@ -689,13 +815,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return ((IEnumerable<ITimedObject>)chords).ToTrackChunk();
         }
 
-        [Obsolete("OBS8")]
         /// <summary>
         /// Creates a MIDI file with the specified chords.
         /// </summary>
         /// <param name="chords">Collection of chords to create a MIDI file.</param>
         /// <returns><see cref="MidiFile"/> containing the specified chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
+        [Obsolete("OBS8")]
         public static MidiFile ToFile(this IEnumerable<Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
