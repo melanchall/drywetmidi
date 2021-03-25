@@ -19,7 +19,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '5.1.3'
+  version: '5.2.0'
 
 name: $(TeamProject)_$(SourceBranchName)_BuildLibraryLogged_$(version)$(Rev:.r)
 

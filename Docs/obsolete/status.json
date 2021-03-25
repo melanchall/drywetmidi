@@ -21,27 +21,27 @@
   },
   "OBS5": {
     "Hint": "Use GetObjects methods from GetObjectsUtilities.",
-    "ObsoleteFromVersion": "5.1.3",
+    "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   },
   "OBS6": {
     "Hint": "Use GetObjects methods from GetObjectsUtilities.",
-    "ObsoleteFromVersion": "5.1.3",
+    "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   },
   "OBS7": {
     "Hint": "Use ToTrackChunk from TimedObjectUtilities.",
-    "ObsoleteFromVersion": "5.1.3",
+    "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   },
   "OBS8": {
     "Hint": "Use ToFile from TimedObjectUtilities.",
-    "ObsoleteFromVersion": "5.1.3",
+    "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   },
   "OBS9": {
     "Hint": "Use AddObjects from TimedObjectUtilities.",
-    "ObsoleteFromVersion": "5.1.3",
+    "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   }
 }
