@@ -110,13 +110,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private class NoteDescriptor : IObjectDescriptor
         {
-            public NoteDescriptor(NoteId noteId, TimedEvent noteOnTimedEvent)
+            public NoteDescriptor(TimedEvent noteOnTimedEvent)
             {
-                NoteId = noteId;
                 NoteOnTimedEvent = noteOnTimedEvent;
             }
-
-            public NoteId NoteId { get; }
 
             public TimedEvent NoteOnTimedEvent { get; }
 
@@ -151,8 +148,8 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             private readonly int _noteOnIndex;
 
-            public NoteDescriptorIndexed(NoteId noteId, TimedEvent noteOnTimedEvent, int noteOnIndex)
-                : base(noteId, noteOnTimedEvent)
+            public NoteDescriptorIndexed(TimedEvent noteOnTimedEvent, int noteOnIndex)
+                : base(noteOnTimedEvent)
             {
                 _noteOnIndex = noteOnIndex;
                 NoteOffIndex = _noteOnIndex;
@@ -345,9 +342,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(e => e.Count);
 
-            var result = new List<Note>(eventsCount / 2);
+            var result = new List<Note>(eventsCount / 3);
 
-            foreach (var note in GetNotesAndTimedEventsLazy(eventsCollections.GetTimedEventsLazy(eventsCount).Select(e => e.Item1), settings ?? new NoteDetectionSettings()).OfType<Note>())
+            foreach (var note in GetNotesAndTimedEventsLazy(eventsCollections.GetTimedEventsLazy(eventsCount), settings ?? new NoteDetectionSettings()).Select(tuple => tuple.Item1).OfType<Note>())
             {
                 result.Add(note);
             }
@@ -643,9 +640,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            var tag = new object();
             var notesToRemoveCount = eventsCollection.ProcessNotes(
-                n => n.TimedNoteOnEvent.Event.Tag = n.TimedNoteOffEvent.Event.Tag = tag,
+                n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
                 match,
                 settings,
                 false);
@@ -653,7 +649,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (notesToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.Tag == tag);
+            eventsCollection.RemoveTimedEvents(e => e.Event.Flag);
             return notesToRemoveCount;
         }
 
@@ -734,9 +730,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            var tag = new object();
             var notesToRemoveCount = trackChunks.ProcessNotes(
-                n => n.TimedNoteOnEvent.Event.Tag = n.TimedNoteOffEvent.Event.Tag = tag,
+                n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
                 match,
                 settings,
                 false);
@@ -744,7 +739,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (notesToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.Tag == tag);
+            trackChunks.RemoveTimedEvents(e => e.Event.Flag);
             return notesToRemoveCount;
         }
 
@@ -984,7 +979,9 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings settings)
         {
             var objectsDescriptors = new LinkedList<IObjectDescriptorIndexed>();
-            var notesDescriptorsNodes = new Dictionary<NoteId, NoteOnsHolderIndexed>();
+            var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolderIndexed>();
+
+            var respectEventsCollectionIndex = settings.NoteSearchContext == NoteSearchContext.SingleEventsCollection;
 
             foreach (var timedEventTuple in timedEvents)
             {
@@ -993,24 +990,26 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     case MidiEventType.NoteOn:
                         {
-                            var noteId = ((NoteOnEvent)timedEvent.Event).GetNoteId();
-                            var node = objectsDescriptors.AddLast(new NoteDescriptorIndexed(noteId, timedEvent, timedEventTuple.Item2));
+                            var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
+                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
+                            var node = objectsDescriptors.AddLast(new NoteDescriptorIndexed(timedEvent, timedEventTuple.Item2));
 
                             NoteOnsHolderIndexed noteOnsHolder;
-                            if (!notesDescriptorsNodes.TryGetValue(noteId, out noteOnsHolder))
-                                notesDescriptorsNodes.Add(noteId, noteOnsHolder = new NoteOnsHolderIndexed(settings.NoteStartDetectionPolicy));
+                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder))
+                                notesDescriptorsNodes.Add(noteFullId, noteOnsHolder = new NoteOnsHolderIndexed(settings.NoteStartDetectionPolicy));
 
                             noteOnsHolder.Add(node);
                         }
                         break;
                     case MidiEventType.NoteOff:
                         {
-                            var noteId = ((NoteOffEvent)timedEvent.Event).GetNoteId();
+                            var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
+                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
 
                             NoteOnsHolderIndexed noteOnsHolder;
                             LinkedListNode<IObjectDescriptorIndexed> node;
 
-                            if (!notesDescriptorsNodes.TryGetValue(noteId, out noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
+                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
                             {
                                 objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.Item2));
                                 break;
@@ -1069,7 +1068,7 @@ namespace Melanchall.DryWetMidi.Interaction
             settings = settings ?? new NoteDetectionSettings();
 
             var objectsDescriptors = new LinkedList<IObjectDescriptor>();
-            var notesDescriptorsNodes = new Dictionary<NoteId, NoteOnsHolder>();
+            var notesDescriptorsNodes = new Dictionary<int, NoteOnsHolder>();
 
             foreach (var timedObject in timedObjects)
             {
@@ -1093,8 +1092,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     case MidiEventType.NoteOn:
                         {
-                            var noteId = ((NoteOnEvent)timedEvent.Event).GetNoteId();
-                            var node = objectsDescriptors.AddLast(new NoteDescriptor(noteId, timedEvent));
+                            var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
+                            var node = objectsDescriptors.AddLast(new NoteDescriptor(timedEvent));
 
                             NoteOnsHolder noteOnsHolder;
                             if (!notesDescriptorsNodes.TryGetValue(noteId, out noteOnsHolder))
@@ -1105,7 +1104,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         break;
                     case MidiEventType.NoteOff:
                         {
-                            var noteId = ((NoteOffEvent)timedEvent.Event).GetNoteId();
+                            var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
 
                             NoteOnsHolder noteOnsHolder;
                             LinkedListNode<IObjectDescriptor> node;
@@ -1150,6 +1149,11 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 yield return objectDescriptor.GetObject();
             }
+        }
+
+        private static int GetNoteEventId(NoteEvent noteEvent)
+        {
+            return noteEvent.Channel * 1000 + noteEvent.NoteNumber;
         }
 
         #endregion

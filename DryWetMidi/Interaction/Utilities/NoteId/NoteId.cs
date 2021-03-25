@@ -45,9 +45,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the specified object is equal to the current object; <c>false</c> otherwise.</returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(obj, null))
-                return false;
-
             if (ReferenceEquals(obj, this))
                 return true;
 
@@ -65,13 +62,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var result = 17;
-                result = result * 23 + Channel.GetHashCode();
-                result = result * 23 + NoteNumber.GetHashCode();
-                return result;
-            }
+            return Channel * 1000 + NoteNumber;
         }
 
         #endregion

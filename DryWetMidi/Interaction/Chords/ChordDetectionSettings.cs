@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -19,6 +20,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private int _notesMinCount = DefaultNotesMinCount;
         private long _notesTolerance = DefaultNotesTolerance;
+
+        private ChordSearchContext _chordSearchContext = ChordSearchContext.SingleEventsCollection;
 
         #endregion
 
@@ -61,6 +64,22 @@ namespace Melanchall.DryWetMidi.Interaction
         /// built on top of those notes.
         /// </summary>
         public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
+
+        /// <summary>
+        /// Gets or sets a value defining a context to search chords within. The default value is
+        /// <see cref="ChordSearchContext.SingleEventsCollection"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public ChordSearchContext ChordSearchContext
+        {
+            get { return _chordSearchContext; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _chordSearchContext = value;
+            }
+        }
 
         #endregion
     }

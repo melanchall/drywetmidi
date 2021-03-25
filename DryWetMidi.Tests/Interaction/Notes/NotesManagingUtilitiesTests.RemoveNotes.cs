@@ -456,11 +456,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new MidiEvent[]
                 {
                     new NoteOnEvent(),
-                    new TextEvent("A")
+                    new NoteOffEvent { DeltaTime = 100 },
+                    new ProgramChangeEvent()
                 },
                 new MidiEvent[]
                 {
-                    new NoteOffEvent { DeltaTime = 100 },
+                    new TextEvent("A"),
                     new ProgramChangeEvent()
                 },
             },
@@ -469,11 +470,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new MidiEvent[]
                 {
-                    new TextEvent("A")
+                    new ProgramChangeEvent { DeltaTime = 100 }
                 },
                 new MidiEvent[]
                 {
-                    new ProgramChangeEvent { DeltaTime = 100 }
+                    new TextEvent("A"),
+                    new ProgramChangeEvent()
                 },
             },
             expectedRemovedCount: 1);
@@ -667,10 +669,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOffEvent { DeltaTime = 100 },
                     new TextEvent("A"),
                     new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 },
                 },
                 new MidiEvent[]
                 {
-                    new NoteOffEvent { DeltaTime = 200 },
                     new ProgramChangeEvent()
                 },
             },
@@ -683,7 +685,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 new MidiEvent[]
                 {
-                    new ProgramChangeEvent { DeltaTime = 200 }
+                    new ProgramChangeEvent()
                 },
             },
             expectedRemovedCount: 2);

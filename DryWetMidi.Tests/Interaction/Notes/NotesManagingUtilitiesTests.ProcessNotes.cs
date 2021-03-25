@@ -1150,10 +1150,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent(),
+                        new NoteOffEvent(),
                         new TextEvent("A"),
                     },
                     new MidiEvent[]
                     {
+                        new NoteOnEvent(),
                         new TextEvent("B"),
                         new NoteOffEvent(),
                     },
@@ -1164,10 +1166,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent { NoteNumber = (SevenBitNumber)70 },
+                        new NoteOffEvent { NoteNumber = (SevenBitNumber)70 },
                         new TextEvent("A"),
                     },
                     new MidiEvent[]
                     {
+                        new NoteOnEvent { NoteNumber = (SevenBitNumber)70 },
                         new TextEvent("B"),
                         new NoteOffEvent { NoteNumber = (SevenBitNumber)70 },
                     },
@@ -1185,11 +1189,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent(),
                     },
                 },
                 action: n => n.Time = 100,
@@ -1199,11 +1203,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new TextEvent("A"),
                         new NoteOnEvent { DeltaTime = 100 },
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent { DeltaTime = 100 },
                     },
                 });
         }
@@ -1217,11 +1221,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
                     },
                     new MidiEvent[]
                     {
+                        new NoteOnEvent(),
                         new TextEvent("B") { DeltaTime = 100 },
                         new NoteOffEvent(),
                     },
@@ -1231,11 +1235,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
                     },
                     new MidiEvent[]
                     {
+                        new NoteOnEvent(),
                         new NoteOffEvent { DeltaTime = 50 },
                         new TextEvent("B") { DeltaTime = 50 },
                     },
@@ -1251,11 +1255,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A") { DeltaTime = 100 },
                     },
                     new MidiEvent[]
                     {
+                        new NoteOnEvent(),
                         new TextEvent("B") { DeltaTime = 100 },
                         new NoteOffEvent(),
                     },
@@ -1270,12 +1274,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new TextEvent("A") { DeltaTime = 100 },
-                        new NoteOnEvent { DeltaTime = 50 },
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B") { DeltaTime = 100 },
-                        new NoteOffEvent { DeltaTime = 250 },
+                        new NoteOnEvent { DeltaTime = 50 },
+                        new NoteOffEvent { DeltaTime = 200 },
                     },
                 });
         }
@@ -1291,11 +1295,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent(),
                     },
                 },
                 action: n => n.Channel = (FourBitNumber)5,
@@ -1305,11 +1309,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent { Channel = (FourBitNumber)5 },
                         new TextEvent("A"),
+                        new NoteOffEvent { Channel = (FourBitNumber)5 },
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent { Channel = (FourBitNumber)5 },
                     },
                 });
         }
@@ -1325,10 +1329,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
+                        new NoteOnEvent(),
                         new NoteOffEvent(),
                     },
                 },
@@ -1339,10 +1345,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent { Velocity = (SevenBitNumber)50 },
                         new TextEvent("A"),
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
+                        new NoteOnEvent { Velocity = (SevenBitNumber)50 },
                         new NoteOffEvent(),
                     },
                 });
@@ -1357,12 +1365,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
+                        new TextEvent("B"),
                     },
                     new MidiEvent[]
                     {
-                        new TextEvent("B"),
+                        new NoteOnEvent(),
                         new NoteOffEvent(),
                     },
                 },
@@ -1371,12 +1379,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
+                        new TextEvent("B"),
                     },
                     new MidiEvent[]
                     {
-                        new TextEvent("B"),
+                        new NoteOnEvent(),
                         new NoteOffEvent { Velocity = (SevenBitNumber)50 },
                     },
                 });
@@ -1440,9 +1448,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1459,9 +1464,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)80, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1484,9 +1486,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1503,9 +1502,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { Velocity = (SevenBitNumber)80 },
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1528,9 +1524,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1547,9 +1540,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { Velocity = (SevenBitNumber)80 },
                         new ControlChangeEvent()
                     },
@@ -1572,9 +1562,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1591,9 +1578,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { Channel = (FourBitNumber)8 },
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { Channel = (FourBitNumber)8 },
                         new ControlChangeEvent()
                     },
@@ -1615,9 +1599,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1632,12 +1613,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     },
                     new MidiEvent[]
                     {
-                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100 },
-                    },
-                    new MidiEvent[]
-                    {
                         new ControlChangeEvent(),
-                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 100 },
+                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100 },
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     },
                 });
         }
@@ -1657,9 +1635,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1675,9 +1650,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new ControlChangeEvent(),
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 100 },
                     },
@@ -1700,9 +1672,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -1722,12 +1691,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     },
                     new MidiEvent[]
                     {
-                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 50 },
-                    },
-                    new MidiEvent[]
-                    {
                         new ControlChangeEvent(),
-                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 150 },
+                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 50 },
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 100 },
                     },
                 });
         }
@@ -1755,11 +1721,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent(),
                     },
                 },
                 action: n => { },
@@ -1770,11 +1736,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent(),
                     },
                 },
                 expectedProcessedCount: 1);
@@ -1861,11 +1827,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
                     },
                     new MidiEvent[]
                     {
+                        new NoteOnEvent(),
                         new TextEvent("B"),
                         new NoteOffEvent(),
                     },
@@ -1876,11 +1842,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent { NoteNumber = (SevenBitNumber)70 },
                         new TextEvent("A"),
                     },
                     new MidiEvent[]
                     {
+                        new NoteOnEvent { NoteNumber = (SevenBitNumber)70 },
                         new TextEvent("B"),
                         new NoteOffEvent { NoteNumber = (SevenBitNumber)70 },
                     },
@@ -1897,12 +1863,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
+                        new NoteOnEvent(),
                         new NoteOffEvent(),
                     },
                 },
@@ -1913,12 +1879,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new TextEvent("A"),
-                        new NoteOnEvent { DeltaTime = 100 },
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent { DeltaTime = 100 },
+                        new NoteOnEvent { DeltaTime = 100 },
+                        new NoteOffEvent(),
                     },
                 },
                 expectedProcessedCount: 1);
@@ -1935,10 +1901,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new TextEvent("B") { DeltaTime = 100 },
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
-                        new TextEvent("B") { DeltaTime = 100 },
+                        new NoteOnEvent(),
                         new NoteOffEvent(),
                     },
                 },
@@ -1950,14 +1918,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent { DeltaTime = 50 },
                         new TextEvent("B") { DeltaTime = 50 },
                     },
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent(),
+                        new NoteOffEvent { DeltaTime = 50 },
+                    },
                 },
-                expectedProcessedCount: 1);
+                expectedProcessedCount: 2);
         }
 
         [Test]
@@ -1971,11 +1941,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A") { DeltaTime = 100 },
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B") { DeltaTime = 100 },
-                        new NoteOffEvent(),
                     },
                 },
                 action: n =>
@@ -1990,11 +1960,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new TextEvent("A") { DeltaTime = 100 },
                         new NoteOnEvent { DeltaTime = 50 },
+                        new NoteOffEvent { DeltaTime = 200 },
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B") { DeltaTime = 100 },
-                        new NoteOffEvent { DeltaTime = 250 },
                     },
                 },
                 expectedProcessedCount: 1);
@@ -2009,12 +1979,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
+                        new TextEvent("B"),
                     },
                     new MidiEvent[]
                     {
-                        new TextEvent("B"),
+                        new NoteOnEvent(),
                         new NoteOffEvent(),
                     },
                 },
@@ -2024,12 +1994,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent { Channel = (FourBitNumber)5 },
                         new TextEvent("A"),
+                        new TextEvent("B"),
                     },
                     new MidiEvent[]
                     {
-                        new TextEvent("B"),
+                        new NoteOnEvent { Channel = (FourBitNumber)5 },
                         new NoteOffEvent { Channel = (FourBitNumber)5 },
                     },
                 },
@@ -2045,12 +2015,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent(),
                         new TextEvent("A"),
+                        new TextEvent("B"),
                     },
                     new MidiEvent[]
                     {
-                        new TextEvent("B"),
+                        new NoteOnEvent(),
                         new NoteOffEvent(),
                     },
                 },
@@ -2060,12 +2030,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new MidiEvent[]
                     {
-                        new NoteOnEvent { Velocity = (SevenBitNumber)50 },
                         new TextEvent("A"),
+                        new TextEvent("B"),
                     },
                     new MidiEvent[]
                     {
-                        new TextEvent("B"),
+                        new NoteOnEvent { Velocity = (SevenBitNumber)50 },
                         new NoteOffEvent(),
                     },
                 },
@@ -2083,11 +2053,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new NoteOffEvent(),
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent(),
                     },
                 },
                 action: n => n.OffVelocity = (SevenBitNumber)50,
@@ -2098,11 +2068,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         new NoteOnEvent(),
                         new TextEvent("A"),
+                        new NoteOffEvent { Velocity = (SevenBitNumber)50 },
                     },
                     new MidiEvent[]
                     {
                         new TextEvent("B"),
-                        new NoteOffEvent { Velocity = (SevenBitNumber)50 },
                     },
                 },
                 expectedProcessedCount: 1);
@@ -2168,9 +2138,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     },
                 },
@@ -2187,9 +2154,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     },
                 },
@@ -2256,9 +2220,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent(),
                         new NoteOnEvent((SevenBitNumber)90, SevenBitNumber.MaxValue),
@@ -2278,9 +2239,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)80, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue),
                         new ControlChangeEvent(),
                         new NoteOnEvent((SevenBitNumber)80, SevenBitNumber.MaxValue),
@@ -2355,9 +2313,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -2373,12 +2328,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     },
                     new MidiEvent[]
                     {
-                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100 },
-                    },
-                    new MidiEvent[]
-                    {
                         new ControlChangeEvent(),
-                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 100 },
+                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100 },
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     },
                 },
                 expectedProcessedCount: 2);
@@ -2399,9 +2351,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -2417,12 +2366,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     },
                     new MidiEvent[]
                     {
-                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100 },
-                    },
-                    new MidiEvent[]
-                    {
                         new ControlChangeEvent(),
-                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 100 },
+                        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100 },
+                        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                     },
                 },
                 expectedProcessedCount: 1);
@@ -2443,9 +2389,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
                         new ControlChangeEvent()
                     },
@@ -2462,9 +2405,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    },
-                    new MidiEvent[]
-                    {
                         new ControlChangeEvent(),
                         new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 100 },
                     },

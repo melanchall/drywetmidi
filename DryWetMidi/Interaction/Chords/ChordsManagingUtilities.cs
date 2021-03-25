@@ -125,6 +125,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public long Time { get; }
 
+            public int EventsCollectionIndex { get; set; }
+
             public List<LinkedListNode<IObjectDescriptorIndexed>> NotesNodes { get; } = new List<LinkedListNode<IObjectDescriptorIndexed>>(3);
 
             public bool IsSealed { get; set; }
@@ -280,7 +282,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var result = new List<Chord>(eventsCount / 2);
 
-            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(eventsCollections.GetTimedEventsLazy(eventsCount).Select(e => e.Item1), settings).OfType<Chord>())
+            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(eventsCollections.GetTimedEventsLazy(eventsCount), settings).Select(o => o.Item1).OfType<Chord>())
             {
                 result.Add(chord);
             }
@@ -591,13 +593,12 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            var tag = new object();
             var chordsToRemoveCount = eventsCollection.ProcessChords(
                 c =>
                 {
                     foreach (var note in c.Notes)
                     {
-                        note.TimedNoteOnEvent.Event.Tag = note.TimedNoteOffEvent.Event.Tag = tag;
+                        note.TimedNoteOnEvent.Event.Flag = note.TimedNoteOffEvent.Event.Flag = true;
                     }
                 },
                 match,
@@ -607,7 +608,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (chordsToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.Tag == tag);
+            eventsCollection.RemoveTimedEvents(e => e.Event.Flag);
             return chordsToRemoveCount;
         }
 
@@ -688,13 +689,12 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            var tag = new object();
             var chordsToRemoveCount = trackChunks.ProcessChords(
                 c =>
                 {
                     foreach (var note in c.Notes)
                     {
-                        note.TimedNoteOnEvent.Event.Tag = note.TimedNoteOffEvent.Event.Tag = tag;
+                        note.TimedNoteOnEvent.Event.Flag = note.TimedNoteOffEvent.Event.Flag = true;
                     }
                 },
                 match,
@@ -704,7 +704,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (chordsToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.Tag == tag);
+            trackChunks.RemoveTimedEvents(e => e.Event.Flag);
             return chordsToRemoveCount;
         }
 
@@ -842,13 +842,18 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MusicTheory.Chord(chord.Notes.OrderBy(n => n.NoteNumber).Select(n => n.NoteName).ToArray());
         }
 
-        internal static IEnumerable<Tuple<ITimedObject, int[]>> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<Tuple<TimedEvent, int>> timedEvents, ChordDetectionSettings settings)
+        internal static IEnumerable<Tuple<ITimedObject, int[]>> GetChordsAndNotesAndTimedEventsLazy(
+            this IEnumerable<Tuple<TimedEvent, int>> timedEvents,
+            ChordDetectionSettings settings)
         {
             settings = settings ?? new ChordDetectionSettings();
 
             var timedObjects = new LinkedList<IObjectDescriptorIndexed>();
             var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
+
+            var notesTolerance = settings.NotesTolerance;
+            var eventsCollectionShouldMatch = settings.ChordSearchContext == ChordSearchContext.SingleEventsCollection;
 
             foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings()))
             {
@@ -875,7 +880,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 else
                 {
                     var chordDescriptor = chordDescriptorNode.Value;
-                    if (CanNoteBeAddedToChord(chordDescriptor, note, settings.NotesTolerance))
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, notesTolerance, timedObjectTuple.Item2, eventsCollectionShouldMatch))
                     {
                         var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, timedObjectTuple.Item2, timedObjectTuple.Item3, false));
                         chordDescriptor.NotesNodes.Add(noteNode);
@@ -1219,7 +1224,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ChordDetectionSettings settings)
         {
             var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, noteOnIndex, noteOffIndex, true));
-            var chordDescriptor = new ChordDescriptorIndexed(note.Time, noteNode, settings.NotesMinCount);
+            var chordDescriptor = new ChordDescriptorIndexed(note.Time, noteNode, settings.NotesMinCount) { EventsCollectionIndex = noteOnIndex };
             chordsDescriptorsByChannel[note.Channel] = chordsDescriptors.AddLast(chordDescriptor);
         }
 
@@ -1228,9 +1233,9 @@ namespace Melanchall.DryWetMidi.Interaction
             return note.Time - chordDescriptor.Time <= notesTolerance;
         }
 
-        private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance)
+        private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance, int eventsCollectionIndex, bool eventsCollectionShouldMatch)
         {
-            return note.Time - chordDescriptor.Time <= notesTolerance;
+            return note.Time - chordDescriptor.Time <= notesTolerance && (!eventsCollectionShouldMatch || chordDescriptor.EventsCollectionIndex == eventsCollectionIndex);
         }
 
         #endregion

@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        internal object Tag { get; set; }
+        internal bool Flag { get; set; }
 
         #endregion
 

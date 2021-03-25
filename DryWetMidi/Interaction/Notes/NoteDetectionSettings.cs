@@ -11,6 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Fields
 
         private NoteStartDetectionPolicy _noteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn;
+        private NoteSearchContext _noteSearchContext = NoteSearchContext.SingleEventsCollection;
 
         #endregion
 
@@ -29,6 +30,22 @@ namespace Melanchall.DryWetMidi.Interaction
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
                 _noteStartDetectionPolicy = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value defining a context to search notes within. The default value is
+        /// <see cref="NoteSearchContext.SingleEventsCollection"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public NoteSearchContext NoteSearchContext
+        {
+            get { return _noteSearchContext; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _noteSearchContext = value;
             }
         }
 

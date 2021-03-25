@@ -276,6 +276,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent(),
                     new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            match: n => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                }
+            },
+            expectedProcessedCount: 3);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_FirstNoteOn_1([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
                 },
                 new MidiEvent[]
                 {
@@ -301,9 +343,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 2);
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_FirstNoteOn_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_FirstNoteOn_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -335,9 +381,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 2);
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_FirstNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_FirstNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -372,6 +422,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_FirstNoteOn_4([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            match: n => n.Length == 100,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_FirstNoteOn_4([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -446,6 +538,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent { DeltaTime = 100 },
                     new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            match: n => n.Length == 80,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100, Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_FirstNoteOn_6([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 10 },
                 },
                 new MidiEvent[]
                 {
@@ -512,6 +646,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new MidiEvent[]
                 {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 80 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            action: n => n.OffVelocity = (SevenBitNumber)70,
+            match: n => n.Length == 80,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 80, Velocity = (SevenBitNumber)70 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 70, Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_FirstNoteOn_8([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
                     new NoteOnEvent { DeltaTime = 100 },
                 },
                 new MidiEvent[]
@@ -547,6 +723,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new MidiEvent[]
                 {
                     new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            match: n => n.Time == 0,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            expectedProcessedCount: 3);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_LastNoteOn_1([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
                     new NoteOnEvent(),
                 },
                 new MidiEvent[]
@@ -573,9 +791,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 2);
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_LastNoteOn_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_LastNoteOn_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -607,9 +829,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 2);
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_LastNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_LastNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -644,6 +870,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_LastNoteOn_4([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            match: n => n.Length == 0,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100, Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100, Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                }
+            },
+            expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_LastNoteOn_4([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -719,6 +987,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOnEvent(),
                     new NoteOnEvent { DeltaTime = 100 },
                     new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 },
+                }
+            },
+            action: n => n.OffVelocity = (SevenBitNumber)70,
+            match: n => n.Time == 0,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent { Velocity = (SevenBitNumber)70 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100, Velocity = (SevenBitNumber)70 },
+                }
+            },
+            expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_LastNoteOn_6([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
                 },
                 new MidiEvent[]
                 {
@@ -746,6 +1056,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_LastNoteOn_7([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            match: n => n.Length == 70,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 10, Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_LastNoteOn_7([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -818,6 +1170,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new MidiEvent[]
                 {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 70 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            action: n => n.OffVelocity = (SevenBitNumber)70,
+            match: n => n.Length == 130,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 70 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50, Velocity = (SevenBitNumber)70 },
+                }
+            },
+            expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithPredicate_LastNoteOn_9([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
                     new NoteOnEvent { DeltaTime = 100 },
                     new NoteOnEvent { DeltaTime = 10 },
                     new NoteOffEvent { DeltaTime = 70 },
@@ -848,6 +1242,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_FirstNoteOn_1([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_1([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -885,6 +1319,50 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new MidiEvent[]
                 {
                     new NoteOnEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.OffVelocity = (SevenBitNumber)70,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent { Velocity = (SevenBitNumber)70 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent(),
+                    new NoteOffEvent { Velocity = (SevenBitNumber)70 },
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
                 },
                 new MidiEvent[]
                 {
@@ -909,9 +1387,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_FirstNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -950,6 +1432,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent(),
                     new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Time += 20,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 20 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 120 },
+                    new NoteOffEvent(),
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_4([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
                 },
                 new MidiEvent[]
                 {
@@ -973,9 +1495,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_FirstNoteOn_5([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_5([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -1014,6 +1540,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent { DeltaTime = 100 },
                     new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 },
+                }
+            },
+            action: n => n.Length -= 40,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 60 },
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_6([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
                 },
                 new MidiEvent[]
                 {
@@ -1046,6 +1612,50 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent { DeltaTime = 100 },
                     new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            action: n => n.Length -= 40,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_7([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
                     new NoteOffEvent { DeltaTime = 30 },
                 },
                 new MidiEvent[]
@@ -1069,9 +1679,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_FirstNoteOn_8([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_FirstNoteOn_8([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -1110,6 +1724,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent(),
                     new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Velocity = (SevenBitNumber)70,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_LastNoteOn_1([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
                 },
                 new MidiEvent[]
                 {
@@ -1133,9 +1787,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_LastNoteOn_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_LastNoteOn_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -1165,9 +1823,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_LastNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_LastNoteOn_3([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -1206,6 +1868,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     new NoteOnEvent(),
                     new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => n.Length += 20,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent { DeltaTime = 20 },
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent { DeltaTime = 20 },
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_LastNoteOn_4([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
                 },
                 new MidiEvent[]
                 {
@@ -1229,9 +1931,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_LastNoteOn_5([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_LastNoteOn_5([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -1261,9 +1967,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_LastNoteOn_6([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_LastNoteOn_6([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
-            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -1296,6 +2006,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate_LastNoteOn_7([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 70 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                }
+            },
+            action: n => n.Length -= 30,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 40 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 20 },
+                }
+            });
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_AllEventsCollections_WithoutPredicate_LastNoteOn_7([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
+                NoteSearchContext = NoteSearchContext.AllEventsCollections
+            },
             midiEvents: new[]
             {
                 new MidiEvent[]
@@ -1495,7 +2245,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> expectedMidiEvents)
         {
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
-            var notesCount = trackChunks.GetNotes().Count();
+            var notesCount = trackChunks.GetNotes(settings).Count();
 
             if (wrapToFile)
             {
