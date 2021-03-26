@@ -1,2 +1,1 @@
 * `GetNotesAndRestsUtilities`
-* `GetNotesAndRestsUtilities.GetNotesAndRests`

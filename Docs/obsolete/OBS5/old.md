@@ -1,2 +1,1 @@
 * `GetTimedEventsAndNotesUtilities`
-* `GetTimedEventsAndNotesUtilities.GetTimedEventsAndNotes`

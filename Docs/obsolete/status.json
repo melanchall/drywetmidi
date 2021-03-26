@@ -30,17 +30,17 @@
     "InLibrary": true
   },
   "OBS7": {
-    "Hint": "Use ToTrackChunk from TimedObjectUtilities.",
+    "Hint": "Use ToTrackChunk method from TimedObjectUtilities.",
     "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   },
   "OBS8": {
-    "Hint": "Use ToFile from TimedObjectUtilities.",
+    "Hint": "Use ToFile method from TimedObjectUtilities.",
     "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   },
   "OBS9": {
-    "Hint": "Use AddObjects from TimedObjectUtilities.",
+    "Hint": "Use AddObjects methods from TimedObjectUtilities.",
     "ObsoleteFromVersion": "5.2.0",
     "InLibrary": true
   }

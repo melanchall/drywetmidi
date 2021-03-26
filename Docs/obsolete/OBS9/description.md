@@ -1,1 +1,1 @@
-TODO
+`AddTimedEvents`, `AddNotes` and `AddChords` methods are replaced now with single [TimedObjectUtilities.AddObjects](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*) method which can save objects of different types to events collection or track chunk.

@@ -1,1 +1,1 @@
-TODO
+`ToTrackChunk` methods for collections of objects of one type (for example, collection of [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [Note](xref:Melanchall.DryWetMidi.Interaction.Note) instances) are replaced now with single [TimedObjectUtilities.ToTrackChunk](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})) method which can save objects of different types to track chunk.

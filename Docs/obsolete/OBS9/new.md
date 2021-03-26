@@ -1,1 +1,1 @@
-* [...](xref:TODO)
+* [TimedObjectUtilities.AddObjects](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*)

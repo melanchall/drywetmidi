@@ -1,1 +1,1 @@
-TODO
+`ToFile` methods for collections of objects of one type (for example, collection of [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [Note](xref:Melanchall.DryWetMidi.Interaction.Note) instances) are replaced now with single [TimedObjectUtilities.ToFile](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})) method which can save objects of different types to MIDI file.

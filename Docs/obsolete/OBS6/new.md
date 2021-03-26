@@ -1,1 +1,1 @@
-* [GetObjectsUtilities.GetObjects](xref:TODO)
+* [GetObjectsUtilities](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities)
