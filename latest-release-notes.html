@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Obsolete API | DryWetMIDI </title>
+    <title>Performance | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Obsolete API | DryWetMIDI ">
+    <meta name="title" content="Performance | DryWetMIDI ">
     <meta name="generator" content="docfx 2.56.2.0">
     
     <link rel="shortcut icon" href="images/favicon.png">
@@ -70,40 +70,57 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="obsolete-api">Obsolete API</h1>
+<h1 id="performance">Performance</h1>
 
-<p>New section has been added to <a href="https://melanchall.github.io/drywetmidi">documentation</a> site: <a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html">Obsolete</a>. This section contains the list of methods and classes that are obsolete and thus will be removed by a next release.</p>
-<p>The current list of obsolete API:</p>
+<p>Methods to get, process and remove timed events and notes now work faster and consume less memory. Full tables with benchmarks results can be found here:</p>
 <ul>
-<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs1">OBS1: WritingSettings.CompressionPolicy</a></li>
-<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs2">OBS2: ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData</a></li>
-<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs3">OBS3: TempoMap.TimeSignature</a></li>
-<li><a href="https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs4">OBS4: TempoMap.Tempo</a></li>
+<li><a href="https://gist.github.com/melanchall/d5dd6ee785a94c9df0443fd7616d9c8b">synthetic benchmarks</a>;</li>
+<li><a href="https://gist.github.com/melanchall/1b134282e2bc3dba47b5790300fcc51c">benchmarks on real files</a>.</li>
 </ul>
 <h1 id="new-features-and-improvements">New features and improvements</h1>
 <ul>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">ReaderSettings.BufferingPolicy</a> property.</li>
-<li>Increased speed of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_">MidiFile.Read</a> method.</li>
-<li>Increased speed of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">MidiFile.Write</a> method.</li>
-<li>Implemented buffered MIDI file writing (see <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WriterSettings.html#Melanchall_DryWetMidi_Core_WriterSettings_UseBuffering">WriterSettings.UseBuffering</a>).</li>
-<li>Decreased memory usage of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiWriter.html#Melanchall_DryWetMidi_Core_MidiWriter_Write3ByteDword_System_UInt32_">MidiWriter.Write3ByteDword</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.MidiWriter.html#Melanchall_DryWetMidi_Core_MidiWriter_WriteVlqNumber_System_Int32_">MidiWriter.WriteVlqNumber</a>.</li>
-<li>Reduced memory usage for <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ChannelEvent.html">ChannelEvent</a>.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ZeroLengthDataPolicy">ReadingSettings.ZeroLengthDataPolicy</a> property.</li>
-<li>Added RPN classes (see <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.RegisteredParameter.html">RegisteredParameter</a>).</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">TempoMap.GetTimeSignatureChanges</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">TempoMap.GetTimeSignatureAtTime</a> methods.</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WritingSettings.html#Melanchall_DryWetMidi_Core_WritingSettings_WriteHeaderChunk">WritingSettings.WriteHeaderChunk</a> property (#94).</li>
-<li>Added GS standard percussion API (#93).</li>
-<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_Markers">SliceMidiFileSettings.Markers</a> property (#99).</li>
-<li>Non-SMF events will be filtered out on saving to MIDI file or track chunk (#103).</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a> class containing methods that allow get objects of different types from the input ones (or MIDI file, for example).</li>
+<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_">ProcessTimedEvents</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_">RemoveTimedEvents</a> methods return now count of processed/removed timed events.</li>
+<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_">ProcessNotes</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_">RemoveNotes</a> methods return now count of processed/removed notes.</li>
+<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_">ProcessChords</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_">RemoveChords</a> methods return now count of processed/removed chords.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiDevice.html#Melanchall_DryWetMidi_Devices_MidiDevice_IsEnabled">IsEnabled</a> property to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.MidiDevice.html">MidiDevice</a>.</li>
+<li>Added methods to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> to move to snap points by data.</li>
+<li>All move-to-by-snap-points methods of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> return <code>bool</code> now to indicate whether time changed or not.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_PlaybackStart">PlaybackStart</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_PlaybackEnd">PlaybackEnd</a> properties to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_IsEnabled">IsEnabled</a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html">PlaybackSnapping</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html#Melanchall_DryWetMidi_Devices_PlaybackSnapping_Clear">PlaybackSnapping.Clear</a> method.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackProgram">TrackProgram</a>, <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackPitchValue">TrackPitchValue</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackControlValue">TrackControlValue</a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html">Playback</a>.</li>
+<li>Removed reading handlers API.</li>
+<li>Added <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> operators for <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a>.</li>
+<li><a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Tempo.html#Melanchall_DryWetMidi_Interaction_Tempo_BeatsPerMinute">BeatsPerMinute</a> property of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> is now of <code>double</code> type.</li>
+<li>Added <code>settings</code> parameter to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_">SplitByChannel</a> method.</li>
+<li>Added <code>settings</code> parameter to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_">SplitByNotes</a> method.</li>
+<li>Return type of <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_">GetTimedEvents</a>, <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_">GetNotes</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_">GetChords</a> changed from <code>IEnumerable&lt;T&gt;</code> to <code>ICollection&lt;T&gt;</code>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_">GetNotes</a>, <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_">ProcessNotes</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_">RemoveNotes</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_">GetChords</a>, <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_">ProcessChords</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_">RemoveChords</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.ChordsQuantizingSettings.html">ChordsQuantizingSettings</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.ChordsRandomizingSettings.html">ChordsRandomizingSettings</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a> to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.NotesQuantizingSettings.html">NotesQuantizingSettings</a> and <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.NotesRandomizingSettings.html">NotesRandomizingSettings</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.InputDevice.html#Melanchall_DryWetMidi_Devices_InputDevice_SilentNoteOnPolicy">SilentNoteOnPolicy</a> property to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a>.</li>
+<li>Added <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChunks_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings_">SplitByChunks</a> method to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html">MidiFileSplitter</a>.</li>
 </ul>
 <h1 id="small-changes-and-bug-fixes">Small changes and bug fixes</h1>
 <ul>
-<li>Added value validation in setters of some MIDI events classes properties.</li>
-<li>Edge Note Off events will always be put to current part on MIDI file splitting (#99).</li>
-<li><strong>Fixed:</strong> Events transferred incorrectly between parts on MIDI file splitting (#99).</li>
-<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html">SmpteOffsetEvent</a> writes in wrong way.</li>
-<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html">SmpteOffsetEvent</a> equality check is wrong.</li>
-<li><strong>Fixed:</strong> Failed to use devices API in UWP app (#95).</li>
+<li>Some methods are now obsolete:
+<ul>
+<li><code>GetTimedEventsAndNotesUtilities</code> (OBS5);</li>
+<li><code>GetNotesAndRestsUtilities</code> (OBS6);</li>
+<li><code>TimedEventsManagingUtilities.ToTrackChunk</code>, <code>NotesManagingUtilities.ToTrackChunk</code>, <code>ChordsManagingUtilities.ToTrackChunk</code> (OBS7);</li>
+<li><code>TimedEventsManagingUtilities.ToFile</code>, <code>NotesManagingUtilities.ToFile</code>, <code>ChordsManagingUtilities.ToFile</code> (OBS8);</li>
+<li><code>TimedEventsManagingUtilities.AddTimedEvents</code>, <code>NotesManagingUtilities.AddNotes</code>, <code>ChordsManagingUtilities.AddChords</code> (OBS9).</li>
+</ul>
+</li>
+<li>Discard high resolution timer request on playback stop (#106).</li>
+<li>Implemented <code>ICollection&lt;MidiEvent&gt;</code> on <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.</li>
+<li>Implemented <code>ICollection&lt;MidiChunk&gt;</code> on <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</li>
+<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Composing.PatternUtilities.html#Melanchall_DryWetMidi_Composing_PatternUtilities_CombineInParallel_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Composing_Pattern__">PatternUtilities.CombineInParallel</a> last action moves back to previous time (#112).</li>
+<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_MoveToNextSnapPoint">Playback.MoveToNextSnapPoint</a> works incorrectly for snap point at zero.</li>
+<li><strong>Fixed:</strong> <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html#Melanchall_DryWetMidi_Interaction_MetricTimeSpan_Clone">MetricTimeSpan.Clone</a> works incorrectly.</li>
+<li><strong>Fixed:</strong> Wrong order of actual and expected counts arguments on passing to <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a> constructor.</li>
 </ul>
 </article>
           </div>

@@ -178,11 +178,10 @@ tempoMap.GetTempoAtTime(MusicalTimeSpan.Whole);
 </ul>
 <h3 id="obs6">OBS6</h3>
 <p>Methods from <code>GetNotesAndRestsUtilities</code> are now obsolete and you should use <code>GetObjects</code> methods from <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a>. Example how you can get notes and rests:</p>
-<pre><code class="lang-csharp">var timedEventsAndNotes = midiFile.GetObjects(ObjectType.Note | ObjectType.Rest);
+<pre><code class="lang-csharp">var notesAndRests = midiFile.GetObjects(ObjectType.Note | ObjectType.Rest);
 </code></pre>
 <p><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html">RestSeparationPolicy</a> can be specified via <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html">ObjectDetectionSettings</a>:</p>
-<pre><code class="lang-csharp">```csharp
-var timedEventsAndNotes = midiFile.GetObjects(
+<pre><code class="lang-csharp">var notesAndRests = midiFile.GetObjects(
     ObjectType.Note | ObjectType.Rest,
     new ObjectDetectionSettings
     {
@@ -192,65 +191,54 @@ var timedEventsAndNotes = midiFile.GetObjects(
         }
     });
 </code></pre>
-<pre><code>
-Obsolete from version **5.2.0**.
-
-**Old API**
-
-* `GetNotesAndRestsUtilities`
-
-**New API**
-
-* [GetObjectsUtilities](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities)
-
-### OBS7
-
-`ToTrackChunk` methods for collections of objects of one type (for example, collection of [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [Note](xref:Melanchall.DryWetMidi.Interaction.Note) instances) are replaced now with single [TimedObjectUtilities.ToTrackChunk](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})) method which can save objects of different types to track chunk.
-
-Obsolete from version **5.2.0**.
-
-**Old API**
-
-* `TimedEventsManagingUtilities.ToTrackChunk`
-* `NotesManagingUtilities.ToTrackChunk`
-* `ChordsManagingUtilities.ToTrackChunk`
-
-**New API**
-
-* [TimedObjectUtilities.ToTrackChunk](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject}))
-
-### OBS8
-
-`ToFile` methods for collections of objects of one type (for example, collection of [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [Note](xref:Melanchall.DryWetMidi.Interaction.Note) instances) are replaced now with single [TimedObjectUtilities.ToFile](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})) method which can save objects of different types to MIDI file.
-
-Obsolete from version **5.2.0**.
-
-**Old API**
-
-* `TimedEventsManagingUtilities.ToFile`
-* `NotesManagingUtilities.ToFile`
-* `ChordsManagingUtilities.ToFile`
-
-**New API**
-
-* [TimedObjectUtilities.ToFile](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject}))
-
-### OBS9
-
-`AddTimedEvents`, `AddNotes` and `AddChords` methods are replaced now with single [TimedObjectUtilities.AddObjects](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*) method which can save objects of different types to events collection or track chunk.
-
-Obsolete from version **5.2.0**.
-
-**Old API**
-
-* `TimedEventsManagingUtilities.AddTimedEvents`
-* `NotesManagingUtilities.AddNotes`
-* `ChordsManagingUtilities.AddChords`
-
-**New API**
-
-* [TimedObjectUtilities.AddObjects](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*)
-</code></pre>
+<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>GetNotesAndRestsUtilities</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a></li>
+</ul>
+<h3 id="obs7">OBS7</h3>
+<p><code>ToTrackChunk</code> methods for collections of objects of one type (for example, collection of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> or <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> instances) are replaced now with single <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToTrackChunk</a> method which can save objects of different types to track chunk.</p>
+<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>TimedEventsManagingUtilities.ToTrackChunk</code></li>
+<li><code>NotesManagingUtilities.ToTrackChunk</code></li>
+<li><code>ChordsManagingUtilities.ToTrackChunk</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToTrackChunk</a></li>
+</ul>
+<h3 id="obs8">OBS8</h3>
+<p><code>ToFile</code> methods for collections of objects of one type (for example, collection of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> or <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> instances) are replaced now with single <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToFile</a> method which can save objects of different types to MIDI file.</p>
+<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>TimedEventsManagingUtilities.ToFile</code></li>
+<li><code>NotesManagingUtilities.ToFile</code></li>
+<li><code>ChordsManagingUtilities.ToFile</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToFile</a></li>
+</ul>
+<h3 id="obs9">OBS9</h3>
+<p><code>AddTimedEvents</code>, <code>AddNotes</code> and <code>AddChords</code> methods are replaced now with single <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_">TimedObjectUtilities.AddObjects</a> method which can save objects of different types to events collection or track chunk.</p>
+<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>TimedEventsManagingUtilities.AddTimedEvents</code></li>
+<li><code>NotesManagingUtilities.AddNotes</code></li>
+<li><code>ChordsManagingUtilities.AddChords</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_">TimedObjectUtilities.AddObjects</a></li>
+</ul>
 </article>
           </div>
           
