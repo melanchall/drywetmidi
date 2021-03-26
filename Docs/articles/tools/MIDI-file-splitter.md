@@ -6,6 +6,9 @@ uid: a_file_splitter
 
 You can split MIDI file in different ways using extension methods from the [MidiFileSplitter](xref:Melanchall.DryWetMidi.Tools.MidiFileSplitter) class. Available methods of splitting are described below.
 
+> [!IMPORTANT]
+> This article doesn't cover all possible methods and their settings. Please read API documentation on [MidiFileSplitter](xref:Melanchall.DryWetMidi.Tools.MidiFileSplitter) to get complete information.
+
 ## SplitByChannel
 
 [SplitByChannel](xref:Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByChannel(Melanchall.DryWetMidi.Core.MidiFile)) method splits MIDI file by channel so all [channel events](xref:Melanchall.DryWetMidi.Core.ChannelEvent) will be separated by channel and copied to corresponding new files. All meta and system exclusive events will be copied to all the new files. Non-track chunks will not be copied to any of the new files. Thus each file from the result will contain all meta and sysex events and channel events for single channel. The image below illustrates this process:

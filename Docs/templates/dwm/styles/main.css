@@ -484,6 +484,17 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
     border-color: #EC5508;
 }
 
-.alert h5 {
+.alert-danger h5 {
     color: #EC5508;
+}
+
+.alert-warning {
+    color: #F8F8F8;
+    border-radius: 0px;
+    background-color: transparent;
+    border-color: #ECE208;
+}
+
+.alert-warning h5 {
+    color: #ECE208;
 }
