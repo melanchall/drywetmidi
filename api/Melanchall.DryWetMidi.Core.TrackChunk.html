@@ -144,7 +144,7 @@ Represents a track chunk of a standard MIDI file.
   <h5 id="Melanchall_DryWetMidi_Core_TrackChunk_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
 <p>
-See <a href="https://www.midi.org/specifications-old/category/smf-specifications">https://www.midi.org/specifications-old/category/smf-specifications</a> for detailed MIDI file specification.
+See <a href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files">https://www.midi.org/specifications/file-format-specifications/standard-midi-files</a> for detailed MIDI file specification.
 </p>
 </div>
   <h3 id="constructors">Constructors
@@ -573,31 +573,46 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
       <a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_">PlaybackUtilities.Play(TrackChunk, TempoMap, IOutputDevice, MidiClockSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">ChordsManagingUtilities.ManageChords(TrackChunk, Int64, Comparison&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">ChordsManagingUtilities.ManageChords(TrackChunk, ChordDetectionSettings, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Int64_">ChordsManagingUtilities.GetChords(TrackChunk, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.GetChords(TrackChunk, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.ProcessChords(TrackChunk, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(TrackChunk, Action&lt;Chord&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.RemoveChords(TrackChunk, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(TrackChunk, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(TrackChunk, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(TrackChunk, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__">ChordsManagingUtilities.AddChords(TrackChunk, IEnumerable&lt;Chord&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ManageNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">NotesManagingUtilities.ManageNotes(TrackChunk, Comparison&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">GetObjectsUtilities.GetObjects(TrackChunk, ObjectType, ObjectDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_TrackChunk_">NotesManagingUtilities.GetNotes(TrackChunk)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ManageNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">NotesManagingUtilities.ManageNotes(TrackChunk, NoteDetectionSettings, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.ProcessNotes(TrackChunk, Action&lt;Note&gt;, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.GetNotes(TrackChunk, NoteDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.RemoveNotes(TrackChunk, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(TrackChunk, Action&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(TrackChunk, Action&lt;Note&gt;, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(TrackChunk, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(TrackChunk, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_AddNotes_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.AddNotes(TrackChunk, IEnumerable&lt;Note&gt;)</a>
@@ -615,7 +630,13 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_">TimedEventsManagingUtilities.GetTimedEvents(TrackChunk)</a>
   </div>
   <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(TrackChunk, Action&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(TrackChunk, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_">TimedEventsManagingUtilities.RemoveTimedEvents(TrackChunk)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.RemoveTimedEvents(TrackChunk, Predicate&lt;TimedEvent&gt;)</a>
@@ -624,43 +645,46 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.AddTimedEvents(TrackChunk, IEnumerable&lt;TimedEvent&gt;)</a>
   </div>
   <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.AddObjects(TrackChunk, IEnumerable&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TrackChunkUtilities.html#Melanchall_DryWetMidi_Interaction_TrackChunkUtilities_ShiftEvents_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">TrackChunkUtilities.ShiftEvents(TrackChunk, ITimeSpan, TempoMap)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_">ChordsSplitterUtilities.SplitChordsByStep(TrackChunk, ITimeSpan, TempoMap, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsByStep(TrackChunk, ITimeSpan, TempoMap, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_">ChordsSplitterUtilities.SplitChordsByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_">ChordsSplitterUtilities.SplitChordsByGrid(TrackChunk, IGrid, TempoMap, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsByGrid(TrackChunk, IGrid, TempoMap, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_">ChordsSplitterUtilities.SplitChordsAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_">ChordsSplitterUtilities.SplitChordsAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">NotesSplitterUtilities.SplitNotesByStep(TrackChunk, ITimeSpan, TempoMap)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesSplitterUtilities.SplitNotesByStep(TrackChunk, ITimeSpan, TempoMap, NoteDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">NotesSplitterUtilities.SplitNotesByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesSplitterUtilities.SplitNotesByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap, NoteDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_">NotesSplitterUtilities.SplitNotesByGrid(TrackChunk, IGrid, TempoMap)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesSplitterUtilities.SplitNotesByGrid(TrackChunk, IGrid, TempoMap, NoteDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_">NotesSplitterUtilities.SplitNotesAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesSplitterUtilities.SplitNotesAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap, NoteDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_">NotesSplitterUtilities.SplitNotesAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesSplitterUtilities.SplitNotesAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap, NoteDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html#Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesMergerUtilities.MergeNotes(TrackChunk, TempoMap, NotesMergingSettings, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html#Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesMergingSettings_">NotesMergerUtilities.MergeNotes(TrackChunk, TempoMap, NotesMergingSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsQuantizerUtilities_QuantizeChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_Melanchall_DryWetMidi_Tools_ChordsQuantizingSettings_">ChordsQuantizerUtilities.QuantizeChords(TrackChunk, IGrid, TempoMap, Int64, ChordsQuantizingSettings)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsQuantizerUtilities_QuantizeChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ChordsQuantizingSettings_">ChordsQuantizerUtilities.QuantizeChords(TrackChunk, IGrid, TempoMap, ChordsQuantizingSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_NotesQuantizerUtilities_QuantizeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesQuantizingSettings_">NotesQuantizerUtilities.QuantizeNotes(TrackChunk, IGrid, TempoMap, NotesQuantizingSettings)</a>
@@ -669,7 +693,7 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
       <a class="xref" href="Melanchall.DryWetMidi.Tools.TimedEventsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_TimedEventsQuantizerUtilities_QuantizeTimedEvents_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_TimedEventsQuantizingSettings_">TimedEventsQuantizerUtilities.QuantizeTimedEvents(TrackChunk, IGrid, TempoMap, TimedEventsQuantizingSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsRandomizerUtilities_RandomizeChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Interaction_TempoMap_System_Int64_Melanchall_DryWetMidi_Tools_ChordsRandomizingSettings_">ChordsRandomizerUtilities.RandomizeChords(TrackChunk, IBounds, TempoMap, Int64, ChordsRandomizingSettings)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsRandomizerUtilities_RandomizeChords_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ChordsRandomizingSettings_">ChordsRandomizerUtilities.RandomizeChords(TrackChunk, IBounds, TempoMap, ChordsRandomizingSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_NotesRandomizerUtilities_RandomizeNotes_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NotesRandomizingSettings_">NotesRandomizerUtilities.RandomizeNotes(TrackChunk, IBounds, TempoMap, NotesRandomizingSettings)</a>
@@ -697,7 +721,7 @@ Content of a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">T
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

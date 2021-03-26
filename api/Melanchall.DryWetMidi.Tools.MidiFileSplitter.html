@@ -163,7 +163,7 @@ an instance of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">M
         <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which <code data-dev-comment-type="paramref" class="paramref">midiFile</code>
-should be splitted.</td>
+should be split.</td>
       </tr>
     </tbody>
   </table>
@@ -201,14 +201,14 @@ should be splitted.</td>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByChannel*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByChannel(Melanchall.DryWetMidi.Core.MidiFile)">SplitByChannel(MidiFile)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByChannel(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings)">SplitByChannel(MidiFile, SplitFileByChannelSettings)</h4>
   <div class="markdown level1 summary">
 Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by channel.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;MidiFile&gt; SplitByChannel(this MidiFile midiFile)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;MidiFile&gt; SplitByChannel(this MidiFile midiFile, SplitFileByChannelSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -225,6 +225,11 @@ Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile<
         <td><span class="parametername">midiFile</span></td>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html">SplitFileByChannelSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings accoridng to which MIDI file should be split.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -238,16 +243,74 @@ Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile<
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>&gt;</td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> where each file contains events for single channel.</td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> where each file contains events for single channel
+and meta and sysex ones as defined by <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile__remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-Channel events will be separated by channel and copied to corresponding new files. All
-meta and system exclusive events will be copied to all the new files. Non-track chunks
-will not be copied to any of the new files.
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChunks_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByChunks*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChunks_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByChunks(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings)">SplitByChunks(MidiFile, SplitFileByChunksSettings)</h4>
+  <div class="markdown level1 summary">
+Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by chunks within it.
 </div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;MidiFile&gt; SplitByChunks(this MidiFile midiFile, SplitFileByChunksSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><span class="parametername">midiFile</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.html">SplitFileByChunksSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings accoridng to which MIDI file should be split.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>&gt;</td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> where each file contains single chunk from
+the original file.</td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -296,7 +359,7 @@ Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile<
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a></td>
         <td><span class="parametername">settings</span></td>
-        <td>Settings according to which file should be splitted.</td>
+        <td>Settings according to which file should be split.</td>
       </tr>
     </tbody>
   </table>
@@ -338,14 +401,14 @@ Non-track chunks will not be copied to any of the new files.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByNotes*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByNotes(Melanchall.DryWetMidi.Core.MidiFile)">SplitByNotes(MidiFile)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByNotes(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings)">SplitByNotes(MidiFile, SplitFileByNotesSettings)</h4>
   <div class="markdown level1 summary">
 Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by notes.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;MidiFile&gt; SplitByNotes(this MidiFile midiFile)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;MidiFile&gt; SplitByNotes(this MidiFile midiFile, SplitFileByNotesSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -362,6 +425,11 @@ Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile<
         <td><span class="parametername">midiFile</span></td>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to split.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html">SplitFileByNotesSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings accoridng to which notes should be detected and built.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -375,16 +443,11 @@ Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile<
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>&gt;</td>
-        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> where each file contains events for single note number.</td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> where each file contains events for single note and
+other events as defined by <code data-dev-comment-type="paramref" class="paramref">settings</code>.</td>
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile__remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-Note events will be separated by note number and copied to corresponding new files. All other
-channel events, meta and system exclusive events will be copied to all the new files. Non-track
-chunks will not be copied to any of the new files.
-</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -440,7 +503,7 @@ and returns it as an instance of <a class="xref" href="Melanchall.DryWetMidi.Cor
         <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which <code data-dev-comment-type="paramref" class="paramref">midiFile</code>
-should be splitted.</td>
+should be split.</td>
       </tr>
     </tbody>
   </table>
@@ -512,7 +575,7 @@ and returns it as an instance of <a class="xref" href="Melanchall.DryWetMidi.Cor
         <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which <code data-dev-comment-type="paramref" class="paramref">midiFile</code>
-should be splitted.</td>
+should be split.</td>
       </tr>
     </tbody>
   </table>
@@ -569,7 +632,7 @@ should be splitted.</td>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

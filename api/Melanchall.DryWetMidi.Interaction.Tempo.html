@@ -190,12 +190,12 @@ Default tempo which is 500,000 microseconds per quarter note or 120 beats per mi
   <a id="Melanchall_DryWetMidi_Interaction_Tempo_BeatsPerMinute_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.BeatsPerMinute*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_BeatsPerMinute" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.BeatsPerMinute">BeatsPerMinute</h4>
   <div class="markdown level1 summary">
-Gets number of beats per minute.
+Gets the number of beats per minute.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public long BeatsPerMinute { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public double BeatsPerMinute { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -207,7 +207,7 @@ Gets number of beats per minute.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -284,7 +284,7 @@ Determines whether the specified object is equal to the current object.
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_Tempo_FromBeatsPerMinute_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.FromBeatsPerMinute*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_FromBeatsPerMinute_System_Int32_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.FromBeatsPerMinute(System.Int32)">FromBeatsPerMinute(Int32)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_FromBeatsPerMinute_System_Double_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.FromBeatsPerMinute(System.Double)">FromBeatsPerMinute(Double)</h4>
   <div class="markdown level1 summary">
 Creates an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> with the specified number of
 beats per minute.
@@ -292,7 +292,7 @@ beats per minute.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Tempo FromBeatsPerMinute(int beatsPerMinute)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Tempo FromBeatsPerMinute(double beatsPerMinute)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -305,7 +305,7 @@ beats per minute.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
         <td><span class="parametername">beatsPerMinute</span></td>
         <td>Number of beats per minute.</td>
       </tr>
@@ -506,6 +506,139 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Tempo_op_GreaterThan_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_GreaterThan*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_op_GreaterThan_Melanchall_DryWetMidi_Interaction_Tempo_Melanchall_DryWetMidi_Interaction_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_GreaterThan(Melanchall.DryWetMidi.Interaction.Tempo,Melanchall.DryWetMidi.Interaction.Tempo)">GreaterThan(Tempo, Tempo)</h4>
+  <div class="markdown level1 summary">
+Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> is greater than another one.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator&gt;(Tempo tempo1, Tempo tempo2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if the value of <code data-dev-comment-type="paramref" class="paramref">tempo1</code> is greater than the value of
+<code data-dev-comment-type="paramref" class="paramref">tempo2</code>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">tempo1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempo2</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Tempo_op_GreaterThanOrEqual_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_GreaterThanOrEqual*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_op_GreaterThanOrEqual_Melanchall_DryWetMidi_Interaction_Tempo_Melanchall_DryWetMidi_Interaction_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_GreaterThanOrEqual(Melanchall.DryWetMidi.Interaction.Tempo,Melanchall.DryWetMidi.Interaction.Tempo)">GreaterThanOrEqual(Tempo, Tempo)</h4>
+  <div class="markdown level1 summary">
+Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> is greater than or equal to
+another one.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator &gt;=(Tempo tempo1, Tempo tempo2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if the value of <code data-dev-comment-type="paramref" class="paramref">tempo1</code> is greater than or equal to the value of
+<code data-dev-comment-type="paramref" class="paramref">tempo2</code>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">tempo1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempo2</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Tempo_op_Inequality_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_Inequality*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_op_Inequality_Melanchall_DryWetMidi_Interaction_Tempo_Melanchall_DryWetMidi_Interaction_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_Inequality(Melanchall.DryWetMidi.Interaction.Tempo,Melanchall.DryWetMidi.Interaction.Tempo)">Inequality(Tempo, Tempo)</h4>
   <div class="markdown level1 summary">
@@ -553,6 +686,139 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Tempo_op_LessThan_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_LessThan*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_op_LessThan_Melanchall_DryWetMidi_Interaction_Tempo_Melanchall_DryWetMidi_Interaction_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_LessThan(Melanchall.DryWetMidi.Interaction.Tempo,Melanchall.DryWetMidi.Interaction.Tempo)">LessThan(Tempo, Tempo)</h4>
+  <div class="markdown level1 summary">
+Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> is less than another one.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator &lt;(Tempo tempo1, Tempo tempo2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if the value of <code data-dev-comment-type="paramref" class="paramref">tempo1</code> is less than the value of
+<code data-dev-comment-type="paramref" class="paramref">tempo2</code>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">tempo1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempo2</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Tempo_op_LessThanOrEqual_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_LessThanOrEqual*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Tempo_op_LessThanOrEqual_Melanchall_DryWetMidi_Interaction_Tempo_Melanchall_DryWetMidi_Interaction_Tempo_" data-uid="Melanchall.DryWetMidi.Interaction.Tempo.op_LessThanOrEqual(Melanchall.DryWetMidi.Interaction.Tempo,Melanchall.DryWetMidi.Interaction.Tempo)">LessThanOrEqual(Tempo, Tempo)</h4>
+  <div class="markdown level1 summary">
+Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> is less than or equal to
+another one.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator &lt;=(Tempo tempo1, Tempo tempo2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo1</span></td>
+        <td>The first <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a></td>
+        <td><span class="parametername">tempo2</span></td>
+        <td>The second <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.html">Tempo</a> to compare.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if the value of <code data-dev-comment-type="paramref" class="paramref">tempo1</code> is less than or equal to the value of
+<code data-dev-comment-type="paramref" class="paramref">tempo2</code>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">tempo1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempo2</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -573,7 +839,7 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tempo.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

@@ -135,7 +135,7 @@ following chunk classes (derived from <a class="xref" href="Melanchall.DryWetMid
 (<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a> or
 <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_IO_Stream_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(Stream, MidiFileFormat, WritingSettings)</a>).</p>
 <p>
-See <a href="https://www.midi.org/specifications-old/category/smf-specifications">https://www.midi.org/specifications-old/category/smf-specifications</a> for detailed MIDI file specification.
+See <a href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files">https://www.midi.org/specifications/file-format-specifications/standard-midi-files</a> for detailed MIDI file specification.
 </p>
 </div>
   <h3 id="constructors">Constructors
@@ -1125,22 +1125,37 @@ exceeds maximum value allowed for MIDI file.</td>
       <a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_">PlaybackUtilities.Play(MidiFile, IOutputDevice, MidiClockSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_MidiFile_System_Int64_">ChordsManagingUtilities.GetChords(MidiFile, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.GetChords(MidiFile, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.ProcessChords(MidiFile, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(MidiFile, Action&lt;Chord&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.RemoveChords(MidiFile, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(MidiFile, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_MidiFile_">NotesManagingUtilities.GetNotes(MidiFile)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(MidiFile, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.ProcessNotes(MidiFile, Action&lt;Note&gt;, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(MidiFile, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.RemoveNotes(MidiFile, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">GetObjectsUtilities.GetObjects(MidiFile, ObjectType, ObjectDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.GetNotes(MidiFile, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(MidiFile, Action&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(MidiFile, Action&lt;Note&gt;, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(MidiFile, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(MidiFile, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetNotesAndRestsUtilities.html#Melanchall_DryWetMidi_Interaction_GetNotesAndRestsUtilities_GetNotesAndRests_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_">GetNotesAndRestsUtilities.GetNotesAndRests(MidiFile, RestSeparationPolicy)</a>
@@ -1161,7 +1176,13 @@ exceeds maximum value allowed for MIDI file.</td>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_">TimedEventsManagingUtilities.GetTimedEvents(MidiFile)</a>
   </div>
   <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(MidiFile, Action&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(MidiFile, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_">TimedEventsManagingUtilities.RemoveTimedEvents(MidiFile)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.RemoveTimedEvents(MidiFile, Predicate&lt;TimedEvent&gt;)</a>
@@ -1185,19 +1206,19 @@ exceeds maximum value allowed for MIDI file.</td>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_Melanchall_DryWetMidi_Core_MidiFile_System_Double_">MidiFileUtilities.Resize(MidiFile, Double)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Int64_">ChordsSplitterUtilities.SplitChordsByStep(MidiFile, ITimeSpan, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsByStep(MidiFile, ITimeSpan, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_System_Int64_">ChordsSplitterUtilities.SplitChordsByPartsNumber(MidiFile, Int32, TimeSpanType, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsByPartsNumber(MidiFile, Int32, TimeSpanType, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_System_Int64_">ChordsSplitterUtilities.SplitChordsByGrid(MidiFile, IGrid, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsByGrid(MidiFile, IGrid, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_System_Int64_">ChordsSplitterUtilities.SplitChordsAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_System_Int64_">ChordsSplitterUtilities.SplitChordsAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsSplitterUtilities.html#Melanchall_DryWetMidi_Tools_ChordsSplitterUtilities_SplitChordsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsSplitterUtilities.SplitChordsAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget, ChordDetectionSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_">NotesSplitterUtilities.SplitNotesByStep(MidiFile, ITimeSpan)</a>
@@ -1215,10 +1236,13 @@ exceeds maximum value allowed for MIDI file.</td>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_">NotesSplitterUtilities.SplitNotesAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_">MidiFileSplitter.SplitByChannel(MidiFile)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChunks_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings_">MidiFileSplitter.SplitByChunks(MidiFile, SplitFileByChunksSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_">MidiFileSplitter.SplitByNotes(MidiFile)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_">MidiFileSplitter.SplitByChannel(MidiFile, SplitFileByChannelSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_">MidiFileSplitter.SplitByNotes(MidiFile, SplitFileByNotesSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_">MidiFileSplitter.SplitByGrid(MidiFile, IGrid, SliceMidiFileSettings)</a>
@@ -1233,10 +1257,10 @@ exceeds maximum value allowed for MIDI file.</td>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_TakePart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_">MidiFileSplitter.TakePart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html#Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_NotesMergingSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesMergerUtilities.MergeNotes(MidiFile, NotesMergingSettings, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html#Melanchall_DryWetMidi_Tools_NotesMergerUtilities_MergeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_NotesMergingSettings_">NotesMergerUtilities.MergeNotes(MidiFile, NotesMergingSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsQuantizerUtilities_QuantizeChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_System_Int64_Melanchall_DryWetMidi_Tools_ChordsQuantizingSettings_">ChordsQuantizerUtilities.QuantizeChords(MidiFile, IGrid, Int64, ChordsQuantizingSettings)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsQuantizerUtilities_QuantizeChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_ChordsQuantizingSettings_">ChordsQuantizerUtilities.QuantizeChords(MidiFile, IGrid, ChordsQuantizingSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_NotesQuantizerUtilities_QuantizeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_NotesQuantizingSettings_">NotesQuantizerUtilities.QuantizeNotes(MidiFile, IGrid, NotesQuantizingSettings)</a>
@@ -1245,7 +1269,7 @@ exceeds maximum value allowed for MIDI file.</td>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.TimedEventsQuantizerUtilities.html#Melanchall_DryWetMidi_Tools_TimedEventsQuantizerUtilities_QuantizeTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_TimedEventsQuantizingSettings_">TimedEventsQuantizerUtilities.QuantizeTimedEvents(MidiFile, IGrid, TimedEventsQuantizingSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsRandomizerUtilities_RandomizeChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_IBounds_System_Int64_Melanchall_DryWetMidi_Tools_ChordsRandomizingSettings_">ChordsRandomizerUtilities.RandomizeChords(MidiFile, IBounds, Int64, ChordsRandomizingSettings)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_ChordsRandomizerUtilities_RandomizeChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Tools_ChordsRandomizingSettings_">ChordsRandomizerUtilities.RandomizeChords(MidiFile, IBounds, ChordsRandomizingSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.NotesRandomizerUtilities.html#Melanchall_DryWetMidi_Tools_NotesRandomizerUtilities_RandomizeNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_IBounds_Melanchall_DryWetMidi_Tools_NotesRandomizingSettings_">NotesRandomizerUtilities.RandomizeNotes(MidiFile, IBounds, NotesRandomizingSettings)</a>
@@ -1281,7 +1305,7 @@ exceeds maximum value allowed for MIDI file.</td>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

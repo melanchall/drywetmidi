@@ -124,6 +124,106 @@ Extension methods for objects that implement the <a class="xref" href="Melanchal
   </div>
   <h3 id="methods">Methods
   </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects(Melanchall.DryWetMidi.Core.EventsCollection,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})">AddObjects(EventsCollection, IEnumerable&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds the specified collection of objects to <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddObjects(this EventsCollection eventsCollection, IEnumerable&lt;ITimedObject&gt; timedObjects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to add objects to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>Objects to add to <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_Melanchall_DryWetMidi_Core_TrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects(Melanchall.DryWetMidi.Core.TrackChunk,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})">AddObjects(TrackChunk, IEnumerable&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds the specified collection of objects to <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddObjects(this TrackChunk trackChunk, IEnumerable&lt;ITimedObject&gt; timedObjects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to add objects to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>Objects to add to <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AtTime_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AtTime*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AtTime``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">AtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, ITimeSpan, TempoMap)</h4>
   <div class="markdown level1 summary">
@@ -466,6 +566,132 @@ Gets time of an <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedOb
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToFile*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})">ToFile(IEnumerable&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates a MIDI file with the specified timed objects.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiFile ToFile(this IEnumerable&lt;ITimedObject&gt; timedObjects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>Collection of objects to create a MIDI file from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> containing the <code data-dev-comment-type="paramref" class="paramref">timedObjects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that only MIDI events allowed by SMF specification will be added to result MIDI file.
+So instances of <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> containing <a class="xref" href="Melanchall.DryWetMidi.Core.SystemCommonEvent.html">SystemCommonEvent</a> or
+<a class="xref" href="Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">SystemRealTimeEvent</a> won&apos;t be added.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToTrackChunk*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})">ToTrackChunk(IEnumerable&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">
+Creates a track chunk with the specified objects.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TrackChunk ToTrackChunk(this IEnumerable&lt;ITimedObject&gt; timedObjects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>Collection of objects to create a track chunk from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> containing the <code data-dev-comment-type="paramref" class="paramref">timedObjects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that only MIDI events allowed by SMF specification will be added to result track chunk.
+So instances of <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> containing <a class="xref" href="Melanchall.DryWetMidi.Core.SystemCommonEvent.html">SystemCommonEvent</a> or
+<a class="xref" href="Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">SystemRealTimeEvent</a> won&apos;t be added.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -486,7 +712,7 @@ Gets time of an <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedOb
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

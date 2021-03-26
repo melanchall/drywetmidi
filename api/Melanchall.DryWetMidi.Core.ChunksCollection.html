@@ -94,6 +94,7 @@ Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">M
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</div>
     <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</div>
     <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
   </div>
@@ -125,7 +126,7 @@ Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">M
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class ChunksCollection : IEnumerable&lt;MidiChunk&gt;, IEnumerable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class ChunksCollection : ICollection&lt;MidiChunk&gt;, IEnumerable&lt;MidiChunk&gt;, IEnumerable</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -150,6 +151,31 @@ Gets the number of chunks contained in the collection.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_IsReadOnly_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.IsReadOnly*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_IsReadOnly" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.IsReadOnly">IsReadOnly</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a> is read-only.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -326,6 +352,108 @@ Removes all chunks from the <a class="xref" href="Melanchall.DryWetMidi.Core.Chu
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
   </div>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Contains_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Contains*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Contains_Melanchall_DryWetMidi_Core_MidiChunk_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Contains(Melanchall.DryWetMidi.Core.MidiChunk)">Contains(MidiChunk)</h4>
+  <div class="markdown level1 summary">
+Determines whether the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a> contains a specific chunk.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(MidiChunk item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td><span class="parametername">item</span></td>
+        <td>The chunk to locate in the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if chunk is found in the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_CopyTo_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.CopyTo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_CopyTo_Melanchall_DryWetMidi_Core_MidiChunk___System_Int32_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.CopyTo(Melanchall.DryWetMidi.Core.MidiChunk[],System.Int32)">CopyTo(MidiChunk[], Int32)</h4>
+  <div class="markdown level1 summary">
+Copies the elements of the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a> to an <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a>,
+starting at a particular index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(MidiChunk[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>[]</td>
+        <td><span class="parametername">array</span></td>
+        <td>The one-dimensional <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a> that is the destination of
+the elements copied from <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>. The array must have zero-based
+indexing.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td>The zero-based index in array at which copying begins.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">array</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> is less than 0.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>The number of elements in the source <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>
+is greater than the available space from <code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> to the end of the destination
+array.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_ChunksCollection_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.GetEnumerator*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_GetEnumerator" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.GetEnumerator">GetEnumerator()</h4>
   <div class="markdown level1 summary">
@@ -718,6 +846,9 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
   </table>
   <h3 id="implements">Implements</h3>
   <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">System.Collections.Generic.ICollection&lt;T&gt;</a>
+  </div>
+  <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">System.Collections.Generic.IEnumerable&lt;T&gt;</a>
   </div>
   <div>
@@ -743,7 +874,7 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

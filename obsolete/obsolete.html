@@ -163,6 +163,94 @@ tempoMap.GetTempoAtTime(MusicalTimeSpan.Whole);
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">TempoMap.GetTempoChanges</a></li>
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">TempoMap.GetTempoAtTime</a></li>
 </ul>
+<h3 id="obs5">OBS5</h3>
+<p>Methods from <code>GetTimedEventsAndNotesUtilities</code> are now obsolete and you should use <code>GetObjects</code> methods from <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a>. Example how you can get timed events and notes:</p>
+<pre><code class="lang-csharp">var timedEventsAndNotes = midiFile.GetObjects(ObjectType.TimedEvent | ObjectType.Note);
+</code></pre>
+<p>Obsolete from version <strong>5.2.0</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>GetTimedEventsAndNotesUtilities</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a></li>
+</ul>
+<h3 id="obs6">OBS6</h3>
+<p>Methods from <code>GetNotesAndRestsUtilities</code> are now obsolete and you should use <code>GetObjects</code> methods from <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a>. Example how you can get notes and rests:</p>
+<pre><code class="lang-csharp">var timedEventsAndNotes = midiFile.GetObjects(ObjectType.Note | ObjectType.Rest);
+</code></pre>
+<p><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html">RestSeparationPolicy</a> can be specified via <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html">ObjectDetectionSettings</a>:</p>
+<pre><code class="lang-csharp">```csharp
+var timedEventsAndNotes = midiFile.GetObjects(
+    ObjectType.Note | ObjectType.Rest,
+    new ObjectDetectionSettings
+    {
+        RestDetectionSettings = new RestDetectionSettings
+        {
+            RestSeparationPolicy = RestSeparationPolicy.SeparateByChannel
+        }
+    });
+</code></pre>
+<pre><code>
+Obsolete from version **5.2.0**.
+
+**Old API**
+
+* `GetNotesAndRestsUtilities`
+
+**New API**
+
+* [GetObjectsUtilities](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities)
+
+### OBS7
+
+`ToTrackChunk` methods for collections of objects of one type (for example, collection of [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [Note](xref:Melanchall.DryWetMidi.Interaction.Note) instances) are replaced now with single [TimedObjectUtilities.ToTrackChunk](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})) method which can save objects of different types to track chunk.
+
+Obsolete from version **5.2.0**.
+
+**Old API**
+
+* `TimedEventsManagingUtilities.ToTrackChunk`
+* `NotesManagingUtilities.ToTrackChunk`
+* `ChordsManagingUtilities.ToTrackChunk`
+
+**New API**
+
+* [TimedObjectUtilities.ToTrackChunk](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToTrackChunk(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject}))
+
+### OBS8
+
+`ToFile` methods for collections of objects of one type (for example, collection of [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [Note](xref:Melanchall.DryWetMidi.Interaction.Note) instances) are replaced now with single [TimedObjectUtilities.ToFile](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})) method which can save objects of different types to MIDI file.
+
+Obsolete from version **5.2.0**.
+
+**Old API**
+
+* `TimedEventsManagingUtilities.ToFile`
+* `NotesManagingUtilities.ToFile`
+* `ChordsManagingUtilities.ToFile`
+
+**New API**
+
+* [TimedObjectUtilities.ToFile](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.ToFile(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject}))
+
+### OBS9
+
+`AddTimedEvents`, `AddNotes` and `AddChords` methods are replaced now with single [TimedObjectUtilities.AddObjects](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*) method which can save objects of different types to events collection or track chunk.
+
+Obsolete from version **5.2.0**.
+
+**Old API**
+
+* `TimedEventsManagingUtilities.AddTimedEvents`
+* `NotesManagingUtilities.AddNotes`
+* `ChordsManagingUtilities.AddChords`
+
+**New API**
+
+* [TimedObjectUtilities.AddObjects](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.AddObjects*)
+</code></pre>
 </article>
           </div>
           
@@ -183,7 +271,7 @@ tempoMap.GetTempoAtTime(MusicalTimeSpan.Whole);
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

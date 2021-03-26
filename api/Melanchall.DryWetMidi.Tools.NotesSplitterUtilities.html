@@ -255,7 +255,7 @@ at the center of a note.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)">SplitNotesAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap, NoteDetectionSettings)</h4>
   <div class="markdown level1 summary">
 Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> at the specified distance
 from a note&apos;s start or end.
@@ -263,7 +263,7 @@ from a note&apos;s start or end.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -295,6 +295,11 @@ from a note&apos;s start or end.
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used for distances calculations.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></td>
+        <td><span class="parametername">noteDetectionSettings</span></td>
+        <td>Settings accoridng to which notes should be detected and built.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="exceptions">Exceptions</h5>
@@ -320,7 +325,7 @@ from a note&apos;s start or end.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)">SplitNotesAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap, NoteDetectionSettings)</h4>
   <div class="markdown level1 summary">
 Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified ratio of a
 note&apos;s length measuring it from the note&apos;s start or end. For example, 0.5 means splitting
@@ -329,7 +334,7 @@ at the center of a note.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -365,6 +370,11 @@ at the center of a note.
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used for distances calculations.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></td>
+        <td><span class="parametername">noteDetectionSettings</span></td>
+        <td>Settings accoridng to which notes should be detected and built.</td>
       </tr>
     </tbody>
   </table>
@@ -588,14 +598,14 @@ Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetM
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByGrid(TrackChunk, IGrid, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)">SplitNotesByGrid(TrackChunk, IGrid, TempoMap, NoteDetectionSettings)</h4>
   <div class="markdown level1 summary">
 Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified grid.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -621,6 +631,11 @@ Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetM
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used to calculate times to split by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></td>
+        <td><span class="parametername">noteDetectionSettings</span></td>
+        <td>Settings accoridng to which notes should be detected and built.</td>
       </tr>
     </tbody>
   </table>
@@ -738,7 +753,7 @@ parts of the equal length.
   </table>
   <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If a note has zero length, it will be splitted into the specified number of parts of zero length.
+If a note has zero length, it will be split into the specified number of parts of zero length.
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -764,7 +779,7 @@ If a note has zero length, it will be splitted into the specified number of part
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)">SplitNotesByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap, NoteDetectionSettings)</h4>
   <div class="markdown level1 summary">
 Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> into the specified number
 of parts of the equal length.
@@ -772,7 +787,7 @@ of parts of the equal length.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -804,11 +819,16 @@ of parts of the equal length.
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used to calculate times to split by.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></td>
+        <td><span class="parametername">noteDetectionSettings</span></td>
+        <td>Settings accoridng to which notes should be detected and built.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If a note has zero length, it will be splitted into the specified number of parts of zero length.
+If a note has zero length, it will be split into the specified number of parts of zero length.
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -881,7 +901,7 @@ specified number of parts of the equal length.
   </table>
   <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
-If a note has zero length, it will be splitted into the specified number of parts of zero length.
+If a note has zero length, it will be split into the specified number of parts of zero length.
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -913,7 +933,7 @@ If a note has zero length, it will be splitted into the specified number of part
   <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)">SplitNotesByStep(MidiFile, ITimeSpan)</h4>
   <div class="markdown level1 summary">
 Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified
-step so every note will be splitted at points equally distanced from each other
+step so every note will be split at points equally distanced from each other
 starting from the note&apos;s start time.
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -946,7 +966,7 @@ starting from the note&apos;s start time.
   <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Notes with zero length and notes with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
-will not be splitted.
+will not be split.
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -967,16 +987,16 @@ will not be splitted.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByStep(TrackChunk, ITimeSpan, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)">SplitNotesByStep(TrackChunk, ITimeSpan, TempoMap, NoteDetectionSettings)</h4>
   <div class="markdown level1 summary">
 Splits notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified step so
-every note will be splitted at points equally distanced from each other starting from
+every note will be split at points equally distanced from each other starting from
 the note&apos;s start time.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1003,12 +1023,17 @@ the note&apos;s start time.
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used to calculate times to split by.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></td>
+        <td><span class="parametername">noteDetectionSettings</span></td>
+        <td>Settings accoridng to which notes should be detected and built.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Notes with zero length and notes with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
-will not be splitted.
+will not be split.
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1032,7 +1057,7 @@ will not be splitted.
   <h4 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitNotesByStep(IEnumerable&lt;TrackChunk&gt;, ITimeSpan, TempoMap)</h4>
   <div class="markdown level1 summary">
 Splits notes contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the
-specified step so every note will be splitted at points equally distanced from each
+specified step so every note will be split at points equally distanced from each
 other starting from the note&apos;s start time.
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1070,7 +1095,7 @@ other starting from the note&apos;s start time.
   <h5 id="Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Notes with zero length and notes with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
-will not be splitted.
+will not be split.
 </div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1110,7 +1135,7 @@ will not be splitted.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

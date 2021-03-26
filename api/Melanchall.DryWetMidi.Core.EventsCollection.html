@@ -94,6 +94,7 @@ Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">M
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</div>
     <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</div>
     <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
   </div>
@@ -125,7 +126,7 @@ Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">M
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_EventsCollection_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class EventsCollection : IEnumerable&lt;MidiEvent&gt;, IEnumerable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class EventsCollection : ICollection&lt;MidiEvent&gt;, IEnumerable&lt;MidiEvent&gt;, IEnumerable</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -150,6 +151,31 @@ Gets the number of events contained in the collection.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_IsReadOnly_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.IsReadOnly*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_IsReadOnly" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.IsReadOnly">IsReadOnly</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> is read-only.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -324,6 +350,108 @@ Removes all events from the <a class="xref" href="Melanchall.DryWetMidi.Core.Eve
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
   </div>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Contains_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Contains*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Contains_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Contains(Melanchall.DryWetMidi.Core.MidiEvent)">Contains(MidiEvent)</h4>
+  <div class="markdown level1 summary">
+Determines whether the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> contains a specific event.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(MidiEvent item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">item</span></td>
+        <td>The event to locate in the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if event is found in the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_CopyTo_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.CopyTo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_CopyTo_Melanchall_DryWetMidi_Core_MidiEvent___System_Int32_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.CopyTo(Melanchall.DryWetMidi.Core.MidiEvent[],System.Int32)">CopyTo(MidiEvent[], Int32)</h4>
+  <div class="markdown level1 summary">
+Copies the elements of the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to an <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a>,
+starting at a particular index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(MidiEvent[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>[]</td>
+        <td><span class="parametername">array</span></td>
+        <td>The one-dimensional <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a> that is the destination of
+the elements copied from <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>. The array must have zero-based
+indexing.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td>The zero-based index in array at which copying begins.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">array</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> is less than 0.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>The number of elements in the source <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>
+is greater than the available space from <code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> to the end of the destination
+array.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_EventsCollection_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.GetEnumerator*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_GetEnumerator" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.GetEnumerator">GetEnumerator()</h4>
   <div class="markdown level1 summary">
@@ -716,6 +844,9 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
   </table>
   <h3 id="implements">Implements</h3>
   <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">System.Collections.Generic.ICollection&lt;T&gt;</a>
+  </div>
+  <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">System.Collections.Generic.IEnumerable&lt;T&gt;</a>
   </div>
   <div>
@@ -723,37 +854,55 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">ChordsManagingUtilities.ManageChords(EventsCollection, Int64, Comparison&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">ChordsManagingUtilities.ManageChords(EventsCollection, ChordDetectionSettings, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__System_Int64_">ChordsManagingUtilities.GetChords(IEnumerable&lt;MidiEvent&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.GetChords(IEnumerable&lt;MidiEvent&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Int64_">ChordsManagingUtilities.GetChords(EventsCollection, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.GetChords(EventsCollection, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.ProcessChords(EventsCollection, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(EventsCollection, Action&lt;Chord&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__System_Int64_">ChordsManagingUtilities.RemoveChords(EventsCollection, Predicate&lt;Chord&gt;, Int64)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(EventsCollection, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(EventsCollection, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(EventsCollection, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_AddChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Chord__">ChordsManagingUtilities.AddChords(EventsCollection, IEnumerable&lt;Chord&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ManageNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">NotesManagingUtilities.ManageNotes(EventsCollection, Comparison&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">GetObjectsUtilities.GetObjects(IEnumerable&lt;MidiEvent&gt;, ObjectType, ObjectDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__">NotesManagingUtilities.GetNotes(IEnumerable&lt;MidiEvent&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">GetObjectsUtilities.GetObjects(EventsCollection, ObjectType, ObjectDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_EventsCollection_">NotesManagingUtilities.GetNotes(EventsCollection)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ManageNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">NotesManagingUtilities.ManageNotes(EventsCollection, NoteDetectionSettings, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.ProcessNotes(EventsCollection, Action&lt;Note&gt;, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.GetNotes(IEnumerable&lt;MidiEvent&gt;, NoteDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.RemoveNotes(EventsCollection, Predicate&lt;Note&gt;)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.GetNotes(EventsCollection, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(EventsCollection, Action&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(EventsCollection, Action&lt;Note&gt;, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(EventsCollection, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(EventsCollection, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_AddNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__">NotesManagingUtilities.AddNotes(EventsCollection, IEnumerable&lt;Note&gt;)</a>
@@ -762,19 +911,25 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__">TimedEventsManagingUtilities.ManageTimedEvents(EventsCollection, Comparison&lt;MidiEvent&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__">TimedEventsManagingUtilities.GetTimedEvents(IEnumerable&lt;MidiEvent&gt;)</a>
-  </div>
-  <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_">TimedEventsManagingUtilities.GetTimedEvents(EventsCollection)</a>
   </div>
   <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(EventsCollection, Action&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.ProcessTimedEvents(EventsCollection, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_">TimedEventsManagingUtilities.RemoveTimedEvents(EventsCollection)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.RemoveTimedEvents(EventsCollection, Predicate&lt;TimedEvent&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_TimedEvent__">TimedEventsManagingUtilities.AddTimedEvents(EventsCollection, IEnumerable&lt;TimedEvent&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.AddObjects(EventsCollection, IEnumerable&lt;ITimedObject&gt;)</a>
   </div>
 </article>
           </div>
@@ -796,7 +951,7 @@ Returns an enumerator that iterates through the <a class="xref" href="Melanchall
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>
