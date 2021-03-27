@@ -128,11 +128,6 @@ body .toc {
     border: none;
 }
 
-.seealso {
-    border-top: 1px solid #EC5508;
-    padding-top: 5px;
-}
-
 /*h1[id|="Melanchall_DryWetMidi"] > h4 {
   border-bottom: 2px solid #EC5508;
 }*/
@@ -474,10 +469,12 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
 
 /* */
 
-#fields, #properties, #methods, #events, #constructors, #classes, #enums, #delegates, #extensionmethods, #structs, #interfaces, #implements, #operators, #seealso {
+#fields, #properties, #methods, #events, #constructors, #classes, #enums, #delegates, #extensionmethods, #structs, #interfaces, #implements, #operators, #seealso, h5[id*="_seealso"] {
     font-weight: bold;
     margin-top: 40px;
     border-bottom: 5px solid #EC5508;
+    font-size: 24px;
+    padding-bottom: 10px;
 }
 
 /* */
