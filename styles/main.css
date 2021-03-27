@@ -459,9 +459,15 @@ article h4 {
     font-weight: bold;
 }
 
+h4[data-uid]:before {
+    content: "▪ ▪ ▪";
+    display: block;
+    color: #EC5508;
+}
+
 /* Images exceptions */
 
-img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
+    img [src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
     background-color: initial;
     padding: initial;
     border: none;
