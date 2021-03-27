@@ -467,7 +467,7 @@ h4[data-uid]:before {
 
 /* Images exceptions */
 
-    img [src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
+img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
     background-color: initial;
     padding: initial;
     border: none;
