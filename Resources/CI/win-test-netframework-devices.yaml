@@ -33,7 +33,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '5.2.0'
+  version: '5.2.1'
 
 name: Windows_Test_NetFramework_Devices_$(version)$(Rev:.r)
 
