@@ -21,6 +21,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets how start event of a note should be found in case of overlapping notes with
         /// the same note number and channel. The default value is <see cref="NoteStartDetectionPolicy.FirstNoteOn"/>.
         /// </summary>
+        /// <remarks>
+        /// See Remarks section of the <see cref="Interaction.NoteStartDetectionPolicy"/> enum.
+        /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteStartDetectionPolicy NoteStartDetectionPolicy
         {
@@ -37,6 +40,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets a value defining a context to search notes within. The default value is
         /// <see cref="NoteSearchContext.SingleEventsCollection"/>.
         /// </summary>
+        /// <remarks>
+        /// See Remarks section of the <see cref="Interaction.NoteSearchContext"/> enum.
+        /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteSearchContext NoteSearchContext
         {

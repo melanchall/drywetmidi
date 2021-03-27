@@ -128,6 +128,11 @@ body .toc {
     border: none;
 }
 
+.seealso {
+    border-top: 1px solid #EC5508;
+    padding-top: 5px;
+}
+
 /*h1[id|="Melanchall_DryWetMidi"] > h4 {
   border-bottom: 2px solid #EC5508;
 }*/
