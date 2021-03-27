@@ -2465,7 +2465,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.HighPrecisionTickGenerator.html",
-          "hash": "4mAKUES2OL51ByVHvOOS6g=="
+          "hash": "Ngd4FC1gtdlNBUSOZRIh6w=="
         }
       },
       "is_incremental": false,
@@ -2825,7 +2825,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.RegularPrecisionTickGenerator.html",
-          "hash": "UAfDfud6Aw7FwQk8l23R/g=="
+          "hash": "yh/UlEKk+orkBrKhyANkKA=="
         }
       },
       "is_incremental": false,
@@ -2873,7 +2873,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.TickGenerator.html",
-          "hash": "tmf6rjaGdTlVUIkxCd7Vug=="
+          "hash": "/0PsFcfFz5rWNAGidR0iqw=="
         }
       },
       "is_incremental": false,
@@ -2993,7 +2993,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html",
-          "hash": "NxB5KDtYXYCNPmZXjWdq4w=="
+          "hash": "H3HzEoqvYxokc2er/9fNSg=="
         }
       },
       "is_incremental": false,
@@ -3005,7 +3005,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html",
-          "hash": "OKfR+RA4NsWcLkZYSI3c1w=="
+          "hash": "KetwSfZq8/pwU5Duty8H8w=="
         }
       },
       "is_incremental": false,
@@ -3341,7 +3341,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html",
-          "hash": "y/DnV6RB8aNVDbg5s3OX5Q=="
+          "hash": "WnbUMwS1fYriTTU35MQDIg=="
         }
       },
       "is_incremental": false,
@@ -3377,7 +3377,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html",
-          "hash": "xHIDBFaIXvLToAvqM+m6Fw=="
+          "hash": "mqKBQJuehOFyEv6X7s36tw=="
         }
       },
       "is_incremental": false,
@@ -3389,7 +3389,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html",
-          "hash": "AUXc92azUXa1UwmOlMG24A=="
+          "hash": "wgtScJa8KmYnjKYkW44fBA=="
         }
       },
       "is_incremental": false,
@@ -3881,7 +3881,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.html",
-          "hash": "rzlTS3rFrd3yOQwUciruRg=="
+          "hash": "1XKGcJnVQu819UsOSCIr/A=="
         }
       },
       "is_incremental": false,

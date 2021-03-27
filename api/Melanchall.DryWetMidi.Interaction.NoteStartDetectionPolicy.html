@@ -83,7 +83,10 @@
   
   <h1 id="Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy" data-uid="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy" class="text-break">Enum NoteStartDetectionPolicy
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Defines how start event of a note should be found in case of overlapping notes with
+the same note number and channel. The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">FirstNoteOn</a>.
+</div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -91,6 +94,43 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public enum NoteStartDetectionPolicy</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+<p>To understand how this policy works let&apos;s take a look at following events sequence:</p>
+<p><code>ON1...ON2...OFF1...OFF2</code></p>
+<p>where <code>ON</code> and <code>OFF</code> means Note On and Note Off events correspondingly
+with the same note number and channel; <code>.</code> is any other event. So we have two
+overlapped notes here.</p>
+<p>
+If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">FirstNoteOn</a> for the policy, notes will be constructed in
+following way:
+</p>
+<p>
+<pre><code>  +----------------+
+  |                |
+[ON1]...(ON2)...[OFF1]...(OFF2)
+          |                 |
+          +-----------------+</code></pre>
+</p>
+<p>
+So every Note Off event will be combined with first free Note On event into a note.
+<code>[...]</code> and <code>(...)</code> denote two different instances of <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>.
+</p>
+<p>
+But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_LastNoteOn">LastNoteOn</a> value, notes will be constructed in
+a new way:
+</p>
+<p>
+<pre><code>  +-------------------------+
+  |                         |
+[ON1]...(ON2)...(OFF1)...[OFF2]
+          |        |
+          +--------+</code></pre>
+</p>
+<p>
+So Note Off events will be combined with last free Note On event into a note.
+</p>
+</div>
   <h3 id="fields">Fields
   </h3>
   <table class="table table-bordered table-striped table-condensed">
@@ -115,6 +155,11 @@ Last Note On event with corresponding note number and channel should be taken.
       </tr>
     </tbody>
   </thead></thead></table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html">NotesManagingUtilities</a></div>
+  </div>
 </article>
           </div>
           

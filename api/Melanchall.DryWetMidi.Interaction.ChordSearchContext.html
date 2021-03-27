@@ -93,6 +93,47 @@ Defines a context to search chords within.
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public enum ChordSearchContext</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+<p>To understand what context means let&apos;s take a look at following events sequence
+within two track chunks:</p>
+<p>
+<pre><code>Track chunk 1: ON1...ON2...OFF1...OFF2
+Track chunk 2: ON3...OFF3.............</code></pre>
+</p>
+<p>where <code>ON</code> and <code>OFF</code> means Note On and Note Off events correspondingly
+(with different note number and channel for simplicity); <code>.</code> is any other event.</p>
+<p>
+If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">SingleEventsCollection</a> as the context, chords will be constructed in
+following way:
+</p>
+<p>
+<pre><code>                 +-------+--- A --+--------+
+                 |       |        |        |
+Track chunk 1: [ON1]...[ON2]...[OFF1]...[OFF2]
+Track chunk 2: (ON3)...(OFF3).................
+                 |        |
+                 +-- B ---+</code></pre>
+</p>
+<p>
+So chords (A and B) will be constructed only from notes within the same events collection.
+<code>[...]</code> and <code>(...)</code> denote two different instances of <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>.
+</p>
+<p>
+But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">AllEventsCollections</a> as the context, we&apos;ll get a single chord:
+</p>
+<p>
+<pre><code>               +-----+-------+--------+--------+
+               |     |       |        |        |
+Track chunk 1: |   [ON1]...[ON2]...[OFF1]...[OFF2]
+Track chunk 2: |   [ON3]...[OFF3].................
+               |     |        |
+               +-----+--------+</code></pre>
+</p>
+<p>
+So a chord can be constructed from notes within different events collections.
+</p>
+</div>
   <h3 id="fields">Fields
   </h3>
   <table class="table table-bordered table-striped table-condensed">
@@ -121,6 +162,11 @@ in one events collection.
       </tr>
     </tbody>
   </thead></thead></table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html">ChordsManagingUtilities</a></div>
+  </div>
 </article>
           </div>
           

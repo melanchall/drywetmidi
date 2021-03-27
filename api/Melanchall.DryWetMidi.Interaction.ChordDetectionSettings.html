@@ -150,6 +150,10 @@ Gets or sets a value defining a context to search chords within. The default val
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_ChordSearchContext_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+See Remarks section of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html">ChordSearchContext</a> enum.
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -217,6 +221,52 @@ notes is less than this value, they won&apos;t make up a chord. The default valu
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_NotesMinCount_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Let&apos;s take a look at the example:</p>
+<p>
+<pre><code>...###...
+...#####.
+.....###.</code></pre>
+</p>
+<p>
+So we have three notes (represented by <code>#</code> symbol). For simplicity we&apos;ll assume that
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_NotesTolerance">NotesTolerance</a> is <code>0</code> (default value) and every character occupies 1 unit
+of time. If we set notes min count to <code>1</code> (which is default value), we&apos;ll get two different
+instances of <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>:
+<pre><code>     A
+     |
+...[###]...
+...[#####].
+.....(###).
+       |
+       B</code></pre>
+<code>[...]</code> and <code>(...)</code> denote two different chords (A and B).
+</p>
+<p>
+If we set notes min count to <code>2</code>, we&apos;ll get only one chord:
+<pre><code>          A
+          |
+      +---+---+
+      |       |
+...[###]...   |
+...[#####].   |
+      |       |
+      +-------+
+
+.....###...</code></pre>
+Last note will not be turned into a chord because count of notes for a chord will be <code>1</code>
+which is less than the specified minimum count.
+</p>
+<p>
+With minimum count of notes of <code>3</code> we&apos;ll get no chords:
+<pre><code>...###...
+...#####.
+.....###.</code></pre>
+First possible chord will contain two notes and second chord will contain one note. In both cases
+count of notes is less than the specified minimum count.
+</p>
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -258,6 +308,59 @@ Notes within this tolerance will be included in a chord. The default value is <c
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_NotesTolerance_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Let&apos;s take a look at the example:</p>
+<p>
+<pre><code>...###...
+....#####
+.....###.</code></pre>
+</p>
+<p>
+So we have three notes (represented by <code>#</code> symbol). Every character occupies 1 unit of time.
+If we set notes tolerance to <code>0</code> (which is default value), we&apos;ll get three different instances of
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>:
+<pre><code>     A
+     |
+...[###]...
+       B
+       |
+....(#####)
+.....{###}.
+       |
+       C</code></pre>
+<code>[...]</code>, <code>(...)</code> and <code>{...}</code> denote three different chords (A, B and C).
+</p>
+<p>
+If we set notes tolerance to <code>1</code>, we&apos;ll get two chords:
+<pre><code>          A
+          |
+      +---+---+
+      |       |
+...[###]...   |
+....[#####]   |
+      |       |
+      +-------+
+
+.....{###}.
+       |
+       B</code></pre>
+</p>
+<p>
+With tolerance of <code>2</code> we&apos;ll finally get a single chord:
+<pre><code>          A
+          |
+      +---+---+
+      |       |
+...[###]...   |
+      |       |
+....[#####]   |
+      |       |
+.....[###].   |
+      |       |
+      +-------+</code></pre>
+</p>
+</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -273,6 +376,10 @@ Notes within this tolerance will be included in a chord. The default value is <c
       </tr>
     </tbody>
   </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html">ChordsManagingUtilities</a></div>
+  </div>
 </article>
           </div>
           

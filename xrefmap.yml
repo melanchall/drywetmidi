@@ -13418,6 +13418,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.TickGenerator.Stop
   nameWithType: TickGenerator.Stop
+- uid: Melanchall.DryWetMidi.Devices.TickGenerator.TickGenerated
+  name: TickGenerated
+  href: api/Melanchall.DryWetMidi.Devices.TickGenerator.html#Melanchall_DryWetMidi_Devices_TickGenerator_TickGenerated
+  commentId: E:Melanchall.DryWetMidi.Devices.TickGenerator.TickGenerated
+  fullName: Melanchall.DryWetMidi.Devices.TickGenerator.TickGenerated
+  nameWithType: TickGenerator.TickGenerated
 - uid: Melanchall.DryWetMidi.Devices.Volume
   name: Volume
   href: api/Melanchall.DryWetMidi.Devices.Volume.html

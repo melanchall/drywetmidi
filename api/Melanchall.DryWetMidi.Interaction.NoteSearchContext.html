@@ -93,6 +93,50 @@ Defines a context to search notes within.
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public enum NoteSearchContext</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_NoteSearchContext_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+<p>To understand what context means let&apos;s take a look at following events sequence
+within two track chunks:</p>
+<p>
+<pre><code>Track chunk 1: ON1..............OFF1...
+Track chunk 2: .....ON2...OFF2.........</code></pre>
+</p>
+<p>where <code>ON</code> and <code>OFF</code> means Note On and Note Off events correspondingly
+with the same note number and channel; <code>.</code> is any other event. We will assume that
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">FirstNoteOn</a> used to search a note&apos;s start.</p>
+<p>
+If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_SingleEventsCollection">SingleEventsCollection</a> as the context, notes will be constructed in
+following way:
+</p>
+<p>
+<pre><code>                 +-------------------+
+                 |                   |
+Track chunk 1: [ON1]..............[OFF1]...
+Track chunk 2: .....(ON2)...(OFF2).........
+                      |        |
+                      +--------+</code></pre>
+</p>
+<p>
+So every Note On event will be combined with Note Off one within the same events collection.
+<code>[...]</code> and <code>(...)</code> denote two different instances of <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>.
+</p>
+<p>
+But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_AllEventsCollections">AllEventsCollections</a> as the context, notes will be constructed in
+a new way:
+</p>
+<p>
+<pre><code>                 +-------------+
+                 |             |
+Track chunk 1: [ON1]...........|..(OFF1)...
+Track chunk 2: .....(ON2)...[OFF2]...|.....
+                      |              |
+                      +--------------+</code></pre>
+</p>
+<p>
+So Note On event can be combined with Note Off one within another events collection, i.e.
+ends of a note can be placed in different events collections.
+</p>
+</div>
   <h3 id="fields">Fields
   </h3>
   <table class="table table-bordered table-striped table-condensed">
@@ -121,6 +165,11 @@ in one events collection.
       </tr>
     </tbody>
   </thead></thead></table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_NoteSearchContext_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html">NotesManagingUtilities</a></div>
+  </div>
 </article>
           </div>
           
