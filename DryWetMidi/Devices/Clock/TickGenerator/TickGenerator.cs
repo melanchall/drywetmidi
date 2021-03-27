@@ -9,7 +9,10 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Events
 
-        internal event EventHandler TickGenerated;
+        /// <summary>
+        /// Occurs on tick generator's tick.
+        /// </summary>
+        public event EventHandler TickGenerated;
 
         #endregion
 
