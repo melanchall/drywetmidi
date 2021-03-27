@@ -17,7 +17,7 @@ You can split MIDI file in different ways using extension methods from the [Midi
 
 ## SplitByNotes
 
-[SplitByNotes](xref:Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByNotes(Melanchall.DryWetMidi.Core.MidiFile)) method splits MIDI file by notes. Note events will be separated by note number and copied to corresponding new files. All other channel events, meta and system exclusive events will be copied to all the new files. Non-track chunks will not be copied to any of the new files. The image below illustrates splitting by notes:
+[SplitByNotes](xref:Melanchall.DryWetMidi.Tools.MidiFileSplitter.SplitByNotes*) method splits MIDI file by notes. Note events will be separated by note number and copied to corresponding new files. All other channel events, meta and system exclusive events will be copied to all the new files. Non-track chunks will not be copied to any of the new files. The image below illustrates splitting by notes:
 
 ![Split MIDI file by notes](images/MidiFileSplitter/SplitByNotes.png)
 
