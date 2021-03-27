@@ -6,6 +6,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Settings which define how notes should be detected and built.
     /// </summary>
+    /// <seealso cref="NotesManagingUtilities"/>
     public sealed class NoteDetectionSettings
     {
         #region Fields
