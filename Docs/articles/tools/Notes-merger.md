@@ -20,7 +20,7 @@ var mergedNotes = notesMerger.Merge(
     });
 ```
 
-Note that notes obtained via [GetNotes](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.MidiFile)) are detached from the file so if you call `GetNotes` on the file again, you will get original unmerged notes. To update notes in the file or specific track chunk you should use [NotesManager](xref:Melanchall.DryWetMidi.Interaction.NotesManager).
+Note that notes obtained via [GetNotes](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes*) are detached from the file so if you call `GetNotes` on the file again, you will get original unmerged notes. To update notes in the file or specific track chunk you should use [NotesManager](xref:Melanchall.DryWetMidi.Interaction.NotesManager).
 
 Also there are useful methods inside [NotesMergerUtilities](xref:Melanchall.DryWetMidi.Tools.NotesMergerUtilities) class that allows quickly merge nearby notes inside [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) or [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) without messing with updating notes via `NotesManager`. Example above can be rewritten to the following code:
 
