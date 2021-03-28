@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Fields
 
-        private static readonly Dictionary<int, Octave> Cache = new Dictionary<int, Octave>();
+        private static readonly ConcurrentDictionary<int, Octave> Cache = new ConcurrentDictionary<int, Octave>();
 
         private readonly Dictionary<NoteName, Note> _notes;
 
@@ -185,7 +186,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             Octave octave;
             if (!Cache.TryGetValue(octaveNumber, out octave))
-                Cache.Add(octaveNumber, octave = new Octave(octaveNumber));
+                Cache.TryAdd(octaveNumber, octave = new Octave(octaveNumber));
 
             return octave;
         }

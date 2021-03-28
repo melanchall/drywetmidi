@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
@@ -206,6 +207,35 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 },
                 sortedNotes,
                 "Notes are sorted incorrectly.");
+        }
+
+        [Test]
+        public void GetNotesFromDifferentThreads()
+        {
+            var noteNumbers = SevenBitNumber.Values.ToArray();
+            var reversedNoteNumbers = SevenBitNumber.Values.Reverse().ToArray();
+
+            var thread1 = new Thread(() =>
+            {
+                foreach (var noteNumber in noteNumbers)
+                {
+                    var note = Note.Get(noteNumber);
+                }
+            });
+
+            var thread2 = new Thread(() =>
+            {
+                foreach (var noteNumber in reversedNoteNumbers)
+                {
+                    var note = Note.Get(noteNumber);
+                }
+            });
+
+            thread1.Start();
+            thread2.Start();
+
+            thread1.Join();
+            thread2.Join();
         }
 
         #endregion

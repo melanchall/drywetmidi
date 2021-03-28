@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
 
@@ -25,6 +26,35 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var parsedOctave = Octave.Parse(input);
             var expectedOctave = Octave.Get(expectedOctaveNumber);
             Assert.AreEqual(expectedOctave, parsedOctave, "Parsed octave is invalid.");
+        }
+
+        [Test]
+        public void GetOctavesFromDifferentThreads()
+        {
+            var minOctaveNumber = Octave.MinOctaveNumber;
+            var maxOctaveNumber = Octave.MinOctaveNumber;
+
+            var thread1 = new Thread(() =>
+            {
+                for (var octaveNumber = minOctaveNumber; octaveNumber <= maxOctaveNumber; octaveNumber++)
+                {
+                    var octave = Octave.Get(octaveNumber);
+                }
+            });
+
+            var thread2 = new Thread(() =>
+            {
+                for (var octaveNumber = maxOctaveNumber; octaveNumber >= minOctaveNumber; octaveNumber--)
+                {
+                    var octave = Octave.Get(octaveNumber);
+                }
+            });
+
+            thread1.Start();
+            thread2.Start();
+
+            thread1.Join();
+            thread2.Join();
         }
 
         #endregion
