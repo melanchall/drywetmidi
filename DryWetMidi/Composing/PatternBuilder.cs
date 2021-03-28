@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Composing
     /// </summary>
     /// <example>
     /// <para>Following example shows how to create first four bars of Beethoven's 'Moonlight Sonata':</para>
-    /// <code>
+    /// <code language="csharp">
     /// // Define a chord for bass part which is just an octave
     /// var bassChord = new[] { Interval.Twelve };
     /// 

@@ -460,6 +460,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Converts the value of a <see cref="Interval"/> to a <see cref="int"/>.
         /// </summary>
         /// <param name="interval"><see cref="Interval"/> object to convert to an <see cref="int"/>.</param>
+        /// <returns><paramref name="interval"/> represented as <see cref="int"/>.</returns>
         public static implicit operator int(Interval interval)
         {
             return interval.HalfSteps;
@@ -469,6 +470,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Converts the value of a <see cref="SevenBitNumber"/> to a <see cref="Interval"/>.
         /// </summary>
         /// <param name="interval"><see cref="SevenBitNumber"/> object to convert to an <see cref="Interval"/>.</param>
+        /// <returns><paramref name="interval"/> represented as <see cref="Interval"/>.</returns>
         public static implicit operator Interval(SevenBitNumber interval)
         {
             return GetUp(interval);

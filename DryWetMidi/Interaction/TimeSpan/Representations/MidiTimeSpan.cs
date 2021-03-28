@@ -101,6 +101,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Converts <see cref="long"/> to <see cref="MidiTimeSpan"/>.
         /// </summary>
         /// <param name="timeSpan"><see cref="long"/> to convert to <see cref="MidiTimeSpan"/>.</param>
+        /// <returns><paramref name="timeSpan"/> represented as <see cref="MidiTimeSpan"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="timeSpan"/> is negative.</exception>
         public static explicit operator MidiTimeSpan(long timeSpan)
         {
             return new MidiTimeSpan(timeSpan);
@@ -110,6 +112,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Converts <see cref="MidiTimeSpan"/> to <see cref="long"/>.
         /// </summary>
         /// <param name="timeSpan"><see cref="MidiTimeSpan"/> to convert to <see cref="long"/>.</param>
+        /// <returns><paramref name="timeSpan"/> represented as <see cref="long"/>.</returns>
         public static implicit operator long(MidiTimeSpan timeSpan)
         {
             return timeSpan.TimeSpan;

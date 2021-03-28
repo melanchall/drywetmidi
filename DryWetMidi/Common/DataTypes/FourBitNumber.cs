@@ -4,14 +4,24 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
-    /// Type that is used to represent a four-bit number (0-15).
+    /// Type that is used to represent a four-bit number (0-15; or in binary format 0000-1111).
     /// </summary>
     /// <remarks>
-    /// Four-bit numbers widely used by MIDI protocol as parameters of MIDI events.
-    /// So instead of manipulating built-in C# numeric types (like byte or int) and checking for
-    /// out-of-range errors all validation of numbers in the [0; 15] range happens on data type
-    /// level via casting C# integer values to the <see cref="FourBitNumber"/>.
+    /// Four-bit numbers widely used by MIDI protocol as parameters of MIDI events
+    /// (channel number, for example). Instead of manipulating built-in .NET numeric types
+    /// (like <c>byte</c> or <c>int</c>) and checking for out-of-range errors all validation of numbers
+    /// in the [0; 15] range happens on data type level via casting .NET integer values to
+    /// the <see cref="FourBitNumber"/> (see <see cref="op_Explicit(byte)"/>).
     /// </remarks>
+    /// <example>
+    /// <para>
+    /// For example, to set a note's channel:
+    /// </para>
+    /// <code language="csharp">
+    /// var noteOnEvent = new NoteOnEvent();
+    /// noteOnEvent.Channel = (FourBitNumber)10;
+    /// </code>
+    /// </example>
     public struct FourBitNumber : IComparable<FourBitNumber>, IConvertible
     {
         #region Constants
@@ -112,6 +122,7 @@ namespace Melanchall.DryWetMidi.Common
         /// Converts the value of a <see cref="FourBitNumber"/> to a <see cref="byte"/>.
         /// </summary>
         /// <param name="number"><see cref="FourBitNumber"/> object to convert to a byte value.</param>
+        /// <returns><paramref name="number"/> represented as <see cref="byte"/>.</returns>
         public static implicit operator byte(FourBitNumber number)
         {
             return number._value;
@@ -121,6 +132,8 @@ namespace Melanchall.DryWetMidi.Common
         /// Converts the value of a <see cref="byte"/> to a <see cref="FourBitNumber"/>.
         /// </summary>
         /// <param name="number">Byte value to convert to a <see cref="FourBitNumber"/> object.</param>
+        /// <returns><paramref name="number"/> represented as <see cref="FourBitNumber"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is out of [0; 15] range.</exception>
         public static explicit operator FourBitNumber(byte number)
         {
             return new FourBitNumber(number);

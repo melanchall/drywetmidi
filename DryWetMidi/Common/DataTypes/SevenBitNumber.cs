@@ -4,14 +4,36 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
-    /// Type that is used to represent a seven-bit number (0-127).
+    /// Type that is used to represent a seven-bit number (0-127; or in binary format 0000000-1111111).
     /// </summary>
     /// <remarks>
-    /// Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events.
-    /// So instead of manipulating built-in C# numeric types (like byte or int) and checking for
-    /// out-of-range errors all validation of numbers in the [0; 127] range happens on data type
-    /// level via casting C# integer values to the <see cref="SevenBitNumber"/>.
+    /// <para>
+    /// Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events (note number or
+    /// velocity). Instead of manipulating built-in .NET numeric types (like <c>byte</c> or <c>int</c>)
+    /// and checking for out-of-range errors all validation of numbers in the [0; 127] range happens
+    /// on data type level via casting .NET integer values to the <see cref="SevenBitNumber"/>
+    /// (see <see cref="op_Explicit(byte)"/>).
+    /// </para>
     /// </remarks>
+    /// <example>
+    /// <para>
+    /// For example, to set a note's number:
+    /// </para>
+    /// <code language="csharp">
+    /// var noteOnEvent = new NoteOnEvent();
+    /// noteOnEvent.NoteNumber = (SevenBitNumber)100;
+    /// </code>
+    /// <para>
+    /// or velocity:
+    /// </para>
+    /// <code>
+    /// var noteOffEvent = new NoteOffEvent(SevenBitNumber.MinValue, (SevenBitNumber)70);
+    /// </code>
+    /// <para>
+    /// where <c>SevenBitNumber.MinValue</c> passed to the <c>noteNumber</c> parameter and
+    /// <c>(SevenBitNumber)70</c> passed to the <c>velocity</c> one.
+    /// </para>
+    /// </example>
     public struct SevenBitNumber : IComparable<SevenBitNumber>, IConvertible
     {
         #region Constants
@@ -112,6 +134,7 @@ namespace Melanchall.DryWetMidi.Common
         /// Converts the value of a <see cref="SevenBitNumber"/> to a <see cref="byte"/>.
         /// </summary>
         /// <param name="number"><see cref="SevenBitNumber"/> object to convert to a byte value.</param>
+        /// <returns><paramref name="number"/> represented as <see cref="byte"/>.</returns>
         public static implicit operator byte(SevenBitNumber number)
         {
             return number._value;
@@ -121,6 +144,8 @@ namespace Melanchall.DryWetMidi.Common
         /// Converts the value of a <see cref="byte"/> to a <see cref="SevenBitNumber"/>.
         /// </summary>
         /// <param name="number">Byte value to convert to a <see cref="SevenBitNumber"/> object.</param>
+        /// <returns><paramref name="number"/> represented as <see cref="SevenBitNumber"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is out of [0; 127] range.</exception>
         public static explicit operator SevenBitNumber(byte number)
         {
             return new SevenBitNumber(number);

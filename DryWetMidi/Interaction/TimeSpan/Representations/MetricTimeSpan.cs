@@ -208,6 +208,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Converts <see cref="TimeSpan"/> to <see cref="MetricTimeSpan"/>.
         /// </summary>
         /// <param name="timeSpan"><see cref="TimeSpan"/> to convert to <see cref="MetricTimeSpan"/>.</param>
+        /// <returns><paramref name="timeSpan"/> represented as <see cref="MetricTimeSpan"/>.</returns>
         public static implicit operator MetricTimeSpan(TimeSpan timeSpan)
         {
             return new MetricTimeSpan(timeSpan);
@@ -217,6 +218,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Converts <see cref="MetricTimeSpan"/> to <see cref="TimeSpan"/>.
         /// </summary>
         /// <param name="timeSpan"><see cref="MetricTimeSpan"/> to convert to <see cref="TimeSpan"/>.</param>
+        /// <returns><paramref name="timeSpan"/> represented as <see cref="TimeSpan"/>.</returns>
         public static implicit operator TimeSpan(MetricTimeSpan timeSpan)
         {
             return timeSpan._timeSpan;
