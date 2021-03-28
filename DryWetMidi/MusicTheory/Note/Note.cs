@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Fields
 
-        private static readonly Dictionary<SevenBitNumber, Note> Cache = new Dictionary<SevenBitNumber, Note>();
+        private static readonly ConcurrentDictionary<SevenBitNumber, Note> Cache = new ConcurrentDictionary<SevenBitNumber, Note>();
 
         #endregion
 
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             Note note;
             if (!Cache.TryGetValue(noteNumber, out note))
-                Cache.Add(noteNumber, note = new Note(noteNumber));
+                Cache.TryAdd(noteNumber, note = new Note(noteNumber));
 
             return note;
         }
