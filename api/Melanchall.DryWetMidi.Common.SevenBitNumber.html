@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Common_SevenBitNumber" data-uid="Melanchall.DryWetMidi.Common.SevenBitNumber" class="text-break">Struct SevenBitNumber
   </h1>
   <div class="markdown level0 summary">
-Type that is used to represent a seven-bit number (0-127).
+Type that is used to represent a seven-bit number (0-127; or in binary format 0000000-1111111).
 </div>
   <div class="markdown level0 conceptual"></div>
   <div classs="implements">
@@ -112,11 +112,30 @@ Type that is used to represent a seven-bit number (0-127).
   </div>
   <h5 id="Melanchall_DryWetMidi_Common_SevenBitNumber_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events.
-So instead of manipulating built-in C# numeric types (like byte or int) and checking for
-out-of-range errors all validation of numbers in the [0; 127] range happens on data type
-level via casting C# integer values to the <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.
+<p>
+Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events (note number or
+velocity). Instead of manipulating built-in .NET numeric types (like <code>byte</code> or <code>int</code>)
+and checking for out-of-range errors all validation of numbers in the [0; 127] range happens
+on data type level via casting .NET integer values to the <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>
+(see <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html#Melanchall_DryWetMidi_Common_SevenBitNumber_op_Explicit_System_Byte__Melanchall_DryWetMidi_Common_SevenBitNumber">Explicit(Byte to SevenBitNumber)</a>).
+</p>
 </div>
+  <h5 id="Melanchall_DryWetMidi_Common_SevenBitNumber_examples"><strong>Examples</strong></h5>
+  
+<p>
+For example, to set a note&apos;s number:
+</p>
+<pre><code class="lang-csharp">var noteOnEvent = new NoteOnEvent();
+noteOnEvent.NoteNumber = (SevenBitNumber)100;</code></pre>
+<p>
+or velocity:
+</p>
+<pre><code>var noteOffEvent = new NoteOffEvent(SevenBitNumber.MinValue, (SevenBitNumber)70);</code></pre>
+<p>
+where <code>SevenBitNumber.MinValue</code> passed to the <code>noteNumber</code> parameter and
+<code>(SevenBitNumber)70</code> passed to the <code>velocity</code> one.
+</p>
+
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Common_SevenBitNumber__ctor_" data-uid="Melanchall.DryWetMidi.Common.SevenBitNumber.#ctor*"></a>
@@ -562,7 +581,22 @@ Converts the value of a <a class="xref" href="https://docs.microsoft.com/dotnet/
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
-        <td></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">number</code> represented as <a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">number</code> is out of [0; 127] range.</td>
       </tr>
     </tbody>
   </table>
@@ -604,7 +638,7 @@ Converts the value of a <a class="xref" href="Melanchall.DryWetMidi.Common.Seven
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
-        <td></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">number</code> represented as <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>.</td>
       </tr>
     </tbody>
   </table>
