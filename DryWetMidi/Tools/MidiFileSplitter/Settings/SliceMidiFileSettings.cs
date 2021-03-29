@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -45,6 +46,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// to mark parts of split file.
         /// </summary>
         public SliceMidiFileMarkers Markers { get; set; }
+
+        public NoteDetectionSettings NoteDetectionSettings { get; set; }
 
         #endregion
     }

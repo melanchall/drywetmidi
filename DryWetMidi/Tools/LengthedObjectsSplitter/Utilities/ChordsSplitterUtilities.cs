@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="step">Step to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -42,13 +42,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByStep(chords, step, tempoMap), settings);
+            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitByStep(chords, step, tempoMap));
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="step">Step to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsByStep(step, tempoMap, settings);
+                trackChunk.SplitChordsByStep(step, tempoMap, chordDetectionSettings);
             }
         }
 
@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
         /// <param name="step">Step to split chords by.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -113,13 +113,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, ChordDetectionSettings settings = null)
+        public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(step), step);
 
             var tempoMap = midiFile.GetTempoMap();
-            midiFile.GetTrackChunks().SplitChordsByStep(step, tempoMap, settings);
+            midiFile.GetTrackChunks().SplitChordsByStep(step, tempoMap, chordDetectionSettings);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partsNumber">The number of parts to split chords into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -147,14 +147,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByPartsNumber(chords, partsNumber, lengthType, tempoMap), settings);
+            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitByPartsNumber(chords, partsNumber, lengthType, tempoMap));
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partsNumber">The number of parts to split chords into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -182,7 +182,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static void SplitChordsByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, settings);
+                trackChunk.SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, chordDetectionSettings);
             }
         }
 
@@ -205,11 +205,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
         /// <param name="partsNumber">The number of parts to split chords into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, ChordDetectionSettings settings = null)
+        public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -217,7 +217,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var tempoMap = midiFile.GetTempoMap();
 
-            midiFile.GetTrackChunks().SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, settings);
+            midiFile.GetTrackChunks().SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, chordDetectionSettings);
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="grid">Grid to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -241,13 +241,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitByGrid(chords, grid, tempoMap), settings);
+            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitByGrid(chords, grid, tempoMap));
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split chords in.</param>
         /// <param name="grid">Grid to split chords by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -272,7 +272,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -280,7 +280,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsByGrid(grid, tempoMap, settings);
+                trackChunk.SplitChordsByGrid(grid, tempoMap, chordDetectionSettings);
             }
         }
 
@@ -308,7 +308,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split chords at.</param>
         /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -324,14 +324,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, distance, from, tempoMap), settings);
+            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitAtDistance(chords, distance, from, tempoMap));
         }
 
         /// <summary>
@@ -342,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split chords at.</param>
         /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -358,7 +358,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -367,7 +367,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsAtDistance(distance, from, tempoMap, settings);
+                trackChunk.SplitChordsAtDistance(distance, from, tempoMap, chordDetectionSettings);
             }
         }
 
@@ -378,7 +378,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split chords in.</param>
         /// <param name="distance">Distance to split chords at.</param>
         /// <param name="from">Point of a chord <paramref name="distance"/> should be measured from.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -391,14 +391,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, ChordDetectionSettings settings = null)
+        public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
 
             var tempoMap = midiFile.GetTempoMap();
-            midiFile.GetTrackChunks().SplitChordsAtDistance(distance, from, tempoMap, settings);
+            midiFile.GetTrackChunks().SplitChordsAtDistance(distance, from, tempoMap, chordDetectionSettings);
         }
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a chord's length should be processed according to.</param>
         /// <param name="from">Point of a chord distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -435,7 +435,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -447,7 +447,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, (splitter, chords) => splitter.SplitAtDistance(chords, ratio, lengthType, from, tempoMap), settings);
+            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitAtDistance(chords, ratio, lengthType, from, tempoMap));
         }
 
         /// <summary>
@@ -460,7 +460,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a chord's length should be processed according to.</param>
         /// <param name="from">Point of a chord distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -484,7 +484,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)
+        public static void SplitChordsAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -498,7 +498,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitChordsAtDistance(ratio, lengthType, from, tempoMap, settings);
+                trackChunk.SplitChordsAtDistance(ratio, lengthType, from, tempoMap, chordDetectionSettings);
             }
         }
 
@@ -511,7 +511,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="ratio">Ratio of a chord's length to split by. Valid values are from 0 to 1.</param>
         /// <param name="lengthType">The type a chord's length should be processed according to.</param>
         /// <param name="from">Point of a chord distance should be measured from.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
@@ -525,7 +525,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, ChordDetectionSettings settings = null)
+        public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, ChordDetectionSettings chordDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -537,12 +537,12 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
 
             var tempoMap = midiFile.GetTempoMap();
-            midiFile.GetTrackChunks().SplitChordsAtDistance(ratio, lengthType, from, tempoMap, settings);
+            midiFile.GetTrackChunks().SplitChordsAtDistance(ratio, lengthType, from, tempoMap, chordDetectionSettings);
         }
 
-        private static void SplitTrackChunkChords(TrackChunk trackChunk, Func<ChordsSplitter, IEnumerable<Chord>, IEnumerable<Chord>> splitOperation, ChordDetectionSettings settings)
+        private static void SplitTrackChunkChords(TrackChunk trackChunk, ChordDetectionSettings chordDetectionSettings, Func<ChordsSplitter, IEnumerable<Chord>, IEnumerable<Chord>> splitOperation)
         {
-            using (var chordsManager = trackChunk.ManageChords(settings))
+            using (var chordsManager = trackChunk.ManageChords(chordDetectionSettings))
             {
                 var chords = chordsManager.Chords;
 

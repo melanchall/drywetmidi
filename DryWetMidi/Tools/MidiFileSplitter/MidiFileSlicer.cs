@@ -230,25 +230,19 @@ namespace Melanchall.DryWetMidi.Tools
 
                 //
 
-                if (isPartEmpty && i == _timedEventsHolders.Length - 1 && emptyPartMarkerEventFactory != null)
-                {
-                    takenTimedEvents.Insert(0, new TimedEvent(emptyPartMarkerEventFactory(), preserveTimes ? _lastTime : 0));
-                    newEventsStartIndex++;
-                }
-
-                if (partStartMarkerEventFactory != null)
-                {
-                    takenTimedEvents.Insert(0, new TimedEvent(partStartMarkerEventFactory(), preserveTimes ? _lastTime : 0));
-                    newEventsStartIndex++;
-                }
-
-                if (partEndMarkerEventFactory != null)
-                    takenTimedEvents.Add(new TimedEvent(partEndMarkerEventFactory(), endTime));
+                if (!preserveTimes)
+                    MoveEventsToStart(takenTimedEvents, newEventsStartIndex, _lastTime);
 
                 //
 
-                if (!preserveTimes)
-                    MoveEventsToStart(takenTimedEvents, newEventsStartIndex, _lastTime);
+                if (isPartEmpty && i == _timedEventsHolders.Length - 1 && emptyPartMarkerEventFactory != null)
+                    takenTimedEvents.Insert(0, new TimedEvent(emptyPartMarkerEventFactory(), preserveTimes ? _lastTime : 0));
+
+                if (partStartMarkerEventFactory != null)
+                    takenTimedEvents.Insert(0, new TimedEvent(partStartMarkerEventFactory(), preserveTimes ? _lastTime : 0));
+
+                if (partEndMarkerEventFactory != null)
+                    takenTimedEvents.Add(new TimedEvent(partEndMarkerEventFactory(), preserveTimes ? endTime : endTime - _lastTime));
 
                 //
 

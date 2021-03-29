@@ -36,7 +36,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
         private static void AreEqual(TimedEvent expectedTimedEvent, TimedEvent actualTimedEvent, bool compareDeltaTimes, long timesEpsilon, string message)
         {
-            Assert.IsTrue(Math.Abs(expectedTimedEvent.Time - actualTimedEvent.Time) <= timesEpsilon, $"{message} Time is invalid.");
+            Assert.IsTrue(
+                Math.Abs(expectedTimedEvent.Time - actualTimedEvent.Time) <= timesEpsilon,
+                $"{message} Time is invalid ({expectedTimedEvent.Time}+-0 expected, but was {actualTimedEvent.Time}).");
 
             string eventsEqualityCheckMessage;
             Assert.IsTrue(
@@ -71,10 +73,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
             while (expectedTimedObjectsEnumerator.MoveNext() && actualTimedObjectsEnumerator.MoveNext())
             {
-                var expectedChord = expectedTimedObjectsEnumerator.Current;
-                var actualChord = actualTimedObjectsEnumerator.Current;
+                var expectedTimedObject = expectedTimedObjectsEnumerator.Current;
+                var actualTimedObject = actualTimedObjectsEnumerator.Current;
 
-                AreEqual(expectedChord, actualChord, compareDeltaTimes, timesEpsilon, $"{message} Object {i} is invalid.");
+                AreEqual(expectedTimedObject, actualTimedObject, compareDeltaTimes, timesEpsilon, $"{message} Object {i} is invalid.");
 
                 i++;
             }

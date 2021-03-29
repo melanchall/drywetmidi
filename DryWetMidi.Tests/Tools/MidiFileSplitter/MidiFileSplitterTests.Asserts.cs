@@ -19,8 +19,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             string message)
         {
             MidiAsserts.AreEqual(
-                actualTimedEvents,
                 expectedTimedEvents,
+                actualTimedEvents,
                 false,
                 0,
                 message);
