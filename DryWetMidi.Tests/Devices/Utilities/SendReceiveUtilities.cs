@@ -90,6 +90,30 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        public static void CompareReceivedEvents(
+            IReadOnlyList<ReceivedEvent> receivedEvents,
+            IReadOnlyList<ReceivedEvent> expectedReceivedEvents,
+            TimeSpan maximumEventSendReceiveDelay)
+        {
+            for (var i = 0; i < expectedReceivedEvents.Count; i++)
+            {
+                var receivedEvent = receivedEvents[i];
+                var expectedReceivedEvent = expectedReceivedEvents[i];
+
+                MidiAsserts.AreEventsEqual(
+                    expectedReceivedEvent.Event,
+                    receivedEvent.Event,
+                    false,
+                    $"Received event ({receivedEvent.Event}) doesn't match the expected one ({expectedReceivedEvent.Event}).");
+
+                var delay = (expectedReceivedEvent.Time - receivedEvent.Time).Duration();
+                Assert.LessOrEqual(
+                    delay,
+                    maximumEventSendReceiveDelay,
+                    $"Event was received too late (at {receivedEvent.Time} instead of {expectedReceivedEvent.Time}). Delay is too big.");
+            }
+        }
+
         public static void WarmUpDevice(OutputDevice outputDevice)
         {
             var eventsToSend = Enumerable.Range(0, 100)

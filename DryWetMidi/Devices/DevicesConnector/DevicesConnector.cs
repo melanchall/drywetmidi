@@ -64,6 +64,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public bool AreDevicesConnected { get; private set; }
 
+        public DevicesConnectorEventCallback EventCallback { get; set; }
+
         #endregion
 
         #region Methods
@@ -91,6 +93,16 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
         {
+            if (!AreDevicesConnected)
+                return;
+
+            var inputMidiEvent = e.Event;
+            var eventCallback = EventCallback;
+
+            var midiEvent = eventCallback == null ? inputMidiEvent : eventCallback(inputMidiEvent);
+            if (midiEvent == null)
+                return;
+
             foreach (var outputDevice in OutputDevices)
             {
                 if (AreDevicesConnected)
