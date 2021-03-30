@@ -511,7 +511,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (settings.SplitNotes)
             {
                 midiFile = midiFile.Clone();
-                midiFile.SplitNotesByGrid(grid);
+                midiFile.SplitNotesByGrid(grid, settings.NoteDetectionSettings);
             }
 
             return midiFile;

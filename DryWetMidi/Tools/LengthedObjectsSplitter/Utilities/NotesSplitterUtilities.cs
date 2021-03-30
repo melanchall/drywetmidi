@@ -286,14 +286,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="grid">Grid to split notes by.</param>
         /// <exception cref="ArgumentNullException"><paramref name="grid"/> is <c>null</c>.</exception>
-        public static void SplitNotesByGrid(this MidiFile midiFile, IGrid grid)
+        public static void SplitNotesByGrid(this MidiFile midiFile, IGrid grid, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
 
             var tempoMap = midiFile.GetTempoMap();
 
-            midiFile.GetTrackChunks().SplitNotesByGrid(grid, tempoMap);
+            midiFile.GetTrackChunks().SplitNotesByGrid(grid, tempoMap, noteDetectionSettings);
         }
 
         /// <summary>
