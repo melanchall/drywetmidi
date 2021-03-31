@@ -5,8 +5,27 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Devices
 {
     /// <summary>
-    /// Provides a way to connect an input MIDI device to an output MIDI device.
+    /// Provides a way to connect an input MIDI device to an output MIDI devices to redirect all
+    /// incoming events from the input device to the output ones.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Following image illustrates what the connection means:
+    /// </para>
+    /// <code>
+    ///                                    ┌───────┐
+    ///                      ┌ >> EVENT >> │ OUT 1 │
+    ///                      │             └───────┘
+    ///                      │
+    /// ┌──────┐             │             ┌───────┐
+    /// │  IN  │ >> EVENT >> ├ >> EVENT >> │ OUT 2 │
+    /// └──────┘             │             └───────┘
+    ///                      │
+    ///                      │             ┌───────┐
+    ///                      └ >> EVENT >> │ OUT 3 │
+    ///                                    └───────┘
+    /// </code>
+    /// </remarks>
     public sealed class DevicesConnector
     {
         #region Constructor
@@ -60,7 +79,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Gets or sets a value indicating whether <see cref="InputDevice"/> currently connected
-        /// to <see cref="OutputDevices"/> or note (i.e. <see cref="Connect"/> method has been called).
+        /// to <see cref="OutputDevices"/> or not (i.e. <see cref="Connect"/> method has been called).
         /// </summary>
         public bool AreDevicesConnected { get; private set; }
 
@@ -71,7 +90,8 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         /// <summary>
-        /// Connects <see cref="InputDevice"/> to <see cref="OutputDevices"/>.
+        /// Connects <see cref="InputDevice"/> to <see cref="OutputDevices"/> so all events coming from
+        /// the input device will be redirected to the output ones.
         /// </summary>
         public void Connect()
         {
@@ -83,7 +103,8 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Disconnects <see cref="InputDevice"/> from <see cref="OutputDevices"/>.
+        /// Disconnects <see cref="InputDevice"/> from <see cref="OutputDevices"/> so events coming from
+        /// the input device will not be redirected to the output ones.
         /// </summary>
         public void Disconnect()
         {

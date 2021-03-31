@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Methods
 
         /// <summary>
-        /// Connects an input device to the specified output device.
+        /// Connects an input device to the specified output devices.
         /// </summary>
         /// <param name="inputDevice">Input MIDI device to connect to <paramref name="outputDevices"/>.</param>
         /// <param name="outputDevices">Output MIDI devices to connect <paramref name="inputDevice"/> to.</param>
