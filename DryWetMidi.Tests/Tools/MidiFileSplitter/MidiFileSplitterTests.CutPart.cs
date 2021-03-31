@@ -118,6 +118,158 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new NoteOnEvent { DeltaTime = 40 }, new NoteOffEvent { DeltaTime = 60 }, new NoteOnEvent(), new NoteOffEvent { DeltaTime = 60 })));
 
+        [Test]
+        public void CutPart_DontSplitNotes_1() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 400 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new NoteOffEvent { DeltaTime = 102 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 300 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new NoteOffEvent { DeltaTime = 2 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false
+            });
+
+        [Test]
+        public void CutPart_DontSplitNotes_2() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 100 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new NoteOffEvent { DeltaTime = 102 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new NoteOffEvent { DeltaTime = 2 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false
+            });
+
+        [Test]
+        public void CutPart_DontSplitNotes_3() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 400 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 70 }, new NoteOffEvent { DeltaTime = 40 }, new NoteOnEvent { DeltaTime = 80 }, new NoteOffEvent { DeltaTime = 40 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 300 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 70 }, new NoteOffEvent { DeltaTime = 60 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false
+            });
+
+        [Test]
+        public void CutPart_DontSplitNotes_4() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 50 }, new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 40 }, new NoteOffEvent { DeltaTime = 60 }, new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 60 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 50 }, new NoteOnEvent(), new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 40 }, new NoteOffEvent { DeltaTime = 60 }, new NoteOnEvent(), new NoteOffEvent { DeltaTime = 60 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false
+            });
+
+        [Test]
+        public void CutPart_DontSplitNotes_PreserveTimes_1() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 400 }, new TextEvent("A") { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new NoteOffEvent { DeltaTime = 102 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 400 }, new TextEvent("A") { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new NoteOffEvent { DeltaTime = 102 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            });
+
+        [Test]
+        public void CutPart_DontSplitNotes_PreserveTimes_2() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 100 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new TextEvent("A") { DeltaTime = 2 }, new NoteOffEvent { DeltaTime = 100 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 99 }, new NoteOffEvent { DeltaTime = 102 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            });
+
+        [Test]
+        public void CutPart_DontSplitNotes_PreserveTimes_3() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 400 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 70 }, new NoteOffEvent { DeltaTime = 40 }, new NoteOnEvent { DeltaTime = 80 }, new NoteOffEvent { DeltaTime = 40 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 400 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 70 }, new NoteOffEvent { DeltaTime = 160 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            });
+
+        [Test]
+        public void CutPart_DontSplitNotes_PreserveTimes_4() => CutPart(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 50 }, new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 40 }, new NoteOffEvent { DeltaTime = 60 }, new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 60 })),
+            partStart: (MidiTimeSpan)100,
+            partLength: (MidiTimeSpan)100,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 50 }, new NoteOffEvent { DeltaTime = 50 }, new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 40 }, new NoteOffEvent { DeltaTime = 60 }, new NoteOnEvent { DeltaTime = 100 }, new NoteOffEvent { DeltaTime = 60 })),
+            settings: new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = true
+            });
+
         #endregion
 
         #region Private methods
@@ -126,9 +278,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             MidiFile midiFile,
             ITimeSpan partStart,
             ITimeSpan partLength,
-            MidiFile expectedMidiFile)
+            MidiFile expectedMidiFile,
+            SliceMidiFileSettings settings = null)
         {
-            var newMidiFile = midiFile.CutPart(partStart, partLength);
+            var newMidiFile = midiFile.CutPart(partStart, partLength, settings);
             MidiAsserts.AreEqual(expectedMidiFile, newMidiFile, false, "Invalid new MIDI file.");
         }
 

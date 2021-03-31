@@ -373,6 +373,12 @@ namespace Melanchall.DryWetMidi.Tools
                 var mid = slicer.GetNextSlice(times[1], internalSettings);
                 var endPart = slicer.GetNextSlice(Math.Max(times.Last(), midiFile.GetDuration<MidiTimeSpan>()) + 1, internalSettings);
 
+                if (internalSettings.PreserveTimes)
+                {
+                    var partLengthInTicks = times[1] - times[0];
+                    endPart.ProcessTimedEvents(e => e.Time -= partLengthInTicks);
+                }
+
                 var startPartTrackChunksEnumerator = startPart.GetTrackChunks().GetEnumerator();
                 var endPartTrackChunksEnumerator = endPart.GetTrackChunks().GetEnumerator();
                 var notesToSplitDescriptorsEnumerator = notesToSplitDescriptors.GetEnumerator();
