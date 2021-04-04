@@ -70,6 +70,12 @@ steps:
     targetType: 'inline'
     script: docfx Docs/docfx.json
 
+- task: PowerShell@2
+  displayName: Post process docs
+  inputs:
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Post process docs.ps1'
+
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Docs' artifact
   inputs:

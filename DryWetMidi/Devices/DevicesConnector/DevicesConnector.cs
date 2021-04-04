@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// Provides a way to connect an input MIDI device to an output MIDI devices to redirect all
     /// incoming events from the input device to the output ones.
     /// </summary>
-    /// <remarks>
+    /// <example>
     /// <para>
     /// Following image illustrates what the connection means:
     /// </para>
@@ -25,7 +25,12 @@ namespace Melanchall.DryWetMidi.Devices
     ///                      └ >> EVENT >> │ OUT 3 │
     ///                                    └───────┘
     /// </code>
-    /// </remarks>
+    /// <para>
+    /// where <c>IN</c> is an input device (see <see cref="InputDevice"/>); <c>OUT1</c>, <c>OUT2</c>,
+    /// <c>OUT3</c> are output devices (see <see cref="OutputDevice"/>); <c>EVENT</c> is a MIDI event
+    /// which coming from <c>IN</c> and redirected to all connected output devices.
+    /// </para>
+    /// </example>
     public sealed class DevicesConnector
     {
         #region Constructor
