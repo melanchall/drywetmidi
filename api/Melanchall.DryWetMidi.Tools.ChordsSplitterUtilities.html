@@ -133,7 +133,7 @@ from a chord&apos;s start or end.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -162,7 +162,7 @@ from a chord&apos;s start or end.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -199,7 +199,7 @@ at the center of a chord.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -233,7 +233,7 @@ at the center of a chord.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -273,7 +273,7 @@ from a chord&apos;s start or end.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -307,7 +307,7 @@ from a chord&apos;s start or end.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -344,7 +344,7 @@ at the center of a chord.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -383,7 +383,7 @@ at the center of a chord.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -426,7 +426,7 @@ distance from a chord&apos;s start or end.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -460,7 +460,7 @@ distance from a chord&apos;s start or end.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -497,7 +497,7 @@ For example, 0.5 means splitting at the center of a chord.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -536,7 +536,7 @@ For example, 0.5 means splitting at the center of a chord.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -630,7 +630,7 @@ Splits chords contained in the specified <a class="xref" href="Melanchall.DryWet
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -659,7 +659,7 @@ Splits chords contained in the specified <a class="xref" href="Melanchall.DryWet
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -691,7 +691,7 @@ specified grid.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this IEnumerable&lt;TrackChunk&gt; trackChunks, IGrid grid, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByGrid(this IEnumerable&lt;TrackChunk&gt; trackChunks, IGrid grid, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -720,7 +720,7 @@ specified grid.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -752,7 +752,7 @@ parts of the equal length.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -781,7 +781,7 @@ parts of the equal length.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -822,7 +822,7 @@ of parts of the equal length.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -856,7 +856,7 @@ of parts of the equal length.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -900,7 +900,7 @@ specified number of parts of the equal length.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this IEnumerable&lt;TrackChunk&gt; trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByPartsNumber(this IEnumerable&lt;TrackChunk&gt; trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -934,7 +934,7 @@ specified number of parts of the equal length.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -979,7 +979,7 @@ starting from the chord&apos;s start time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this MidiFile midiFile, ITimeSpan step, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1003,7 +1003,7 @@ starting from the chord&apos;s start time.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -1041,7 +1041,7 @@ the chord&apos;s start time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1070,7 +1070,7 @@ the chord&apos;s start time.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>
@@ -1108,7 +1108,7 @@ other starting from the chord&apos;s start time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitChordsByStep(this IEnumerable&lt;TrackChunk&gt; trackChunks, ITimeSpan step, TempoMap tempoMap, ChordDetectionSettings chordDetectionSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1137,7 +1137,7 @@ other starting from the chord&apos;s start time.
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
     </tbody>

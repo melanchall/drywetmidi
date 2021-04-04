@@ -9993,6 +9993,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.Disconnect
   nameWithType: DevicesConnector.Disconnect
+- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.EventCallback
+  name: EventCallback
+  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_EventCallback
+  commentId: P:Melanchall.DryWetMidi.Devices.DevicesConnector.EventCallback
+  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.EventCallback
+  nameWithType: DevicesConnector.EventCallback
+- uid: Melanchall.DryWetMidi.Devices.DevicesConnector.EventCallback*
+  name: EventCallback
+  href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_EventCallback_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.DevicesConnector.EventCallback
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.EventCallback
+  nameWithType: DevicesConnector.EventCallback
 - uid: Melanchall.DryWetMidi.Devices.DevicesConnector.InputDevice
   name: InputDevice
   href: api/Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_InputDevice
@@ -10019,6 +10032,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.DevicesConnector.OutputDevices
   nameWithType: DevicesConnector.OutputDevices
+- uid: Melanchall.DryWetMidi.Devices.DevicesConnectorEventCallback
+  name: DevicesConnectorEventCallback
+  href: api/Melanchall.DryWetMidi.Devices.DevicesConnectorEventCallback.html
+  commentId: T:Melanchall.DryWetMidi.Devices.DevicesConnectorEventCallback
+  fullName: Melanchall.DryWetMidi.Devices.DevicesConnectorEventCallback
+  nameWithType: DevicesConnectorEventCallback
 - uid: Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities
   name: DevicesConnectorUtilities
   href: api/Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.html
@@ -36079,6 +36098,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Tools.MidiFileSplitter
   fullName: Melanchall.DryWetMidi.Tools.MidiFileSplitter
   nameWithType: MidiFileSplitter
+- uid: Melanchall.DryWetMidi.Tools.MidiFileSplitter.CutPart(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.SliceMidiFileSettings)
+  name: CutPart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)
+  href: api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_CutPart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.MidiFileSplitter.CutPart(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.SliceMidiFileSettings)
+  fullName: Melanchall.DryWetMidi.Tools.MidiFileSplitter.CutPart(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.SliceMidiFileSettings)
+  nameWithType: MidiFileSplitter.CutPart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)
+- uid: Melanchall.DryWetMidi.Tools.MidiFileSplitter.CutPart*
+  name: CutPart
+  href: api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_CutPart_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileSplitter.CutPart
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.MidiFileSplitter.CutPart
+  nameWithType: MidiFileSplitter.CutPart
 - uid: Melanchall.DryWetMidi.Tools.MidiFileSplitter.SkipPart(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.SliceMidiFileSettings)
   name: SkipPart(MidiFile, ITimeSpan, SliceMidiFileSettings)
   href: api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SkipPart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_
@@ -36540,18 +36572,18 @@ references:
   commentId: T:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities
   nameWithType: NotesSplitterUtilities
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget)
-  name: SplitNotesAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget)
-  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget)
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget)
-  name: SplitNotesAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget)
-  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(MidiFile, ITimeSpan, LengthedObjectTarget, NoteDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_MidiFile_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.MidiFile, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(MidiFile, Double, TimeSpanType, LengthedObjectTarget, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   name: SplitNotesAtDistance(TrackChunk, ITimeSpan, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
@@ -36564,24 +36596,24 @@ references:
   commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(Melanchall.DryWetMidi.Core.TrackChunk, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(TrackChunk, Double, TimeSpanType, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitNotesAtDistance(IEnumerable<TrackChunk>, ITimeSpan, LengthedObjectTarget, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitNotesAtDistance(IEnumerable(Of TrackChunk), ITimeSpan, LengthedObjectTarget, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable<TrackChunk>, ITimeSpan, LengthedObjectTarget, TempoMap)
-  nameWithType.vb: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable(Of TrackChunk), ITimeSpan, LengthedObjectTarget, TempoMap)
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitNotesAtDistance(IEnumerable<TrackChunk>, Double, TimeSpanType, LengthedObjectTarget, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitNotesAtDistance(IEnumerable(Of TrackChunk), Double, TimeSpanType, LengthedObjectTarget, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable<TrackChunk>, Double, TimeSpanType, LengthedObjectTarget, TempoMap)
-  nameWithType.vb: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable(Of TrackChunk), Double, TimeSpanType, LengthedObjectTarget, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesAtDistance(IEnumerable<TrackChunk>, ITimeSpan, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name.vb: SplitNotesAtDistance(IEnumerable(Of TrackChunk), ITimeSpan, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable<TrackChunk>, ITimeSpan, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
+  nameWithType.vb: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable(Of TrackChunk), ITimeSpan, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesAtDistance(IEnumerable<TrackChunk>, Double, TimeSpanType, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name.vb: SplitNotesAtDistance(IEnumerable(Of TrackChunk), Double, TimeSpanType, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable<TrackChunk>, Double, TimeSpanType, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
+  nameWithType.vb: NotesSplitterUtilities.SplitNotesAtDistance(IEnumerable(Of TrackChunk), Double, TimeSpanType, LengthedObjectTarget, TempoMap, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance*
   name: SplitNotesAtDistance
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesAtDistance_
@@ -36589,27 +36621,27 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesAtDistance
   nameWithType: NotesSplitterUtilities.SplitNotesAtDistance
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.IGrid)
-  name: SplitNotesByGrid(MidiFile, IGrid)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.IGrid)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.IGrid)
-  nameWithType: NotesSplitterUtilities.SplitNotesByGrid(MidiFile, IGrid)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesByGrid(MidiFile, IGrid, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesByGrid(MidiFile, IGrid, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   name: SplitNotesByGrid(TrackChunk, IGrid, TempoMap, NoteDetectionSettings)
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
   commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   nameWithType: NotesSplitterUtilities.SplitNotesByGrid(TrackChunk, IGrid, TempoMap, NoteDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitNotesByGrid(IEnumerable<TrackChunk>, IGrid, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitNotesByGrid(IEnumerable(Of TrackChunk), IGrid, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: NotesSplitterUtilities.SplitNotesByGrid(IEnumerable<TrackChunk>, IGrid, TempoMap)
-  nameWithType.vb: NotesSplitterUtilities.SplitNotesByGrid(IEnumerable(Of TrackChunk), IGrid, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesByGrid(IEnumerable<TrackChunk>, IGrid, TempoMap, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name.vb: SplitNotesByGrid(IEnumerable(Of TrackChunk), IGrid, TempoMap, NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesByGrid(IEnumerable<TrackChunk>, IGrid, TempoMap, NoteDetectionSettings)
+  nameWithType.vb: NotesSplitterUtilities.SplitNotesByGrid(IEnumerable(Of TrackChunk), IGrid, TempoMap, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid*
   name: SplitNotesByGrid
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByGrid_
@@ -36617,27 +36649,27 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByGrid
   nameWithType: NotesSplitterUtilities.SplitNotesByGrid
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType)
-  name: SplitNotesByPartsNumber(MidiFile, Int32, TimeSpanType)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType)
-  nameWithType: NotesSplitterUtilities.SplitNotesByPartsNumber(MidiFile, Int32, TimeSpanType)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesByPartsNumber(MidiFile, Int32, TimeSpanType, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesByPartsNumber(MidiFile, Int32, TimeSpanType, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   name: SplitNotesByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap, NoteDetectionSettings)
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
   commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   nameWithType: NotesSplitterUtilities.SplitNotesByPartsNumber(TrackChunk, Int32, TimeSpanType, TempoMap, NoteDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitNotesByPartsNumber(IEnumerable<TrackChunk>, Int32, TimeSpanType, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitNotesByPartsNumber(IEnumerable(Of TrackChunk), Int32, TimeSpanType, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: NotesSplitterUtilities.SplitNotesByPartsNumber(IEnumerable<TrackChunk>, Int32, TimeSpanType, TempoMap)
-  nameWithType.vb: NotesSplitterUtilities.SplitNotesByPartsNumber(IEnumerable(Of TrackChunk), Int32, TimeSpanType, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesByPartsNumber(IEnumerable<TrackChunk>, Int32, TimeSpanType, TempoMap, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name.vb: SplitNotesByPartsNumber(IEnumerable(Of TrackChunk), Int32, TimeSpanType, TempoMap, NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesByPartsNumber(IEnumerable<TrackChunk>, Int32, TimeSpanType, TempoMap, NoteDetectionSettings)
+  nameWithType.vb: NotesSplitterUtilities.SplitNotesByPartsNumber(IEnumerable(Of TrackChunk), Int32, TimeSpanType, TempoMap, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber*
   name: SplitNotesByPartsNumber
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByPartsNumber_
@@ -36645,27 +36677,27 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByPartsNumber
   nameWithType: NotesSplitterUtilities.SplitNotesByPartsNumber
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)
-  name: SplitNotesByStep(MidiFile, ITimeSpan)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ITimeSpan)
-  nameWithType: NotesSplitterUtilities.SplitNotesByStep(MidiFile, ITimeSpan)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesByStep(MidiFile, ITimeSpan, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesByStep(MidiFile, ITimeSpan, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   name: SplitNotesByStep(TrackChunk, ITimeSpan, TempoMap, NoteDetectionSettings)
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
   commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
   nameWithType: NotesSplitterUtilities.SplitNotesByStep(TrackChunk, ITimeSpan, TempoMap, NoteDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitNotesByStep(IEnumerable<TrackChunk>, ITimeSpan, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitNotesByStep(IEnumerable(Of TrackChunk), ITimeSpan, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: NotesSplitterUtilities.SplitNotesByStep(IEnumerable<TrackChunk>, ITimeSpan, TempoMap)
-  nameWithType.vb: NotesSplitterUtilities.SplitNotesByStep(IEnumerable(Of TrackChunk), ITimeSpan, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name: SplitNotesByStep(IEnumerable<TrackChunk>, ITimeSpan, TempoMap, NoteDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  name.vb: SplitNotesByStep(IEnumerable(Of TrackChunk), ITimeSpan, TempoMap, NoteDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings)
+  nameWithType: NotesSplitterUtilities.SplitNotesByStep(IEnumerable<TrackChunk>, ITimeSpan, TempoMap, NoteDetectionSettings)
+  nameWithType.vb: NotesSplitterUtilities.SplitNotesByStep(IEnumerable(Of TrackChunk), ITimeSpan, TempoMap, NoteDetectionSettings)
 - uid: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep*
   name: SplitNotesByStep
   href: api/Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.html#Melanchall_DryWetMidi_Tools_NotesSplitterUtilities_SplitNotesByStep_
@@ -37110,6 +37142,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.Markers
   nameWithType: SliceMidiFileSettings.Markers
+- uid: Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.NoteDetectionSettings
+  name: NoteDetectionSettings
+  href: api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_NoteDetectionSettings
+  commentId: P:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.NoteDetectionSettings
+  fullName: Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.NoteDetectionSettings
+  nameWithType: SliceMidiFileSettings.NoteDetectionSettings
+- uid: Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.NoteDetectionSettings*
+  name: NoteDetectionSettings
+  href: api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_NoteDetectionSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.NoteDetectionSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.NoteDetectionSettings
+  nameWithType: SliceMidiFileSettings.NoteDetectionSettings
 - uid: Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes
   name: PreserveTimes
   href: api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes

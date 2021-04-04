@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class DevicesConnectorUtilities
+    <title>Delegate DevicesConnectorEventCallback
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class DevicesConnectorUtilities
+    <meta name="title" content="Delegate DevicesConnectorEventCallback
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.56.2.0">
     
@@ -78,61 +78,18 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnectorEventCallback">
   
   
-  <h1 id="Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities" class="text-break">Class DevicesConnectorUtilities
+  <h1 id="Melanchall_DryWetMidi_Devices_DevicesConnectorEventCallback" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnectorEventCallback" class="text-break">Delegate DevicesConnectorEventCallback
   </h1>
-  <div class="markdown level0 summary">
-Provides methods to connect MIDI devices.
-</div>
+  <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">DevicesConnectorUtilities</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Devices.html">Melanchall.DryWetMidi.Devices</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Devices_DevicesConnectorEventCallback_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class DevicesConnectorUtilities</code></pre>
-  </div>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities_Connect_" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_DevicesConnectorUtilities_Connect_Melanchall_DryWetMidi_Devices_IInputDevice_Melanchall_DryWetMidi_Devices_IOutputDevice___" data-uid="Melanchall.DryWetMidi.Devices.DevicesConnectorUtilities.Connect(Melanchall.DryWetMidi.Devices.IInputDevice,Melanchall.DryWetMidi.Devices.IOutputDevice[])">Connect(IInputDevice, IOutputDevice[])</h4>
-  <div class="markdown level1 summary">
-Connects an input device to the specified output devices.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static DevicesConnector Connect(this IInputDevice inputDevice, params IOutputDevice[] outputDevices)</code></pre>
+    <pre><code class="lang-csharp hljs">public delegate MidiEvent DevicesConnectorEventCallback(MidiEvent inputMidiEvent);</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -145,14 +102,9 @@ Connects an input device to the specified output devices.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.IInputDevice.html">IInputDevice</a></td>
-        <td><span class="parametername">inputDevice</span></td>
-        <td>Input MIDI device to connect to <code data-dev-comment-type="paramref" class="paramref">outputDevices</code>.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a>[]</td>
-        <td><span class="parametername">outputDevices</span></td>
-        <td>Output MIDI devices to connect <code data-dev-comment-type="paramref" class="paramref">inputDevice</code> to.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">inputMidiEvent</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -166,30 +118,8 @@ Connects an input device to the specified output devices.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html">DevicesConnector</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
         <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td>
-<p>One of the following errors occured:</p>
-<ul><li><code data-dev-comment-type="paramref" class="paramref">inputDevice</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">outputDevices</code> is <code>null</code>.</li></ul>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">outputDevices</code> contains <code>null</code>.</td>
       </tr>
     </tbody>
   </table>

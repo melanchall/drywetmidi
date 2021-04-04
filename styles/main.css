@@ -506,3 +506,14 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
 .alert-warning h5 {
     color: #ECE208;
 }
+
+pre.text-image {
+    background: transparent;
+    border: none;
+    color: lightgray;
+}
+
+span.outer-block {
+    background: #333;
+    color: #333;
+}
