@@ -9,6 +9,7 @@ trigger:
     - 'DryWetMidi/*'
     - 'Docs/*'
     - 'Resources/CI/build-artifacts-docs.yaml'
+    - 'Resources/Utilities/InlineTextImages/*'
     - 'README.md'
 
 pr: none
@@ -43,12 +44,6 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      #Write-Host "Writing build datetime to site footer..."
-      #$content = Get-Content -Path Docs\docfx.json -Raw
-      #$currentDateTime = Get-Date -Format "MMMM d, yyyy HH:mm:ss"
-      #$content = $content -Replace "{BUILD_DATETIME}",$currentDateTime
-      #Set-Content -Path Docs\docfx.json -Value $content
-      
       Write-Host "Copying README.md as index.md to Docs folder..."
       Copy-Item README.md -Destination Docs\index.md
 
@@ -70,11 +65,12 @@ steps:
     targetType: 'inline'
     script: docfx Docs/docfx.json
 
-- task: PowerShell@2
-  displayName: Post process docs
+- task: DotNetCoreCLI@2
+  displayName: Inline API images
   inputs:
-    targetType: filePath
-    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Post process docs.ps1'
+    command: 'run'
+    arguments: '--configuration $(buildConfiguration) -- $(Build.SourcesDirectory)\Docs\_site\api\images 20'
+    projects: 'Resources/Utilities/InlineTextImages/InlineTextImages/InlineTextImages.csproj'
 
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Docs' artifact

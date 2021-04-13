@@ -4,46 +4,67 @@
     /// Defines how start event of a note should be found in case of overlapping notes with
     /// the same note number and channel. The default value is <see cref="FirstNoteOn"/>.
     /// </summary>
-    /// <remarks>
-    /// <para>To understand how this policy works let's take a look at following events sequence:</para>
-    /// <para><c>ON1...ON2...OFF1...OFF2</c></para>
-    /// <para>where <c>ON</c> and <c>OFF</c> means Note On and Note Off events correspondingly
-    /// with the same note number and channel; <c>.</c> is any other event. So we have two
-    /// overlapped notes here.</para>
+    /// <example>
+    /// <para>
+    /// To understand how this policy works let's take a look at following events sequence:
+    /// </para>
+    /// <para>
+    /// <code language="image">
+    ///  A...B...X...Y
+    /// </code>
+    /// </para>
+    /// <para>
+    /// where <c>A</c> and <c>B</c> mean Note On events, and <c>X</c> and <c>Y</c> mean
+    /// Note Off ones with the same note number and channel; <c>.</c> is any other event. So we
+    /// have two overlapped notes here.
+    /// </para>
     /// <para>
     /// If we use <see cref="FirstNoteOn"/> for the policy, notes will be constructed in
     /// following way:
     /// </para>
     /// <para>
-    /// <code>
-    ///   +----------------+
-    ///   |                |
-    /// [ON1]...(ON2)...[OFF1]...(OFF2)
-    ///           |                 |
-    ///           +-----------------+
+    /// <code language="image">
+    ///  ┌───────┐
+    ///  A...B...X...Y
+    ///      └───────┘
+    /// </code>
+    /// </para>
+    /// <para>
+    /// or, if highlight notes:
+    /// </para>
+    /// <para>
+    /// <code language="image">
+    /// [         ]
+    ///     [         ]
     /// </code>
     /// </para>
     /// <para>
     /// So every Note Off event will be combined with first free Note On event into a note.
-    /// <c>[...]</c> and <c>(...)</c> denote two different instances of <see cref="Note"/>.
     /// </para>
     /// <para>
     /// But if we use <see cref="LastNoteOn"/> value, notes will be constructed in
     /// a new way:
     /// </para>
     /// <para>
-    /// <code>
-    ///   +-------------------------+
-    ///   |                         |
-    /// [ON1]...(ON2)...(OFF1)...[OFF2]
-    ///           |        |
-    ///           +--------+
+    /// <code language="image">
+    ///  ┌───────────┐
+    ///  A...B...X...Y
+    ///      └───┘
+    /// </code>
+    /// </para>
+    /// <para>
+    /// or, if highlight notes:
+    /// </para>
+    /// <para>
+    /// <code language="image">
+    /// [             ]
+    ///     [     ]
     /// </code>
     /// </para>
     /// <para>
     /// So Note Off events will be combined with last free Note On event into a note.
     /// </para>
-    /// </remarks>
+    /// </example>
     /// <seealso cref="NoteDetectionSettings"/>
     /// <seealso cref="NotesManagingUtilities"/>
     public enum NoteStartDetectionPolicy

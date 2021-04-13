@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InlineTextImages", "InlineTextImages\InlineTextImages.csproj", "{FE626B42-C1C8-4215-9386-FD527171CCEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE626B42-C1C8-4215-9386-FD527171CCEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE626B42-C1C8-4215-9386-FD527171CCEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE626B42-C1C8-4215-9386-FD527171CCEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE626B42-C1C8-4215-9386-FD527171CCEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

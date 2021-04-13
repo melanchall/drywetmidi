@@ -5,52 +5,69 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Defines a context to search chords within.
     /// </summary>
-    /// <remarks>
+    /// <example>
     /// <para>To understand what context means let's take a look at following events sequence
     /// within two track chunks:</para>
     /// <para>
-    /// <code>
-    /// Track chunk 1: ON1...ON2...OFF1...OFF2
-    /// Track chunk 2: ON3...OFF3.............
+    /// <code language="image">
+    /// ┌───────────────┐
+    /// │.A...B...X...Y.│
+    /// └───────────────┘
+    /// ┌───────────────┐
+    /// │.C...Z.........│
+    /// └───────────────┘
     /// </code>
     /// </para>
-    /// <para>where <c>ON</c> and <c>OFF</c> means Note On and Note Off events correspondingly
-    /// (with different note number and channel for simplicity); <c>.</c> is any other event.</para>
+    /// <para>
+    /// <para>
+    /// where <c>A</c>, <c>B</c> and <c>C</c> mean Note On events (see <see cref="NoteOnEvent"/>), and
+    /// <c>X</c>, <c>Y</c> and <c>Z</c> mean Note Off ones (see <see cref="NoteOffEvent"/>) with different
+    /// note number and channel for simplicity; <c>.</c> is any other event.
+    /// </para>
+    /// </para>
     /// <para>
     /// If we use <see cref="SingleEventsCollection"/> as the context, chords will be constructed in
     /// following way:
     /// </para>
     /// <para>
-    /// <code>
-    ///                  +-------+--- A --+--------+
-    ///                  |       |        |        |
-    /// Track chunk 1: [ON1]...[ON2]...[OFF1]...[OFF2]
-    /// Track chunk 2: (ON3)...(OFF3).................
-    ///                  |        |
-    ///                  +-- B ---+
+    /// <code language="image">
+    /// ┌ ┌───┬───┬───┐ ┐
+    /// │.A...B...X...Y.│
+    /// └───────────────┘
+    /// ┌───────────────┐
+    /// │.C...Z.........│
+    /// └ └───┘ ────────┘
     /// </code>
     /// </para>
     /// <para>
-    /// So chords (A and B) will be constructed only from notes within the same events collection.
-    /// <c>[...]</c> and <c>(...)</c> denote two different instances of <see cref="Chord"/>.
+    /// or, if highlight all chords:
+    /// </para>
+    /// <para>
+    /// <code language="image">
+    ///  [             ]
+    ///  [     ]
+    /// </code>
+    /// </para>
+    /// <para>
+    /// So chords will be constructed only from notes within the same events collection (track chunk).
     /// </para>
     /// <para>
     /// But if we use <see cref="AllEventsCollections"/> as the context, we'll get a single chord:
     /// </para>
     /// <para>
-    /// <code>
-    ///                +-----+-------+--------+--------+
-    ///                |     |       |        |        |
-    /// Track chunk 1: |   [ON1]...[ON2]...[OFF1]...[OFF2]
-    /// Track chunk 2: |   [ON3]...[OFF3].................
-    ///                |     |        |
-    ///                +-----+--------+
+    /// <code language="image">
+    /// ┌ ┌───┬───┬───┐ ┐
+    /// │.A...B...X...Y.│
+    /// └ │ ─ │ ────────┘
+    /// ┌ │ ─ │ ────────┐
+    /// │.C...Z.........│
+    /// └───────────────┘
     /// </code>
     /// </para>
     /// <para>
     /// So a chord can be constructed from notes within different events collections.
     /// </para>
-    /// </remarks>
+    /// </example>
     /// <seealso cref="ChordDetectionSettings"/>
     /// <seealso cref="ChordsManagingUtilities"/>
     public enum ChordSearchContext
@@ -65,7 +82,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// A chord can be detected within all events collection (<see cref="EventsCollection"/>
         /// or <see cref="TrackChunk"/>) of the source (<see cref="MidiFile"/> for example). It means
-        /// MIDI events that make up a chord can be present in different events collection.
+        /// MIDI events that make up a chord can be present in different events collections.
         /// </summary>
         AllEventsCollections
     }

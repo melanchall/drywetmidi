@@ -12,22 +12,22 @@ namespace Melanchall.DryWetMidi.Devices
     /// <para>
     /// Following image illustrates what the connection means:
     /// </para>
-    /// <code>
-    ///                                    ┌───────┐
-    ///                      ┌ >> EVENT >> │ OUT 1 │
-    ///                      │             └───────┘
-    ///                      │
-    /// ┌──────┐             │             ┌───────┐
-    /// │  IN  │ >> EVENT >> ├ >> EVENT >> │ OUT 2 │
-    /// └──────┘             │             └───────┘
-    ///                      │
-    ///                      │             ┌───────┐
-    ///                      └ >> EVENT >> │ OUT 3 │
-    ///                                    └───────┘
+    /// <code language="image">
+    ///                     ╔══════╗
+    ///              ┌─→─E→─║ OUT1 ║
+    ///              │      ╚══════╝
+    ///              │
+    /// ╔══════╗     │      ╔══════╗
+    /// ║  IN  ║→─E→─┼─→─E→─║ OUT2 ║
+    /// ╚══════╝     │      ╚══════╝
+    ///              │
+    ///              │      ╔══════╗
+    ///              └─→─E→─║ OUT3 ║
+    ///                     ╚══════╝
     /// </code>
     /// <para>
-    /// where <c>IN</c> is an input device (see <see cref="InputDevice"/>); <c>OUT1</c>, <c>OUT2</c>,
-    /// <c>OUT3</c> are output devices (see <see cref="OutputDevice"/>); <c>EVENT</c> is a MIDI event
+    /// where <c>IN</c> is an input device (see <see cref="Devices.InputDevice"/>); <c>OUT1</c>, <c>OUT2</c>,
+    /// <c>OUT3</c> are output devices (see <see cref="OutputDevice"/>); <c>E</c> is a MIDI event
     /// which coming from <c>IN</c> and redirected to all connected output devices.
     /// </para>
     /// </example>

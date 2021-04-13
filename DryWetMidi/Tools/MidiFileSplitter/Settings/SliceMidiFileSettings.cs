@@ -24,78 +24,70 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <example>
         /// <para>
-        /// Take a look at the following file:
+        /// Take a look at the following file which should be split at the time defined by the vertical line:
         /// </para>
         /// <para>
         /// <code language="image">
-        /// ┌───────────────────────┐
-        /// │       A.......B       │
-        /// └───────────────────────┘
-        /// ┌───────────────────────┐
-        /// │   A...B          A..B │
-        /// └───────────────────────┘
-        /// ┌───────────────────────┐
-        /// │     A............B    │
-        /// └───────────────────────┘
+        /// +-------------║-----------+
+        /// |┌────────────║──────────┐|
+        /// |│      [A    ║  B]      │|
+        /// |└───────⁞────║──⁞───────┘|
+        /// |┌───────⁞────║──⁞───────┐|
+        /// |│  [A   B]   ║  ⁞ [A  B]│|
+        /// |└───⁞───⁞────║──⁞──⁞──⁞─┘|
+        /// +----⁞---⁞----║--⁞--⁞--⁞--+
         /// </code>
         /// </para>
         /// <para>
-        /// where <c>A</c> and <c>B</c> mean Note On and Note Off events correspondingly. <c>...</c> symbols
-        /// are drawn to make it more clear what notes we have in each track chunk. Each block on the image
-        /// represents a track chunk.
+        /// where <c>▼</c> and <c>▲</c> mean Note On and Note Off events correspondingly (notes are highlighted
+        /// for convenience). So we have the file with two track chunks here containing some notes.
         /// </para>
         /// <para>
-        /// Now let's imagine the file should be split by the line on image below:
+        /// If <see cref="SplitNotes"/> set to <c>false</c>, we'll get following two new files:
         /// </para>
         /// <para>
         /// <code language="image">
-        /// ┌────────────│──────────┐
-        /// │       A    │  B       │
-        /// └────────────│──────────┘
-        /// ┌────────────│──────────┐
-        /// │   A...B    │     A..B │
-        /// └────────────│──────────┘
-        /// ┌────────────│──────────┐
-        /// │     A      │     B    │
-        /// └────────────│──────────┘
+        /// +----⁞---⁞-----+ ⁞  ⁞  ⁞
+        /// |┌───⁞───⁞────┐| ⁞  ⁞  ⁞
+        /// |│   ⁞   A    │| ⁞  ⁞  ⁞
+        /// |└───⁞───⁞────┘| ⁞  ⁞  ⁞
+        /// |┌───⁞───⁞────┐| ⁞  ⁞  ⁞
+        /// |│  [A   B]   │| ⁞  ⁞  ⁞
+        /// |└───⁞───⁞────┘| ⁞  ⁞  ⁞
+        /// +----⁞---⁞-----+ ⁞  ⁞  ⁞
+        ///      ⁞   ⁞   +---⁞--⁞--⁞--+
+        ///      ⁞   ⁞   |┌──⁞──⁞──⁞─┐|
+        ///      ⁞   ⁞   |│  B  ⁞  ⁞ │|
+        ///      ⁞   ⁞   |└──⁞──⁞──⁞─┘|
+        ///      ⁞   ⁞   |┌──⁞──⁞──⁞─┐|
+        ///      ⁞   ⁞   |│  ⁞ [A  B]│|
+        ///      ⁞   ⁞   |└──⁞──⁞──⁞─┘|
+        ///      ⁞   ⁞   +---⁞--⁞--⁞--+
         /// </code>
         /// </para>
         /// <para>
-        /// If <see cref="SplitNotes"/> set to <c>false</c>, we'll get following two parts:
+        /// So the not within first track chunk just exploded into its Note On and Note Off events placed in
+        /// different files after split. But if <see cref="SplitNotes"/> set to <c>true</c> (which is the default value),
+        /// we'll get following new files:
         /// </para>
         /// <para>
         /// <code language="image">
-        ///       File 1             File 2
-        /// ··················  ················
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │       A    │ ·  · │  B       │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │   A...B    │ ·  · │     A..B │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │     A      │ ·  · │     B    │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// ··················  ················
-        /// </code>
-        /// </para>
-        /// <para>
-        /// But if <see cref="SplitNotes"/> set to <c>true</c>, we'll get following new files:
-        /// </para>
-        /// <para>
-        /// <code language="image">
-        ///       File 1             File 2
-        /// ··················  ················
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │       A....B ·  · A..B       │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │   A...B    │ ·  · │     A..B │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │     A......B ·  · A.....B    │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// ··················  ················
+        /// +----⁞---⁞-----+ ⁞  ⁞  ⁞
+        /// |┌───⁞───⁞────┐| ⁞  ⁞  ⁞
+        /// |│   ⁞  [A    B] ⁞  ⁞  ⁞
+        /// |└───⁞───⁞────┘| ⁞  ⁞  ⁞
+        /// |┌───⁞───⁞────┐| ⁞  ⁞  ⁞
+        /// |│  [A   B]   │| ⁞  ⁞  ⁞
+        /// |└────────────┘| ⁞  ⁞  ⁞
+        /// +--------------+ ⁞  ⁞  ⁞
+        ///              +---⁞--⁞--⁞--+
+        ///              |┌──⁞──⁞──⁞─┐|
+        ///              [A  B] ⁞  ⁞ │|
+        ///              |└─────⁞──⁞─┘|
+        ///              |┌─────⁞──⁞─┐|
+        ///              |│    [A  B]│|
+        ///              |└──────────┘|
+        ///              +------------+
         /// </code>
         /// </para>
         /// <para>
@@ -114,49 +106,46 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <example>
         /// <para>
-        /// Take a look at the following file with two track chunks:
+        /// Take a look at the following file with two track chunks which should be split at the time
+        /// defined by the vertical line:
         /// </para>
         /// <para>
         /// <code language="image">
-        /// ┌───────────────────────┐
-        /// │     E  E           E  │
-        /// └───────────────────────┘
-        /// ┌───────────────────────┐
-        /// │   E      E   E      E │
-        /// └───────────────────────┘
+        /// +-------------║-----------+
+        /// |┌────────────║──────────┐|
+        /// |│     E      ║       E  │|
+        /// |└─────⁞──────║───────⁞──┘|
+        /// |┌─────⁞──────║───────⁞──┐|
+        /// |│     ⁞    E ║ E     ⁞  │|
+        /// |└─────⁞────⁞─║─⁞─────⁞──┘|
+        /// +------⁞----⁞-║-⁞-----⁞---+
         /// </code>
-        /// </para>
         /// <para>
         /// where each <c>E</c> symbol represents a MIDI event.
         /// </para>
-        /// <para>
-        /// Now let's imagine the file should be split as shown on the image below:
-        /// </para>
-        /// <para>
-        /// <code language="image">
-        /// ┌────────────│──────────┐
-        /// │     E  E   │       E  │
-        /// └────────────│──────────┘
-        /// ┌────────────│──────────┐
-        /// │   E      E │ E      E │
-        /// └────────────│──────────┘
-        /// </code>
         /// </para>
         /// <para>
         /// If <see cref="PreserveTimes"/> set to <c>false</c> (which is the default value),
-        /// we'll get following two files:
+        /// we'll get following two new files:
         /// </para>
         /// <para>
         /// <code language="image">
-        ///       File 1             File 2
-        /// ··················  ················
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │     E  E   │ ·  · │       E  │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// · ┌────────────┐ ·  · ┌──────────┐ ·
-        /// · │   E      E │ ·  · │ E      E │ ·
-        /// · └────────────┘ ·  · └──────────┘ ·
-        /// ··················  ················
+        /// +------⁞----⁞--+⁞     ⁞
+        /// |┌─────⁞────⁞─┐|⁞     ⁞
+        /// |│     E    ⁞ │|⁞     ⁞
+        /// |└─────⁞────⁞─┘|⁞     ⁞
+        /// |┌─────⁞────⁞─┐|⁞     ⁞
+        /// |│     ⁞    E │|⁞     ⁞
+        /// |└─────⁞────⁞─┘|⁞     ⁞
+        /// +------⁞----⁞--+⁞     ⁞
+        ///             ⁞+--⁞-----⁞---+
+        ///             ⁞|┌─⁞─────⁞──┐|
+        ///             ⁞|│ ⁞     E  │|
+        ///             ⁞|└─⁞─────⁞──┘|
+        ///             ⁞|┌─⁞─────⁞──┐|
+        ///             ⁞|│ E     ⁞  │|
+        ///             ⁞|└─⁞─────⁞──┘|
+        ///             ⁞+--⁞-----⁞---+
         /// </code>
         /// </para>
         /// <para>
@@ -164,25 +153,22 @@ namespace Melanchall.DryWetMidi.Tools
         /// </para>
         /// <para>
         /// <code language="image">
-        ///       File 1
-        /// ··················
-        /// · ┌────────────┐ ·
-        /// · │     E  E   │ ·
-        /// · └────────────┘ ·
-        /// · ┌────────────┐ ·
-        /// · │   E      E │ ·
-        /// · └────────────┘ ·
-        /// ··················
-        /// 
-        ///             File 2
-        /// ·····························
-        /// · ┌───────────────────────┐ ·
-        /// · │                    E  │ ·
-        /// · └───────────────────────┘ ·
-        /// · ┌───────────────────────┐ ·
-        /// · │              E      E │ ·
-        /// · └───────────────────────┘ ·
-        /// ·····························
+        /// +------⁞----⁞--+⁞     ⁞
+        /// |┌─────⁞────⁞─┐|⁞     ⁞
+        /// |│     E    ⁞ │|⁞     ⁞
+        /// |└──────────⁞─┘|⁞     ⁞
+        /// |┌──────────⁞─┐|⁞     ⁞
+        /// |│          E │|⁞     ⁞
+        /// |└────────────┘|⁞     ⁞
+        /// +--------------+⁞     ⁞
+        /// +---------------⁞-----⁞---+
+        /// |┌──────────────⁞─────⁞──┐|
+        /// |│              ⁞     E  │|
+        /// |└──────────────⁞────────┘|
+        /// |┌──────────────⁞────────┐|
+        /// |│              E        │|
+        /// |└───────────────────────┘|
+        /// +-------------------------+
         /// </code>
         /// </para>
         /// <para>
@@ -204,49 +190,43 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <example>
         /// <para>
-        /// Take a look at the following file with two track chunks:
+        /// Take a look at the following file with two track chunks which should be split at the times
+        /// defined by the vertical lines:
         /// </para>
         /// <para>
         /// <code language="image">
-        /// ┌───────────────────────┐
-        /// │     E  E           E  │
-        /// └───────────────────────┘
-        /// ┌───────────────────────┐
-        /// │   E      E   E      E │
-        /// └───────────────────────┘
+        /// +-------------║-----║-----+
+        /// |┌────────────║─────║────┐|
+        /// |│     E      ║     ║  E │|
+        /// |└─────⁞──────║─────║──⁞─┘|
+        /// |┌─────⁞──────║─────║──⁞─┐|
+        /// |│   E ⁞      ║ E   ║  ⁞ │|
+        /// |└───⁞─⁞──────║─⁞───║──⁞─┘|
+        /// +----⁞-⁞------║-⁞---║--⁞--+
         /// </code>
         /// </para>
         /// <para>
         /// where each <c>E</c> symbol represents a MIDI event.
         /// </para>
         /// <para>
-        /// Now let's imagine the file should be split as shown on the image below:
-        /// </para>
-        /// <para>
-        /// <code language="image">
-        /// ┌────────────│─────│────┐
-        /// │     E  E   │     │ E  │
-        /// └────────────│─────│────┘
-        /// ┌────────────│─────│────┐
-        /// │   E      E │ E   │  E │
-        /// └────────────│─────│────┘
-        /// </code>
-        /// </para>
-        /// <para>
         /// If <see cref="PreserveTrackChunks"/> set to <c>false</c> (which is the default value),
-        /// we'll get following three files:
+        /// we'll get following three new files:
         /// </para>
         /// <para>
         /// <code language="image">
-        ///       File 1                      File 3
-        /// ··················              ··········
-        /// · ┌────────────┐ ·              · ┌────┐ ·
-        /// · │     E  E   │ ·    File 2    · │ E  │ ·
-        /// · └────────────┘ ·  ··········  · └────┘ ·
-        /// · ┌────────────┐ ·  · ┌────┐ ·  · ┌────┐ ·
-        /// · │   E      E │ ·  · │ E  │ ·  · │  E │ ·
-        /// · └────────────┘ ·  · └────┘ ·  · └────┘ ·
-        /// ··················  ··········  ··········
+        /// +----⁞-⁞-------+⁞  +---⁞--+
+        /// |┌───⁞─⁞──────┐|⁞  |┌──⁞─┐|
+        /// |│   ⁞ E      │|⁞  |│  E │|
+        /// |└───⁞─⁞──────┘|⁞  |└──⁞─┘|
+        /// |┌───⁞─⁞──────┐|⁞  +---⁞--+
+        /// |│   E ⁞      │|⁞      ⁞
+        /// |└───⁞─⁞──────┘|⁞      ⁞
+        /// +----⁞-⁞-------+⁞      ⁞
+        ///      ⁞ ⁞     +--⁞---+  ⁞
+        ///      ⁞ ⁞     |┌─⁞──┐|  ⁞
+        ///      ⁞ ⁞     |│ E  │|  ⁞
+        ///      ⁞ ⁞     |└─⁞──┘|  ⁞
+        ///      ⁞ ⁞     +--⁞---+  ⁞
         /// </code>
         /// </para>
         /// <para>
@@ -254,20 +234,26 @@ namespace Melanchall.DryWetMidi.Tools
         /// </para>
         /// <para>
         /// <code language="image">
-        ///       File 1          File 2      File 3
-        /// ··················  ··········  ··········
-        /// · ┌────────────┐ ·  · ┌────┐ ·  · ┌────┐ ·
-        /// · │     E  E   │ ·  · │    │ ·  · │ E  │ ·
-        /// · └────────────┘ ·  · └────┘ ·  · └────┘ ·
-        /// · ┌────────────┐ ·  · ┌────┐ ·  · ┌────┐ ·
-        /// · │   E      E │ ·  · │ E  │ ·  · │  E │ ·
-        /// · └────────────┘ ·  · └────┘ ·  · └────┘ ·
-        /// ··················  ··········  ··········
+        /// +----⁞-⁞-------+⁞  +---⁞--+
+        /// |┌───⁞─⁞──────┐|⁞  |┌──⁞─┐|
+        /// |│   ⁞ E      │|⁞  |│  E │|
+        /// |└───⁞────────┘|⁞  |└────┘|
+        /// |┌───⁞────────┐|⁞  |┌────┐|
+        /// |│   E        │|⁞  |│    │|
+        /// |└────────────┘|⁞  |└────┘|
+        /// +--------------+⁞  +------+
+        ///              +--⁞---+ 
+        ///              |┌─⁞──┐|
+        ///              |│ ⁞  │|
+        ///              |└─⁞──┘|
+        ///              |┌─⁞──┐|
+        ///              |│ E  │|
+        ///              |└────┘|
+        ///              +------+
         /// </code>
         /// </para>
         /// <para>
-        /// So although first track chunk of the second new file is empty, it will be present
-        /// in the file because it's present in the original one.
+        /// So empty track chunks still present in new files because they're present in the original ones.
         /// </para>
         /// </example>
         public bool PreserveTrackChunks { get; set; } = false;
