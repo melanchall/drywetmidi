@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -207,68 +207,27 @@ will be placed in new files at the same absolute times as in the input file.
   <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes_examples">Examples</h5>
   
 <p>
-Take a look at the following file with two track chunks:
+Take a look at the following file with two track chunks which should be split at the time
+defined by the vertical line:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">┌───────────────────────┐
-│     E  E           E  │
-└───────────────────────┘
-┌───────────────────────┐
-│   E      E   E      E │
-└───────────────────────┘</code></pre>
-</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-28a41aecc2f7f709fe8eb71bc8fbc0ed.png" class="text-image" />
 <p>
 where each <code>E</code> symbol represents a MIDI event.
 </p>
-<p>
-Now let&apos;s imagine the file should be split as shown on the image below:
-</p>
-<p>
-<pre class="text-image"><code class="lang-image">┌────────────│──────────┐
-│     E  E   │       E  │
-└────────────│──────────┘
-┌────────────│──────────┐
-│   E      E │ E      E │
-└────────────│──────────┘</code></pre>
 </p>
 <p>
 If <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> set to <code>false</code> (which is the default value),
-we&apos;ll get following two files:
+we&apos;ll get following two new files:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">      File 1             File 2
-<span class="outer-block">··················</span>  <span class="outer-block">················</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │     E  E   │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │       E  │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │   E      E │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │ E      E │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">··················</span>  <span class="outer-block">················</span></code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-ae6efb0fd6bf6d052508aca98b779e96.png" class="text-image" />
 </p>
 <p>
 But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> set to <code>true</code>, we&apos;ll get following new files:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">      File 1
-<span class="outer-block">··················</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │     E  E   │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │   E      E │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>
-<span class="outer-block">··················</span>
-
-            File 2
-<span class="outer-block">·····························</span>
-<span class="outer-block">·</span> ┌───────────────────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │                    E  │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └───────────────────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌───────────────────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │              E      E │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └───────────────────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·····························</span></code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-ad3e268204667109c6506b11b857bb28.png" class="text-image" />
 </p>
 <p>
 So events will not be shifted to the start of a file and will keep their original
@@ -311,62 +270,30 @@ If <code>false</code> used, track chunks without events will be removed from the
   <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks_examples">Examples</h5>
   
 <p>
-Take a look at the following file with two track chunks:
+Take a look at the following file with two track chunks which should be split at the times
+defined by the vertical lines:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">┌───────────────────────┐
-│     E  E           E  │
-└───────────────────────┘
-┌───────────────────────┐
-│   E      E   E      E │
-└───────────────────────┘</code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-8d42330f5471f799eb7df71ca2b8c639.png" class="text-image" />
 </p>
 <p>
 where each <code>E</code> symbol represents a MIDI event.
 </p>
 <p>
-Now let&apos;s imagine the file should be split as shown on the image below:
-</p>
-<p>
-<pre class="text-image"><code class="lang-image">┌────────────│─────│────┐
-│     E  E   │     │ E  │
-└────────────│─────│────┘
-┌────────────│─────│────┐
-│   E      E │ E   │  E │
-└────────────│─────│────┘</code></pre>
-</p>
-<p>
 If <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks">PreserveTrackChunks</a> set to <code>false</code> (which is the default value),
-we&apos;ll get following three files:
+we&apos;ll get following three new files:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">      File 1                      File 3
-<span class="outer-block">··················</span>              <span class="outer-block">··········</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>              <span class="outer-block">·</span> ┌────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │     E  E   │ <span class="outer-block">·</span>    File 2    <span class="outer-block">·</span> │ E  │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">··········</span>  <span class="outer-block">·</span> └────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │   E      E │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │ E  │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │  E │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └────┘ <span class="outer-block">·</span>
-<span class="outer-block">··················</span>  <span class="outer-block">··········</span>  <span class="outer-block">··········</span></code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-f7db9df4584e7f0b816badf92f5e0d56.png" class="text-image" />
 </p>
 <p>
 But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks">PreserveTrackChunks</a> set to <code>true</code>, we&apos;ll get following new files:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">      File 1          File 2      File 3
-<span class="outer-block">··················</span>  <span class="outer-block">··········</span>  <span class="outer-block">··········</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │     E  E   │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │    │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │ E  │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │   E      E │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │ E  │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │  E │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └────┘ <span class="outer-block">·</span>
-<span class="outer-block">··················</span>  <span class="outer-block">··········</span>  <span class="outer-block">··········</span></code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-2a71c3337cac081b6769b77b7d89f9fd.png" class="text-image" />
 </p>
 <p>
-So although first track chunk of the second new file is empty, it will be present
-in the file because it&apos;s present in the original one.
+So empty track chunks still present in new files because they&apos;re present in the original ones.
 </p>
 
   <a id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes_" data-uid="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes*"></a>
@@ -406,71 +333,28 @@ intersecting notes.
   <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes_examples">Examples</h5>
   
 <p>
-Take a look at the following file:
+Take a look at the following file which should be split at the time defined by the vertical line:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">┌───────────────────────┐
-│       A.......B       │
-└───────────────────────┘
-┌───────────────────────┐
-│   A...B          A..B │
-└───────────────────────┘
-┌───────────────────────┐
-│     A............B    │
-└───────────────────────┘</code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-046668fad770085996f29264eea4826b.png" class="text-image" />
 </p>
 <p>
-where <code>A</code> and <code>B</code> mean Note On and Note Off events correspondingly. <code>...</code> symbols
-are drawn to make it more clear what notes we have in each track chunk. Each block on the image
-represents a track chunk.
+where <code>▼</code> and <code>▲</code> mean Note On and Note Off events correspondingly (notes are highlighted
+for convenience). So we have the file with two track chunks here containing some notes.
 </p>
 <p>
-Now let&apos;s imagine the file should be split by the line on image below:
+If <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> set to <code>false</code>, we&apos;ll get following two new files:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">┌────────────│──────────┐
-│       A    │  B       │
-└────────────│──────────┘
-┌────────────│──────────┐
-│   A...B    │     A..B │
-└────────────│──────────┘
-┌────────────│──────────┐
-│     A      │     B    │
-└────────────│──────────┘</code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-839a206815e12c741ac69bb6ac3c12f0.png" class="text-image" />
 </p>
 <p>
-If <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> set to <code>false</code>, we&apos;ll get following two parts:
+So the not within first track chunk just exploded into its Note On and Note Off events placed in
+different files after split. But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> set to <code>true</code> (which is the default value),
+we&apos;ll get following new files:
 </p>
 <p>
-<pre class="text-image"><code class="lang-image">      File 1             File 2
-<span class="outer-block">··················</span>  <span class="outer-block">················</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │       A    │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │  B       │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │   A...B    │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │     A..B │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │     A      │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │     B    │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">··················</span>  <span class="outer-block">················</span></code></pre>
-</p>
-<p>
-But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> set to <code>true</code>, we&apos;ll get following new files:
-</p>
-<p>
-<pre class="text-image"><code class="lang-image">      File 1             File 2
-<span class="outer-block">··················</span>  <span class="outer-block">················</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │       A....B <span class="outer-block">·</span>  <span class="outer-block">·</span> A..B       │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │   A...B    │ <span class="outer-block">·</span>  <span class="outer-block">·</span> │     A..B │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">·</span> ┌────────────┐ <span class="outer-block">·</span>  <span class="outer-block">·</span> ┌──────────┐ <span class="outer-block">·</span>
-<span class="outer-block">·</span> │     A......B <span class="outer-block">·</span>  <span class="outer-block">·</span> A.....B    │ <span class="outer-block">·</span>
-<span class="outer-block">·</span> └────────────┘ <span class="outer-block">·</span>  <span class="outer-block">·</span> └──────────┘ <span class="outer-block">·</span>
-<span class="outer-block">··················</span>  <span class="outer-block">················</span></code></pre>
+<img src="images/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-1ad38ca8472a0747d2f901f639c9b6d9.png" class="text-image" />
 </p>
 <p>
 So we have new Note On / Note Off events at points of split which gives us new notes.

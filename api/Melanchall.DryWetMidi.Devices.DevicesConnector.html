@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -128,20 +128,10 @@ incoming events from the input device to the output ones.
 <p>
 Following image illustrates what the connection means:
 </p>
-<pre><code>                                   ┌───────┐
-                     ┌ >> EVENT >> │ OUT 1 │
-                     │             └───────┘
-                     │
-┌──────┐             │             ┌───────┐
-│  IN  │ >> EVENT >> ├ >> EVENT >> │ OUT 2 │
-└──────┘             │             └───────┘
-                     │
-                     │             ┌───────┐
-                     └ >> EVENT >> │ OUT 3 │
-                                   └───────┘</code></pre>
+<img src="images/Melanchall.DryWetMidi.Devices.DevicesConnector-d48610bfc2af3ee97419863d0f9d9d53.png" class="text-image" />
 <p>
-where <code>IN</code> is an input device (see <a class="xref" href="Melanchall.DryWetMidi.Devices.DevicesConnector.html#Melanchall_DryWetMidi_Devices_DevicesConnector_InputDevice">InputDevice</a>); <code>OUT1</code>, <code>OUT2</code>,
-<code>OUT3</code> are output devices (see <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>); <code>EVENT</code> is a MIDI event
+where <code>IN</code> is an input device (see <a class="xref" href="Melanchall.DryWetMidi.Devices.InputDevice.html">InputDevice</a>); <code>OUT1</code>, <code>OUT2</code>,
+<code>OUT3</code> are output devices (see <a class="xref" href="Melanchall.DryWetMidi.Devices.OutputDevice.html">OutputDevice</a>); <code>E</code> is a MIDI event
 which coming from <code>IN</code> and redirected to all connected output devices.
 </p>
 

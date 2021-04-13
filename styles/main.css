@@ -517,3 +517,11 @@ span.outer-block {
     background: #333;
     color: #333;
 }
+
+img.text-image {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    padding: 0px;
+    border: none;
+}

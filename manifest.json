@@ -2411,7 +2411,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.DevicesConnector.html",
-          "hash": "TlBrXySFOhA3ElZQwyFceQ=="
+          "hash": "tUf8mtUwQze7lEii1BRVWg=="
         }
       },
       "is_incremental": false,
@@ -3011,7 +3011,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html",
-          "hash": "KetwSfZq8/pwU5Duty8H8w=="
+          "hash": "UsrisjZEDbvKbDeb9ReeUg=="
         }
       },
       "is_incremental": false,
@@ -3383,7 +3383,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html",
-          "hash": "mqKBQJuehOFyEv6X7s36tw=="
+          "hash": "OdtUAOmpw8mAF43mT5ZKWQ=="
         }
       },
       "is_incremental": false,
@@ -3395,7 +3395,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html",
-          "hash": "wgtScJa8KmYnjKYkW44fBA=="
+          "hash": "tQ5qqzjDOdiKZKRvTKW8wA=="
         }
       },
       "is_incremental": false,
@@ -4979,7 +4979,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html",
-          "hash": "Tra7heyJhV5sv30wu12KeQ=="
+          "hash": "y4tvJoNxohNtLyG8EGmTLQ=="
         }
       },
       "is_incremental": false,

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -93,47 +93,46 @@ Defines a context to search chords within.
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public enum ChordSearchContext</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_remarks"><strong>Remarks</strong></h5>
-  <div class="markdown level0 remarks">
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_examples"><strong>Examples</strong></h5>
+  
 <p>To understand what context means let&apos;s take a look at following events sequence
 within two track chunks:</p>
 <p>
-<pre><code>Track chunk 1: ON1...ON2...OFF1...OFF2
-Track chunk 2: ON3...OFF3.............</code></pre>
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-1c54c916d8785eba1986206c2501e1fa.png" class="text-image" />
 </p>
-<p>where <code>ON</code> and <code>OFF</code> means Note On and Note Off events correspondingly
-(with different note number and channel for simplicity); <code>.</code> is any other event.</p>
+<p>
+<p>
+where <code>A</code>, <code>B</code> and <code>C</code> mean Note On events, and <code>X</code>, <code>Y</code> and <code>Z</code>
+mean Note Off ones (with different note number and channel for simplicity); <code>.</code> is any
+other event.
+</p>
+</p>
 <p>
 If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">SingleEventsCollection</a> as the context, chords will be constructed in
 following way:
 </p>
 <p>
-<pre><code>                 +-------+--- A --+--------+
-                 |       |        |        |
-Track chunk 1: [ON1]...[ON2]...[OFF1]...[OFF2]
-Track chunk 2: (ON3)...(OFF3).................
-                 |        |
-                 +-- B ---+</code></pre>
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-b5f404e78c7bc9ba8f5e5a5b2908788d.png" class="text-image" />
 </p>
 <p>
-So chords (A and B) will be constructed only from notes within the same events collection.
-<code>[...]</code> and <code>(...)</code> denote two different instances of <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>.
+or, if highlight all chords:
+</p>
+<p>
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5eb6d55048d65fff04843052e3be247c.png" class="text-image" />
+</p>
+<p>
+So chords will be constructed only from notes within the same events collection (track chunk).
 </p>
 <p>
 But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">AllEventsCollections</a> as the context, we&apos;ll get a single chord:
 </p>
 <p>
-<pre><code>               +-----+-------+--------+--------+
-               |     |       |        |        |
-Track chunk 1: |   [ON1]...[ON2]...[OFF1]...[OFF2]
-Track chunk 2: |   [ON3]...[OFF3].................
-               |     |        |
-               +-----+--------+</code></pre>
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-4ecde1229301886f58c124167e65047c.png" class="text-image" />
 </p>
 <p>
 So a chord can be constructed from notes within different events collections.
 </p>
-</div>
+
   <h3 id="fields">Fields
   </h3>
   <table class="table table-bordered table-striped table-condensed">
