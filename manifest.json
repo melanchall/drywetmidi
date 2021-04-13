@@ -2411,7 +2411,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Devices.DevicesConnector.html",
-          "hash": "tUf8mtUwQze7lEii1BRVWg=="
+          "hash": "6LuYgXiKWn+Kd44zTaKDwQ=="
         }
       },
       "is_incremental": false,
@@ -3011,7 +3011,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html",
-          "hash": "UsrisjZEDbvKbDeb9ReeUg=="
+          "hash": "ycNNirO6LUvSR8woFJrRsw=="
         }
       },
       "is_incremental": false,
@@ -3383,7 +3383,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html",
-          "hash": "OdtUAOmpw8mAF43mT5ZKWQ=="
+          "hash": "wtOtyEmkICfiP6IibGLjJQ=="
         }
       },
       "is_incremental": false,

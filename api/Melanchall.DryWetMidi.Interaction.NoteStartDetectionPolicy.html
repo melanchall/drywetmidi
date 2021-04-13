@@ -100,7 +100,7 @@ the same note number and channel. The default value is <a class="xref" href="Mel
 To understand how this policy works let&apos;s take a look at following events sequence:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-f68c8167ea5d6fb93c21603ada9383eb.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-4563.png" class="text-image" />
 </p>
 <p>
 where <code>A</code> and <code>B</code> mean Note On events, and <code>X</code> and <code>Y</code> mean
@@ -112,13 +112,13 @@ If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetec
 following way:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-60933c634d107d6dce63ac4ea806f43e.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5122.png" class="text-image" />
 </p>
 <p>
 or, if highlight notes:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-c822c8521736c848dd0d2d49e13cd3c8.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5248.png" class="text-image" />
 </p>
 <p>
 So every Note Off event will be combined with first free Note On event into a note.
@@ -128,13 +128,13 @@ But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartD
 a new way:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-23b432d82338a8a4f6ec5e269d03c955.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5663.png" class="text-image" />
 </p>
 <p>
 or, if highlight notes:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-c822c8521736c848dd0d2d49e13cd3c8.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5789.png" class="text-image" />
 </p>
 <p>
 So Note Off events will be combined with last free Note On event into a note.

@@ -98,13 +98,13 @@ Defines a context to search chords within.
 <p>To understand what context means let&apos;s take a look at following events sequence
 within two track chunks:</p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-1c54c916d8785eba1986206c2501e1fa.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-4257.png" class="text-image" />
 </p>
 <p>
 <p>
-where <code>A</code>, <code>B</code> and <code>C</code> mean Note On events, and <code>X</code>, <code>Y</code> and <code>Z</code>
-mean Note Off ones (with different note number and channel for simplicity); <code>.</code> is any
-other event.
+where <code>A</code>, <code>B</code> and <code>C</code> mean Note On events (see <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>), and
+<code>X</code>, <code>Y</code> and <code>Z</code> mean Note Off ones (see <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>) with different
+note number and channel for simplicity; <code>.</code> is any other event.
 </p>
 </p>
 <p>
@@ -112,13 +112,13 @@ If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchCon
 following way:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-b5f404e78c7bc9ba8f5e5a5b2908788d.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5119.png" class="text-image" />
 </p>
 <p>
 or, if highlight all chords:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5eb6d55048d65fff04843052e3be247c.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5317.png" class="text-image" />
 </p>
 <p>
 So chords will be constructed only from notes within the same events collection (track chunk).
@@ -127,7 +127,7 @@ So chords will be constructed only from notes within the same events collection 
 But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">AllEventsCollections</a> as the context, we&apos;ll get a single chord:
 </p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-4ecde1229301886f58c124167e65047c.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5749.png" class="text-image" />
 </p>
 <p>
 So a chord can be constructed from notes within different events collections.
@@ -148,7 +148,7 @@ So a chord can be constructed from notes within different events collections.
         <td>
 A chord can be detected within all events collection (<a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>
 or <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>) of the source (<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> for example). It means
-MIDI events that make up a chord can be present in different events collection.
+MIDI events that make up a chord can be present in different events collections.
 </td>
       </tr>
       <tr>
