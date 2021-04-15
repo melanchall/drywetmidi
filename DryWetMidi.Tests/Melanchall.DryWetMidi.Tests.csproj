@@ -4,6 +4,8 @@
     <TargetFrameworks>netcoreapp2.1;net472</TargetFrameworks>
     <OutputType>Library</OutputType>
     <Configurations>Debug;Release;Coverage</Configurations>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Coverage'">
