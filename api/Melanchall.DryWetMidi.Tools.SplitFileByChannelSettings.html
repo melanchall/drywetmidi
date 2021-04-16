@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -127,7 +127,10 @@ Defines how a MIDI file should be split by channel using
   </h3>
   <a id="Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile_" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.CopyNonChannelEventsToEachFile*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.CopyNonChannelEventsToEachFile">CopyNonChannelEventsToEachFile</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether to copy all meta and system exclusive events
+to all the new files or throw them away. The default value is <code>true</code>>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -148,12 +151,33 @@ Defines how a MIDI file should be split by channel using
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile_examples">Examples</h5>
+  
+<p>
+Given a MIDI file with two track chunks:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-7491.png" class="text-image" />
+<p>
+where <code>○</code> and <code>□</code> mean channel MIDI events on channel 0 and 1 correspondingly;
+<code>.</code> is any non-channel event.
+</p>
+<p>
+If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile">CopyNonChannelEventsToEachFile</a> set to <code>true</code> (which is the default
+value), we&apos;ll get following two new files:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-8172.png" class="text-image" />
+<p>
+But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile">CopyNonChannelEventsToEachFile</a> set to <code>false</code>, new files will
+contain only channel events:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-8726.png" class="text-image" />
+
   <a id="Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_Filter_" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.Filter*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_Filter" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.Filter">Filter</h4>
   <div class="markdown level1 summary">
 Gets or sets a predicate to filter events out before processing. If predicate returns <code>true</code>,
-an event will be processed; if <code>false</code> - it won&apos;t. If the property set to <code>null</code>,
-all MIDI events will be processed.
+an event will be processed; if <code>false</code> - it won&apos;t. If the property set to <code>null</code>
+(default value), all MIDI events will be processed.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -175,6 +199,10 @@ all MIDI events will be processed.
       </tr>
     </tbody>
   </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html">MidiFileSplitter</a></div>
+  </div>
 </article>
           </div>
           

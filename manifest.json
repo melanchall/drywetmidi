@@ -4703,7 +4703,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.MidiFileSplitter.html",
-          "hash": "hYj4b++bt+h2QeslPLLelg=="
+          "hash": "dcW2v/mw+d1HJUtVDkHXig=="
         }
       },
       "is_incremental": false,
@@ -4979,7 +4979,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html",
-          "hash": "y4tvJoNxohNtLyG8EGmTLQ=="
+          "hash": "RWdiIC3LH5vMmvjeH+aa5Q=="
         }
       },
       "is_incremental": false,
@@ -4991,7 +4991,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html",
-          "hash": "+MT6HTqeHi2Ca7d/8nryzw=="
+          "hash": "t32x2SLx7tKsigVsl82+UA=="
         }
       },
       "is_incremental": false,
@@ -5003,7 +5003,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.html",
-          "hash": "ymBca5jSbFcuDizvNhcRxw=="
+          "hash": "L4p/84FUdS/cuxfC+zR//Q=="
         }
       },
       "is_incremental": false,
@@ -5015,7 +5015,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html",
-          "hash": "gbOS841qUzSbEmNFsK1rEA=="
+          "hash": "XdI7cKjio0jpGtWXLEZ6VQ=="
         }
       },
       "is_incremental": false,

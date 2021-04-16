@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -237,6 +237,21 @@ should be split.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SkipPart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings__examples">Examples</h5>
+  
+<p>
+Given the MIDI file (vertical line shows where the file will be split):
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-11590.png" class="text-image" />
+<p>
+where <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> and <code>E</code> are some MIDI events;
+<code>L</code> is <code data-dev-comment-type="paramref" class="paramref">partLength</code>.
+</p>
+<p>
+Skipping the part we&apos;ll get following file:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-12143.png" class="text-image" />
+
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -303,6 +318,35 @@ and meta and sysex ones as defined by <code data-dev-comment-type="paramref" cla
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+All channel events (<a class="xref" href="Melanchall.DryWetMidi.Core.ChannelEvent.html">ChannelEvent</a>) will be grouped by channel and then events for each
+channel will be placed to separate files. So each new file will contain channel events for single channel.
+If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile">CopyNonChannelEventsToEachFile</a> of <code data-dev-comment-type="paramref" class="paramref">settings</code>
+set to <code>true</code> (default value), each new file will also contain all non-channel events from the original file.
+If an input file doesn&apos;t contain channel events, result file will be just a copy of the input one.
+</div>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings__examples">Examples</h5>
+  
+<p>
+Given a MIDI file:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-16943.png" class="text-image" />
+<p>
+where <code>◊</code>, <code>○</code> and <code>□</code> mean channel MIDI events on channel 0, 1 and 2 correspondingly;
+<code>.</code> is any non-channel event.
+</p>
+<p>
+So the file will be split in following way (<a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile">CopyNonChannelEventsToEachFile</a>
+of <code data-dev-comment-type="paramref" class="paramref">settings</code> set to <code>true</code>):
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-17691.png" class="text-image" />
+<p>
+So each new file consist of single track chunk containing channel events of one channel and
+all non-channel events. New files will have the same time division (<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_TimeDivision">TimeDivision</a>) as
+the original one.
+</p>
+
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -366,6 +410,24 @@ the original file.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChunks_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings__examples">Examples</h5>
+  
+<p>
+For example, we have a MIDI file with two chunks:
+</p>
+<p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-21675.png" class="text-image" />
+</p>
+<p>
+So the file will be split into two new files:
+</p>
+<p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-21958.png" class="text-image" />
+</p>
+<p>
+Each new file will have the same time division (<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_TimeDivision">TimeDivision</a>) as the original one.
+</p>
+
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -437,6 +499,20 @@ Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile<
   <div class="markdown level1 remarks">
 Non-track chunks will not be copied to any of the new files.
 </div>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings__examples">Examples</h5>
+  
+<p>
+Given the MIDI file (vertical lines show the grid the file should be split by):
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-26446.png" class="text-image" />
+<p>
+where <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> and <code>E</code> are some MIDI events.
+</p>
+<p>
+We&apos;ll get three new files as the result of the split:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-26900.png" class="text-image" />
+
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -503,6 +579,33 @@ other events as defined by <code data-dev-comment-type="paramref" class="paramre
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+The method produces new files where each one contains Note On and Note Off events for single
+note number and channel (if it&apos;s not ignored according to <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel">IgnoreChannel</a>
+of <code data-dev-comment-type="paramref" class="paramref">settings</code>). Also files can contain all non-note events as defined by
+<a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</a> of <code data-dev-comment-type="paramref" class="paramref">settings</code>. If
+an input file doesn&apos;t contain note events, result file will be just a copy of the input one.
+</div>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings__examples">Examples</h5>
+  
+<p>
+For example, a MIDI file contains following notes:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-31882.png" class="text-image" />
+<p>
+where <code>A</code> and <code>B</code> mean different notes; <code>.</code> is any non-note event.
+</p>
+<p>
+After split we&apos;ll get following two new files:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-32303.png" class="text-image" />
+<p>
+So each new file contains one track chunk with notes of the same note number and channel, and
+also all non-note events. New files will have the same time division (<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_TimeDivision">TimeDivision</a>)
+as the original one.
+</p>
+
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -577,6 +680,21 @@ should be split.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_TakePart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings__examples">Examples</h5>
+  
+<p>
+Given the MIDI file (vertical line shows where the file will be split):
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-37034.png" class="text-image" />
+<p>
+where <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> and <code>E</code> are some MIDI events;
+<code>S</code> is <code data-dev-comment-type="paramref" class="paramref">partStart</code> and <code>L</code> is <code data-dev-comment-type="paramref" class="paramref">partLength</code>.
+</p>
+<p>
+Taking the part we&apos;ll get following file:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-37693.png" class="text-image" />
+
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -649,6 +767,21 @@ should be split.</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileSplitter_TakePart_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_SliceMidiFileSettings__examples">Examples</h5>
+  
+<p>
+Given the MIDI file (vertical line shows where the file will be split):
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-41871.png" class="text-image" />
+<p>
+where <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> and <code>E</code> are some MIDI events;
+<code>L</code> is <code data-dev-comment-type="paramref" class="paramref">partLength</code>.
+</p>
+<p>
+Taking the part we&apos;ll get following file:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.MidiFileSplitter-42422.png" class="text-image" />
+
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>

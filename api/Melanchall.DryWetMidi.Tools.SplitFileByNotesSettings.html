@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -127,7 +127,10 @@ Defines how a MIDI file should be split by notes using
   </h3>
   <a id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile_" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.CopyNonNoteEventsToEachFile*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether to copy all non-note events
+to all the new files or throw them away. The default value is <code>true</code>>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -148,12 +151,32 @@ Defines how a MIDI file should be split by notes using
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile_examples">Examples</h5>
+  
+<p>
+For example, a MIDI file contains following notes:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-7425.png" class="text-image" />
+<p>
+where <code>A</code> and <code>B</code> mean different notes; <code>.</code> is any non-note event.
+</p>
+<p>
+If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</a> set to <code>true</code> (default value), we&apos;ll get following
+two new files:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8073.png" class="text-image" />
+<p>
+But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</a> set to <code>false</code>, each new file will contain
+only note events:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8658.png" class="text-image" />
+
   <a id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_Filter_" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.Filter*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_Filter" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.Filter">Filter</h4>
   <div class="markdown level1 summary">
 Gets or sets a predicate to filter events out before processing. If predicate returns <code>true</code>,
-an event will be processed; if <code>false</code> - it won&apos;t. If the property set to <code>null</code>,
-all MIDI events will be processed.
+an event will be processed; if <code>false</code> - it won&apos;t. If the property set to <code>null</code>
+(default value), all MIDI events will be processed.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -202,6 +225,29 @@ treated as same ones. The default value is <code>false</code>.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel_examples">Examples</h5>
+  
+<p>
+For example, a MIDI file contains following notes:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-11767.png" class="text-image" />
+<p>
+where <code>AN</code> and <code>BN</code> mean different notes on channel <code>N</code>.
+</p>
+<p>
+If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel">IgnoreChannel</a> set to <code>false</code> (which is the default value),
+we&apos;ll get four new files (since different channel means different note):
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-12517.png" class="text-image" />
+<p>
+But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel">IgnoreChannel</a> set to <code>true</code>, we&apos;ll get two files:
+</p>
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-13534.png" class="text-image" />
+
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html">MidiFileSplitter</a></div>
+  </div>
 </article>
           </div>
           
